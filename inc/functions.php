@@ -11,7 +11,6 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 // Biblys version
-<<<<<<< HEAD
 define('BIBLYS_VERSION', '2.50.0-dev.4');
 
 /**
@@ -28,9 +27,6 @@ function biblys_exception($exception)
         $exception
     );
 }
-=======
-define('BIBLYS_VERSION', '2.49.4');
->>>>>>> 4b115132... Fix writing errors in log for authentication and paypal
 
 function biblys_error($level, $message, $file, $line, $trace, Exception $exception = null)
 {
