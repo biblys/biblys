@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $textid_title = $_POST['article_title'];
     }
-    $_POST['article_textid'] = md5($textid_title.' / '.$_POST['article_authors']);
 
     // Link to another edition of the same book
     $linkto = $request->request->get('article_link_to', false);
@@ -157,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     $article->setCollection($collection);
 
-    // VALIDATION //
+    // VALIDATION
     foreach ($_POST as $key => $val) {
         $article->set($key, $val);
     }
@@ -688,7 +687,7 @@ $content .= '
             <br />
 
             <label for="article_authors">Auteur(s) :</label>
-            <input type="text" id="article_authors" name="article_authors" value="'.$a['article_authors'].'" class="long" tabindex="-1" readonly required data-toggle="popover" data-trigger="focus" title="Ajouter un auteur" data-content="Champ rempli automatiquement. Utilisez la section Contributeurs (ci-dessous) pour ajouter ou supprimer un auteur.">
+            <input type="text" id="article_authors" value="'.$a['article_authors'].'" class="long" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Ajouter un auteur" data-content="Champ rempli automatiquement. Utilisez la section Contributeurs (ci-dessous) pour ajouter ou supprimer un auteur.">
             <br />
 
             <label for="article_collection">Collection :</label>
