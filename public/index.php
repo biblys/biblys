@@ -66,7 +66,7 @@ $_JS_CALLS[] = '/libs/ckeditor/ckeditor.js?4.5.7';
 $_JS_CALLS[] = '/libs/ckeditor/adapters/jquery.js?4.5.7';
 
 // Axys
-$axysConfig = $config->get('axys');
+$axysConfig = $config->get('axys') ?: [];
 $axys = new AxysClient($axysConfig);
 
 if (!$request->isSecure() && $config->get('https') === true) {
