@@ -47,6 +47,10 @@ if ($request->getMethod() === 'POST') {
     $time = $request->request->get("post_time");
     $post->set('post_date', $date." ".$time);
     
+    // Selected checkbox
+    $selected = $request->request->get("post_selected") ? 1 : 0;
+    $post->set('post_selected', $selected);
+
     $pm->update($post);
 
     $postUrl = $urlgenerator->generate(
