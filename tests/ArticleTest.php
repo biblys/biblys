@@ -110,10 +110,22 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $tagWithHeight = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "height" => 85]);
         $tagWithoutLink = $article->getCoverTag(['link' => false]);
 
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\"><\/a>/", $tag);
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" width=\"250\"><\/a>/", $tagWithWidth);
-        $this->assertRegExp("/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" height=\"85\"><\/a>/", $tagWithHeight);
-        $this->assertRegExp("/<img src=\"\/media\/book\/\d+\/\d+\.jpg\" alt=\"Bara Yogoi\">/", $tagWithoutLink);
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\"><\/a>/",
+            $tag
+        );
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" width=\"250\"><\/a>/",
+            $tagWithWidth
+        );
+        $this->assertRegExp(
+            "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" height=\"85\"><\/a>/",
+            $tagWithHeight
+        );
+        $this->assertRegExp(
+            "/<img src=\"\/media\/book\/\d+\/\d+\.jpg\" alt=\"Bara Yogoi\">/",
+            $tagWithoutLink
+        );
     }
 
     /**
