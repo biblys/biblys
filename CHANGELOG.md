@@ -1,5 +1,16 @@
 # Changelog
 
+### 2.49.1 (7 septembre 2020)
+
+Corrections
+
+- La case à cocher "À la une" du formulaire d'édition d'un billet peut à nouveau
+  être décochée.
+- Le numéro de version d'une image de couverture est correctement inclus dans
+  les urls du CDN WeServ
+- L'ajout d'une valeur dépassant 256 caractères dans le champ auteurs ne 
+  provoque plus d'erreur
+
 ### 2.49.0 (2 septembre 2020)
 
 Améliorations
