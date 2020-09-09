@@ -1360,8 +1360,14 @@ class ArticleManager extends EntityManager
 
         $article->set('article_keywords', $keywords)
             ->set('article_links', $links)
-            ->set('article_authors', truncate(implode(', ', $authors), 256))
-            ->set('article_authors_alphabetic', truncate(implode(', ', $authors_alpha), 256))
+            ->set(
+                'article_authors', 
+                mb_strimwidth(implode(', ', $authors), 0, 250, '…', 'utf-8')
+            )
+            ->set(
+                'article_authors_alphabetic', 
+                mb_strimwidth(implode(', ', $authors_alpha), 0, 250, '…', 'utf-8')
+            )
             ->set('article_keywords_generated', date('Y-m-d H:i:s'));
 
         return $article;
