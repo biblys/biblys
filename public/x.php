@@ -49,12 +49,8 @@ try {
         header("HTTP/1.0 404 Not Found");
         die('ERROR > Page introuvable');
     }
-} catch (Exception $e) {
-    $response = new JsonResponse(
-        ['error' => $e->getMessage()]
-    );
-    $response->setStatusCode(500);
-    $response->send();
+} catch (Exception $exception) {
+    biblys_exception($exception);
 }
 
 // Close MySQL connection

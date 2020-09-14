@@ -11,7 +11,22 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 // Biblys version
-define('BIBLYS_VERSION', '2.50.0-dev');
+define('BIBLYS_VERSION', '2.50.0-dev.1');
+
+/**
+ * Calls biblys_error with the correct arguments for an Exception
+ */
+function biblys_exception($exception)
+{
+    biblys_error(
+        E_ERROR, 
+        $exception->getMessage(), 
+        $exception->getFile(), 
+        $exception->getLine(), 
+        null, 
+        $exception
+    );
+}
 
 function biblys_error($level, $message, $file, $line, $trace, Exception $exception = null)
 {
