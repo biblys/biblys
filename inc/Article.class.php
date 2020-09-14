@@ -1360,14 +1360,8 @@ class ArticleManager extends EntityManager
 
         $article->set('article_keywords', $keywords)
             ->set('article_links', $links)
-            ->set(
-                'article_authors', 
-                mb_strimwidth(implode(', ', $authors), 0, 250, '…', 'utf-8')
-            )
-            ->set(
-                'article_authors_alphabetic', 
-                mb_strimwidth(implode(', ', $authors_alpha), 0, 250, '…', 'utf-8')
-            )
+            ->set('article_authors', implode(', ', $authors))
+            ->set('article_authors_alphabetic', implode(', ', $authors_alpha))
             ->set('article_keywords_generated', date('Y-m-d H:i:s'));
 
         return $article;
@@ -1448,6 +1442,12 @@ class ArticleManager extends EntityManager
 
             $article->set('article_url', $url);
         }
+
+        // Truncate authors fields
+        $authors = mb_strcut($article->get('authors'), 0, 256);
+        $article->set('article_authors', $authors);
+        $authorsAlpha = mb_strcut($article->get('authors_alphabetic'), 0, 256);
+        $article->set('article_authors_alphabetic', $authorsAlpha);
 
         return $article;
     }
