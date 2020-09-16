@@ -882,9 +882,6 @@ CREATE TABLE `rights` (
   `right_updated` datetime DEFAULT NULL,
   `right_deleted` datetime DEFAULT NULL,
   PRIMARY KEY (`right_id`),
-  UNIQUE KEY `user_bookshop` (`user_id`,`bookshop_id`),
-  UNIQUE KEY `user_publisher` (`user_id`,`publisher_id`),
-  UNIQUE KEY `user_library` (`user_id`,`library_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Create syntax for TABLE 'roles'
