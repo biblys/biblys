@@ -1,5 +1,18 @@
 # Changelog
 
+### 2.49.2 (15 septembre 2020)
+
+Corrections
+
+- L'import d'un article associé à une collection déjà existante fonctionne à 
+  nouveau
+- Le retrait d'un rayon associé à un article fonctionne à nouveau
+- L'import d'un article dont le champ auteurs dépasse 256 caractères ne provoque
+  plus d'erreur
+- La mise à jour d'un contributeur existant ne provoque plus d'erreur
+- Le tronquage d'une chaîne de caractères utf-8 est calculé au nombre de bits et 
+  plus au nombre de caractères
+
 ### 2.49.1 (7 septembre 2020)
 
 Corrections
