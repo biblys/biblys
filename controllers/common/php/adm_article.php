@@ -245,7 +245,11 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         // Biblys publisher's catalog can only be edited on it's own site
         $publisher = $article->get('publisher');
         $publisher_site = $sm->get(array('publisher_id' => $publisher->get('id')));
-        if ($publisher_site && $publisher_site->get('id') != $_SITE['site_id']) {
+        if (
+            $publisher_site && 
+            $publisher_site->get('id') != $_SITE['site_id'] &&
+            !$_V->hasRight('publisher', $publisher->get('id'))
+        ) {
             trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name').", merci de <a href='http://".$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
         }
 
