@@ -124,7 +124,7 @@ class Article extends Entity
                     `people_id`, `people_first_name`, `people_last_name`, `people_url`, `job_id`, `job_name`
                 FROM `people` JOIN `roles` USING(`people_id`) JOIN `jobs` USING(`job_id`)
                 WHERE 
-                    `roles`.`article_id` = '.$this->get('id').' AND
+                    `roles`.`article_id` = ' . $this->get('id') . ' AND
                     `people_deleted` IS NULL
                 ORDER BY `id`';
             $contributors = $_SQL->query($query);
@@ -193,7 +193,7 @@ class Article extends Entity
         global $_SQL, $site;
 
         $result = array();
-        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%'.$this->get('id').'%" AND `site_id` = "'.$site->get('id').'"');
+        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $site->get('id') . '"');
         while ($r = $rewards->fetch(PDO::FETCH_ASSOC)) {
             $result[] = new CFReward($r);
         }
@@ -210,7 +210,7 @@ class Article extends Entity
         $pm = new PostManager();
 
         $posts = array();
-        $links = $_SQL->query('SELECT `post_id` FROM `links` WHERE `article_id` = '.$this->get('id').' AND `post_id` IS NOT NULL');
+        $links = $_SQL->query('SELECT `post_id` FROM `links` WHERE `article_id` = ' . $this->get('id') . ' AND `post_id` IS NOT NULL');
         while ($l = $links->fetch(PDO::FETCH_ASSOC)) {
             $posts[] = $pm->get(array('post_id' => $l['post_id']));
         }
@@ -234,7 +234,7 @@ class Article extends Entity
                 return $this->getCoverUrl();
             } else {
                 trigger_error('Article.getCover() method is depreciated. Use Article.getCoverTag() instead.');
-                return '<a href="'.$this->getCoverUrl().'" rel="fancybox"><img src="'.$this->getCoverUrl($size).'" alt="'.$this->get('title').'"></a>';
+                return '<a href="' . $this->getCoverUrl() . '" rel="fancybox"><img src="' . $this->getCoverUrl($size) . '" alt="' . $this->get('title') . '"></a>';
             }
         }
     }
@@ -258,7 +258,7 @@ class Article extends Entity
     {
         $cover = $this->getCover("object");
         if (!$cover->exists()) {
-            throw new Exception("No cover at ".$cover->path()." for article ".$this->get("id"));
+            throw new Exception("No cover at " . $cover->path() . " for article " . $this->get("id"));
         }
 
         if (!isset($options["link"])) {
@@ -271,28 +271,27 @@ class Article extends Entity
 
         $sizeAttribute = '';
         if (isset($options["height"])) {
-            $options["size"] = "h".$options["height"];
-            $sizeAttribute = ' height="'.$options["height"].'"';
-        }
-        elseif (isset($options["width"])) {
-            $options["size"] = "w".$options["width"];
-            $sizeAttribute = ' width="'.$options["width"].'"';
+            $options["size"] = "h" . $options["height"];
+            $sizeAttribute = ' height="' . $options["height"] . '"';
+        } elseif (isset($options["width"])) {
+            $options["size"] = "w" . $options["width"];
+            $sizeAttribute = ' width="' . $options["width"] . '"';
         }
 
         $class = "";
         if (isset($options["class"])) {
-            $class = ' class="'.$options["class"].'"';
+            $class = ' class="' . $options["class"] . '"';
         }
 
         $rel = "";
         if (isset($options["rel"])) {
-            $rel = ' rel="'.$options["rel"].'"';
+            $rel = ' rel="' . $options["rel"] . '"';
         }
 
-        $coverTag = '<img src="'.$this->getCoverUrl($options).'"'.$class.' alt="'.$this->get('title').'"'.$sizeAttribute.'>';
+        $coverTag = '<img src="' . $this->getCoverUrl($options) . '"' . $class . ' alt="' . $this->get('title') . '"' . $sizeAttribute . '>';
 
         if ($options['link'] !== false) {
-            $coverTag = '<a href="'.$options["link"].'"'.$rel.'>'.$coverTag.'</a>';
+            $coverTag = '<a href="' . $options["link"] . '"' . $rel . '>' . $coverTag . '</a>';
         }
 
         return $coverTag;
@@ -338,7 +337,7 @@ class Article extends Entity
         }
 
         $am = new ArticleManager();
-        return $am->get(array('article_item' => $item, 'article_id' => '!= '.$this->get('id'), 'publisher_id' => $this->get('publisher_id')));
+        return $am->get(array('article_item' => $item, 'article_id' => '!= ' . $this->get('id'), 'publisher_id' => $this->get('publisher_id')));
     }
 
     /**
@@ -361,7 +360,7 @@ class Article extends Entity
                 if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != $_SITE['site_id']) {
                     continue;
                 } else {
-                    $uid = $s->get('selling_price').'-'.$s->get('condition');
+                    $uid = $s->get('selling_price') . '-' . $s->get('condition');
                     $result[$uid] = $s;
                 }
             }
@@ -653,10 +652,23 @@ class Article extends Entity
      */
     public function getRayons()
     {
-        global $_SQL;
+        global $_SQL, $_SITE;
 
-        $sql = $_SQL->prepare("SELECT `rayon_id`, `rayon_name`, `rayon_url` FROM `links` JOIN `rayons` USING(`rayon_id`) WHERE `article_id` = :article_id ORDER BY `rayon_name`");
-        $sql->execute([':article_id' => $this->get('id')]);
+        $sql = $_SQL->prepare("
+            SELECT `rayon_id`, `rayon_name`, `rayon_url` 
+            FROM `links` 
+            JOIN `rayons` USING(`rayon_id`) 
+            WHERE `article_id` = :article_id
+                AND `links`.`site_id` = :site_id
+                AND `link_deleted` IS NULL
+                AND `rayons`.`site_id` = :site_id
+                AND `rayon_deleted` IS NULL
+            ORDER BY `rayon_name`
+        ");
+        $sql->execute([
+            ':article_id' => $this->get('id'),
+            ':site_id' => $_SITE->get('id')
+        ]);
         $rayons = $sql->fetchAll();
 
         $the_rayons = [];
@@ -670,10 +682,10 @@ class Article extends Entity
     public function getRayonsAsJsArray()
     {
         $rayons = array_slice($this->getRayons(), 0, 5);
-        $rayonNames = array_map(function($rayon) {
-            return '"'.$rayon->get('name').'"';
+        $rayonNames = array_map(function ($rayon) {
+            return '"' . $rayon->get('name') . '"';
         }, $rayons);
-        return "[".join($rayonNames, ",")."]";
+        return "[" . join($rayonNames, ",") . "]";
     }
 
     public function hasRayon(Rayon $rayon)
@@ -694,16 +706,16 @@ class Article extends Entity
 
         if ($this->get('price') == 0) {
             return '
-                <a href="'.$urlgenerator->generate('article_free_download', ['id' => $this->get('id')]).'" class="btn btn-primary cart-button'.($text ? '' : ' btn-sm').'">
-                    <span class="fa fa-cloud-download"></span>'.($text ? ' <span class="cart-button-text">'.$text.'</span>' : '').'
+                <a href="' . $urlgenerator->generate('article_free_download', ['id' => $this->get('id')]) . '" class="btn btn-primary cart-button' . ($text ? '' : ' btn-sm') . '">
+                    <span class="fa fa-cloud-download"></span>' . ($text ? ' <span class="cart-button-text">' . $text . '</span>' : '') . '
                 </a>
             ';
         }
 
         return '
-            <a class="btn btn-primary'.($text ? '' : ' btn-sm').' cart-button add_to_cart event"
-                data-type="article" data-id="'.$this->get('id').'">
-                <span class="fa fa-shopping-cart"></span>'.($text ? ' <span class="cart-button-text">'.$text.'</span>' : '').'
+            <a class="btn btn-primary' . ($text ? '' : ' btn-sm') . ' cart-button add_to_cart event"
+                data-type="article" data-id="' . $this->get('id') . '">
+                <span class="fa fa-shopping-cart"></span>' . ($text ? ' <span class="cart-button-text">' . $text . '</span>' : '') . '
             </a>
         ';
     }
@@ -712,18 +724,18 @@ class Article extends Entity
     {
         $text = isset($options['text']) ? $options['text'] : 'Ajouter à vos envies';
 
-        $button = '<i class="fa fa-heart-o"></i>&nbsp;'.$text.'';
+        $button = '<i class="fa fa-heart-o"></i>&nbsp;' . $text . '';
         $classes = ' btn btn-default';
 
 
         if (isset($options['image'])) {
-            $button = '<img src="'.$options['image'].'" alt="'.$text.'">';
+            $button = '<img src="' . $options['image'] . '" alt="' . $text . '">';
             $classes = '';
         }
 
         return '
-            <a data-wish="'.$this->get('id').'" class="event'.$classes.'" title="'.$text.'">
-                '.$button.'
+            <a data-wish="' . $this->get('id') . '" class="event' . $classes . '" title="' . $text . '">
+                ' . $button . '
             </a>
         ';
     }
@@ -770,13 +782,13 @@ class Article extends Entity
         return $this->awards;
     }
 
-    public function getShareButtons(Array $options = [])
+    public function getShareButtons(array $options = [])
     {
         global $request, $urlgenerator;
 
-        $host = $request->getScheme().'://'.$request->getHost();
-        $url = $host.$urlgenerator->generate('article_show', ['slug' => $this->get('url')]);
-        return share_buttons($url, $this->get('title').' de '.$this->get('authors'), $options);
+        $host = $request->getScheme() . '://' . $request->getHost();
+        $url = $host . $urlgenerator->generate('article_show', ['slug' => $this->get('url')]);
+        return share_buttons($url, $this->get('title') . ' de ' . $this->get('authors'), $options);
     }
 
     public function setType(Type $type)
@@ -815,7 +827,7 @@ class Article extends Entity
         // Use current date for date of sale
         $dateOfSale = new \DateTime();
 
-        $tax = new \Biblys\EuroTax($sellerCountry, $customerCountry, constant('\Biblys\EuroTax::'.$tax_type), $dateOfSale);
+        $tax = new \Biblys\EuroTax($sellerCountry, $customerCountry, constant('\Biblys\EuroTax::' . $tax_type), $dateOfSale);
 
         return $tax->getTaxRate();
     }
@@ -852,15 +864,15 @@ class Article extends Entity
     public function getAgeRange()
     {
         if ($this->has('age_min') && $this->has('age_max')) {
-            return 'de '.$this->get('age_min').' à '.$this->get('age_max').' ans';
+            return 'de ' . $this->get('age_min') . ' à ' . $this->get('age_max') . ' ans';
         }
 
         if ($this->has('age_min')) {
-            return $this->get('age_min').' ans et plus';
+            return $this->get('age_min') . ' ans et plus';
         }
 
         if ($this->has('age_max')) {
-            return 'jusqu\'à '.$this->get('age_max').' ans';
+            return 'jusqu\'à ' . $this->get('age_max') . ' ans';
         }
 
         return null;
@@ -894,7 +906,7 @@ class Article extends Entity
             } elseif ($item->isReturned()) {
                 $returned++;
             }
-            
+
             if ($item->isInCart()) {
                 $inCart++;
             }
@@ -959,8 +971,8 @@ class ArticleManager extends EntityManager
 
         foreach ($where as $key => $val) {
             if ($key == 'rayon_id') {
-                $query[] = '`article_links` LIKE :rayon'.$i;
-                $params['rayon'.$i] = '%[rayon:'.$val.']%';
+                $query[] = '`article_links` LIKE :rayon' . $i;
+                $params['rayon' . $i] = '%[rayon:' . $val . ']%';
             }
             $i++;
         }
@@ -979,7 +991,7 @@ class ArticleManager extends EntityManager
     {
         $where = $this->addSiteFilters([]);
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND '.$q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -989,9 +1001,9 @@ class ArticleManager extends EntityManager
     {
         $where = $this->addSiteFilters([]);
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
         if (!empty($q['where'])) {
-            $query .=  ' AND '.$q['where'];
+            $query .=  ' AND ' . $q['where'];
         }
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
@@ -1000,12 +1012,12 @@ class ArticleManager extends EntityManager
 
     public function countAllFromPeople($people)
     {
-        $where = ["article_links" => "LIKE %[people:".$people->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
 
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND '.$q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1013,18 +1025,18 @@ class ArticleManager extends EntityManager
 
     public function getAllFromPeople($people, $options = [], $withJoins = true)
     {
-        $where = ["article_links" => "LIKE %[people:".$people->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
         return $this->getAll($where, $options, $withJoins);
     }
 
     public function countAllFromRayon($rayon)
     {
-        $where = ["article_links" => "LIKE %[rayon:".$rayon->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
 
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND '.$q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1032,10 +1044,10 @@ class ArticleManager extends EntityManager
 
     public function getAllFromRayon($rayon, $options = [], $withJoins = true)
     {
-        $where = ["article_links" => "LIKE %[rayon:".$rayon->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
 
         if ($rayon->has("sort_by")) {
-            $options["order"] = "article_".$rayon->get("sort_by");
+            $options["order"] = "article_" . $rayon->get("sort_by");
         }
 
         if ($rayon->has("sort_order") && $rayon->get("sort_order") == 1) {
@@ -1043,7 +1055,7 @@ class ArticleManager extends EntityManager
         }
 
         if ($rayon->has("show_upcoming") && $rayon->get("show_upcoming") == 1) {
-            $where["article_pubdate"] = "< ".date("Y-m-d H:i:s");
+            $where["article_pubdate"] = "< " . date("Y-m-d H:i:s");
         }
 
         return $this->getAll($where, $options, $withJoins);
@@ -1051,12 +1063,12 @@ class ArticleManager extends EntityManager
 
     public function countAllFromTag($tag)
     {
-        $where = ["article_links" => "LIKE %[tag:".$tag->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
 
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND '.$q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1071,7 +1083,7 @@ class ArticleManager extends EntityManager
      */
     public function getAllFromTag($tag, $options = [], $withJoins = true)
     {
-        $where = ["article_links" => "LIKE %[tag:".$tag->get('id')."]%"];
+        $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
 
         return $this->getAll($where, $options, $withJoins);
     }
@@ -1091,8 +1103,8 @@ class ArticleManager extends EntityManager
         $i = 0;
         $keywords = explode(' ', $keywords);
         foreach ($keywords as $k) {
-            $query[] = '`article_keywords` LIKE :keyword'.$i;
-            $params['keyword'.$i] = '%'.$k.'%';
+            $query[] = '`article_keywords` LIKE :keyword' . $i;
+            $params['keyword' . $i] = '%' . $k . '%';
             $i++;
         }
 
@@ -1103,7 +1115,7 @@ class ArticleManager extends EntityManager
     {
         $q = $this->buildSearchQuery($keywords);
 
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL AND '.implode(' AND ', $q['query']);
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . implode(' AND ', $q['query']);
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1197,14 +1209,14 @@ class ArticleManager extends EntityManager
         // Check if article is already in rayon
         $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
-            throw new Exception("L'article « ".$article->get('title')." » est déjà dans le rayon « ".$this->get('name')." ».");
+            throw new Exception("L'article « " . $article->get('title') . " » est déjà dans le rayon « " . $this->get('name') . " ».");
         }
 
         // Create link
         $link = $lm->create(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
-        $article_links = $article->get('links')."[rayon:".$rayon->get('id')."]";
+        $article_links = $article->get('links') . "[rayon:" . $rayon->get('id') . "]";
         $article->set('article_links', $article_links);
         $this->update($article);
 
@@ -1235,7 +1247,7 @@ class ArticleManager extends EntityManager
 
             throw new Exception(
                 'Cet ISBN est déjà utilisé par un autre article :
-                <a href="/'.$article->get('url').'">'.$article->get('title').'</a>'
+                <a href="/' . $article->get('url') . '">' . $article->get('title') . '</a>'
             );
         }
 
@@ -1269,12 +1281,12 @@ class ArticleManager extends EntityManager
 
         $pm = new PeopleManager();
 
-        $keywords = $article->get('title').' '
-            .$article->get('title_original').' '
-            .$article->get('title_others').' '
-            .$article->get('subtitle').' '
-            .$article->get('ean').' '
-            .$article->get('ean_others');
+        $keywords = $article->get('title') . ' '
+            . $article->get('title_original') . ' '
+            . $article->get('title_others') . ' '
+            . $article->get('subtitle') . ' '
+            . $article->get('ean') . ' '
+            . $article->get('ean_others');
 
         if ($article->has('collection')) {
             $collection = $article->get('collection');
@@ -1282,7 +1294,7 @@ class ArticleManager extends EntityManager
             if ($collection instanceof Collection) {
                 $collectionName = $collection->get('name');
             }
-            $keywords .= $collectionName.' ';
+            $keywords .= $collectionName . ' ';
             $article->set('article_collection', $collectionName);
         }
 
@@ -1292,24 +1304,24 @@ class ArticleManager extends EntityManager
             if ($publisher instanceof Publisher) {
                 $publisherName = $publisher->get('name');
             }
-            $keywords .= $publisherName.' ';
+            $keywords .= $publisherName . ' ';
             $article->set('article_publisher', $publisherName);
         }
 
         if ($article->has('cycle')) {
             $cycle = $article->get('cycle');
             if ($cycle instanceof Cycle) {
-                $keywords .= $cycle->get('name').' ';
+                $keywords .= $cycle->get('name') . ' ';
             } else {
-                $keywords .= $cycle.' ';
+                $keywords .= $cycle . ' ';
             }
         }
 
-        $peoples = $_SQL->query("SELECT `people_id`, `job_id` FROM `roles` JOIN `people` USING(`people_id`) WHERE `article_id` = ".$article->get('id'));
+        $peoples = $_SQL->query("SELECT `people_id`, `job_id` FROM `roles` JOIN `people` USING(`people_id`) WHERE `article_id` = " . $article->get('id'));
         while ($p = $peoples->fetch()) {
             $people = $pm->getById($p["people_id"]);
-            $keywords .= ' '.$people->get('name');
-            $links .= ' [people:'.$people->get('id').']';
+            $keywords .= ' ' . $people->get('name');
+            $links .= ' [people:' . $people->get('id') . ']';
             if ($p['job_id'] == 1) {
                 $authors[] = $people->get('name');
                 $authors_alpha[] = $people->get('alpha');
@@ -1318,24 +1330,24 @@ class ArticleManager extends EntityManager
 
         $tags = $article->getLinked('tag');
         foreach ($tags as $tag) {
-            $keywords .= ' '.$tag->get('name');
-            $links .= ' [tag:'.$tag->get('id').']';
+            $keywords .= ' ' . $tag->get('name');
+            $links .= ' [tag:' . $tag->get('id') . ']';
         }
 
         $rayons = $article->getLinked('rayon');
         foreach ($rayons as $rayon) {
-            $links .= ' [rayon:'.$rayon->get('id').']';
+            $links .= ' [rayon:' . $rayon->get('id') . ']';
         }
 
-        $hides = $_SQL->query("SELECT `site_id` FROM `links` WHERE `article_id` = ".$article->get('id')." AND `link_hide` = 1");
+        $hides = $_SQL->query("SELECT `site_id` FROM `links` WHERE `article_id` = " . $article->get('id') . " AND `link_hide` = 1");
         while ($h = $hides->fetch()) {
-            $links .= ' [hide:'.$h["site_id"].']';
+            $links .= ' [hide:' . $h["site_id"] . ']';
         }
 
         if ($article->has('publisher_id')) {
-            $onorders = $_SQL->query("SELECT `links`.`site_id` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = ".$article->get('publisher_id')." AND `supplier_on_order` = 1 AND `supplier_deleted` IS NULL");
+            $onorders = $_SQL->query("SELECT `links`.`site_id` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = " . $article->get('publisher_id') . " AND `supplier_on_order` = 1 AND `supplier_deleted` IS NULL");
             while ($oo = $onorders->fetch()) {
-                $links .= ' [onorder:'.$oo["site_id"].']';
+                $links .= ' [onorder:' . $oo["site_id"] . ']';
             }
         }
 
@@ -1344,16 +1356,16 @@ class ArticleManager extends EntityManager
         if ($dlfiles = $fm->getAll(["article_id" => $article->get('id')])) {
             foreach ($dlfiles as $f) {
                 if ($f->has('file_ean')) {
-                    $keywords .= ' '.$f->get('ean');
+                    $keywords .= ' ' . $f->get('ean');
                 }
             }
         }
 
         // Bundle
         if ($article->get('type_id') == 8) {
-            $bundle = $_SQL->query("SELECT `article_title`, `article_ean` FROM `articles` JOIN `links` USING(`article_id`) WHERE `bundle_id` = '".$article->get('id')."'");
+            $bundle = $_SQL->query("SELECT `article_title`, `article_ean` FROM `articles` JOIN `links` USING(`article_id`) WHERE `bundle_id` = '" . $article->get('id') . "'");
             while ($bu = $bundle->fetch()) {
-                $keywords .= ' '.$bu["article_title"].' '.$bu["article_ean"];
+                $keywords .= ' ' . $bu["article_title"] . ' ' . $bu["article_ean"];
             }
             $keywords .= ' lot';
         }
@@ -1427,17 +1439,17 @@ class ArticleManager extends EntityManager
             if (empty($authors_url)) {
                 $authors_url = 'anonyme';
             }
-            $url = makeurl($authors_url).'/'.makeurl($article->get('title'));
+            $url = makeurl($authors_url) . '/' . makeurl($article->get('title'));
 
             // If slug is already used, add article id at the end
             $other = $this->get(
                 [
                     'article_url' => $url,
-                    'article_id' => '!= '.$article->get('id')
+                    'article_id' => '!= ' . $article->get('id')
                 ]
             );
             if ($other) {
-                $url .= '_'.$article->get('id');
+                $url .= '_' . $article->get('id');
             }
 
             $article->set('article_url', $url);
@@ -1466,12 +1478,11 @@ class ArticleManager extends EntityManager
         $other = $this->get(
             [
                 'article_url' => $article->get('url'),
-                'article_id' => '!= '.$article->get('id')
+                'article_id' => '!= ' . $article->get('id')
             ]
         );
         if ($other) {
-            throw new Exception('Il existe déjà un article avec cette l\'url '.$article->get('url'));
+            throw new Exception('Il existe déjà un article avec cette l\'url ' . $article->get('url'));
         }
-
     }
 }
