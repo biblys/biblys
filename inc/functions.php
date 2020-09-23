@@ -11,7 +11,7 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 // Biblys version
-define('BIBLYS_VERSION', '2.49.2');
+define('BIBLYS_VERSION', '2.49.3');
 
 function biblys_error($level, $message, $file, $line, $trace, Exception $exception = null)
 {
