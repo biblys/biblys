@@ -881,7 +881,7 @@ CREATE TABLE `rights` (
   `right_created` datetime DEFAULT NULL,
   `right_updated` datetime DEFAULT NULL,
   `right_deleted` datetime DEFAULT NULL,
-  PRIMARY KEY (`right_id`),
+  PRIMARY KEY (`right_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Create syntax for TABLE 'roles'
