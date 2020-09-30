@@ -1,5 +1,12 @@
 # Changelog
 
+### 2.49.4 (30 septembre 2020)
+
+Corrections
+
+- L'écriture des journaux d'erreurs fonctionne à nouveau pour l'authentification
+  les paiements par Paypal
+
 ### 2.49.3 (23 septembre 2020)
 
 Correction d'un problème qui pouvait conduire, dans certains cas, à l'apparition
