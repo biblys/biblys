@@ -1,6 +1,6 @@
 # Changelog
 
-### 2.50.0 (DEV)
+### 2.50.0 (7 octobre 2020)
 
 Améliorations
 
