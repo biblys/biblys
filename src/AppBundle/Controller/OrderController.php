@@ -217,9 +217,10 @@ class OrderController extends Controller
                 throw new \Exception('Resource '.$resource->id.'  is not a Payment.');
             }
 
+            // Payment failed, ignore process
             if (!$resource->is_paid) {
                 $log->error('Payment '.$resource->id.'  is not paid.');
-                throw new \Exception('Payment '.$resource->id.'  is not paid.');
+                return;
             }
 
             // Check if payment exists

@@ -1,5 +1,10 @@
 # Changelog
 
+### 2.50.1 (14 octobre 2020)
+
+Correction d'un problème qui pouvait provoquer un problème lors de l'échec
+d'un paiement via Payplug.
+
 ### 2.50.0 (7 octobre 2020)
 
 Améliorations
