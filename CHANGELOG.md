@@ -2,8 +2,11 @@
 
 ### 2.50.1 (14 octobre 2020)
 
-Correction d'un problème qui pouvait provoquer un problème lors de l'échec
-d'un paiement via Payplug.
+Corrections
+
+- L'échec d'un paiement via PayPlug ne cause plus d'erreur
+- La modification des options "Exemplté de TVA" et "Livres vendables sur 
+  commande" des fournisseurs fonctionne à nouveau 
 
 ### 2.50.0 (7 octobre 2020)
 
