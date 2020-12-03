@@ -9,6 +9,8 @@ use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\PaymentExecution;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class Order extends Entity
 {
@@ -232,6 +234,9 @@ class Order extends Entity
      */
     public function createPayplugPayment()
     {
+        $log = new Logger('name');
+        $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/payplug.log', Logger::INFO));
+
         global $config, $urlgenerator, $request;
 
         $payplug = $config->get('payplug');
@@ -278,20 +283,28 @@ class Order extends Entity
         $shipping = $billing;
         $shipping["delivery_type"] = "BILLING";
 
-        $response = Payplug\Payment::create([
-            'amount'            => $total_amount,
-            'currency'          => 'EUR',
-            'billing'           => $billing,
-            'shipping'          => $shipping,
-            'hosted_payment'    => [
-                'return_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/order/'.$this->get('url').'?payed=1',
-                'cancel_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/payment/'.$this->get('url')
-            ],
-            'notification_url'  => $notification_url,
-            'metadata'          => [
-                'order_id'          => $this->get('id')
-            ]
-        ]);
+        try {
+            $response = Payplug\Payment::create([
+                'amount'            => $total_amount,
+                'currency'          => 'EUR',
+                'billing'           => $billing,
+                'shipping'          => $shipping,
+                'hosted_payment'    => [
+                    'return_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/order/'.$this->get('url').'?payed=1',
+                    'cancel_url'        => 'http://'.$_SERVER["HTTP_HOST"].'/payment/'.$this->get('url')
+                ],
+                'notification_url'  => $notification_url,
+                'metadata'          => [
+                    'order_id'          => $this->get('id')
+                ]
+            ]);
+        } catch (Exception $exception) {
+            $log->error(
+                "An error occurred while creating a Payment for order ".$this->get('id'),
+                [$exception->getHttpResponse()]
+            );
+            throw $exception;
+        }
 
         $pm = new PaymentManager();
         $payment = $pm->create([
@@ -365,7 +378,7 @@ class Order extends Entity
             'success_url' => 'http://'.$_SERVER["HTTP_HOST"].'/order/'.$this->get('url').'?payed=1',
             'cancel_url' => 'http://'.$_SERVER["HTTP_HOST"].'/payment/'.$this->get('url'),
             'customer_email' => $this->get('email'),
-        ]); 
+        ]);
 
         $pm = new PaymentManager();
         return $pm->create([
@@ -812,7 +825,7 @@ class OrderManager extends EntityManager
 
     /**
      * Add payment to order and flag it as executed
-     * 
+     *
      * @param {Order} $order : the order
      * @param {Payment} $payment : a Payment object or the mode as a String
      * @param {Int} $amount : if Payment is not provided
