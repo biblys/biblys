@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f790709e6c03b1d3738d751da4f41016",
+    "content-hash": "56acdc5c5a21eca33b6ebec1dedf0c14",
     "packages": [
         {
             "name": "biblys/data-client-php",
@@ -742,16 +742,16 @@
         },
         {
             "name": "gitonomy/gitlib",
-            "version": "dev-master",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gitonomy/gitlib.git",
-                "reference": "3d70f3504ee0d3b687917312af96a22f649bcf3d"
+                "reference": "d1fe4676bf1347c08dec84a14a4c5e7110740d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/3d70f3504ee0d3b687917312af96a22f649bcf3d",
-                "reference": "3d70f3504ee0d3b687917312af96a22f649bcf3d",
+                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/d1fe4676bf1347c08dec84a14a4c5e7110740d72",
+                "reference": "d1fe4676bf1347c08dec84a14a4c5e7110740d72",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +762,7 @@
             },
             "require-dev": {
                 "ext-fileinfo": "*",
-                "phpunit/phpunit": "^5.7|^6.5|^7.0",
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.0 || ^8.0 || ^9.0",
                 "psr/log": "^1.0"
             },
             "suggest": {
@@ -770,11 +770,6 @@
                 "psr/log": "Required to use loggers for reporting of execution"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Gitonomy\\Git\\": "src/Gitonomy/Git/"
@@ -803,13 +798,17 @@
                 }
             ],
             "description": "Library for accessing git",
+            "support": {
+                "issues": "https://github.com/gitonomy/gitlib/issues",
+                "source": "https://github.com/gitonomy/gitlib/tree/1.2"
+            },
             "funding": [
                 {
                     "url": "https://tidelift.com/funding/github/packagist/gitonomy/gitlib",
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-14T08:47:33+00:00"
+            "time": "2020-07-30T14:54:11+00:00"
         },
         {
             "name": "google/recaptcha",
@@ -7203,7 +7202,6 @@
     "stability-flags": {
         "swiftmailer/swiftmailer": 0,
         "composer/composer": 20,
-        "gitonomy/gitlib": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
@@ -7212,5 +7210,5 @@
         "php": "~7.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

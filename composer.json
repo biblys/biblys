@@ -39,7 +39,7 @@
     "composer/composer": "dev-master",
     "jflight/gacookie": "~2.0",
     "sinergi/browser-detector": "^6.1",
-    "gitonomy/gitlib": "dev-master",
+    "gitonomy/gitlib": "^1.2",
     "symfony/debug": "^4.4",
     "symfony/event-dispatcher": "^4.4",
     "symfony/console": "^4.4",
