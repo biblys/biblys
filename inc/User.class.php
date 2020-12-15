@@ -284,7 +284,7 @@ class User extends Entity
             return $this->rights;
         } else {
             $rm = new RightManager();
-            $rights = $rm->getAll(['user_id' => $this->get('id')]);
+            $rights = $rm->getAll(['user_id' => $this->get('id')], [], false);
 
             // Keep only admin rights for current site
             foreach ($rights as $key => $right) {
@@ -292,7 +292,8 @@ class User extends Entity
                     unset($rights[$key]);
                 }
             }
-
+            
+            $this->rights = $rights;
             return $rights;
         }
     }
