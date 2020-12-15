@@ -61,8 +61,13 @@
                             continue;
                         }
 
-                        // Keep only fees for max_amount higher than order
-                        if ($fee->get('max_amount') !== null && $fee->get('max_amount') < $amount) {
+                        // Keep only fees for which order's amount is higher than min amount
+                        if ($fee->get('min_amount') !== null && $amount < $fee->get('min_amount')) {
+                            continue;
+                        }
+
+                        // Keep only fees for which order's amount is lesser than max amount
+                        if ($fee->get('max_amount') !== null && $amount > $fee->get('max_amount')) {
                             continue;
                         }
 
