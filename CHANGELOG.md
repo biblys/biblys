@@ -1,11 +1,17 @@
 # Changelog
 
+### 2.50.2 (15 décembre 2020)
+
+- La création ou la modification d'une tranche de frais de port avec un montant
+  de 0,00 € fonctionne à nouveau.
+- L'outil de gestion des frais de port affiche désormais correctement les 
+  tranches sans commentaires.
 ### 2.50.1 (14 octobre 2020)
 
 Corrections
 
 - L'échec d'un paiement via PayPlug ne cause plus d'erreur
-- La modification des options "Exemplté de TVA" et "Livres vendables sur 
+- La modification des options "Exempté de TVA" et "Livres vendables sur 
   commande" des fournisseurs fonctionne à nouveau 
 
 ### 2.50.0 (7 octobre 2020)

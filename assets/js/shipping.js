@@ -236,7 +236,7 @@ export default class Shipping {
 
       <div class="form-group">
         <label class="control-label label-inline" for="info">Commentaire (affiché au client lorsqu'il choisit ce mode) :</label>
-        <input type="text" id="info" name="info" class="form-control" value="${info}">
+        <input type="text" id="info" name="info" class="form-control" value="${info === null ? '' : info}">
       </div>
 
       <div class="form-group text-center">
