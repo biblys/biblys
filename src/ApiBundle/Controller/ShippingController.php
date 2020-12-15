@@ -62,7 +62,7 @@ class ShippingController extends Controller
         $fee->set('shipping_max_weight', $maxWeight);
         $fee->set('shipping_max_amount', $maxAmount);
         $fee->set('shipping_max_articles', $maxArticles);
-        $fee->set('shipping_fee', $postData->fee);
+        $fee->set('shipping_fee', (int) $postData->fee);
         $fee->set('shipping_info', $postData->info);
 
         $fee = $sm->update($fee);
@@ -103,7 +103,7 @@ class ShippingController extends Controller
         $fee->set('shipping_max_weight', $maxWeight);
         $fee->set('shipping_max_amount', $maxAmount);
         $fee->set('shipping_max_articles', $maxArticles);
-        $fee->set('shipping_fee', $putData->fee);
+        $fee->set('shipping_fee', (int) $putData->fee);
         $fee->set('shipping_info', $putData->info);
 
         $fee = $sm->update($fee);
