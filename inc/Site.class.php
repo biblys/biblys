@@ -8,14 +8,27 @@ class Site extends Entity
     public function getOpt($key)
     {
         $om = new OptionManager();
-
-        $option = $om->get(['site_id' => $this->get('id'), 'option_key' => $key]);
-
-        if ($option) {
-            return $option->get('value');
+        
+        // Load and cache all site options
+        if ($this->options === null) {
+            $this->options = $om->getAll([
+                'site_id' => $this->get('id')
+            ]);
         }
 
-        return false;
+        // Get options for key
+        $options = array_values(array_filter($this->options, function($option) use($key) {
+            return $option->get('key') === $key;
+        }));
+
+        // If option for key does not exist, return false 
+        if (count($options) === 0) {
+            return false;
+        }
+
+        // Else return option value
+        $option = $options[0];
+        return $option->get('value');
     }
 
     public function setOpt($key, $value)
@@ -33,6 +46,10 @@ class Site extends Entity
 
         // Else, create a new one
         $option = $om->create(['site_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
+
+        // Reset cached options
+        $this->options = null;
+
         return $this;
     }
 
