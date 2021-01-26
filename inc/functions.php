@@ -11,7 +11,7 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 // Biblys version
-define('BIBLYS_VERSION', '2.50.1');
+define('BIBLYS_VERSION', '2.50.3');
 
 /**
  * Calls biblys_error with the correct arguments for an Exception
