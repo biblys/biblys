@@ -48,7 +48,8 @@
     "symfony/options-resolver": "^5.1",
     "symfony/webpack-encore-bundle": "^1.7",
     "jasonlewis/resource-watcher": "^1.2",
-    "stripe/stripe-php": "^7.39"
+    "stripe/stripe-php": "^7.39",
+    "egulias/email-validator": "2.1.25"
   },
   "require-dev": {
     "phpunit/phpunit": "5.*",
