@@ -7,6 +7,8 @@
   offrir les frais de port à partir d'un certain montant de commande).
 - Paiement : lorsque la création d'un paiement PayPlug échoue, le message
   d'erreur affiché est désormais plus explicite.
+- Commande : l'adresse e-mail indiquée par le client est désormais validée
+  avant l'enregistrement de la commande
 
 ### 2.50.2 (15 décembre 2020)
 

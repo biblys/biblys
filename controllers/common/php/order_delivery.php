@@ -1,5 +1,74 @@
 <?php
 
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
+use Egulias\EmailValidator\Validation\RFCValidation;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+
+class OrderDetailsValidationException extends Exception {};
+
+function validateOrderDetails($request) {
+    if (empty($request->request->get('order_firstname'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Pr&eacute;nom&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('order_lastname'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Nom&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('order_address1'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Adresse&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('order_postalcode'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Code Postal&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('order_city'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Ville&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('order_email'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Adresse e-mail&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('country_id'))) {
+        throw new OrderDetailsValidationException(
+            'Le champ &laquo;&nbsp;Pays&nbsp;&raquo; est obligatoire !'
+        );
+    }
+
+    if (empty($request->request->get('cgv_checkbox'))) {
+        throw new OrderDetailsValidationException(
+            'Vous devez accepter les Conditions Générales de Vente.'
+        );
+    }
+
+    // Validate e-mail
+    $orderEmail = $request->request->get('order_email');
+    $validator = new EmailValidator();
+    $multipleValidations = new MultipleValidationWithAnd([
+        new RFCValidation(),
+        new DNSCheckValidation()
+    ]);
+    $isEmailValid = $validator->isValid($orderEmail, $multipleValidations);
+    if (!$isEmailValid) {
+        throw new Exception("L'adresse e-mail est pas valide.");
+    }
+}
+
     $_PAGE_TITLE = 'Commande &raquo; Validation';
 
     $order_update = 0;
@@ -139,23 +208,15 @@
 
             // Confirm order
             if ($request->getMethod() == "POST") {
-                if (empty($_POST["order_firstname"])) {
-                    $error = 'Le champ &laquo;&nbsp;Pr&eacute;nom&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["order_lastname"])) {
-                    $error = 'Le champ &laquo;&nbsp;Nom&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["order_address1"])) {
-                    $error = 'Le champ &laquo;&nbsp;Adresse&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["order_postalcode"])) {
-                    $error = 'Le champ &laquo;&nbsp;Code Postal&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["order_city"])) {
-                    $error = 'Le champ &laquo;&nbsp;Ville&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["order_email"])) {
-                    $error = 'Le champ &laquo;&nbsp;Adresse e-mail&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["country_id"])) {
-                    $error = 'Le champ &laquo;&nbsp;Pays&nbsp;&raquo; est obligatoire !';
-                } elseif (empty($_POST["cgv_checkbox"])) {
-                    $error = 'Vous devez accepter les Conditions Générales de Vente.';
-                } else {
+
+                $error = null;
+                try {
+                    validateOrderDetails($request);
+                } catch(Exception $exception) {
+                    $error = $exception->getMessage();
+                }
+
+                if ($error === null) {
                     $_SQL->beginTransaction();
 
 
@@ -185,7 +246,7 @@
                     else {
                         $order = $om->create();
                     }
-                    
+
                     /* CUSTOMER */
 
                     // Get customer from User
@@ -525,10 +586,10 @@
                                 Je souhaite recevoir la newsletter pour être tenu-e
                                 au courant de l\'actualité du site.<br>
                                 <small>
-                                    En cochant cette case, j\'accepte de recevoir par 
-                                    courriel la newsletter de '.$site->get('title').'. Je 
-                                    comprends que je peux me désabonner de ces 
-                                    communications en cliquant sur le lien de 
+                                    En cochant cette case, j\'accepte de recevoir par
+                                    courriel la newsletter de '.$site->get('title').'. Je
+                                    comprends que je peux me désabonner de ces
+                                    communications en cliquant sur le lien de
                                     désabonnement inséré à la fin de ces courriels.
                                 </small>
                             </label>
@@ -589,8 +650,8 @@
                     <div class="previous-order">
                         <p>
                             <span class="fa fa-lightbulb-o"></span>
-                            Vous pouvez pré-remplir le formulaire avec les coordonnées 
-                            utilisées lors de votre précédente commande 
+                            Vous pouvez pré-remplir le formulaire avec les coordonnées
+                            utilisées lors de votre précédente commande
                             (n°&nbsp;'.$previousOrder->get('id').').
                         </p>
                         <p>
