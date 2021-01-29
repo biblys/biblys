@@ -5,6 +5,8 @@
 - Frais de port : il est désormais possible de préciser un montant minimum
   pour les conditions d'une tranche de frais de port (utile par exemple pour
   offrir les frais de port à partir d'un certain montant de commande).
+- Paiement : lorsque la création d'un paiement PayPlug échoue, le message
+  d'erreur affiché est désormais plus explicite.
 
 ### 2.50.2 (15 décembre 2020)
 

@@ -62,8 +62,19 @@
 
         } elseif ($payment_mode == 'payplug' && $payplug) {
 
-            $payment = $order->createPayplugPayment();
-            redirect($payment->get("url"));
+            try {
+                $payment = $order->createPayplugPayment();
+                redirect($payment->get("url"));
+            } catch(Payplug\Exception\BadRequestException $exception) {
+                $error = $exception->getErrorObject();
+                $_ECHO = '
+                    <p class="alert alert-danger">
+                        Une erreur est survenue lors de la création du paiement via PayPlug :<br />
+                        <strong>Message : '.$error['message'].'</strong>
+                    </p>
+                    <pre>'.json_encode($error['details'], JSON_PRETTY_PRINT).'</pre>
+                ';
+            }
 
         } elseif ($payment_mode == 'stripe' && $stripe) {
             
