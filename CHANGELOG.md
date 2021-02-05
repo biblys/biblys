@@ -1,5 +1,6 @@
 # Changelog
-### DEV
+
+### 2.51.0 (5 février 2021)
 
 - Amélioration des performances
 - Frais de port : il est désormais possible de préciser un montant minimum
@@ -13,7 +14,7 @@
   pré-remplie avec l'adresse e-mail de son compte utilisateur lors de
   l'enregistrement d'une nouvelle commande
 
-### 2.50.3 (26 janvier 2020)
+### 2.50.3 (26 janvier 2021)
 
 - Correction : cliquer sur annuler dans la boîte de dialogue du numéro de suivi
   d'une commande ne marque plus la commande comme expédiée.
