@@ -231,7 +231,12 @@ function reloadEvents(scope) {
       }, 
       success: function (data) {
         notification.remove();
-        var res = jQuery.parseJSON(data);
+        let res;
+        try {
+          res = jQuery.parseJSON(data);
+        } catch (error) {
+          _alert(`Erreur du serveur: ${data}`);
+        }
         if (res.error) {
           overlay('hide');
           _alert(res.error);

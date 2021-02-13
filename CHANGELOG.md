@@ -1,5 +1,9 @@
 # Changelog
 
+### DEV
+
+- Correction de l'affichage des erreurs serveur lors de l'import d'un article
+
 ### 2.51.0 (5 février 2021)
 
 - Amélioration des performances
