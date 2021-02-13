@@ -189,7 +189,7 @@ function noosfere($x, $mode = null)
         $a["article_import_source"] = "noosfere";
         $articles[] = $a;
     }
-    
+
     return $articles;
 }
 
@@ -284,7 +284,7 @@ function amazon($x)
 if ($_GET["mode"] == "search") { // Mode recherche
     $r = null;
     $articles_noosfere = noosfere($_GET["q"]); // ne fonctionne plus le 16 avril 2015
-    
+
     // If query param is an EAN, try as an ISBN-10
     $isbnQ = new ISBN($_GET['q']);
     if (count($articles_noosfere) === 0 && $isbnQ->isValid()) {
@@ -349,7 +349,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
     if (isset($additional_results)) {
         $r .= '<div id="additionalResults" class="hidden">'.$additional_results.'</div><h3 id="showAllResults" class="toggleThis center pointer">Afficher plus de r&eacute;sultats...</h3>';
     }
-    
+
     $response = new JsonResponse(['result' => $r]);
     $response->send();
 } elseif ($_GET["mode"] == "import") { // Mode import
@@ -393,8 +393,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
         }
 
         $publishers = $_SQL->prepare(
-            "SELECT `publisher_id`, `publisher_name` FROM `publishers` 
-                WHERE (`publisher_noosfere_id` = :noosfere_IdEditeur OR 
+            "SELECT `publisher_id`, `publisher_name` FROM `publishers`
+                WHERE (`publisher_noosfere_id` = :noosfere_IdEditeur OR
                     `publisher_name` = :publisher_name) AND
                     `publisher_deleted` IS NULL
                 ORDER BY `publisher_noosfere_id` LIMIT 1"
@@ -405,7 +405,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 'publisher_name' => $x["article_publisher"],
             ]
         );
-        
+
         // Si l'editeur existe deja en base, on recupere les infos
         if ($p = $publishers->fetch(PDO::FETCH_ASSOC)) {
             $publisher = $pm->getById($p['publisher_id']);
@@ -421,7 +421,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
         elseif (!empty($x["noosfere_IdEditeur"])) {
             $publisher = $pm->create([
                 "publisher_name" => $x["article_publisher"],
-                "publisher_noosfere_id" => $x["noosfere_IdCollection"], 
+                "publisher_noosfere_id" => $x["noosfere_IdCollection"],
             ]);
             $x["publisher_id"] = $publisher->get('id');
         // Sinon, on ne met pas de editeur
@@ -436,7 +436,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Reconnaissance de collection
     if (isset($x["article_collection"]) && isset($x["publisher_id"])) {
-        
+
         // Filtres de collections noosfere
         $correctId = Noosfere::getCorrectIdFor($x["noosfere_IdCollection"]);
         if ($correctId) {
@@ -470,11 +470,11 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $collection->set('collection_noosfere_id', $x["noosfere_IdCollection"]);
                 $cm->update($collection);
             }
-        } 
-        
+        }
+
         // If collection does not exist but has a noosfere id, let's create it
         elseif (!empty($x["noosfere_IdCollection"])) {
-           
+
             // Si la collection n'existe pas, mais qu'on a un id noosfere, on la cree
             $collectionParams = [
                 "publisher_id" => $publisher->get('id'),
@@ -516,8 +516,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
             // Reconnaissance des jobs
             if (!empty($c["people_role"])) {
                 $jobs = $_SQL->prepare(
-                    "SELECT `job_id` FROM `jobs` 
-                    WHERE `job_name` = :people_role OR 
+                    "SELECT `job_id` FROM `jobs`
+                    WHERE `job_name` = :people_role OR
                         `job_other_names` LIKE :like_people_role LIMIT 1"
                 );
                 $jobs->execute(
@@ -537,10 +537,14 @@ if ($_GET["mode"] == "search") { // Mode recherche
             }
 
             $people = $_SQL->prepare(
-                "SELECT `people_id`, `people_name` FROM `people` 
-                WHERE `people_noosfere_id` = :people_noosfere_id OR 
-                    `people_name` = :people_name OR 
-                    `people_url` = :people_url
+                "SELECT `people_id`, `people_name` FROM `people`
+                WHERE
+                    `people_deleted` IS NULL AND
+                        (
+                            `people_noosfere_id` = :people_noosfere_id OR
+                            `people_name` = :people_name OR
+                            `people_url` = :people_url
+                        )
                 ORDER BY `people_noosfere_id` DESC LIMIT 1"
             );
             $people->execute(
@@ -550,7 +554,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
                     'people_url' => makeurl($c["people_name"]),
                 ]
             );
-            
+
             // Si le contributeur existe deja en base, on recupere les infos
             if ($p = $people->fetch(PDO::FETCH_ASSOC)) {
                 $contributor = $pom->getById($p['people_id']);
@@ -572,10 +576,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
                 $x["article_people"][$k]["people_id"] = $contributor->get('id');
                 $x["article_people"][$k]["people_name"] = $contributor->getName();
             }
-            
+
             // S'il manque des infos, on n'ajoute pas le contributeur au livre
-            if (empty($x["article_people"][$k]["people_id"]) 
-                || empty($x["article_people"][$k]["people_name"]) 
+            if (empty($x["article_people"][$k]["people_id"])
+                || empty($x["article_people"][$k]["people_name"])
                 || empty($x["article_people"][$k]["job_id"])
             ) {
                 unset($x["article_people"][$k]);
@@ -586,8 +590,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
     // Reconnaissance des catégories
     if (isset($x["pricegrid_id"]) && isset($x["article_price"])) {
         $prices = $_SQL->prepare(
-            "SELECT `price_cat` FROM `prices` 
-            WHERE `price_amount` = :price_amount AND 
+            "SELECT `price_cat` FROM `prices`
+            WHERE `price_amount` = :price_amount AND
                 `pricegrid_id` = :pricegrid_id LIMIT 1"
         );
         $prices->execute(

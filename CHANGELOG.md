@@ -2,7 +2,12 @@
 
 ### DEV
 
-- Correction de l'affichage des erreurs serveur lors de l'import d'un article
+Corrections
+
+- Les erreurs serveur survenant lors de l'import d'un article s'affiche à
+  nouveau correctement
+- L'import d'un article associé à un contributeur ayant précédemment été
+  supprimé fonctionne à nouveau
 
 ### 2.51.0 (5 février 2021)
 
