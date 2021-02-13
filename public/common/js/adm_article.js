@@ -2,7 +2,7 @@
 /* global _alert */
 /* global overlay */
 
-'use strict';
+
 
 if (typeof Biblys === 'undefined') {
   var Biblys = {};
@@ -51,29 +51,29 @@ function choose_cycle(cycle_id, cycle_name) {
 // Choisir un contributeur
 function choose_people(people_id, people_name, job_id) {
   $.ajax({
-      url: '/x/adm_article_people', 
-      method: 'POST',
-      data: {
-        action: 'add',
-        article_id: $('#article_id').val(),
-        people_id: people_id,
-        people_name: people_name,
-        job_id: job_id
-      }, 
-      complete: function (jqXHR) {
-        var data = jqXHR.responseJSON;
-        $('#article_people').removeAttr('readonly').removeClass('loading');
-        if (data.error) {
-          window._alert(data.error);
-        } else {
-          $('#people_list').append(data.people);
-          $('#job_id_' + data.role_id).html($('#new_people_job').html()).focus();
-          $('#job_id_' + data.role_id + ' option[value=' + job_id + ']').attr('selected', 'selected');
-          $('#article_authors').val(data.authors);
-          $('#article_people').val('');
-          reloadEvents($('#people_list'));
-        }
+    url: '/x/adm_article_people',
+    method: 'POST',
+    data: {
+      action: 'add',
+      article_id: $('#article_id').val(),
+      people_id: people_id,
+      people_name: people_name,
+      job_id: job_id
+    },
+    complete: function (jqXHR) {
+      var data = jqXHR.responseJSON;
+      $('#article_people').removeAttr('readonly').removeClass('loading');
+      if (data.error) {
+        window._alert(data.error);
+      } else {
+        $('#people_list').append(data.people);
+        $('#job_id_' + data.role_id).html($('#new_people_job').html()).focus();
+        $('#job_id_' + data.role_id + ' option[value=' + job_id + ']').attr('selected', 'selected');
+        $('#article_authors').val(data.authors);
+        $('#article_people').val('');
+        reloadEvents($('#people_list'));
       }
+    }
   });
 }
 
@@ -198,7 +198,7 @@ function reloadEvents(scope) {
         .then(function (json) {
           field.classList.remove('loading');
           notification.remove();
-          field.value = json.isbn
+          field.value = json.isbn;
           field.dataset.checked = json.isbn;
           if ($('#article_form').data('mode') == 'insert' && field.id == 'article_ean') {
             article_search();
@@ -220,15 +220,18 @@ function reloadEvents(scope) {
   // Importer une fiche
   $('.article-import').click(function () {
     overlay('Importation en cours...');
-    var notification = new Biblys.Notification('Importation de la fiche en cours...', { sticky: true, loader: true });
+    const notification = new Biblys.Notification(
+      'Importation de la fiche en cours...',
+      { sticky: true, loader: true }
+    );
     $.ajax({
-      url: '/x/adm_article_import', 
-        data: {
+      url: '/x/adm_article_import',
+      data: {
         mode: 'import',
         ean: $(this).data('ean'),
         asin: $(this).data('asin'),
         noosfere_id: $(this).data('noosfere_id')
-      }, 
+      },
       success: function (data) {
         notification.remove();
         let res;
@@ -295,7 +298,7 @@ function reloadEvents(scope) {
   $('#createCollection.event', scope).submit(function (e) {
     e.preventDefault();
     $.post({
-      url: '/x/adm_article_collection', 
+      url: '/x/adm_article_collection',
       data: {
         collection_name: $('#collection_name').val(),
         collection_publisher: $('#collection_publisher').val(),
@@ -399,7 +402,7 @@ function reloadEvents(scope) {
         award_year: $('#award_year').val(),
         award_category: $('#award_category').val(),
         award_note: $('#award_note').val()
-      }, 
+      },
       complete: function (jqXHR) {
         const res = jqXHR.responseJSON;
         $('#addAwardSubmit').removeClass('loading').removeAttr('disabled');
@@ -418,11 +421,11 @@ function reloadEvents(scope) {
     var award_id = $(this).data('award_id');
     $('#award_' + award_id).fadeTo('fast', '0.5');
     $.ajax({
-      url: '/x/adm_article_award', 
+      url: '/x/adm_article_award',
       data: {
         del: 1,
         award_id: award_id
-      }, 
+      },
       complete: function (jqXHR) {
         var res = jqXHR.responseJSON;
         if (res.error) {
@@ -513,11 +516,11 @@ $(document).ready(function () {
       select: function (event, ui) {
         if (ui.item.create == '1') { // Creer un nouvel editeur
           $('#collection_publisher').addClass('loading');
-          $.post({ 
-            url: '/x/adm_article_publisher', 
+          $.post({
+            url: '/x/adm_article_publisher',
             data: {
               publisher_name: ui.item.value
-            }, 
+            },
             success: function (data) {
               $('#collection_publisher').removeClass('loading');
               var res = jQuery.parseJSON(data);
@@ -544,11 +547,11 @@ $(document).ready(function () {
       if (ui.item.create == '1') { // Creer un nouveau cycle
         $('#article_cycle').addClass('loading');
         $.ajax({
-          url: '/x/adm_article_cycle', 
+          url: '/x/adm_article_cycle',
           method: 'POST',
           data: {
             cycle_name: ui.item.value
-          }, 
+          },
           complete: function (jqXHR) {
             var data = jqXHR.responseJSON;
             $('#article_cycle').removeClass('loading');
