@@ -45,7 +45,7 @@ class Controller
             throw new AuthException('Accès réservé aux administrateurs.');
         }
 
-        if ($rank == 'publisher' && !$this->user->isPublisher($id) && !$this->user->isAdmin()) {
+        if ($rank == 'publisher' && !$this->user->isPublisherWithId($id) && !$this->user->isAdmin()) {
             throw new AuthException('Accès réservé aux éditeurs.');
         }
 

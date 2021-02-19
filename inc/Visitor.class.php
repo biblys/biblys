@@ -111,31 +111,23 @@ class Visitor extends User
         return false;
     }
 
-    /**
-     * Is the visitor currently a publisher ?
-     * @param type $id
-     * @return boolean
-     */
-    public function isPublisher($publisherId = null)
+    public function isPublisher()
     {
         $right = $this->getCurrentRight();
-
-        // If user has no publisher right, return false
-        if (!$right->has('publisher_id')) {
-            return false;
-        }
-
-        // If no publisher id was specified, return true
-        if ($publisherId === null) {
+        if ($right->has('publisher_id')) {
             return true;
         }
 
-        // If right's publisher id matches specified id, return true
-        if ($right->get('publisher_id') === $publisherId) {
+        return false;
+    }
+
+    public function isPublisherWithId($id)
+    {
+        $right = $this->getCurrentRight();
+        if ($right->get('publisher_id') === $id) {
             return true;
         }
 
-        // Else return false
         return false;
     }
 
@@ -170,7 +162,7 @@ class Visitor extends User
     /**
      * Is the visitor currenty a web cron task launcher
      */
-    public function isCron() 
+    public function isCron()
     {
         global $request, $config;
 

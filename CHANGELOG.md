@@ -2,6 +2,12 @@
 
 ### 2.51.1 (19 février 2021)
 
+Correction
+
+- L'accès au tableau de bord en tant qu'éditeur fonctionne à nouveau
+
+### 2.51.1 (18 février 2020)
+
 Corrections
 
 - Les erreurs serveur survenant lors de l'import d'un article s'affiche à

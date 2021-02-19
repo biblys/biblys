@@ -318,7 +318,9 @@ class ArticleController extends Controller
             throw new \Exception("Article $id not found");
         }
 
-        $this->auth('publisher', $article->get('publisher_id'));
+        if ($article->has('publisher_id')) {
+            $this->auth('publisher', $article->get('publisher_id'));
+        }
 
         $links = [];
 
@@ -377,7 +379,9 @@ class ArticleController extends Controller
             throw new \Exception("Article $id not found");
         }
 
-        $this->auth('publisher', $article->get('publisher_id'));
+        if ($article->has('publisher_id')) {
+            $this->auth('publisher', $article->get('publisher_id'));
+        }
 
         $rayon_id = $request->request->get('rayon_id');
         $rayon = $rm->getById($rayon_id);
