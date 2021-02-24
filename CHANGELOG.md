@@ -2,9 +2,10 @@
 
 ### 2.51.1 (19 février 2021)
 
-Correction
+Corrections
 
 - L'accès au tableau de bord en tant qu'éditeur fonctionne à nouveau
+- Il n'est plus possible d'associer un article à un cycle supprimé
 
 ### 2.51.1 (18 février 2020)
 

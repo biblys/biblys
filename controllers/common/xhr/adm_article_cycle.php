@@ -7,13 +7,13 @@ $json = [];
 $term = filter_input(INPUT_GET, 'term', FILTER_SANITIZE_SPECIAL_CHARS);
 if ($term) {
     $i = 0;
-    $cycles = $_SQL->prepare("SELECT `cycle_id`, `cycle_name` FROM `cycles` WHERE `cycle_name` LIKE :term ORDER BY `cycle_name`");
-    $cycles->execute(['term' => '%'.$term.'%']);
-    while ($c = $cycles->fetch(PDO::FETCH_ASSOC)) {
-        $json[$i]["label"] = $c["cycle_name"];
-        $json[$i]["value"] = $c["cycle_name"];
-        $json[$i]["cycle_id"] = $c["cycle_id"];
-        $json[$i]["cycle_name"] = $c["cycle_name"];
+    $cm = new CycleManager();
+    $cycles = $cm->getAll(['cycle_name' => "LIKE %$term%"]);
+    foreach ($cycles as $cycle) {
+        $json[$i]["label"] = $cycle->get("cycle_name");
+        $json[$i]["value"] = $cycle->get("cycle_name");
+        $json[$i]["cycle_id"] = $cycle->get("cycle_id");
+        $json[$i]["cycle_name"] = $cycle->get("cycle_name");
         $i++;
     }
     $json[$i]["label"] = '=> Créer : '.$_GET["term"];
