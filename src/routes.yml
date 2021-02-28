@@ -2,11 +2,11 @@
 
 api_auth:
   path: /api/auth
-  defaults: { _controller: 'ApiBundle\Controller\AuthController::authAction' }
+  controller: ApiBundle\Controller\AuthController::authAction
 
 api_me:
   path: /api/me
-  defaults: { _controller: 'ApiBundle\Controller\AuthController::meAction' }
+  controller: ApiBundle\Controller\AuthController::meAction
 
 # Shipping
 
@@ -36,161 +36,138 @@ api_shipping_delete:
 
 maintenance_infos:
   path: /biblys/infos
-  defaults: { _controller: 'AppBundle\Controller\MaintenanceController::infosAction' }
+  controller: AppBundle\Controller\MaintenanceController::infosAction
 
 maintenance_update:
   path: /admin/update
-  defaults: { _controller: 'AppBundle\Controller\MaintenanceController::updateAction' }
+  controller: AppBundle\Controller\MaintenanceController::updateAction
 
 maintenance_updating:
   path: /admin/updating/{version}
-  defaults:
-    _controller: AppBundle\Controller\MaintenanceController::updatingAction
+  controller: AppBundle\Controller\MaintenanceController::updatingAction
 
 maintenance_composer:
   path: /admin/composer
-  defaults:
-    _controller: AppBundle\Controller\MaintenanceController::composerAction
+  controller: AppBundle\Controller\MaintenanceController::composerAction
 
 maintenance_changelog_index:
   path: /biblys/changelog
-  defaults: { _controller: 'AppBundle\Controller\MaintenanceController::changelogIndexAction' }
+  controller: AppBundle\Controller\MaintenanceController::changelogIndexAction
 
 maintenance_changelog_show:
   path: /biblys/changelog/{version}
-  defaults: { _controller: 'AppBundle\Controller\MaintenanceController::changelogShowAction' }
+  controller: AppBundle\Controller\MaintenanceController::changelogShowAction
 
 # Main
 
 main_home:
   path: /
-  defaults:
-    _controller: AppBundle\Controller\MainController::homeAction
+  controller: AppBundle\Controller\MainController::homeAction
 
 main_contact:
   path: /contact/
-  defaults:
-    _controller: AppBundle\Controller\MainController::contactAction
+  controller: AppBundle\Controller\MainController::contactAction
   methods: [GET, POST]
 
 main_admin:
   path: /admin/
-  defaults:
-    _controller: AppBundle\Controller\MainController::adminAction
+  controller: AppBundle\Controller\MainController::adminAction
 
 main_admin_shortcuts:
   path: /admin/shortcuts
-  defaults:
-    _controller: AppBundle\Controller\MainController::adminShortcutsAction
+  controller: AppBundle\Controller\MainController::adminShortcutsAction
 
 main_admin_notifications:
   path: /admin/notifications
-  defaults:
-    _controller: AppBundle\Controller\MainController::adminNotificationsAction
+  controller: AppBundle\Controller\MainController::adminNotificationsAction
 
 # Article
 
 article_show:
   path: /a/{slug}
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::showAction
+  controller: AppBundle\Controller\ArticleController::showAction
   requirements:
     slug: '.+'
 
 article_search:
   path: /articles/search
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::searchAction
+  controller: AppBundle\Controller\ArticleController::searchAction
 
 article_free_download:
   path: /articles/{id}/free-download
-  defaults:
-    _controller: 'AppBundle\Controller\ArticleController::freeDownloadAction'
+  controller: AppBundle\Controller\ArticleController::freeDownloadAction
 
 article_delete:
   path: /admin/articles/{id}/delete
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::deleteAction
+  controller: AppBundle\Controller\ArticleController::deleteAction
 
 article_deleted:
   path: /admin/articles/deleted
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::deletedAction
+  controller: AppBundle\Controller\ArticleController::deletedAction
 
 article_deletions:
   path: /admin/articles/deletions
-  defaults: { _controller: 'AppBundle\Controller\ArticleController::deletionsAction' }
+  controller: AppBundle\Controller\ArticleController::deletionsAction
 
 article_push_to_data:
   path: /admin/articles/push_to_data
-  defaults:
-    _controller: 'AppBundle\Controller\ArticleController::pushToDataAction'
+  controller: AppBundle\Controller\ArticleController::pushToDataAction
 
 article_tags_add:
   path: /admin/articles/{id}/tags/add
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::addTagsAction
+  controller: AppBundle\Controller\ArticleController::addTagsAction
+  requirements:
     id: \d+
 
 article_rayons_add:
   path: /admin/articles/{id}/rayons/add
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::addRayonsAction
+  controller: AppBundle\Controller\ArticleController::addRayonsAction
+  requirements:
     id: \d+
 
 article_search_terms:
   path: /admin/articles/search-terms/
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::searchTermsAction
+  controller: AppBundle\Controller\ArticleController::searchTermsAction
 
 article_refresh_search_terms:
   path: /admin/articles/{id}/refresh-search-terms
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::refreshSearchTermsAction
+  controller: AppBundle\Controller\ArticleController::refreshSearchTermsAction
 
 article_by_isbn:
   path: /isbn/{ean}
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::byIsbn
+  controller: AppBundle\Controller\ArticleController::byIsbn
 
 article_admin_catalog:
   path: /admin/articles/
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::adminCatalog
+  controller: AppBundle\Controller\ArticleController::adminCatalog
 
 article_check_isbn:
   path: /admin/articles/check-isbn
-  defaults:
-    _controller: AppBundle\Controller\ArticleController::checkIsbn
+  controller: AppBundle\Controller\ArticleController::checkIsbn
 
 # Awards
 
 awards_index:
   path: /recompenses/
-  defaults:
-    _controller: AppBundle\Controller\AwardsController::indexAction
+  controller: AppBundle\Controller\AwardsController::indexAction
 
 # Crons
 
 crons_tasks:
   path: /admin/crons/
-  defaults:
-    _controller: AppBundle\Controller\CronsController::tasksAction
+  controller: AppBundle\Controller\CronsController::tasksAction
 
 crons_task:
   path: /admin/crons/{slug}/jobs
-  defaults:
-    _controller: AppBundle\Controller\CronsController::jobsAction
+  controller: AppBundle\Controller\CronsController::jobsAction
 
 crons_test:
   path: /crons/test
-  defaults:
-    _controller: AppBundle\Controller\CronsController::testAction
+  controller: AppBundle\Controller\CronsController::testAction
 
 crons_export_pdl:
   path: /crons/export-pdl
-  defaults:
-    _controller: AppBundle\Controller\CronsController::exportPdlAction
+  controller: AppBundle\Controller\CronsController::exportPdlAction
 
 # Crowdfunding
 
@@ -198,64 +175,61 @@ crons_export_pdl:
 
 cf_campaign_show:
   path: /financement/{slug}
-  defaults: { _controller: 'AppBundle\Controller\CFCampaignController::showAction' }
+  controller: AppBundle\Controller\CFCampaignController::showAction
 
 cf_campaign_list:
   path: /admin/crowdfunding/campaigns
-  defaults: { _controller: 'AppBundle\Controller\CFCampaignController::listAction' }
+  controller: AppBundle\Controller\CFCampaignController::listAction
 
 cf_campaign_edit:
   path: /admin/crowdfunding/campaign/{id}/edit
-  defaults: { _controller: 'AppBundle\Controller\CFCampaignController::editAction' }
+  controller: AppBundle\Controller\CFCampaignController::editAction
 
 cf_campaign_refresh:
   path: /admin/crowdfunding/campaign/{id}/refresh
-  defaults: { _controller: 'AppBundle\Controller\CFCampaignController::refreshAction' }
+  controller: AppBundle\Controller\CFCampaignController::refreshAction
 
 cf_campaign_new:
   path: /admin/crowdfunding/campaign/new
-  defaults: { _controller: 'AppBundle\Controller\CFCampaignController::newAction' }
+  controller: AppBundle\Controller\CFCampaignController::newAction
 
 ## Rewards
 
 cf_reward_list:
   path: /admin/crowdfunding/campaign/{campaign_id}/rewards
-  defaults: { _controller: 'AppBundle\Controller\CFRewardController::listAction' }
+  controller: AppBundle\Controller\CFRewardController::listAction
 
 cf_reward_new:
   path: /admin/crowdfunding/campaign/{campaign_id}/rewards/new
-  defaults: { _controller: 'AppBundle\Controller\CFRewardController::newAction' }
+  controller: AppBundle\Controller\CFRewardController::newAction
 
 cf_reward_edit:
   path: /admin/crowdfunding/reward/{id}/edit
-  defaults: { _controller: 'AppBundle\Controller\CFRewardController::editAction' }
+  controller: AppBundle\Controller\CFRewardController::editAction
 
 cf_reward_delete:
   path: /admin/crowdfunding/reward/{id}/delete
-  defaults: { _controller: 'AppBundle\Controller\CFRewardController::deleteAction' }
+  controller: AppBundle\Controller\CFRewardController::deleteAction
 
 # Collection
 
 collection_index:
   path: /collections/
-  defaults: { _controller: 'AppBundle\Controller\CollectionController::indexAction' }
+  controller: AppBundle\Controller\CollectionController::indexAction
 
 collection_show:
   path: /collection/{slug}
-  defaults:
-    _controller: AppBundle\Controller\CollectionController::showAction
+  controller: AppBundle\Controller\CollectionController::showAction
 
 collection_edit:
   path: /admin/collection/{id}/edit
-  defaults:
-    _controller: AppBundle\Controller\CollectionController::editAction
+  controller: AppBundle\Controller\CollectionController::editAction
   requirements:
     id: \d+
 
 collection_delete:
   path: /admin/collection/{id}/delete
-  defaults:
-    _controller: AppBundle\Controller\CollectionController::deleteAction
+  controller: AppBundle\Controller\CollectionController::deleteAction
   requirements:
     id: \d+
 
@@ -263,71 +237,63 @@ collection_delete:
 
 cycle_show:
   path: /cycle/{slug}
-  defaults:
-    _controller: AppBundle\Controller\CycleController::showAction
+  controller: AppBundle\Controller\CycleController::showAction
 
 # Events
 
 event_index:
   path: /evenements/
-  defaults:
-    _controller: AppBundle\Controller\EventController::indexAction
+  controller: AppBundle\Controller\EventController::indexAction
 
 event_show:
   path: /evenements/{slug}
-  defaults:
-    _controller: AppBundle\Controller\EventController::showAction
+  controller: AppBundle\Controller\EventController::showAction
 
 # File
 
 file_download:
   path: /download/{id}.{format}
-  defaults: { _controller: 'AppBundle\Controller\FileController::downloadAction' }
+  controller: AppBundle\Controller\FileController::downloadAction
 
 # Gallery
 
 gallery_index:
   path: /galeries/
-  defaults:
-    _controller: 'AppBundle\Controller\GalleryController::indexAction'
+  controller: AppBundle\Controller\GalleryController::indexAction
 
 gallery_show:
   path: /galerie/{slug}
-  defaults:
-    _controller: 'AppBundle\Controller\GalleryController::showAction'
+  controller: AppBundle\Controller\GalleryController::showAction
 
 # Inventory
 
 inventory_index:
   path: /admin/inventories/
-  defaults: { _controller: 'AppBundle\Controller\InventoryController::indexAction' }
+  controller: AppBundle\Controller\InventoryController::indexAction
 
 inventory_item_delete:
   path: /admin/inventories/{inventory_id}/item/{id}/delete
-  defaults: { _controller: 'AppBundle\Controller\InventoryController::itemDeleteAction' }
+  controller: AppBundle\Controller\InventoryController::itemDeleteAction
 
 inventory_item_remove:
   path: /admin/inventories/{inventory_id}/item/{id}/remove
-  defaults: { _controller: 'AppBundle\Controller\InventoryController::itemRemoveAction' }
+  controller: AppBundle\Controller\InventoryController::itemRemoveAction
 
 inventory_import:
   path: /admin/inventories/{id}/import
-  defaults:
-    _controller: 'AppBundle\Controller\InventoryController::importAction'
-    mode: null
+  controller: AppBundle\Controller\InventoryController::importAction
 
 inventory_show:
   path: /admin/inventories/{id}/{mode}
+  controller: AppBundle\Controller\InventoryController::showAction
   defaults:
-    _controller: 'AppBundle\Controller\InventoryController::showAction'
     mode: null
 
 # Links
 
 link_delete:
   path: /admin/links/{id}/delete
-  defaults:
-    _controller: AppBundle\Controller\LinkController::deleteAction
+  controller: AppBundle\Controller\LinkController::deleteAction
   requirements:
     id: \d+
 
@@ -335,66 +301,57 @@ link_delete:
 
 mailing_subscribe:
   path: /mailing/subscribe
-  defaults: { _controller: 'AppBundle\Controller\MailingController::subscribeAction' }
+  controller: AppBundle\Controller\MailingController::subscribeAction
 
 mailing_unsubscribe:
   path: /mailing/unsubscribe
-  defaults: { _controller: 'AppBundle\Controller\MailingController::unsubscribeAction' }
+  controller: AppBundle\Controller\MailingController::unsubscribeAction
 
 mailing_contacts:
   path: /admin/mailing/contacts
-  defaults: { _controller: 'AppBundle\Controller\MailingController::contactsAction' }
+  controller: AppBundle\Controller\MailingController::contactsAction
 
 # Orders
 
 order_index:
   path: /admin/orders/
-  defaults:
-    _controller: AppBundle\Controller\OrderController::indexAction
+  controller: AppBundle\Controller\OrderController::indexAction
 
 order_paypal_process:
   path: /orders/{url}/paypal-process
-  defaults:
-    _controller: AppBundle\Controller\OrderController::paypalProcessAction
+  controller: AppBundle\Controller\OrderController::paypalProcessAction
 
 order_payplug_notification:
   path: /orders/{url}/payplug-notification
-  defaults:
-    _controller: AppBundle\Controller\OrderController::payplugNotificationAction
+  controller: AppBundle\Controller\OrderController::payplugNotificationAction
 
 order_update:
   path: /admin/orders/{id}/{action}
-  defaults:
-    _controller: AppBundle\Controller\OrderController::updateAction
+  controller: AppBundle\Controller\OrderController::updateAction
 
 orders_conversions:
   path: /admin/orders/conversions
-  defaults:
-    _controller: AppBundle\Controller\OrderController::conversionsAction
+  controller: AppBundle\Controller\OrderController::conversionsAction
 
 orders_convert_utmz:
   path: /admin/orders/convert-utmz
-  defaults:
-    _controller: AppBundle\Controller\OrderController::convertUtmzAction
+  controller: AppBundle\Controller\OrderController::convertUtmzAction
 
 # People
 
 people_index:
   path: /auteurs/
-  defaults:
-    _controller: AppBundle\Controller\PeopleController::authorsAction
+  controller: AppBundle\Controller\PeopleController::authorsAction
 
 people_show:
   path: /p/{slug}/
-  defaults:
-    _controller: AppBundle\Controller\PeopleController::showAction
+  controller: AppBundle\Controller\PeopleController::showAction
   requirements:
     slug: '.+'
 
 people_edit:
   path: /admin/people/{id}/edit
-  defaults:
-    _controller: AppBundle\Controller\PeopleController::editAction
+  controller: AppBundle\Controller\PeopleController::editAction
   requirements:
     id: \d+
 
@@ -409,37 +366,31 @@ payment_stripe_webhook:
 
 post_index:
   path: /blog/
-  defaults:
-    _controller: AppBundle\Controller\PostController::indexAction
+  controller: AppBundle\Controller\PostController::indexAction
 
 post_show:
   path: /blog/{slug}
-  defaults:
-    _controller: AppBundle\Controller\PostController::showAction
+  controller: AppBundle\Controller\PostController::showAction
 
 posts_admin:
   path: /admin/posts/
-  defaults:
-    _controller: AppBundle\Controller\PostController::adminAction
+  controller: AppBundle\Controller\PostController::adminAction
 
 post_delete:
   path: /admin/post/{id}/delete
-  defaults:
-    _controller: AppBundle\Controller\PostController::deleteAction
+  controller: AppBundle\Controller\PostController::deleteAction
   requirements:
     id: \d+
 
 post_old_path:
   path: /post/{slug}
-  defaults:
-    _controller: AppBundle\Controller\PostController::oldUrlAction
+  controller: AppBundle\Controller\PostController::oldUrlAction
 
 # PostCategory
 
 category_show:
   path: /blog/{slug}/
-  defaults:
-    _controller: AppBundle\Controller\PostCategoryController::showAction
+  controller: AppBundle\Controller\PostCategoryController::showAction
 
 # Publisher
 
@@ -449,13 +400,11 @@ publisher_index:
 
 publisher_show:
   path: /editeur/{slug}
-  defaults:
-    _controller: AppBundle\Controller\PublisherController::showAction
+  controller: AppBundle\Controller\PublisherController::showAction
 
 publisher_edit:
   path: /admin/publisher/{id}/edit
-  defaults:
-    _controller: AppBundle\Controller\PublisherController::editAction
+  controller: AppBundle\Controller\PublisherController::editAction
   requirements:
     id: \d+
 
@@ -492,22 +441,19 @@ publisher_rights_remove:
 
 publisher_suppliers:
   path: /admin/publisher/{id}/suppliers
-  defaults:
-    _controller: AppBundle\Controller\PublisherController::suppliersAction
+  controller: AppBundle\Controller\PublisherController::suppliersAction
   requirements:
     id: \d+
 
 publisher_suppliers_add:
   path: /admin/publisher/{id}/suppliers/add
-  defaults:
-    _controller: AppBundle\Controller\PublisherController::suppliersAddAction
+  controller: AppBundle\Controller\PublisherController::suppliersAddAction
   requirements:
     id: \d+
 
 publisher_suppliers_remove:
   path: /admin/publisher/{id}/suppliers/remove/{supplier_id}
-  defaults:
-    _controller: AppBundle\Controller\PublisherController::suppliersRemoveAction
+  controller: AppBundle\Controller\PublisherController::suppliersRemoveAction
   requirements:
     id: \d+
     supplier_id: \d+
@@ -516,51 +462,43 @@ publisher_suppliers_remove:
 
 rayon_index:
   path: /admin/rayons
-  defaults:
-    _controller: AppBundle\Controller\RayonController::indexAction
+  controller: AppBundle\Controller\RayonController::indexAction
 
 rayon_new:
   path: /admin/rayon/new
-  defaults:
-    _controller: AppBundle\Controller\RayonController::newAction
+  controller: AppBundle\Controller\RayonController::newAction
 
 rayon_show:
   path: /rayon/{url}
-  defaults:
-    _controller: AppBundle\Controller\RayonController::showAction
+  controller: AppBundle\Controller\RayonController::showAction
 
 rayon_edit:
   path: /admin/rayon/{id}/edit
-  defaults:
-    _controller: AppBundle\Controller\RayonController::editAction
+  controller: AppBundle\Controller\RayonController::editAction
   requirements:
     id: \d+
 
 rayon_delete:
   path: /admin/rayon/{id}/delete
-  defaults:
-    _controller: AppBundle\Controller\RayonController::deleteAction
+  controller: AppBundle\Controller\RayonController::deleteAction
   requirements:
     id: \d+
 
 rayon_add:
   path: /admin/rayon/{id}/add
-  defaults:
-    _controller: AppBundle\Controller\RayonController::addArticleAction
+  controller: AppBundle\Controller\RayonController::addArticleAction
   requirements:
     id: \d+
 
 rayon_articles:
   path: /admin/rayon/{id}/articles
-  defaults:
-    _controller: AppBundle\Controller\RayonController::rayonArticlesAction
+  controller: AppBundle\Controller\RayonController::rayonArticlesAction
   requirements:
     id: \d+
 
 rayon_remove:
   path: /admin/rayon/{rayon_id}/articles/{article_id}/remove
-  defaults:
-    _controller: AppBundle\Controller\RayonController::removeArticleAction
+  controller: AppBundle\Controller\RayonController::removeArticleAction
   requirements:
     rayon_id: \d+
     article_id: \d+
@@ -569,63 +507,55 @@ rayon_remove:
 
 shipping_admin:
   path: /admin/shipping
-  defaults:
-    _controller: AppBundle\Controller\ShippingController::adminAction
+  controller: AppBundle\Controller\ShippingController::adminAction
 
 # Site
 
 site_options:
   path: /admin/options
-  defaults:
-    _controller: AppBundle\Controller\SiteController::optionsAction
+  controller: AppBundle\Controller\SiteController::optionsAction
 
 site_default_values:
   path: /admin/default-values
-  defaults:
-    _controller: AppBundle\Controller\SiteController::defaultValuesAction
+  controller: AppBundle\Controller\SiteController::defaultValuesAction
 
 # Stats
 
 stats_lost:
   path: /admin/stats/lost/{year}
+  controller: AppBundle\Controller\StatsController::lostAction
   defaults:
-    _controller: AppBundle\Controller\StatsController::lostAction
     year: all
 
 stats_suppliers:
   path: /admin/stats/suppliers/{year}
+  controller: AppBundle\Controller\StatsController::suppliersAction
   defaults:
-    _controller: AppBundle\Controller\StatsController::suppliersAction
     year: all
 
 # Stock
 
 stock_add_to_cart:
   path: /stock/{stock_id}/add-to-cart
-  defaults:
-    _controller: AppBundle\Controller\StockController::addToCartAction
+  controller: AppBundle\Controller\StockController::addToCartAction
 
 stock_search:
   path: /stock/search/{query}
-  defaults:
-    _controller: AppBundle\Controller\StockController::searchAction
+  controller: AppBundle\Controller\StockController::searchAction
 
 stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return
-  defaults:
-    _controller: AppBundle\Controller\StockController::cancelReturnAction
+  controller: AppBundle\Controller\StockController::cancelReturnAction
 
 # Tag
 
 tag_show:
   path: /tag/{slug}
-  defaults:
-    _controller: AppBundle\Controller\TagController::showAction
+  controller: AppBundle\Controller\TagController::showAction
 
 tag_edit:
   path: /admin/tag/{id}/edit
-  defaults:
-    _controller: AppBundle\Controller\TagController::editAction
+  controller: AppBundle\Controller\TagController::editAction
   requirements:
     id: \d+
 
@@ -633,57 +563,54 @@ tag_edit:
 
 template_index:
   path: /admin/templates/
-  defaults:
-    _controller: AppBundle\Controller\TemplateController::indexAction
+  controller: AppBundle\Controller\TemplateController::indexAction
 
 template_edit:
   path: /admin/templates/{slug}/edit
-  defaults:
-    _controller: AppBundle\Controller\TemplateController::editAction
+  controller: AppBundle\Controller\TemplateController::editAction
 
 template_delete:
   path: /admin/templates/{slug}/delete
-  defaults:
-    _controller: AppBundle\Controller\TemplateController::deleteAction
+  controller: AppBundle\Controller\TemplateController::deleteAction
 
 # Ticket
 
 ticket_index:
   path: /support/
-  defaults: { _controller: 'AppBundle\Controller\TicketController::indexAction' }
+  controller: AppBundle\Controller\TicketController::indexAction
 
 ticket_root:
   path: /support/root
-  defaults: { _controller: 'AppBundle\Controller\TicketController::rootAction' }
+  controller: AppBundle\Controller\TicketController::rootAction
 
 ticket_new:
   path: /ticket/new
-  defaults: { _controller: 'AppBundle\Controller\TicketController::newAction' }
+  controller: AppBundle\Controller\TicketController::newAction
 
 ticket_show:
   path: /ticket/{id}
-  defaults: { _controller: 'AppBundle\Controller\TicketController::showAction' }
+  controller: AppBundle\Controller\TicketController::showAction
 
 ticket_edit:
   path: /ticket/{id}/edit
-  defaults: { _controller: 'AppBundle\Controller\TicketController::editAction' }
+  controller: AppBundle\Controller\TicketController::editAction
 
 ticket_close:
   path: /ticket/{id}/close
-  defaults: { _controller: 'AppBundle\Controller\TicketController::closeAction' }
+  controller: AppBundle\Controller\TicketController::closeAction
 
 ticket_resolve:
   path: /ticket/{id}/resolve
-  defaults: { _controller: 'AppBundle\Controller\TicketController::resolveAction' }
+  controller: AppBundle\Controller\TicketController::resolveAction
 
 # TicketComment
 
 ticket_comment_new:
   path: /ticket/{ticket_id}/comment
-  defaults: { _controller: 'AppBundle\Controller\TicketController::newCommentAction' }
+  controller: AppBundle\Controller\TicketController::newCommentAction
 
 # Old controllers
 
 contact:
   path: /pages/contact
-  defaults: { _controller: 'AppBundle\Controller\MainController::defaultAction' }
+  controller: AppBundle\Controller\MainController::defaultAction
