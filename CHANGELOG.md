@@ -1,5 +1,10 @@
 # Changelog
 
+### DEV
+
+Correction : le raccourci "Ajouter au stock" de la barre d'administration
+fonctionne à nouveau.
+
 ### 2.51.2 (26 février 2021)
 
 Corrections

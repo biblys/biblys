@@ -1,7 +1,5 @@
 /* global $, file_size, _alert, notify, price, currency, quickAdd, Biblys */
 
-'use strict';
-
 function reloadAdminEvents() {
   /* FORM CHECK */
 
@@ -854,8 +852,12 @@ Biblys.AdminBar.prototype = {
         var element = document.createElement('a');
 
         element.classList.add('admin-bar-shortcut');
+        if (shortcut.class) {
+          element.classList.add(shortcut.class);
+        }
+
         element.href = shortcut.url;
-        element.innerHTML = '<span aria-label="'+shortcut.name+'" class="fa fa-' + shortcut.icon + '"></span>';
+        element.innerHTML = `<span aria-label="${shortcut.name}" class="fa fa-${shortcut.icon}"></span>`;
         fragment.appendChild(element);
 
         if (shortcut.subscription) {

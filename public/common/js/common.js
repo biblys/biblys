@@ -1,4 +1,3 @@
-// 'use strict';
 
 window.biblys = {};
 var Biblys = {};
@@ -1049,7 +1048,7 @@ function reloadEvents(scope) {
   });
 
   // ** QUICK ADD **//
-  $('.stockQuickAdd').click(function(event) {
+  $(document).on('click', '.stockQuickAdd', function(event) {
     event.preventDefault();
     quickAdd();
   });
