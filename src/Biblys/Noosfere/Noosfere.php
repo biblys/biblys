@@ -11,10 +11,8 @@ class Noosfere
 
         // Auto-select mode if not defined
         if (!$mode) {
-            $isbn = new Isbn($query);
-            if ($isbn->isValid()) {
+            if (Isbn::isParsable($query)) {
                 $mode = "isbn";
-            // $query = $isbn->format('EAN');
             } elseif (is_numeric($query)) {
                 $mode = "noosfere_id";
             } else {

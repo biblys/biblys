@@ -167,9 +167,7 @@ class Controller
 
         // isbn
         $filters[] = new \Twig\TwigFilter('isbn', function ($ean) {
-            $isbn = new Isbn($ean);
-
-            return $isbn->format('ISBN-13');
+            return Isbn::convertToIsbn13($ean);
         });
 
         // Forms

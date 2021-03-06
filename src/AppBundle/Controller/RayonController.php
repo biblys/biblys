@@ -175,11 +175,7 @@ class RayonController extends Controller
 
             // Get articles to add
             if ($article_ean) {
-                $ean = new Isbn($article_ean);
-                if (!$ean->isValid()) {
-                    throw new Exception("$ean is not a valid EAN.");
-                }
-                $article_where['article_ean'] = $ean->format('EAN');
+                $article_where['article_ean'] = Isbn::convertToEan13($article_ean);
             } elseif ($article_id) {
                 $article_where['article_id'] = $_POST['article_id'];
             } elseif ($collection_id) {

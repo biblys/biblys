@@ -27,18 +27,13 @@
 
 		public function set($field, $value)
 		{
-			// Verification selon le type de champ
-			if ($field == "image_id") $value = (int) $value;
-
-			elseif ($field == "image_ean" && !empty($value))
-			{
-				$isbn = new Isbn($value);
-				if ($isbn->isValid()) $value = $isbn->format('EAN');
-				else throw new Exception($value.' is not a valid ISBN : '.$isbn->getErrors());
+			if ($field == "image_id") {
+				$value = (int) $value;
+			} elseif ($field == "image_ean" && !empty($value)) {
+				$value = Isbn::convertToEan13($value);
 			}
 
-			if(isset($error)) die($error);
-			else $this->_i[$field] = $value;
+			$this->_i[$field] = $value;
 		}
 
 		public function get($field)

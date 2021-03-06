@@ -1,7 +1,8 @@
 <?php
 
-use Biblys\Utils\Browser;
 use Symfony\Component\HttpFoundation\Response;
+use Biblys\Utils\Browser;
+use Biblys\Isbn\Isbn;
 
 $am = new ArticleManager();
 $sm = new SiteManager();
@@ -101,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $eans = array_unique(explode(' ', $_POST['article_ean_others']));
         $_POST['article_ean_others'] = null;
         foreach ($eans as $ean) {
-            if (isbn($ean)) {
-                $_POST['article_ean_others'] .= ' '.isbn($ean, 'EAN');
+            if (Isbn::isParsable($ean)) {
+                $_POST['article_ean_others'] .= ' '.Isbn::convertToEan13($ean);
             }
         }
         $_POST['article_ean_others'] = trim($_POST['article_ean_others']);
@@ -298,8 +299,8 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         $_PAGE_TITLE = 'Créer un nouvel article';
         $_MODE = 'insert';
         if (isset($_GET['import'])) {
-            if (isbn($_GET['import'])) {
-                $a['article_ean'] = isbn($_GET['import'], 'EAN');
+            if (Isbn::isParsable($_GET['import'])) {
+                $a['article_ean'] = Isbn::convertToEan13($_GET['import']);
                 $article_ean_class = ' autoimport';
             } else {
                 $a['article_title'] = $_GET['import'];

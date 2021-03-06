@@ -123,7 +123,7 @@ class Article extends Entity
             $query = 'SELECT
                     `people_id`, `people_first_name`, `people_last_name`, `people_url`, `job_id`, `job_name`
                 FROM `people` JOIN `roles` USING(`people_id`) JOIN `jobs` USING(`job_id`)
-                WHERE 
+                WHERE
                     `roles`.`article_id` = ' . $this->get('id') . ' AND
                     `people_deleted` IS NULL
                 ORDER BY `id`';
@@ -322,8 +322,7 @@ class Article extends Entity
 
     public function getIsbn()
     {
-        $isbn = new Isbn($this->get('ean'));
-        return $isbn->format('ISBN');
+        return Isbn::convertToIsbn13($this->get('ean'));
     }
 
     /**
@@ -655,9 +654,9 @@ class Article extends Entity
         global $_SQL, $_SITE;
 
         $sql = $_SQL->prepare("
-            SELECT `rayon_id`, `rayon_name`, `rayon_url` 
-            FROM `links` 
-            JOIN `rayons` USING(`rayon_id`) 
+            SELECT `rayon_id`, `rayon_name`, `rayon_url`
+            FROM `links`
+            JOIN `rayons` USING(`rayon_id`)
             WHERE `article_id` = :article_id
                 AND `links`.`site_id` = :site_id
                 AND `link_deleted` IS NULL
@@ -1226,17 +1225,16 @@ class ArticleManager extends EntityManager
     /**
      * Checks that ISBN is valid and isn't already used
      *
-     * @param int   $articleId  Article id
-     * @param Isbn $articleIsbn Article ISBN
+     * @param int $articleId  Article id
+     * @param int $ean        Article EAN
      *
      * @return bool true if ISBN is valid and not used
      */
-    public function checkIsbn($articleId, $articleIsbn)
+    public function checkIsbn($articleId, $articleEan)
     {
         global $_SQL;
 
-        $ean = $articleIsbn->format('EAN');
-        $articles = $this->search($ean);
+        $articles = $this->search($articleEan);
         if ($articles) {
             $article = $articles[0];
 
@@ -1418,11 +1416,7 @@ class ArticleManager extends EntityManager
 
         $ean = $article->get('ean');
         if ($ean) {
-            $isbn = new \Biblys\Isbn\Isbn($ean);
-            if (!$isbn->isValid()) {
-                throw new \Exception("ISBN $ean is invalid.");
-            }
-            $article->set('article_ean', $isbn->format('EAN'));
+            $article->set('article_ean', Isbn::convertToEan13($ean));
         }
 
         // Create article slug

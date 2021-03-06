@@ -26,7 +26,9 @@
             $c[$article->get('ean')] = '
                 <tr>
                     <td>'.$article->get('ean').'</td>
-                    <td class="nowrap">'.isbn($article->get('ean'), 'ISBN').'</td>
+                    <td class="nowrap">
+                        '.Isbn::convertToIsbn13($article->get('ean')).'
+                    </td>
                     <td><a href="/'.$article->get('url').'">'.$article->get('title').'</a></td>
                 </tr>
             ';
@@ -40,7 +42,9 @@
                     $c[$file->get('ean')] = '
                         <tr>
                             <td>'.$file->get('ean').'</td>
-                            <td>'.isbn($file->get('ean'), 'ISBN').'</td>
+                            <td>
+                                '.Isbn::convertToIsbn13($file->get('ean')).'
+                            </td>
                             <td><a href="/'.$article->get('url').'">'.$article->get('title').'</a> ('.$file->getType('name').')</td>
                         </tr>
                     ';
@@ -55,7 +59,7 @@
 
     $isbn_checker_start = $site->getOpt('isbn_checker_start');
     if ($isbn_checker_start) {
-        $ean_start = (new Isbn($isbn_checker_start))->format('EAN');
+        $ean_start = Isbn::convertToEan13($isbn_checker_start);
 
         $ean = substr($ean_start, 0, -1);
 
@@ -74,11 +78,10 @@
 
     // 10 prochains ISBN
     for ($i = 0; $i < 10; $i++) {
-        $isbn = new ISBN($ean);
         $nexts .= '
             <tr>
-                <td>'.$isbn->format('EAN').'</td>
-                <td>'.$isbn->format('ISBN-13').'</td>
+                <td>'.Isbn::convertToEan13($ean).'</td>
+                <td>'.Isbn::convertToEan13($ean).'</td>
             </tr>
         ';
         $ean++;
@@ -88,7 +91,10 @@
     $types = Biblys\Article\Type::getAll();
     $types_options = [];
     foreach ($types as $type) {
-        $types_options[] = '<option '.($selected_type == $type->getId() ? 'selected' : '').' value="?type='.$type->getId().'">'.$type->getName().'</option>';
+        $types_options[] = '
+            <option '.($selected_type == $type->getId() ? 'selected' : '').' value="?type='.$type->getId().'">
+                '.$type->getName().'
+            </option>';
     }
 
 

@@ -43,7 +43,7 @@
             }
 
             $file_id = $request->request->get('file_id');
-            
+
             // If file exist
             if ($file_id && !strstr($file_id, 'new_')) {
 
@@ -83,11 +83,7 @@
 
                     // EAN check
                     if ($ean) {
-                        $isbn = new Isbn($ean);
-                        if (!$isbn->isValid()) {
-                            throw new Exception($isbn->getErrors());
-                        }
-                        $file->set('file_ean', $isbn->format('EAN'));
+                        $file->set('file_ean', Isbn::convertToEan13($ean));
                     }
 
                     $file->set('file_title', $_POST['file_title']);

@@ -489,11 +489,7 @@ class ArticleController extends Controller
      */
     public function byIsbn($ean)
     {
-        $isbn = new \Biblys\Isbn\Isbn($ean);
-        if (!$isbn->isValid()) {
-            throw new \Exception("$ean is not a valid ISBN");
-        }
-        $ean = $isbn->format('EAN');
+        $ean = Isbn::convertToEan13($ean);
 
         $am = $this->entityManager('Article');
         $article = $am->get(['article_ean' => $ean]);
@@ -531,20 +527,14 @@ class ArticleController extends Controller
      */
     public function checkIsbn(Request $request)
     {
-        $content = $request->getContent();
-        $params = json_decode($content, true);
-        $articleEan = $params['article_ean'];
-        $articleId = $params['article_id'];
-
-        $articleIsbn = new Isbn($articleEan);
-        if (!$articleIsbn->isValid()) {
-            throw new \Exception('Cet ISBN est invalide.');
-        }
 
         $am = $this->entityManager('Article');
-        $am->checkIsbn($articleId, $articleIsbn);
-        $response = new JsonResponse(['isbn' => $articleIsbn->format('EAN')]);
+        $content = $request->getContent();
+        $params = json_decode($content, true);
 
-        return $response;
+        $ean = Isbn::convertToEan13($params['article_ean']);
+        $am->checkIsbn($params['article_id'], $ean);
+
+        return new JsonResponse(['isbn' => $ean]);
     }
 }

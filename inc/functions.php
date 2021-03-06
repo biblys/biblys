@@ -606,22 +606,6 @@ function file_dir($x)
     return $x;
 }
 
-// ** ISBN ** //
-
-function isbn($x, $m = 'check')
-{
-    $isbn = new Isbn($x);
-    if ($isbn->isValid()) {
-        if ('check' == $m) {
-            return true;
-        } else {
-            return $isbn->format($m);
-        }
-    }
-
-    return false;
-}
-
 function json_error($errno, $errstr, $errfile = null, $errline = null, $errcontext = null)
 {
     $json = [

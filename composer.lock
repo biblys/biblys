@@ -108,16 +108,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "cff1716350f0b3e7661556cd62726f1574189366"
+                "reference": "eadcba4a50049f1c06e99c1cbec1bc46c590b2ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/cff1716350f0b3e7661556cd62726f1574189366",
-                "reference": "cff1716350f0b3e7661556cd62726f1574189366",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/eadcba4a50049f1c06e99c1cbec1bc46c590b2ff",
+                "reference": "eadcba4a50049f1c06e99c1cbec1bc46c590b2ff",
                 "shasum": ""
             },
             "require": {
@@ -143,7 +143,7 @@
                     "email": "c@iwzr.fr"
                 }
             ],
-            "description": "A PHP library to convert and validate ISBNs & EANs",
+            "description": "A PHP library to convert and validate ISBNs",
             "homepage": "https://github.com/biblys/isbn",
             "keywords": [
                 "ISBN",
@@ -153,9 +153,9 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/2.3.0"
+                "source": "https://github.com/biblys/isbn/tree/2.4.0"
             },
-            "time": "2021-02-28T00:00:00+00:00"
+            "time": "2021-03-05T00:00:00+00:00"
         },
         {
             "name": "composer/ca-bundle",

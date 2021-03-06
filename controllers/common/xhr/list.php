@@ -11,9 +11,9 @@ $del = $request->request->get("del");
 if ($query) {
     $req = null;
     $params = [];
-    if (isbn($query)) {
+    if (Isbn::isParsable($query)) {
         $req = "`article_ean` = :ean";
-        $params["ean"] = isbn($query, 'EAN');
+        $params["ean"] = Isbn::convertToEan13($query);
     } else {
         $qex = explode(" ", addslashes($query));
         $i = 0;

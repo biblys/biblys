@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
 
 $pm = new PublisherManager();
@@ -167,7 +167,7 @@ function noosfere($x, $mode = null)
         // ISBN
         $a['article_ean'] = null;
         if ($n->ISBN != "nd") {
-            $a["article_ean"] = (string) isbn($n->ISBN, 'EAN');
+            $a["article_ean"] = (string) Isbn::convertToEan13($n->ISBN);
         }
 
         // Prix
@@ -286,28 +286,33 @@ if ($_GET["mode"] == "search") { // Mode recherche
     $articles_noosfere = noosfere($_GET["q"]); // ne fonctionne plus le 16 avril 2015
 
     // If query param is an EAN, try as an ISBN-10
-    $isbnQ = new ISBN($_GET['q']);
-    if (count($articles_noosfere) === 0 && $isbnQ->isValid()) {
-        $isbn10 = $isbnQ->format('ISBN-10');
+    $query = $_GET["q"];
+    if (count($articles_noosfere) === 0 && Isbn::isParsable($query)) {
+        $isbn10 = Isbn::convertToIsbn10($query);
         $articleNoosfereIsbn10 = noosfere($isbn10);
         $articles_noosfere = (array_merge($articles_noosfere, $articleNoosfereIsbn10));
     }
 
-    //$articles_amazon = amazon($_GET["q"]);
     $results = 0;
     $additional_results = null;
     $r .= '<div id="results" class="hidden">';
     if ($articles_noosfere) {
         foreach ($articles_noosfere as $a) {
+
+            $isbn = null;
+            if ($a["article_ean"]) {
+                $isbn = '<br />ISBN : ' . Isbn::convertToIsbn13($a["article_ean"]);
+            }
+
             $result = '
                 <div data-ean="'.$a["article_ean"].'" data-asin="'.(isset($a["article_asin"]) ? $a['article_asin'] : null).'" data-noosfere_id="'.$a["article_noosfere_id"].'" class="article-thumb article-import pointer">
                     <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" />
                     <div class="article-thumb-data">
-                        <h3>'.$a["article_title"].'</h3>
+                        <h3>'.$a["article_title"]. '</h3>
                         <p>
                             de '.truncate($a["article_authors"], 65, '...', true, true).'<br />
                             coll. '.$a["article_collection"].' '.numero($a["article_number"]).' ('.$a["article_publisher"].')<br />
-                            ISBN : '.isbn($a["article_ean"], 'ISBN13').'
+                            ISBN : '.Isbn::convertToIsbn13($a["article_ean"]).'
                         </p>
                     </div>
                 </div>
@@ -329,7 +334,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
                     <p>
                         de '.truncate($a["article_authors"], 65, '...', true).'<br />
                         coll. '.$a["article_collection"].'<br />
-                        ISBN : '.isbn($a["article_ean"], 'ISBN13').'
+                        ISBN : '.Isbn::convertToIsbn13($a["article_ean"]).'
                     </p>
                 </div>
             ';

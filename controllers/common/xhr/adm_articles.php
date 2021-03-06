@@ -1,6 +1,7 @@
 <?php	
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Biblys\Isbn\Isbn;
 
 $am = new ArticleManager();
 
@@ -14,9 +15,9 @@ if ($term) {
 
 if (isset($q)) {
     $params = [];
-    if (isbn($q)) {
+    if (Isbn::isParsable($q)) {
         $req = "(`article_ean` = :ean OR `article_ean_others` = :ean)";
-        $params['ean'] = isbn($q, 'EAN');
+        $params['ean'] = Isbn::convertToEan13($q);
     } else {
         $qex = explode(" ", addslashes($q));
         $req = null;

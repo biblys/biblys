@@ -62,16 +62,15 @@
             $a['isbn'] = array();
             $eans = explode(',', $a['eans']);
             foreach ($eans as $ean) {
-                $isbn = new Isbn($ean);
-                $a['isbn'][] = $isbn->format('ISBN');
+                $a['isbn'][] = Isbn::convertToIsbn13($ean);
             }
             $a['isbn'] = implode('<br>', $a['isbn']);
         } elseif (!empty($a["article_ean"])) {
-            $a["isbn"] = isbn($a["article_ean"], 'ISBN');
+            $a["isbn"] = Isbn::convertToIsbn13($a["article_ean"]);
         } elseif (!empty($a["article_pdf_ean"])) {
-            $a["isbn"] = isbn($a["article_pdf_ean"], 'ISBN');
+            $a["isbn"] = Isbn::convertToIsbn13($a["article_pdf_ean"]);
         } elseif (!empty($a["article_epub_ean"])) {
-            $a["isbn"] = isbn($a["article_epub_ean"], 'ISBN');
+            $a["isbn"] = Isbn::convertToIsbn13($a["article_epub_ean"]);
         } else {
             $a['isbn'] = null;
         }
