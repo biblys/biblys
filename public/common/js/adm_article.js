@@ -767,7 +767,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add a rayon
 
   var rayonInput = document.querySelector('#rayon_id');
-  rayonInput.addEventListener('change', function () {
+  rayonInput && rayonInput.addEventListener('change', function () {
 
     var rayonId = rayonInput.value;
 
