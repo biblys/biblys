@@ -1,4 +1,4 @@
-<?php	
+<?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Biblys\Isbn\Isbn;
@@ -41,7 +41,7 @@ if (isset($q)) {
         } else {
             $a["article_cover"] = null;
         }
-        
+
         $json[$j]["label"] = $a["article_title"].' ('.$a["article_collection"].numero($a["article_number"], ' - ').')';
         $json[$j]["value"] = $a["article_title"];
         $json[$j]["url"] = "/pages/adm_stock?add=".$a["article_id"]."#add";

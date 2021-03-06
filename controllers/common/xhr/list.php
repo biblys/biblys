@@ -32,8 +32,8 @@ if ($query) {
         FROM `articles`
         JOIN `stock` USING(`article_id`)
         WHERE ".$req." AND `stock`.`site_id` = :site_id
-            AND `stock_selling_date` IS NULL 
-            AND `stock_return_date` IS NULL 
+            AND `stock_selling_date` IS NULL
+            AND `stock_return_date` IS NULL
             AND `stock_lost_date` IS NULL
     ";
     $params["site_id"] = $site->get("id");
@@ -90,7 +90,7 @@ if ($query) {
 } elseif ($stockId) {
     $sm = new StockManager();
     $stock = $sm->getById($stockId);
-    
+
     if ($stock) {
         // If item is already in a list, skip it
         $listed = $lm->get(["list_id" => $listId, "stock_id" => $stockId]);
@@ -122,7 +122,7 @@ if ($query) {
             echo '
                 <tr id="link_'.$stock->get("link_id").'">
                     <td>
-                        <img src="/common/img/'.$led.'.png" width="8" height="8" 
+                        <img src="/common/img/'.$led.'.png" width="8" height="8"
                             title="'.$ledTitle.'">
                     </td>
                     <td>
@@ -131,10 +131,10 @@ if ($query) {
                         </a>
                     </td>
                     <td>'.$article->get("collection")->get("name").'</td>
-                    <td 
-                        data-price='.$article->get("selling_price").' 
-                        data-stock_id='.$stock->get("id").' 
-                        data-article_title="'.$article->get("title").'" 
+                    <td
+                        data-price='.$article->get("selling_price").'
+                        data-stock_id='.$stock->get("id").'
+                        data-article_title="'.$article->get("title").'"
                         class="right pointer changePriceInList e">'
                             .price($stock->get("selling_price"), 'EUR').'
                     </td>
@@ -144,12 +144,12 @@ if ($query) {
                     </td>
                     <td style="width: 50px;">
                         <a href="/pages/adm_stock?id='.$stock->get("id").'">
-                            <img src="/common/icons/edit.svg" width=16 
-                                alt="Modifier l\'exemplaire" 
+                            <img src="/common/icons/edit.svg" width=16
+                                alt="Modifier l\'exemplaire"
                                 title="Modifier l\'exemplaire">
-                        </a> 
-                        <img src="/common/icons/delete.svg" width=16 class="pointer" 
-                            alt="Retirer de la liste" title="Retirer de la liste" 
+                        </a>
+                        <img src="/common/icons/delete.svg" width=16 class="pointer"
+                            alt="Retirer de la liste" title="Retirer de la liste"
                             onClick="delFromList('.$stock->get("link_id").')" />
                     </td>
                 </tr>
@@ -159,7 +159,7 @@ if ($query) {
             echo 'ERROR > Cet exemplaire est déjà dans la liste !';
         }
     }
-       
+
 } elseif ($del) {
     $link = $lm->getById($del);
     $lm->delete($link);

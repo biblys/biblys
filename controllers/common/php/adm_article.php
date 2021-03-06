@@ -218,7 +218,7 @@ if (!isset($_GET['id'])) {
     $_GET['id'] = null;
 }
 $articles = EntityManager::prepareAndExecute(
-    'SELECT * FROM `articles` 
+    'SELECT * FROM `articles`
     WHERE (`article_id` = :article_id OR `article_editing_user` = :user_id)
         AND `article_deleted` IS NULL
     ORDER BY `article_editing_user` LIMIT 1',
@@ -247,7 +247,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         $publisher = $article->get('publisher');
         $publisher_site = $sm->get(array('publisher_id' => $publisher->get('id')));
         if (
-            $publisher_site && 
+            $publisher_site &&
             $publisher_site->get('id') != $_SITE['site_id'] &&
             !$_V->hasRight('publisher', $publisher->get('id'))
         ) {
@@ -491,10 +491,10 @@ if ($_MODE == 'insert') {
     $delete->execute(['article_id' => $article->get('id')]);
 }
 $people = $_SQL->prepare(
-    'SELECT `id`, `people_id`, `people_name`, `job_id`, `job_name` FROM `people` 
-        JOIN `roles` USING(`people_id`) 
-        JOIN `jobs` USING(`job_id`) 
-        WHERE 
+    'SELECT `id`, `people_id`, `people_name`, `job_id`, `job_name` FROM `people`
+        JOIN `roles` USING(`people_id`)
+        JOIN `jobs` USING(`job_id`)
+        WHERE
             `article_id` = :article_id AND
             `role_deleted` IS NULL
         ORDER BY `job_id`'
@@ -537,9 +537,9 @@ foreach ($files as $file) {
 
 // Rayons actuels
 $links = $_SQL->query("
-    SELECT `link_id`, `rayon_name` FROM `links` 
-    JOIN `rayons` USING(`rayon_id`) 
-    WHERE `article_id` = '".$a['article_id']."' 
+    SELECT `link_id`, `rayon_name` FROM `links`
+    JOIN `rayons` USING(`rayon_id`)
+    WHERE `article_id` = '".$a['article_id']."'
         AND `links`.`site_id` = '".$_SITE['site_id']."'
         AND `rayon_deleted` IS NULL
     ORDER BY `link_id`");
@@ -832,11 +832,11 @@ $content .= '
             <p>
 
                 <label for="article_age_min">Lectorat :</label>
-                <input type="number" id="article_age_min" 
-                    name="article_age_min" value="'.$a['article_age_min'].'" 
+                <input type="number" id="article_age_min"
+                    name="article_age_min" value="'.$a['article_age_min'].'"
                     step="1" min="1" max="99" class="mini" /> ans à
-                <input type="number" id="article_age_max" 
-                    name="article_age_max" value="'.$a['article_age_max'].'" 
+                <input type="number" id="article_age_max"
+                    name="article_age_max" value="'.$a['article_age_max'].'"
                     step="1" min="1" max="99" class="mini" /> ans
             </p>
 
@@ -990,11 +990,11 @@ $content .= '
         <fieldset class="collapsable-fieldset"
             data-collapsed="'.($article->has('summary') ? 'false' : 'true').'">
             <legend>
-                Quatri&egrave;me de couverture&nbsp; 
+                Quatri&egrave;me de couverture&nbsp;
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
-                <textarea id="article_summary" name="article_summary" 
+                <textarea id="article_summary" name="article_summary"
                     class="wysiwyg">'.$a['article_summary'].'</textarea>
             </div>
         </fieldset>
@@ -1006,7 +1006,7 @@ $content .= '
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
-                <textarea id="article_contents" name="article_contents" 
+                <textarea id="article_contents" name="article_contents"
                     class="wysiwyg">'.$a['article_contents'].'</textarea>
             </div>
         </fieldset>
@@ -1018,7 +1018,7 @@ $content .= '
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
-                <textarea id="article_bonus" name="article_bonus" 
+                <textarea id="article_bonus" name="article_bonus"
                     class="wysiwyg">'.$a['article_bonus'].'</textarea>
             </div>
         </fieldset>
@@ -1030,7 +1030,7 @@ $content .= '
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
-                <textarea id="article_catchline" name="article_catchline" 
+                <textarea id="article_catchline" name="article_catchline"
                     class="wysiwyg">'.$article->get('catchline').'</textarea>
             </div>
         </fieldset>
@@ -1042,7 +1042,7 @@ $content .= '
                 <span class="fa fa-plus-square"></span>
             </legend>
             <div class="collapsable-element">
-                <textarea id="article_biography" name="article_biography" 
+                <textarea id="article_biography" name="article_biography"
                     class="wysiwyg">'.$article->get('biography').'</textarea>
             </div>
         </fieldset>
