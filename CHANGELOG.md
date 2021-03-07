@@ -1,5 +1,9 @@
 # Changelog
 
+## DEV
+
+Amélioration : ajout d'un champ pour ajouter un logo à une fiche éditeur
+
 ### 2.51.3 (5 mars 2021)
 
 Correction : le raccourci "Ajouter au stock" de la barre d'administration
