@@ -4,9 +4,9 @@ namespace AppBundle\Controller;
 
 use Framework\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-// Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -135,6 +135,7 @@ class PublisherController extends Controller
         $form = $formFactory->createBuilder(FormType::class, $defaults)
             ->add('name', TextType::class, ['label' => 'Nom :', 'required' => false])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail :', 'required' => false])
+            ->add('logo', FileType::class, ['label' => 'Logo :', 'required' => false])
             ->add('desc', TextareaType::class, ['label' => false, 'attr' => ['class' => 'wysiwyg']])
             ->getForm();
 
@@ -150,6 +151,10 @@ class PublisherController extends Controller
 
             try {
                 $updated = $pm->update($updated);
+
+                if ($data['logo'] !== null) {
+                    $updated->addLogo($data['logo']);
+                }
             } catch (\Exception $e) {
                 $error = $e->getMessage();
             }
