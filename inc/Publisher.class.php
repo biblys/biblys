@@ -24,6 +24,23 @@ class Publisher extends Entity
         throw new Error("Publisher $publisherName has no logo");
     }
 
+    /**
+     * Save uploaded file as publisher's logo
+     * @param UploadedFile $file a file that was uploaded
+     * @return Media             the contributor's saved Media
+     */
+    public function addLogo($file)
+    {
+        if ($file->getMimeType() !== 'image/png') {
+            throw new Exception('La photo doit être au format PNG.');
+        }
+
+        $logo = new Media('publisher', $this->get('id'));
+        $logo->upload($file->getRealPath());
+
+        return $logo;
+    }
+
     public function countArticles()
     {
         $am = new ArticleManager();
