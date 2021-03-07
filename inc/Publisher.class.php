@@ -4,16 +4,24 @@
     {
         protected $prefix = 'publisher';
 
+        public function hasLogo()
+        {
+            $media = new Media("publisher", $this->get("id"));
+            if ($media->exists()) {
+                return true;
+            }
+
+            return false;
+        }
+
         public function getLogo()
         {
-            if (!isset($this->logo)) {
-                $this->logo = false;
-                $media = new Media("publisher", $this->get('id'));
-                if ($media->exists()) {
-                    $this->logo = $media;
-                }
+            if ($this->hasLogo()) {
+                return new Media("publisher", $this->get("id"));
             }
-            return $this->logo;
+
+            $publisherName = $this->get("name");
+            throw new Error("Publisher $publisherName has no logo");
         }
 
         public function countArticles()
