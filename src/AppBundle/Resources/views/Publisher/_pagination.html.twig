@@ -1,10 +1,13 @@
 {% if pages is defined and pages.total > 1 %}
 
-	<p class="posts-pagination text-center">
+	<p class="pagination text-center">
 
 		{% if pages.previous > -1 %}
-			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}" class="btn btn-default btn-sm">
-				<span class="fa fa-chevron-circle-left"></span>
+			<a
+				href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}"
+				class="btn btn-default btn-sm pagination-button button-prev"
+			>
+				<span class="icon fa fa-chevron-circle-left"></span>
 			</a>
 			&nbsp;
 		{% endif %}
@@ -13,14 +16,20 @@
 			{% if pages.current == i %}
 				<span class="pagination-page pagination-page-current">{{ i }}</span>
 			{% else %}
-				<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ i - 1 }}" class="pagination-page">{{ i }}</a>
+				<a
+					href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ i - 1 }}"
+					class="pagination-page"
+				>{{ i }}</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if pages.next %}
 			&nbsp;
-			<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}" class="btn btn-default btn-sm">
-				<span class="fa fa-chevron-circle-right"></span>
+			<a
+				href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}"
+				class="btn btn-default btn-sm pagination-button button-next"
+			>
+				<span class="icon fa fa-chevron-circle-right"></span>
 			</a>
 		{% endif %}
 	</p>
