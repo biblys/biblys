@@ -336,13 +336,17 @@ class EntityManager
             $where['site_id'] = $site->get('id');
         }
 
+        if (method_exists($this, 'addSiteFilters')) {
+            $where = $this->addSiteFilters($where);
+        }
+
         $q = EntityManager::buildSqlQuery($where);
-        
+
         $queryWhere = '';
         if ($q['where']) {
             $queryWhere = ' AND '.$q['where'];
         }
-        
+
         $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL '.$queryWhere;
         $res = EntityManager::prepareAndExecute($query, $q['params']);
 
