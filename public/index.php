@@ -3,6 +3,7 @@
 use Biblys\Axys\Client as AxysClient;
 use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
+use Framework\ExceptionController;
 
 // INCLUDES
 include '../inc/functions.php';
@@ -12,7 +13,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -102,6 +102,8 @@ $opengraph = [];
 $_PAGE_TYPE = null;
 $_PAGE = null;
 
+$exceptionHandler = new ExceptionController();
+
 try {
     // Site closed
     $closed = $site->getOpt('closed');
@@ -149,37 +151,13 @@ try {
 
 // Thrown when server is in maintenance mode
 catch (ServiceUnavailableException $e) {
-
-    $response = new Response();
-    $response->setStatusCode(503);
-    $response->headers->set('Retry-After', 3600);
-    $response->setContent('
-        <div class="text-center">
-            <h1>Maintenance en cours</h1>
-            <p>Merci de réessayer dans quelques instants…</p>
-        </div>
-    ');
+    $response = $exceptionHandler->handleServiceUnavailable();
 }
 
 // Thrown when user is accessing a unauthorized resource
+// TODO: distinguish between 401 (unauthenticated) and 403 (unauthorized)
 catch (AuthException $e) {
-    if (
-        $request->isXmlHttpRequest()
-        || $request->headers->get('Accept') == 'application/json'
-    ) {
-        $response = new JsonResponse(['error' => $e->getMessage()]);
-        $response->setStatusCode(401);
-        $response->send();
-        die();
-    }
-
-    $response = new Response();
-    $response->setStatusCode(403);
-    $response->setContent('
-        <h1>Erreur d\'authentification</h1>
-        <p>' . $e->getMessage() . '</p>
-        <p>Pour continuer, veuillez <a href="' . $axys->getLoginUrl() . '">vous identifier</a> ou <a href="' . $axys->getSignupUrl() . '">créer un compte</a>.</p>
-    ');
+    $response = $exceptionHandler->handleUnauthorizedAccess($request, $axys, $e->getMessage());
 }
 
 // Not defined as symfony route, fallback to old router
@@ -230,7 +208,7 @@ catch (ResourceNotFoundException $e) {
             $_INCLUDE = get_controller_path('_page');
         } else {
             $debug = 'Unable to find page from index.php';
-            $response = handlePageNotFound($debug);
+            $response = $exceptionHandler->handlePageNotFound($debug);
         }
     }
 } catch (Exception $e) {
@@ -263,13 +241,9 @@ try {
         }
     }
 } catch (ResourceNotFoundException $e) {
-    $response = handlePageNotFound($symfonyRouter404message ?? $e->getMessage());
+    $response = $exceptionHandler->handlePageNotFound($symfonyRouter404message ?? $e->getMessage());
 } catch (AuthException $e) {
-    $response = new Response('
-        <h1>Erreur d\'authentification</h1>
-        <p>' . $e->getMessage() . '</p>
-        <p>Pour continuer, veuillez <a href="' . $axys->getLoginUrl() . '">vous identifier</a> ou <a href="' . $axys->getSignupUrl() . '">créer un compte</a>.</p>
-    ', 403);
+    $response = $exceptionHandler->handleUnauthorizedAccess($request, $axys, $e->getMessage());
 } catch (Exception $e) {
     biblys_error(E_USER_ERROR, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
 }
@@ -544,52 +518,4 @@ if ($config->get('environment') == 'dev') {
 $response->send();
 if (isset($framework)) {
     $framework->terminateKernel($request, $response);
-}
-
-function handlePageNotFound(string $errorMessage): Response
-{
-    global $_SQL, $_V, $site;
-
-    $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $parsedUrl = parse_url($currentUrl);
-    $redirectionOld = $parsedUrl["path"];
-    if (!empty($parsedUrl["query"])) {
-        $redirectionOld .= '?' . $parsedUrl["query"];
-    }
-
-    $redirections = $_SQL->prepare(
-        "SELECT `redirection_id`, `redirection_new`
-        FROM `redirections` WHERE (`redirection_old` = :redirection_old)
-            AND `redirection_old` != `redirection_new`
-            AND (`site_id` = :site_id OR `site_id` IS NULL) LIMIT 1"
-    );
-    $redirections->execute(
-        [
-            'redirection_old' => $redirectionOld,
-            'site_id' => $site->get('id')
-        ]
-    );
-    if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {
-        $response = new RedirectResponse($r['redirection_new'], 301);
-    } else {
-        $response = new Response();
-        $response->setStatusCode(404);
-
-        $_PAGE_TITLE = 'Erreur 404';
-        $content = '
-            <h2>Erreur 404</h2>
-            <p>Cette page  n\'existe pas !</p>
-        ';
-
-        if ($_V->isAdmin()) {
-            $content .= '
-
-                ' . (isset($errorMessage) ? '<p>Debug info: ' . $errorMessage . '</p>' : null) . '
-                <p>Page : ' . $redirectionOld . '</p>
-            ';
-        }
-
-        $response->setContent($content);
-    }
-    return $response;
 }
