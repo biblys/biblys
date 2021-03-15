@@ -6,6 +6,8 @@ Améliorations
 
 - Ajout d'un champ pour ajouter un logo à une fiche éditeur
 - Le bouton "Vider tous les paniers" a été supprimé
+- Les redirections de pages causées par un changement d'url utilisent désormais
+  le statut HTTP 301 plutôt que 302
 
 Corrections
 

@@ -116,7 +116,7 @@ try {
                 Durant la période de maintenance, le site est accessible uniquement<br />
                 aux administrateurs mais son utilisation est déconseillée<br />
                 et peut conduire à la perte de données.
-            ", 
+            ",
             E_USER_WARNING
         );
     }
@@ -145,7 +145,7 @@ try {
     if (!$response instanceof Response) {
         throw new Exception('Controller should return a Response object.');
     }
-} 
+}
 
 // Thrown when server is in maintenance mode
 catch (ServiceUnavailableException $e) {
@@ -570,7 +570,7 @@ function handlePageNotFound(string $errorMessage): Response
         ]
     );
     if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {
-        $response = new RedirectResponse($r['redirection_new']);
+        $response = new RedirectResponse($r['redirection_new'], 301);
     } else {
         $response = new Response();
         $response->setStatusCode(404);
