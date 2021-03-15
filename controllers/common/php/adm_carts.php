@@ -34,12 +34,11 @@ if($_SITE["site_id"] == 8) $datelimite = date('Y-m-d h:i:s',(strtotime("-2 days"
 else $datelimite = date('Y-m-d h:i:s',(strtotime("-1 days")));
 
 $_ECHO .= '
-    <h1><span class="fa fa-shopping-basket"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-shopping-basket"></span> '.$_PAGE_TITLE. '</h1>
 
     <p class="buttonset">
         <a href="?refresh=1" class="btn btn-info"><i class="fa fa-refresh"></i> Actualiser les paniers</a>
-        <a href="/pages/adm_carts?go=1" class="btn btn-warning" data-confirm="Voulez-vous vraiment vider les paniers de clients inconnus ant&eacute;rieurs au '._date($datelimite,'d/m/Y H:i').' ?"><i class="fa fa-trash-o"></i> Vider les paniers obsol&egrave;tes</a>
-        <a href="/pages/adm_carts?delall=1" class="btn btn-danger" data-confirm="Voulez-vous vraiment VIDER tous les panier et remettre tous les articles en vente ?"><i class="fa fa-trash-o"></i> Vider tous les paniers VPC</a>
+        <a href="/pages/adm_carts?go=1" class="btn btn-warning" data-confirm="Voulez-vous vraiment vider les paniers de clients inconnus ant&eacute;rieurs au ' . _date($datelimite, 'd/m/Y H:i') . ' ?"><i class="fa fa-trash-o"></i> Vider les paniers obsol&egrave;tes</a>
     </p><br>
 
       '.$alert.join($flashs).'
@@ -73,16 +72,6 @@ while($c = $carts->fetch(PDO::FETCH_ASSOC)) {
     if ($refresh) {
         $cart = $cm->get(array('cart_id' => $c['cart_id'], 'site_id' => $c['site_id']));
         $cm->updateFromStock($cart);
-    }
-
-    $delall = $request->query->get('delall', false);
-    if ($delall) {
-            if ($cart = $cm->get(array('cart_id' => $c['cart_id'], 'site_id' => $c['site_id']))) {
-                $cm->vacuum($cart);
-                $cm->delete($cart);
-                $emptied++;
-            }
-            else trigger_error('Impossible de vider le panier '.$c['cart_id']);
     }
 
     if ($c["stock_cart_date"] < $datelimite && empty($c["Email"]) || empty($c["num"]))

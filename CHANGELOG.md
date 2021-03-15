@@ -2,7 +2,10 @@
 
 ## DEV
 
-Amélioration : ajout d'un champ pour ajouter un logo à une fiche éditeur
+Améliorations
+
+- Ajout d'un champ pour ajouter un logo à une fiche éditeur
+- Le bouton "Vider tous les paniers" a été supprimé
 
 ### 2.51.3 (5 mars 2021)
 
