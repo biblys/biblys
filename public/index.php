@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -229,7 +230,7 @@ catch (ResourceNotFoundException $e) {
             $_INCLUDE = get_controller_path('_page');
         } else {
             $debug = 'Unable to find page from index.php';
-            $_INCLUDE = get_controller_path('404');
+            $response = handlePageNotFound($debug);
         }
     }
 } catch (Exception $e) {
@@ -262,7 +263,7 @@ try {
         }
     }
 } catch (ResourceNotFoundException $e) {
-    $response = new Response(e404($symfonyRouter404message ?? $e->getMessage()), 404);
+    $response = handlePageNotFound($symfonyRouter404message ?? $e->getMessage());
 } catch (AuthException $e) {
     $response = new Response('
         <h1>Erreur d\'authentification</h1>
@@ -543,4 +544,52 @@ if ($config->get('environment') == 'dev') {
 $response->send();
 if (isset($framework)) {
     $framework->terminateKernel($request, $response);
+}
+
+function handlePageNotFound(string $errorMessage): Response
+{
+    global $_SQL, $_V, $site;
+
+    $currentUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $parsedUrl = parse_url($currentUrl);
+    $redirectionOld = $parsedUrl["path"];
+    if (!empty($parsedUrl["query"])) {
+        $redirectionOld .= '?' . $parsedUrl["query"];
+    }
+
+    $redirections = $_SQL->prepare(
+        "SELECT `redirection_id`, `redirection_new`
+        FROM `redirections` WHERE (`redirection_old` = :redirection_old)
+            AND `redirection_old` != `redirection_new`
+            AND (`site_id` = :site_id OR `site_id` IS NULL) LIMIT 1"
+    );
+    $redirections->execute(
+        [
+            'redirection_old' => $redirectionOld,
+            'site_id' => $site->get('id')
+        ]
+    );
+    if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {
+        $response = new RedirectResponse($r['redirection_new']);
+    } else {
+        $response = new Response();
+        $response->setStatusCode(404);
+
+        $_PAGE_TITLE = 'Erreur 404';
+        $content = '
+            <h2>Erreur 404</h2>
+            <p>Cette page  n\'existe pas !</p>
+        ';
+
+        if ($_V->isAdmin()) {
+            $content .= '
+
+                ' . (isset($errorMessage) ? '<p>Debug info: ' . $errorMessage . '</p>' : null) . '
+                <p>Page : ' . $redirectionOld . '</p>
+            ';
+        }
+
+        $response->setContent($content);
+    }
+    return $response;
 }

@@ -71,7 +71,7 @@ class MainController extends Controller
                 $_INCLUDE = get_controller_path('_page');
             } else {
                 $debug = 'Unable to find page from index.php';
-                $_INCLUDE = get_controller_path('404');
+                throw new NotFoundException($debug);
             }
         }
 
@@ -82,7 +82,7 @@ class MainController extends Controller
             }
         } catch (NotFoundException $e) {
             $_ECHO .= e404($e->getMessage());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             biblys_error(E_USER_NOTICE, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
         }
 

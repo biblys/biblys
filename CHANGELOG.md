@@ -7,6 +7,10 @@ Améliorations
 - Ajout d'un champ pour ajouter un logo à une fiche éditeur
 - Le bouton "Vider tous les paniers" a été supprimé
 
+Corrections
+
+- Le statut HTTP des pages d'erreur 404 est bien 404
+
 ### 2.51.3 (5 mars 2021)
 
 Correction : le raccourci "Ajouter au stock" de la barre d'administration

@@ -547,13 +547,9 @@ function userE()
     }
 }
 
-function e404($debug = '404 function called without debug info')
+function e404($debug = 'e404 function called without debug info')
 {
-    global $_V, $response, $_SQL, $site;
-    $controller = get_controller_path('404');
-    include $controller;
-
-    return $_ECHO;
+    throw new Symfony\Component\Routing\Exception\ResourceNotFoundException($debug);
 }
 
 function error($x, $t = 'MySQL')
