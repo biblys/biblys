@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class MainController extends Controller
 {
@@ -18,36 +19,24 @@ class MainController extends Controller
     {
         global $site, $config,
             $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,
-            $_JS_CALLS, $_CSS_CALLS;
+            $_JS_CALLS, $_CSS_CALLS, $urlgenerator;
 
-        // PAGE EN COURS
         $_PAGE = $request->get('page', 'home');
 
-        // Verification page utilisateur et admin
         $_PAGE_TYPE = substr($_PAGE, 0, 4);
-        if ($_PAGE_TYPE == 'adm_' and !$_V->isAdmin()) {
-            $_PAGE = 'nologin';
+        if ($_PAGE_TYPE == 'adm_') {
+            $this->auth('admin');
         }
-        if ($_PAGE_TYPE == 'log_' and !$_V->isLogged()) {
-            $_PAGE = 'nologin';
+        if ($_PAGE_TYPE == 'log_') {
+            $this->auth();
         }
 
         // Get correct controller for called url
         $controller_path = get_controller_path($_PAGE);
-        $html_template = BIBLYS_PATH.'/public/'.$site->get('name').'/html/'.$_PAGE.'.html';
-        $twig_template = BIBLYS_PATH.'/public/'.$site->get('name').'/templates/'.$_PAGE.'.html.twig';
-        if ($_PAGE == '404') {
-            $debug = '404 page direct access';
-        }
-
-        // HTML template controller
-        if ($site->get('html_renderer') && file_exists($html_template)) {
-            $_HTML = $html_template;
-            $_INCLUDE = get_controller_path('_html');
-        }
+        $twig_template = BIBLYS_PATH . '/public/' . $site->get('name') . '/html/' . $_PAGE . '.html.twig';
 
         // Twig template controller
-        elseif ($site->get('html_renderer') && file_exists($twig_template)) {
+        if ($site->get('html_renderer') && file_exists($twig_template)) {
             $_HTML = $twig_template;
             $_INCLUDE = get_controller_path('_twig');
         }
@@ -70,23 +59,36 @@ class MainController extends Controller
             if ($page) {
                 $_INCLUDE = get_controller_path('_page');
             } else {
-                $debug = 'Unable to find page from index.php';
-                throw new NotFoundException($debug);
+                throw new ResourceNotFoundException('Cannot find static page ' . $_PAGE);
             }
         }
 
         // INCLUDE PAGE EN COURS
-        try {
-            if (isset($_INCLUDE)) {
-                include $_INCLUDE;
-            }
-        } catch (NotFoundException $e) {
-            $_ECHO .= e404($e->getMessage());
-        } catch (\Exception $e) {
-            biblys_error(E_USER_NOTICE, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
-        }
+        if (isset($_INCLUDE)) {
+            $_ECHO = null;
+            $response = require $_INCLUDE;
 
-        return new Response($_ECHO);
+            if (isset($_ECHO)) {
+                trigger_error("Using \$_ECHO in $_INCLUDE. Legacy controllers should return a Response.", E_USER_DEPRECATED);
+                return new Response($_ECHO);
+                $_ECHO = null;
+            };
+
+            // Is this still used?
+            if (isset($_JSON)) {
+                trigger_error("Using \$_JSON in $_INCLUDE. Legacy controllers should return a Response", E_USER_DEPRECATED);
+                $_JSON->send();
+                die();
+            }
+
+            // If response is JSON, return immediately and die
+            if ($response instanceof JsonResponse) {
+                $response->send();
+                die();
+            }
+
+            return $response;
+        }
     }
 
     public function homeAction(Request $request)

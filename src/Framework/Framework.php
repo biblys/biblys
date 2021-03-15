@@ -12,9 +12,7 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -50,10 +48,6 @@ class Framework
             'kernel.exception',
             function (GetResponseForExceptionEvent $event) {
                 $exception = $event->getThrowable();
-                if ($exception instanceof NotFoundHttpException) {
-                    throw new ResourceNotFoundException();
-                }
-
                 throw $exception;
             }
         );

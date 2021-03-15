@@ -410,10 +410,9 @@ foreach ($langs as $l) {
 // Countries
 $cm = new CountryManager();
 $countries = $cm->getAll([], ['order' => 'country_name']);
-$origin_country_options = array_map(function ($country) {
-    global $article;
-    $selected = $country->get('id') == $article->get('origin_country') ? ' selected' : null;
-
+$articleOriginCountry = $article->get('origin_country');
+$origin_country_options = array_map(function ($country) use ($articleOriginCountry) {
+    $selected = $country->get('id') == $articleOriginCountry ? ' selected' : null;
     return '<option value='.$country->get('id').$selected.'>'.$country->get('name').'</option>';
 }, $countries);
 

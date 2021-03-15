@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 // Create request from globals
 $request = Request::createFromGlobals();
@@ -99,10 +100,7 @@ if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary(
 
 $opengraph = [];
 
-$_PAGE_TYPE = null;
-$_PAGE = null;
-
-$exceptionHandler = new ExceptionController();
+$exceptionController = new ExceptionController();
 
 try {
     // Site closed
@@ -125,23 +123,17 @@ try {
 
     $framework = new Framework($request);
     $urlgenerator = $framework->getUrlGenerator();
-    $response = $framework->handle($request);
 
-    // Set security headers
-    $response->headers->set('X-XSS-Protection', '1; mode=block');
-    $response->headers->set('X-Content-Type-Options', 'nosniff');
-    $response->headers->set('Referrer-Policy', 'no-referrer-when-downgrade');
-    $response->headers->set('X-Frame-Options', 'DENY');
-
-    // Set HTTP Strict Transport Security to one month if config has option
-    if ($request->isSecure() && $config->get('hsts') === true) {
-        $response->headers->set('Strict-Transport-Security', 'max-age=15768000');
+    try {
+        $response = $framework->handle($request);
     }
 
-    // If response is JSON, return immediately and die
-    if ($response instanceof JsonResponse) {
-        $response->send();
-        die();
+    // If route is not found in route.yml, we might be dealing with a legacy
+    // controller. We try to handle the route below. If not, default action
+    // will throw a resourceNotFoundException that will be catched below.
+    catch (NotFoundHttpException $e) {
+        $mainController = new \AppBundle\Controller\MainController();
+        $response = $mainController->defaultAction($request);
     }
 
     if (!$response instanceof Response) {
@@ -149,103 +141,42 @@ try {
     }
 }
 
-// Thrown when server is in maintenance mode
+// HTTP 503 (maintenance mode)
 catch (ServiceUnavailableException $e) {
-    $response = $exceptionHandler->handleServiceUnavailable();
+    $response = $exceptionController->handleServiceUnavailable();
 }
 
-// Thrown when user is accessing a unauthorized resource
+// HTTP 401
 // TODO: distinguish between 401 (unauthenticated) and 403 (unauthorized)
 catch (AuthException $e) {
-    $response = $exceptionHandler->handleUnauthorizedAccess($request, $axys, $e->getMessage());
+    $response = $exceptionController->handleUnauthorizedAccess($request, $axys, $e->getMessage());
 }
 
-// Not defined as symfony route, fallback to old router
+// HTTP 404
 catch (ResourceNotFoundException $e) {
-    $symfonyRouter404message = $e->getMessage();
+    $response = $exceptionController->handlePageNotFound($e->getMessage());
+}
 
-    // PAGE EN COURS
-    $_PAGE = $request->get('page', 'home');
-
-    // Verification page utilisateur et admin
-    $_PAGE_TYPE = substr($_PAGE, 0, 4);
-    if ($_PAGE_TYPE == 'adm_' and !$_V->isAdmin()) {
-        $_PAGE = 'nologin';
-    }
-    if ($_PAGE_TYPE == 'log_' and !$_V->isLogged()) {
-        $_PAGE = 'nologin';
-    }
-
-    // Get correct controller for called url
-    $controller_path = get_controller_path($_PAGE);
-    $twig_template = BIBLYS_PATH . '/public/' . $site->get('name') . '/html/' . $_PAGE . '.html.twig';
-    if ($_PAGE == '404') {
-        $debug = '404 page direct access';
-    }
-
-    // Twig template controller
-    elseif ($site->get('html_renderer') && file_exists($twig_template)) {
-        $_HTML = $twig_template;
-        $_INCLUDE = get_controller_path('_twig');
-    }
-
-    // Native controller
-    elseif ($controller_path) {
-        $_INCLUDE = $controller_path;
-    }
-
-    // Controller for static page from DB
-    else {
-        $pm = new PageManager();
-
-        $page_request = ['page_url' => $_PAGE];
-        if (!$_V->isAdmin()) {
-            $page_request['page_status'] = 1;
-        }
-        $page = $pm->get($page_request);
-
-        if ($page) {
-            $_INCLUDE = get_controller_path('_page');
-        } else {
-            $debug = 'Unable to find page from index.php';
-            $response = $exceptionHandler->handlePageNotFound($debug);
-        }
-    }
-} catch (Exception $e) {
+// HTTP 500
+catch (Exception $e) {
     biblys_error(E_ERROR, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
 }
 
-// INCLUDE PAGE EN COURS
-try {
-    if (isset($_INCLUDE)) {
-        $_ECHO = null;
-        $response = require $_INCLUDE;
+// Set security headers
+$response->headers->set('X-XSS-Protection', '1; mode=block');
+$response->headers->set('X-Content-Type-Options', 'nosniff');
+$response->headers->set('Referrer-Policy', 'no-referrer-when-downgrade');
+$response->headers->set('X-Frame-Options', 'DENY');
 
-        if (isset($_ECHO)) {
-            trigger_error("Using \$_ECHO in $_INCLUDE. Legacy controllers should return a Response.", E_USER_DEPRECATED);
-            $response = new Response($_ECHO);
-            $_ECHO = null;
-        };
+// Set HTTP Strict Transport Security to one month if config has option
+if ($request->isSecure() && $config->get('hsts') === true) {
+    $response->headers->set('Strict-Transport-Security', 'max-age=15768000');
+}
 
-        // Is this still used?
-        if (isset($_JSON)) {
-            trigger_error("Using \$_JSON in $_INCLUDE. Legacy controllers should return a Response", E_USER_DEPRECATED);
-            $_JSON->send();
-            die();
-        }
-
-        // If response is JSON, return immediately and die
-        if ($response instanceof JsonResponse) {
-            $response->send();
-            die();
-        }
-    }
-} catch (ResourceNotFoundException $e) {
-    $response = $exceptionHandler->handlePageNotFound($symfonyRouter404message ?? $e->getMessage());
-} catch (AuthException $e) {
-    $response = $exceptionHandler->handleUnauthorizedAccess($request, $axys, $e->getMessage());
-} catch (Exception $e) {
-    biblys_error(E_USER_ERROR, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
+// If response is JSON, return immediately and die
+if ($response instanceof JsonResponse) {
+    $response->send();
+    die();
 }
 
 $assetsVersion = '';
@@ -505,17 +436,13 @@ if ($config->get('environment') === 'dev') {
     $content .= '<div class="dev-mode noprint">~ dev mode ~</div>';
 }
 
-// Set response content & send
 $response->setContent($content);
 $response->prepare($request);
 
-// In dev mode, add response time header
 if ($config->get('environment') == 'dev') {
     $responseTime = round(microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'], 3) * 1000;
     $response->headers->set('Server-Timing', 'total;desc="Total";dur=' . $responseTime);
 }
 
 $response->send();
-if (isset($framework)) {
-    $framework->terminateKernel($request, $response);
-}
+$framework->terminateKernel($request, $response);

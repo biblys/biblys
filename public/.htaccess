@@ -41,9 +41,6 @@ RewriteRule ^invoice/(.*)$  /index.php?page=order_invoice&url=$1 [QSA,L]
 # Redirection /confirmer/
 RewriteRule ^confirmer/(.*)$  /index.php?page=order_confirm&id=$1 [QSA,L]
 
-# Redirection /rayon/
-RewriteRule ^rayon/(.*)  /index.php?page=rayon&url=$1 [QSA,L]
-
 # Redirection /editeur/
 RewriteRule ^o/editeur/(.*)  /index.php?page=publisher&url=$1 [QSA,L]
 
