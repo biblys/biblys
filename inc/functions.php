@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
-// Biblys version
-define('BIBLYS_VERSION', '2.52.0-dev.4');
+// Constants
+require_once 'constants.php';
 
 /**
  * Calls biblys_error with the correct arguments for an Exception
@@ -197,16 +197,6 @@ if (!isset($_CRON)) {
 $_MYSQL_DOWN = 0;
 $_OPENGRAPH = null;
 
-// BIBLYS
-if (!defined('BIBLYS_PATH')) {
-    define('BIBLYS_PATH', dirname(dirname(__FILE__)) . '/');
-}
-define('TYS_PATH', BIBLYS_PATH . '/../../tys');
-define('DL_PATH', BIBLYS_PATH . '/../../dl');
-define('DL_URL', 'http://dl.biblys.fr');
-define('IMAGES_PATH', BIBLYS_PATH . '/../../images/files');
-define('IMAGES_URL', 'http://images.biblys.fr');
-
 /* AUTOLOAD */
 
 // Include composer autoload
@@ -328,18 +318,6 @@ if (!defined('SITE_PATH')) {
     $site->set('site_path', BIBLYS_PATH . '/public/' . $site->get('name'));
     define('SITE_PATH', $site->get('path'));
 }
-
-// if (!$_CRON)
-// {
-//     $_SITE = sites();
-//     if (empty($_SITE['site_name'])
-//             && !defined('CRON')
-//             && $_SERVER["HTTP_HOST"] != 'dl.biblys.fr'
-//             && $_SERVER["HTTP_HOST"] != 'status.biblys.fr'
-//             && $_SERVER["HTTP_HOST"] != 'code.biblys.fr'
-//             && $_SERVER["HTTP_HOST"] != 'biblys.me'
-//         ) trigger_error('Site inconnu');
-// }
 
 /* BIBLYS.ME */
 
