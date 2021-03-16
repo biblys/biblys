@@ -266,7 +266,12 @@ if ('dev' == $config->get('environment')) {
 /* DATABASE */
 
 // Get MySQL Credential from config
-$_MYSQL = $config->get('db');
+$dbConfig = $config->get("db");
+$_MYSQL = $dbConfig;
+if (getenv("PHP_ENV") === "test") {
+    $_MYSQL = $dbConfig["test"];
+}
+
 if (!array_key_exists('port', $_MYSQL)) {
     $_MYSQL['port'] = 3306;
 }
