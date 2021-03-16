@@ -272,18 +272,10 @@ if (getenv("PHP_ENV") === "test") {
     $_MYSQL = $dbConfig["test"];
 }
 
-if (!array_key_exists('port', $_MYSQL)) {
-    $_MYSQL['port'] = 3306;
-}
-
-// MySQL PDO
 try {
-    $_SQL = new PDO('mysql:host=' . $_MYSQL['host'] . ';port=' . $_MYSQL['port'] . ';dbname=' . $_MYSQL['base'], $_MYSQL['user'], $_MYSQL['pass']);
-    $_SQL->exec('SET CHARACTER SET utf8');
-    $_SQL->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $GLOBALS['_SQL'] = $_SQL;
-} catch (PDOException $e) {
-    trigger_error('MySQL error #' . $e->getCode() . ': ' . $e->getMessage());
+    $_SQL = Biblys\Database\Connection::init($_MYSQL);
+} catch (Exception $e) {
+    trigger_error($e->getMessage());
 }
 
 /* CURRENT SITE DETECTION */
