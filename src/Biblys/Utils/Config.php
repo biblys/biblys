@@ -1,7 +1,9 @@
 <?php
 
-use Symfony\Component\Yaml\Parser;
+namespace Biblys\Utils;
 
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class Config
 {
@@ -10,11 +12,11 @@ class Config
     public function __construct()
     {
         // Config file path
-        $file = BIBLYS_PATH.'/app/config.yml';
+        $file = BIBLYS_PATH . '/app/config.yml';
 
         // If config file does not exists, throw Exception
         if (!file_exists($file)) {
-            throw new Exception("Config file not found.");
+            throw new \Exception("Config file not found.");
         }
 
         // Get global config

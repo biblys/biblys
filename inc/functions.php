@@ -232,7 +232,7 @@ function loadClass($class)
 spl_autoload_register('loadClass');
 
 // Load config
-$config = new Config();
+$config = new Biblys\Utils\Config();
 
 // Media path
 $media_path = BIBLYS_PATH . '/public/media';

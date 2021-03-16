@@ -308,8 +308,8 @@ class EntityManager
 
     public static function prepareAndExecute($query, array $params)
     {
-        global $config;
         global $_SQL;
+        $config = new Biblys\Utils\Config();
 
         try {
             // Logs sql query
