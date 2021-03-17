@@ -1,0 +1,50 @@
+name: tests
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+            MYSQL_DATABASE: biblys-test
+        ports:
+            - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          php
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Run test suite
+      run: composer test
+      env:
+        DB_PORT: ${{ job.services.mysql.ports[3306] }}
