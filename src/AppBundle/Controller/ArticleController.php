@@ -7,6 +7,7 @@ use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class ArticleController extends Controller
@@ -532,8 +533,12 @@ class ArticleController extends Controller
         $content = $request->getContent();
         $params = json_decode($content, true);
 
-        $ean = Isbn::convertToEan13($params['article_ean']);
-        $am->checkIsbn($params['article_id'], $ean);
+        try {
+            $ean = Isbn::convertToEan13($params['article_ean']);
+            $am->checkIsbn($params['article_id'], $ean);
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
 
         return new JsonResponse(['isbn' => $ean]);
     }
