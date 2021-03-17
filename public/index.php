@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -144,6 +145,11 @@ try {
 // HTTP 503 (maintenance mode)
 catch (ServiceUnavailableException $e) {
     $response = $exceptionController->handleServiceUnavailable();
+}
+
+// HTTP 400
+catch (BadRequestHttpException $e) {
+    $response = $exceptionController->handleBadRequest($request, $e->getMessage());
 }
 
 // HTTP 401

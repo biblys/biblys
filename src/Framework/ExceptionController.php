@@ -60,6 +60,26 @@ class ExceptionController extends Controller
         return $response;
     }
 
+    function handleBadRequest($request, $message): Response
+    {
+        if (
+            $request->isXmlHttpRequest()
+            || $request->headers->get('Accept') == 'application/json'
+        ) {
+            $response = new JsonResponse(['error' => "Bad request: $message"]);
+        } else {
+            $response = new Response('
+            <div class="text-center">
+                <h1>Error: Bad request</h1>
+                <p>' . $message . '</p>
+            </div>
+        ');
+        }
+
+        $response->setStatusCode(400);
+        return $response;
+    }
+
     function handleServiceUnavailable(): Response
     {
         $response = new Response();
