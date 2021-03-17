@@ -123,33 +123,34 @@ class OrderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddStock(Order $order)
     {
+        // given
         $cm = new CountryManager();
         $om = new OrderManager();
         $am = new ArticleManager();
         $sm = new StockManager();
-
-        // Set order country to Belgium
         $order->set('country', $cm->getById(25));
         $om->update($order);
-
-        // Create fake book & add to order
         $book = $am->create(array('type_id' => 1, 'article_price' => 1000));
         $book = $sm->create(array('article_id' => $book->get('id'), 'stock_selling_price' => $book->get('price')));
         $om->addStock($order, $book);
         $book = $sm->reload($book);
-
-        // Create fake ebook & add to order
         $ebook = $am->create(array('type_id' => 2, 'article_price' => 500));
         $ebook = $sm->create(array('article_id' => $ebook->get('id'), 'stock_selling_price' => $ebook->get('price')));
+
+        // when
         $om->addStock($order, $ebook);
         $ebook = $sm->reload($ebook);
 
+        // then
         $this->assertEquals($order->get('id'), $book->get('order')->get('id'));
         $this->assertNotNull($book->get('selling_date'));
         $this->assertEquals($order->get('id'), $ebook->get('order')->get('id'));
         $this->assertNotNull($ebook->get('selling_date'));
-
-        $this->assertEquals(21, $ebook->get('tva_rate'));
+        $this->assertEquals(
+            5.5,
+            $ebook->get('tva_rate'),
+            "Tax rate should be 5.5 for an ebook sold in France"
+        );
 
         return $order;
     }

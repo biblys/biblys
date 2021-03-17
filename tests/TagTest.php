@@ -69,7 +69,7 @@ class TagTest extends PHPUnit_Framework_TestCase
     {
         $tm = new TagManager();
 
-        $tag = $tm->create(['tag_name' => '']);
+        $tm->create(['tag_name' => '']);
     }
 
     /**
@@ -81,7 +81,8 @@ class TagTest extends PHPUnit_Framework_TestCase
     {
         $tm = new TagManager();
 
-        $tag = $tm->create(['tag_name' => 'Science-fiction']);
+        $tm->create(['tag_name' => 'Science-fiction']);
+        $tm->create(['tag_name' => 'Science-fiction']);
     }
 
     /**

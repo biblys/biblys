@@ -138,7 +138,7 @@
         /**
          * Returns previous post from current post's date
          */
-        public function getPrevPost() 
+        public function getPrevPost()
         {
             global $_SQL;
 

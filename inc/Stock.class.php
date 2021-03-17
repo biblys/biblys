@@ -382,7 +382,7 @@ class Stock extends Entity
         }
 
         return '
-            <span 
+            <span
                 title="'.$title.'"
                 class="availability-dot availability-dot-'.$color.'"
             >
@@ -474,7 +474,7 @@ class StockManager extends EntityManager
         $sellerCountry = $this->site['site_tva'];
 
         // If customer country is unknown, use seller's
-        $customerCountry = $this->site['site_tva'];
+        $customerCountry = $sellerCountry;
         $order = $stock->get('order');
         if ($order) {
             $country = $order->get('country');
@@ -499,7 +499,12 @@ class StockManager extends EntityManager
             $dateOfSale = new \DateTime();
         }
 
-        $tax = new Tax($sellerCountry, $customerCountry, constant('\Biblys\EuroTax::'.$tax_type), $dateOfSale);
+        $tax = new Tax(
+            $sellerCountry,
+            $customerCountry,
+            constant('\Biblys\EuroTax::' . $tax_type),
+            $dateOfSale
+        );
 
         return $tax->getTaxRate();
     }

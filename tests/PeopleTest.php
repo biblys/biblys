@@ -132,6 +132,10 @@ class PeopleTest extends PHPUnit_Framework_TestCase
             'people_first_name' => 'Edgar Allan',
             'people_last_name' => 'Poe'
         ]);
+        $pm->create([
+            'people_first_name' => 'Edgar Allan',
+            'people_last_name' => 'Poe'
+        ]);
     }
 
     /**

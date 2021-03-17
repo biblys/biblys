@@ -154,7 +154,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 
         $this->assertEmpty($postWithoutArticles->getArticles());
         $this->assertEquals(
-            $article->get('id'), 
+            $article->get('id'),
             $postWithArticles->getArticles()[0]->get('id')
         );
     }
@@ -180,7 +180,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 
         $this->assertEmpty($postWithoutPeople->getRelatedPeople());
         $this->assertEquals(
-            $people->get('id'), 
+            $people->get('id'),
             $postWithPeople->getRelatedPeople()[0]->get('id')
         );
 
@@ -196,13 +196,22 @@ class PostTest extends PHPUnit_Framework_TestCase
         $pm = new PostManager();
         $um = new UserManager();
 
-        $user = $um->create(['user_email' => 'user'.rand(0,999).'@example.com']);
+        $user = $um->create([
+            "id" => 927,
+            'user_email' => 'user@example.com'
+        ]);
         $post = $pm->create();
 
-        $this->assertFalse($post->canBeDeletedBy($user));
+        $this->assertFalse(
+            $post->canBeDeletedBy($user),
+            "User should not be able to delete any post"
+        );
 
         $post->set('user_id', $user->get('id'));
-        $this->assertTrue($post->canBeDeletedBy($user));
+        $this->assertTrue(
+            $post->canBeDeletedBy($user),
+            "Post author should be able to delete it"
+        );
     }
 
     /**

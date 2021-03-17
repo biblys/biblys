@@ -743,13 +743,6 @@ class OrderManager extends EntityManager
         // Tax
         $stock = $sm->calculateTax($stock);
 
-        // User
-        // User shouldn't be associated with stock until order is payed,
-        // because it will allow to download ebooks
-        // if ($order->has('user_id')) {
-        //     $stock->set('user_id', $order->get('user_id'));
-        // }
-
         // Customer
         if ($order->has('customer_id')) {
             $stock->set('customer_id', $order->get('customer_id'));
