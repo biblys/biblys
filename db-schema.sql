@@ -466,16 +466,19 @@ CREATE TABLE `inventory_item` (
 
 -- Create syntax for TABLE 'jobs'
 CREATE TABLE `jobs` (
-  `job_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `job_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `job_name` varchar(64) DEFAULT NULL,
   `job_name_f` varchar(64) DEFAULT NULL,
   `job_other_names` varchar(256) DEFAULT NULL,
   `job_event` tinyint(1) DEFAULT NULL,
-  `job_order` tinyint(3) unsigned DEFAULT NULL DEFAULT '0',
+  `job_order` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `job_onix` varchar(3) DEFAULT NULL,
-  `job_date` datetime DEFAULT NULL,
+  `job_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `job_created` datetime DEFAULT NULL,
+  `job_updated` datetime DEFAULT NULL,
+  `job_deleted` datetime DEFAULT NULL,
   PRIMARY KEY (`job_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Create syntax for TABLE 'langs'
 CREATE TABLE `langs` (
