@@ -29,6 +29,22 @@ $testDb->exec("USE `$testBaseName`");
 $sql = file_get_contents("db-schema.sql");
 $testDb->exec($sql);
 
-global $config;
-require_once "inc/functions.php";
+// Include entity autoloader
+require_once BIBLYS_PATH . "inc/autoload-entity.php";
+
+// Create fixtures
+$sm = new SiteManager();
+$jm = new JobManager();
+$cm = new CountryManager();
+$sm->create([
+    "site_id" => 1,
+    "site_tva" => "fr",
+    "site_title" => "Librairie Ys",
+    "site_contact" => "librairieys@example.com",
+]);
+$jm->create(["job_id" => 1]);
+$jm->create(["job_id" => 2]);
+$cm->create(["country_id" => 67, "country_name" => "France"]);
+
+require_once BIBLYS_PATH . "inc/functions.php";
 $config->set("environment", "test");
