@@ -208,18 +208,7 @@ if (!file_exists($autoload_file)) {
 }
 
 // Biblys autoload
-function loadClass($class)
-{
-    $Entity = BIBLYS_PATH . '/inc/' . $class . '.class.php';
-    $EntityManager = BIBLYS_PATH . '/inc/' . str_replace('Manager', '', $class) . '.class.php';
-
-    if (is_file($Entity)) {
-        require_once $Entity;
-    } elseif (is_file($EntityManager)) {
-        require_once $EntityManager;
-    }
-}
-spl_autoload_register('loadClass');
+require_once BIBLYS_PATH . '/inc/autoload-entity.php';
 
 // Load config
 $config = new Biblys\Utils\Config();
