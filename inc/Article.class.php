@@ -93,6 +93,12 @@ class Article extends Entity
     {
         $rm = new RoleManager();
 
+        $jm = new JobManager();
+        $job = $jm->getById($jobId);
+        if (!$job) {
+            throw new Exception("Cannot add contributor with invalid job $jobId");
+        }
+
         $roleParams = [
             'article_id' => $this->get('id'),
             'people_id' => $people->get('id'),

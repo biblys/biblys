@@ -339,6 +339,25 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Cannot add contributor with invalid job 25
+     */
+    public function testAddContributorWrongJob()
+    {
+        // given
+        $am = new ArticleManager();
+        $rm = new RoleManager();
+        $pm = new PeopleManager();
+
+        $article = $am->create([]);
+        $people = $pm->create(["people_first_name" => "Luke", "people_last_name" => "Skywalker"]);
+        $article->addContributor($people, 25);
+
+        $pm->delete($people);
+        $am->delete($article);
+    }
+
+    /**
     * Test getting article contributors
     * @depends testUpdate
     */
@@ -358,6 +377,11 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $article->addContributor($people2, 2);
 
         $contributors = $article->getContributors();
+        $this->assertEquals(
+            2,
+            count($contributors),
+            "it should return 2 contributors",
+        );
         $this->assertEquals($contributors[0]->get('id'), $people1->get('id'));
         $this->assertEquals($contributors[1]->get('id'), $people2->get('id'));
 
@@ -584,7 +608,7 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $this->m->addRayon($article, $rayon6);
 
         $this->assertEquals(
-            $article->getRayonsAsJsArray(), 
+            $article->getRayonsAsJsArray(),
             '["Rayon 1","Rayon 2","Rayon 3","Rayon 4","Rayon 5"]'
         );
 
@@ -598,7 +622,7 @@ class ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that adding a too long string as article_authors does not validate
-     * 
+     *
      * @expectedException Exception
      * @expectedExceptionMessage Le champ Auteurs ne peut pas dépasser 256 caractères.
      */
@@ -608,10 +632,10 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $article = new Article(['url' => 'article/url']);
         $article->set(
             'article_authors',
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam 
-            aliquet arcu at libero maximus, euismod vehicula justo suscipit. 
-            Praesent faucibus porta porta. Integer id congue lorem. Nulla 
-            convallis sagittis ultricies. Fusce molestie nibh quis tellus 
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+            aliquet arcu at libero maximus, euismod vehicula justo suscipit.
+            Praesent faucibus porta porta. Integer id congue lorem. Nulla
+            convallis sagittis ultricies. Fusce molestie nibh quis tellus
             iaculis dapibus. Aenean vitae velit sed nulla."
         );
 
