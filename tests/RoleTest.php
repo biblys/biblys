@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-require_once('inc/functions.php');
+require_once "setUp.php";
 
 class RoleTest extends PHPUnit_Framework_TestCase
 {

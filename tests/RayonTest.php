@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-require_once('inc/functions.php');
+require_once "setUp.php";
 
 class RayonTest extends PHPUnit_Framework_TestCase
 {
@@ -97,13 +97,16 @@ class RayonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddArticle(Rayon $rayon)
     {
+        // given
         $rm = new RayonManager();
         $am = new ArticleManager();
+        $pm = new PeopleManager();
+        $article = $am->create(["article_title" => "Pomme", "article_url" => "pomme"]);
 
-        $article = $am->create(["article_title" => "Pomme"]);
-
+        // when
         $rayon->addArticle($article);
 
+        // then
         $this->assertEquals($article->get('links'), '[rayon:'.$rayon->get('id').']');
     }
 
@@ -111,14 +114,14 @@ class RayonTest extends PHPUnit_Framework_TestCase
      * Test adding an article to a rayon that is already in Rayon
      * @depends testGet
      * @expectedException Exception
-     * @expectedExceptionMessage L'article « Pomme » est déjà dans le rayon « Fruits & légumes ».
+     * @expectedExceptionMessage L'article « Banane » est déjà dans le rayon « Fruits & légumes ».
      */
     public function testAddArticleAlreadyInRayon(Rayon $rayon)
     {
         $rm = new RayonManager();
         $am = new ArticleManager();
 
-        $article = $am->create(["article_title" => "Pomme"]);
+        $article = $am->create(["article_title" => "Banane", "article_url" => "banane"]);
 
         $rayon->addArticle($article);
         $rayon->addArticle($article);
