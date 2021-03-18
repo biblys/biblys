@@ -642,6 +642,25 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $am->validate($article);
     }
 
+    public function testPreprocessSlug()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = new Article([]);
+        $article->set("article_title", "Légumes du jour");
+        $article->set("article_authors", "Jean-Sol PARTRE");
+
+        // when
+        $article = $am->preprocess($article);
+
+        // then
+        $this->assertEquals(
+            "jean-sol-partre/legumes-du-jour",
+            $article->get('url'),
+            "it should generate correct slug for url"
+        );
+    }
+
 
     /**
      * Test deleting a copy

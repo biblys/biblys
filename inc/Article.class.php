@@ -1261,7 +1261,12 @@ class ArticleManager extends EntityManager
     /**
      * Hook to push to data server whenever article is updated
      */
-    public function update($article, $reason = null, $pushToBiblysData = true)
+    public function update(
+        $article,
+        $reason = null,
+        $pushToBiblysData = true,
+        $refreshMetadata = false
+    )
     {
         $article = parent::update($article);
 
@@ -1419,7 +1424,6 @@ class ArticleManager extends EntityManager
 
     public function preprocess($article)
     {
-
         $ean = $article->get('ean');
         if ($ean) {
             $article->set('article_ean', Isbn::convertToEan13($ean));
