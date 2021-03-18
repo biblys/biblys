@@ -58,7 +58,7 @@ class PublisherTest extends PHPUnit_Framework_TestCase
     {
         $pm = new PublisherManager();
         $this->publisher = $pm->create(['publisher_name' => 'Un éditeur']);
-        
+
         $this->publisher->set('publisher_name', 'Les éditions Publitou');
         $pm->update($this->publisher);
 
@@ -80,7 +80,7 @@ class PublisherTest extends PHPUnit_Framework_TestCase
 
         $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie"]);
         $article = $am->create([
-            "article_title" => "Sous-sol", 
+            "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
         ]);
 
@@ -99,7 +99,7 @@ class PublisherTest extends PHPUnit_Framework_TestCase
 
         $this->publisher = $pm->create(["publisher_name" => "Les Éditions Paronymie"]);
         $article = $am->create([
-            "article_title" => "Sous-sol", 
+            "article_title" => "Sous-sol",
             "publisher_id" => $this->publisher->get('id'),
         ]);
 

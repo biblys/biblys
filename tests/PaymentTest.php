@@ -80,7 +80,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
     {
         $pm = new PaymentManager();
         $payment = $pm->create();
-        
+
         $this->assertFalse($payment->isExecuted());
 
         $payment->setExecuted();
