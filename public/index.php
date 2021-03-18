@@ -229,7 +229,7 @@ $js_calls .= '
 // Get custom or default layout template
 $layout = BIBLYS_PATH . '/src/AppBundle/Resources/views/layout.html';
 $custom_layout = BIBLYS_PATH . '/app/Resources/views/layout.html';
-$old_wrap_layout = $site->get('path') . '/html/_wrap.html'; // Retro-compatibility
+$old_wrap_layout = SITE_PATH . '/html/_wrap.html'; // Retro-compatibility
 
 if (file_exists($custom_layout)) {
     $layout = $custom_layout;

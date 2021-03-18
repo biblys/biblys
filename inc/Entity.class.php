@@ -5,9 +5,8 @@ use Monolog\Handler\StreamHandler;
 
 class Entity implements ArrayAccess, Iterator, Countable
 {
-    private $x;
+    private $_attributes = [];
     private $cursor = 0;
-    private $keys;
     protected $prefix = 'entity';
     public $idField = 'entity_id';
     public $trackChange = true;
@@ -15,7 +14,6 @@ class Entity implements ArrayAccess, Iterator, Countable
     public function __construct(array $data, $withJoins = true)
     {
         $this->hydrate($data);
-        $this->keys = array_keys($data);
         $this->cursor = 0;
         $this->idField = $this->prefix.'_id';
     }
@@ -37,21 +35,16 @@ class Entity implements ArrayAccess, Iterator, Countable
         if ($field == $this->idField) {
             $value = (int) $value;
         }
-        $this->x[$field] = $value;
+        $this->_attributes[$field] = $value;
 
         return $this;
     }
 
-    // public function __set($field, $value)
-    // {
-//     // return $this->set($field, $value);
-    // }
-
     public function has($field)
     {
-        if (!empty($this->x[$field])) {
+        if (!empty($this->_attributes[$field])) {
             return true;
-        } elseif (!empty($this->x[$this->prefix.'_'.$field])) {
+        } elseif (!empty($this->_attributes[$this->prefix . '_' . $field])) {
             return true;
         }
 
@@ -60,10 +53,10 @@ class Entity implements ArrayAccess, Iterator, Countable
 
     public function get($field)
     {
-        if (isset($this->x[$field])) {
-            return $this->x[$field];
-        } elseif (isset($this->x[$this->prefix.'_'.$field])) {
-            return $this->x[$this->prefix.'_'.$field];
+        if (isset($this->_attributes[$field])) {
+            return $this->_attributes[$field];
+        } elseif (isset($this->_attributes[$this->prefix . '_' . $field])) {
+            return $this->_attributes[$this->prefix . '_' . $field];
         }
         // elseif (DEV)
         // {
@@ -78,7 +71,7 @@ class Entity implements ArrayAccess, Iterator, Countable
 
     public function remove($field)
     {
-        unset($this->x[$field]);
+        unset($this->_attributes[$field]);
     }
 
     // Get related entitiy
@@ -139,7 +132,7 @@ class Entity implements ArrayAccess, Iterator, Countable
      */
     public function current()
     {
-        return $this->x[$this->key()];
+        return $this->_attributes[$this->key()];
     }
 
     /**
@@ -147,7 +140,8 @@ class Entity implements ArrayAccess, Iterator, Countable
      */
     public function key()
     {
-        return $this->keys[$this->cursor];
+        $keys = array_keys($this->_attributes);
+        return $keys[$this->cursor];
     }
 
     /**
@@ -171,19 +165,20 @@ class Entity implements ArrayAccess, Iterator, Countable
      */
     public function valid()
     {
-        return isset($this->keys[$this->cursor]);
+        $keys = array_keys($this->_attributes);
+        return isset($keys[$this->cursor]);
     }
 
     // Interface Countable //
 
     public function count()
     {
-        return count($this->x);
+        return count($this->_attributes);
     }
 
     public function __toString()
     {
-        return json_encode($this->x);
+        return json_encode($this->_attributes);
     }
 }
 
@@ -466,36 +461,47 @@ class EntityManager
         // Validate
         $this->validate($entity);
 
+        $tableColumnsQuery = EntityManager::prepareAndExecute(
+            "SHOW COLUMNS FROM `$this->table`",
+            []
+        );
+        $tableColumnsResult = $tableColumnsQuery->fetchAll();
+        $tableColumns = array_map(function ($column) {
+            return $column["Field"];
+        }, $tableColumnsResult);
+
         // Default values
         $query = null;
         $values = null;
         $i = 0;
         $params = array();
-        foreach ($defaults as $k => $v) {
-            $query .= ', `'.$k.'`';
+        foreach ($entity as $property => $attribute) {
+
+            if (!in_array($property, $tableColumns)) {
+                continue;
+            }
+
+            $query .= ', `' . $property . '`';
             $values .= ', :key'.$i;
-            $params['key'.$i] = $v;
+            $params['key' . $i] = $attribute;
             ++$i;
         }
 
         try {
-            $qu = 'INSERT INTO `'.$this->table.'`(`'.$this->prefix.'_created`'.$query.') VALUES(NOW()'.$values.')';
-            $this->prepareAndExecute($qu, $params);
+            $qu = 'INSERT INTO `' . $this->table . '`(`' . $this->prefix . '_created`' . $query . ') VALUES(NOW()' . $values . ')';
+            self::prepareAndExecute($qu, $params);
             $id = $this->db->lastInsertId();
         } catch (Exception $ex) {
             throw new Exception('Error creating '.$this->object.': '.$ex->getMessage());
         }
 
         $new = $this->getById($id);
-        if ($new) {
-            // Update new element to trigger preprocess & validate
-            $new = $this->update($new);
-
-            return $new;
-        } else {
+        if (!$new) {
             // This error is probably caused by differents defaults in create and getAll methods
             throw new Exception('Error creating Entity');
         }
+
+        return $new;
     }
 
     /**

@@ -304,8 +304,8 @@ if (!$site) {
 
 // Define site_path (should be replace with $site->get("path"))
 if (!defined('SITE_PATH')) {
-    $site->set('site_path', BIBLYS_PATH . '/public/' . $site->get('name'));
-    define('SITE_PATH', $site->get('path'));
+    $sitePath = BIBLYS_PATH . '/public/' . $site->get('name');
+    define('SITE_PATH', $sitePath);
 }
 
 /* BIBLYS.ME */

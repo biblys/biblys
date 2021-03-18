@@ -93,7 +93,7 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
         }
 
         // Old custom file location
-        $old_custom_file = $this->site->get('path').'/templates/'.$path[1].'/'.$path[2];
+        $old_custom_file = SITE_PATH . '/templates/' . $path[1] . '/' . $path[2];
         if (file_exists($old_custom_file)) {
             return $old_custom_file;
         }
