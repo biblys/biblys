@@ -518,7 +518,7 @@ class EntityManager
         $x = $this->preprocess($x);
 
         // Validate
-        $this->validate($x);
+        $this->validateBeforeUpdate($x);
 
         $fields = array(); // Updated fields array
         $query = array(); // SQL query
@@ -651,6 +651,18 @@ class EntityManager
     public function validate($entity)
     {
         return true;
+    }
+
+    /**
+     * Preprocess entity before they are updated.
+     *
+     * @param Entity $entity The entity to process
+     *
+     * @throws Exception if entity is invalid
+     */
+    public function validateBeforeUpdate($entity): void
+    {
+        $this->validate($entity);
     }
 
     public function getMailer()

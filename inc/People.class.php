@@ -141,7 +141,10 @@
                 throw new Exception('Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.');
             }
 
-            // Check that there is not another publisher with that name
+            if (!$people->has('url')) {
+                throw new Exception('Le contributeur doit avoir une url.');
+            }
+
             $other = $this->get(['people_url' => $people->get('url'), 'people_id' => '!= '.$people->get('id')]);
             if ($other) {
                 throw new Exception('Il existe déjà un contributeur avec le nom '.$people->get('name').'.');

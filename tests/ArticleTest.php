@@ -45,15 +45,21 @@ class ArticleTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdate(Article $article)
     {
-        $article->set('article_title', 'Bara Yogoi');
-        $article->set('publisher_id', 262);
+        // given
+        $article->set("article_title", "Bara Yogoi");
+        $article->set("publisher_id", 262);
+        $pm = new PeopleManager();
+        $author = $pm->create(["people_first_name" => "Léo", "people_last_name" => "Henry"]);
+        $article->addContributor($author, 1);
         $this->m->update($article);
 
-        $updatedArticle = $this->m->getById($article->get('id'));
+        // when
+        $updatedArticle = $this->m->getById($article->get("id"));
 
-        $this->assertTrue($updatedArticle->has('updated'));
-        $this->assertEquals($updatedArticle->get('title'), 'Bara Yogoi');
-        $this->assertEquals($updatedArticle->get('publisher_id'), 262);
+        // then
+        $this->assertTrue($updatedArticle->has("updated"));
+        $this->assertEquals($updatedArticle->get("title"), "Bara Yogoi");
+        $this->assertEquals($updatedArticle->get("publisher_id"), 262);
 
         return $updatedArticle;
     }
@@ -591,7 +597,10 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     public function testGetJsArray()
     {
         $rm = new RayonManager();
+        $pm = new PeopleManager();
         $article = $this->m->create(["article_title" => "A Book"]);
+        $people = $pm->create(["people_last_name" => "An author"]);
+        $article->addContributor($people, 1);
 
         $rayon1 = $rm->create(["rayon_name" => "Rayon 1"]);
         $rayon2 = $rm->create(["rayon_name" => "Rayon 2"]);
