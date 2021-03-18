@@ -369,6 +369,7 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     */
     public function testGetContributors(Article $article)
     {
+        $article = $this->m->create([]);
         $this->assertEmpty($article->getContributors());
         $this->assertFalse($article->hasOtherContributors());
 
@@ -651,13 +652,31 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $am->validate($article);
     }
 
-    public function testPreprocessSlug()
+    /**
+     * Test that updating an article without an url throws
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage L'article doit avoir une url
+     */
+    public function testUpdatingArticleWithoutUrl()
+    {
+        $am = new ArticleManager();
+        $article = $am->create([]);
+
+        $am->update($article);
+    }
+
+    public function testPreprocessSlugWithOneAuthor()
     {
         // given
         $am = new ArticleManager();
-        $article = new Article([]);
-        $article->set("article_title", "Légumes du jour");
-        $article->set("article_authors", "Jean-Sol PARTRE");
+        $article = $am->create(["article_title" => "Légumes du jour"]);
+        $pm = new PeopleManager();
+        $people = $pm->create([
+            "people_first_name" => "Jean-Sol",
+            "people_last_name" => "Partre"
+        ]);
+        $article->addContributor($people, 1);
 
         // when
         $article = $am->preprocess($article);
@@ -666,7 +685,31 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             "jean-sol-partre/legumes-du-jour",
             $article->get('url'),
-            "it should generate correct slug for url"
+            "it should generate correct slug for one author"
+        );
+    }
+
+    public function testPreprocessSlugWithSeveralAuthors()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = $am->create(["article_title" => "La Bande à Picsou"]);
+        $pm = new PeopleManager();
+        $riri = $pm->create(["people_last_name" => "Riri"]);
+        $fifi = $pm->create(["people_last_name" => "Fifi"]);
+        $loulou = $pm->create(["people_last_name" => "Loulou"]);
+        $article->addContributor($riri, 1);
+        $article->addContributor($fifi, 1);
+        $article->addContributor($loulou, 1);
+
+        // when
+        $article = $am->preprocess($article);
+
+        // then
+        $this->assertEquals(
+            "collectif/la-bande-a-picsou",
+            $article->get('url'),
+            "it should generate correct slug for several authors"
         );
     }
 
