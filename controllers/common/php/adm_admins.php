@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Utils\Config;
+
 $_PAGE_TITLE = 'Admininistrateurs';
 
 // Supprimer une right
@@ -22,13 +24,18 @@ if (isset($_GET['added'])) {
     $message = $messageC.'<p class="success">L\'utilisateur '.$_GET['email'].' a été ajouté aux administrateurs.</p>';
 }
 
-$rights = $_SQL->prepare("SELECT `Users`.`id` as `user_id`, `Users`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
+$rights = $_SQL->prepare("
+    SELECT `$usersTableName`.`id` as `user_id`, `$usersTableName`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
         FROM `rights`
-        JOIN `Users` ON `Users`.`id` = `rights`.`user_id`
+        JOIN `$usersTableName` ON `$usersTableName`.`id` = `rights`.`user_id`
     WHERE `rights`.`site_id` = :site_id
         AND `right_deleted` IS NULL
         AND `user_deleted` IS NULL
-    ORDER BY `DateConnexion` DESC");
+    ORDER BY `DateConnexion` DESC
+");
 $rights->execute(["site_id" => $site->get("id")]);
 
 $table = NULL;

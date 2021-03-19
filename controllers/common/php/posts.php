@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Utils\Config;
+
 $um = new UserManager();
 
 $_PAGE_TITLE = 'Le Blog';
@@ -52,13 +54,16 @@ if (!$use_old_controller) {
 
 $_ECHO .= '<h1>'.$_PAGE_TITLE.'</h1>';
 
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
 // Requête
 $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date`, `post_illustration_legend`,
                 `category_name`, `category_url`,
                 `user_screen_name`, `user_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
-    LEFT JOIN `Users` ON `posts`.`user_id` = `Users`.`id`
+    LEFT JOIN `$usersTableName` ON `posts`.`user_id` = `$usersTableName`.`id`
     LEFT JOIN `links` USING(`post_id`)
 WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' AND `post_deleted` IS NULL ".$aut_req." ".$cat_req.""
         . "GROUP BY `post_id`";

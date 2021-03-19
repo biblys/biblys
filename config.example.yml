@@ -12,6 +12,8 @@ site: 1
 logs:
     sql: false
 
+# users_table_name: Users
+
 # axys:
 #     protocol: https
 #     host: axys.me

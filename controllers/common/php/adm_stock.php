@@ -1,7 +1,7 @@
 <?php
 
 use Biblys\Utils\Config;
-use Symfony\Component\HttpFoundation\Response as Response;
+use Symfony\Component\HttpFoundation\Response;
 
 $sm = new StockManager();
 $am = new ArticleManager();
@@ -30,7 +30,7 @@ if ($returnedStockId) {
     $stock = $sm->getById($returnedStockId);
     $stock->setReturned();
     $sm->update($stock);
-    redirect('/pages/adm_stock?id='.$_GET['return'].'&returned=1');
+    redirect('/pages/adm_stock?id=' . $_GET['return'] . '&returned=1');
 }
 
 // Exemplaire perdu
@@ -42,8 +42,8 @@ if ($lostCopyId) {
         ->set('stock_cart_date', null)
         ->set('stock_selling_date', null);
     $sm->update($lostCopy);
-    $session->getFlashBag()->add('success', 'L\'exemplaire n° '.$lostCopyId.' a été marqué comme perdu.');
-    redirect('/pages/adm_stock?id='.$lostCopyId);
+    $session->getFlashBag()->add('success', 'L\'exemplaire n° ' . $lostCopyId . ' a été marqué comme perdu.');
+    redirect('/pages/adm_stock?id=' . $lostCopyId);
 }
 
 // Copies sold in shop
@@ -62,7 +62,7 @@ if (isset($_GET['sold'])) {
         } else {
             try {
                 // Get order for current day shop sales if it exists
-                $orderDate = date('Y-m-d').' 00:00:00';
+                $orderDate = date('Y-m-d') . ' 00:00:00';
                 $order = $om->get([
                     'customer_id' => $fakeCustomerId,
                     'order_created' => $orderDate,
@@ -87,7 +87,7 @@ if (isset($_GET['sold'])) {
                 trigger_error($e->getMessage());
             }
 
-            redirect('/pages/adm_stock?id='.$stock->get('id').'&solded=1');
+            redirect('/pages/adm_stock?id=' . $stock->get('id') . '&solded=1');
         }
     } else {
         trigger_error('Exemplaire introuvable');
@@ -115,7 +115,7 @@ if ($request->getMethod() === 'POST') {
             throw new Exception("Cannot find rayon with id $rayon_id");
         }
         $rayon->addArticle($article);
-        $session->getFlashBag()->add('info', 'L\'article <strong>'.$article->get('title').'</strong> a été ajouté au rayon <strong>'.$rayon->get('name').'</strong>.');
+        $session->getFlashBag()->add('info', 'L\'article <strong>' . $article->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
     }
 
     for ($i = 0; $i < $_POST['stock_num']; ++$i) {
@@ -123,7 +123,7 @@ if ($request->getMethod() === 'POST') {
         if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
             $stock = $sm->create();
             $_POST['stock_id'] = $stock->get('id');
-            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
+            $_ECHO .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
             $mode = 'insert';
             $update_date = 'NULL';
         } else {
@@ -187,7 +187,7 @@ if ($request->getMethod() === 'POST') {
             $campaign = $cfcm->getById($campaign_id);
             if ($campaign) {
                 $cfcm->updateFromSales($campaign);
-                $session->getFlashBag()->add('success', 'La campagne <strong>'.$campaign->get('title').'</strong> a été mise à jour.');
+                $session->getFlashBag()->add('success', 'La campagne <strong>' . $campaign->get('title') . '</strong> a été mise à jour.');
             }
         }
 
@@ -211,11 +211,11 @@ if ($request->getMethod() === 'POST') {
 
     // Flash messages
     if ($mode == 'update') {
-        $session->getFlashBag()->add('success', "L'exemplaire n° ".$stock->get('id').' a été mis à jour.');
+        $session->getFlashBag()->add('success', "L'exemplaire n° " . $stock->get('id') . ' a été mis à jour.');
     } elseif ($_POST['stock_num'] == 1) {
-        $session->getFlashBag()->add('success', 'Un exemplaire de <strong>'.$article->get('title').'</strong> a été ajouté au stock.');
+        $session->getFlashBag()->add('success', 'Un exemplaire de <strong>' . $article->get('title') . '</strong> a été ajouté au stock.');
     } else {
-        $session->getFlashBag()->add('success', $_POST['stock_num'].' exemplaires de <strong>'.$article->get('title').'</strong> ont été ajoutés au stock.');
+        $session->getFlashBag()->add('success', $_POST['stock_num'] . ' exemplaires de <strong>' . $article->get('title') . '</strong> ont été ajoutés au stock.');
     }
 
     // Update CFReward if necessary
@@ -230,7 +230,7 @@ if ($request->getMethod() === 'POST') {
         }
 
         if ($rewards_updated) {
-            $session->getFlashBag()->add('info', 'Les quantités de <strong>'.$rewards_updated.' contrepartie'.s($rewards_updated).'</strong> ont été mises à jour.');
+            $session->getFlashBag()->add('info', 'Les quantités de <strong>' . $rewards_updated . ' contrepartie' . s($rewards_updated) . '</strong> ont été mises à jour.');
         }
     }
 
@@ -238,56 +238,61 @@ if ($request->getMethod() === 'POST') {
     if (!empty($_POST['stock_weight']) && $article->get('weight') != $_POST['stock_weight']) {
         $article->set('article_weight', $_POST['stock_weight']);
         $am->update($article);
-        $session->getFlashBag()->add('info', "Le poids de l'article <strong>".$article->get('title').'</strong> a été mis à <strong>'.$article->get('weight').'g</strong>.');
+        $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $article->get('title') . '</strong> a été mis à <strong>' . $article->get('weight') . 'g</strong>.');
     }
+
+    $config = new Config();
+    $usersTableName = $config->get("users_table_name");
 
     // Envoi des alertes s'il y a lieu
     if ($mode == 'insert' && $_POST['stock_condition'] != 'Neuf' && BIBLYS_VERSION > 2) {
-        $alerts = $_SQL->prepare('SELECT
-            `Email` AS `user_email`,
-            `user_id`,
-            `alert_max_price`,
-            `alert_condition`,
-            `alert_pub_year`,
-            `article_title`,
-            `article_url`,
-            `article_authors`,
-            `article_collection`,
-            `article_number`,
-            `article_publisher`
-        FROM `alerts`
-        JOIN `Users` ON `Users`.`id` = `user_id`
-        JOIN `articles` USING(`article_id`)
-        WHERE `article_id` = :article_id AND `alert_deleted` IS NULL');
+        $alerts = $_SQL->prepare(
+            "SELECT
+                `Email` AS `user_email`,
+                `user_id`,
+                `alert_max_price`,
+                `alert_condition`,
+                `alert_pub_year`,
+                `article_title`,
+                `article_url`,
+                `article_authors`,
+                `article_collection`,
+                `article_number`,
+                `article_publisher`
+            FROM `alerts`
+            JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
+            JOIN `articles` USING(`article_id`)
+            WHERE `article_id` = :article_id AND `alert_deleted` IS NULL"
+        );
         $alerts->bindValue('article_id', $_POST['article_id'], PDO::PARAM_INT);
         $alerts->execute() or error($alerts->errorInfo());
 
         $alerts_send = 0;
         while ($al = $alerts->fetch(PDO::FETCH_ASSOC)) {
-            $headers = 'From: '.$_SITE['site_title'].' <'.$_SITE['site_contact'].'>'."\r\n";
-            $subject = $_SITE['site_tag'].' | Alerte : '.$al['article_title'].' est disponible !';
+            $headers = 'From: ' . $_SITE['site_title'] . ' <' . $_SITE['site_contact'] . '>' . "\r\n";
+            $subject = $_SITE['site_tag'] . ' | Alerte : ' . $al['article_title'] . ' est disponible !';
             $message = '
                 <p>Bonjour,</p>
                 <p>Vous avez créé une alerte Biblys pour le livre&nbsp;:</p>
                 <p>
-                    <a href="http://'.$_SITE['site_domain'].'/'.$al['article_url'].'">'.$al['article_title'].'</a><br />
-                    de '.authors($al['article_authors']).'<br />
-                    coll. '.$al['article_collection'].numero($al['article_number']).' ('.$al['article_publisher'].')
+                    <a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">' . $al['article_title'] . '</a><br />
+                    de ' . authors($al['article_authors']) . '<br />
+                    coll. ' . $al['article_collection'] . numero($al['article_number']) . ' (' . $al['article_publisher'] . ')
                 </p>
-                <p>Un exemplaire de ce livre vient d\'être mis en vente chez <a href="http://'.$_SITE['site_domain'].'/'.$al['article_url'].'">'.$_SITE['site_title'].'</a>&nbsp;!</p>
+                <p>Un exemplaire de ce livre vient d\'être mis en vente chez <a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">' . $_SITE['site_title'] . '</a>&nbsp;!</p>
                 <p>
-                    Édition de '.$_POST['stock_pub_year'].'<br />
-                    État : '.$_POST['stock_condition'].'<br />
-                    Prix : '.price($_POST['stock_selling_price'], 'EUR').'
+                    Édition de ' . $_POST['stock_pub_year'] . '<br />
+                    État : ' . $_POST['stock_condition'] . '<br />
+                    Prix : ' . price($_POST['stock_selling_price'], 'EUR') . '
                 </p>
             ';
 
             if ($site->getOpt('alerts_custom_message')) {
-                $message .= '<p><strong>'.$site->getOpt('alerts_custom_message').'</strong></p>';
+                $message .= '<p><strong>' . $site->getOpt('alerts_custom_message') . '</strong></p>';
             }
 
             $message .= '
-                <p>Pour en savoir plus ou acheter ce livre, rendez-vous sur :<br /><a href="http://'.$_SITE['site_domain'].'/'.$al['article_url'].'">http://'.$_SITE['site_domain'].'/'.$al['article_url'].'</a></p>
+                <p>Pour en savoir plus ou acheter ce livre, rendez-vous sur :<br /><a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '</a></p>
                 <p>Attention !<br />Une alerte pouvant être créée par plusieurs personnes sur le même livre, le premier arrivé est le premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne perdez pas de temps !</p>
                 <p><a href="http://www.biblys.fr/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
                 <p>À très bientôt dans les librairies Biblys !</p>
@@ -300,11 +305,11 @@ if ($request->getMethod() === 'POST') {
         }
 
         if ($alerts_send) {
-            $session->getFlashBag()->add('info', '<strong>'.$alerts_send.' alerte'.s($alerts_send).'</strong> '.s($alerts_send, 'a', 'ont').' été envoyée'.s($alerts_send).'.');
+            $session->getFlashBag()->add('info', '<strong>' . $alerts_send . ' alerte' . s($alerts_send) . '</strong> ' . s($alerts_send, 'a', 'ont') . ' été envoyée' . s($alerts_send) . '.');
         }
     }
 
-    redirect('/pages/adm_stock?id='.$_POST['stock_id']);
+    redirect('/pages/adm_stock?id=' . $_POST['stock_id']);
 }
 
 $photo_field = null;
@@ -315,10 +320,10 @@ $delId = $request->query->get('del');
 // Modifier un exemplaire existant
 if (!empty($_GET['id'])) {
     $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; ' . $_GET['id'];
-    $content .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
+    $_ECHO .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
 
     if (isset($_GET['created'])) {
-        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
+        $_ECHO .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
     } elseif (isset($_GET['returned'])) {
         $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; retourn&eacute;.</p>';
     } elseif (isset($_GET['losted'])) {
@@ -328,7 +333,7 @@ if (!empty($_GET['id'])) {
     }
 
     if (isset($_GET['alerts'])) {
-        $content .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
+        $_ECHO .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
     }
 
     $stockId = $request->query->get('id');
@@ -348,7 +353,7 @@ if (!empty($_GET['id'])) {
     if ($stock->hasPhoto()) {
         $photo_field = '
             <div class="floatR center">
-                '.$stock->getPhotoTag(['size' => 'w90']).'<br/>
+                ' . $stock->getPhotoTag(['size' => 'w90']) . '<br/>
                 <input type="checkbox" name="delete_photo" value="1" /> Supprimer
             </div>';
     } else {
@@ -356,14 +361,14 @@ if (!empty($_GET['id'])) {
     }
 
     $div_admin = '
-        <p>Exemplaire n&deg; '.$s['stock_id'].'</p>
-        <p><a href="/pages/adm_stocks?article_id='.$s['article_id'].'">autres exemplaires</a></p>
-        <p><a href="/pages/adm_stock?add='.$s['article_id'].'#add">nouvel exemplaire</a></p>
-        <p><a href="/pages/adm_stock?del='.$s['stock_id'].'" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
+        <p>Exemplaire n&deg; ' . $s['stock_id'] . '</p>
+        <p><a href="/pages/adm_stocks?article_id=' . $s['article_id'] . '">autres exemplaires</a></p>
+        <p><a href="/pages/adm_stock?add=' . $s['article_id'] . '#add">nouvel exemplaire</a></p>
+        <p><a href="/pages/adm_stock?del=' . $s['stock_id'] . '" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
     ';
 } elseif (!empty($copyId)) {
     $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; ' . $copyId;
-    $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
+    $_ECHO .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {
         throw new Exception('Cet exemplaire n\'existe pas');
@@ -372,7 +377,7 @@ if (!empty($_GET['id'])) {
     $_GET['id'] = null;
 } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
     $_PAGE_TITLE = 'Ajouter au stock un nouvel exemplaire de...';
-    $content .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
+    $_ECHO .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
     $s['article_id'] = $_GET['add'];
     $mode = 'insert';
 
@@ -401,7 +406,7 @@ if (!empty($_GET['id'])) {
 } elseif ($delId) {
     $copyToDelete = $sm->getById($delId);
     $sm->delete($copyToDelete);
-    $session->getFlashBag()->add('success', 'L\'exemplaire '.$delId.' a bien été supprimé.');
+    $session->getFlashBag()->add('success', 'L\'exemplaire ' . $delId . ' a bien été supprimé.');
     redirect('/pages/adm_stock');
 }
 
@@ -438,7 +443,7 @@ if ($article) {
     $articleUrl = $urlgenerator->generate(
         'article_show',
         [
-        'slug' => $article->get('url'),
+            'slug' => $article->get('url'),
         ]
     );
     $articleCover = null;
@@ -452,16 +457,16 @@ if ($article) {
         );
     }
 
-    $content .= '
+    $_ECHO .= '
         <a href="' . $articleUrl . '">
             <div class="article-thumb">
-                '.$articleCover.'
+                ' . $articleCover . '
                 <div class="article-thumb-data">
-                    <h3>'.$a['article_title'].'</h3>
+                    <h3>' . $a['article_title'] . '</h3>
                     <p>
-                        de '.truncate($a['article_authors'], 65, '...', true, true).'<br />
-                        coll. '.$a['article_collection'].' '.numero($a['article_number']).' ('.$a['article_publisher'].')<br />
-                        Prix &eacute;diteur : '.price($a['article_price'], 'EUR').'
+                        de ' . truncate($a['article_authors'], 65, '...', true, true) . '<br />
+                        coll. ' . $a['article_collection'] . ' ' . numero($a['article_number']) . ' (' . $a['article_publisher'] . ')<br />
+                        Prix &eacute;diteur : ' . price($a['article_price'], 'EUR') . '
                     </p>
                 </div>
             </div>
@@ -469,7 +474,7 @@ if ($article) {
     ';
 
     if (!empty($a['article_weight'])) {
-        $article_weight = '<input type="hidden" name="article_weight" value="'.$a['article_weight'].'">';
+        $article_weight = '<input type="hidden" name="article_weight" value="' . $a['article_weight'] . '">';
     } else {
         $article_weight = null;
     }
@@ -496,14 +501,14 @@ if ($article) {
             ++$in_base;
             $exs .= '
                         <tr>
-                            <td><a href="adm_stock?id='.$os['stock_id'].'">'.$os['stock_id'].'</a></td>
-                            <td>'.price($os['stock_purchase_price'], 'EUR').'</td>
-                            <td>'.price($os['stock_selling_price'], 'EUR').'</td>
-                            <td>'.$os['stock_condition'].'</td>
-                            <td>'.$os['stock_weight'].'g</td>
-                            <td>'.$os['stock_pub_year'].'</td>
-                            <td>'._date($os['stock_purchase_date'], 'd/m/Y').'</td>
-                            <td>'._date($os['stock_selling_date'], 'd/m/Y').' '._date($os['stock_return_date'], 'd/m/Y').'</td>
+                            <td><a href="adm_stock?id=' . $os['stock_id'] . '">' . $os['stock_id'] . '</a></td>
+                            <td>' . price($os['stock_purchase_price'], 'EUR') . '</td>
+                            <td>' . price($os['stock_selling_price'], 'EUR') . '</td>
+                            <td>' . $os['stock_condition'] . '</td>
+                            <td>' . $os['stock_weight'] . 'g</td>
+                            <td>' . $os['stock_pub_year'] . '</td>
+                            <td>' . _date($os['stock_purchase_date'], 'd/m/Y') . '</td>
+                            <td>' . _date($os['stock_selling_date'], 'd/m/Y') . ' ' . _date($os['stock_return_date'], 'd/m/Y') . '</td>
                         </tr>
             ';
         }
@@ -519,7 +524,7 @@ if ($article) {
                         </tr>
                     </thead>
                     <tbody id="stockBody">
-                        '.$exs.'
+                        ' . $exs . '
                     </tbody>
                 </table>
             ';
@@ -536,10 +541,10 @@ if ($article) {
 
             return '
                 <tr>
-                    <td>'.$user->get('email').'</a></td>
-                    <td>'.$alert->get('condition').'</td>
-                    <td>'.$alert->get('pub_year').'</td>
-                    <td>'.currency($alert->get('max_price'), true).'</td>
+                    <td>' . $user->get('email') . '</a></td>
+                    <td>' . $alert->get('condition') . '</td>
+                    <td>' . $alert->get('pub_year') . '</td>
+                    <td>' . currency($alert->get('max_price'), true) . '</td>
                 </tr>
             ';
         }, $alerts);
@@ -552,12 +557,12 @@ if ($article) {
                         <tr>
                             <th colspan="9">
                                 <span class="fa fa-chevron-down"></span>
-                                '.$alerts_num.' alerte'.s($alerts_num).'
+                                ' . $alerts_num . ' alerte' . s($alerts_num) . '
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        '.join($alerts).'
+                        ' . join($alerts) . '
                     </tbody>
                 </table>
             ';
@@ -572,7 +577,7 @@ if ($article) {
         $su = $suppliers[0];
         $supplier = '
             <label for="Fournisseur" class="disabled">Fournisseur :</label>
-            <input type="text" name="Fournisseur" id="Fournisseur" value="'.$su['supplier_name'].'" class="short disabled" disabled />
+            <input type="text" name="Fournisseur" id="Fournisseur" value="' . $su['supplier_name'] . '" class="short disabled" disabled />
             <br />
         ';
     }
@@ -584,7 +589,7 @@ if ($article) {
         $s['stock_tva'] = $article->getTaxRate();
         $tva = '
             <label for="stock_tva" class="disabled">TVA :</label>
-            <input type="text" name="stock_tva" id="stock_tva" value="'.$s['stock_tva'].' %" class="mini" disabled />
+            <input type="text" name="stock_tva" id="stock_tva" value="' . $s['stock_tva'] . ' %" class="mini" disabled />
             <br />
         ';
     }
@@ -610,26 +615,26 @@ if ($article) {
         $tva_fields = '
             <p>
                 <label>Prix de vente HT :</label>
-                <input type="text" readonly value="'.$stock->get('selling_price_ht').'" class="mini"> centimes
+                <input type="text" readonly value="' . $stock->get('selling_price_ht') . '" class="mini"> centimes
             </p>
             <p>
                 <label>Taux de TVA :</label>
-                <input type="text" readonly value="'.$stock->get('tva_rate').'" class="mini"> %
+                <input type="text" readonly value="' . $stock->get('tva_rate') . '" class="mini"> %
             </p>
             <p>
                 <label>TVA sur PdV :</label>
-                <input type="text" readonly value="'.$stock->get('selling_price_tva').'" class="mini"> centimes
+                <input type="text" readonly value="' . $stock->get('selling_price_tva') . '" class="mini"> centimes
             </p>
             <p>
                 <label>Remise recalculée :</label>
-                <input type="text" readonly value="'.$stock->getDiscountRate().'" class="mini"> %
+                <input type="text" readonly value="' . $stock->getDiscountRate() . '" class="mini"> %
             </p>
         ';
     } elseif ($site->has('tva') && $stock->has('id')) {
         $tva_fields = '
             <p>
                 <label>Remise recalculée :</label>
-                <input type="text" readonly value="'.$stock->getDiscountRate().'" class="mini"> %
+                <input type="text" readonly value="' . $stock->getDiscountRate() . '" class="mini"> %
             </p>
         ';
     }
@@ -649,7 +654,7 @@ if ($article) {
         $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * $_SITE['Rabais']);
     }
 
-    $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="'.$s['stock_invoice'].'" />';
+    $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $s['stock_invoice'] . '" />';
     if (empty($s['stock_invoice'])) {
         $invoicesQuery = EntityManager::prepareAndExecute(
             'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
@@ -659,9 +664,9 @@ if ($article) {
         $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
         $invoices_options = null;
         foreach ($invoices as $invoice) {
-            $invoices_options .= '<option>'.$invoice['stock_invoice'].'</option>';
+            $invoices_options .= '<option>' . $invoice['stock_invoice'] . '</option>';
         }
-        $invoice = '<select name="stock_invoice" id="stock_invoice">'.$invoices_options.'</select>';
+        $invoice = '<select name="stock_invoice" id="stock_invoice">' . $invoices_options . '</select>';
     }
 
     // STOCK
@@ -680,35 +685,35 @@ if ($article) {
     if (!empty($site->getOpt('default_stock_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise" class="disabled">Remise :</label>
-                <input type="text" name="Remise" id="Remise" value="'.$site->getOpt('default_stock_discount').' %" class="court" disabled />
+                <input type="text" name="Remise" id="Remise" value="' . $site->getOpt('default_stock_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }
     if (!empty($site->getOpt('default_stock_super_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise2" class="disabled">Sur-remise :</label>
-                <input type="text" name="Remise2" id="Remise2" value="'.$site->getOpt('default_stock_super_discount').' %" class="court" disabled />
+                <input type="text" name="Remise2" id="Remise2" value="' . $site->getOpt('default_stock_super_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }
     if (!empty($site->getOpt('default_stock_cascading_discount')) and $mode == 'insert') {
         $remises .= '
                 <label for="Remise3" class="disabled">Remise en cascade :</label>
-                <input type="text" name="Remise3" id="Remise3" value="'.$site->getOpt('default_stock_cascading_discount').' %" class="court" disabled />
+                <input type="text" name="Remise3" id="Remise3" value="' . $site->getOpt('default_stock_cascading_discount') . ' %" class="court" disabled />
                 <br />
         ';
     }
 
-    $stock_shop = '<input type="hidden" name="stock_shop" value="'.$_SITE['site_id'].'" />';
+    $stock_shop = '<input type="hidden" name="stock_shop" value="' . $_SITE['site_id'] . '" />';
 
     // Add article to rayons
     $rayons = $rm->getAll();
     $rayon_select = null;
     if ($rayons) {
         $rayons_options = array_map(function ($rayon) {
-            return '<option value="'.$rayon->get('id').'">'.$rayon->get('name').'</option>';
+            return '<option value="' . $rayon->get('id') . '">' . $rayon->get('name') . '</option>';
         }, $rayons);
-        $rayon_select = '<select name="add_to_rayon"><option value="">Ajouter l\'article au rayon...</option>'.join($rayons_options).'</select><br>';
+        $rayon_select = '<select name="add_to_rayon"><option value="">Ajouter l\'article au rayon...</option>' . join($rayons_options) . '</select><br>';
     }
 
     $orderLink = null;
@@ -716,13 +721,13 @@ if ($article) {
     $order = $om->getById($stock->get('order_id'));
     if ($order) {
         $orderLink = '
-            <a class="btn btn-primary" href="/pages/adm_order?order_id='.$order->get('id').'">
+            <a class="btn btn-primary" href="/pages/adm_order?order_id=' . $order->get('id') . '">
                 Modifier
             </a>
         ';
         $removeLink = '
             <a class="btn btn-primary"
-                href="/pages/adm_order?order_id='.$order->get('id').'&stock_remove='.$stock->get('id').'">
+                href="/pages/adm_order?order_id=' . $order->get('id') . '&stock_remove=' . $stock->get('id') . '">
                     Retirer de la commande et remettre en vente
             </a>
         ';
@@ -732,10 +737,10 @@ if ($article) {
     if ($stock->isReturned()) {
         $cancelReturnLink = '
             <a class="btn btn-primary"
-                href="'.$urlgenerator->generate(
+                href="' . $urlgenerator->generate(
             'stock_cancel_return',
             ['stockId' => $stock->get('id')]
-        ).'">
+        ) . '">
                 Annuler le retour et remettre en vente
             </a>
         ';
@@ -744,33 +749,33 @@ if ($article) {
     $content .= '
 
         <div class="buttons">
-            '.$removeLink.' '.$cancelReturnLink.'
+            ' . $removeLink . ' ' . $cancelReturnLink . '
         </div>
 
         <form enctype="multipart/form-data" method="post" action="/pages/adm_stock" class="fieldset">
             <fieldset>
 
                 <label title="Chaque exemplaire en base a un num&eacute;ro unique" for="stock_id" class="readonly">Exemplaire n&deg; </label>
-                <input type="text" name="stock_id" id="stock_id" value="'.$_GET['id'].'" class="mini" readonly />
+                <input type="text" name="stock_id" id="stock_id" value="' . $_GET['id'] . '" class="mini" readonly />
                 <br />
 
                 <label for="article_id" class="required">Article n&deg; </label>
-                <input type="text" name="article_id" id="article_id" value="'.$a['article_id'].'" class="mini required" required />
-                '.$rayon_select.'
+                <input type="text" name="article_id" id="article_id" value="' . $a['article_id'] . '" class="mini required" required />
+                ' . $rayon_select . '
                 <br />
                 <br />
 
-                '.$supplier.'
+                ' . $supplier . '
                 <label for="stock_invoice">Lot / Facture n&deg; :</label>
-                '.$invoice.' <input type="checkbox" name="stock_depot" id="stock_depot" value=1'.(isset($s['stock_depot']) && $s['stock_depot'] ? ' checked' : null).'> <label for="stock_depot" class="after">D&eacute;p&ocirc;t</label>
+                ' . $invoice . ' <input type="checkbox" name="stock_depot" id="stock_depot" value=1' . (isset($s['stock_depot']) && $s['stock_depot'] ? ' checked' : null) . '> <label for="stock_depot" class="after">D&eacute;p&ocirc;t</label>
                 <br />
                 <label for="stock_stockage">Emplacement :</label>
-                <input type="text" name="stock_stockage" id="stock_stockage" value="'.$s['stock_stockage'].'" class="short" required />
+                <input type="text" name="stock_stockage" id="stock_stockage" value="' . $s['stock_stockage'] . '" class="short" required />
                 <br /><br />
 
                 <label for="stock_condition" class="required">&Eacute;tat :</label>
                 <select name="stock_condition" id="stock_condition" class="required" autofocus required>
-                    <option selected>'.$s['stock_condition'].'</option>
+                    <option selected>' . $s['stock_condition'] . '</option>
                     <option>Neuf</option>
                     <option>Très bon</option>
                     <option>Bon</option>
@@ -778,21 +783,21 @@ if ($article) {
                     <option>Moyen</option>
                     <option>Mauvais</option>
                     <option>Très mauvais</option>
-                </select> <input type="text" name="stock_condition_details" placeholder="Pr&eacute;cisions sur l\'&eacute;tat..." value="'.$s['stock_condition_details'].'" />
+                </select> <input type="text" name="stock_condition_details" placeholder="Pr&eacute;cisions sur l\'&eacute;tat..." value="' . $s['stock_condition_details'] . '" />
                 <br />
 
                 <label for="stock_selling_price" class="required">Prix de vente :</label>
-                <input type="number" name="stock_selling_price" id="stock_selling_price" maxlength="5" value="'.$s['stock_selling_price'].'" class="mini required" required /> centimes
+                <input type="number" name="stock_selling_price" id="stock_selling_price" maxlength="5" value="' . $s['stock_selling_price'] . '" class="mini required" required /> centimes
                 <br />
                 <label for="stock_weight" class="required">Poids :</label>
-                <input type="number" name="stock_weight" id="stock_weight" maxlength=5 min='.$stock_weight_minimum.' max=100000 value="'.$s['stock_weight'].'" class="mini" required /> grammes
-                '.$article_weight.'
+                <input type="number" name="stock_weight" id="stock_weight" maxlength=5 min=' . $stock_weight_minimum . ' max=100000 value="' . $s['stock_weight'] . '" class="mini" required /> grammes
+                ' . $article_weight . '
                 <br /><br />
 
-                '.$photo_field.'
+                ' . $photo_field . '
 
                 <label for="stock_pub_year">D&eacute;p&ocirc;t l&eacute;gal :</label>
-                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlenght="4" min="1900" max="'.(date('Y') + 1).'" class="mini" placeholder="AAAA" value="'.$s['stock_pub_year'].'" />
+                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlenght="4" min="1900" max="' . (date('Y') + 1) . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
                 </span>
                 <br /><br />
 
@@ -800,16 +805,16 @@ if ($article) {
                 <input type="file" accept="image/jpeg" id="upload_photo" name="upload_photo" />
                 <br /><br />
 
-                '.$tva.$remises.'
+                ' . $tva . $remises . '
 
-                '.$tva_fields.'
+                ' . $tva_fields . '
 
                 <br />
                 <label for="stock_purchase_price" class="required">Prix d\'achat :</label>
-                <input type="number" name="stock_purchase_price" id="stock_purchase_price" maxlength="5" value="'.$s['stock_purchase_price'].'" class="mini required" required /> centimes
+                <input type="number" name="stock_purchase_price" id="stock_purchase_price" maxlength="5" value="' . $s['stock_purchase_price'] . '" class="mini required" required /> centimes
                 <br />
                 <label for="stock_selling_price_saved">Prix sauvegardé :</label>
-                <input type="number" name="stock_selling_price_saved" id="stock_selling_price_saved" maxlength="5" value="'.$s['stock_selling_price_saved'].'" class="mini" /> centimes
+                <input type="number" name="stock_selling_price_saved" id="stock_selling_price_saved" maxlength="5" value="' . $s['stock_selling_price_saved'] . '" class="mini" /> centimes
                 <br /><br />
 
     ';
@@ -818,13 +823,13 @@ if ($article) {
     $campaigns = $cfcm->getAll();
     if ($campaigns) {
         $campaigns = array_map(function ($campaign) use ($stock) {
-            return '<option value="'.$campaign->get('id').'"'.($stock->get('campaign_id') == $campaign->get('id') ? ' selected' : null).'>'.$campaign->get('title').'</option>';
+            return '<option value="' . $campaign->get('id') . '"' . ($stock->get('campaign_id') == $campaign->get('id') ? ' selected' : null) . '>' . $campaign->get('title') . '</option>';
         }, $campaigns);
 
         $cfrm = new CFRewardManager();
         $rewards = $cfrm->getAll([], ['order' => 'reward_price']);
         $rewards = array_map(function ($reward) use ($stock) {
-            return '<option value="'.$reward->get('id').'"'.($stock->get('reward_id') == $reward->get('id') ? ' selected' : null).'>['.price($reward->get('price'), 'EUR').'] '.$reward->get('content').'</option>';
+            return '<option value="' . $reward->get('id') . '"' . ($stock->get('reward_id') == $reward->get('id') ? ' selected' : null) . '>[' . price($reward->get('price'), 'EUR') . '] ' . $reward->get('content') . '</option>';
         }, $rewards);
 
         $content .= '
@@ -832,20 +837,20 @@ if ($article) {
                 <label for="campaign_id">Campagne liée :</label>
                 <select name="campaign_id" id="campaign_id" class="form-control">
                     <option></option>
-                    '.join($campaigns).'
+                    ' . join($campaigns) . '
                 </select>
             </p>
             <p>
                 <label for="campaign_id">Contrepartie liée :</label>
                 <select name="reward_id" id="reward_id" class="form-control">
                     <option></option>
-                    '.join($rewards).'
+                    ' . join($rewards) . '
                 </select>
             </p>
             <br>
         ';
     } else {
-        $content .= '
+        $_ECHO .= '
             <input type="hidden" name="campaign_id" value="' . $stock->get('campaign_id') . '">
             <input type="hidden" name="reward_id" value="' . $stock->get('reward_id') . '">
         ';
@@ -854,10 +859,10 @@ if ($article) {
     $content .= '
 
                 <label for="stock_purchase_date" class="required">Date d\'achat :</label>
-                <input type="text" name="stock_purchase_date" id="stock_purchase_date" value="'.$s['stock_purchase_date'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
+                <input type="text" name="stock_purchase_date" id="stock_purchase_date" value="' . $s['stock_purchase_date'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
                 <br />
                 <label for="stock_onsale_date" class="required">Mis en vente le :</label>
-                <input type="text" name="stock_onsale_date" id="stock_onsale_date" value="'.$s['stock_onsale_date'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
+                <input type="text" name="stock_onsale_date" id="stock_onsale_date" value="' . $s['stock_onsale_date'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
                 <br /><br />
     ';
 
@@ -885,28 +890,28 @@ if ($article) {
         <fieldset>
             <legend>Statut de l\'exemplaire</legend>
             <label for="stock_cart_date">Mis en panier le :</label>
-            <input readonly type="text" name="stock_cart_date" id="stock_cart_date" value="'.(isset($s['stock_cart_date']) ? $s['stock_cart_date'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
+            <input readonly type="text" name="stock_cart_date" id="stock_cart_date" value="' . (isset($s['stock_cart_date']) ? $s['stock_cart_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
             <br />
             <label for="cart_id">Panier n&deg; :</label>
-            <input readonly type="text" name="cart_id" id="cart_id" value="'.(isset($s['cart_id']) ? $s['cart_id'] : null).'" class="mini" />
+            <input readonly type="text" name="cart_id" id="cart_id" value="' . (isset($s['cart_id']) ? $s['cart_id'] : null) . '" class="mini" />
             <br />
             <br />
             <label for="stock_selling_date">Vendu le :</label>
-            <input readonly type="text" name="stock_selling_date" id="stock_selling_date" value="'.(isset($s['stock_selling_date']) ? $s['stock_selling_date'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
-            '.$removeLink.'
+            <input readonly type="text" name="stock_selling_date" id="stock_selling_date" value="' . (isset($s['stock_selling_date']) ? $s['stock_selling_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
+            ' . $removeLink . '
             <br />
             <label for="order_id">Commande n&deg; :</label>
-            <input readonly type="text" name="order_id" id="order_id" value="'.(isset($s['order_id']) ? $s['order_id'] : null).'" class="mini" />
-            '.$orderLink.'
+            <input readonly type="text" name="order_id" id="order_id" value="' . (isset($s['order_id']) ? $s['order_id'] : null) . '" class="mini" />
+            ' . $orderLink . '
             <br />
             <br />
             <label readonly for="stock_return_date">Retourn&eacute; le :</label>
-            <input type="text" name="stock_return_date" id="stock_return_date" value="'.(isset($s['stock_return_date']) ? $s['stock_return_date'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
-            '.$cancelReturnLink.'
+            <input type="text" name="stock_return_date" id="stock_return_date" value="' . (isset($s['stock_return_date']) ? $s['stock_return_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
+            ' . $cancelReturnLink . '
             <br />
             <br />
             <label for="stock_lost_date">Perdu le :</label>
-            <input readonly type="text" name="stock_lost_date" id="stock_lost_date" value="'.(isset($s['stock_lost_date']) ? $s['stock_lost_date'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
+            <input readonly type="text" name="stock_lost_date" id="stock_lost_date" value="' . (isset($s['stock_lost_date']) ? $s['stock_lost_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
             <br />
         </fieldset>
     ';
@@ -916,10 +921,10 @@ if ($article) {
             <fieldset>
                 <legend>Base de donn&eacute;es</legend>
                 <label for="stock_insert" class="readonly">Fiche cr&eacute;&eacute;e le :</label>
-                <input type="text" name="stock_insert" id="stock_insert" value="'.$s['stock_created'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
+                <input type="text" name="stock_insert" id="stock_insert" value="' . $s['stock_created'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
                 <br />
                 <label for="stock_update" class="readonly">Fiche modifi&eacute;e le :</label>
-                <input type="text" name="stock_update" id="stock_update" value="'.$s['stock_updated'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
+                <input type="text" name="stock_update" id="stock_update" value="' . $s['stock_updated'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
                 <br /><br />
             </fieldset>
         ';
@@ -932,17 +937,17 @@ if ($article) {
         $cm = new CartManager();
         $carts = $cm->getAll(['cart_type' => 'web'], ['order' => 'cart_updated', 'sort' => 'desc', 'limit' => 100]);
         $carts_options = array_map(function ($cart) {
-            return '<option value="'.$cart->get('id').'">'.$cart->get('id').' — '.$cart->getUserInfo().'</option>';
+            return '<option value="' . $cart->get('id') . '">' . $cart->get('id') . ' — ' . $cart->getUserInfo() . '</option>';
         }, $carts);
 
-        $content .= '
+        $_ECHO .= '
         <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]) . '" class="fieldset form-inline">
             <fieldset>
                 <legend>Ajouter à un panier</legend>
                     <p class="text-center">
                         Ajouter l\'exemplaire au panier :
                         <select class="form-control" name="cart_id">
-                            '.join($carts_options).'
+                            ' . join($carts_options) . '
                         </select>
                         <button class="btn btn-primary" type="submit">OK</button>
                     </p>
@@ -956,7 +961,7 @@ if ($article) {
 
 $content .= '
     <div class="admin">
-        '.$div_admin.'
+        ' . $div_admin . '
     </div>
 ';
 

@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CartManager();
@@ -70,6 +71,9 @@ $content = '
 
 $refresh = $request->query->get('refresh');
 
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
 $emptied = 0;
 $carts = $_SQL->prepare("
     SELECT
@@ -77,7 +81,7 @@ $carts = $_SQL->prepare("
         `cart_amount`, `Email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
         MAX(`stock_cart_date`) AS `stock_cart_date`
     FROM `carts`
-    LEFT JOIN `Users` ON `carts`.`user_id` = `Users`.`id`
+    LEFT JOIN `$usersTableName` ON `carts`.`user_id` = `$usersTableName`.`id`
     LEFT JOIN `stock` USING(`cart_id`)
     WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web' AND `cart_deleted` IS NULL
     GROUP BY `cart_id`

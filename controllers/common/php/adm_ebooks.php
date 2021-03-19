@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $_JS_CALLS[] = "/common/js/sorttable.js";
@@ -223,13 +224,15 @@ if ($articleId) {
     ';
 }
 
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
 
 $content .= '<h3>Toutes les ventes</h3>';
 
 $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    JOIN `Users` ON `Users`.`id` = `stock`.`user_id`
+    JOIN `$usersTableName` ON `$usersTableName`.`id` = `stock`.`user_id`
     WHERE  `site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) ".$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");

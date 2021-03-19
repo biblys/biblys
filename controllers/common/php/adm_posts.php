@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $the_categories = null;
@@ -21,7 +22,6 @@ if ($_V->isAdmin()) {
 }
 elseif ($_V->isPublisher()) $rank = 'pub_';
 
-//$params = array();
 $req = NULL;
 if (isset($_GET["category_id"])) {
     $req .= 'AND `category_id` = :category_id';
@@ -33,17 +33,21 @@ if(!$_V->isAdmin() && $_V->isPublisher()) {
     $params["publisher_id"] = $_V->getCurrentRight()->get('publisher_id');
 }
 
-$query = 'SELECT `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`, `user_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
+$posts = EntityManager::prepareAndExecute(
+    "SELECT
+        `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`,
+        `user_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
     FROM `posts`
-    JOIN `Users` ON `Users`.`id` = `user_id`
+    JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
-    WHERE `posts`.`site_id` = :site_id '.$req.' AND `post_deleted` IS NULL
-ORDER BY `post_date` DESC, `post_id` DESC';
-$params["site_id"] = $_SITE["site_id"];
-
-$posts = $_SQL->prepare($query);
-$posts->execute($params);
+    WHERE `posts`.`site_id` = :site_id $req AND `post_deleted` IS NULL
+    ORDER BY `post_date` DESC, `post_id` DESC",
+    ["site_id" => $site->get('id')]
+);
 
 if(isset($_BIBLYS_TYS)) $post_url = 'post';
 else $post_url = 'blog';

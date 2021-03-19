@@ -1,10 +1,12 @@
 <?php
 
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $_PAGE_TITLE = 'Ventes';
 
 $_QUERY = null;
+
 
 // FILTRES
 
@@ -64,30 +66,34 @@ if (!empty($_GET["date1"])) {
     $params['date_2'] = $_GET['date2'].' '.$_GET['time2'].':00';
 }
 
-$orders = $_SQL->prepare('SELECT
-    `order_id`,
-    `order_url`,
-    `order_payment_date`,
-    `order_type`,
-    `o`.`user_id`,
-    `user_screen_name`,
-    `Email` as `user_email`,
-    `user_nom` AS `user_last_name`,
-    `user_prenom` AS `user_first_name`,
-    `order_firstname` AS `order_first_name`,
-    `order_lastname` AS `order_last_name`,
-    COUNT(`stock_id`) AS `articles_num`,
-    `order_amount`,
-    `customer_first_name`, `customer_last_name`
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
+$orders = EntityManager::prepareAndExecute(
+    "SELECT
+        `order_id`,
+        `order_url`,
+        `order_payment_date`,
+        `order_type`,
+        `o`.`user_id`,
+        `user_screen_name`,
+        `Email` as `user_email`,
+        `user_nom` AS `user_last_name`,
+        `user_prenom` AS `user_first_name`,
+        `order_firstname` AS `order_first_name`,
+        `order_lastname` AS `order_last_name`,
+        COUNT(`stock_id`) AS `articles_num`,
+        `order_amount`,
+        `customer_first_name`, `customer_last_name`
     FROM `orders` AS `o`
     JOIN `stock` AS `s` USING(`order_id`)
-    LEFT JOIN `Users` AS `u` ON `o`.`user_id` = `u`.`id`
+    LEFT JOIN `$usersTableName` AS `u` ON `o`.`user_id` = `u`.`id`
     LEFT JOIN `customers` AS `c` ON `o`.`customer_id` = `c`.`customer_id`
     WHERE `o`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `order_id`
-    ORDER BY `order_payment_date`');
-$params['site_id'] = $_SITE["site_id"];
-$orders->execute($params) or error($orders->errorInfo());
+    ORDER BY `order_payment_date`",
+    ["site_id" => $site->get('id')]
+);
 
 $tbody = null;
 $TotalAmount = 0;

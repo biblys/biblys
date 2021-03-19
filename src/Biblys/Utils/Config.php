@@ -65,6 +65,10 @@ class Config
             return 1;
         }
 
+        if ($key === "users_table_name") {
+            return "Users";
+        }
+
         return null;
     }
 }

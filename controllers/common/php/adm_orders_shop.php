@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 if (!function_exists('tva_rate')) {
@@ -103,24 +104,33 @@ if (isset($_GET["customer_id"]) && !empty($_GET['customer_id'])) {
     $req .= " AND `orders`.`customer_id` = '" . $_GET["customer_id"] . "' ";
 } else $_GET['customer_id'] = null;
 
-$sql = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`, `article_number`, `article_tva`,
-    `stock_id`, `stock_condition`, `stock_shop`, `stock_selling_price`, `stock_selling_price_ht`, `stock_return_date`, `stock_selling_date`, `stock_tva_rate`,
-    `order_id`, `order_type`, `order_url`, `order_amount`, `order_firstname`, `order_lastname`, `order_payment_date`,`order_payment_cash`, `order_payment_cheque`, `order_payment_card`, `order_payment_paypal`,  `order_payment_left`, `order_shipping`,
-    `Users`.`id` AS `user_id`, `Users`.`Email` AS `user_email`, `user_nom` AS `user_last_name`, `user_prenom` AS `user_first_name`,
-    `customers`.`customer_id`, `customer_first_name`, `customer_last_name`
+$config = new Config();
+$usersTableName = $config->get("users_table_name");
+
+$sql = $_SQL->prepare(
+    "SELECT
+        `article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`,
+        `article_number`, `article_tva`, `stock_id`, `stock_condition`, `stock_shop`,
+        `stock_selling_price`, `stock_selling_price_ht`, `stock_return_date`, `stock_selling_date`,
+        `stock_tva_rate`, `order_id`, `order_type`, `order_url`, `order_amount`, `order_firstname`,
+        `order_lastname`, `order_payment_date`,`order_payment_cash`, `order_payment_cheque`,
+        `order_payment_card`, `order_payment_paypal`,  `order_payment_left`, `order_shipping`,
+        `$usersTableName`.`id` AS `user_id`, `$usersTableName`.`Email` AS `user_email`,
+        `user_nom` AS `user_last_name`, `user_prenom` AS `user_first_name`,
+        `customers`.`customer_id`, `customer_first_name`, `customer_last_name`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
     JOIN `orders` USING(`order_id`)
     JOIN `collections` USING(`collection_id`)
-    LEFT JOIN `Users` ON `Users`.`id` = `orders`.`user_id`
+    LEFT JOIN `$usersTableName` ON `$usersTableName`.`id` = `orders`.`user_id`
     LEFT JOIN `customers` ON `orders`.`customer_id` = `customers`.`customer_id`
-    WHERE `orders`.`site_id` = :site_id " . $req . "
-    GROUP BY `stock_id` ORDER BY `order_payment_date` ASC");
+    WHERE `orders`.`site_id` = :site_id $req
+    GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"
+);
 $sql->execute(['site_id' => $site->get('id')]);
 $num = $sql->rowCount();
 
 $content = '
-
     <a href="/pages/adm_sales" class="floatR">Future interface</a>
     <h1>
         <span class="fa fa-line-chart"></span>

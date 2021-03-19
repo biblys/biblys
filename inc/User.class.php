@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Axys\Client as AxysClient;
+use Biblys\Utils\Config;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -361,7 +362,6 @@ class User extends Entity
 class UserManager extends EntityManager
 {
     protected $prefix = 'user';
-    protected $table = 'Users';
     protected $object = 'User';
     protected $select = '*,
                     `id` AS `user_id`,
@@ -377,6 +377,14 @@ class UserManager extends EntityManager
                     `user_pays` AS `user_country`,
                     `user_telephone` AS `user_phone`
                     ';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $config = new Config();
+        $this->table = $config->get("users_table_name");
+    }
 
     public function getQuery($query, $params, $options = [], $withJoins = true)
     {
