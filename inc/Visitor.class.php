@@ -188,7 +188,7 @@ class Visitor extends User
      * Get cart from visitor or user
      *  TODO : What if user logs after filling his cart as visitor ? Carts should be merged
      */
-    public function getCart($create = null)
+    public function getCart($create = null): ?Cart
     {
         if (isset($this->cart)) {
             return $this->cart;
@@ -226,7 +226,8 @@ class Visitor extends User
                 return $cart;
             }
         }
-        return false;
+
+        return null;
     }
 
     // Get wishes from parent class only if logged in

@@ -113,7 +113,7 @@ class User extends Entity
     /**
      * Get user cart.
      *
-     * @return array
+     * @return Cart
      */
     public function getCart()
     {
