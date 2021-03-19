@@ -71,11 +71,19 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testRefreshMetadata(Article $article)
     {
         $this->m->refreshMetadata($article);
+        $this->assertEquals(
+            "Bara Yogoi      Léo HENRY",
+            $article->get("keywords"),
+        );
 
-        $article_without_joins = $this->m->create(["article_collection" => "Présence du futur"]);
-        $this->m->refreshMetadata($article_without_joins);
-
-        $this->expectNotToPerformAssertions();
+        $articleWithoutJoins = $this->m->create([
+            "article_collection" => "Présence du futur"
+        ]);
+        $this->m->refreshMetadata($articleWithoutJoins);
+        $this->assertEquals(
+            "     Présence du futur ",
+            $articleWithoutJoins->get("keywords"),
+        );
     }
 
     /**
