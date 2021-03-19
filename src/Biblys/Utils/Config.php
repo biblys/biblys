@@ -38,6 +38,10 @@ class Config
             return $this->config[$key];
         }
 
+        if (self::_getDefaultValueForKey($key) !== null) {
+            return self::_getDefaultValueForKey($key);
+        }
+
         return false;
     }
 
@@ -53,5 +57,14 @@ class Config
         }
 
         return BIBLYS_PATH . 'app/config.yml';
+    }
+
+    static private function _getDefaultValueForKey($key): ?string
+    {
+        if ($key === "site") {
+            return 1;
+        }
+
+        return null;
     }
 }
