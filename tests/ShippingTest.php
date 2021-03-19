@@ -68,18 +68,21 @@ class ShippingTest extends PHPUnit\Framework\TestCase
         $cm = new CountryManager();
 
         $fee = $sm->create([
+            "site_id" => "1",
+            "shipping_type" => "normal",
+            "shipping_zone" => "ALL",
             "shipping_max_weight" => 1000,
             "shipping_max_amount" => 2000,
         ]);
 
         $country = $cm->getById(67); // France
-        $order_weight = 1000;
-        $order_amount = 2714;
+        $order_weight = 500;
+        $order_amount = 1500;
 
         $fees = $sm->getFees($country, $order_weight, $order_amount);
 
         $this->assertEquals(
-            $fees[0],
+            $fees[1],
             $fee
         );
     }
