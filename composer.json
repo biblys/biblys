@@ -18,7 +18,7 @@
     "post-install-cmd": "hash yarn 2>/dev/null && yarn && composer build || { echo >&2 \"Yarn is not installed: skipping front dependencies.\"; }"
   },
   "require": {
-    "php": "~7.2",
+    "php": "7.2.*",
     "biblys/eurotax": "1.*",
     "symfony/http-foundation": "^5",
     "twig/twig": "^3.0",
