@@ -4,15 +4,13 @@ namespace Biblys\Database;
 
 class Connection
 {
-    public static function init($config): \PDO
+    public static function init(array $config): \PDO
     {
-        if (!array_key_exists('port', $config)) {
-            $config['port'] = 3306;
-        }
+        $dbPort = self::_getDbPort($config);
 
         try {
             $_SQL = new \PDO(
-                'mysql:host=' . $config['host'] . ';port=' . $config['port'] . ';dbname=' . $config['base'],
+                'mysql:host=' . $config['host'] . ';port=' . $dbPort . ';dbname=' . $config['base'],
                 $config['user'],
                 $config['pass']
             );
@@ -26,5 +24,18 @@ class Connection
                 'Cannot connect to MySQL server ' . $config['host'] . ':' . $config['port'] . ' #' . $e->getCode() . ': ' . $e->getMessage()
             );
         }
+    }
+
+    private static function _getDbPort(array $config): int
+    {
+        if (getenv("DB_PORT")) {
+            return getenv("DB_PORT");
+        }
+
+        if (array_key_exists('port', $config)) {
+            return $config['port'];
+        }
+
+        return 3306;
     }
 }
