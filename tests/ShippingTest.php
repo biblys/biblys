@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class ShippingTest extends PHPUnit_Framework_TestCase
+class ShippingTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a copy
@@ -67,17 +67,21 @@ class ShippingTest extends PHPUnit_Framework_TestCase
         $sm = new ShippingManager();
         $cm = new CountryManager();
 
+        $fee = $sm->create([
+            "shipping_max_weight" => 1000,
+            "shipping_max_amount" => 2000,
+        ]);
+
         $country = $cm->getById(67); // France
         $order_weight = 1000;
         $order_amount = 2714;
 
         $fees = $sm->getFees($country, $order_weight, $order_amount);
 
-        foreach ($fees as $fee)
-        {
-            $this->assertInstanceOf('Shipping', $fee);
-        }
-
+        $this->assertEquals(
+            $fees[0],
+            $fee
+        );
     }
 
     /**

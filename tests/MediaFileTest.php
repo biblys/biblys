@@ -7,7 +7,7 @@
 
 require_once "setUp.php";
 
-class MediaFileTest extends PHPUnit_Framework_TestCase
+class MediaFileTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a copy

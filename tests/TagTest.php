@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class TagTest extends PHPUnit_Framework_TestCase
+class TagTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post
@@ -62,11 +62,12 @@ class TagTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two tag cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Le mot-clé doit avoir un nom.
      */
     public function testCreateTagWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le mot-clé doit avoir un nom.");
+
         $tm = new TagManager();
 
         $tm->create(['tag_name' => '']);
@@ -74,11 +75,12 @@ class TagTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two tag cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Il existe déjà un mot-clé avec le nom Science-fiction.
      */
     public function testDuplicateNameCheck()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Il existe déjà un mot-clé avec le nom Science-fiction.");
+
         $tm = new TagManager();
 
         $tm->create(['tag_name' => 'Science-fiction']);

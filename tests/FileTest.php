@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class FileTest extends PHPUnit_Framework_TestCase
+class FileTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a file

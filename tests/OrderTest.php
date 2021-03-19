@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 require_once "setUp.php";
 
-class OrderTest extends PHPUnit_Framework_TestCase
+class OrderTest extends PHPUnit\Framework\TestCase
 {
     // Set site TVA before tests
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         global $site;
         $sm = new SiteManager();
@@ -354,11 +354,12 @@ class OrderTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set a payed order's shipping fee
-     * @expectedException Exception
-     * @expectedExceptionMessage Impossible de modifier le mode d'expédition d'une commande qui a déjà été payée.
      */
     public function testSetShippingFeeForPayedOrder()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Impossible de modifier le mode d'expédition d'une commande qui a déjà été payée.");
+
         $order = new Order(['order_payment_date' => '2016-11-25 20:13:37']);
 
         $order->setShippingFee(new Shipping([]));
@@ -366,11 +367,12 @@ class OrderTest extends PHPUnit_Framework_TestCase
 
     /**
      * Set a shipped order's shipping fee
-     * @expectedException Exception
-     * @expectedExceptionMessage Impossible de modifier le mode d'expédition d'une commande qui a déjà été expédiée.
      */
     public function testSetShippingFeeForShippedOrder()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Impossible de modifier le mode d'expédition d'une commande qui a déjà été expédiée.");
+
         $order = new Order(['order_shipping_date' => '2016-11-25 20:13:37']);
 
         $order->setShippingFee(new Shipping([]));

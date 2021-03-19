@@ -6,9 +6,9 @@
 
 require_once "setUp.php";
 
-class ArticleTest extends PHPUnit_Framework_TestCase
+class ArticleTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->m = new ArticleManager();
     }
@@ -74,6 +74,8 @@ class ArticleTest extends PHPUnit_Framework_TestCase
 
         $article_without_joins = $this->m->create(["article_collection" => "Présence du futur"]);
         $this->m->refreshMetadata($article_without_joins);
+
+        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -82,25 +84,36 @@ class ArticleTest extends PHPUnit_Framework_TestCase
      */
     public function testOnOrder(Article $article)
     {
-        global $_SITE;
+        global $site;
+        $siteId = $site->get("id");
 
         // Create a fake publisher for article
         $pm = new PublisherManager();
-        $publisher = $pm->create(array('publisher_name' => 'Publitou'.rand(1,10000), 'publisher_url' => 'publitou'.rand(1,10000)));
+        $publisher = $pm->create([
+            'publisher_name' => 'Publitou' . rand(1, 10000),
+            'publisher_url' => 'publitou' . rand(1, 10000)
+        ]);
         $article->set('publisher_id', $publisher->get('id'));
 
         // Create a fake on order supplier
         $sm = new SupplierManager();
-        $supplier = $sm->create(array('supplier_on_order' => 1));
+        $supplier = $sm->create(['supplier_on_order' => 1]);
 
         // Associate publisher with supplier
         $lm = new LinkManager();
-        $link = $lm->create(array('site_id' => $_SITE['site_id'], 'publisher_id' => $publisher->get('id'), 'supplier_id' => $supplier->get('id')));
+        $lm->create([
+            'site_id' => $siteId,
+            'publisher_id' => $publisher->get('id'),
+            'supplier_id' => $supplier->get('id')
+        ]);
 
         // Refresh metadata
         $article = $this->m->refreshMetadata($article);
 
-        $this->assertContains('[onorder:'.$_SITE['site_id'].']', $article->get('links'));
+        $this->assertStringContainsString(
+            "[onorder:$siteId]",
+            $article->get('links')
+        );
     }
 
     /**
@@ -344,15 +357,13 @@ class ArticleTest extends PHPUnit_Framework_TestCase
         $pm->delete($people);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Cannot add contributor with invalid job 25
-     */
     public function testAddContributorWrongJob()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Cannot add contributor with invalid job 25");
+
         // given
         $am = new ArticleManager();
-        $rm = new RoleManager();
         $pm = new PeopleManager();
 
         $article = $am->create([]);
@@ -521,11 +532,12 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     /**
      * Test deleting a collection with links
      * @depends testGet
-     * @expectedException Exception
-     * @expectedExceptionMessage Impossible de supprimer cet article car des éléments y sont liés.
      */
     public function testBeforeDeleteWithLinks(Article $article)
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Impossible de supprimer cet article car des éléments y sont liés.");
+
         $am = new ArticleManager();
         $lm = new LinkManager();
 
@@ -537,11 +549,12 @@ class ArticleTest extends PHPUnit_Framework_TestCase
     /**
      * Test deleting a collection with stock
      * @depends testGet
-     * @expectedException Exception
-     * @expectedExceptionMessage Impossible de supprimer cet article car des exemplaires y sont associés.
      */
     public function testBeforeDeleteWithStock(Article $article)
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Impossible de supprimer cet article car des exemplaires y sont associés.");
+
         $am = new ArticleManager();
         $sm = new StockManager();
 
@@ -632,12 +645,12 @@ class ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that adding a too long string as article_authors does not validate
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Le champ Auteurs ne peut pas dépasser 256 caractères.
      */
     public function testValidateArticleAuthorsLength()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le champ Auteurs ne peut pas dépasser 256 caractères.");
+
         $am = new ArticleManager();
         $article = new Article(['url' => 'article/url']);
         $article->set(
@@ -654,12 +667,12 @@ class ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that updating an article without an url throws
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage L'article doit avoir une url
      */
     public function testUpdatingArticleWithoutUrl()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'article doit avoir une url");
+
         $am = new ArticleManager();
         $article = $am->create([]);
 

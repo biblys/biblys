@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class PaymentTest extends PHPUnit_Framework_TestCase
+class PaymentTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a payment

@@ -107,9 +107,9 @@ class Cart extends Entity
             $class = " not-empty";
         }
 
-        return '<a 
-                href="/pages/cart" 
-                rel="nofollow" 
+        return '<a
+                href="/pages/cart"
+                rel="nofollow"
                 class="btn btn-default btn-sm' . $class . '">' .
             $icon . ' ' .
             $content .
@@ -368,7 +368,7 @@ class CartManager extends EntityManager
             }
         }
         $a = $article;
-    
+
         if (!$article instanceof Article) {
             throw new Exception(
                 'Cart->addArticle should receive an article, '.get_class($article).' received instead'

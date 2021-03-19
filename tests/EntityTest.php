@@ -5,7 +5,7 @@
  */
 require_once 'inc/functions.php';
 
-class EntityTest extends PHPUnit_Framework_TestCase
+class EntityTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a copy.

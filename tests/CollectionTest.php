@@ -6,11 +6,11 @@
 
 require_once "setUp.php";
 
-class CollectionTest extends PHPUnit_Framework_TestCase
+class CollectionTest extends PHPUnit\Framework\TestCase
 {
     private static $cm, $publisher;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         CollectionTest::$cm = new PublisherManager();
         CollectionTest::$publisher = CollectionTest::$cm->create(['publisher_name' => 'ÉDITEUR TIMBRÉ']);
@@ -83,14 +83,15 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that collections cannot be created without a name
-     * @expectedException Exception
-     * @expectedExceptionMessage La collection doit avoir un nom.
      */
     public function testCreateCollectionWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("La collection doit avoir un nom.");
+
         $cm = new CollectionManager();
 
-        $collection = $cm->create([
+        $cm->create([
             'publisher_id' => CollectionTest::$publisher->get('id'),
             'collection_name' => ''
         ]);
@@ -98,11 +99,12 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that collections cannot be created without a publisher
-     * @expectedException Exception
-     * @expectedExceptionMessage La collection doit être associée à un éditeur.
      */
     public function testCreateTagWithoutAPublisher()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("La collection doit être associée à un éditeur.");
+
         $cm = new CollectionManager();
 
         $collection = $cm->create(['collection_name' => 'Une collection']);
@@ -110,14 +112,15 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two collection cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Il existe déjà une collection avec le nom Ma collection de timbres chez cet éditeur.
      */
     public function testDuplicateNameCheck()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Il existe déjà une collection avec le nom Ma collection de timbres chez cet éditeur.");
+
         $cm = new CollectionManager();
 
-        $collection = $cm->create([
+        $cm->create([
             'publisher_id' => CollectionTest::$publisher->get('id'),
             'collection_name' => 'Ma collection de timbres'
         ]);
@@ -143,15 +146,16 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     /**
      * Test deleting a collection with articles
      * @depends testGet
-     * @expectedException Exception
-     * @expectedExceptionMessage Impossible de supprimer la collection car des articles y sont associés.
      */
     public function testBeforeDelete(Collection $collection)
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Impossible de supprimer la collection car des articles y sont associés.");
+
         $am = new ArticleManager();
         $cm = new CollectionManager();
 
-        $article = $am->create(['collection_id' => $collection->get('id')]);
+        $am->create(['collection_id' => $collection->get('id')]);
 
         $cm->delete($collection);
     }
@@ -175,7 +179,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($collection);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         CollectionTest::$cm->delete(CollectionTest::$publisher);
     }

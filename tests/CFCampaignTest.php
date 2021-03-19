@@ -7,7 +7,7 @@ use AppBundle\Controller\CFCampaignController;
 
 require_once "setUp.php";
 
-class CFCampaignTest extends PHPUnit_Framework_TestCase
+class CFCampaignTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post

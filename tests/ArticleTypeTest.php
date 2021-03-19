@@ -8,7 +8,7 @@ use Biblys\Article\Type;
 
 require_once "setUp.php";
 
-class ArticleTypeTest extends PHPUnit_Framework_TestCase
+class ArticleTypeTest extends PHPUnit\Framework\TestCase
 {
 
     /**

@@ -7,17 +7,17 @@
 
 require_once "setUp.php";
 
-class CartTest extends PHPUnit_Framework_TestCase
+class CartTest extends PHPUnit\Framework\TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->carts = [];
         $this->stocks = [];
         $this->article = null;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (count($this->carts) >= 1) {
             $cm = new CartManager();
@@ -41,7 +41,7 @@ class CartTest extends PHPUnit_Framework_TestCase
             $this->article = null;
         }
     }
-    
+
     /**
      * Test creating a web cart
      */
@@ -124,13 +124,13 @@ class CartTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildOneLine()
     {
-        $this->assertEquals(Cart::buildOneLine(0, 0), '<a 
-                href="/pages/cart" 
-                rel="nofollow" 
+        $this->assertEquals(Cart::buildOneLine(0, 0), '<a
+                href="/pages/cart"
+                rel="nofollow"
                 class="btn btn-default btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>');
-        $this->assertEquals(Cart::buildOneLine(10, 10000), '<a 
-                href="/pages/cart" 
-                rel="nofollow" 
+        $this->assertEquals(Cart::buildOneLine(10, 10000), '<a
+                href="/pages/cart"
+                rel="nofollow"
                 class="btn btn-default btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 10 articles (100,00&nbsp;&euro;)</a>');
     }
 
@@ -183,11 +183,12 @@ class CartTest extends PHPUnit_Framework_TestCase
      * Test adding a stock that is already in a shop cart (forbidden)
      * @depends testCreateWebCart
      * @depends testAddStockToShopCart
-     * @expectedException        Exception
-     * @expectedExceptionMessage Cet article est réservé en magasin.
      */
     public function testStealFromShopCart(Cart $webCart, Stock $shopStock)
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Cet article est réservé en magasin.");
+
         $cm = new CartManager();
 
         $cm->addStock($webCart, $shopStock);
@@ -195,11 +196,12 @@ class CartTest extends PHPUnit_Framework_TestCase
 
     /**
      * An unavailable ebook shouldn't be added to cart even if stock available
-     * @expectedException        Exception
-     * @expectedExceptionMessage Cet article est indisponible.
      */
     public function testAddUnavailableEbook()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Cet article est indisponible.");
+
         $am = new ArticleManager();
         $sm = new StockManager();
         $cm = new CartManager();
@@ -313,7 +315,7 @@ class CartTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(
             $secondCart->contains("stock", $stock->get("id")),
             "In-cart copy should not be added to another cart during cooldown period"
-        ); 
+        );
 
         $twoHoursAgo = date('Y-m-d H:i:s', strtotime('2 hours ago'));
         $stock->set('stock_cart_date', $twoHoursAgo);
@@ -323,7 +325,7 @@ class CartTest extends PHPUnit_Framework_TestCase
             $secondCart->contains("stock", $stock->get("id")),
             "In-cart copy should be added to another cart after cooldown period"
         );
-        
+
         if ($not_virtual_stock) {
             $site->setOpt('virtual_stock', 0);
         }
@@ -336,11 +338,12 @@ class CartTest extends PHPUnit_Framework_TestCase
     /**
      * Test not adding article from virtual stock
      * when article is unavailable
-     * @expectedException        Exception
-     * @expectedExceptionMessage L'article Plop n'a pas pu être ajouté au panier car il est hors commerce. 
      */
     public function testAddUnavailableArticle()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'article Plop n'a pas pu être ajouté au panier car il est hors commerce.");
+
         global $site;
 
         $cm = new CartManager();

@@ -9,7 +9,7 @@ use AppBundle\Controller\CFRewardController;
 
 require_once "setUp.php";
 
-class CFRewardTest extends PHPUnit_Framework_TestCase
+class CFRewardTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post

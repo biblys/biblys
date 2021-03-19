@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class RayonTest extends PHPUnit_Framework_TestCase
+class RayonTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a rayon
@@ -69,11 +69,12 @@ class RayonTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two rayons cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Le rayon doit avoir un nom.
      */
     public function testCreateTagWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le rayon doit avoir un nom.");
+
         $rm = new RayonManager();
 
         $rm->create(['rayon_name' => '']);
@@ -81,11 +82,12 @@ class RayonTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two publisher cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Il existe déjà un rayon avec le nom Fruits & légumes.
      */
     public function testDuplicateNameCheck()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Il existe déjà un rayon avec le nom Fruits & légumes.");
+
         $rm = new RayonManager();
 
         $rm->create(['rayon_name' => 'Fruits & légumes']);
@@ -113,12 +115,12 @@ class RayonTest extends PHPUnit_Framework_TestCase
     /**
      * Test adding an article to a rayon that is already in Rayon
      * @depends testGet
-     * @expectedException Exception
-     * @expectedExceptionMessage L'article « Banane » est déjà dans le rayon « Fruits & légumes ».
      */
     public function testAddArticleAlreadyInRayon(Rayon $rayon)
     {
-        $rm = new RayonManager();
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'article « Banane » est déjà dans le rayon « Fruits & légumes ».");
+
         $am = new ArticleManager();
 
         $article = $am->create(["article_title" => "Banane", "article_url" => "banane"]);

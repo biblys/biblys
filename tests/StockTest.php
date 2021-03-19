@@ -5,10 +5,10 @@
 */
 require_once 'inc/functions.php';
 
-class StockTest extends PHPUnit_Framework_TestCase
+class StockTest extends PHPUnit\Framework\TestCase
 {
     // Set site TVA before tests
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         global $site;
         $sm = new SiteManager();

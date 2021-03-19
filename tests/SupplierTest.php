@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class SupplierTest extends PHPUnit_Framework_TestCase
+class SupplierTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a copy

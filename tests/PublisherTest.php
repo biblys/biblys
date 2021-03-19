@@ -6,14 +6,14 @@
 
 require_once "setUp.php";
 
-class PublisherTest extends PHPUnit_Framework_TestCase
+class PublisherTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->publisher = null;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->publisher)
         {
@@ -111,11 +111,12 @@ class PublisherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two tag cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage L'éditeur doit avoir un nom.
      */
     public function testCreateTagWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'éditeur doit avoir un nom.");
+
         $pm = new PublisherManager();
 
         $pm->create(['publisher_name' => '']);
@@ -123,11 +124,12 @@ class PublisherTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two publisher cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Il existe déjà un éditeur avec le nom LES ÉDITIONS PUBLITOU.
      */
     public function testDuplicateNameCheck()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Il existe déjà un éditeur avec le nom LES ÉDITIONS PUBLITOU.");
+
         $pm = new PublisherManager();
 
         $this->publisher = $pm->create(['publisher_name' => 'Les éditions Publitou']);

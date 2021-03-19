@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class PostTest extends PHPUnit_Framework_TestCase
+class PostTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post

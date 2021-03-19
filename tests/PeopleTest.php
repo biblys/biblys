@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class PeopleTest extends PHPUnit_Framework_TestCase
+class PeopleTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post
@@ -107,11 +107,12 @@ class PeopleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two tag cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Le contributeur doit avoir un nom.
      */
     public function testCreateTagWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le contributeur doit avoir un nom.");
+
         $pm = new PeopleManager();
 
         $people = new People(['people_last_name' => '']);
@@ -121,11 +122,12 @@ class PeopleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that two publisher cannot have the same name
-     * @expectedException Exception
-     * @expectedExceptionMessage Il existe déjà un contributeur avec le nom Edgar Allan POE.
      */
     public function testDuplicateNameCheck()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Il existe déjà un contributeur avec le nom Edgar Allan POE.");
+
         $pm = new PeopleManager();
 
         $pm->create([
@@ -140,11 +142,12 @@ class PeopleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test validate website url
-     * @expectedException Exception
-     * @expectedExceptionMessage L'adresse du site est invalide.
      */
     public function testValidateWebsiteUrl()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'adresse du site est invalide.");
+
         $pm = new PeopleManager();
 
         $pm->create([
@@ -156,11 +159,12 @@ class PeopleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test validate facebook page url
-     * @expectedException Exception
-     * @expectedExceptionMessage L'adresse de la page Facebook doit commencer par https://www.facebook.com/.
      */
     public function testValidateFacebookPageUrl()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("L'adresse de la page Facebook doit commencer par https://www.facebook.com/.");
+
         $pm = new PeopleManager();
 
         $pm->create([
@@ -172,11 +176,12 @@ class PeopleTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test validate Twitter username
-     * @expectedException Exception
-     * @expectedExceptionMessage Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.
      */
     public function testValidateTwitterUsername()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.");
+
         $pm = new PeopleManager();
 
         $pm->create([

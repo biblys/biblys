@@ -3,12 +3,10 @@
 ini_set("display_errors", "On");
 error_reporting(E_ALL);
 
-$_SERVER = [
-    "HTTP_HOST" => "www.biblys.fr",
-    "REQUEST_URI" => "/",
-    "SERVER_NAME" => "localhost",
-    "SCRIPT_NAME" => "index.php"
-];
+$_SERVER["HTTP_HOST"] = "www.biblys.fr";
+$_SERVER["REQUEST_URI"] = "/";
+$_SERVER["SERVER_NAME"] = "localhost";
+$_SERVER["SCRIPT_NAME"] = "index.php";
 
 // Load database config
 require_once "inc/constants.php";

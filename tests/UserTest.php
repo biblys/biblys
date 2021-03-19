@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class UserTest extends PHPUnit_Framework_TestCase
+class UserTest extends PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {

@@ -6,14 +6,14 @@
 
 use Biblys\Utils\Pagination;
 
-class PaginationTest extends PHPUnit_Framework_TestCase
+class PaginationTest extends PHPUnit\Framework\TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pagination = new Pagination(1, 25, 10);
     }
-    
+
     public function testCreate()
     {
         $this->assertInstanceOf('Biblys\Utils\Pagination', $this->pagination);

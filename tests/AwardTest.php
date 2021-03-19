@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class AwardTest extends PHPUnit_Framework_TestCase
+class AwardTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a post
@@ -61,11 +61,12 @@ class AwardTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that awards cannot be created without a name
-     * @expectedException Exception
-     * @expectedExceptionMessage Le prix littéraire doit avoir un nom.
      */
     public function testCreateAwardWithoutAName()
     {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage("Le prix littéraire doit avoir un nom.");
+
         $am = new AwardManager();
 
         $award = new Award(['award_name' => '']);

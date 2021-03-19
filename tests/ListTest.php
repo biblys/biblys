@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class ListeTest extends PHPUnit_Framework_TestCase
+class ListeTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a copy

@@ -6,7 +6,7 @@
 
 require_once "setUp.php";
 
-class MailingTest extends PHPUnit_Framework_TestCase
+class MailingTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating a mailing

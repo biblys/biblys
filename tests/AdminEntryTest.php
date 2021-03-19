@@ -7,7 +7,7 @@ use Biblys\Admin\Entry;
 
 require_once 'setUp.php';
 
-class AdminEntryTest extends PHPUnit_Framework_TestCase
+class AdminEntryTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test creating an entry.
