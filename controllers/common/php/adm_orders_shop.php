@@ -121,10 +121,6 @@
             Ventes
         </h1>
 
-        <div class="admin">
-            <p><a href="/pages/adm_checkout_errors">Erreurs de caisse</a></p>
-        </div>
-
             <label for="d">Raccourcis :</label>
             <select name="d" class="goto">
                 <option>30 derniers jours...</option>
