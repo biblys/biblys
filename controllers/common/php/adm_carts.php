@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $cm = new CartManager();
 
 // Flash messages
@@ -20,7 +22,10 @@ if ($empty) {
         $cm->delete($cart);
         $session->getFlashbag()->add('success', "Le panier n° $empty a été vidé.");
     } else {
-        $session->getFlashbag()->add('error', "Impossible de vider le panier n° $empty : il n'existe plus.");
+        $session->getFlashbag()->add(
+            "error",
+            "Impossible de vider le panier n° $empty : il n'existe plus."
+        );
     }
     redirect('/pages/adm_carts');
 }
@@ -33,12 +38,18 @@ $alert = null;
 if($_SITE["site_id"] == 8) $datelimite = date('Y-m-d h:i:s',(strtotime("-2 days")));
 else $datelimite = date('Y-m-d h:i:s',(strtotime("-1 days")));
 
-$_ECHO .= '
+$content = '
     <h1><span class="fa fa-shopping-basket"></span> '.$_PAGE_TITLE. '</h1>
 
     <p class="buttonset">
         <a href="?refresh=1" class="btn btn-info"><i class="fa fa-refresh"></i> Actualiser les paniers</a>
-        <a href="/pages/adm_carts?go=1" class="btn btn-warning" data-confirm="Voulez-vous vraiment vider les paniers de clients inconnus ant&eacute;rieurs au ' . _date($datelimite, 'd/m/Y H:i') . ' ?"><i class="fa fa-trash-o"></i> Vider les paniers obsol&egrave;tes</a>
+        <a
+            href="/pages/adm_carts?go=1"
+            class="btn btn-warning"
+            data-confirm="Voulez-vous vraiment vider les paniers de clients inconnus antérieurs au ' . _date($datelimite, 'd/m/Y H:i') . ' ?"
+        >
+            <i class="fa fa-trash-o"></i> Vider les paniers obsolètes
+        </a>
     </p><br>
 
       '.$alert.join($flashs).'
@@ -60,9 +71,18 @@ $_ECHO .= '
 $refresh = $request->query->get('refresh');
 
 $emptied = 0;
-$carts = $_SQL->prepare("SELECT `cart_id`, `carts`.`site_id`, `carts`.`user_id`, `cart_ip`, `cart_date`, `cart_count`, `cart_amount`, "
-        . "`Email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`, MAX(`stock_cart_date`) AS `stock_cart_date` FROM `carts` LEFT JOIN `Users` ON `carts`.`user_id` = `Users`.`id` LEFT JOIN `stock` USING(`cart_id`) "
-        . "WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web' AND `cart_deleted` IS NULL GROUP BY `cart_id` ORDER BY `stock_cart_date` DESC");
+$carts = $_SQL->prepare("
+    SELECT
+        `cart_id`, `carts`.`site_id`, `carts`.`user_id`, `cart_ip`, `cart_date`, `cart_count`,
+        `cart_amount`, `Email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
+        MAX(`stock_cart_date`) AS `stock_cart_date`
+    FROM `carts`
+    LEFT JOIN `Users` ON `carts`.`user_id` = `Users`.`id`
+    LEFT JOIN `stock` USING(`cart_id`)
+    WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web' AND `cart_deleted` IS NULL
+    GROUP BY `cart_id`
+    ORDER BY `stock_cart_date` DESC
+");
 $carts->execute(['site_id' => $site->get('id')]);
 while($c = $carts->fetch(PDO::FETCH_ASSOC)) {
     if(isset($c["Email"])) $c["user"] = $c["Email"];
@@ -90,21 +110,27 @@ while($c = $carts->fetch(PDO::FETCH_ASSOC)) {
         }
     }
 
-    $_ECHO .= '
+    $content .= '
         <tr>
             <td><a href="/pages/cart?cart_id='.$c["cart_id"].'">'.$c["cart_id"].'</a></td>
             <td'.$c["style"].'>'.$c["user"].'</td>
-            <td class="right">'.$c["cart_count"].'</td>
-            <td class="right">'.price($c["cart_amount"],'EUR').'</td>
-            <td class="center">'._date($c["stock_cart_date"],'d/m/Y H:i:s').'</td>
+            <td class="right">'.$c["cart_count"]. '</td>
+            <td class="right">' . price($c["cart_amount"], 'EUR') . '</td>
+            <td class="center">' . _date($c["stock_cart_date"], 'd/m/Y H:i:s') . '</td>
             <td class="center">
-                <a href="/pages/adm_carts?empty='.$c["cart_id"].'" class="btn btn-danger btn-sm" data-confirm="Voulez-vous vraiment vider le panier n° '.$c["cart_id"].' ?"><i class="fa fa-trash-o"> Vider</i>
+                <a
+                    href="/pages/adm_carts?empty=' . $c["cart_id"] . '"
+                    class="btn btn-danger btn-sm"
+                    data-confirm="Voulez-vous vraiment vider le panier n° ' . $c["cart_id"] . ' ?"
+                >
+                    <i class="fa fa-trash-o"> Vider</i>
+                </a>
             </td>
         <tr>
     ';
 }
 
-$_ECHO .= '
+$content .= '
         </tbody>
     </table>
 ';
@@ -118,3 +144,5 @@ if (isset($_GET["go"])) {
     $session->getFlashbag()->add('success', "$emptied paniers ont été vidés.");
     redirect('/pages/adm_carts');
 }
+
+return new Response($content);
