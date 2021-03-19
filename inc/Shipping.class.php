@@ -15,7 +15,6 @@
         {
             global $site;
 
-            $selectedFees = [];
             $where = [];
 
             // Add 5 % to the weight for wrapping
@@ -30,7 +29,6 @@
             $zone = $country->get('shipping_zone');
             $fees = $this->getAll($where, ['order' => 'shipping_fee']);
 
-            $cheapests = [];
 
             // For each types in ['normal', 'suivi', 'magasin']
             $types = array_map(
