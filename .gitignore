@@ -18,6 +18,7 @@ public/*
 !public/common
 !public/assets
 !public/libs
+!public/media/*
 .DS_Store
 app/
 !app/config.yml.dist
