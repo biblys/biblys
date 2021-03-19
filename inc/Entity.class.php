@@ -1,7 +1,6 @@
 <?php
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use Biblys\Utils\Log;
 
 class Entity implements ArrayAccess, Iterator, Countable
 {
@@ -307,9 +306,7 @@ class EntityManager
             // Logs sql query
             $logsConfig = $config->get('logs');
             if (isset($logsConfig['sql']) && $logsConfig['sql'] === true) {
-                $log = new Logger('sql');
-                $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/sql.log', Logger::INFO));
-                $log->info($query, $params);
+                Log::sql('INFO', $query, $params);
             }
 
             $qu = $_SQL->prepare($query);

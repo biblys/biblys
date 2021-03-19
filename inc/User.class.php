@@ -2,8 +2,7 @@
 
 use Biblys\Axys\Client as AxysClient;
 use Biblys\Utils\Config;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Biblys\Utils\Log;
 
 class InvalidCredentialsException extends Exception
 {
@@ -463,13 +462,10 @@ class UserManager extends EntityManager
      */
     public function authenticate($login, $password)
     {
-        $log = new Logger('name');
-        $log->pushHandler(new StreamHandler(BIBLYS_PATH . '/logs/security.log', Logger::INFO));
-
         try {
             return $this->_authenticate($login, $password);
         } catch (InvalidCredentialsException $exception) {
-            $log->error($exception->getMessage());
+            Log::security("ERROR", 'Login error: user unknown for login ' . $login);
             return false;
         }
     }

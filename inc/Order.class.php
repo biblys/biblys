@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Utils\Log;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;
@@ -9,8 +10,7 @@ use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\PaymentExecution;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Payplug\Exception\HttpException;
 
 class Order extends Entity
 {
@@ -234,9 +234,6 @@ class Order extends Entity
      */
     public function createPayplugPayment()
     {
-        $log = new Logger('name');
-        $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/payplug.log', Logger::INFO));
-
         global $config, $urlgenerator, $request;
 
         $payplug = $config->get('payplug');
@@ -298,8 +295,9 @@ class Order extends Entity
                     'order_id'          => $this->get('id')
                 ]
             ]);
-        } catch (Exception $exception) {
-            $log->error(
+        } catch (HttpException $exception) {
+            Log::payplug(
+                "ERROR",
                 "An error occurred while creating a Payment for order ".$this->get('id'),
                 [$exception->getHttpResponse()]
             );

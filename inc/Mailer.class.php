@@ -1,8 +1,6 @@
 <?php
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
+use Biblys\Utils\Log;
 
 /**
  * SwiftMailer wrapper
@@ -58,9 +56,6 @@ class Mailer
             return;
         }
 
-        $log = new Logger('mails');
-        $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/mails.log', Logger::INFO));
-
         // Default from address
         if (empty($from)) {
             $from = $this->from;
@@ -95,12 +90,13 @@ class Mailer
         $sent = $this->mailer->send($message, $errors);
 
         // Log
-        $log->info(
-            'Sent mail "'.$subject.'" to "'.$to.'" through '.$this->method
+        Log::mail(
+            "INFO",
+            "Sent mail \"$subject\" to \"$to\" through " . $this->method
         );
 
         if ($errors) {
-            trigger_error('Error: '.implode($errors));
+            trigger_error('Error: ' . implode($errors));
         }
 
         return true;

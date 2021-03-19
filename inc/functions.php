@@ -1,10 +1,11 @@
 <?php
 
-use Biblys\Isbn\Isbn as Isbn;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use Biblys\Utils\Log;
 
 // Default error level
 ini_set('display_errors', 'On');
@@ -38,39 +39,62 @@ function biblys_error($level, $message, $file, $line, $trace, Throwable $excepti
         case E_ERROR:
         case E_USER_ERROR:
             $level = 'ERROR';
+            $logLevel = 'ERROR';
             break;
         case E_WARNING:
         case E_USER_WARNING:
             $level = 'WARNING';
+            $logLevel = 'WARNING';
             break;
         case E_DEPRECATED:
         case E_USER_DEPRECATED:
             $level = 'DEPRECATED';
+            $logLevel = 'WARNING';
             break;
         case E_PARSE:
             $level = 'PARSE ERROR';
+            $logLevel = 'CRITICAL';
             break;
         case E_NOTICE:
         case E_USER_NOTICE:
             $level = 'NOTICE';
+            $logLevel = 'NOTICE';
             break;
         case E_RECOVERABLE_ERROR:
             $level = 'RECOVERABLE FATAL ERROR';
+            $logLevel = 'CRITICAL ERROR';
             break;
         default:
             $level = 'UNKNOWN ERROR (' . $level . ')';
+            $logLevel = 'CRITICAL ERROR';
             break;
     }
 
-    // Errors.log
-    $log = BIBLYS_PATH . '/logs/errors.log';
-    if (!file_exists($log)) {
-        file_put_contents($log, '');
+    $stackTrace = '';
+    if ($exception) {
+        $stackTrace = $exception->getTraceAsString();
+    } else {
+
+        $debugBacktrace = debug_backtrace();
+        $i = 0;
+        foreach ($debugBacktrace as $b) {
+
+            if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
+                continue;
+            }
+
+            $stackTrace .= '#' . $i . ' ' . $b['file'] . '(' . $b['line'] . '): ' . $b['function'] . "\n";
+            $i++;
+        }
     }
-    $current = file_get_contents($log);
-    $log_line = "\nDate: " . date('Y-m-d H:i:s') . "\nError: " . $message . "\nURL: " . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "\nFile: " . $file . "\nLine: " . $line . "\r\n";
-    file_put_contents($log, $current . $log_line);
-    $lines = count(explode("\r\n", $current));
+
+    // Errors.log
+    Log::error($logLevel, $message, [
+        "URL" => $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+        "File" => $file,
+        "Line" => $line,
+        "Trace" => $stackTrace,
+    ]);
 
     // CLI mode
     if (!isset($request) || 'cli' == php_sapi_name()) {
@@ -86,11 +110,6 @@ function biblys_error($level, $message, $file, $line, $trace, Throwable $excepti
         // Web mode
     } else {
 
-        $errorId = null;
-        if ($site) {
-            $errorId = $site->get('name') . '-' . $lines;
-        }
-
         $errorMessage = $level . ': ' . $message . "\n";
 
         $devErrorMessage = '
@@ -98,24 +117,6 @@ URL: ' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . '
 in ' . $file . ':' . $line . '
 
 ';
-
-        $stackTrace = '';
-        if ($exception) {
-            $stackTrace = $exception->getTraceAsString();
-        } else {
-
-            $debugBacktrace = debug_backtrace();
-            $i = 0;
-            foreach ($debugBacktrace as $b) {
-
-                if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
-                    continue;
-                }
-
-                $stackTrace .= '#' . $i . ' ' . $b['file'] . '(' . $b['line'] . '): ' . $b['function'] . "\n";
-                $i++;
-            }
-        }
 
         $mailSubject = "J'ai rencontré une erreur sur le site";
         if ($site) {

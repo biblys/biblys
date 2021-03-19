@@ -2,9 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Utils\Log;
 use Framework\Controller;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,10 +20,7 @@ class PaymentController extends Controller
     {
         global $config;
 
-        $log = new Logger('stripe');
-        $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/stripe.log', Logger::INFO));
-
-        $log->info('Receiving new webhook from Stripe…');
+        Log::stripe("INFO", 'Receiving new webhook from Stripe…');
 
         try {
 
@@ -59,14 +55,14 @@ class PaymentController extends Controller
             );
 
             if ($event->type !== 'checkout.session.completed') {
-                $log->info('Webhook is not of type checkout.session.completed, ignoring.');
+                Log::stripe("INFO", 'Webhook is not of type checkout.session.completed, ignoring.');
                 return;
             }
 
             // Handle the checkout.session.completed event
             if ($event->type == 'checkout.session.completed') {
                 $session = $event->data->object;
-                $log->info('Handling Checkout session…', ["id" => $session->id]);
+                Log::stripe("INFO", 'Handling Checkout session…', ["id" => $session->id]);
 
                 // Retrieve payment associated with session id
                 $pm = new \PaymentManager();
@@ -74,7 +70,7 @@ class PaymentController extends Controller
                 if (!$payment) {
                     throw new \Exception("Could not find a payment associated with this session id");
                 }
-                $log->info('Associated Payment with session id', ["id" => $payment->get('id')]);
+                Log::stripe("INFO", 'Associated Payment with session id', ["id" => $payment->get('id')]);
 
                 // Retrieve order associated with payment
                 $om = new \OrderManager();
@@ -82,15 +78,15 @@ class PaymentController extends Controller
                 if (!$order) {
                     throw new \Exception("Could not find an order associated with this id");
                 }
-                $log->info('Associated Order with Payment', ["id" => $order->get('id')]);
+                Log::stripe("INFO", 'Associated Order with Payment', ["id" => $order->get('id')]);
 
                 // Add payment to the order
                 $om->addPayment($order, $payment);
-                $log->info('Payment amount ('.$payment->get('amount').') was added to order '.$order->get('id'));
+                Log::stripe("INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
             }
 
         } catch(\Exception $e) {
-            $log->error($e->getMessage());
+            Log::stripe("ERROR", $e->getMessage());
             throw $e;
         }
 

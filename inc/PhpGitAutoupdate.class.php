@@ -1,8 +1,5 @@
 <?php
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException;
 
