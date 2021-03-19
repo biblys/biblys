@@ -8,10 +8,7 @@ $_JS_CALLS[] = "/common/js/sorttable.js";
 $_PAGE_TITLE = 'Gestion du stock';
 
 $am = new ArticleManager();
-$articles = $am->getAll(
-    ["publisher_id" => $site->get("publisher_id")],
-    ["order" => "article_pubdate", "sort" => "desc"]
-);
+$articles = $am->getAll([], ["order" => "article_pubdate", "sort" => "desc"]);
 
 // Minimal virtual stock
 $minimum = 3;
@@ -41,11 +38,31 @@ foreach ($articles as $article) {
         $collections[$collection] = null;
     }
 
+    $articleNumber = null;
+    if ($article->has('number')) {
+        $articleNumber = $article->get('number') . ".";
+    }
+
     $collections[$collection] .= '
             <tr id="article_' . $article->get("id") . '">
-                <td sorttable_customkey="' . $article->get("title_alphabetic") . '"><a href="/' . $article->get("url") . '">' . $article->get("title") . '</a></td>
-                <td sorttable_customkey="' . $article->get("authors_alphabetic") . '">' . authors($article->get("authors"), 'url') . '</td>
-                <td class="right stock' . $td_class . '" data-title="' . $article->get("title") . '" data-id="' . $article->get("id") . '" data-stock="' . $article->get("publisher_stock") . '" contenteditable>' . $article->get("publisher_stock") . '</td>
+                <td sorttable_customkey="' . $article->get("title_alphabetic") . '">
+                    <a href="/' . $article->get("url") . '">
+                        ' . $articleNumber . '
+                        ' . $article->get("title") . '
+                    </a>
+                </td>
+                <td sorttable_customkey="' . $article->get("authors_alphabetic") . '">
+                    ' . authors($article->get("authors"), 'url') . '
+                </td>
+                <td
+                    class="right stock' . $td_class . '"
+                    data-title="' . $article->get("title") . '"
+                    data-id="' . $article->get("id") . '"
+                    data-stock="' . $article->get("publisher_stock") . '"
+                    contenteditable
+                >
+                    ' . $article->get("publisher_stock") . '
+                </td>
             </tr>
         ';
 }
