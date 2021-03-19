@@ -22,7 +22,9 @@ class Connection
 
             return $_SQL;
         } catch (\PDOException $e) {
-            throw new \Exception('MySQL error #' . $e->getCode() . ': ' . $e->getMessage());
+            throw new \Exception(
+                'Cannot connect to MySQL server ' . $config['host'] . ':' . $config['port'] . ' #' . $e->getCode() . ': ' . $e->getMessage()
+            );
         }
     }
 }
