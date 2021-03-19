@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $_JS_CALLS[] = "/common/js/adm_publisher_stock.js";
 $_JS_CALLS[] = "/common/js/sorttable.js";
 
@@ -48,10 +50,10 @@ foreach ($articles as $article) {
         ';
 }
 
-$_ECHO .= '<h2>' . $_PAGE_TITLE . '</h2>';
+$content = '<h2>' . $_PAGE_TITLE . '</h2>';
 
 foreach ($collections as $collection => $articles) {
-    $_ECHO .= '
+    $content .= '
             <h3>' . $collection . '</h3>
             <table class="sortable admin-table publisher_stock" cellpadding=0 cellspacing=0>
                 <thead class="pointer">
@@ -67,3 +69,5 @@ foreach ($collections as $collection => $articles) {
             </table>
         ';
 }
+
+return new Response($content);
