@@ -272,7 +272,7 @@ class OrderController extends Controller
             $filters['order_utm_campaign'] = $utmCampaign;
         }
 
-        $utmSource = $request->query->get('medium');
+        $utmMedium = $request->query->get('medium');
         if ($utmSource) {
             $filters['order_utm_medium'] = $utmMedium;
         }
