@@ -17,7 +17,7 @@ class MainController extends Controller
     // Used for triggering old controllers
     public function defaultAction(Request $request)
     {
-        global $site, $config,
+        global $site, $config, $session,
             $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,
             $_JS_CALLS, $_CSS_CALLS, $urlgenerator;
 
