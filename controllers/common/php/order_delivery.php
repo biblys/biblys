@@ -301,6 +301,10 @@ function validateOrderDetails($request) {
 
                     // Update order info from form
                     foreach ($_POST as $key => $val) {
+                        if ($key === "cgv_checkbox") {
+                            continue;
+                        }
+
                         $order->set($key, $val);
                     }
 
