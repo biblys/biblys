@@ -8,7 +8,9 @@ $_JS_CALLS[] = "/common/js/sorttable.js";
 $_PAGE_TITLE = 'Gestion du stock';
 
 $am = new ArticleManager();
-$articles = $am->getAll([], ["order" => "article_pubdate", "sort" => "desc"]);
+$articles = $am->getAll([], [
+    "order" => "article_pubdate DESC, article_id DESC"
+]);
 
 // Minimal virtual stock
 $minimum = 3;
