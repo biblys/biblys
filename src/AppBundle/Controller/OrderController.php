@@ -194,7 +194,7 @@ class OrderController extends Controller
             throw new \Exception('Missing payplug private key.');
         }
 
-        \Payplug\Payplug::setSecretKey($payplug_config['secret']);
+        \Payplug\Payplug::init(["secretKey" => $payplug_config['secret']]);
 
         $om = $this->entityManager('Order');
         $pm = $this->entityManager('Payment');
