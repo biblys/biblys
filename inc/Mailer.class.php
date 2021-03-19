@@ -54,11 +54,12 @@ class Mailer
      */
     public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = [])
     {
-        global $config;
+        if (getenv("PHP_ENV") === "test") {
+            return;
+        }
 
         $log = new Logger('mails');
         $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/mails.log', Logger::INFO));
-
 
         // Default from address
         if (empty($from)) {
