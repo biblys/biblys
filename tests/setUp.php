@@ -12,15 +12,12 @@ $_SERVER["SCRIPT_NAME"] = "index.php";
 require_once "inc/constants.php";
 $config = new Biblys\Utils\Config();
 $dbConfig = $config->get("db");
-if (!isset($dbConfig["test"])) {
-    throw new Exception("Missing test database config!");
-}
 
 // Connect to test
-$testDb = Biblys\Database\Connection::init($dbConfig["test"]);
+$testDb = Biblys\Database\Connection::init($dbConfig);
 
 // Reset test database
-$testBaseName = $dbConfig["test"]["base"];
+$testBaseName = $dbConfig["base"];
 $testDb->exec("DROP DATABASE IF EXISTS `$testBaseName`");
 $testDb->exec("CREATE DATABASE `$testBaseName`");
 $testDb->exec("USE `$testBaseName`");

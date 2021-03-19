@@ -247,9 +247,6 @@ if ('dev' == $config->get('environment')) {
 // Get MySQL Credential from config
 $dbConfig = $config->get("db");
 $_MYSQL = $dbConfig;
-if (getenv("PHP_ENV") === "test") {
-    $_MYSQL = $dbConfig["test"];
-}
 
 try {
     $_SQL = Biblys\Database\Connection::init($_MYSQL);
