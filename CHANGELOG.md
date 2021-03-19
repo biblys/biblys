@@ -1,5 +1,16 @@
 # Changelog
 
+### 2.51.4 (19 mars 2021)
+
+Corrections
+
+- L'url d'un article contient bien le nom de l'auteur et plus "anonyme"/ si
+  l'article a un ou plusieurs auteurs associés.
+- Le compte du nombre d'éditeur est désormais correct si le site utilise un
+  filtre éditeurs
+- Le formulaire d'édition d'un article fonctionne à nouveau si le site n'a aucun
+  rayon
+
 ### 2.51.3 (5 mars 2021)
 
 Correction : le raccourci "Ajouter au stock" de la barre d'administration
