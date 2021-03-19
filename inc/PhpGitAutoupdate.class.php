@@ -49,7 +49,7 @@ class PhpGitAutoupdate
 
         // Get latest version & check if uptodate
         $releases = $this->getReleases();
-        
+
         if (count($releases) === 0) {
             return null;
         }
@@ -178,5 +178,4 @@ class PhpGitAutoupdate
         $this->repository = $repository;
         return $this->repository;
     }
-
 }

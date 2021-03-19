@@ -68,9 +68,9 @@ class User extends Entity
         } elseif ($create) {
             $customer = $cm->create();
             $customer->set('user_id', $this->get('id'))
-                    ->set('customer_first_name', $this->get('first_name'))
-                    ->set('customer_last_name', $this->get('last_name'))
-                    ->set('customer_email', $this->get('email'));
+                ->set('customer_first_name', $this->get('first_name'))
+                ->set('customer_last_name', $this->get('last_name'))
+                ->set('customer_email', $this->get('email'));
             $cm->update($customer);
 
             return $customer;
@@ -91,7 +91,7 @@ class User extends Entity
         }
 
         if ($this->has('last_name')) {
-            return trim($this->get('first_name').' '.$this->get('last_name'));
+            return trim($this->get('first_name') . ' ' . $this->get('last_name'));
         }
 
         if ($this->has('email')) {
@@ -99,7 +99,7 @@ class User extends Entity
         }
 
         if ($this->has('id')) {
-            return 'User #'.$this->get('id');
+            return 'User #' . $this->get('id');
         }
 
         return 'Inconnu';
@@ -292,7 +292,7 @@ class User extends Entity
                     unset($rights[$key]);
                 }
             }
-            
+
             $this->rights = $rights;
             return $rights;
         }
@@ -302,10 +302,10 @@ class User extends Entity
     {
         $rights = $this->getRights();
         foreach ($rights as $r) {
-            if ($r->has($type.'_id')) {
+            if ($r->has($type . '_id')) {
                 if (!isset($id)) {
                     return true;
-                } elseif ($r->get($type.'_id') == $id) {
+                } elseif ($r->get($type . '_id') == $id) {
                     return true;
                 }
             }
@@ -318,7 +318,7 @@ class User extends Entity
     {
         $rm = new RightManager();
         $right = $rm->create();
-        $right->set('user_id', $this->get('id'))->set($type.'_id', $id);
+        $right->set('user_id', $this->get('id'))->set($type . '_id', $id);
         $rm->update($right);
     }
 
@@ -327,9 +327,9 @@ class User extends Entity
         $rm = new RightManager();
         $right = $rm->get([
             'user_id' => $this->get('id'),
-            $type.'_id' => $id,
+            $type . '_id' => $id,
         ]);
-        
+
         if ($right) {
             $rm->delete($right);
         }
@@ -354,12 +354,12 @@ class User extends Entity
     }
 }
 
-    class UserManager extends EntityManager
-    {
-        protected $prefix = 'user';
-        protected $table = 'Users';
-        protected $object = 'User';
-        protected $select = '*,
+class UserManager extends EntityManager
+{
+    protected $prefix = 'user';
+    protected $table = 'Users';
+    protected $object = 'User';
+    protected $select = '*,
                     `id` AS `user_id`,
                     `Email` AS `user_email`,
                     `user_key` AS `user_uid`,
@@ -374,258 +374,254 @@ class User extends Entity
                     `user_telephone` AS `user_phone`
                     ';
 
-        public function getQuery($query, $params, $options = [], $withJoins = true)
-        {
-            // Old db scheme
-            $query = str_replace('`user_id`', '`id`', $query);
-            $query = str_replace('`user_email`', '`Email`', $query);
-            $query = str_replace('`user_uid`', '`user_key`', $query);
+    public function getQuery($query, $params, $options = [], $withJoins = true)
+    {
+        // Old db scheme
+        $query = str_replace('`user_id`', '`id`', $query);
+        $query = str_replace('`user_email`', '`Email`', $query);
+        $query = str_replace('`user_uid`', '`user_key`', $query);
 
-            return parent::getQuery($query, $params, $options);
+        return parent::getQuery($query, $params, $options);
+    }
+
+    // Create a new User
+    public function create(array $defaults = [], $text = null)
+    {
+        global $axys;
+
+        if (!$axys) {
+            $axys = new AxysClient();
         }
 
-        // Create a new User
-        public function create(array $defaults = [], $text = null)
-        {
-            global $axys;
+        // Check if there is already a user with that e-mail address
+        if ($this->get(['user_email' => $defaults['user_email']])) {
+            throw new Exception('Cette adresse e-mail est déjà utilisée !');
+        }
 
-            if (!$axys) {
-                $axys = new AxysClient();
+        // Generate a new password if necessary
+        if (isset($defaults['user_new_password'])) {
+            $user_password = $defaults['user_new_password'];
+        } else {
+            $user_password = null;
+            for ($i = 0; $i < 8; ++$i) {
+                $user_password .= substr('ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnopqrstuvxyz23456789', rand(0, 31), 1);
             }
+        }
+        unset($defaults['user_new_password']);
 
-            // Check if there is already a user with that e-mail address
-            if ($this->get(['user_email' => $defaults['user_email']])) {
-                throw new Exception('Cette adresse e-mail est déjà utilisée !');
-            }
+        // Crypt the password
+        $defaults['user_password'] = password_hash($user_password, PASSWORD_DEFAULT);
 
-            // Generate a new password if necessary
-            if (isset($defaults['user_new_password'])) {
-                $user_password = $defaults['user_new_password'];
-            } else {
-                $user_password = null;
-                for ($i = 0; $i < 8; ++$i) {
-                    $user_password .= substr('ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnopqrstuvxyz23456789', rand(0, 31), 1);
-                }
-            }
-            unset($defaults['user_new_password']);
+        // Override defaults because of old db scheme
+        $defaults['Email'] = $defaults['user_email'];
+        unset($defaults['user_email']);
 
-            // Crypt the password
-            $defaults['user_password'] = password_hash($user_password, PASSWORD_DEFAULT);
+        // Creating the entity
+        $user = parent::create($defaults);
+        $user->set('user_just_created', true);
+        $user->set('user_new_password', $user_password);
 
-            // Override defaults because of old db scheme
-            $defaults['Email'] = $defaults['user_email'];
-            unset($defaults['user_email']);
-
-            // Creating the entity
-            $user = parent::create($defaults);
-            $user->set('user_just_created', true);
-            $user->set('user_new_password', $user_password);
-
-            // Send mail
-            if (empty($text)) {
-                $text = '<p>Bienvenue sur Axys !</p>';
-            }
-            $message = $text.'
+        // Send mail
+        if (empty($text)) {
+            $text = '<p>Bienvenue sur Axys !</p>';
+        }
+        $message = $text . '
 <p>
     Voici vos informations de connexion :<br />
-    Adresse e-mail : '.$user->get('user_email').'<br />
-    Mot de passe : '.$user_password.'
+    Adresse e-mail : ' . $user->get('user_email') . '<br />
+    Mot de passe : ' . $user_password . '
 </p>
 
-<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="'.$axys->getLoginUrl().'">axys.me</a>.</a></p>
+<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="' . $axys->getLoginUrl() . '">axys.me</a>.</a></p>
 
 <p>A très bientôt sur les sites du réseau Axys !</p>
 ';
-            $this->mail($user, $this->site['site_tag'].' | Votre compte Axys', $message);
+        $this->mail($user, $this->site['site_tag'] . ' | Votre compte Axys', $message);
 
-            // Return user
-            return $user;
-        }
+        // Return user
+        return $user;
+    }
 
-        /**
-         * Authenticate user from given credentials.
-         *
-         * @param string $login    can be username or e-mail
-         * @param string $password raw password
-         * @param User returns User if successfully authentificated, false otherwise
-         */
-        public function authenticate($login, $password)
-        {
-            $log = new Logger('name');
-            $log->pushHandler(new StreamHandler(BIBLYS_PATH.'/logs/security.log', Logger::INFO));
+    /**
+     * Authenticate user from given credentials.
+     *
+     * @param string $login    can be username or e-mail
+     * @param string $password raw password
+     * @param User returns User if successfully authentificated, false otherwise
+     */
+    public function authenticate($login, $password)
+    {
+        $log = new Logger('name');
+        $log->pushHandler(new StreamHandler(BIBLYS_PATH . '/logs/security.log', Logger::INFO));
 
-            // Try to get user from email
-            $user = $this->get(['user_email' => $login]);
-            if (!$user) {
-                // Else, try to get user from username
-                $user = $this->get(['user_slug' => slugify($login)]);
-                if (!$user) {
-                    // Still nothing : user unknown
-                    $log->error('Login error: user unknown for login '.$login);
-
-                    return false;
-                }
-            }
-
-            // If user still has md5 password, reencrypt & delete it
-            if ($user->has('MotDePasse') && md5($password) === $user->get('MotDePasse')) {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                $user->set('user_password', $hash);
-                $user->set('MotDePasse', null);
-                $this->update($user);
-
-                return $user;
-            }
-
-            // Else, if password with high encryption verifies
-            if (password_verify($password, $user->get('password'))) {
-                return $user;
-            }
-
-            // Wrong password
-            $log->error('Login error: Wrong password for login '.$login);
+        // Try to get user from email
+        $user = $this->get(['user_email' => $login]);
+        if (!$user) {
+            // Still nothing : user unknown
+            $log->error('Login error: user unknown for login ' . $login);
 
             return false;
         }
 
-        /**
-         * Send a mail to the user.
-         *
-         * @param User   $user    The mail's recipient
-         * @param string $subject The mail's subject
-         * @param string $message The mail's body
-         * @param array  $headers The mail's header
-         */
-        public function mail(User $user, $subject, $message, $headers = null)
-        {
-            $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        // If user still has md5 password, reencrypt & delete it
+        if ($user->has('MotDePasse') && md5($password) === $user->get('MotDePasse')) {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $user->set('user_password', $hash);
+            $user->set('MotDePasse', null);
+            $this->update($user);
+
+            return $user;
+        }
+
+        // Else, if password with high encryption verifies
+        if (password_verify($password, $user->get('password'))) {
+            return $user;
+        }
+
+        // Wrong password
+        $log->error('Login error: Wrong password for login ' . $login);
+
+        return false;
+    }
+
+    /**
+     * Send a mail to the user.
+     *
+     * @param User   $user    The mail's recipient
+     * @param string $subject The mail's subject
+     * @param string $message The mail's body
+     * @param array  $headers The mail's header
+     */
+    public function mail(User $user, $subject, $message, $headers = null)
+    {
+        $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>'.$subject.'</title>
+        <title>' . $subject . '</title>
     </head>
     <body>
-        '.$message.'
+        ' . $message . '
     </body>
 </html>
             ';
-            $mailer = new Mailer();
-            $mailer->send($user->get('email'), $subject, $message);
+        $mailer = new Mailer();
+        $mailer->send($user->get('email'), $subject, $message);
+    }
+
+    /**
+     * Add ebooks to user's library.
+     *
+     * @param object $user        The user
+     * @param array  $articles    An array of Article objects to add
+     * @param array  $stock       An array of Stock objects to add (if they already exists)
+     * @param bool   $predownload Can the user download the files before article publication date?
+     * @param array  $options     Additionnal options
+     */
+    public function addToLibrary(User $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
+    {
+        global $site;
+
+        $added = [];
+        $errors = [];
+        $sm = new StockManager();
+
+        if (!isset($options['send_email'])) {
+            $options['send_email'] = true;
         }
 
-        /**
-         * Add ebooks to user's library.
-         *
-         * @param object $user        The user
-         * @param array  $articles    An array of Article objects to add
-         * @param array  $stock       An array of Stock objects to add (if they already exists)
-         * @param bool   $predownload Can the user download the files before article publication date?
-         * @param array  $options     Additionnal options
-         */
-        public function addToLibrary(User $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
-        {
-            global $site;
+        if (!empty($articles)) {
+            foreach ($articles as $article) {
+                // Check if article is owned by current site
+                $downloadablePublishers = explode(',', $site->getOpt('downloadable_publishers'));
+                if (
+                    $site->get('publisher_id') !== $article->get('publisher_id') &&
+                    !in_array($article->get('publisher_id'), $downloadablePublishers)
+                ) {
+                    throw new Exception('Ce site n\'est pas autorisé à distribué cet article.');
+                }
 
-            $added = [];
-            $errors = [];
-            $sm = new StockManager();
-
-            if (!isset($options['send_email'])) {
-                $options['send_email'] = true;
-            }
-
-            if (!empty($articles)) {
-                foreach ($articles as $article) {
-                    // Check if article is owned by current site
-                    $downloadablePublishers = explode(',', $site->getOpt('downloadable_publishers'));
-                    if (
-                        $site->get('publisher_id') !== $article->get('publisher_id') &&
-                        !in_array($article->get('publisher_id'), $downloadablePublishers)
-                    ) {
-                        throw new Exception('Ce site n\'est pas autorisé à distribué cet article.');
-                    }
-
-                    // Check if article is a downloadable
-                    if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
-                        // Check if article is already in library
-                        if ($sm->getAll(['article_id' => $article->get('id'), 'user_id' => $user->get('id')])) {
-                            $errors[] = 'Article '.$article->get('title').' is already in user\'s library.';
-                        } else {
-                            // Create a new free copy
-                            $stock = $sm->create(['site_id' => $this->site['site_id']])
-                                ->set('article_id', $article->get('id'))
-                                ->set('site_id', $this->site['site_id'])
-                                ->set('stock_selling_price', 0);
-
-                            $sm->update($stock);
-
-                            $new_stock = $sm->getById($stock->get('id'));
-                            $stocks[] = $new_stock;
-                        }
+                // Check if article is a downloadable
+                if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
+                    // Check if article is already in library
+                    if ($sm->getAll(['article_id' => $article->get('id'), 'user_id' => $user->get('id')])) {
+                        $errors[] = 'Article ' . $article->get('title') . ' is already in user\'s library.';
                     } else {
-                        $errors[] = 'Article #'.$article->get('id').' is not downloadable.';
+                        // Create a new free copy
+                        $stock = $sm->create(['site_id' => $this->site['site_id']])
+                            ->set('article_id', $article->get('id'))
+                            ->set('site_id', $this->site['site_id'])
+                            ->set('stock_selling_price', 0);
+
+                        $sm->update($stock);
+
+                        $new_stock = $sm->getById($stock->get('id'));
+                        $stocks[] = $new_stock;
                     }
+                } else {
+                    $errors[] = 'Article #' . $article->get('id') . ' is not downloadable.';
                 }
             }
+        }
 
-            // Add existing stocks to library
-            if (!empty($stocks)) {
-                foreach ($stocks as $stock) {
-                    $article = $stock->get('article');
+        // Add existing stocks to library
+        if (!empty($stocks)) {
+            foreach ($stocks as $stock) {
+                $article = $stock->get('article');
 
-                    // Check if article is a downloadable
-                    if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
-                        // Check if copy is already in library
-                        if ($stock->has('user_id')) {
-                            $errors[] = 'Stock #'.$stock->get('id').' is already in user\'s library.';
-                        }
-
-                        // Else add it
-                        else {
-                            $stock->set('user_id', $user->get('id'))
-                                ->set('stock_selling_date', date('Y-m-d H:i:s'));
-                            if ($predownload) {
-                                $stock->set('stock_allow_predownload', 1);
-                            }
-
-                            $sm->update($stock);
-                            $added[] = $article->get('title');
-                        }
-                    } else {
-                        $errors[] = 'Article #'.$article->get('id').' is not downloadable.';
+                // Check if article is a downloadable
+                if ($article->get('type_id') == 2 || $article->get('type_id') == 11) {
+                    // Check if copy is already in library
+                    if ($stock->has('user_id')) {
+                        $errors[] = 'Stock #' . $stock->get('id') . ' is already in user\'s library.';
                     }
+
+                    // Else add it
+                    else {
+                        $stock->set('user_id', $user->get('id'))
+                            ->set('stock_selling_date', date('Y-m-d H:i:s'));
+                        if ($predownload) {
+                            $stock->set('stock_allow_predownload', 1);
+                        }
+
+                        $sm->update($stock);
+                        $added[] = $article->get('title');
+                    }
+                } else {
+                    $errors[] = 'Article #' . $article->get('id') . ' is not downloadable.';
                 }
             }
+        }
 
-            // Send mail
-            if (!empty($added) && $options['send_email']) {
-                $newuser = null;
-                if ($user->get('user_just_created')) {
-                    $newuser = '
+        // Send mail
+        if (!empty($added) && $options['send_email']) {
+            $newuser = null;
+            if ($user->get('user_just_created')) {
+                $newuser = '
                         <p>
                             Connectez-vous en utilisant vos identifiants Axys :<br />
-                            Adresse e-mail : '.$user->get('user_email').'<br />
-                            Mot de passe : '.$user->get('user_new_password').'
+                            Adresse e-mail : ' . $user->get('user_email') . '<br />
+                            Mot de passe : ' . $user->get('user_new_password') . '
                         </p>
 
                     ';
-                }
+            }
 
-                $headers = null;
-                $headers .= 'From: '.$this->site['site_title'].' <'.$this->site['site_contact'].'>'."\r\n";
-                $subject = $this->site['site_tag'].' | De nouveaux livres numériques disponibles dans votre bibliothèque.';
-                $message = '
+            $headers = null;
+            $headers .= 'From: ' . $this->site['site_title'] . ' <' . $this->site['site_contact'] . '>' . "\r\n";
+            $subject = $this->site['site_tag'] . ' | De nouveaux livres numériques disponibles dans votre bibliothèque.';
+            $message = '
                     <p>Bonjour,</p>
-                    <p>Les livres numériques suivants ont été ajoutés à <a href="http://'.$this->site['site_domain'].'/pages/log_myebooks">votre bibliothèque numérique</a> :</p>
-                    <ul><li>'.implode('</li><li>', $added).'</li></ul>
+                    <p>Les livres numériques suivants ont été ajoutés à <a href="http://' . $this->site['site_domain'] . '/pages/log_myebooks">votre bibliothèque numérique</a> :</p>
+                    <ul><li>' . implode('</li><li>', $added) . '</li></ul>
                     <p>Vous pouvez les télécharger à volonté depuis notre site, dans tous les formats disponibles. Vous pourrez également profiter gratuitement des mises à jour de ces fichiers si de nouvelles versions sont proposées.</p>
                     <p>Vous trouverez également dans votre bibliothèque numérique de l\'aide pour télécharger et lire ces fichiers. En cas de difficulté, n\'hésitez pas à nous solliciter en répondant à ce message.</p>
-                    <p><a href="http://'.$this->site['site_domain'].'/pages/log_myebooks"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
-                    '.$newuser.'
+                    <p><a href="http://' . $this->site['site_domain'] . '/pages/log_myebooks"><strong>Accéder à votre bibliothèque numérique</strong></a></p>
+                    ' . $newuser . '
                     <p>NB : Ces fichiers vous sont volontairement proposés sans dispositif de gestion des droits numériques (DRM ou GDN). Nous vous invitons à les transmettre à vos proches si vous souhaitez les leur faire découvrir, comme vous le feriez avec un livre papier, mais nous vous prions de ne pas les diffuser plus largement, par respect pour l\'auteur et l\'éditeur.</p>
                 ';
-                $mailer = new Mailer();
-                $mailer->send($user->get('Email'), $subject, $message);
-            }
+            $mailer = new Mailer();
+            $mailer->send($user->get('Email'), $subject, $message);
         }
     }
+}
