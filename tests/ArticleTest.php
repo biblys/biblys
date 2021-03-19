@@ -73,7 +73,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->m->refreshMetadata($article);
         $this->assertEquals(
             "Bara Yogoi      Léo HENRY",
-            $article->get("keywords"),
+            $article->get("keywords")
         );
 
         $articleWithoutJoins = $this->m->create([
@@ -82,7 +82,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->m->refreshMetadata($articleWithoutJoins);
         $this->assertEquals(
             "     Présence du futur ",
-            $articleWithoutJoins->get("keywords"),
+            $articleWithoutJoins->get("keywords")
         );
     }
 
@@ -406,7 +406,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(
             2,
             count($contributors),
-            "it should return 2 contributors",
+            "it should return 2 contributors"
         );
         $this->assertEquals($contributors[0]->get('id'), $people1->get('id'));
         $this->assertEquals($contributors[1]->get('id'), $people2->get('id'));
