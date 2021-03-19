@@ -78,9 +78,9 @@ class Type
 
     /**
      * Return all types
-     * @return [array] an array containing all Types
+     * @return Type[] an array containing all Types
      */
-    public static function getAll()
+    public static function getAll(): array
     {
         $types = [];
 
@@ -209,9 +209,9 @@ class Type
 
     /**
      * Get only physical types
-     * @return [array] a filtered array of Types
+     * @return Type[] a filtered array of Types
      */
-    public static function getAllPhysicalTypes()
+    public static function getAllPhysicalTypes(): array
     {
         $types = self::getAll();
 
