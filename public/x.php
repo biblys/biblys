@@ -49,7 +49,7 @@ try {
         header("HTTP/1.0 404 Not Found");
         die('ERROR > Page introuvable');
     }
-} catch (Exception $exception) {
+} catch (Throwable $exception) {
     biblys_exception($exception);
 }
 
