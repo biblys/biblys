@@ -6,3 +6,5 @@ db:
   base: biblys-test
 
 site: 1
+
+users_table_name: users
