@@ -4,6 +4,8 @@ namespace Biblys\Utils;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Handler\PsrHandler;
+use Rollbar\Rollbar;
 
 class Log
 {
@@ -49,11 +51,27 @@ class Log
         string $message,
         array $context = []
     ): void {
-        $log = new Logger($name);
+        $logger = new Logger($name);
 
         $filePath = BIBLYS_PATH . "/app/logs/$name.log";
-        $log->pushHandler(new StreamHandler($filePath, Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler($filePath, Logger::DEBUG));
 
-        $log->log($level, $message, $context);
+        $config = new Config();
+        $rollbarConfig = $config->get("rollbar");
+        if ($rollbarConfig) {
+            Rollbar::init([
+                "access_token" => $rollbarConfig["access_token"],
+                "environment" => $rollbarConfig["environment"],
+                "code_version" => BIBLYS_VERSION
+            ]);
+            $logger->pushHandler(
+                new PsrHandler(
+                    Rollbar::logger(),
+                    $rollbarConfig["level"] ?? "WARNING"
+                )
+            );
+        }
+
+        $logger->log($level, $message, $context);
     }
 }
