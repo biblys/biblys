@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Axys\Client;
+use Biblys\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -16,6 +18,9 @@ $sm = new StockManager();
 $um = new UserManager();
 
 $content = null;
+
+$config = new Config();
+$axys = new Client($config->get("axys"));
 
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {
@@ -378,7 +383,14 @@ $content .= '
 
 if (isset($Articles) && $Articles > 0) {
     if (!auth()) {
-        $content .= '<p class="warning">Attention : vous n\'&ecirc;tes pas connect&eacute;. Si vous quittez le site, votre panier ne sera pas sauvegard&eacute;. <a href="'.$axys->getLoginUrl().'">Connectez-vous</a> ou <a href="'.$axys->getSignupUrl().'">cr&eacute;ez un compte</a> pour sauvegarder votre panier.</p><br />';
+        $content .= '
+            <p class="warning">
+                Attention : vous n\'&ecirc;tes pas connect&eacute;. Si vous quittez le site, votre
+                panier ne sera pas sauvegard&eacute;.
+                <a href="' . $axys->getLoginUrl() . '">Connectez-vous</a> ou
+                <a href="' . $axys->getSignupUrl() . '">cr&eacute;ez un compte</a> pour sauvegarder
+                votre panier.
+            </p><br />';
     }
 
     // Deja une commande en cours ?
@@ -486,7 +498,7 @@ if (isset($Articles) && $Articles > 0) {
 
         if ($missing <= 0) {
             $style = null;
-            $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez 
+            $sentence = 'Si vous ne souhaitez pas bénéficier de l\'offre, vous pourrez
                     le préciser dans le champ Commentaires de la page suivante.';
             $price = 'Offert';
         }
@@ -506,7 +518,7 @@ if (isset($Articles) && $Articles > 0) {
                         coll. '.$fa->get('collection')->get('name').' '.numero($fa->get('number')).'<br />
                         <p>
                             <strong>
-                                Offert pour '.$special_offer_amount.' titres de la 
+                                Offert pour '.$special_offer_amount.' titres de la
                                 collection '.$offerCollection->get('name').' achetés&nbsp;!
                                 <small>(hors numérique)</small><br>
                                 <small>'.$sentence.'</small>

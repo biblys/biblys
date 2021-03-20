@@ -1,5 +1,11 @@
 <?php
 
+use Biblys\Axys\Client;
+use Biblys\Utils\Config;
+
+$config = new Config();
+$axys = new Client($config->get("axys"));
+
 $wlm = new WishlistManager();
 $wm = new WishManager();
 $am = new ArticleManager();

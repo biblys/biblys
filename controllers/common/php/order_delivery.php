@@ -1,11 +1,16 @@
 <?php
 
+use Biblys\Axys\Client;
+use Biblys\Utils\Config;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 
 class OrderDetailsValidationException extends Exception {};
+
+$config = new Config();
+$axys = new Client($config->get("axys"));
 
 function validateOrderDetails($request) {
     if (empty($request->request->get('order_firstname'))) {
