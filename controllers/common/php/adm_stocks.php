@@ -51,7 +51,7 @@ $dates = null;
 $liste = null;
 
 $stockDates = EntityManager::prepareAndExecute(
-    "SELECT 
+    "SELECT
         DATE_FORMAT(`stock_insert`, '%Y-%m-%d') as `date`
     FROM `stock`
     WHERE `stock`.`site_id` = :site_id AND `stock_insert` > SUBDATE(NOW(), INTERVAL 1 MONTH)
@@ -325,27 +325,27 @@ foreach ($sql as $x) {
 
         $x['copyButton'] = '
             <a href="/pages/adm_stock?copy='.$x['stock_id'].'">
-                <span class="fa fa-clone fa-lg black" aria-label="Dupliquer" 
+                <span class="fa fa-clone fa-lg black" aria-label="Dupliquer"
                     title="Dupliquer"></span>
             </a>
         ';
         $x['returnButton'] = '
             <a href="/pages/adm_stock?return='.$x['stock_id'].'">
-                <span class="fa fa-undo fa-lg black" aria-label="Retourner" 
+                <span class="fa fa-undo fa-lg black" aria-label="Retourner"
                     title="Retourner"></span>
             </a>
         ';
         $x['lostButton'] = '
             <a href="/pages/adm_stock?lost='.$x['stock_id'].'">
-                <span class="fa fa-question fa-lg black" 
-                    aria-label="Marquer comme perdu" 
+                <span class="fa fa-question fa-lg black"
+                    aria-label="Marquer comme perdu"
                     title="Marquer comme perdu">
                 </span>
             </a>
         ';
         $x['soldButton'] = '
             <a href="/pages/adm_stock?sold='.$x['stock_id'].'">
-                <span class="fa fa-shopping-bag fa-lg black" 
+                <span class="fa fa-shopping-bag fa-lg black"
                     alt="Vendu en magasin" title="Vendu en magasin" />
             </a>
         ';
@@ -395,10 +395,10 @@ foreach ($sql as $x) {
                     '.(isset($x['soldButton']) ? $x['soldButton'] : null).'
                     '.(isset($x['returnButton']) ? $x['returnButton'] : null).'
                     '.$x['lostButton'].'
-                    <span class="fa fa-trash fa-lg deleteStock pointer" 
+                    <span class="fa fa-trash fa-lg deleteStock pointer"
                         aria-label="Supprimer"
-                        data-stock_id="'.$x['stock_id'].'" 
-                        data-article_id="'.$x['article_id'].'" 
+                        data-stock_id="'.$x['stock_id'].'"
+                        data-article_id="'.$x['article_id'].'"
                         title="Supprimer"></span>
                 </td>
         ';

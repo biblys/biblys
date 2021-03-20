@@ -314,7 +314,7 @@ $delId = $request->query->get('del');
 
 // Modifier un exemplaire existant
 if (!empty($_GET['id'])) {
-    $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; '.$_GET['id'];
+    $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; ' . $_GET['id'];
     $content .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
 
     if (isset($_GET['created'])) {
@@ -362,7 +362,7 @@ if (!empty($_GET['id'])) {
         <p><a href="/pages/adm_stock?del='.$s['stock_id'].'" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
     ';
 } elseif (!empty($copyId)) {
-    $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; '.$copyId;
+    $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; ' . $copyId;
     $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {
@@ -453,7 +453,7 @@ if ($article) {
     }
 
     $content .= '
-        <a href="'.$articleUrl.'">
+        <a href="' . $articleUrl . '">
             <div class="article-thumb">
                 '.$articleCover.'
                 <div class="article-thumb-data">
@@ -514,7 +514,7 @@ if ($article) {
                         <tr>
                             <th colspan="9">
                                 <span class="fa fa-chevron-down"></span>
-                                '.$in_base.' exemplaire'.s($in_base).' en base dont '.$in_stock.' en stock
+                                ' . $in_base . ' exemplaire' . s($in_base) . ' en base dont ' . $in_stock . ' en stock
                             </th>
                         </tr>
                     </thead>
@@ -846,8 +846,8 @@ if ($article) {
         ';
     } else {
         $content .= '
-            <input type="hidden" name="campaign_id" value="'.$stock->get('campaign_id').'">
-            <input type="hidden" name="reward_id" value="'.$stock->get('reward_id').'">
+            <input type="hidden" name="campaign_id" value="' . $stock->get('campaign_id') . '">
+            <input type="hidden" name="reward_id" value="' . $stock->get('reward_id') . '">
         ';
     }
 
@@ -936,7 +936,7 @@ if ($article) {
         }, $carts);
 
         $content .= '
-        <form method="post" action="'.$urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]).'" class="fieldset form-inline">
+        <form method="post" action="' . $urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]) . '" class="fieldset form-inline">
             <fieldset>
                 <legend>Ajouter à un panier</legend>
                     <p class="text-center">
