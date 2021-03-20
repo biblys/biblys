@@ -166,7 +166,7 @@ function noosfere($x, $mode = null)
 
         // ISBN
         $a['article_ean'] = null;
-        if ($n->ISBN != "nd") {
+        if (Isbn::isParsable($n->ISBN)) {
             $a["article_ean"] = (string) Isbn::convertToEan13($n->ISBN);
         }
 
@@ -311,8 +311,8 @@ if ($_GET["mode"] == "search") { // Mode recherche
                         <h3>'.$a["article_title"]. '</h3>
                         <p>
                             de '.truncate($a["article_authors"], 65, '...', true, true).'<br />
-                            coll. '.$a["article_collection"].' '.numero($a["article_number"]).' ('.$a["article_publisher"].')<br />
-                            ISBN : '.Isbn::convertToIsbn13($a["article_ean"]).'
+                            coll. '.$a["article_collection"].' '.numero($a["article_number"]).' ('.$a["article_publisher"]. ')<br />
+                            ' . $isbn . '
                         </p>
                     </div>
                 </div>
