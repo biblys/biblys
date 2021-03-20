@@ -1,13 +1,15 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $lm = new ListeManager();
 $sm = new StockManager();
 
 $_PAGE_TITLE = 'Stock';
-$_ECHO .= '<h1><span class="fa fa-cubes"></span> '.$_PAGE_TITLE.'</h1>';
+$content = '<h1><span class="fa fa-cubes"></span> '.$_PAGE_TITLE.'</h1>';
 
 if (isset($_GET['collection_id'])) {
-    $_ECHO .= '
+    $content .= '
         <div class="admin">
             <p>Inventaire</p>
             <p><a href="/pages/adm_stock_export?collection_id='.$_GET['collection_id'].'">Exporter</a></p>
@@ -83,7 +85,7 @@ $types_options = array_map(function ($type) {
     return '<option value="'.$type->getId().'"'.($type->getId() == $request->query->get('type_id', 0) ? ' selected' : null).'>'.$type->getName().'</option>';
 }, $types);
 
-$_ECHO .= '
+$content .= '
     <form method="get">
         <p>
             <label for="stock_insert">Ajout&eacute;s le :</label>
@@ -284,9 +286,9 @@ $sql = EntityManager::prepareAndExecute(
 $num = $sql->rowCount();
 
 if (isset($_GET['article_id'])) {
-    $_ECHO .= '';
+    $content .= '';
 }
-$_ECHO .= '<h3>'.$num.' exemplaire'.s($num).'</h3>';
+$content .= '<h3>'.$num.' exemplaire'.s($num).'</h3>';
 
 $article_title = null; $list = null; $ventes = 0; $stocks = 0; $retours = 0; $paniers = 0; $perdus = 0;
 $total_weight = 0;
@@ -518,7 +520,7 @@ $lists = array_map(function ($list) {
     return '<option value='.$list->get('id').'>'.$list->get('title').'</option>';
 }, $lists);
 
-$_ECHO .= '
+$content .= '
     <p>
         <img src="/common/img/square_green.png" /> '.$stocks.' en stock<br />
         <img src="/common/img/square_gray.png" /> '.$paniers.' en panier'.s($paniers).'<br />
@@ -560,10 +562,12 @@ $_ECHO .= '
 ';
 
 if ($_V->isRoot()) {
-    $_ECHO .= '
+    $content .= '
     <br />
     <div class="center">
         <textarea>'.$req.' AND `site_id` = '.$_SITE['site_id'].'</textarea>
     </div>
     ';
 }
+
+return new Response($content);

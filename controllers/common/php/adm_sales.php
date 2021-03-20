@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $_PAGE_TITLE = 'Ventes';
 
 $_QUERY = null;
@@ -91,7 +93,7 @@ while ($o = $orders->fetch(PDO::FETCH_ASSOC))
 }
 $orders->closeCursor();
 
-$_ECHO .= '
+$content = '
         <a href="/pages/adm_orders_shop" class="floatR">Revenir à l\'interface actuelle</a>
         <h1><span class="fa fa-line-chart"></span> '.$_PAGE_TITLE.'</h1>
 
@@ -155,4 +157,4 @@ $_ECHO .= '
         </table>
     ';
 
-?>
+return new Response($content);

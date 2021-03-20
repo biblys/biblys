@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $the_categories = null;
 
 if ($_V->isAdmin()) {
@@ -75,7 +77,7 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $_PAGE_TITLE = 'Gestion des billets';
-$_ECHO .= '
+$content = '
     <h1><span class="fa fa-newspaper-o"></span> Gestion des billets</h1>
 
     <p class="buttonset">
@@ -110,3 +112,4 @@ $_ECHO .= '
 
     </table>';
 
+return new Response($content);

@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $_JS_CALLS[] = "/common/js/sorttable.js";
 
 $_PAGE_TITLE = "Ventes numériques";
@@ -10,7 +12,7 @@ if (!$site->getOpt('downloadable_publishers')) {
 
 // Article select
 $ao = array();
-$articles = $_SQL->query("SELECT `article_id`, `article_title`, `article_collection` FROM `articles` 
+$articles = $_SQL->query("SELECT `article_id`, `article_title`, `article_collection` FROM `articles`
     WHERE
         `publisher_id` IN (".$site->getOpt('downloadable_publishers').")
         AND (`type_id` = 2 OR `type_id` = 11) ORDER BY `article_collection`, `article_title_alphabetic`");
@@ -129,9 +131,9 @@ $header = ["Reseller date", "Customer date", "EAN", "Paper ISBN", "Title", "Publ
     "Currency", "Tax rate", "Units", "Order ID", "Reseller", "Country",    "Description", "Unit price excluding tax",
     "Reseller discount", "Net unit price", "Total net without VAT", "Total due without VAT"];
 
-$_ECHO .= '<h1><span class="fa fa-book"></span> Ventes numériques</h1>';
+$content = '<h1><span class="fa fa-book"></span> Ventes numériques</h1>';
 
-$_ECHO .= '
+$content .= '
         <form class="fieldset form-horizontal" role="form">
             <fieldset>
                 <legend>Filter les ventes</legend>
@@ -216,13 +218,13 @@ $_ECHO .= '
 
 $articleId = $request->query->get('article_id');
 if ($articleId) {
-    $_ECHO .= '<h3>Statistiques de t&eacute;l&eacute;chargements</h3>';
+    $content .= '<h3>Statistiques de t&eacute;l&eacute;chargements</h3>';
 
     $downloads = $_SQL->prepare("SELECT `download_filetype`, `download_version` FROM `downloads` WHERE `article_id` = :article_id");
     $downloads->execute(['article_id' => $articleId]);
     $total = $downloads->rowCount();
 
-    $_ECHO .= '
+    $content .= '
         <table class="admin-table sortable">
             <tr>
                 <td class="right">Total :</td>
@@ -234,7 +236,7 @@ if ($articleId) {
 }
 
 
-$_ECHO .= '<h3>Toutes les ventes</h3>';
+$content .= '<h3>Toutes les ventes</h3>';
 
 $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,`stock_selling_date`, `stock_id`
     FROM `articles`
@@ -245,7 +247,7 @@ $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,
 ORDER BY `stock_selling_date` DESC");
 $achats->execute(array_merge($reqParams, $reqPeopleParams));
 
-    $_ECHO .= '<br />
+$content .= '<br />
     <table class="admin-table sortable">
         <thead>
             <tr class="cliquable">
@@ -261,7 +263,7 @@ $achats->execute(array_merge($reqParams, $reqPeopleParams));
 
 //$customers = array('0' => NULL);
 while ($a = $achats->fetch(PDO::FETCH_ASSOC)) {
-    $_ECHO .= '
+    $content .= '
         <tr>
             <td>'.$a["stock_id"].'</td>
             <td>'._date($a['stock_selling_date'],"j/m/Y").'</td>
@@ -273,14 +275,16 @@ while ($a = $achats->fetch(PDO::FETCH_ASSOC)) {
     $customers[] = $a["Email"].', ';
 }
 
-$_ECHO .= '</tbody></table>';
+$content .= '</tbody></table>';
 
 if(!empty($customers)) {
     $customers = array_unique($customers);
     $count = count($customers);
-    $_ECHO .= '<h3>Tous les clients ('.$count.')</h3><p>';
+    $content .= '<h3>Tous les clients (' . $count . ')</h3><p>';
     foreach($customers as $c) {
-        $_ECHO .= $c;
+        $content .= $c;
     }
-    $_ECHO .= '</p>';
+    $content .= '</p>';
 }
+
+return new Response($content);

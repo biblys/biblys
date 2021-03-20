@@ -1,5 +1,8 @@
 <?php
 
+use Biblys\Utils\Config;
+use Symfony\Component\HttpFoundation\Response as Response;
+
 $sm = new StockManager();
 $am = new ArticleManager();
 $alm = new AlertManager();
@@ -10,11 +13,13 @@ $rm = new RayonManager();
 $_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
 $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
 
+$content = null;
+
 foreach ($session->getFlashBag()->get('success', []) as $message) {
-    $_ECHO .= "<p class='alert alert-success'>$message</p>";
+    $content .= "<p class='alert alert-success'>$message</p>";
 }
 foreach ($session->getFlashBag()->get('info', []) as $message) {
-    $_ECHO .= "<p class='alert alert-info'>$message</p>";
+    $content .= "<p class='alert alert-info'>$message</p>";
 }
 
 $div_admin = null;
@@ -118,7 +123,7 @@ if ($request->getMethod() === 'POST') {
         if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
             $stock = $sm->create();
             $_POST['stock_id'] = $stock->get('id');
-            $_ECHO .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id='.$_POST['stock_id'].'">'.$_POST['stock_id'].'</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
+            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
             $mode = 'insert';
             $update_date = 'NULL';
         } else {
@@ -135,7 +140,7 @@ if ($request->getMethod() === 'POST') {
         if (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 1) {
             if ($photo->exists()) {
                 $photo->delete();
-                $_ECHO = '<p class="success">La photo de l\'exemplaire a &eacute;t&eacute; supprim&eacute;e !</p>';
+                $content = '<p class="success">La photo de l\'exemplaire a &eacute;t&eacute; supprim&eacute;e !</p>';
             }
         }
 
@@ -310,20 +315,20 @@ $delId = $request->query->get('del');
 // Modifier un exemplaire existant
 if (!empty($_GET['id'])) {
     $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; '.$_GET['id'];
-    $_ECHO .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; '.$_GET['id'].'</h1>';
+    $content .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
 
     if (isset($_GET['created'])) {
-        $_ECHO .= '<p class="success">'.$_GET['created'].' exemplaire'.s($_GET['created']).' ajout&eacute;'.s($_GET['created']).' au stock !</p>';
+        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
     } elseif (isset($_GET['returned'])) {
-        $_ECHO .= '<p class="success">L\'exemplaire a &eacute;t&eacute; retourn&eacute;.</p>';
+        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; retourn&eacute;.</p>';
     } elseif (isset($_GET['losted'])) {
-        $_ECHO .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme perdu.</p>';
+        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme perdu.</p>';
     } elseif (isset($_GET['solded'])) {
-        $_ECHO .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme vendu en magasin.</p>';
+        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme vendu en magasin.</p>';
     }
 
     if (isset($_GET['alerts'])) {
-        $_ECHO .= '<p class="success">'.$_GET['alerts'].' alerte'.s($_GET['alerts']).' '.s($_GET['alerts'], 'a', 'ont').' été envoyée'.s($_GET['alerts']).'</p>';
+        $content .= '<p class="success">' . $_GET['alerts'] . ' alerte' . s($_GET['alerts']) . ' ' . s($_GET['alerts'], 'a', 'ont') . ' été envoyée' . s($_GET['alerts']) . '</p>';
     }
 
     $stockId = $request->query->get('id');
@@ -358,7 +363,7 @@ if (!empty($_GET['id'])) {
     ';
 } elseif (!empty($copyId)) {
     $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; '.$copyId;
-    $_ECHO .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> '.$_GET['copy'].'</h1>';
+    $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {
         throw new Exception('Cet exemplaire n\'existe pas');
@@ -367,7 +372,7 @@ if (!empty($_GET['id'])) {
     $_GET['id'] = null;
 } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
     $_PAGE_TITLE = 'Ajouter au stock un nouvel exemplaire de...';
-    $_ECHO .= '<h1 id="add"><span class="fa fa-plus"></span> '.$_PAGE_TITLE.'</h1>';
+    $content .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
     $s['article_id'] = $_GET['add'];
     $mode = 'insert';
 
@@ -447,7 +452,7 @@ if ($article) {
         );
     }
 
-    $_ECHO .= '
+    $content .= '
         <a href="'.$articleUrl.'">
             <div class="article-thumb">
                 '.$articleCover.'
@@ -503,12 +508,12 @@ if ($article) {
             ';
         }
         if (isset($exs)) {
-            $_ECHO .= '
+            $content .= '
                 <table class="unfold admin-table">
                     <thead>
                         <tr>
                             <th colspan="9">
-                                <span class="fa fa-chevron-down"></span> 
+                                <span class="fa fa-chevron-down"></span>
                                 '.$in_base.' exemplaire'.s($in_base).' en base dont '.$in_stock.' en stock
                             </th>
                         </tr>
@@ -541,7 +546,7 @@ if ($article) {
         $alerts_num = count($alerts);
 
         if ($alerts_num > 0) {
-            $_ECHO .= '
+            $content .= '
                 <table class="unfold admin-table">
                     <thead>
                         <tr>
@@ -647,7 +652,7 @@ if ($article) {
     $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="'.$s['stock_invoice'].'" />';
     if (empty($s['stock_invoice'])) {
         $invoicesQuery = EntityManager::prepareAndExecute(
-            'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id 
+            'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
                         GROUP BY `stock_invoice`',
             ['site_id' => $site->get('id')]
         );
@@ -716,7 +721,7 @@ if ($article) {
             </a>
         ';
         $removeLink = '
-            <a class="btn btn-primary" 
+            <a class="btn btn-primary"
                 href="/pages/adm_order?order_id='.$order->get('id').'&stock_remove='.$stock->get('id').'">
                     Retirer de la commande et remettre en vente
             </a>
@@ -726,7 +731,7 @@ if ($article) {
     $cancelReturnLink = null;
     if ($stock->isReturned()) {
         $cancelReturnLink = '
-            <a class="btn btn-primary" 
+            <a class="btn btn-primary"
                 href="'.$urlgenerator->generate(
             'stock_cancel_return',
             ['stockId' => $stock->get('id')]
@@ -736,7 +741,7 @@ if ($article) {
         ';
     }
 
-    $_ECHO .= '
+    $content .= '
 
         <div class="buttons">
             '.$removeLink.' '.$cancelReturnLink.'
@@ -822,7 +827,7 @@ if ($article) {
             return '<option value="'.$reward->get('id').'"'.($stock->get('reward_id') == $reward->get('id') ? ' selected' : null).'>['.price($reward->get('price'), 'EUR').'] '.$reward->get('content').'</option>';
         }, $rewards);
 
-        $_ECHO .= '
+        $content .= '
             <p>
                 <label for="campaign_id">Campagne liée :</label>
                 <select name="campaign_id" id="campaign_id" class="form-control">
@@ -840,13 +845,13 @@ if ($article) {
             <br>
         ';
     } else {
-        $_ECHO .= '
+        $content .= '
             <input type="hidden" name="campaign_id" value="'.$stock->get('campaign_id').'">
             <input type="hidden" name="reward_id" value="'.$stock->get('reward_id').'">
         ';
     }
 
-    $_ECHO .= '
+    $content .= '
 
                 <label for="stock_purchase_date" class="required">Date d\'achat :</label>
                 <input type="text" name="stock_purchase_date" id="stock_purchase_date" value="'.$s['stock_purchase_date'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime required" required />
@@ -857,7 +862,7 @@ if ($article) {
     ';
 
     if ($mode == 'insert') {
-        $_ECHO .= '
+        $content .= '
                 <div class="center">
                     <button type="submit" class="btn btn-primary">Ajouter au stock</button>
                     <input type="number" name="stock_num" min="1" max="99" maxlength="2" value="1" class="nano" /> exemplaire(s)
@@ -866,7 +871,7 @@ if ($article) {
             </fieldset>
         ';
     } else {
-        $_ECHO .= '
+        $content .= '
                 <div class="center">
                     <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                     <input type="hidden" name="stock_num" value="1" class="mini" />
@@ -876,7 +881,7 @@ if ($article) {
         ';
     }
 
-    $_ECHO .= '
+    $content .= '
         <fieldset>
             <legend>Statut de l\'exemplaire</legend>
             <label for="stock_cart_date">Mis en panier le :</label>
@@ -907,7 +912,7 @@ if ($article) {
     ';
 
     if ($mode == 'update') {
-        $_ECHO .= '
+        $content .= '
             <fieldset>
                 <legend>Base de donn&eacute;es</legend>
                 <label for="stock_insert" class="readonly">Fiche cr&eacute;&eacute;e le :</label>
@@ -920,7 +925,7 @@ if ($article) {
         ';
     }
 
-    $_ECHO .= '</form>';
+    $content .= '</form>';
 
     // Add to cart
     if ($mode == 'update' && $stock->isAvailable()) {
@@ -930,7 +935,7 @@ if ($article) {
             return '<option value="'.$cart->get('id').'">'.$cart->get('id').' — '.$cart->getUserInfo().'</option>';
         }, $carts);
 
-        $_ECHO .= '
+        $content .= '
         <form method="post" action="'.$urlgenerator->generate('stock_add_to_cart', ['stock_id' => $stock->get('id')]).'" class="fieldset form-inline">
             <fieldset>
                 <legend>Ajouter à un panier</legend>
@@ -946,11 +951,13 @@ if ($article) {
         ';
     }
 } elseif (isset($_GET['add']) or isset($_GET['id'])) {
-    $_ECHO .= '<p class="error">Erreur : article inconnu</p>';
+    $content .= '<p class="error">Erreur : article inconnu</p>';
 }
 
-$_ECHO .= '
+$content .= '
     <div class="admin">
         '.$div_admin.'
     </div>
 ';
+
+return new Response($content);

@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!function_exists('tva_rate')) {
     function tva_rate($tva, $date)
     {
@@ -107,7 +109,7 @@ $sql = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_url`, `art
 $sql->execute(['site_id' => $site->get('id')]);
 $num = $sql->rowCount();
 
-$_ECHO = '
+$content = '
 
     <a href="/pages/adm_sales" class="floatR">Future interface</a>
     <h1>
@@ -171,7 +173,7 @@ $_ECHO = '
 
 ';
 
-$_ECHO .= '<table class="liste orders">
+$content .= '<table class="liste orders">
     <thead>
     <tr>
     <th></th>
@@ -214,7 +216,7 @@ while ($l = $sql->fetch(PDO::FETCH_ASSOC)) {
                 if (!isset($TVA[tva_rate(3, $l["order_payment_date"])])) $TVA[tva_rate(3, $l["order_payment_date"])] = 0;
                 $TVA[tva_rate(3, $l["order_payment_date"])] += $c["shipping"] - round($c["shipping"] / $c["tva"]);
             } else $c["total_shipping"] = null;
-            $_ECHO .= '
+            $content .= '
                 ' . $c["total_shipping"] . '
                 <tr>
                     <td colspan="8" class="right">Total HT :</td>
@@ -231,13 +233,13 @@ while ($l = $sql->fetch(PDO::FETCH_ASSOC)) {
         $l["total_payments"] = $l["order_payment_cash"] + $l["order_payment_cheque"] + $l["order_payment_card"] - $l["order_payment_left"];
         if ($l["order_type"] == "web") $l["type"] = 'Commande VPC';
         else $l["type"] = 'Achat en magasin';
-        $_ECHO .= '
+        $content .= '
             <tr id="order_' . $l["order_id"] . '">
                 <td colspan="3">
                     <strong>' . $l["type"] . ' n&deg; <a href="/order/' . $l["order_url"] . '">' . $l["order_id"] . '</a></strong><br />';
-        if (!empty($l["customer_id"])) $_ECHO .= '<p>Client&nbsp;: <a href="/pages/adm_customer?id=' . $l["customer_id"] . '">' . trim($l['customer_first_name'] . ' ' . $l['customer_last_name']) . '</a></p>';
-        elseif (!empty($l["user_id"])) $_ECHO .= '<p><a href="/pages/adm_orders_shop?u=' . $l["user_id"] . '">' . user_name($l) . '</a></p>';
-        $_ECHO .= '
+        if (!empty($l["customer_id"])) $content .= '<p>Client&nbsp;: <a href="/pages/adm_customer?id=' . $l["customer_id"] . '">' . trim($l['customer_first_name'] . ' ' . $l['customer_last_name']) . '</a></p>';
+        elseif (!empty($l["user_id"])) $content .= '<p><a href="/pages/adm_orders_shop?u=' . $l["user_id"] . '">' . user_name($l) . '</a></p>';
+        $content .= '
                     ' . _date($l["order_payment_date"], 'L j F Y - H:i') . '<br />
                     <a href="/pages/adm_order?order_id=' . $l["order_id"] . '">modifier</a> | <a href="/pages/adm_order?order_id=' . $l["order_id"] . '&delete=1" data-confirm="Voulez-vous vraiment ANNULER cet achat et remettre les livres en vente ?">annuler</a>
                 </td>
@@ -288,7 +290,7 @@ while ($l = $sql->fetch(PDO::FETCH_ASSOC)) {
     if ($l["stock_condition"] == "Neuf") $TotalNeuf += $l["stock_selling_price"];
     else $TotalOccasion += $l["stock_selling_price"];
 
-    $_ECHO .= '
+    $content .= '
         <tr>
             <td></td>
             <td class="center"><a href="/pages/adm_stock?id=' . $l["stock_id"] . '">' . $l["stock_id"] . '</a></td>
@@ -324,7 +326,7 @@ if (!isset($c['totalHT'])) $c['totalHT'] = 0;
 if (!isset($c['total'])) $c['total'] = 0;
 if (!isset($c['shipping'])) $c['shipping'] = 0;
 
-$_ECHO .= '
+$content .= '
         ' . $c["total_shipping"] . '
         <tr>
             <td colspan="8" class="right">Total HT :</td>
@@ -349,7 +351,7 @@ foreach ($TVA as $rate => $amount) {
     $ti++;
 }
 
-$_ECHO .= '
+$content .= '
 
 <h3>R&eacute;capitulatif</h3>
 <table class="admin-table">
@@ -415,7 +417,7 @@ if ($_SITE["site_id"] == 5 && !empty($_GET["m"])) {
     if ($reste < 1000 && $reste > 0) $ppg = '<br /><img src="http://www.gifsmaniac.com/gifs-animes/personnages/pompom-girls/personnages-pompom-girls-21.gif" height="150">';
     if ($reste > 0) $reste = ' (encore ' . $reste . ' &euro;)';
     else $reste = null;
-    $_ECHO .= '
+    $content .= '
     <div class="center">
         <br />
         Objectif : <progress id="progressBar" value="' . $percent . '" max="100"></progress> ' . $percent . ' % ' . $reste . '
@@ -423,3 +425,5 @@ if ($_SITE["site_id"] == 5 && !empty($_GET["m"])) {
     </div>
 ';
 }
+
+return new Response($content);
