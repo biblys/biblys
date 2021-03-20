@@ -218,19 +218,4 @@ class UserTest extends PHPUnit\Framework\TestCase
             "it should return false"
         );
     }
-
-    /**
-     * @depends testCreate
-     */
-    public function testDelete(User $user)
-    {
-        global $_SQL;
-        $um = new UserManager();
-
-        $_SQL->query("DELETE FROM `Users` WHERE `Email` = '".$user->get('email')."' LIMIT 1");
-        $user = $um->get(array('user_id' => $user->get('id')));
-
-        $this->assertFalse($user);
-    }
-
 }
