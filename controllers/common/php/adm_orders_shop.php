@@ -27,18 +27,28 @@ $TVA = array();
 $_PAGE_TITLE = 'Ventes';
 
 $dates = null;
-$orders = $_SQL->prepare("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = :site_id AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
-$orders->execute(['site_id' => $site->get('id')]);
+$orders = EntityManager::prepareAndExecute(
+    "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`, MAX(`order_payment_date`)
+    FROM `orders`
+    WHERE
+        `orders`.`site_id` = :site_id AND
+        `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND
+        `order_cancel_date` IS null
+    GROUP BY `date`
+    ORDER BY `date` DESC",
+    ['site_id' => $site->get('id')]
+);
 while ($o = $orders->fetch(PDO::FETCH_ASSOC)) {
     $dates .= '<option value="?d=' . $o["date"] . '">' . _date($o["date"], "l j F") . '</option>';
 }
 
 $months = null;
 $mois = EntityManager::prepareAndExecute(
-    "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`,`order_payment_date` 
-    FROM `orders` 
-    WHERE `orders`.`site_id` = :site_id AND `order_cancel_date` IS null 
-    GROUP BY `date` ORDER BY `date` DESC",
+    "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, MAX(`order_payment_date`)
+    FROM `orders`
+    WHERE `orders`.`site_id` = :site_id AND `order_cancel_date` IS null
+    GROUP BY `date`
+    ORDER BY `date` DESC",
     ["site_id" => $site->get("id")]
 );
 while ($m = $mois->fetch(PDO::FETCH_ASSOC)) {
