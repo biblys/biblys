@@ -4,6 +4,10 @@ use Biblys\Axys\Client as AxysClient;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+class InvalidCredentialsException extends Exception
+{
+}
+
 class User extends Entity
 {
     protected $prefix = 'user';
@@ -454,34 +458,39 @@ class UserManager extends EntityManager
         $log = new Logger('name');
         $log->pushHandler(new StreamHandler(BIBLYS_PATH . '/logs/security.log', Logger::INFO));
 
-        // Try to get user from email
-        $user = $this->get(['user_email' => $login]);
-        if (!$user) {
-            // Still nothing : user unknown
-            $log->error('Login error: user unknown for login ' . $login);
-
+        try {
+            return $this->_authenticate($login, $password);
+        } catch (InvalidCredentialsException $exception) {
+            $log->error($exception->getMessage());
             return false;
         }
+    }
 
-        // If user still has md5 password, reencrypt & delete it
-        if ($user->has('MotDePasse') && md5($password) === $user->get('MotDePasse')) {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            $user->set('user_password', $hash);
-            $user->set('MotDePasse', null);
-            $this->update($user);
+    /**
+     * Throw if login and password does not match a password
+     *
+     * @param string $login    can be username or e-mail
+     * @param string $password raw password
+     *
+     * @return User
+     *
+     * @throws InvalidCredentialsException
+     */
+    private function _authenticate($userNameOrEmail, $password): User
+    {
+        $userByEmail = $this->get(["user_email" => $userNameOrEmail]);
+        $userByUsername = $this->get(["user_screen_name" => $userNameOrEmail]);
+        $user = $userByEmail ? $userByEmail : $userByUsername;
 
-            return $user;
+        if (!$user) {
+            throw new InvalidCredentialsException("User unknown for login $userNameOrEmail");
         }
 
-        // Else, if password with high encryption verifies
-        if (password_verify($password, $user->get('password'))) {
-            return $user;
+        if (!password_verify($password, $user->get("password"))) {
+            throw new InvalidCredentialsException("Wrong password for login $userNameOrEmail");
         }
 
-        // Wrong password
-        $log->error('Login error: Wrong password for login ' . $login);
-
-        return false;
+        return $user;
     }
 
     /**
