@@ -145,6 +145,13 @@ article_check_isbn:
   path: /admin/articles/check-isbn
   controller: AppBundle\Controller\ArticleController::checkIsbn
 
+article_update_publisher_stock:
+  path: /admin/articles/{articleId}/update-publisher-stock
+  methods: POST
+  controller: AppBundle\Controller\ArticleController::updatePublisherStock
+  requirements:
+    articleId: \d+
+
 # Awards
 
 awards_index:

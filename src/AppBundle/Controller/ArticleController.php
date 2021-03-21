@@ -542,4 +542,29 @@ class ArticleController extends Controller
 
         return new JsonResponse(['isbn' => $ean]);
     }
+
+    /**
+     * Update article's publisher stock property
+     *
+     * @return Response
+     */
+    public function updatePublisherStock(Request $request, int $articleId)
+    {
+        $am = new \ArticleManager();
+
+        $publisherStock = (int) $request->request->get("article_publisher_stock");
+        if (!is_int($publisherStock)) {
+            throw new BadRequestHttpException("article_publisher_stock $publisherStock is not an integer.");
+        }
+
+        $article = $am->getById($articleId);
+        if (!$article) {
+            throw new BadRequestHttpException("Impossible de trouver l'article $articleId.");
+        }
+
+        $article->set("article_publisher_stock", $publisherStock);
+        $am->update($article);
+
+        return new JsonResponse();
+    }
 }
