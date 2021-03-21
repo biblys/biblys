@@ -58,10 +58,6 @@ class Entity implements ArrayAccess, Iterator, Countable
         } elseif (isset($this->_attributes[$this->prefix . '_' . $field])) {
             return $this->_attributes[$this->prefix . '_' . $field];
         }
-        // elseif (DEV)
-        // {
-        //     trigger_error('Undefined property "'.$field.'" for object '.$this->prefix, E_USER_NOTICE);
-        // }
     }
 
     public function __get($field)
@@ -218,28 +214,28 @@ class EntityManager
     /**
      * Create unique slug.
      *
-     * @param type $x
+     * @param Entity $entity
      *
      * @return string
      */
-    public function makeslug($x)
+    public function makeslug($entity)
     {
         if ($this->object == 'Collection') {
-            $slug = collection_url($x->get('publisher')->get('name'), $x->get('name'));
-        } elseif ($x->has('title')) {
-            $slug = makeurl($x->get('title'));
-        } elseif ($x->has('name')) {
-            $slug = makeurl($x->get('name'));
+            $slug = collection_url($entity->get('publisher')->get('name'), $entity->get('name'));
+        } elseif ($entity->has('title')) {
+            $slug = makeurl($entity->get('title'));
+        } elseif ($entity->has('name')) {
+            $slug = makeurl($entity->get('name'));
         } else {
-            $slug = $this->prefix.'_'.$x->get('id');
+            $slug = $this->prefix . '_' . $entity->get('id');
         }
 
         // Check if slug is unique
         if ($u = $this->get(array($this->prefix.'_url' => $slug))) {
             // If slug exists but for another element
-            if ($u->get('id') != $x->get('id')) {
+            if ($u->get('id') != $entity->get('id')) {
                 // Append _id at the end
-                $slug .= '_'.$x->get('id');
+                $slug .= '_' . $entity->get('id');
             }
         }
 
@@ -295,8 +291,8 @@ class EntityManager
         $qu = self::prepareAndExecute($query, $params);
 
         $entities = array();
-        while ($x = $qu->fetch(PDO::FETCH_ASSOC)) {
-            $entities[] = new $this->object($x, $withJoins);
+        while ($entity = $qu->fetch(PDO::FETCH_ASSOC)) {
+            $entities[] = new $this->object($entity, $withJoins);
         }
 
         return $entities;
@@ -506,7 +502,7 @@ class EntityManager
     /**
      * Persist updated entity in database.
      *
-     * @param Entity $x      the entity to update
+     * @param Entity $entity the entity to update
      * @param string $reason the reason it has been updated (change log)
      *
      * @return Entity the updated entity
@@ -619,16 +615,16 @@ class EntityManager
      *
      * @param object $e Entity to delete
      */
-    public function delete($x, $reason = null)
+    public function delete($entity, $reason = null)
     {
         // Check if entity can be deleted
-        $this->beforeDelete($x);
+        $this->beforeDelete($entity);
 
         try {
             if ($this->delete == 'soft') {
-                $query = 'UPDATE `'.$this->table.'` SET `'.$this->prefix.'_deleted` = NOW() WHERE `'.$this->idField.'` = '.$x->get('id');
+                $query = 'UPDATE `' . $this->table . '` SET `' . $this->prefix . '_deleted` = NOW() WHERE `' . $this->idField . '` = ' . $entity->get('id');
             } elseif ($this->delete == 'hard') {
-                $query = 'DELETE FROM `'.$this->table.'` WHERE `'.$this->idField.'` = '.$x->get('id');
+                $query = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->idField . '` = ' . $entity->get('id');
             }
 
             $sql = $this->db->exec($query);
