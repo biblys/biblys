@@ -194,6 +194,7 @@ class EntityManager
     protected $entities = array();
     protected $delete = 'soft';
     protected $siteAgnostic = true;
+    protected $_entityProperties = [];
 
     public function __construct()
     {
@@ -461,29 +462,27 @@ class EntityManager
         // Validate
         $this->validate($entity);
 
-        $tableColumnsQuery = EntityManager::prepareAndExecute(
-            "SHOW COLUMNS FROM `$this->table`",
-            []
-        );
-        $tableColumnsResult = $tableColumnsQuery->fetchAll();
-        $tableColumns = array_map(function ($column) {
-            return $column["Field"];
-        }, $tableColumnsResult);
-
         // Default values
         $query = null;
         $values = null;
         $i = 0;
         $params = array();
-        foreach ($entity as $property => $attribute) {
+        foreach ($entity as $property => $value) {
+            if (is_object($value)) {
+                continue;
+            }
 
-            if (!in_array($property, $tableColumns)) {
+            if (!in_array($property, $this->_getEntityProperties())) {
+                trigger_error(
+                    "Trying to create $this->object with invalid property $property",
+                    E_USER_DEPRECATED
+                );
                 continue;
             }
 
             $query .= ', `' . $property . '`';
             $values .= ', :key'.$i;
-            $params['key' . $i] = $attribute;
+            $params['key' . $i] = $value;
             ++$i;
         }
 
@@ -512,13 +511,13 @@ class EntityManager
      *
      * @return Entity the updated entity
      */
-    public function update($x, $reason = null)
+    public function update($entity, $reason = null)
     {
         // Preprocess
-        $x = $this->preprocess($x);
+        $entity = $this->preprocess($entity);
 
         // Validate
-        $this->validateBeforeUpdate($x);
+        $this->validateBeforeUpdate($entity);
 
         $fields = array(); // Updated fields array
         $query = array(); // SQL query
@@ -526,32 +525,45 @@ class EntityManager
         $create_redirection = 0;
 
         // Get actual entity for comparison
-        $o = $this->getById($x->get('id'));
+        $o = $this->getById($entity->get('id'));
         if (!$o) {
-            throw new Exception($this->object.' #'.$x->get('id').' not found');
+            throw new Exception($this->object . ' #' . $entity->get('id') . ' not found');
         }
 
         // Build update query from modified fields
         $i = 0;
-        foreach ($x as $key => $val) {
-            if (is_object($val)) {
+        $updatedEntity = new $this->object([]);
+        foreach ($entity as $property => $value) {
+            if (is_object($value)) {
                 continue;
             }
-            if ($o->get($key) != $val) { // If field has beed modified
-                $fields[] = $key;
 
-                if ($key == $this->prefix.'_url') {
+            if (!in_array($property, $this->_getEntityProperties())) {
+                trigger_error(
+                    "Trying to update $this->object with invalid property $property",
+                    E_USER_DEPRECATED
+                );
+                continue;
+            }
+
+            if ($o->get($property) != $value) { // If field has beed modified
+                $fields[] = $property;
+
+                if (
+                    $property == $this->prefix . '_url'
+                ) {
                     $create_redirection = 1; // Create redirection if url has changed
                 }
 
-                if (empty($val) && $val !== 0) {
-                    $query[] = '`'.$key.'` = NULL';
+                if (empty($value) && $value !== 0) {
+                    $query[] = '`' . $property . '` = NULL';
                 } else {
-                    $query[] = '`'.$key.'` = :field'.$i;
-                    $params['field'.$i] = $val;
+                    $query[] = '`' . $property . '` = :field' . $i;
+                    $params['field' . $i] = $value;
                 }
             }
             ++$i;
+            $updatedEntity->set($property, $value);
         }
 
         // Update database
@@ -561,7 +573,7 @@ class EntityManager
             }
 
             try {
-                $query = 'UPDATE `'.$this->table.'` SET '.implode(', ', $query).', `'.$this->prefix.'_updated` = NOW() WHERE `'.$this->idField.'` = '.$x->get('id');
+                $query = 'UPDATE `' . $this->table . '` SET ' . implode(', ', $query) . ', `' . $this->prefix . '_updated` = NOW() WHERE `' . $this->idField . '` = ' . $entity->get('id');
                 $this->prepareAndExecute($query, $params);
             } catch (PDOException $e) {
                 throw new Exception($e.' <br> Query: '.$query.' <br> Params: '.var_export($params, true));
@@ -569,11 +581,11 @@ class EntityManager
 
             // Create redirection if needed
             if ($create_redirection && $this->prefix == 'event') {
-                $this->db->exec("REPLACE INTO `redirections`(`redirection_old`, `redirection_new`, `redirection_date`) VALUES('/evenement/".$o->get('url')."', '/evenement/".$x->get('url')."', NOW())");
+                $this->db->exec("REPLACE INTO `redirections`(`redirection_old`, `redirection_new`, `redirection_date`) VALUES('/evenement/" . $o->get('url') . "', '/evenement/" . $entity->get('url') . "', NOW())");
             }
         }
 
-        return $x;
+        return $updatedEntity;
     }
 
     /**
@@ -755,5 +767,21 @@ class EntityManager
         }
 
         return array('where' => $q_where, 'having' => $q_having, 'params' => $params);
+    }
+
+    private function _getEntityProperties(): array
+    {
+        if (!$this->_entityProperties) {
+            $tableColumnsQuery = EntityManager::prepareAndExecute(
+                "SHOW COLUMNS FROM `$this->table`",
+                []
+            );
+            $tableColumnsResult = $tableColumnsQuery->fetchAll();
+            $this->_entityProperties = array_map(function ($column) {
+                return $column["Field"];
+            }, $tableColumnsResult);
+        }
+
+        return $this->_entityProperties;
     }
 }

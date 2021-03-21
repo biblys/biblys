@@ -32,4 +32,46 @@ class EntityTest extends PHPUnit\Framework\TestCase
             $query
         );
     }
+
+    public function testCreateEntityWithInvalidProperty()
+    {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage(
+            "Trying to create Order with invalid property cgv_checkbox"
+        );
+
+        // given
+        $om = new OrderManager();
+
+        // when
+        $order = $om->create(["cgv_checkbox" => 1]);
+
+        // then
+        $this->assertTrue(
+            !$order->has("cgv_checkbox"),
+            "it should create the entity without the invalid property"
+        );
+    }
+
+    public function testUpdateEntityWithInvalidProperty()
+    {
+        $this->expectException("Exception");
+        $this->expectExceptionMessage(
+            "Trying to update Order with invalid property newsletter"
+        );
+
+        // given
+        $om = new OrderManager();
+
+        // when
+        $order = $om->create([]);
+        $order->set("newsletter", 1);
+        $order = $om->update($order);
+
+        // then
+        $this->assertTrue(
+            !$order->has("newsletter"),
+            "it should create the entity without the invalid property"
+        );
+    }
 }

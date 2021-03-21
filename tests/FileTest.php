@@ -62,18 +62,18 @@ class FileTest extends PHPUnit\Framework\TestCase
      */
     public function testMarkAsUpdated()
     {
+        $am = new ArticleManager();
         $sm = new StockManager();
         $fm = new FileManager();
 
-        $article_id = 2345;
+        $article = $am->create(["article_title" => "Downloadable article"]);
         $soldCopy = $sm->create([
-            "article_id" => $article_id,
+            "article_id" => $article->get("id"),
             "stock_selling_date" => date("Y-m-d H:i:s")
         ]);
-        $availableCopy = $sm->create([
-            "article_id" => $article_id
+        $availableCopy = $sm->create(["article_id" => $article->get("id")
         ]);
-        $file = $fm->create(["article_id" => $article_id]);
+        $file = $fm->create(["article_id" => $article->get("id")]);
 
         $file->markAsUpdated();
 

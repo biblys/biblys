@@ -128,7 +128,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $om = new OrderManager();
         $am = new ArticleManager();
         $sm = new StockManager();
-        $order->set('country', $cm->getById(25));
+        $order->set('country_id', 65);
         $om->update($order);
         $book = $am->create(array('type_id' => 1, 'article_price' => 1000));
         $book = $sm->create(array('article_id' => $book->get('id'), 'stock_selling_price' => $book->get('price')));
