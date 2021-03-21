@@ -29,7 +29,7 @@ function biblys_exception($exception)
     );
 }
 
-function biblys_error($level, $message, $file, $line, $trace, Throwable $exception = null)
+function biblys_error($level, $message, $file, $line, $trace = null, Throwable $exception = null)
 {
     global $request, $config, $site;
 
