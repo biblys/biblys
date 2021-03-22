@@ -753,9 +753,18 @@ function currency($amount, $cents = false)
     return number_format($amount, 2, ',', '&#8239;') . '&nbsp;&euro;';
 }
 
-function redirect($url, $params = null, $text = null, $status = 302)
+/**
+ * @deprecated Using redirect() is deprecated. Use RedirectResponse instead.
+ */
+function redirect($url, $params = null, $text = null, $status = 302): void
 {
     global $response;
+
+    trigger_deprecation(
+        "biblys/biblys",
+        "2.52.0",
+        "Using redirect() is deprecated. Use RedirectResponse instead."
+    );
 
     if (is_array($params)) {
         $url .= '?' . http_build_query($params);
@@ -763,6 +772,7 @@ function redirect($url, $params = null, $text = null, $status = 302)
 
     $response = new RedirectResponse($url, $status);
     $response->send();
+    die();
 }
 
 function root($x)
