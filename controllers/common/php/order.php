@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Exception\AuthException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 $_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
@@ -389,5 +390,8 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
             </p>
         ';
     }
-} elseif (!auth()) include('nologin.php');
-else $_ECHO .= '<p class="error">Vous n\'avez pas le droit d\'acc&eacute;der &agrave; cette page.</p>';
+} elseif (!auth()) {
+    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
+} else {
+    $_ECHO .= '<p class="error">Vous n\'avez pas le droit d\'accéder à cette page.</p>';
+}
