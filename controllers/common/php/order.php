@@ -1,6 +1,7 @@
 <?php
 
 use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 $_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
@@ -17,6 +18,7 @@ if (!$order) {
 }
 
 $o = $order;
+$content = '';
 
 if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth("admin")) {
 
@@ -24,10 +26,10 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
 
     $_PAGE_TITLE = 'Commande n° ' . $o["order_id"];
 
-    $_ECHO .= '<h2>Commande n&deg; ' . $o["order_id"] . '</h2>';
+    $content .= '<h2>Commande n&deg; ' . $o["order_id"] . '</h2>';
 
     if (auth('admin')) {
-        $_ECHO .= '
+        $content .= '
             <div class="admin">
                 <p>Commande n&deg; ' . $o["order_id"] . '</p>
                 <p><a href="/pages/adm_order?order_id=' . $o["order_id"] . '">modifier</a></p>
@@ -37,30 +39,30 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
     }
 
     // Etat de la commande
-    $_ECHO .= '
+    $content .= '
         <div class="floatR">
             <h4 class="text-right">&Eacute;tat de la commande</h4>
             <p class="right">Valid&eacute;e le ' . _date($o["order_insert"], 'j f Y') . '</p>
     ';
 
     if ($o["order_followup_date"]) {
-        $_ECHO .= '<p class="right">Relancée le ' . _date($o["order_followup_date"], 'j f Y') . '</p>';
+        $content .= '<p class="right">Relancée le ' . _date($o["order_followup_date"], 'j f Y') . '</p>';
     }
     if ($o["order_payment_date"]) {
-        $_ECHO .= '<p class="right">Payée le ' . _date($o["order_payment_date"], 'j f Y') . '</p>';
+        $content .= '<p class="right">Payée le ' . _date($o["order_payment_date"], 'j f Y') . '</p>';
     }
     if ($order->has('shipping_date')) {
         if ($order->get('shipping_mode') == 'magasin') {
-            $_ECHO .= '<p class="right">Mise à dispo. en magasin le ' . _date($o["order_shipping_date"], 'j f Y') . '</p>';
+            $content .= '<p class="right">Mise à dispo. en magasin le ' . _date($o["order_shipping_date"], 'j f Y') . '</p>';
         } else {
-            $_ECHO .= '<p class="right">Expédiée le ' . _date($o["order_shipping_date"], 'j f Y') . '</p>';
+            $content .= '<p class="right">Expédiée le ' . _date($o["order_shipping_date"], 'j f Y') . '</p>';
         }
     }
     if ($o["order_cancel_date"]) {
-        $_ECHO .= '<p class="right">Annul&eacute;e le ' . _date($o["order_cancel_date"], 'j f Y') . '</p>';
+        $content .= '<p class="right">Annul&eacute;e le ' . _date($o["order_cancel_date"], 'j f Y') . '</p>';
     }
 
-    $_ECHO .= '
+    $content .= '
         </div>
     ';
 
@@ -71,7 +73,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
 
     // Coordonn&eacute;es clients
     if (!empty($o["order_address2"])) $o["order_address2"] = $o["order_address2"] . '<br />';
-    $_ECHO .= '
+    $content .= '
         <h4>Coordonn&eacute;es</h4>
         <p>
             ' . $o["order_title"] . ' ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
@@ -91,28 +93,28 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
             'site_id' => $site->get('id')
         ]);
         $s = $stock->fetch(PDO::FETCH_ASSOC);
-        $_ECHO .= '<p>Ref. Client : ' . $o["user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
+        $content .= '<p>Ref. Client : ' . $o["user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
     }
 
     if ($order->has('comment') && $_V->isAdmin()) {
-        $_ECHO .= '
+        $content .= '
         <h4>Commentaire du client</h4>
         <p>' . nl2br($order->get('comment')) . '</p>
         ';
     }
 
-    $_ECHO .= '<br /><div class="center">';
+    $content .= '<br /><div class="center">';
 
     // Creation de la commande
     if (isset($_GET["created"])) {
-        $_ECHO .= '<br /><p class="success">Votre commande a bien &eacute;t&eacute; enregistr&eacute;e sous le num&eacute;ro ' . $o["order_id"] . '.</p><p class="center">Vous pouvez la r&eacute;gler en utilisant le bouton ci-dessous.</p><br />';
+        $content .= '<br /><p class="success">Votre commande a bien &eacute;t&eacute; enregistr&eacute;e sous le num&eacute;ro ' . $o["order_id"] . '.</p><p class="center">Vous pouvez la r&eacute;gler en utilisant le bouton ci-dessous.</p><br />';
     }
 
     // MAJ de la commande
-    if (isset($_GET["updated"])) $_ECHO .= '<p class="success">La commande a &eacute;t&eacute; mise &agrave; jour.</p><br />';
+    if (isset($_GET["updated"])) $content .= '<p class="success">La commande a &eacute;t&eacute; mise &agrave; jour.</p><br />';
 
     // Paiement de la commande
-    if (isset($_GET["payed"])) $_ECHO .= '<p class="success">La commande a &eacute;t&eacute; pay&eacute;e.</p><br />';
+    if (isset($_GET["payed"])) $content .= '<p class="success">La commande a &eacute;t&eacute; pay&eacute;e.</p><br />';
 
     // Confirmation
     if (isset($_GET["confirm"])) {
@@ -120,11 +122,11 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
         $om->update($order);
         redirect('/order/' . $o["order_url"] . '?confirmed=1');
     } elseif (isset($_GET["confirmed"])) {
-        $_ECHO .= '<p class="success">Merci d\'avoir confirm&eacute; la réception de votre commande.</p><br />';
+        $content .= '<p class="success">Merci d\'avoir confirm&eacute; la réception de votre commande.</p><br />';
     }
 
     // Signaler un incident
-    if (isset($_GET["flagged"])) $_ECHO .= '<p class="success">L\'incident a bien &eacute;t&eacute; enregistr&eacute;.</p><br />';
+    if (isset($_GET["flagged"])) $content .= '<p class="success">L\'incident a bien &eacute;t&eacute; enregistr&eacute;.</p><br />';
 
     // Paiement
     if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa fa-money"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
@@ -133,7 +135,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
     // Suivi et confirmation
     if ($o["order_shipping_date"]) {
         if ($o["order_track_number"]) {
-            $_ECHO .= '<p class="center">Num&eacute;ro de suivi : <a href="http://www.coliposte.net/particulier/suivi_particulier.jsp?colispart=' . $o["order_track_number"] . '">' . $o["order_track_number"] . '</a></p><br />';
+            $content .= '<p class="center">Num&eacute;ro de suivi : <a href="http://www.coliposte.net/particulier/suivi_particulier.jsp?colispart=' . $o["order_track_number"] . '">' . $o["order_track_number"] . '</a></p><br />';
         }
         if (!$o["order_confirmation_date"]) {
             $buttons .= '
@@ -171,7 +173,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
                 redirect('/order/' . $o["order_url"] . '?flagged=1');
             }
 
-            $_ECHO .= '
+            $content .= '
                 <form id="incident" method="post" class="hidden" data-title="Signaler un incident">
                     <fieldset>
                         <p>Nous voulons que vous soyez totalement satisfait' . userE() . ' de votre commande. En cas de probl&egrave;me, vous pouvez la renvoyer int&eacute;gralement ou en partie &agrave; l\'adresse ci-dessous sous 7 jours. Le montant des livres retourn&eacute;s, ainsi que les frais de retour, vous seront rembours&eacute;s int&eacute;gralement.</p>
@@ -186,9 +188,9 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
         }
     }
 
-    $_ECHO .= $buttons;
+    $content .= $buttons;
 
-    $_ECHO .= '<br /></div>';
+    $content .= '<br /></div>';
 
     $copies = $order->getCopies();
 
@@ -277,7 +279,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
         $ArticlesCount++;
     }
 
-    $_ECHO .= '
+    $content .= '
         <br />
         <table class="table cart list order">
             <thead>
@@ -298,7 +300,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
     ';
 
     if (isset($o["order_weight"]) && $_SITE["site_shipping_fee"]) {
-        $_ECHO .= '
+        $content .= '
                     <tr>
                         <th colspan="3" class="right">Poids :</th>
                         <th class="right">' . round($o["order_weight"] / 1000, 2) . '&nbsp;kg</th>
@@ -309,7 +311,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
                     </tr>
         ';
     } elseif ($o["order_shipping"]) {
-        $_ECHO .= '
+        $content .= '
                 <tr>
                     <th colspan="3" class="right">Frais de port :</th>
                     <th class="right">' . currency($o["order_shipping"] / 100) . '</th>
@@ -318,7 +320,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
     }
 
     if ($total_tva) {
-        $_ECHO .= '
+        $content .= '
                     <tr>
                         <th colspan="3" class="right">Total H.T. :</th>
                         <th class="right">' . currency($total_ht / 100) . '</th>
@@ -330,7 +332,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
         ';
     }
 
-    $_ECHO .= '
+    $content .= '
                 <tr>
                     <th colspan="3" class="right">Total T.T.C.&nbsp;:</th>
                     <th class="right">' . currency(($o["order_amount"] + $o["order_shipping"]) / 100) . '</th>
@@ -345,13 +347,13 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
         $groups = StockManager::groupByArticles($order->getCopies());
         foreach ($groups as $group) {
             $article = $group["article"];
-            $_ECHO .= "
+            $content .= "
                 <script>
                     _paq.push(['addEcommerceItem',
                         // (required) SKU: Product unique identifier
                         " . ($article->has("ean") ?
                 $article->get("ean") :
-                $article->get("id")) . ", 
+                $article->get("id")) . ",
                         // (optional) Product name
                         '" . addSlashes($article->get("title")) . "',
                         // (optional) Product category.
@@ -365,7 +367,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
             ";
         }
 
-        $_ECHO .= "
+        $content .= "
             <script>
                 _paq.push(['trackEcommerceOrder',
                     " . $order->get("id") . ", // (required) Unique Order ID
@@ -381,7 +383,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
     }
 
     if ($_V->isAdmin()) {
-        $_ECHO .= '
+        $content .= '
             <h3 class="text-center">Origine de la commande</h3>
             <p class="text-center">
                 Source : <a href="' . $urlgenerator->generate('orders_conversions') . '?source=' . $order->get('utm_source') . '">' . $order->get('utm_source') . '</a><br>
@@ -393,5 +395,7 @@ if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth(
 } elseif (!auth()) {
     throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
 } else {
-    $_ECHO .= '<p class="error">Vous n\'avez pas le droit d\'accéder à cette page.</p>';
+    $content .= '<p class="error">Vous n\'avez pas le droit d\'accéder à cette page.</p>';
 }
+
+return new Response($content);
