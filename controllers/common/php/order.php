@@ -20,7 +20,21 @@ if (!$order) {
 $o = $order;
 $content = '';
 
-if (empty($o["user_id"]) || auth() && $o["user_id"] == $_LOG["user_id"] || auth("admin")) {
+function _isAnonymousOrder(Order $order): bool
+{
+    return !$order->has("user_id");
+}
+
+function _orderBelongsToVisitor(Order $order, Visitor $visitor): bool
+{
+    if (!$visitor->isLogged()) {
+        return false;
+    }
+
+    return $order->get("user_id") === $visitor->get("user_id");
+}
+
+if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isAdmin()) {
 
     $buttons = NULL;
 
