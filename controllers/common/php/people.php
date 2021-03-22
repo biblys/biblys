@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $pm = new PeopleManager();
@@ -11,7 +12,7 @@ if (!$people) {
 
 $use_old_controller = $site->getOpt("use_old_people_controller");
 if (!$use_old_controller) {
-    redirect("/p/$url/");
+    return new RedirectResponse("/p/$url/", 301);
 }
 
 

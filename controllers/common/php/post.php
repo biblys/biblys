@@ -21,7 +21,8 @@ if (!$post) {
     // redirect to to new post controller immediately
     $use_old_controller = $site->getOpt('use_old_post_controller');
     if (!$use_old_controller) {
-        redirect($urlgenerator->generate('post_show', ['slug' => $post->get('url')]), null, null, 301);
+        $newUrl = $urlgenerator->generate('post_show', ['slug' => $post->get('url')]);
+        return new \Symfony\Component\HttpFoundation\RedirectResponse($newUrl);
     }
 
     if ($post->get('status') == 0) {

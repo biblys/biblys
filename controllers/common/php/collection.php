@@ -8,9 +8,8 @@ $collection->execute(['url' => $request->query->get('url')]);
     if ($c = $collection->fetch(PDO::FETCH_ASSOC)) {
         $use_old_controller = $site->getOpt('use_old_collection_controller');
         if (!$use_old_controller) {
-            redirect('/collection/'.$c['collection_url']);
+            return new \Symfony\Component\HttpFoundation\RedirectResponse('/collection/'.$c['collection_url'], 301);
         }
-
 
         $_PAGE_TITLE = 'Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;';
 
