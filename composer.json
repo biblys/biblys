@@ -26,7 +26,7 @@
     "symfony/var-dumper": "~5.1",
     "symfony/http-kernel": "^4.4",
     "swiftmailer/swiftmailer": "@stable",
-    "symfony/yaml": "^4.3",
+    "symfony/yaml": "^5.2",
     "symfony/config": "^4.3",
     "monolog/monolog": "^2.0",
     "google/recaptcha": "^1.1",
