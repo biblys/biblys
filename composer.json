@@ -50,7 +50,7 @@
     "symfony/webpack-encore-bundle": "^1.7",
     "jasonlewis/resource-watcher": "^1.2",
     "stripe/stripe-php": "^7.39",
-    "egulias/email-validator": "2.1.25",
+    "egulias/email-validator": "3.1.0",
     "symfony/mime": "^5.2",
     "rollbar/rollbar": "~1.5"
   },
