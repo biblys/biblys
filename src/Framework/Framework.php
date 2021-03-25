@@ -3,8 +3,11 @@
 namespace Framework;
 
 use Composer\Console\Application;
+use Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,22 +26,32 @@ class Framework
 {
     protected $matcher;
     protected $resolver;
+    private $request;
+    private $routes;
+    private $context;
+    private $kernel;
 
-    public function __construct(Request $request)
+    public function __construct($request)
     {
         $this->request = $request;
-        $this->routes = require '../src/routes.php';
+        $this->routes = require BIBLYS_PATH.'src/routes.php';
         $this->context = new RequestContext();
         $this->context->fromRequest($request);
     }
 
-    public function getUrlGenerator()
+    public function getUrlGenerator(): UrlGenerator
     {
         return new UrlGenerator($this->routes, $this->context);
     }
 
-    public function handle()
+    public function handle(): Response
     {
+
+        $axysUid = $this->request->query->get("UID");
+        if ($axysUid) {
+            return $this->_createAfterLoginRedirectResponse($this->request, $axysUid);
+        }
+
         $matcher = new UrlMatcher($this->routes, $this->context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
@@ -80,7 +93,7 @@ class Framework
         // Set composer home
         $composer_home = $config->get('composer_home');
         if (!$composer_home) {
-            throw new \Exception("L'option `composer_home` doit être définie dans le fichier de configuration pour utiliser composer.");
+            throw new Exception("L'option `composer_home` doit être définie dans le fichier de configuration pour utiliser composer.");
         }
         putenv('COMPOSER_HOME='.$composer_home);
 
@@ -93,8 +106,29 @@ class Framework
         $code = $application->run(new ArrayInput(['command' => $command]));
 
         if ($code !== 0) {
-            throw new \Exception('Une erreur est survenue lors de la mise à jour automatique
+            throw new Exception('Une erreur est survenue lors de la mise à jour automatique
                     des composants.');
         }
+    }
+
+    /**s
+     * @param Request $request
+     * @param string $axysUid
+     * @return RedirectResponse
+     */
+    static private function _createAfterLoginRedirectResponse(
+        Request $request,
+        string $axysUid
+    ): RedirectResponse
+    {
+        $url = $request->getRequestUri();
+        $url = preg_replace('/([?&]UID=[^&]*)/', '', $url);
+        $cookie = Cookie::create("user_uid")
+            ->withValue($axysUid)
+            ->withExpires(0)
+            ->withSecure(true);
+        $response = new RedirectResponse($url, 302);
+        $response->headers->setCookie($cookie);
+        return $response;
     }
 }
