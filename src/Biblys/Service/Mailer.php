@@ -6,6 +6,7 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
+use Exception;
 use InvalidArgumentException;
 use Swift_Mailer;
 use Swift_Message;
@@ -60,11 +61,15 @@ class Mailer
      * @param array $options
      * @param array $headers
      * @return bool [bool]          true if mail was sent
+     * @throws Exception
      */
     public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = []): bool
     {
 
-        $from = $from ?? $this->from;
+        $from = count($from) > 0 ? $from : $this->from;
+        if (count($from) === 0) {
+            throw new Exception("Cannot send mail without sender");
+        }
 
         $this->validateEmail($to);
         foreach ($from as $email => $name) {
