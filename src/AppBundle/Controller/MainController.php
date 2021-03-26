@@ -128,7 +128,7 @@ class MainController extends Controller
                 // Pagination
                 $page = (int) $request->query->get('p', 0);
                 $totalCount = $am->countAll();
-                $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+                $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
                 $articles = $am->getAll(['article_pubdate' => '<= '.date('Y-m-d H:i:s')], [
                     'order' => 'article_pubdate',

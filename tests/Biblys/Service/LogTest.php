@@ -5,7 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 use Monolog\Logger;
 
 require_once "tests/setUp.php";

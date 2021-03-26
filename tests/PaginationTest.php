@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Utils\Pagination;
+use Biblys\Service\Pagination;
 
 class PaginationTest extends PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ class PaginationTest extends PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf('Biblys\Utils\Pagination', $this->pagination);
+        $this->assertInstanceOf('Biblys\Service\Pagination', $this->pagination);
     }
 
     public function testGetCurrent()

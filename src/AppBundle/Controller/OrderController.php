@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -275,7 +275,7 @@ class OrderController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $om->count($filters);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount, 100);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount, 100);
 
         $orders = $om->getAll($filters, [
             'order' => 'order_payment_date',

@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 
 /**
  * SwiftMailer wrapper

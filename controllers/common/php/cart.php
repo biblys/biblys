@@ -1,7 +1,7 @@
 <?php
 
 use Biblys\Axys\Client;
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;

@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;

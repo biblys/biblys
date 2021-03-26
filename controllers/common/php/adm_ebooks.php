@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $_JS_CALLS[] = "/common/js/sorttable.js";

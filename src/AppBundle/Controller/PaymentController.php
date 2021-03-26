@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

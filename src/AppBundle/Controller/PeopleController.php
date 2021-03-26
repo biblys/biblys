@@ -55,7 +55,7 @@ class PeopleController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromPeople($people);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAllFromPeople($people, [
             'order' => 'article_pubdate',

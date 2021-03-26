@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 
 $pm = new PostManager();
 

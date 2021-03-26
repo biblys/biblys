@@ -37,7 +37,7 @@ class TagController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromTag($tag);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $am = $this->entityManager("Article");
         $articles = $am->getAllFromTag($tag, [

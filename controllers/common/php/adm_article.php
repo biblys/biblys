@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Response;
-use Biblys\Utils\Browser;
+use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
 
 $am = new ArticleManager();

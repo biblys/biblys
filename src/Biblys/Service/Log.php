@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblys\Utils;
+namespace Biblys\Service;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

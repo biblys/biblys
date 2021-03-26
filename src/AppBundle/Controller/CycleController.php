@@ -33,7 +33,7 @@ class CycleController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['cycle_id' => $cycle->get('id')]);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAll(['cycle_id' => $cycle->get('id')], [
             'order' => 'article_tome',

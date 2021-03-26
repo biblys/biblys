@@ -14,7 +14,7 @@ if (file_exists('../inc/functions.php')) {
 $response = new JsonResponse();
 
 // Config
-$config = new Biblys\Utils\Config();
+$config = new Biblys\Service\Config();
 $axysConfig = $config->get("axys");
 $axys = new AxysClient($axysConfig);
 

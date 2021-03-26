@@ -31,7 +31,7 @@ class PostController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalPostCount = $pm->count($queryParams);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalPostCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalPostCount);
 
         $posts = $pm->getAll($queryParams, [
             "order" => "post_date",

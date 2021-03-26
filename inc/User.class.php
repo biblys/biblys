@@ -1,8 +1,8 @@
 <?php
 
 use Biblys\Axys\Client as AxysClient;
-use Biblys\Utils\Config;
-use Biblys\Utils\Log;
+use Biblys\Service\Config;
+use Biblys\Service\Log;
 
 class InvalidCredentialsException extends Exception
 {

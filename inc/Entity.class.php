@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 
 class Entity implements ArrayAccess, Iterator, Countable
 {
@@ -300,7 +300,7 @@ class EntityManager
     public static function prepareAndExecute($query, array $params)
     {
         global $_SQL;
-        $config = new Biblys\Utils\Config();
+        $config = new Biblys\Service\Config();
 
         try {
             // Logs sql query

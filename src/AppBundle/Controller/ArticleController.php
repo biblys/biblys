@@ -92,7 +92,7 @@ class ArticleController extends Controller
         } elseif ($query !== null) {
             $count = $am->countSearchResults($query);
             $page = (int) $request->query->get('p', 0);
-            $pagination = new \Biblys\Utils\Pagination($page, $count);
+            $pagination = new \Biblys\Service\Pagination($page, $count);
 
             $articles = $am->search($query, [
                 'order' => 'article_pubdate',

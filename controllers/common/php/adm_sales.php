@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 $_PAGE_TITLE = 'Ventes';

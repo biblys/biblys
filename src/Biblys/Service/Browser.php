@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblys\Utils;
+namespace Biblys\Service;
 
 use Sinergi\BrowserDetector\Browser as BrowserDetector;
 

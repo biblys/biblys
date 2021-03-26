@@ -1,7 +1,7 @@
 <?php
 
 use Biblys\Axys\Client;
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;

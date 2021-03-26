@@ -1,13 +1,13 @@
 <?php
 
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Biblys\Utils\Log;
+use Biblys\Service\Log;
 
 // Default error level
 ini_set('display_errors', 'On');

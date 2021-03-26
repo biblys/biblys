@@ -67,7 +67,7 @@ class CollectionController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['collection_id' => $collection->get('id')]);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAll(['collection_id' => $collection->get('id')], [
             'order' => 'article_pubdate',

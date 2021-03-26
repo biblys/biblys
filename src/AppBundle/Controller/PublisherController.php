@@ -29,7 +29,7 @@ class PublisherController extends Controller
         $page = (int) $request->query->get('p', 0);
         $totalCount = $pm->count([]);
         $limit = $site->getOpt('publisher_per_page') ? $site->getOpt('publisher_per_page') : 100;
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount, $limit);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount, $limit);
 
         $publishers = $pm->getAll([], [
             'order' => 'publisher_name_alphabetic',
@@ -84,7 +84,7 @@ class PublisherController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['publisher_id' => $publisher->get('id')]);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAll(['publisher_id' => $publisher->get('id')], [
             'order' => 'article_pubdate',

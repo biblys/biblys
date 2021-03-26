@@ -10,7 +10,7 @@ $_SERVER["SCRIPT_NAME"] = "index.php";
 
 // Load database config
 require_once "inc/constants.php";
-$config = new Biblys\Utils\Config();
+$config = new Biblys\Service\Config();
 $dbConfig = $config->get("db");
 
 // Connect to test

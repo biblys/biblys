@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblys\Utils;
+namespace Biblys\Service;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;

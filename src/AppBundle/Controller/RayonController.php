@@ -42,7 +42,7 @@ class RayonController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromRayon($rayon);
-        $pagination = new \Biblys\Utils\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
 
         $articles = $am->getAllFromRayon($rayon, [
             'order' => 'article_pubdate',

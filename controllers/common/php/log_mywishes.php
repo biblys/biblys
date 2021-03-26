@@ -1,7 +1,7 @@
 <?php
 
 use Biblys\Axys\Client;
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 
 $config = new Config();
 $axys = new Client($config->get("axys"));

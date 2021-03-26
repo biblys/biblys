@@ -5,7 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
-use Biblys\Utils\Config;
+use Biblys\Service\Config;
 
 require_once "tests/setUp.php";
 

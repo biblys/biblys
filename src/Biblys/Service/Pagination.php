@@ -1,6 +1,6 @@
 <?php
 
-namespace Biblys\Utils;
+namespace Biblys\Service;
 
 class Pagination
 {

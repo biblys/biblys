@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Utils\Browser;
+use Biblys\Service\Browser;
 
   if (!$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
     trigger_error('Accès non autorisé pour '.$_V->get('user_email'));
