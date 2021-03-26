@@ -7,6 +7,7 @@ use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class OrderDetailsValidationException extends Exception {};
 
@@ -476,13 +477,14 @@ function validateOrderDetails($request) {
 
                     $_SQL->commit();
 
+                    $orderUrl = $order->get("url");
                     if ($order_update) {
-                        $params['updated'] = 1;
+                        $redirectUrl = "/order/$orderUrl?updated=1";
                     } else {
-                        $params['created'] = 1;
+                        $redirectUrl = "/order/$orderUrl?created=1";
                     }
 
-                    redirect('/order/'.$order->get('url'), $params);
+                    return new RedirectResponse($orderUrl, 301);
                 }
             }
 

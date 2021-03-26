@@ -8,3 +8,6 @@ db:
 site: 1
 
 users_table_name: users
+
+axys:
+  host: axys.local
