@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Service\Mailer;
+
 $smtp = $config->get('smtp');
 if (!$smtp) {
     throw new Exception('SMTP doit être configuré pour envoyer la newsletter.');
@@ -125,7 +127,7 @@ if (!empty($_POST)) {
         $headers = $baseHeaders;
         $headers["List-Unsubscribe"] = "<".$m["unsubscribeLink"].">";
         
-        $mailer = new \Mailer();
+        $mailer = new Mailer();
         $mailer->send(
             $m["to"], // to
             $m["subject"], // subject

@@ -1,6 +1,16 @@
 <?php
 
-use Biblys\Service\Log;
+namespace Biblys\Service;
+
+use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\DNSCheckValidation;
+use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
+use Egulias\EmailValidator\Validation\RFCValidation;
+use InvalidArgumentException;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SendmailTransport;
+use Swift_SmtpTransport;
 
 /**
  * SwiftMailer wrapper
@@ -21,13 +31,13 @@ class Mailer
 
         // Default mailer: php mail() function
         $this->method = 'sendmail';
-        $this->transport = new \Swift_SendmailTransport('/usr/sbin/sendmail -bs');
+        $this->transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
 
         // If a SMTP config is defined
         $smtp = $config->get('smtp');
         if ($smtp) {
             $this->method = 'smtp';
-            $this->transport = new \Swift_SmtpTransport(
+            $this->transport = new Swift_SmtpTransport(
                 $smtp['host'] ?? 'localhost',
                 $smtp['port'] ?? 25,
                 $smtp['encryption'] ?? null
@@ -37,24 +47,24 @@ class Mailer
         }
 
         // Create mailer with defined transport
-        $this->mailer = new \Swift_Mailer($this->transport);
+        $this->mailer = new Swift_Mailer($this->transport);
     }
 
     /**
      * Send an email using Mailer
      *
-     * @param  [String] $to      Destination email
-     * @param  [String] $subject Subject line
-     * @param  [String] $body    HTML body
-     * @param  [Array]  $from    From array (['email' => 'name'])
-     * @param  [Array]  $options ['reply-to']
-     * @return [bool]          true if mail was sent
+     * @param $to
+     * @param $subject
+     * @param $body
+     * @param array $from
+     * @param array $options
+     * @param array $headers
+     * @return bool [bool]          true if mail was sent
      */
-    public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = [])
+    public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = []): bool
     {
-        if (getenv("PHP_ENV") === "test") {
-            return;
-        }
+
+        $this->validateEmail($to);
 
         // Default from address
         if (empty($from)) {
@@ -62,7 +72,7 @@ class Mailer
         }
 
         // Create message
-        $message = new \Swift_Message();
+        $message = new Swift_Message();
         $message->setFrom($from)
             ->setTo($to)
             ->setSubject($subject)
@@ -86,8 +96,12 @@ class Mailer
             $mailHeaders->addTextHeader($key, $val);
         }
 
+        if (getenv("PHP_ENV") === "test") {
+            return true;
+        }
+
         // Send mail
-        $sent = $this->mailer->send($message, $errors);
+        $this->mailer->send($message, $errors);
 
         // Log
         Log::mail(
@@ -100,5 +114,17 @@ class Mailer
         }
 
         return true;
+    }
+
+    public function validateEmail($email)
+    {
+        $validator = new EmailValidator();
+        $multipleValidations = new MultipleValidationWithAnd([
+            new RFCValidation(),
+            new DNSCheckValidation()
+        ]);
+        if ($validator->isValid($email, $multipleValidations) === false) {
+            throw new InvalidArgumentException("L'adresse $email est invalide.");
+        }
     }
 }

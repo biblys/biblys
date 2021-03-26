@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Service\Mailer;
 use Biblys\Service\Log;
 
 class Entity implements ArrayAccess, Iterator, Countable

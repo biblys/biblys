@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Admin\Entry;
+use Biblys\Service\Mailer;
 use Framework\Controller;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -240,7 +241,7 @@ class MainController extends Controller
             }
 
             if (!$error) {
-                $mailer = new \Mailer();
+                $mailer = new Mailer();
                 $mailer->send(
                     $site->get('site_contact'),
                     $subject,

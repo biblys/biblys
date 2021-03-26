@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Service\Mailer;
 use Framework\Exception\AuthException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;

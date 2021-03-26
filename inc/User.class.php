@@ -518,7 +518,7 @@ class UserManager extends EntityManager
     </body>
 </html>
             ';
-        $mailer = new Mailer();
+        $mailer = new Biblys\Service\Mailer();
         $mailer->send($user->get('email'), $subject, $message);
     }
 

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Mailer;
 use Framework\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -164,7 +165,7 @@ class TicketController extends Controller
                 </p>
             ';
 
-            $mailer = new \Mailer();
+            $mailer = new Mailer();
             $mailer->send(
                 'contact@biblys.fr',
                 'Ticket Biblys #'.$ticket->get('id').' : '.$ticket->get('title'),
@@ -269,7 +270,7 @@ class TicketController extends Controller
             </p>
         ';
 
-        $mailer = new \Mailer();
+        $mailer = new Mailer();
         $mailer->send(
             $ticket->getRelated('user')->get('email'),
             'Ticket Biblys #'.$ticket->get('id').' : '.$ticket->get('title'),
@@ -325,7 +326,7 @@ class TicketController extends Controller
                 $dest = $this->support_email;
             }
 
-            $mailer = new \Mailer();
+            $mailer = new Mailer();
             $mailer->send(
                 $dest,
                 'Ticket Biblys #'.$ticket->get('id').' : '.$ticket->get('title'),
