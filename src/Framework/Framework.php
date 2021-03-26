@@ -64,6 +64,10 @@ class Framework
 
     public function terminateKernel(Request $request, Response $response)
     {
+        if (!$this->kernel) {
+            return;
+        }
+
         $this->kernel->terminate($request, $response);
     }
 
