@@ -53,10 +53,10 @@ class Config
     static private function _getConfigFilePath()
     {
         if (getenv("PHP_ENV")) {
-            return BIBLYS_PATH . 'tests/config-for-tests.yml';
+            return __DIR__ . "/../../../tests/config-for-tests.yml";
         }
 
-        return BIBLYS_PATH . 'app/config.yml';
+        return __DIR__ . "/../../../app/config.yml";
     }
 
     static private function _getDefaultValueForKey($key): ?string
