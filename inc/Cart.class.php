@@ -351,7 +351,7 @@ class CartManager extends EntityManager
     /**
      * Add an article to cart (create copy if needed)
      * @param Cart $cart
-     * @param type $article_id
+     * @param Article $article
      * @return boolean
      * @throws Exception
      */
