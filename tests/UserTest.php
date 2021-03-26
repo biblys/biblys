@@ -117,13 +117,13 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $um = new UserManager();
         $user = $um->create([
-            "user_email" => "hackerman@example.net",
+            "user_email" => "hackerman@biblys.fr",
             "user_screen_name" => "hackerman",
             "user_new_password" => "password",
         ]);
 
         // when
-        $user = $um->authenticate("hackerman@example.net", "password");
+        $user = $um->authenticate("hackerman@biblys.fr", "password");
 
         // then
         $this->assertInstanceOf("User", $user, "it should return a user");
@@ -139,7 +139,7 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $um = new UserManager();
         $user = $um->create([
-            "user_email" => "graceomalley@example.net",
+            "user_email" => "graceomalley@biblys.fr",
             "user_screen_name" => "grace",
             "user_new_password" => "password",
         ]);
@@ -161,13 +161,13 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $um = new UserManager();
         $user = $um->create([
-            "user_email" => "user@example.net",
+            "user_email" => "user@biblys.fr",
             "user_screen_name" => "user",
             "user_new_password" => "password",
         ]);
 
         // when
-        $user = $um->authenticate("youseur@example.net", "password");
+        $user = $um->authenticate("youseur@biblys.fr", "password");
 
         // then
         $this->assertEquals(
@@ -182,7 +182,7 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $um = new UserManager();
         $user = $um->create([
-            "user_email" => "user2@example.net",
+            "user_email" => "user2@biblys.fr",
             "user_screen_name" => "User Two",
             "user_new_password" => "password",
         ]);
@@ -203,7 +203,7 @@ class UserTest extends PHPUnit\Framework\TestCase
         // given
         $um = new UserManager();
         $user = $um->create([
-            "user_email" => "user3@example.net",
+            "user_email" => "user3@biblys.fr",
             "user_screen_name" => "User Three",
             "user_new_password" => "password",
         ]);

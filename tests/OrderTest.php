@@ -26,7 +26,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     {
         $om = new OrderManager();
 
-        $order = $om->create();
+        $order = $om->create(["order_email" => "customer@biblys.fr"]);
 
         $this->assertInstanceOf('Order', $order);
 
@@ -207,7 +207,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         $order = $om->create([
             "order_amount" => 1234,
-            "order_amount_tobepaid" => 1234
+            "order_amount_tobepaid" => 1234,
+            "order_email" => "customer@biblys.fr",
         ]);
         $payment = $pm->create([
             "order_id" => $order->get("id"),

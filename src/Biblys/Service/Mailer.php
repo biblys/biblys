@@ -56,7 +56,7 @@ class Mailer
      * @param $to
      * @param $subject
      * @param $body
-     * @param array $from
+     * @param array $from ["email" => "name"]
      * @param array $options
      * @param array $headers
      * @return bool [bool]          true if mail was sent
@@ -64,11 +64,11 @@ class Mailer
     public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = []): bool
     {
 
-        $this->validateEmail($to);
+        $from = $from ?? $this->from;
 
-        // Default from address
-        if (empty($from)) {
-            $from = $this->from;
+        $this->validateEmail($to);
+        foreach ($from as $email => $name) {
+            $this->validateEmail($email);
         }
 
         // Create message
@@ -80,6 +80,7 @@ class Mailer
 
         // Reply-to
         if (isset($options["reply-to"])) {
+            $this->validateEmail($options["reply-to"]);
             $message->setReplyTo($options["reply-to"]);
         }
 

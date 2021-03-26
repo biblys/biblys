@@ -198,7 +198,7 @@ class PostTest extends PHPUnit\Framework\TestCase
 
         $user = $um->create([
             "id" => 927,
-            'user_email' => 'user@example.com'
+            'user_email' => 'author@biblys.fr'
         ]);
         $post = $pm->create();
 
