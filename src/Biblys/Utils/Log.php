@@ -56,22 +56,29 @@ class Log
         $filePath = BIBLYS_PATH . "/app/logs/$name.log";
         $logger->pushHandler(new StreamHandler($filePath, Logger::DEBUG));
 
-        $config = new Config();
-        $rollbarConfig = $config->get("rollbar");
-        if ($rollbarConfig) {
-            Rollbar::init([
-                "access_token" => $rollbarConfig["access_token"],
-                "environment" => $rollbarConfig["environment"],
-                "code_version" => BIBLYS_VERSION
-            ]);
-            $logger->pushHandler(
-                new PsrHandler(
-                    Rollbar::logger(),
-                    $rollbarConfig["level"] ?? "WARNING"
-                )
-            );
+        if ($name === "errors") {
+            self::_sendToRollbar($logger);
         }
 
         $logger->log($level, $message, $context);
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    private static function _sendToRollbar(Logger $logger): void
+    {
+        $config = new Config();
+        $rollbarConfig = $config->get("rollbar");
+        if (!$rollbarConfig) {
+            return;
+        }
+
+        $logger->pushHandler(
+            new PsrHandler(
+                Rollbar::logger(),
+                $rollbarConfig["level"] ?? "WARNING"
+            )
+        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Utils\Config;
+use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -208,11 +210,18 @@ if (!file_exists($autoload_file)) {
     require_once BIBLYS_PATH . '/vendor/autoload.php';
 }
 
+$config = new Config();
+$rollbarConfig = $config->get("rollbar");
+if ($rollbarConfig) {
+    Rollbar::init([
+        "access_token" => $rollbarConfig["access_token"],
+        "environment" => $rollbarConfig["environment"],
+        "code_version" => BIBLYS_VERSION
+    ]);
+}
+
 // Biblys autoload
 require_once BIBLYS_PATH . '/inc/autoload-entity.php';
-
-// Load config
-$config = new Biblys\Utils\Config();
 
 // Media path
 $media_path = BIBLYS_PATH . '/public/media';
