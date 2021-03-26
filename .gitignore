@@ -26,3 +26,4 @@ app/
 .php_cs.cache
 yarn-error.log
 node_modules
+.phpunit.result.cache
