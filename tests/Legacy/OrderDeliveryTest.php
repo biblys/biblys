@@ -11,7 +11,7 @@ use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 use Visitor;
 
-require_once "../setUp.php";
+require_once __DIR__."/../setUp.php";
 
 
 class OrderDeliveryTest extends TestCase
@@ -50,6 +50,14 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("country_id", 67);
         $request->request->set("cgv_checkbox", 1);
 
+        $_POST["order_firstname"] = "Barnabé";
+        $_POST["order_lastname"] = "Famagouste";
+        $_POST["order_address1"] = "123 rue des Peupliers";
+        $_POST["order_postalcode"] = "69009";
+        $_POST["order_city"] = "Lyon";
+        $_POST["order_email"] = "customer@biblys.fr";
+        $_POST["country_id"] = 67;
+        $_POST["cgv_checkbox"] = 1;
 
         // when
         $response = require_once __DIR__."/../../controllers/common/php/order_delivery.php";
@@ -59,6 +67,11 @@ class OrderDeliveryTest extends TestCase
             "Symfony\Component\HttpFoundation\RedirectResponse",
             $response,
             "it should redirect after order validation"
+        );
+        $this->assertEquals(
+            "/order/".$order->get("url")."?created=1",
+            $response->headers->get("Location"),
+            "it should redirect to the correct url"
         );
     }
 }

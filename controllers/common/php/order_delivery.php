@@ -126,6 +126,7 @@ function validateOrderDetails($request) {
         $total = 0;
 
         // Is there already an order in progress ?
+        $orderInProgress = null;
         if ($_V->isLogged()) {
             $orderInProgress = $om->get([
                 'order_type' => 'web',
@@ -484,7 +485,7 @@ function validateOrderDetails($request) {
                         $redirectUrl = "/order/$orderUrl?created=1";
                     }
 
-                    return new RedirectResponse($orderUrl, 301);
+                    return new RedirectResponse($redirectUrl, 301);
                 }
             }
 
