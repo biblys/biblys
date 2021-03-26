@@ -1,11 +1,10 @@
 <?php
 
-// BIBLYS
-define('BIBLYS_PATH',getcwd().'/..');
+include("../inc/constants.php");
 
 // INCLUDES
-include(BIBLYS_PATH.'/inc/functions.php');
-include(BIBLYS_PATH.'/inc/Array2XML.class.php');
+include(BIBLYS_PATH.'inc/functions.php');
+include(BIBLYS_PATH.'inc/Array2XML.class.php');
 
 // PAGE EN COURS
 $_PAGE = str_replace("/feed/","",$_SERVER["REQUEST_URI"]);
