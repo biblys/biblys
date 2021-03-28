@@ -3,6 +3,7 @@
 use Biblys\Axys\Client as AxysClient;
 use Biblys\Service\Config;
 use Biblys\Service\Log;
+use Biblys\Service\Mailer;
 
 class InvalidCredentialsException extends Exception
 {

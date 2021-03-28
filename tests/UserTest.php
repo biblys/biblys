@@ -218,4 +218,28 @@ class UserTest extends PHPUnit\Framework\TestCase
             "it should return false"
         );
     }
+
+    public function testAddToLibrary()
+    {
+        // given
+        $um = new UserManager();
+        $user = $um->create(["user_email" => "customer@biblys.fr"]);
+        $am = new ArticleManager();
+        $article = $am->create(["type_id" => 2]);
+        $sm = new StockManager();
+
+        // when
+        $um->addToLibrary($user, [$article]);
+
+        // then
+        $copy = $sm->get([
+            "article_id" => $article->get("id"),
+            "user_id" => $user->get("id"),
+        ]);
+        $this->assertInstanceOf(
+            "Stock",
+            $copy,
+            "it should have created a new copy"
+        );
+    }
 }
