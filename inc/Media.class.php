@@ -369,7 +369,7 @@ class Media
     public function exists()
     {
         global $config;
-        if ($config->get("environment") === "test") {
+        if (getenv("PHP_ENV") === "test") {
             return true;
         }
 
