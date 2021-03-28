@@ -453,6 +453,24 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($order->get('utmz'), false);
     }
 
+    public function testCancel()
+    {
+        // given
+        $om = new OrderManager();
+        $order = $om->create([
+            "order_email" => "customer@biblys.fr",
+        ]);
+
+        // when
+        $om->cancel($order);
+
+        // then
+        $this->assertTrue(
+            $order->has("order_cancel_date"),
+            "it should have a cancel date"
+        );
+    }
+
     /**
      * Test deleting an order
      * @depends testGet
