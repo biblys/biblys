@@ -158,6 +158,15 @@ awards_index:
   path: /recompenses/
   controller: AppBundle\Controller\AwardsController::indexAction
 
+# Cart
+
+cart_add_article:
+  path: /cart/add-article/{articleId}
+  controller: AppBundle\Controller\CartController::addArticleAction
+  methods: POST
+  requirements:
+    articleId: \d+
+
 # Crons
 
 crons_tasks:

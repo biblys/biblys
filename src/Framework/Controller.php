@@ -16,9 +16,15 @@ use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
 use Twig\RuntimeLoader\FactoryRuntimeLoader;
+use Visitor;
 
 class Controller
 {
+    /**
+     * @var Visitor
+     */
+    protected $user;
+
     public function __construct()
     {
         global $_V, $urlgenerator;

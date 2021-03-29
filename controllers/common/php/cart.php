@@ -2,6 +2,7 @@
 
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -91,20 +92,6 @@ if ($add) {
                 } else {
                     $p['error'] = 'L\'article n&deg; '.$_GET['id'].' n\'a pas pu être ajouté au panier.';
                 }
-            }
-        } catch (Exception $ex) {
-            trigger_error($ex->getMessage());
-        }
-
-        // Article
-    } elseif ($add == 'article') {
-        try {
-            $p['added'] = 1;
-            if ($cm->addArticle($cart, $addId)) {
-                $p['success'] = 'L\'article a bien été ajouté au panier.';
-                $cm->updateFromStock($cart);
-            } else {
-                $p['error'] = 'L\'article n\'a pas pu être ajouté au panier.';
             }
         } catch (Exception $ex) {
             trigger_error($ex->getMessage());

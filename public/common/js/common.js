@@ -693,8 +693,7 @@ function reloadEvents(scope) {
     .click(function(event) {
       event.preventDefault();
 
-      var button = $(this),
-        text = button.text(),
+      const button = $(this),
         type = $(this).data('type'),
         id = $(this).data('id'),
         wish_id = $(this).data('wish_id'),
@@ -712,19 +711,30 @@ function reloadEvents(scope) {
         .button('loading');
       $('#myCart').html('<i class="fa fa-spin fa-spinner"></i> Mise à jour...');
 
-      fetch('/pages/cart', {
-        method: 'post',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: 'add=' + type + '&id=' + id + '&wish=' + wish_id + '&gift=' + as_a_gift
+      let response;
+
+      if (type === 'article') {
+        response = fetch(`/cart/add-article/${id}`, {
+          method: 'post',
+          credentials: 'include',
+          headers: { Accept: 'application/json' },
+        });
+      } else {
+        response = fetch('/pages/cart', {
+          method: 'post',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: 'add=' + type + '&id=' + id + '&wish=' + wish_id + '&gift=' + as_a_gift
+        });
+      }
+
+      response.then(function(response) {
+        return response.json();
       })
-        .then(function(response) {
-          return response.json();
-        })
         .then(function(data) {
           button.button('reset');
 
@@ -750,8 +760,7 @@ function reloadEvents(scope) {
               button.find('i.fa').removeClass('green');
             }
             new Biblys.Notification(
-              data.success +
-                '<p class="text-center"><a class="btn btn-primary btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>',
+              `L'article a bien été ajouté au panier<br /><br /><p class="text-center"><a class="btn btn-primary btn-sm" href="/pages/cart"><span class="fa fa-shopping-cart"></span> Voir le panier</a></p>`,
               { type: 'success' }
             );
           }
