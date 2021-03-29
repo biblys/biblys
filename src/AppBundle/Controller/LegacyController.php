@@ -9,15 +9,20 @@ use PageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LegacyController extends Controller
 {
-    public function defaultAction(Request $request): Response
+    public function defaultAction(Request $request, Session $session = null): Response
     {
-        global $site, $config, $session,
+        global $site, $config,
                $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,
                $_JS_CALLS, $_CSS_CALLS, $urlgenerator;
+
+        if ($session === null) {
+            global $session;
+        }
 
         $_PAGE = $request->get('page', 'home');
 
