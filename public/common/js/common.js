@@ -697,9 +697,9 @@ function reloadEvents(scope) {
         type = $(this).data('type'),
         id = $(this).data('id'),
         wish_id = $(this).data('wish_id'),
-        as_a_gift = $(this).data('as_a_gift'),
-        text_loading = '',
-        text_success = '';
+        as_a_gift = $(this).data('as_a_gift');
+      let text_loading = '';
+      let text_success = '';
 
       if (button.hasClass('with-text')) {
         (text_loading = 'Ajout...'), (text_success = 'Ajouté !');
@@ -711,15 +711,18 @@ function reloadEvents(scope) {
         .button('loading');
       $('#myCart').html('<i class="fa fa-spin fa-spinner"></i> Mise à jour...');
 
-      let response;
+      function getCartEndpointUrl(type, id) {
+        if (type === 'article') {
+          return `/cart/add-article/${id}`;
+        }
 
-      if (type === 'article') {
-        response = fetch(`/cart/add-article/${id}`, {
-          method: 'post',
-          credentials: 'include',
-          headers: { Accept: 'application/json' },
-        });
-      } else {
+        if (type === 'stock') {
+          return `/cart/add-stock/${id}`;
+        }
+      }
+
+      let response;
+      if (type === 'reward') {
         response = fetch('/pages/cart', {
           method: 'post',
           credentials: 'include',
@@ -729,6 +732,12 @@ function reloadEvents(scope) {
             'X-Requested-With': 'XMLHttpRequest'
           },
           body: 'add=' + type + '&id=' + id + '&wish=' + wish_id + '&gift=' + as_a_gift
+        });
+      } else {
+        response = fetch(getCartEndpointUrl(type, id), {
+          method: 'post',
+          credentials: 'include',
+          headers: { Accept: 'application/json' },
         });
       }
 

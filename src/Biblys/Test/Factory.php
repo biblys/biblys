@@ -9,10 +9,24 @@ use CollectionManager;
 use Exception;
 use Publisher;
 use PublisherManager;
+use Stock;
 use StockManager;
 
 class Factory
 {
+    /**
+     * @return Stock
+     * @throws Exception
+     */
+    public static function createStock(): Stock
+    {
+        $sm = new StockManager();
+        $article = Factory::createArticle();
+        return $sm->create([
+            "article_id" => $article->get("id")
+        ]);
+    }
+
     /**
      * @param string $title
      * @return Article
@@ -21,7 +35,7 @@ class Factory
     public static function createArticle(string $title = "Au revoir Mao"): Article
     {
         $collection = self::createCollection();
-        $am  = new ArticleManager();
+        $am = new ArticleManager();
         return $am->create([
             "article_title" => $title,
             "type_id" => 1,

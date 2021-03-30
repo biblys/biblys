@@ -167,6 +167,13 @@ cart_add_article:
   requirements:
     articleId: \d+
 
+cart_add_stock:
+  path: /cart/add-stock/{stockId}
+  controller: AppBundle\Controller\CartController::addStockAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
 # Crons
 
 crons_tasks:

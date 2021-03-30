@@ -72,32 +72,6 @@ if ($add) {
         }
     }
 
-    // Stock
-    if ($add == 'stock') {
-        try {
-            if (!$cart->contains('stock', $addId)) {
-                $p['added'] = 1;
-                if ($cm->addStock($cart, $addId, $wishId)) {
-                    $p['success'] = 'L\'article a bien été ajouté au panier.';
-                    $cm->updateFromStock($cart);
-                } else {
-                    $p['error'] = 'L\'article n&deg; '.$_GET['id'].' n\'a pas pu être ajouté au panier.';
-                }
-            } else {
-                $p['removed'] = 1;
-                $copy_to_remove = $sm->getById($addId);
-                if ($copy_to_remove && $cm->removeStock($cart, $copy_to_remove, $wishId)) {
-                    $p['success'] = 'L\'article a bien été retiré du panier.';
-                    $cm->updateFromStock($cart);
-                } else {
-                    $p['error'] = 'L\'article n&deg; '.$_GET['id'].' n\'a pas pu être ajouté au panier.';
-                }
-            }
-        } catch (Exception $ex) {
-            trigger_error($ex->getMessage());
-        }
-    }
-
     // Reward
     elseif ($add == 'reward') {
         try {
@@ -118,9 +92,9 @@ if ($add) {
     }
 
     if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($p);
+        return new JsonResponse();
     } else {
-        redirect('/pages/cart', $p);
+        redirect('/pages/cart');
     }
 }
 
