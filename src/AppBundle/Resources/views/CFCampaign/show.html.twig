@@ -19,7 +19,9 @@
 <div class="row">
 
     <div class="col-sm-8 crowdfunding-presentation" id="presentation">
-        {{ campaign.description|raw }}
+        {% if campaign.has('description') %}
+            {{ campaign.description|raw }}
+        {% endif %}
     </div>
     <div class="col-sm-4 crowdfunding-aside" id="rewards">
         <div>
