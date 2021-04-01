@@ -160,7 +160,7 @@ catch (AuthException $e) {
 
 // HTTP 404
 catch (ResourceNotFoundException $e) {
-    $response = $exceptionController->handlePageNotFound($e->getMessage());
+    $response = $exceptionController->handlePageNotFound($request, $e->getMessage());
 }
 
 // HTTP 500

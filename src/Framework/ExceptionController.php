@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExceptionController extends Controller
 {
-    function handlePageNotFound(string $errorMessage): Response
+    function handlePageNotFound(Request $request, string $errorMessage): Response
     {
         global $_SQL, $_V, $site;
 
@@ -38,6 +38,12 @@ class ExceptionController extends Controller
         if ($r = $redirections->fetch(\PDO::FETCH_ASSOC)) {
             $response = new RedirectResponse($r['redirection_new'], 301);
         } else {
+            if ($request->headers->get("Accept") === "application/json") {
+                $response = new JsonResponse(["error" => $errorMessage]);
+                $response->setStatusCode(404);
+                return $response;
+            }
+
             $response = new Response();
             $response->setStatusCode(404);
 
