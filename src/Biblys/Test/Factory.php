@@ -4,6 +4,8 @@ namespace Biblys\Test;
 
 use Article;
 use ArticleManager;
+use CFReward;
+use CFRewardManager;
 use Collection;
 use CollectionManager;
 use Exception;
@@ -77,5 +79,20 @@ class Factory
         }
 
         return $pm->create(["publisher_name" => "Paronymie"]);
+    }
+
+    /**
+     * @param Article $article
+     * @return CFReward
+     * @throws Exception
+     */
+    public static function createCrowfundingReward(): CFReward
+    {
+        $cfrm = new CFRewardManager();
+
+        $article = self::createArticle();
+        return $cfrm->create([
+             "reward_articles"=> "[".$article->get("id")."]",
+        ]);
     }
 }

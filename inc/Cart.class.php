@@ -137,6 +137,24 @@ class Cart extends Entity
     }
 
     /**
+     * Returns true if the cart contains reward
+     *
+     * @param CFReward $reward
+     * @return bool
+     */
+    public function containsReward(CFReward $reward): bool
+    {
+        $copies = $this->getStock();
+        foreach ($copies as $copy) {
+            if ($copy->get("reward_id") === $reward->get("id")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns true if cart contains at least one physical product
      * @return boolean
      */
@@ -497,7 +515,7 @@ class CartManager extends EntityManager
         $articles = json_decode($reward->get('articles'));
         foreach ($articles as $article_id) {
             if ($article = $am->get(array('article_id' => $article_id))) {
-                $this->addArticle($cart, $article->get('id'), $reward);
+                $this->addArticle($cart, $article, $reward);
             } else {
                 trigger_error('Article ' . $article_id . ' inconnu.');
             }

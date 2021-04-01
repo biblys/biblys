@@ -5,6 +5,8 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Test\Factory;
+
 require_once "setUp.php";
 
 class CartTest extends PHPUnit\Framework\TestCase
@@ -375,6 +377,21 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cart = new Cart(['cart_ip' => '127.0.0.1']);
 
         $this->assertEquals($cart->getUserInfo(), '127.0.0.1');
+    }
+
+    public function testContainsReward()
+    {
+        // given
+        $cm = new CartManager();
+        $cart = $cm->create([]);
+        $reward = Factory::createCrowfundingReward();
+        $cm->addCFReward($cart, $reward);
+
+        // when / then
+        $this->assertTrue(
+            $cart->containsReward($reward),
+            "it should return true if reward is in cart"
+        );
     }
 
     /**
