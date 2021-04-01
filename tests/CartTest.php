@@ -270,7 +270,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $cm->addArticle($cart, $article);
 
-        $this->assertTrue($cart->contains("article", $article->get("id")));
+        $this->assertTrue($cart->containsArticle($article));
 
         if ($not_virtual_stock) {
             $site->setOpt('virtual_stock', 0);
@@ -390,7 +390,22 @@ class CartTest extends PHPUnit\Framework\TestCase
         // when / then
         $this->assertTrue(
             $cart->containsStock($stock),
-            "it should return true if reward is in cart"
+            "it should return true if stock is in cart"
+        );
+    }
+
+    public function testContainsArticle()
+    {
+        // given
+        $cm = new CartManager();
+        $cart = $cm->create([]);
+        $article = Factory::createArticle();
+        $cm->addArticle($cart, $article);
+
+        // when / then
+        $this->assertTrue(
+            $cart->containsArticle($article),
+            "it should return true if article is in cart"
         );
     }
 

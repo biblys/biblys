@@ -134,13 +134,18 @@ class Cart extends Entity
             return $this->containsStock($stock);
         }
 
-        $stock = $this->getStock();
-        foreach ($stock as $s) {
-            if ($s['article_id'] == $id) {
-                return true;
-            }
+        if ($type === "article") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.0",
+                "Use Cart->containsArticle instead."
+            );
+            $am = new ArticleManager();
+            $article = $am->getById($id);
+            return $this->containsArticle($article);
         }
-        return false;
+
+        throw new InvalidArgumentException("Unknown type $type");
     }
 
     /**
@@ -154,6 +159,24 @@ class Cart extends Entity
         $copies = $this->getStock();
         foreach ($copies as $copy) {
             if ($copy->get("id") === $stock->get("id")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if the cart contains article
+     *
+     * @param Article $article
+     * @return bool
+     */
+    public function containsArticle(Article $article): bool
+    {
+        $copies = $this->getStock();
+        foreach ($copies as $copy) {
+            if ($copy->get("article_id") === $article->get("id")) {
                 return true;
             }
         }
