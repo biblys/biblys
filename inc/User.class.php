@@ -136,11 +136,17 @@ class User extends Entity
      *
      * @return bool
      */
-    public function hasInCart($type, $id)
+    public function hasInCart($type, $id): bool
     {
         $cart = $this->getCart();
         if (!$cart) {
             return false;
+        }
+
+        if ($type === "stock") {
+            $sm = new StockManager();
+            $stock = $sm->getById($id);
+            return $cart->containsStock($stock);
         }
 
         return $cart->contains($type, $id);

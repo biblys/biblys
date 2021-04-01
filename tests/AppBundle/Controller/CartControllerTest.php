@@ -70,7 +70,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             "it should respond with http 200"
         );
         $this->assertTrue(
-            $cart->contains("stock", $stock->get("id")),
+            $cart->containsStock($stock),
             "it should have added article to cart"
         );
         $this->assertEquals(

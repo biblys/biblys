@@ -123,16 +123,41 @@ class Cart extends Entity
 
     public function contains($type, $id)
     {
+        if ($type === "stock") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.0",
+                "Use Cart->containsStock instead."
+            );
+            $sm = new StockManager();
+            $stock = $sm->getById($id);
+            return $this->containsStock($stock);
+        }
 
         $stock = $this->getStock();
         foreach ($stock as $s) {
-            if ($type == 'stock' && $s['stock_id'] == $id) {
-                return true;
-            }
-            if ($type == 'article' && $s['article_id'] == $id) {
+            if ($s['article_id'] == $id) {
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Returns true if the cart contains stock
+     *
+     * @param Stock $stock
+     * @return bool
+     */
+    public function containsStock(Stock $stock): bool
+    {
+        $copies = $this->getStock();
+        foreach ($copies as $copy) {
+            if ($copy->get("id") === $stock->get("id")) {
+                return true;
+            }
+        }
+
         return false;
     }
 
