@@ -109,17 +109,6 @@ if (isset($_POST["stock_price"])) {
     }
 }
 
-// Remove from cart
-$copy_to_remove_id = $request->query->get('del');
-if ($copy_to_remove_id) {
-    $copy_to_remove = $sm->getById($copy_to_remove_id);
-    if ($copy_to_remove) {
-        $cm->removeStock($cart, $copy_to_remove);
-        $cm->updateFromStock($cart);
-        redirect('/pages/cart', array('removed' => 1));
-    }
-}
-
 $_PAGE_TITLE = 'Panier';
 
 // Gift
@@ -148,14 +137,8 @@ if ($cart->get('cart_as-a-gift') == 'party') {
 }
 
 $alert = null;
-if (isset($_GET['added'])) {
-    $alert = '<p class="success">L\'article a bien été ajouté au panier.</p>';
-}
 if (isset($_GET['vacuumed'])) {
     $alert = '<p class="success">Votre panier a été vidé.</p>';
-}
-if (isset($_GET['removed'])) {
-    $alert = '<p class="success">L\'article a bien été retiré du panier.</p>';
 }
 if (isset($_GET['stock_price_updated'])) {
     $alert = '<p class="success">Le prix de l\'article a été mis à jour.</p>';
@@ -266,7 +249,11 @@ foreach ($stocks as $stock) {
                 '.currency($stock->get('selling_price') / 100).'<br />
             </td>
             <td class="center">
-                <a href="?del='.$stock->get('id').'"><button class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Retirer</button></a>
+                <form method="POST" action="/cart/remove-stock/'.$stock->get("id").'">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="fa fa-close"></span> Retirer
+                    </button>
+                </form>
             </td>
         </tr>
     ';

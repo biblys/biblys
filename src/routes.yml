@@ -181,6 +181,13 @@ cart_add_reward:
   requirements:
     rewardId: \d+
 
+cart_remove_stock:
+  path: /cart/remove-stock/{stockId}
+  controller: AppBundle\Controller\CartController::removeStockAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
 # Crons
 
 crons_tasks:

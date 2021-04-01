@@ -9,6 +9,8 @@ use CFRewardManager;
 use Framework\Controller;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -66,5 +68,27 @@ class CartController extends Controller
         $cm->updateFromStock($cart);
 
         return new JsonResponse();
+    }
+
+    public function removeStockAction(Request $request, int $stockId): Response
+    {
+        $sm = new StockManager();
+        $stock = $sm->getById($stockId);
+        if (!$stock) {
+            throw new BadRequestHttpException(
+                "Cannot find stock with id $stockId"
+            );
+        }
+
+        $cm = new CartManager();
+        $cart = $this->user->getCart("create");
+        $cm->removeStock($cart, $stock);
+        $cm->updateFromStock($cart);
+
+        if ($request->headers->get("Accept") === "application/json") {
+            return new JsonResponse();
+        }
+
+        return new RedirectResponse("/pages/cart?removed=1");
     }
 }

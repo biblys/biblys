@@ -7,6 +7,7 @@
 
 use AppBundle\Controller\CartController;
 use Biblys\Test\Factory;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -82,7 +83,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
     public function testAddCrowdfundingReward()
     {
-        global $_V, $site;
+        global $_V;
 
         // given
         $cm = new CartManager();
@@ -108,6 +109,87 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
         $this->assertEquals(
             1,
+            $cart->get("count"),
+            "it should have updated cart article count"
+        );
+    }
+
+    public function testRemoveStock()
+    {
+        global $_V;
+
+        // given
+        $cm = new CartManager();
+        $cart = $_V->getCart("create");
+        $cm->vacuum($cart);
+        $stock = Factory::createStock();
+        $cm->addStock($cart, $stock);
+        $cm->updateFromStock($cart);
+        $controller = new CartController();
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+
+        // when
+        $response = $controller->removeStockAction(
+            $request,
+            $stock->get("id")
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $this->assertFalse(
+            $cart->containsStock($stock),
+            "it should have removed stock from cart"
+        );
+        $this->assertEquals(
+            0,
+            $cart->get("count"),
+            "it should have updated cart article count"
+        );
+    }
+
+    public function testRemoveStockLegacyUsage()
+    {
+        global $_V;
+
+        // given
+        $cm = new CartManager();
+        $cart = $_V->getCart("create");
+        $cm->vacuum($cart);
+        $stock = Factory::createStock();
+        $cm->addStock($cart, $stock);
+        $cm->updateFromStock($cart);
+        $controller = new CartController();
+        $request = new Request();
+        $request->headers->set("Accept", "text/html");
+
+        // when
+        $response = $controller->removeStockAction(
+            $request,
+            $stock->get("id")
+        );
+
+        // then
+        $this->assertEquals(
+            302,
+            $response->getStatusCode(),
+            "it should respond with http 302"
+        );
+        $this->assertEquals(
+            "/pages/cart?removed=1",
+            $response->headers->get("Location"),
+            "it should redirect to cart page"
+        );
+        $this->assertFalse(
+            $cart->containsStock($stock),
+            "it should have removed stock from cart"
+        );
+        $this->assertEquals(
+            0,
             $cart->get("count"),
             "it should have updated cart article count"
         );
