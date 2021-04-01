@@ -79,4 +79,37 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             "it should have updated cart article count"
         );
     }
+
+    public function testAddCrowdfundingReward()
+    {
+        global $_V, $site;
+
+        // given
+        $cm = new CartManager();
+        $controller = new CartController();
+        $cart = $_V->getCart("create");
+        $cm->vacuum($cart);
+        $reward = Factory::createCrowfundingReward();
+
+        // when
+        $response = $controller->addCrowdfundingRewardAction(
+            $reward->get("id")
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $this->assertTrue(
+            $cart->containsReward($reward),
+            "it should have added article to cart"
+        );
+        $this->assertEquals(
+            1,
+            $cart->get("count"),
+            "it should have updated cart article count"
+        );
+    }
 }

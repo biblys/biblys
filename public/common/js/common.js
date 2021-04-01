@@ -719,27 +719,17 @@ function reloadEvents(scope) {
         if (type === 'stock') {
           return `/cart/add-stock/${id}`;
         }
+
+        if (type === 'reward') {
+          return `/cart/add-reward/${id}`;
+        }
       }
 
-      let response;
-      if (type === 'reward') {
-        response = fetch('/pages/cart', {
-          method: 'post',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: 'add=' + type + '&id=' + id + '&wish=' + wish_id + '&gift=' + as_a_gift
-        });
-      } else {
-        response = fetch(getCartEndpointUrl(type, id), {
-          method: 'post',
-          credentials: 'include',
-          headers: { Accept: 'application/json' },
-        });
-      }
+      const response = fetch(getCartEndpointUrl(type, id), {
+        method: 'post',
+        credentials: 'include',
+        headers: { Accept: 'application/json' },
+      });
 
       response.then(function(response) {
         return response.json();

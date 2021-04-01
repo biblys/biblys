@@ -70,26 +70,10 @@ if ($add) {
                 $cm->update($cart);
             }
         }
+    } else {
+        throw new Exception("Impossible d'ajouter au panier : type $add inconnu.");
     }
 
-    // Reward
-    elseif ($add == 'reward') {
-        try {
-            if ($reward = $cfrm->get(array('reward_id' => $addId))) {
-                if ($cm->addCFReward($cart, $reward)) {
-                    $p['success'] = 'La contrepartie a bien été ajoutée <a href="/pages/cart">au panier</a>.';
-                } else {
-                    trigger_error('Impossible d\'ajouter la contrepartie au panier : erreur inconnue.');
-                }
-            } else {
-                trigger_error('Impossible d\'ajouter au panier : Contrepartie "'.$addId.'" inconnue.');
-            }
-        } catch (Exception $ex) {
-            trigger_error($ex->getMessage());
-        }
-    } else {
-        trigger_error('Impossible d\'ajouter au panier : type "'.$add.'" inconnu.');
-    }
 
     if ($request->isXmlHttpRequest()) {
         return new JsonResponse();

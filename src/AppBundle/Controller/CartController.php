@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use CartManager;
+use CFRewardManager;
 use Framework\Controller;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,6 +45,24 @@ class CartController extends Controller
         $cm = new CartManager();
         $cart = $this->user->getCart("create");
         $cm->addStock($cart, $stock);
+        $cm->updateFromStock($cart);
+
+        return new JsonResponse();
+    }
+
+    public function addCrowdfundingRewardAction(int $rewardId): Response
+    {
+        $cfrm = new CFRewardManager();
+        $reward = $cfrm->getById($rewardId);
+        if (!$reward) {
+            throw new BadRequestHttpException(
+                "Cannot find reward with id $rewardId"
+            );
+        }
+
+        $cm = new CartManager();
+        $cart = $this->user->getCart("create");
+        $cm->addCFReward($cart, $reward);
         $cm->updateFromStock($cart);
 
         return new JsonResponse();
