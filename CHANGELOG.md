@@ -1,6 +1,7 @@
-# Changelog
 
-### DEV: 2.52.0
+# Historique des modifications
+
+## 2.52.0 (2 avril 2021)
 
 Améliorations
 
