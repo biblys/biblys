@@ -160,31 +160,6 @@ class Visitor extends User
     }
 
     /**
-     * Is the visitor currenty a web cron task launcher
-     */
-    public function isCron()
-    {
-        global $request, $config;
-
-        $siteCron = $config->get('cron');
-        if (!$siteCron) {
-            throw new Exception('Cron is not configured for this site');
-        }
-        if (!isset($siteCron['key'])) {
-            throw new Exception('Key is missing in cron configuration');
-        }
-
-        $requestCronKey = $request->headers->get('X-CRON-KEY');
-        if (!$requestCronKey) {
-            throw new AuthException('Request lacks X-CRON-KEY header');
-        }
-
-        if ($requestCronKey !== $siteCron['key']) {
-            throw new AuthException('Wrong cron key');
-        }
-    }
-
-    /**
      * Get cart from visitor or user
      *  TODO : What if user logs after filling his cart as visitor ? Carts should be merged
      */

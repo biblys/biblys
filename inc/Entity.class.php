@@ -442,13 +442,13 @@ class EntityManager
      */
     public function create(array $defaults = array())
     {
-        $entity = new $this->object($defaults);
-
         // If not site agnostic, add site id
         if ($this->siteAgnostic === false) {
             global $site;
             $defaults['site_id'] = $site->get('id');
         }
+
+        $entity = new $this->object($defaults);
 
         // Preprocess
         $entity = $this->preprocess($entity);

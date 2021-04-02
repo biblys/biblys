@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
+use EntityManager;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,6 +11,30 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class CronsController extends Controller
 {
+    /**
+     * @param Config $config
+     * @param Request $request
+     */
+    private static function _authenticateCronRequest(Config $config, Request $request): void
+    {
+        $siteCron = $config->get('cron');
+        if (!$siteCron) {
+            throw new Exception('Cron is not configured for this site');
+        }
+        if (!isset($siteCron['key'])) {
+            throw new Exception('Key is missing in cron configuration');
+        }
+
+        $requestCronKey = $request->headers->get('X-CRON-KEY');
+        if (!$requestCronKey) {
+            throw new AuthException('Request lacks X-CRON-KEY header');
+        }
+
+        if ($requestCronKey !== $siteCron['key']) {
+            throw new AuthException('Wrong cron key');
+        }
+    }
+
     /**
      * GET /crons/.
      */
@@ -77,7 +103,7 @@ class CronsController extends Controller
     {
         $request->headers->set('Accept', 'application/json');
 
-        $this->auth('cron');
+        self::_authenticateCronRequest($config, $request);
 
         $cjm = new \CronJobManager();
         $job = $cjm->create(
@@ -110,7 +136,7 @@ class CronsController extends Controller
 
         $request->headers->set('Accept', 'application/json');
 
-        $this->auth('cron');
+        self::_authenticateCronRequest($config, $request);
 
         $pdl = $config->get('placedeslibraires');
         if (!$pdl) {
@@ -132,17 +158,21 @@ class CronsController extends Controller
                 $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
             }
 
-            $query = "SELECT `article_ean`, COUNT(`stock_id`) AS `qty`, `stock_selling_price`
-                FROM `stock` JOIN articles USING(`article_id`)
+            $query = "
+                SELECT MAX(`article_ean`), COUNT(`stock_id`) AS `qty`, MAX(`stock_selling_price`)
+                FROM `stock` 
+                JOIN articles USING(`article_id`)
                 WHERE `site_id` = :site_id
                     AND `article_ean` IS NOT NULL
                     AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
-                        AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
+                    AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
                     AND `stock_deleted` IS NULL AND `article_deleted` IS NULL
                     ".$active_stock_query.'
                 GROUP BY `article_ean`';
-            $stock = $_SQL->prepare($query);
-            $stock->execute(['site_id' => $site->get('id')]);
+            $stock = EntityManager::prepareAndExecute(
+                $query,
+                ['site_id' => $site->get('id')]
+            );
 
             $title = 'EXTRACTION STOCK DU '.date('d/m/Y');
             $stockCount = 0;
@@ -170,26 +200,24 @@ class CronsController extends Controller
 
             $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
             $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';
-            file_put_contents($ftp, $file, 0, $stream);
 
+            if (getenv("PHP_ENV") !== "test") {
+                file_put_contents($ftp, $file, 0, $stream);
+            }
+
+            $result = "success";
             $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
 
-            $job = $cjm->create(
-                [
-                    'cron_job_task' => 'export-pdl',
-                    'cron_job_result' => 'success',
-                    'cron_job_message' => $message,
-                ]
-            );
         } catch (\Exception $exception) {
-            $job = $cjm->create(
-                [
-                    'cron_job_task' => 'export-pdl',
-                    'cron_job_result' => 'error',
-                    'cron_job_message' => $exception->getMessage(),
-                ]
-            );
+            $result = "error";
+            $message = $exception->getMessage();
         }
+
+        $job = $cjm->create([
+            'cron_job_task' => 'export-pdl',
+            'cron_job_result' => 'error',
+            'cron_job_message' => $message,
+        ]);
 
         return new JsonResponse(
             [
