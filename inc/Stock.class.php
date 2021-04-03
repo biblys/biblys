@@ -390,6 +390,27 @@ class Stock extends Entity
             </span>
         ';
     }
+
+    /**
+     * @param int $newPrice
+     * @throws Exception
+     */
+    public function editFreePrice(int $newPrice): void
+    {
+        $article = $this->getArticle();
+
+        if (!$article->has('price_editable')) {
+            throw new Exception("Le prix de cet article n'est pas libre.");
+        }
+
+        if ($newPrice < $article->get('price')) {
+            throw new Exception("Le prix doit être supérieur à ".currency($article->get('price') / 100));
+        }
+
+        // TODO: Check that stock item is in cart
+
+        $this->set("stock_selling_price", $newPrice);
+    }
 }
 
 class StockManager extends EntityManager

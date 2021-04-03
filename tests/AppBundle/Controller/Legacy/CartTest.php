@@ -37,7 +37,10 @@ class CartTest extends TestCase
         $request = new Request();
         $request->query->set("page", "cart");
         $cart = $_V->getCart("create");
-        $article = Factory::createArticle("Papeete");
+        $article = Factory::createArticle([
+            "article_title" => "Papeete",
+            "type_id" => 1,
+        ]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
 

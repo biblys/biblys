@@ -17,32 +17,34 @@ use StockManager;
 class Factory
 {
     /**
+     * @param array $attributes
      * @return Stock
      * @throws Exception
      */
-    public static function createStock(): Stock
+    public static function createStock(array $attributes = []): Stock
     {
+        if (!isset($attributes["article_id"])) {
+            $article = self::createArticle();
+            $attributes["article_id"] = $article->get("id");
+        }
         $sm = new StockManager();
         $article = Factory::createArticle();
-        return $sm->create([
-            "article_id" => $article->get("id")
-        ]);
+        return $sm->create($attributes);
     }
 
     /**
-     * @param string $title
+     * @param array $attributes
      * @return Article
      * @throws Exception
      */
-    public static function createArticle(string $title = "Au revoir Mao"): Article
+    public static function createArticle(array $attributes = []): Article
     {
-        $collection = self::createCollection();
+        if (!isset($attributes["collection_id"])) {
+            $collection = self::createCollection();
+            $attributes["collection_id"] = $collection->get("id");
+        }
         $am = new ArticleManager();
-        return $am->create([
-            "article_title" => $title,
-            "type_id" => 1,
-            "collection_id" => $collection->get("id")
-        ]);
+        return $am->create($attributes);
     }
 
     /**
