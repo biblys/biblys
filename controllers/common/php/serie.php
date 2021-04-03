@@ -2,12 +2,17 @@
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+$cycleSlug = $request->query->get("url");
 
 $cm = new CycleManager();
-$cycle = $cm->get(array('cycle_url' => $_GET['url']));
+$cycle = $cm->get(["cycle_url" => $cycleSlug]);
 
 if (!$cycle) {
-    throw new NotFoundHttpException();
+    throw new ResourceNotFoundException(
+        sprintf("Cannot find a cycle for url %s", htmlentities($cycleSlug))
+    );
 }
 
 $useOldController = $site->getOpt('use_old_cycle_controller');
