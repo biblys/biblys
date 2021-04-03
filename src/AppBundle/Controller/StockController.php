@@ -2,11 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use CartManager;
+use Exception;
 use Framework\Controller;
 
+use StockManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class StockController extends Controller
@@ -82,7 +88,7 @@ class StockController extends Controller
         try {
             $cm->addStock($cart, $stock);
             $cm->updateFromStock($cart);
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             $error = true;
             $session->getFlashBag()->add('error', $e->getMessage());
         }
@@ -121,12 +127,47 @@ class StockController extends Controller
             $sm->update($stock);
             $session->getFlashBag()->add('success', "L'exemplaire $stockId a bien été remis en vente.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $error = true;
             $session->getFlashBag()->add('error', $e->getMessage());
         }
 
         return $this->redirect('/pages/adm_stock?id='.$stock->get('id'));
+    }
 
+    /**
+     * POST /stock/{stockId}/edit-free-price
+     * @param Request $request
+     * @param int $stockId
+     * @return Response
+     * @throws Exception
+     */
+    public function editFreePriceAction(Request $request, int $stockId): Response
+    {
+        $sm = new StockManager();
+        $cm = new CartManager();
+
+        $stock = $sm->getById($stockId);
+        if (!$stock) {
+            throw new NotFoundException("Stock $stockId not found");
+        }
+
+        if (!$this->user->hasInCart("stock", $stock->get("id"))) {
+            throw new BadRequestHttpException(
+                "Impossible de modifier un exemplaire qui n'est pas dans votre panier."
+            );
+        }
+
+        $newPrice = (int) $request->request->get("new_price", 0);
+        $newPriceInCents = $newPrice * 100;
+        $stock->editFreePrice($newPriceInCents);
+        $sm->update($stock);
+        $cm->updateFromStock($this->user->getCart());
+
+        if ($request->headers->get("Accept") === "application/json") {
+            return new JsonResponse();
+        }
+
+        return new RedirectResponse("/pages/cart");
     }
 }

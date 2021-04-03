@@ -82,33 +82,6 @@ if ($add) {
     }
 }
 
-// Edit stock price
-if (isset($_POST["stock_price"])) {
-    $new_price = round($_POST['stock_price'] * 100);
-
-    $stock = $sm->getById($_POST['stock_id']);
-    if ($stock) {
-        $article = $stock->get('article');
-
-        if (!$article->has('price_editable')) {
-            trigger_error("Le prix de cet article n'est pas libre.");
-        }
-
-        if ($new_price < $article->get('price')) {
-            trigger_error("Le prix doit être supérieur à ".currency($article->get('price') / 100));
-        }
-
-        // Update stock
-        $stock->set('stock_selling_price', $new_price);
-        $sm->update($stock);
-
-        // Update cart
-        $cm->updateFromStock($cart);
-
-        redirect('/pages/cart', array('stock_price_updated' => $_POST['stock_id']));
-    }
-}
-
 $_PAGE_TITLE = 'Panier';
 
 // Gift
@@ -219,11 +192,11 @@ foreach ($stocks as $stock) {
     $editable_price_form = null;
     if ($article->has('price_editable')) {
         $editable_price_form = '
-            <form method="post">
+            <form action="/stock/'.$stock->get("id").'/edit-free-price" method="post">
                 <fieldset>
                     <input type="hidden" name="stock_id" value="'.$stock->get('id').'">
                     Modifier le montant :
-                        <input type="number" name="stock_price" min="'.($article->get('price') / 100).'" value="'.($stock->get('selling_price') / 100).'" step=10 class="nano" required> &euro;
+                        <input type="number" name="new_price" min="'.($article->get('price') / 100).'" value="'.($stock->get('selling_price') / 100).'" step=10 class="nano" required> &euro;
                     <button type="submit" class="btn btn-info btn-xs">OK</button>
                 </fieldset>
             </form>

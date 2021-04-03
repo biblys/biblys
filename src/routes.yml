@@ -584,6 +584,13 @@ stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return
   controller: AppBundle\Controller\StockController::cancelReturnAction
 
+stock_edit_free_price:
+  path: /stock/{stockId}/edit-free-price
+  controller: AppBundle\Controller\StockController::editFreePriceAction
+  methods: POST
+  requirements:
+    stockId: \d+
+
 # Tag
 
 tag_show:
