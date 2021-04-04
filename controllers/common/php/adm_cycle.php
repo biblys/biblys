@@ -1,5 +1,8 @@
 <?php
 
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -13,42 +16,42 @@ if (!$cycle) {
     throw new ResourceNotFoundException("Cannot find any cycle with id $cycleId");
 }
 
+$error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $update_children = 0;
-    foreach ($_POST as $key => $val)
-    {
-        $cycle->set($key, $val);
-        if ($key == 'cycle_name') $update_children = 1;
-    }
-
-    // Update URL
-    $cycle->set('cycle_url', $cm->makeslug($cycle));
-
-    // Persist
-    $cm->update($cycle);
-
-    // Update children
-    if ($update_children)
-    {
-        $articles = $am->getAll(array('cycle_id' => $cycle->get('id')));
-        $params['articles_updated'] = 0;
-        foreach ($articles as $article)
-        {
-            $article->set('article_cycle', $cycle->get('name'));
-            $am->update($article);
-            $params['articles_updated']++;
+    try {
+        $updateChildren = 0;
+        foreach ($_POST as $key => $val) {
+            $cycle->set($key, $val);
+            if ($key == 'cycle_name') $updateChildren = 1;
         }
-    }
 
-    $params['success'] = $cycle->get('name').' a bien été mise à jour.';
-    redirect('/serie/'.$cycle->get('url'), $params);
+        $cycle->set('cycle_url', $cm->makeslug($cycle));
+
+        $cm->update($cycle);
+
+        // Update children
+        if ($updateChildren) {
+            $articles = $am->getAll(array('cycle_id' => $cycle->get('id')));
+            $params['articles_updated'] = 0;
+            foreach ($articles as $article) {
+                $article->set('article_cycle', $cycle->get('name'));
+                $am->update($article);
+            }
+        }
+
+        new RedirectResponse("/serie/".$cycle->get('url'));
+    } catch (EntityAlreadyExistsException | InvalidEntityException $exception) {
+        $error = '<p class="alert alert-danger">'.$exception->getMessage().'</p>';
+    }
 }
 
 $_PAGE_TITLE = 'Modifier '.$cycle->get('name');
 
 $content = '
     <h2>Modifier <a href="/serie/'.$cycle->get('url').'">'.$cycle->get('name').'</a></h2>
-        
+
+    '.$error.'
+
     <form method="post" class="fieldset">
         <fieldset>
             <legend>Informations</legend>
