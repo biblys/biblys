@@ -1,6 +1,9 @@
 <?php
 
-    class Cycle extends Entity
+use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Exception\InvalidEntityException;
+
+class Cycle extends Entity
 	{
 		protected $prefix = 'cycle';
     }
@@ -23,10 +26,16 @@
             return $cycle;
         }
 
+        /**
+         * @param Entity $cycle
+         * @return bool
+         * @throws EntityAlreadyExistsException
+         * @throws InvalidEntityException
+         */
         public function validate($cycle)
         {
             if (!$cycle->has('name')) {
-                throw new Exception('Le cycle doit avoir un nom.');
+                throw new InvalidEntityException('Le cycle doit avoir un nom.');
             }
 
             // Check that there is not another cycle with that name
@@ -35,7 +44,9 @@
                 'cycle_id' => '!= '.$cycle->get('id')
             ]);
             if ($other) {
-                throw new Exception('Il existe déjà un cycle avec le nom '.$cycle->get('name').'.');
+                throw new EntityAlreadyExistsException(
+                    'Il existe déjà un cycle avec le nom '.$cycle->get('name').'.'
+                );
             }
 
             return true;
