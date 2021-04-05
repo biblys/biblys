@@ -2,7 +2,6 @@
 
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -41,67 +40,7 @@ if ($cart_id) {
     }
 }
 
-// Type of entity to add (article|stock)
-$add = filter_input(INPUT_POST, 'add', FILTER_SANITIZE_SPECIAL_CHARS);
-
-// Id of entity to add
-$addId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-
-// Is this a gift ?
-$gift = filter_input(INPUT_POST, 'gift', FILTER_SANITIZE_SPECIAL_CHARS);
-
-// If article is gifted, corresponding wish id
-$wishId = filter_input(INPUT_POST, 'wish', FILTER_VALIDATE_INT);
-
-// Add to cart
-if ($add) {
-    if (isset($gift)) {
-        $wm = new WishManager();
-        if ($w = $wm->get(array('wish_id' => $wishId))) {
-            if ($gift == "party") {
-                $cart->set('cart_as-a-gift', 'party');
-                $cart->set('cart_gift-recipient', $w->get('user_id'));
-                $cm->update($cart);
-            }
-        }
-    } else {
-        throw new Exception("Impossible d'ajouter au panier : type $add inconnu.");
-    }
-
-
-    if ($request->isXmlHttpRequest()) {
-        return new JsonResponse();
-    } else {
-        redirect('/pages/cart');
-    }
-}
-
 $_PAGE_TITLE = 'Panier';
-
-// Gift
-$gift = null;
-$gift_shipping = null;
-if ($cart->get('cart_as-a-gift') == 'party') {
-    // Get user
-    if ($u = $um->get(array('user_id' => $cart->get('gift-recipient')))) {
-        // Get customer
-        $cm = new CustomerManager();
-        if ($c = $cm->get(array('user_id' => $u->get('id'), 'site_id' => $_SITE['site_id']))) {
-            // Get shipping for shop
-            if ($sh = $shm->get(array('site_id' => $_SITE['site_id'], 'shipping_type' => 'magasin'))) {
-                $gift = ''
-                . '<p class="warning">Votre panier est en mode cadeau.</p>'
-                . '<p>Tous les articles que vous y ajouterez seront considérés comme des cadeau pour '.$u->getUserName().'.</p>'
-                . '<p>Pour revenir à un panier normal, finalisez votre commande ou cliquez sur :</p><p class="center"><a href="/pages/cart?vacuum" data-confirm="Voulez-vous vraiment vider votre panier ?" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Vider mon panier</a></p>';
-
-                $gift_shipping = '<h2><i class="fa fa-gift"></i> Mode cadeau</h2>'
-                . '<p>Après validation et paiement, les articles de votre panier seront emballés et mis à disposition de '.$u->getUserName().' pour son anniversaire le '._date($c->get('privatization'), 'j f Y').'.</p>'
-                . '<input type="hidden" name="shipping_id" value="'.$sh->get('id').'">'
-                . '<div class="center"><input type="submit" id="continue" value="Finaliser votre commande cadeau" class="btn btn-primary"></div>';
-            }
-        }
-    }
-}
 
 $alert = null;
 if (isset($_GET['vacuumed'])) {
@@ -259,8 +198,6 @@ $content .= '
     '.join($flashs).'
 
     '.$alert.'
-
-    '.$gift.'
 
     <table class="table cart-table">
         <thead>
@@ -505,113 +442,105 @@ if (isset($Articles) && $Articles > 0) {
             <fieldset>
     ';
 
-    // Special case : gift shipping
-    if (isset($gift_shipping)) {
-        $content .= $gift_shipping;
-
-    // If not special case
-    } else {
-
     // If cart contains physical articles that needs to be shipped
-        if ($cart->needsShipping()) {
-            $com = new CountryManager();
+    if ($cart->needsShipping()) {
+        $com = new CountryManager();
 
-            // Countries
-            $destinations = null;
-            $countries = $com->getAll();
-            $destinations = array_map(function ($country) use ($_V) {
-                $selected = null;
-                if ($country->get('name') === $_V->get('country')) {
-                    $selected = " selected";
-                }
-                return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
-            }, $countries);
-            $default_destination = $com->getById(67);
-
-            if ($_V->isLogged() && $customer = $_V->getCustomer()) {
-                $country_id = $customer->get('country_id');
-                $country = $com->getById($country_id);
-                if ($country) {
-                    $default_destination = $country;
-                }
+        // Countries
+        $destinations = null;
+        $countries = $com->getAll();
+        $destinations = array_map(function ($country) use ($_V) {
+            $selected = null;
+            if ($country->get('name') === $_V->get('country')) {
+                $selected = " selected";
             }
+            return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
+        }, $countries);
+        $default_destination = $com->getById(67);
 
-            // Poids > 30 kg
-            if ($Poids >= 29950) {
-                $plus30 = '<br><p class="warning"> Attention ! Votre commande excède le poids maximum autorisé par La Poste pour un colis (30 kg). Votre commande sera expédiée en plusieurs colis.</p>';
-            } else {
-                $plus30 = null;
+        if ($_V->isLogged() && $customer = $_V->getCustomer()) {
+            $country_id = $customer->get('country_id');
+            $country = $com->getById($country_id);
+            if ($country) {
+                $default_destination = $country;
             }
-
-            $content .= '
-                    <h3>Mode d\'exp&eacute;dition</h3>
-
-                    '.$plus30.'
-
-                    <input type="hidden" id="order_weight" value="'.$Poids.'">
-                    <input type="hidden" id="order_amount" value="'.$Total.'">
-                    <input type="hidden" id="articles_num" value="'.$Articles.'">
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th style="width: 200px;">Pays de destination</th>
-                                <th>Mode d\'exp&eacute;dition</th>
-                                <th style="width: 75px;">Frais</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <select id="country_id" name="country_id" class="form-control" required>
-                                        <option value="'.$default_destination->get('id').'">'.$default_destination->get('name').'</option>
-                                        '.implode($destinations).'
-                                    </select>
-                                </td>
-                                <td>
-                                    <select id="shipping_id" name="shipping_id" class="form-control" disabled required>
-                                        <option>Choisir un pays de destination...</option>
-                                    </select>
-                                </td>
-                                <td id="shipping_amount" class="right" style="vertical-align: middle;">0,00&nbsp;&euro;</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">
-                                    <p id="shipping_info">Choisissez un mode d\'expédition ci-dessus pour continuer.</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td class="bold right">Montant &agrave; r&eacute;gler :</td>
-                                <td id="total" class="right bold">'.currency($Total / 100).'</td>
-                            </tr>
-                        </tbody>
-                    </table>
-            ';
         }
 
-        // If cart contains downloadable and user not logged
-        if ($downloadable && !$_V->isLogged()) {
-            $content .= '<br />'
-            . '<div class="center">'
-            . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
-            . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-            . '</div>';
-
-        // If cart contains crowdfunding rewards and user not logged
-        } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
-            $content .= '<br>'
-            . '<div class="center">'
-            . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
-            . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
-            . '</div>';
+        // Poids > 30 kg
+        if ($Poids >= 29950) {
+            $plus30 = '<br><p class="warning"> Attention ! Votre commande excède le poids maximum autorisé par La Poste pour un colis (30 kg). Votre commande sera expédiée en plusieurs colis.</p>';
         } else {
-            if (isset($o["order_id"])) {
-                $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
-            } else {
-                $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
-            }
+            $plus30 = null;
+        }
+
+        $content .= '
+                <h3>Mode d\'exp&eacute;dition</h3>
+
+                '.$plus30.'
+
+                <input type="hidden" id="order_weight" value="'.$Poids.'">
+                <input type="hidden" id="order_amount" value="'.$Total.'">
+                <input type="hidden" id="articles_num" value="'.$Articles.'">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Pays de destination</th>
+                            <th>Mode d\'exp&eacute;dition</th>
+                            <th style="width: 75px;">Frais</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select id="country_id" name="country_id" class="form-control" required>
+                                    <option value="'.$default_destination->get('id').'">'.$default_destination->get('name').'</option>
+                                    '.implode($destinations).'
+                                </select>
+                            </td>
+                            <td>
+                                <select id="shipping_id" name="shipping_id" class="form-control" disabled required>
+                                    <option>Choisir un pays de destination...</option>
+                                </select>
+                            </td>
+                            <td id="shipping_amount" class="right" style="vertical-align: middle;">0,00&nbsp;&euro;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <p id="shipping_info">Choisissez un mode d\'expédition ci-dessus pour continuer.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="bold right">Montant &agrave; r&eacute;gler :</td>
+                            <td id="total" class="right bold">'.currency($Total / 100).'</td>
+                        </tr>
+                    </tbody>
+                </table>
+        ';
+    }
+
+    // If cart contains downloadable and user not logged
+    if ($downloadable && !$_V->isLogged()) {
+        $content .= '<br />'
+        . '<div class="center">'
+        . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+        . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+        . '</div>';
+
+    // If cart contains crowdfunding rewards and user not logged
+    } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
+        $content .= '<br>'
+        . '<div class="center">'
+        . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+        . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
+        . '</div>';
+    } else {
+        if (isset($o["order_id"])) {
+            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
+        } else {
+            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
         }
     }
 
