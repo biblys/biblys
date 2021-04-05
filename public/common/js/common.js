@@ -738,7 +738,12 @@ function reloadEvents(scope) {
           button.button('reset');
 
           // Update cart preview
-          $('#myCart').load('/pages/cart?oneline');
+          fetch('/cart/summary')
+            .then((response) => response.json())
+            .then((json) => {
+              const myCart = document.querySelector('#myCart');
+              myCart.innerHTML = json.summary;
+            });
 
           // If error
           if (data.error) {

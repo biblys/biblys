@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Cart;
 use CartManager;
 use CFRewardManager;
 use Framework\Controller;
@@ -90,5 +91,21 @@ class CartController extends Controller
         }
 
         return new RedirectResponse("/pages/cart?removed=1");
+    }
+
+    /**
+     * GET /cart/summary
+     * @return JsonResponse
+     */
+    public function summaryAction(): JsonResponse
+    {
+        $cart = $this->user->getCart();
+        if (!$cart) {
+            $cartSummary = Cart::getOneLineEmpty();
+            return new JsonResponse($cartSummary);
+        }
+
+        $cartSummary = $cart->getOneLine();
+        return new JsonResponse(["summary" => $cartSummary]);
     }
 }

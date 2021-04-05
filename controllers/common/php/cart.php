@@ -41,12 +41,6 @@ if ($cart_id) {
     }
 }
 
-// Show the cart in one line
-if (isset($_GET['oneline'])) {
-    $line = $cart->getOneLine();
-    die($line);
-}
-
 // Type of entity to add (article|stock)
 $add = filter_input(INPUT_POST, 'add', FILTER_SANITIZE_SPECIAL_CHARS);
 

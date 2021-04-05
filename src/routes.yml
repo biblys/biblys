@@ -188,6 +188,10 @@ cart_remove_stock:
   requirements:
     stockId: \d+
 
+cart_summary:
+  path: /cart/summary
+  controller: AppBundle\Controller\CartController::summaryAction
+
 # Crons
 
 crons_tasks:

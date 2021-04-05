@@ -194,4 +194,67 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             "it should have updated cart article count"
         );
     }
+
+    public function testGetSummaryWhenCartIsEmpty()
+    {
+        global $_V;
+
+        // given
+        $cart = $_V->getCart("create");
+        $cm = new CartManager();
+        $cm->vacuum($cart);
+        $controller = new CartController();
+
+        // when
+        $response = $controller->summaryAction();
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with HTTP 200"
+        );
+        $this->assertEquals(
+            '<a
+                href="/pages/cart"
+                rel="nofollow"
+                class="btn btn-default btn-sm empty"><span class="fa fa-shopping-cart"></span> Panier vide</a>',
+            json_decode($response->getContent())->summary,
+            "it should return cart summary"
+        );
+    }
+
+    public function testGetSummaryWhenCartIsFull()
+    {
+        global $_V;
+
+        // given
+        $cart = $_V->getCart("create");
+        $cm = new CartManager();
+        $cm->vacuum($cart);
+        $stock = Factory::createStock(["stock_selling_price" => 500]);
+        $cm->addStock($cart, $stock);
+        $cm->updateFromStock($cart);
+        $controller = new CartController();
+
+        // when
+        $response = $controller->summaryAction();
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with HTTP 200"
+        );
+        $this->assertEquals(
+            '<a
+                href="/pages/cart"
+                rel="nofollow"
+                class="btn btn-default btn-sm not-empty"><span class="fa fa-shopping-cart"></span> 1 article (5,00&nbsp;&euro;)</a>',
+            json_decode($response->getContent())->summary,
+            "it should return cart summary"
+        );
+
+        $cm->vacuum($cart);
+    }
 }
