@@ -3,7 +3,6 @@
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Framework\Exception\AuthException;
 
@@ -43,13 +42,6 @@ if ($cart_id) {
 $_PAGE_TITLE = 'Panier';
 
 $alert = null;
-if (isset($_GET['vacuumed'])) {
-    $alert = '<p class="success">Votre panier a été vidé.</p>';
-}
-if (isset($_GET['stock_price_updated'])) {
-    $alert = '<p class="success">Le prix de l\'article a été mis à jour.</p>';
-}
-
 $OneArticle = 0;
 $books = 0;
 $ebooks = 0;
@@ -135,7 +127,6 @@ foreach ($stocks as $stock) {
             </form>
         ';
     }
-
 
     $cart_content[] = '
         <tr id="cart_tr_'.$stock->get('id').'">

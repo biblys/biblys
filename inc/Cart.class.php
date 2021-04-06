@@ -308,8 +308,6 @@ class CartManager extends EntityManager
         $cart->set('customer_id', '');
         $cart->set('cart_title', '');
         $cart->set('cart_date', '');
-        $cart->set('cart_as-a-gift', '');
-        $cart->set('cart_gift-recipient', '');
         $cart->set('cart_count', '');
         $cart->set('cart_amount', '');
 
@@ -371,16 +369,6 @@ class CartManager extends EntityManager
         $weight_required = $site->getOpt('weight_required');
         if ($cart->get('type') == 'web' && $weight_required && (!$stock->get('weight') || $stock->get('weight') < $weight_required)) {
             throw new Exception('Cet exemplaire n\'a pas de poids et ne peut être ajouté au panier. Merci de nous contacter.');
-        }
-
-        // Is it bought as a gift ?
-        if ($wish_id != 'undefined') {
-            $wm = new WishManager();
-            if ($w = $wm->get(array('wish_id' => $wish_id))) {
-                $w->set('wish_bought', date('Y-m-d H:i:s'));
-                $wm->update($w);
-                $stock->set('wish_id', $w->get('id'));
-            }
         }
 
         // Is the article in the visitor's wishlist ?

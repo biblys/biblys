@@ -47,8 +47,7 @@ foreach ($wishes as $w) {
                             <p>'.$a->get('collection')->get('name').' / '.$a->get('publisher')->get('name').'</p>
                         </td>
                         <td class="center">
-                            <p class="center">'.price($a->get('price'), 'EUR').'</p>
-                            <a class="btn btn-primary btn-sm" href="/pages/log_gift?wish_id='.$w['wish_id'].'&article_id='.$a->get('id').'">Offrir cet article</a>
+                            '.$article->getCartButton("Offrir ce livre").'
                         </td>
                     </tr>
                 ';
@@ -72,8 +71,7 @@ foreach ($wishes as $w) {
                             <p>'.$a->get('collection')->get('name').' / '.$a->get('publisher')->get('name').'</p>
                         </td>
                         <td class="center">
-                            <p class="center"><span class="'.($s->get('condition') == 'Neuf' ? 'green' : 'orange').'">'.$s->get('condition').'</span> '.price($s->get('selling_price'),'EUR').'</p>
-                            <a class="btn btn-primary btn-sm" href="/pages/log_gift?wish_id='.$w['wish_id'].'&stock_id='.$s->get('id').'"><i class="fa fa-gift"></i> Offrir cet article</a>
+                            '.$s->getCartButton("Offrir ce livre").'
                         </td>
                     </tr>
                 ';

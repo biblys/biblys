@@ -693,11 +693,9 @@ function reloadEvents(scope) {
     .click(function(event) {
       event.preventDefault();
 
-      const button = $(this),
-        type = $(this).data('type'),
-        id = $(this).data('id'),
-        wish_id = $(this).data('wish_id'),
-        as_a_gift = $(this).data('as_a_gift');
+      const button = $(this);
+      const type = $(this).data('type');
+      const id = $(this).data('id');
       let text_loading = '';
       let text_success = '';
 

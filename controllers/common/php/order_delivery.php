@@ -80,9 +80,6 @@ function validateOrderDetails($request) {
 
     $order_update = 0;
 
-    $order_gift_mode = null;
-    $order_gift_recipient = null;
-
     // Managers
     $cm = new CustomerManager();
     $com = new CountryManager();
@@ -93,32 +90,6 @@ function validateOrderDetails($request) {
     $shm = new ShippingManager();
 
     if ($cart = $_V->getCart()) {
-
-        // Gift
-        $gift_mode = null;
-        if ($cart->get('cart_as-a-gift') == 'party') {
-
-            // Get user
-            if ($u = $um->get(array('user_id' => $cart->get('gift-recipient')))) {
-
-                // Get customer
-                $cm = new CustomerManager();
-                if ($c = $cm->get(array('user_id' => $u->get('id'), 'site_id' => $_SITE['site_id']))) {
-                    $shm = new ShippingManager();
-
-                    // Get shipping for shop
-                    if ($sh = $shm->get(array('site_id' => $_SITE['site_id'], 'shipping_type' => 'magasin'))) {
-                        $gift_mode = '<h2><i class="fa fa-gift"></i> Mode cadeau</h2>'
-                                . '<p>Après validation et paiement, les articles de votre panier seront emballés et mis à disposition de '.$u->getUserName().' pour son anniversaire le '._date($c->get('privatization'), 'j f Y').'.</p>'
-                                . '<input type="hidden" name="shipping_id" value="'.$sh->get('id').'">';
-
-                        $order_gift_mode = 'party';
-                        $order_gift_recipient = $u->get('id');
-                        $order_gift_recipient_name = $u->getUserName();
-                    }
-                }
-            }
-        }
 
         $article_count = 0;
         $total_weight = 0;
@@ -316,12 +287,6 @@ function validateOrderDetails($request) {
                         $order->set($key, $val);
                     }
 
-                    // Is the order a gift ?
-                    if (isset($order_gift_mode)) {
-                        $order->set('order_as-a-gift', $order_gift_mode);
-                        $order->set('order_gift-recipient', $order_gift_recipient);
-                    }
-
                     // Persist order
                     $om->update($order);
 
@@ -372,14 +337,9 @@ function validateOrderDetails($request) {
                         $mail['shipping'] = 'Frais de port offerts<br>';
                     }
 
-                    $mail['gift'] = null;
                     $mail['subject'] = $_SITE["site_tag"].' | Commande n° '.$order->get('id');
                     if ($order_update) {
                         $mail['subject'] .= ' (mise à jour)';
-                    }
-                    if (isset($order_gift_mode)) {
-                        $mail['subject'] .= ' [Cadeau]';
-                        $mail['gift'] = '<p>Commande cadeau pour '.$order_gift_recipient_name.'</p>';
                     }
 
                     if ($shipping_mode == "magasin") {
@@ -428,8 +388,6 @@ function validateOrderDetails($request) {
 
                     $mail['content'] .= '
                                 <p><strong><a href="http://'.$_SERVER['HTTP_HOST'].'/order/'.$order->get('url').'">Commande n&deg; '.$order->get('order_id').'</a></strong></p>
-
-                                '.$mail['gift'].'
 
                                 <p><strong>'.$article_count.' article'.s($article_count).'</strong></p>
 
@@ -547,11 +505,6 @@ function validateOrderDetails($request) {
                     <h3>Date d\'expédition</h3>
                     <p>'.$site->getOpt('shipping_date').'</p>
                 ';
-            }
-
-            // Gift mode
-            if (isset($gift_mode)) {
-                $_ECHO .= $gift_mode;
             }
 
             $form_class = null;
