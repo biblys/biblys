@@ -266,7 +266,7 @@
         $s_cart = '
             <tr>
                 <td><a href="/pages/adm_checkout?cart_id='.$s->get('cart_id').'">'.$s->get('cart_title').'</a></td>
-                <td>'.($s->has('seller') ? $s->get('seller')->get('screen_name') : null).'</td>
+                <td>'.($s->hasSeller() ? $s->getSeller()->getUserName() : null).'</td>
                 <td>'.($s->has('customer') ? $s->get('customer')->get('first_name').' '.$s->get('customer')->get('last_name') : null).'</td>
                 <td class="right">'.$s->get('cart_count').'</td>
                 <td class="right">'.currency($s->get('cart_amount') / 100).'</td>
