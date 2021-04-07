@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 if (!$_V->isAdmin()) {
     trigger_error("Vous n'avez pas le droit d'accéder à cette page.");
 }
@@ -10,9 +12,9 @@ $linm = new LinkManager();
 
 $_PAGE_TITLE = 'Listes';
 
-$_ECHO .= '
-        <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
-    ';
+$content = '
+    <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
+';
 
 $newList = $request->request->get('new_list');
 if ($newList) {
@@ -38,7 +40,7 @@ if ($newList) {
     redirect('/list/'.$listUrl);
 }
 
-$_ECHO .= '
+$content .= '
         <p>
         <label>Mes listes :</label>
         <select class="goto">
@@ -49,10 +51,10 @@ $lm = new ListeManager();
 $lists = $lm->getAll([], ['order' => 'list_title']);
 
 foreach ($lists as $list) {
-    $_ECHO .= '<option value="/list/'.$list->get('url').'">'.$list->get('title').'</option>';
+    $content .= '<option value="/list/'.$list->get('url').'">'.$list->get('title').'</option>';
 }
 
-$_ECHO .= '
+$content .= '
         </select>
         </p>
 
@@ -67,13 +69,13 @@ $_ECHO .= '
     ';
 
 if (isset($_GET['emptied'])) {
-    $_ECHO .= '<p class="success">La liste a bien été vidée</p>';
+    $content .= '<p class="success">La liste a bien été vidée</p>';
 }
 if (isset($_GET['deleted'])) {
-    $_ECHO .= '<p class="success">La liste a bien été supprimée</p>';
+    $content .= '<p class="success">La liste a bien été supprimée</p>';
 }
 if (isset($_GET['returned'])) {
-    $_ECHO .= '<p class="success">Les exemplaires de la liste ont bien été retournés</p>';
+    $content .= '<p class="success">Les exemplaires de la liste ont bien été retournés</p>';
 }
 
 $url = $request->query->get('url');
@@ -82,7 +84,7 @@ if ($list) {
     $l = $list;
 
     if ($_V->isAdmin()) {
-        $_ECHO .= '
+        $content .= '
                     <div class="admin">
                         Liste n° '.$list->get('id').'
                     </div>
@@ -155,7 +157,7 @@ if ($list) {
     }
 
     $_PAGE_TITLE = $list->get('title');
-    $_ECHO .= '
+    $content .= '
                 <h2><a href="/list/'.$l['list_url'].'">'.$_PAGE_TITLE.'</a></h2>
 
                 <label for="list">Ajouter &agrave; la liste :</label>
@@ -216,3 +218,5 @@ if ($list) {
                 </form>
             ';
 }
+
+return new Response($content);
