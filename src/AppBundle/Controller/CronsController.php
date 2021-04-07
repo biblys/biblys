@@ -3,10 +3,15 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use CronJobManager;
 use EntityManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use PDO;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class CronsController extends Controller
@@ -14,6 +19,8 @@ class CronsController extends Controller
     /**
      * @param Config $config
      * @param Request $request
+     * @throws AuthException
+     * @throws Exception
      */
     private static function _authenticateCronRequest(Config $config, Request $request): void
     {
@@ -37,14 +44,15 @@ class CronsController extends Controller
 
     /**
      * GET /crons/.
+     * @throws AuthException
      */
-    public function tasksAction()
+    public function tasksAction(): Response
     {
         $this->auth('admin');
 
         $this->setPageTitle('Journal des tâches planifiées');
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
             [],
             ['order' => 'cron_job_created', 'sort' => 'desc']
@@ -61,8 +69,11 @@ class CronsController extends Controller
     /**
      * GET /crons/{slug}/jobs
      * Generic controller to display job logs of a cron task.
+     * @param $slug
+     * @return Response
+     * @throws AuthException
      */
-    public function jobsAction($slug)
+    public function jobsAction(string $slug): Response
     {
         $this->auth('admin');
 
@@ -74,7 +85,7 @@ class CronsController extends Controller
 
         $this->setPageTitle("Journal de la tâche planifiée $slug");
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
             ['cron_job_task' => $slug],
             ['order' => 'cron_job_created', 'sort' => 'desc']
@@ -98,14 +109,20 @@ class CronsController extends Controller
     /**
      * GET /crons/test
      * A test cron task.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthException
+     * @throws Exception
      */
-    public function testAction(Request $request)
+    public function testAction(Request $request): JsonResponse
     {
+        global $config;
+
         $request->headers->set('Accept', 'application/json');
 
         self::_authenticateCronRequest($config, $request);
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
         $job = $cjm->create(
             [
                 'cron_job_task' => 'test',
@@ -127,11 +144,14 @@ class CronsController extends Controller
     /**
      * GET /crons/export-pdl
      * Export to Place des Libraires cron task.
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthException
+     * @throws Exception
      */
-    public function exportPdlAction(Request $request)
+    public function exportPdlAction(Request $request): JsonResponse
     {
         global $site;
-        global $_SQL;
         global $config;
 
         $request->headers->set('Accept', 'application/json');
@@ -140,10 +160,10 @@ class CronsController extends Controller
 
         $pdl = $config->get('placedeslibraires');
         if (!$pdl) {
-            throw new \Exception('Place des libraires credentials are missing in config file');
+            throw new Exception('Place des libraires credentials are missing in config file');
         }
 
-        $cjm = new \CronJobManager();
+        $cjm = new CronJobManager();
 
         try {
             $ftpServer = 'ftp.titelive.com';
@@ -179,7 +199,7 @@ class CronsController extends Controller
             $articleCount = 0;
 
             $lines = [];
-            while ($item = $stock->fetch(\PDO::FETCH_ASSOC)) {
+            while ($item = $stock->fetch(PDO::FETCH_ASSOC)) {
                 $ean = $item['article_ean'];
                 $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
                 $price = str_pad($item['stock_selling_price'], 10, '0', STR_PAD_LEFT);
@@ -187,7 +207,7 @@ class CronsController extends Controller
                 $line = $shopId.$ean.$qty.$price;
 
                 if (strlen($line) !== 31) {
-                    throw new \Exception("Line for $ean is not 31 chars long: $line");
+                    throw new Exception("Line for $ean is not 31 chars long: $line");
                 }
 
                 $stockCount += $item['qty'];
@@ -205,11 +225,9 @@ class CronsController extends Controller
                 file_put_contents($ftp, $file, 0, $stream);
             }
 
-            $result = "success";
             $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
 
-        } catch (\Exception $exception) {
-            $result = "error";
+        } catch (Exception $exception) {
             $message = $exception->getMessage();
         }
 
