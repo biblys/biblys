@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Isbn\Isbn;
+
 $lm = new LinkManager();
 
 $query = $request->query->get("query");
