@@ -99,26 +99,23 @@ if ($list) {
         redirect('/pages/list?deleted=1');
     }
 
-    $group_by = 'GROUP BY `stock_id`';
-    if ($request->query->get('regroup', false)) {
-        $group_by = 'GROUP BY `article_id`';
-    }
-
     $Total = 0;
     $TotalPrice = 0;
     $export = [];
     $articles_in_list = null;
-    $articles = $_SQL->query('
-                SELECT `link_id`, `stock_id`, COUNT(`stock_id`) AS `count`, COUNT(`stock_id`) * `stock_selling_price` AS `total`, 
-                        `stock`.`article_id`, `article_title`, `article_ean`, `article_url`, `article_collection`, `article_publisher`, 
-                        `stock_selling_price`, `stock_return_date`, `stock_selling_date`, `stock_cart_date`, `stock_lost_date`, `stock_stockage`
-                    FROM `links`
-                    JOIN `stock` USING(`stock_id`)
-                    JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id`
-                    WHERE `list_id` = '.$list->get('id').' AND `link_deleted` IS NULL
-                    '.$group_by.'
-                    ORDER BY `link_id` DESC
-                ');
+    $articles = EntityManager::prepareAndExecute('
+        SELECT 
+           `link_id`, `stock_id`, 
+            "1" AS `count`, "0" AS `total`,
+           `stock`.`article_id`, `article_title`, `article_ean`, `article_url`, `article_collection`, `article_publisher`, 
+            `stock_selling_price`, `stock_return_date`, `stock_selling_date`, `stock_cart_date`, `stock_lost_date`, `stock_stockage`
+        FROM `links`
+        JOIN `stock` USING(`stock_id`)
+        JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id`
+        WHERE `list_id` = :list_id AND `link_deleted` IS NULL
+        ORDER BY `link_id` DESC',
+        ["list_id" => $list->get('id')]
+    );
 
     while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         if (isset($_GET['action']) && $_GET['action'] == 'return' && $_V->isAdmin()) {
