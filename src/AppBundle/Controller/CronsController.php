@@ -156,6 +156,8 @@ class CronsController extends Controller
 
         $request->headers->set('Accept', 'application/json');
 
+        $response = new JsonResponse();
+
         self::_authenticateCronRequest($config, $request);
 
         $pdl = $config->get('placedeslibraires');
@@ -226,24 +228,29 @@ class CronsController extends Controller
             }
 
             $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
+            $result = "success";
 
         } catch (Exception $exception) {
+            $response->setStatusCode(500);
             $message = $exception->getMessage();
+            $result = "error";
         }
 
         $job = $cjm->create([
             'cron_job_task' => 'export-pdl',
-            'cron_job_result' => 'error',
+            'cron_job_result' => $result,
             'cron_job_message' => $message,
         ]);
 
-        return new JsonResponse(
-            [
+        $response->setContent(
+            json_encode([
                 'id' => $job->get('id'),
                 'result' => $job->get('result'),
                 'message' => $job->get('message'),
                 'date' => $job->get('created'),
-            ]
+            ])
         );
+
+        return $response;
     }
 }
