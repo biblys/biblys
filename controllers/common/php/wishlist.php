@@ -1,5 +1,8 @@
 <?php
 
+global $request;
+global $site;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -27,18 +30,14 @@ $am = new ArticleManager();
 $articles = array();
 
 $table = null; $og_images = array();
-foreach ($wishes as $w)
-{
+foreach ($wishes as $w) {
 
-    if (!$w['wish_bought'])
-    {
+    if (!$w['wish_bought']) {
 
         $a = $am->get(array('article_id' => $w['article_id']));
 
-        if ($_SITE['site_publisher'])
-        {
-            if ($a->get('publisher_id') == $_SITE['publisher_id'])
-            {
+        if ($site->has("publisher_id")) {
+            if ($a->get('publisher_id') == $site->get('publisher_id')) {
                 $table .= '
                     <tr>
                         <td class="center">'.$a->getPhotoTag(['size' => 'h50']).'</td>
@@ -54,9 +53,7 @@ foreach ($wishes as $w)
                     </tr>
                 ';
             }
-        }
-        else
-        {
+        } else {
             $stock = $a->getStock('available');
             foreach ($stock as $s)
             {
@@ -91,7 +88,7 @@ $_OPENGRAPH = '
     <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'">
     <meta property="og:description" content="Offrez un livre à '.$user->get('screen_name').' en soutenant l\'édition et la librairie indépendante !">
     <meta property="og:locale" content="fr_FR">
-    <meta property="og:site_name" content="'.$_SITE["site_name"].'">
+    <meta property="og:site_name" content="'.$site->get("name").'">
 ';
 shuffle($og_images);
 if (!empty($og_images)) $_OPENGRAPH .= '<meta property="og:image" content="'.$og_images[0].'">';
