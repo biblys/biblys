@@ -181,7 +181,10 @@ class CronsController extends Controller
             }
 
             $query = "
-                SELECT MAX(`article_ean`), COUNT(`stock_id`) AS `qty`, MAX(`stock_selling_price`)
+                SELECT 
+                    MAX(`article_ean`) AS `ean`, 
+                    COUNT(`stock_id`) AS `qty`,
+                    MAX(`stock_selling_price`) `price`
                 FROM `stock` 
                 JOIN articles USING(`article_id`)
                 WHERE `site_id` = :site_id
@@ -202,9 +205,9 @@ class CronsController extends Controller
 
             $lines = [];
             while ($item = $stock->fetch(PDO::FETCH_ASSOC)) {
-                $ean = $item['article_ean'];
+                $ean = $item['ean'];
                 $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
-                $price = str_pad($item['stock_selling_price'], 10, '0', STR_PAD_LEFT);
+                $price = str_pad($item['price'], 10, '0', STR_PAD_LEFT);
 
                 $line = $shopId.$ean.$qty.$price;
 
