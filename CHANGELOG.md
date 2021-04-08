@@ -1,6 +1,10 @@
 
 # Historique des modifications
 
+## 2.53.0-dev.1 (8 avril 2021)
+
+- Refonte technique des actions du panier
+
 ## 2.52.0 (2 avril 2021)
 
 Améliorations
