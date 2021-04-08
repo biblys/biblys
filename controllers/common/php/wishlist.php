@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $um = new UserManager();
@@ -95,7 +96,7 @@ $_OPENGRAPH = '
 shuffle($og_images);
 if (!empty($og_images)) $_OPENGRAPH .= '<meta property="og:image" content="'.$og_images[0].'">';
 
-$_ECHO .= '
+$content = '
     <h2>'.$_PAGE_TITLE.'</h2>
     <p>Liste d\'envies de '.$user->get('screen_name').'</p>
     
@@ -111,3 +112,5 @@ $_ECHO .= '
         </tbody>
     </table>
 ';
+
+return new Response($content);
