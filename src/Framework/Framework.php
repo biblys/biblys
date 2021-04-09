@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -23,8 +22,6 @@ use Symfony\Component\Routing\RouteCollection;
 
 class Framework
 {
-    protected $matcher;
-    protected $resolver;
     private $kernel;
 
     public function handle(Request $request): Response
@@ -40,15 +37,6 @@ class Framework
         $argumentResolver = new ArgumentResolver();
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new RouterListener($matcher, new RequestStack()));
-
-        // Handle Kernel exception (404)
-        $dispatcher->addListener(
-            'kernel.exception',
-            function (GetResponseForExceptionEvent $event) {
-                $exception = $event->getThrowable();
-                throw $exception;
-            }
-        );
 
         $this->kernel = new HttpKernel(
             $dispatcher,
