@@ -24,6 +24,17 @@ class Framework
 {
     private $kernel;
 
+    private $matcher;
+    private $controllerResolver;
+    private $argumentResolver;
+
+    public function __construct(UrlMatcher $matcher, ControllerResolver $controllerResolver, ArgumentResolver $argumentResolver)
+    {
+        $this->matcher = $matcher;
+        $this->controllerResolver = $controllerResolver;
+        $this->argumentResolver = $argumentResolver;
+    }
+
     public function handle(Request $request): Response
     {
         $axysUid = $request->query->get("UID");
@@ -31,18 +42,14 @@ class Framework
             return $this->_createAfterLoginRedirectResponse($request, $axysUid);
         }
 
-        $context = self::getContext($request);
-        $matcher = new UrlMatcher(self::getRoutes(), $context);
-        $controllerResolver = new ControllerResolver();
-        $argumentResolver = new ArgumentResolver();
         $dispatcher = new EventDispatcher();
-        $dispatcher->addSubscriber(new RouterListener($matcher, new RequestStack()));
+        $dispatcher->addSubscriber(new RouterListener($this->matcher, new RequestStack()));
 
         $this->kernel = new HttpKernel(
             $dispatcher,
-            $controllerResolver,
+            $this->controllerResolver,
             new RequestStack(),
-            $argumentResolver
+            $this->argumentResolver
         );
 
         return $this->kernel->handle($request);
@@ -82,22 +89,8 @@ class Framework
         }
     }
 
-    static private function getContext(Request $request): RequestContext
+    static public function getUrlGenerator(RouteCollection $routes, RequestContext $context): UrlGenerator
     {
-        $context = new RequestContext();
-        $context->fromRequest($request);
-        return $context;
-    }
-
-    static private function getRoutes(): RouteCollection
-    {
-        return require BIBLYS_PATH . 'src/routes.php';
-    }
-
-    static public function getUrlGenerator(Request $request): UrlGenerator
-    {
-        $routes = self::getRoutes();
-        $context = self::getContext($request);
         return new UrlGenerator($routes, $context);
     }
 

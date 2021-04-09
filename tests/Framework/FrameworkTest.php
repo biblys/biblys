@@ -1,6 +1,10 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 
 require_once "tests/setUp.php";
 
@@ -16,7 +20,13 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
             "REQUEST_TIME" => 1616700639,
         ];
         $request = Request::createFromGlobals();
-        $framework = new Framework\Framework();
+        $routes = require __DIR__ . "/../../src/routes.php";
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        $matcher = new UrlMatcher($routes, $context);
+        $controllerResolver = new ControllerResolver();
+        $argumentResolver = new ArgumentResolver();
+        $framework = new Framework\Framework($matcher, $controllerResolver, $argumentResolver);;
 
         // when
         $response = $framework->handle($request);

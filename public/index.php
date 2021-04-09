@@ -14,9 +14,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 
 // Create request from globals
 $request = Request::createFromGlobals();
@@ -122,8 +126,15 @@ try {
         );
     }
 
-    $framework = new Framework();
-    $urlgenerator = Framework::getUrlGenerator($request);
+    $routes = require __DIR__ . "/../src/routes.php";
+    $context = new RequestContext();
+    $context->fromRequest($request);
+    $matcher = new UrlMatcher($routes, $context);
+    $controllerResolver = new ControllerResolver();
+    $argumentResolver = new ArgumentResolver();
+
+    $framework = new Framework($matcher, $controllerResolver, $argumentResolver);
+    $urlgenerator = Framework::getUrlGenerator($routes, $context);
 
     try {
         $response = $framework->handle($request);
