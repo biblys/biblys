@@ -123,7 +123,7 @@ try {
     }
 
     $framework = new Framework($request);
-    $urlgenerator = $framework->getUrlGenerator();
+    $urlgenerator = $framework->getUrlGenerator($request);
 
     try {
         $response = $framework->handle($request);

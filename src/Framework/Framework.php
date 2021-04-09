@@ -26,31 +26,29 @@ class Framework
     protected $resolver;
     private $request;
     private $routes;
-    private $context;
     private $kernel;
 
     public function __construct($request)
     {
         $this->request = $request;
         $this->routes = require BIBLYS_PATH.'src/routes.php';
-        $this->context = new RequestContext();
-        $this->context->fromRequest($request);
     }
 
-    public function getUrlGenerator(): UrlGenerator
+    public function getUrlGenerator(Request $request): UrlGenerator
     {
-        return new UrlGenerator($this->routes, $this->context);
+        $context = self::getContext($request);
+        return new UrlGenerator($this->routes, $context);
     }
 
     public function handle(): Response
     {
-
         $axysUid = $this->request->query->get("UID");
         if ($axysUid) {
             return $this->_createAfterLoginRedirectResponse($this->request, $axysUid);
         }
 
-        $matcher = new UrlMatcher($this->routes, $this->context);
+        $context = self::getContext($this->request);
+        $matcher = new UrlMatcher($this->routes, $context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
         $dispatcher = new EventDispatcher();
@@ -107,6 +105,13 @@ class Framework
             throw new Exception('Une erreur est survenue lors de la mise à jour automatique
                     des composants.');
         }
+    }
+
+    static private function getContext(Request $request): RequestContext
+    {
+        $context = new RequestContext();
+        $context->fromRequest($request);
+        return $context;
     }
 
     /**s
