@@ -19,25 +19,24 @@ use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
 
 class Framework
 {
     protected $matcher;
     protected $resolver;
     private $request;
-    private $routes;
     private $kernel;
 
-    public function __construct($request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->routes = require BIBLYS_PATH.'src/routes.php';
     }
 
     public function getUrlGenerator(Request $request): UrlGenerator
     {
         $context = self::getContext($request);
-        return new UrlGenerator($this->routes, $context);
+        return new UrlGenerator(self::getRoutes(), $context);
     }
 
     public function handle(): Response
@@ -48,7 +47,7 @@ class Framework
         }
 
         $context = self::getContext($this->request);
-        $matcher = new UrlMatcher($this->routes, $context);
+        $matcher = new UrlMatcher(self::getRoutes(), $context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
         $dispatcher = new EventDispatcher();
@@ -112,6 +111,11 @@ class Framework
         $context = new RequestContext();
         $context->fromRequest($request);
         return $context;
+    }
+
+    static private function getRoutes(): RouteCollection
+    {
+        return require BIBLYS_PATH . 'src/routes.php';
     }
 
     /**s
