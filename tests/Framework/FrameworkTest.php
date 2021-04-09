@@ -16,10 +16,10 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
             "REQUEST_TIME" => 1616700639,
         ];
         $request = Request::createFromGlobals();
-        $framework = new Framework\Framework($request);
+        $framework = new Framework\Framework();
 
         // when
-        $response = $framework->handle();
+        $response = $framework->handle($request);
 
         // then
         $this->assertInstanceOf(

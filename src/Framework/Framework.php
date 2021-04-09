@@ -25,13 +25,7 @@ class Framework
 {
     protected $matcher;
     protected $resolver;
-    private $request;
     private $kernel;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
 
     public function getUrlGenerator(Request $request): UrlGenerator
     {
@@ -39,14 +33,14 @@ class Framework
         return new UrlGenerator(self::getRoutes(), $context);
     }
 
-    public function handle(): Response
+    public function handle(Request $request): Response
     {
-        $axysUid = $this->request->query->get("UID");
+        $axysUid = $request->query->get("UID");
         if ($axysUid) {
-            return $this->_createAfterLoginRedirectResponse($this->request, $axysUid);
+            return $this->_createAfterLoginRedirectResponse($request, $axysUid);
         }
 
-        $context = self::getContext($this->request);
+        $context = self::getContext($request);
         $matcher = new UrlMatcher(self::getRoutes(), $context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
@@ -69,7 +63,7 @@ class Framework
             $argumentResolver
         );
 
-        return $this->kernel->handle($this->request);
+        return $this->kernel->handle($request);
     }
 
     public function terminateKernel(Request $request, Response $response)

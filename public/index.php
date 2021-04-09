@@ -122,7 +122,7 @@ try {
         );
     }
 
-    $framework = new Framework($request);
+    $framework = new Framework();
     $urlgenerator = $framework->getUrlGenerator($request);
 
     try {
