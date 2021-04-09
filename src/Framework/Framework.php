@@ -21,12 +21,14 @@ class Framework
 {
     private $kernel;
 
+    private $dispatcher;
     private $matcher;
     private $controllerResolver;
     private $argumentResolver;
 
-    public function __construct(UrlMatcher $matcher, ControllerResolver $controllerResolver, ArgumentResolver $argumentResolver)
+    public function __construct(EventDispatcher $dispatcher, UrlMatcher $matcher, ControllerResolver $controllerResolver, ArgumentResolver $argumentResolver)
     {
+        $this->dispatcher = $dispatcher;
         $this->matcher = $matcher;
         $this->controllerResolver = $controllerResolver;
         $this->argumentResolver = $argumentResolver;
@@ -39,11 +41,10 @@ class Framework
             return $this->_createAfterLoginRedirectResponse($request, $axysUid);
         }
 
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addSubscriber(new RouterListener($this->matcher, new RequestStack()));
+        $this->dispatcher->addSubscriber(new RouterListener($this->matcher, new RequestStack()));
 
         $this->kernel = new HttpKernel(
-            $dispatcher,
+            $this->dispatcher,
             $this->controllerResolver,
             new RequestStack(),
             $this->argumentResolver

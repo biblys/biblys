@@ -26,7 +26,8 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
         $matcher = new UrlMatcher($routes, $context);
         $controllerResolver = new ControllerResolver();
         $argumentResolver = new ArgumentResolver();
-        $framework = new Framework\Framework($matcher, $controllerResolver, $argumentResolver);;
+        $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+        $framework = new Framework\Framework($dispatcher, $matcher, $controllerResolver, $argumentResolver);
 
         // when
         $response = $framework->handle($request);

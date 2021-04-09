@@ -9,6 +9,7 @@ use Framework\ExceptionController;
 include '../inc/functions.php';
 
 use Framework\Framework;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -130,11 +131,12 @@ try {
     $routes = require __DIR__ . "/../src/routes.php";
     $context = new RequestContext();
     $context->fromRequest($request);
+    $dispatcher = new EventDispatcher();
     $matcher = new UrlMatcher($routes, $context);
     $controllerResolver = new ControllerResolver();
     $argumentResolver = new ArgumentResolver();
 
-    $framework = new Framework($matcher, $controllerResolver, $argumentResolver);
+    $framework = new Framework($dispatcher, $matcher, $controllerResolver, $argumentResolver);
     $urlgenerator = new UrlGenerator($routes, $context);
 
 
