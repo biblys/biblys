@@ -15,10 +15,7 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
 
 class Framework
 {
@@ -87,11 +84,6 @@ class Framework
             throw new Exception('Une erreur est survenue lors de la mise à jour automatique
                     des composants.');
         }
-    }
-
-    static public function getUrlGenerator(RouteCollection $routes, RequestContext $context): UrlGenerator
-    {
-        return new UrlGenerator($routes, $context);
     }
 
     /**s

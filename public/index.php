@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
@@ -134,7 +135,8 @@ try {
     $argumentResolver = new ArgumentResolver();
 
     $framework = new Framework($matcher, $controllerResolver, $argumentResolver);
-    $urlgenerator = Framework::getUrlGenerator($routes, $context);
+    $urlgenerator = new UrlGenerator($routes, $context);
+
 
     try {
         $response = $framework->handle($request);
