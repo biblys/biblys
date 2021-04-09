@@ -27,12 +27,6 @@ class Framework
     protected $resolver;
     private $kernel;
 
-    public function getUrlGenerator(Request $request): UrlGenerator
-    {
-        $context = self::getContext($request);
-        return new UrlGenerator(self::getRoutes(), $context);
-    }
-
     public function handle(Request $request): Response
     {
         $axysUid = $request->query->get("UID");
@@ -110,6 +104,13 @@ class Framework
     static private function getRoutes(): RouteCollection
     {
         return require BIBLYS_PATH . 'src/routes.php';
+    }
+
+    static public function getUrlGenerator(Request $request): UrlGenerator
+    {
+        $routes = self::getRoutes();
+        $context = self::getContext($request);
+        return new UrlGenerator($routes, $context);
     }
 
     /**s
