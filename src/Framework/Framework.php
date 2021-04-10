@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Biblys\Service\Config;
 use Exception;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,26 +21,41 @@ class Framework extends HttpKernel
         $catch = true
     ): Response
     {
-        $axysUid = $request->query->get("UID");
-        if ($axysUid) {
-            return $this->_createAfterLoginRedirectResponse($request, $axysUid);
+        $config = new Config();
+        if (!$request->isSecure() && $config->get('https') === true) {
+            return self::_createHttpsRedirectResponse($request);
+        }
+
+        if ($request->query->has("UID")) {
+            return $this->_createAfterLoginRedirectResponse($request);
         }
 
         return parent::handle($request, $type, $catch);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    static private function _createHttpsRedirectResponse(
+        Request $request
+    ): RedirectResponse
+    {
+        $httpsUrl = "https://".$request->getHttpHost().$request->getRequestUri();
+        return new RedirectResponse($httpsUrl, 302);
+    }
+
     /**s
      * @param Request $request
-     * @param string $axysUid
      * @return RedirectResponse
      */
     static private function _createAfterLoginRedirectResponse(
-        Request $request,
-        string $axysUid
+        Request $request
     ): RedirectResponse
     {
         $url = $request->getRequestUri();
         $url = preg_replace('/([?&]UID=[^&]*)/', '', $url);
+        $axysUid = $request->query->get("UID");
         $cookie = Cookie::create("user_uid")
             ->withValue($axysUid)
             ->withExpires(0)

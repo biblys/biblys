@@ -138,12 +138,6 @@ try {
     $framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
     $urlgenerator = new UrlGenerator($routes, $context);
 
-    // TODO: Move into Framework->handle
-    if (!$request->isSecure() && $config->get('https') === true) {
-        header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        exit();
-    }
-
     try {
         $response = $framework->handle($request);
     }
