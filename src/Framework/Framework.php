@@ -3,64 +3,29 @@
 namespace Framework;
 
 use Exception;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 
-class Framework
+class Framework extends HttpKernel
 {
-    private $kernel;
-
-    private $dispatcher;
-    private $matcher;
-    private $controllerResolver;
-    private $argumentResolver;
-
-    public function __construct(EventDispatcher $dispatcher, UrlMatcher $matcher, ControllerResolver $controllerResolver, ArgumentResolver $argumentResolver)
-    {
-        $this->dispatcher = $dispatcher;
-        $this->matcher = $matcher;
-        $this->controllerResolver = $controllerResolver;
-        $this->argumentResolver = $argumentResolver;
-    }
-
     /**
      * @throws Exception
      */
-    public function handle(Request $request): Response
+    public function handle(
+        Request $request,
+        $type = self::MASTER_REQUEST,
+        $catch = true
+    ): Response
     {
         $axysUid = $request->query->get("UID");
         if ($axysUid) {
             return $this->_createAfterLoginRedirectResponse($request, $axysUid);
         }
 
-        $this->dispatcher->addSubscriber(new RouterListener($this->matcher, new RequestStack()));
-
-        $this->kernel = new HttpKernel(
-            $this->dispatcher,
-            $this->controllerResolver,
-            new RequestStack(),
-            $this->argumentResolver
-        );
-
-        return $this->kernel->handle($request);
-    }
-
-    public function terminateKernel(Request $request, Response $response)
-    {
-        if (!$this->kernel) {
-            return;
-        }
-
-        $this->kernel->terminate($request, $response);
+        return parent::handle($request, $type, $catch);
     }
 
     /**s

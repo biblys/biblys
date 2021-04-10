@@ -1,14 +1,13 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
-require_once "tests/setUp.php";
+require_once __DIR__."/../setUp.php";
 
-class FrameworkTest extends \PHPUnit\Framework\TestCase
+class FrameworkTest extends TestCase
 {
     public function testRedirectAfterAxysLogin()
     {
@@ -20,14 +19,11 @@ class FrameworkTest extends \PHPUnit\Framework\TestCase
             "REQUEST_TIME" => 1616700639,
         ];
         $request = Request::createFromGlobals();
-        $routes = require __DIR__ . "/../../src/routes.php";
         $context = new RequestContext();
         $context->fromRequest($request);
-        $matcher = new UrlMatcher($routes, $context);
         $controllerResolver = new ControllerResolver();
-        $argumentResolver = new ArgumentResolver();
         $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
-        $framework = new Framework\Framework($dispatcher, $matcher, $controllerResolver, $argumentResolver);
+        $framework = new Framework\Framework($dispatcher, $controllerResolver);
 
         // when
         $response = $framework->handle($request);

@@ -13,19 +13,18 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-
-// Create request from globals
-$request = Request::createFromGlobals();
 
 // Create session
 $session = new Session();
@@ -78,11 +77,6 @@ $_JS_CALLS[] = '/libs/ckeditor/adapters/jquery.js?4.5.7';
 $axysConfig = $config->get('axys') ?: [];
 $axys = new AxysClient($axysConfig);
 
-if (!$request->isSecure() && $config->get('https') === true) {
-    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit();
-}
-
 if ($site->get('axys') || $_V->isAdmin()) {
     if ($_V->isLogged()) {
         $_JS_CALLS[] = $axys->getWidgetUrl($_COOKIE['user_uid']);
@@ -128,17 +122,27 @@ try {
         );
     }
 
+    $request = Request::createFromGlobals();
+    $requestStack = new RequestStack();
     $routes = require __DIR__ . "/../src/routes.php";
+
     $context = new RequestContext();
-    $context->fromRequest($request);
-    $dispatcher = new EventDispatcher();
     $matcher = new UrlMatcher($routes, $context);
+
     $controllerResolver = new ControllerResolver();
     $argumentResolver = new ArgumentResolver();
 
-    $framework = new Framework($dispatcher, $matcher, $controllerResolver, $argumentResolver);
+    $dispatcher = new EventDispatcher();
+    $dispatcher->addSubscriber(new RouterListener($matcher, $requestStack));
+
+    $framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
     $urlgenerator = new UrlGenerator($routes, $context);
 
+    // TODO: Move into Framework->handle
+    if (!$request->isSecure() && $config->get('https') === true) {
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        exit();
+    }
 
     try {
         $response = $framework->handle($request);
@@ -466,4 +470,4 @@ if ($config->get('environment') == 'dev') {
 }
 
 $response->send();
-$framework->terminateKernel($request, $response);
+$framework->terminate($request, $response);
