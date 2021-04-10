@@ -2,7 +2,8 @@
 
 namespace Biblys\Template;
 
-use Framework\Framework;
+use Exception;
+use Framework\Composer;
 
 class Template
 {
@@ -10,15 +11,14 @@ class Template
     private $_type = 'Twig';
     private $_slug;
     private $_dirPath;
-    private $_filename;
+    private $_fileName;
 
     /**
      * Static: return the template list as an array of templates.
+     * @return Template[]
      */
-    public static function getAll()
+    public static function getAll(): array
     {
-        global $site;
-
         $templates = [];
 
         $css = new Template();
@@ -89,15 +89,18 @@ class Template
 
     /**
      * Static: return the template list as an array of templates.
+     * @throws Exception
      */
-    public static function get($slug)
+    public static function get($slug): Template
     {
         $templates = self::getAll();
         foreach ($templates as $template) {
-            if ($template->getSlug('slug') == $slug) {
+            if ($template->getSlug() === $slug) {
                 return $template;
             }
         }
+
+        throw new Exception(sprintf("No template found for slug %s", $slug));
     }
 
     /**
@@ -119,6 +122,7 @@ class Template
 
     /**
      * Update the custom template file content.
+     * @throws Exception
      */
     public function updateContent($content): void
     {
@@ -142,9 +146,9 @@ class Template
     /**
      * Test if a custom version of the template exists.
      *
-     * @return {boolean}
+     * @return bool
      */
-    public function customFileExists()
+    public function customFileExists(): bool
     {
         $path = $this->getCustomDirPath().'/'.$this->getFileName();
         if (file_exists($path)) {
@@ -156,10 +160,8 @@ class Template
 
     /**
      * Create the custom file and directories.
-     *
-     * @return {boolean}
      */
-    public function createCustomFile()
+    public function createCustomFile(): void
     {
         $path = $this->getCustomDirPath();
         if (!is_dir($path)) {
@@ -169,16 +171,14 @@ class Template
         $file = $path.'/'.$this->getFileName();
         $content = $this->getContent();
         file_put_contents($file, $content);
-
-        return false;
     }
 
     /**
      * Returns the template custom file path.
      *
-     * @return {string}
+     * @return string
      */
-    public function getCustomDirPath()
+    public function getCustomDirPath(): string
     {
         if ($this->getSlug() === 'css') {
             return BIBLYS_PATH.'/app/public/theme/';
@@ -192,10 +192,8 @@ class Template
 
     /**
      * Returns the template default file path.
-     *
-     * @return {string}
      */
-    public function getDefaultDirPath()
+    public function getDefaultDirPath(): string
     {
         if ($this->getSlug() === 'global') {
             return BIBLYS_PATH.'/src/AppBundle/Resources/views/';
@@ -206,10 +204,8 @@ class Template
 
     /**
      * Delete the custom template file (by renaming it).
-     *
-     * @return null
      */
-    public function deleteCustomFile()
+    public function deleteCustomFile(): void
     {
         if ($this->customFileExists()) {
             $file = $this->getCustomDirPath().'/'.$this->getFileName();
@@ -239,12 +235,12 @@ class Template
         return $this->_slug;
     }
 
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->_type = $type;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->_type;
     }
@@ -269,7 +265,7 @@ class Template
         return $this->_fileName;
     }
 
-    public function getAceMode()
+    public function getAceMode(): string
     {
         return strtolower($this->getType());
     }
