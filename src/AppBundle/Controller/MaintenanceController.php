@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Framework\Composer;
 use Framework\Controller;
 use Framework\Framework;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -77,7 +78,7 @@ class MaintenanceController extends Controller
         $this->auth('admin');
 
         try {
-            Framework::runComposerCommand('install');
+            Composer::runScript('install');
         } catch (Exception $exception) {
             return $this->render('AppBundle:Maintenance:composer.html.twig', [
                 'error' => $exception->getMessage(),

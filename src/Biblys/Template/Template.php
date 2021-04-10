@@ -136,7 +136,7 @@ class Template
 
         // If css was modified, refresh theme and bump assets version
         if ($this->getSlug() === 'css') {
-            Framework::runComposerCommand('theme:refresh');
+            Composer::runScript("theme:refresh");
 
             $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
             $site->setOpt('assets_version', $assetsVersion + 1);
