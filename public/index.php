@@ -1,13 +1,12 @@
 <?php
 
+use AppBundle\Controller\ErrorController;
+use AppBundle\Controller\LegacyController;
 use Biblys\Axys\Client as AxysClient;
-use Biblys\Service\Config;
-use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
-use Framework\ExceptionController;
 
 // INCLUDES
-include '../inc/functions.php';
+include __DIR__."/../inc/functions.php";
 
 use Framework\Framework;
 use Framework\RequestListener;
@@ -20,10 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -104,89 +102,49 @@ if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary(
 
 $opengraph = [];
 
-$exceptionController = new ExceptionController();
+$exceptionController = new ErrorController();
 
-try {
-    // Site closed
-    $closed = $site->getOpt('closed');
-    if ($closed) {
-        if (!$_V->isAdmin()) {
-            throw new ServiceUnavailableException($closed);
-        }
-
-        trigger_error(
-            "
-                Biblys est en mode maintenance (raison : $closed).<br />
-                Durant la période de maintenance, le site est accessible uniquement<br />
-                aux administrateurs mais son utilisation est déconseillée<br />
-                et peut conduire à la perte de données.
-            ",
-            E_USER_WARNING
-        );
+// Site closed
+$closed = $site->getOpt('closed');
+if ($closed) {
+    if (!$_V->isAdmin()) {
+        throw new ServiceUnavailableException($closed);
     }
 
-    $request = Request::createFromGlobals();
-    $requestStack = new RequestStack();
-    $routes = require __DIR__ . "/../src/routes.php";
-
-    $context = new RequestContext();
-    $matcher = new UrlMatcher($routes, $context);
-
-    $controllerResolver = new ControllerResolver();
-    $argumentResolver = new ArgumentResolver();
-
-    $dispatcher = new EventDispatcher();
-    $dispatcher->addSubscriber(new RouterListener($matcher, $requestStack));
-
-    $requestListener = new RequestListener();
-    $dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onUnsecureRequest"], 1);
-    $dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onReturningFromAxysRequest"], -1);
-
-    $framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
-    $urlgenerator = new UrlGenerator($routes, $context);
-
-    try {
-        $response = $framework->handle($request);
-    }
-
-    // If route is not found in route.yml, we might be dealing with a legacy
-    // controller. We try to handle the route below. If not, default action
-    // will throw a resourceNotFoundException that will be catched below.
-    catch (NotFoundHttpException $e) {
-        $legacyController = new \AppBundle\Controller\LegacyController();
-        $response = $legacyController->defaultAction($request);
-    }
-
-    if (!$response instanceof Response) {
-        throw new Exception('Controller should return a Response object.');
-    }
+    trigger_error(
+        "
+            Biblys est en mode maintenance (raison : $closed).<br />
+            Durant la période de maintenance, le site est accessible uniquement<br />
+            aux administrateurs mais son utilisation est déconseillée<br />
+            et peut conduire à la perte de données.
+        ",
+        E_USER_WARNING
+    );
 }
 
-// HTTP 503 (maintenance mode)
-catch (ServiceUnavailableException $e) {
-    $response = $exceptionController->handleServiceUnavailable();
-}
+$request = Request::createFromGlobals();
+$requestStack = new RequestStack();
+$routes = require __DIR__ . "/../src/routes.php";
 
-// HTTP 400
-catch (BadRequestHttpException $e) {
-    $response = $exceptionController->handleBadRequest($request, $e->getMessage());
-}
+$context = new RequestContext();
+$matcher = new UrlMatcher($routes, $context);
 
-// HTTP 401
-// TODO: distinguish between 401 (unauthenticated) and 403 (unauthorized)
-catch (AuthException $e) {
-    $response = $exceptionController->handleUnauthorizedAccess($request, $axys, $e->getMessage());
-}
+$controllerResolver = new ControllerResolver();
+$argumentResolver = new ArgumentResolver();
 
-// HTTP 404
-catch (ResourceNotFoundException $e) {
-    $response = $exceptionController->handlePageNotFound($request, $e->getMessage());
-}
+$dispatcher = new EventDispatcher();
+$dispatcher->addSubscriber(new RouterListener($matcher, $requestStack));
 
-// HTTP 500
-catch (Exception $e) {
-    biblys_error(E_ERROR, $e->getMessage(), $e->getFile(), $e->getLine(), null, $e);
-}
+$requestListener = new RequestListener();
+$dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onUnsecureRequest"], 1);
+$dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onReturningFromAxysRequest"], -1);
+
+$dispatcher->addSubscriber(new ErrorListener("AppBundle\Controller\ErrorController::exception"));
+
+$framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
+$urlgenerator = new UrlGenerator($routes, $context);
+
+$response = $framework->handle($request);
 
 // Set security headers
 $response->headers->set('X-XSS-Protection', '1; mode=block');
