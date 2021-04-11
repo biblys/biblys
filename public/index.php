@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Axys\Client as AxysClient;
+use Biblys\Service\Config;
 use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
 use Framework\ExceptionController;
@@ -9,6 +10,7 @@ use Framework\ExceptionController;
 include '../inc/functions.php';
 
 use Framework\Framework;
+use Framework\RequestListener;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +22,7 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -134,6 +137,10 @@ try {
 
     $dispatcher = new EventDispatcher();
     $dispatcher->addSubscriber(new RouterListener($matcher, $requestStack));
+
+    $requestListener = new RequestListener();
+    $dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onUnsecureRequest"], 1);
+    $dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onReturningFromAxysRequest"], -1);
 
     $framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
     $urlgenerator = new UrlGenerator($routes, $context);

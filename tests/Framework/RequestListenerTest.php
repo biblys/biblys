@@ -1,16 +1,18 @@
 <?php
 
 use Biblys\Service\Config;
+use Framework\RequestListener;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RequestContext;
 
 require_once __DIR__."/../setUp.php";
 
-class FrameworkTest extends TestCase
+class RequestListenerTest extends TestCase
 {
-    public function testRedirectToHttps()
+    public function testOnUnsecureRequest()
     {
         $config = new Config();
         $config->set("https", true);
@@ -25,6 +27,7 @@ class FrameworkTest extends TestCase
         $context->fromRequest($request);
         $controllerResolver = new ControllerResolver();
         $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+        $dispatcher->addListener(KernelEvents::REQUEST, [new RequestListener(), "onUnsecureRequest"]);
         $framework = new Framework\Framework($dispatcher, $controllerResolver);
 
         // when
@@ -42,7 +45,7 @@ class FrameworkTest extends TestCase
         );
     }
 
-    public function testRedirectAfterAxysLogin()
+    public function testOnReturningFromAxysRequest()
     {
         // given
         $_GET = ["id" => 1, "UID" => "abcd1234"];
@@ -57,6 +60,7 @@ class FrameworkTest extends TestCase
         $context->fromRequest($request);
         $controllerResolver = new ControllerResolver();
         $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+        $dispatcher->addListener(KernelEvents::REQUEST, [new RequestListener(), "onReturningFromAxysRequest"]);
         $framework = new Framework\Framework($dispatcher, $controllerResolver);
 
         // when
