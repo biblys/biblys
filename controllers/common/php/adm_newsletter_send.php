@@ -2,6 +2,7 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Symfony\Component\HttpFoundation\Response;
 
 $config = new Config();
 $smtp = $config->get('smtp');
@@ -28,9 +29,9 @@ $campaignName = $request->request->get('campaignName', $defaultCampaignName);
 
 $_PAGE_TITLE = 'Envoyer la newsletter';
 
-$_ECHO .= '<h1><span class="fa fa-send"></span> Envoyer la newsletter</h1>';
+$content = '<h1><span class="fa fa-send"></span> Envoyer la newsletter</h1>';
     
-$_ECHO .= '<p class="alert alert-warning">
+$content .= '<p class="alert alert-warning">
         L\'outil intégré à Biblys ne permet 
         pas de prouver le consentement des utilisateurs inscrits à la
         newsletter. Pour être en confirmité avec le Règlement Général sur la
@@ -152,7 +153,7 @@ if (!empty($_POST)) {
 
         if ($totalSent < $emailsCount) {
             $percent = round(($totalSent / $emailsCount) * 100);
-            $_ECHO .= '
+            $content .= '
                 <p class="alert alert-warning">
                     <span class="fa fa-spinner fa-spin"></span>
                     Envois toujours en cours, ne quittez pas la page...
@@ -168,15 +169,15 @@ if (!empty($_POST)) {
                 </script>
             ';
         } else {
-            $_ECHO .='<p class="success">La newsletter a été envoyée à '.$totalSent.' inscrit'.s($totalSent).'.</p>';
+            $content .='<p class="success">La newsletter a été envoyée à '.$totalSent.' inscrit'.s($totalSent).'.</p>';
         }
 
     } else {
-        $_ECHO .= '<p class="success">Une newsletter de test a été envoyée à '.$this->user->get('email').'</p>';
+        $content .= '<p class="success">Une newsletter de test a été envoyée à '.$this->user->get('email').'</p>';
     }
 }
 
-$_ECHO .= '
+$content .= '
 
 <form method="post" action="/pages/adm_newsletter_send" id="newsletter" class="fieldset">
     <fieldset>
@@ -224,3 +225,5 @@ $_ECHO .= '
 </form>
 
 ';
+
+return new Response($content);

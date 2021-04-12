@@ -1,12 +1,13 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $_PAGE_TITLE = 'Clients';
 
 if (!isset($_GET['q'])) $_GET['q'] = null;
 
 $years = null;
-for ($y = date('Y'); $y >= 2010; $y--)
-{
+for ($y = date('Y'); $y >= 2010; $y--) {
     if (isset($_GET['year']) && $y == $_GET["year"]) $sel = 'selected';
     else $sel = NULL;
     $years .= '<option value="?year='.$y.'" '.$sel.'>'.$y.'</option>';
@@ -14,17 +15,15 @@ for ($y = date('Y'); $y >= 2010; $y--)
 
 $params = array();
 $query = NULL;
-if (!empty($_GET['year']))
-{
+if (!empty($_GET['year'])) {
     $query = " AND `stock_selling_date` LIKE :year ";
     $params['year'] = (int) $_GET['year'].'%';
-}
-elseif (!empty($_GET['q']))
-{
+} elseif (!empty($_GET['q'])) {
     $query .= " AND (`customer_first_name` LIKE :q OR `customer_last_name` LIKE :q OR `customer_email` LIKE :q)";
     $params['q'] = '%'.$_GET['q'].'%';
+} else {
+    $_GET['q'] = NULL;
 }
-else $_GET['q'] = NULL;
 
 $customers = $_SQL->prepare('
     SELECT *, `customers`.`customer_id`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `CA`, MAX(`stock_selling_date`) AS `DateVente`
@@ -38,7 +37,7 @@ $params['site_id'] = $_SITE['site_id'];
 $customers->execute($params);
 
 
-$_ECHO = '
+$content = '
     <h1><span class="fa fa-address-card"></span> '.$_PAGE_TITLE.'</h1>
 
     <p class="buttonset">
@@ -90,21 +89,23 @@ while ($s = $customers->fetch(PDO::FETCH_ASSOC))
     if(!empty($s["customer_last_name"])) { $user = trim($s["customer_first_name"].' '.$s["customer_last_name"]); $key = $s["customer_last_name"].' '.$s["customer_first_name"]; }
     else { $user = 'Anonyme'; $key = ' '; }
 
-    $_ECHO .= '
+    $content .= '
         <tr>
             <td class="right">'.$Clients.'.</td>
-            <td sorttable_customkey='.$key.'><a href="/pages/adm_customer?id='.$s['customer_id'].'">'.$user.'</a></td>
+            <td><a href="/pages/adm_customer?id='.$s['customer_id'].'">'.$user.'</a></td>
             <td class="right"><a href="/pages/adm_orders_shop?customer_id='.$s["customer_id"].'&date1=2001-01-01&date2='.date('Y-m-d').'">'.$s["num"].'</a></td>
-            <td class="right" sorttable_customkey="'.$s["CA"].'" style="width: 100px;">'.price($s["CA"],'EUR').'</td>
+            <td class="right" style="width: 100px;">'.price($s["CA"],'EUR').'</td>
             <td class="center"><a href="/pages/adm_customer?id='.$s["customer_id"].'"><i class="fa fa-edit fa-lg black"></i></td>
         </tr>
     ';
 }
 
-$_ECHO .= '
+$content .= '
         </tbody>
    </table>
 ';
 
 $Total = 0;
 $Ventes = 0;
+
+return new Response($content);
