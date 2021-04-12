@@ -25,16 +25,23 @@ if (!empty($_GET['year'])) {
     $_GET['q'] = NULL;
 }
 
-$customers = $_SQL->prepare('
-    SELECT *, `customers`.`customer_id`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `CA`, MAX(`stock_selling_date`) AS `DateVente`
-        FROM `customers`
-        LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
+/** @var Site $site */
+$customers = EntityManager::prepareAndExecute('
+    SELECT
+           `customers`.`customer_id`,
+           `customer_last_name`,
+           `customer_first_name`,
+           COUNT(`stock_id`) AS `num`,
+           SUM(`stock_selling_price`) AS `CA`,
+           MAX(`stock_selling_date`) AS `DateVente`
+    FROM `customers`
+    LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
     WHERE `customers`.`site_id` = :site_id '.$query.'
     GROUP BY `customers`.`customer_id`
     ORDER BY `CA` DESC
-');
-$params['site_id'] = $_SITE['site_id'];
-$customers->execute($params);
+',
+    ["site_id" => $site->get("id")]
+);
 
 
 $content = '
@@ -86,7 +93,9 @@ while ($s = $customers->fetch(PDO::FETCH_ASSOC))
     $Ventes += $s["num"];
     $Clients++;
 
-    if(!empty($s["customer_last_name"])) { $user = trim($s["customer_first_name"].' '.$s["customer_last_name"]); $key = $s["customer_last_name"].' '.$s["customer_first_name"]; }
+    if (!empty($s["customer_last_name"])) {
+        $user = trim($s["customer_first_name"].' '.$s["customer_last_name"]); $key = $s["customer_last_name"].' '.$s["customer_first_name"];
+    }
     else { $user = 'Anonyme'; $key = ' '; }
 
     $content .= '
