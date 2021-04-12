@@ -363,7 +363,7 @@ class EntityManager
     /**
      * Get one entity by it's id from memory or from mysql.
      *
-     * @param type $id
+     * @param int $id
      */
     public function getById($id)
     {
