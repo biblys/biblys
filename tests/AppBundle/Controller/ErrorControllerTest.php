@@ -91,7 +91,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
-    public function testHandleServerError()
+    public function testHandleServiceUnavailable()
     {
         // given
         $controller = new ErrorController();
@@ -107,5 +107,24 @@ class ErrorControllerTest extends TestCase
             $response->getStatusCode(),
             "it should response with HTTP status 503"
         );
+    }
+
+    public function testHandleServerError()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new Exception("An error occurred");
+
+        // when
+        $response = $controller->exception($request, $exception);
+
+        // then
+        $this->assertEquals(
+            500,
+            $response->getStatusCode(),
+            "it should response with HTTP status 500"
+        );
+        $this->assertStringContainsString("An error occurred", $response->getContent());
     }
 }

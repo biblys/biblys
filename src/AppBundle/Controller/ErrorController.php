@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Axys\Client;
+use Biblys\Service\Log;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -66,7 +67,7 @@ class ErrorController extends Controller
             }
         }
 
-        return $this->handleServerError($exception);
+        return $this->handleServerError($request, $exception);
     }
 
 
@@ -196,6 +197,43 @@ class ErrorController extends Controller
     }
 
     /**
+     * HTTP 500
+     *
+     * @param Request $request
+     * @param Exception $exception
+     * @return Response
+     */
+    private function handleServerError(Request $request, Exception $exception): Response
+    {
+        $currentUrl = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+
+        Log::error("ERROR", $exception->getMessage(), [
+            "URL" => $currentUrl,
+            "File" => $exception->getFile(),
+            "Line" => $exception->getLine(),
+            "Trace" => $exception->getTrace(),
+        ]);
+
+        // FIXME: Use ApiBundle for request excepting json
+        if ($request->headers->get("Accept") === "application/json") {
+            return new JsonResponse([
+                "error" => $exception->getMessage(),
+                "file" => $exception->getFile(),
+                "line" => $exception->getLine(),
+                "trace" => $exception->getTrace(),
+            ], 500);
+        }
+
+        $response = $this->render("AppBundle:Error:500.html.twig", [
+            "exception" => $exception,
+            "exceptionClass" => get_class($exception),
+        ]);
+        $response->setStatusCode(500);
+
+        return $response;
+    }
+
+    /**
      * HTTP 503
      *
      * @return Response
@@ -213,11 +251,5 @@ class ErrorController extends Controller
         ');
 
         return $response;
-    }
-
-    private function handleServerError(Exception $exception): Response
-    {
-        biblys_exception($exception);
-        return new Response("An error occured", 500);
     }
 }
