@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $cm = new CustomerManager();
 
 $_PAGE_TITLE = "Clients";
@@ -68,7 +70,7 @@ if (isset($_GET['updated'])) {
     $message = '<p class="success">Le client a bien été mis à jour.</p>';
 }
 
-$_ECHO .= '
+$content = '
     <h1><i class="fa fa-user"></i> '.$_PAGE_TITLE.'</h1>
 
     '.$message.'
@@ -126,3 +128,5 @@ $_ECHO .= '
         </fieldset>
     </form>
 ';
+
+return new Response($content);

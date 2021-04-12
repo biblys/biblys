@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $_JS_CALLS[] =  '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
 $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
@@ -267,7 +268,6 @@ $cm->updateFromStock($cart);
 // Paniers sauvegardés & VPC
 $s_carts = $cm->getAll(array());
 
-
 $shop_carts = NULL; $web_carts = NULL;
 foreach ($s_carts as $s)
 {
@@ -298,11 +298,11 @@ elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a �
 else $alert = NULL;
 
 $_PAGE_TITLE = 'Caisse';
-$_ECHO = '';
+$content = '';
 
 /** @var Site $_SITE */
 if ($_SITE['site_tva'] === 'fr') {
-    $_ECHO .= '
+    $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>
             La caisse Biblys n\'est pas un logiciel de caisse certifié.<br/>
@@ -311,7 +311,7 @@ if ($_SITE['site_tva'] === 'fr') {
         </p>';
 }
 
-$_ECHO .= '
+$content .= '
     <h1><span class="fa fa-money"></span> '.$_PAGE_TITLE.'</h1>
 
     '.$alert.'
@@ -447,22 +447,6 @@ $_ECHO .= '
         </tbody>
     </table>
 
-    <!-- br>
-    <h3>Paniers VPC</h3>
-
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Client</th>
-                <th>Articles</th>
-                <th>Montant</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            '.$web_carts.'
-        </tbody>
-    </table //-->
-
 ';
+
+return new Response($content);

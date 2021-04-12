@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 $query = null;
 $terms = null;
 $sql = null;
@@ -9,8 +11,10 @@ $filters = null;
 /** @var $request */
 $input = $request->query->get('q', false);
 
+$content = '';
+
 if (!$input) {
-    $_ECHO .= '
+    $content .= '
         <h1><i class="fa fa-search"></i> Rechercher</h1>
         <form action="/pages/search">
             <div class="form-group">
@@ -22,7 +26,7 @@ if (!$input) {
         </form>
     ';
 } elseif (strlen($input) < 3) {
-    $_ECHO .= '<p class="error">Vous devez entrer un mot-clé d\'au moins trois caractères.</p>';
+    $content .= '<p class="error">Vous devez entrer un mot-clé d\'au moins trois caractères.</p>';
 } else {
 	$queries = explode(" ",$input);
 
@@ -147,7 +151,7 @@ if (!$input) {
 		$_PAGE_TITLE = $type.' '.$filters;
 	}
 
-	$_ECHO .= '
+	$content .= '
 		<p class="floatR"><a href="https://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
 		<h2>'.$_PAGE_TITLE.'</h2>
 	';
@@ -158,3 +162,5 @@ if (!$input) {
 	include($path);
 
 }
+
+return new Response($content);
