@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -97,7 +98,7 @@ if (isset($_POST['validate']))
 
     /** @var Request $request */
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($r));
+        return new JsonResponse($r);
     }
 //        else redirect('/pages/adm_checkout', $r);
 }
@@ -110,7 +111,7 @@ if (isset($_POST['set_title']))
     if ($cart->get('cart_title') == $_POST['set_title']) $p['success'] = "Le nom du panier a bien été modifié.";
     else $p['error'] = "Le nom du panier n'a pas pu être modifié.";
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($p));
+        return new JsonResponse($p);
     }
 }
 
@@ -133,7 +134,7 @@ elseif (isset($_POST['set_customer']))
     //else $p['error'] = "Le client du panier n'a pas pu être modifié. (".$cart->get('customer_id')." / ".$_POST['set_customer'].") ";
 
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($p));
+        return new JsonResponse($p);
     }
     else redirect('/pages/adm_checkout',$p);
 }
@@ -164,7 +165,7 @@ if (isset($_GET['add']) && isset($_GET['id']))
                     $p['line'] = $cart->getLine($stock);
                 }
             }
-            die(json_encode($p));
+            return new JsonResponse($p);
         } else {
             redirect('/pages/adm_checkout', $p);
         }
@@ -184,7 +185,7 @@ elseif ($copyToRemoveId)
     }
     else $p['error'] = 'L\'exemplaire n&deg; '.$_GET['id'].' n\'a pas pu être supprimé du panier.';
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($p));
+        return new JsonResponse($p);
     } else {
         redirect('/pages/adm_checkout',$p);
     }
