@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,10 +38,11 @@ if ($request->getMethod() === "POST") {
     /** @var $request */
     if ($request->isXmlHttpRequest()) {
         return new JsonResponse($params);
-    } else {
-        if (!isset($error)) redirect('/pages/adm_customer', $params);
+    } elseif (!isset($error)) {
+        return new RedirectResponse(
+            sprintf("/pages/adm_customer?%s", http_build_query($params))
+        );
     }
-
 }
 
 /** @var $request */

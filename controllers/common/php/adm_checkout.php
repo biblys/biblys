@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,7 +35,7 @@ if (isset($_GET['cart_id']))
 elseif ($getcart = $cm->get($where))
 {
     $cart = $getcart;
-    redirect('/pages/adm_checkout', array('cart_id' => $cart->get('id')));
+    return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
 }
 
 // Aucun panier en cours, on en cree un nouveau
@@ -45,7 +46,7 @@ else
     /** @var Visitor $_LOG */
     $cart->set('cart_seller_id', $_LOG['user_id']);
     $cart = $cm->update($cart);
-    redirect('/pages/adm_checkout', array('cart_id' => $cart->get('id')));
+    return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
 }
 
 /* ACTIONS */
@@ -100,7 +101,6 @@ if (isset($_POST['validate']))
     if ($request->isXmlHttpRequest()) {
         return new JsonResponse($r);
     }
-//        else redirect('/pages/adm_checkout', $r);
 }
 
 // Changer le nom du panier
@@ -108,35 +108,34 @@ if (isset($_POST['set_title']))
 {
     $cart->set('cart_title', $_POST['set_title']);
     $cart = $cm->update($cart);
-    if ($cart->get('cart_title') == $_POST['set_title']) $p['success'] = "Le nom du panier a bien été modifié.";
-    else $p['error'] = "Le nom du panier n'a pas pu être modifié.";
+    if ($cart->get('cart_title') == $_POST['set_title']) $params['success'] = "Le nom du panier a bien été modifié.";
+    else $params['error'] = "Le nom du panier n'a pas pu être modifié.";
     if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($p);
+        return new JsonResponse($params);
     }
 }
 
 // Changer le client du panier
-elseif (isset($_POST['set_customer']))
-{
-
-    try
-    {
+elseif (isset($_POST['set_customer'])) {
+    $params = [];
+    try {
         $cart->set('customer_id', $_POST['set_customer']);
         $cm->update($cart);
-    }
-    catch (Exception $e)
-    {
+    } catch (Exception $e) {
         $error = $e;
     }
 
-    if (isset($error)) $p['error'] = $error;
-    elseif ($cart->get('customer_id') == $_POST['set_customer']) $p['success'] = "Le client du panier a bien été modifié.";
-    //else $p['error'] = "Le client du panier n'a pas pu être modifié. (".$cart->get('customer_id')." / ".$_POST['set_customer'].") ";
+    if (isset($error)) {
+        $params['error'] = $error;
+    } elseif ($cart->get('customer_id') == $_POST['set_customer']) {
+        $params['success'] = "Le client du panier a bien été modifié.";
+    }
 
     if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($p);
+        return new JsonResponse($params);
+    } else {
+        return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
     }
-    else redirect('/pages/adm_checkout',$p);
 }
 
 $copyToRemoveId = (int) $request->query->get('remove_stock', false);
@@ -150,7 +149,7 @@ if (isset($_GET['add']) && isset($_GET['id']))
         try
         {
             $cm->addStock($cart, $_GET['id']);
-            $p['success'] = 'L\'exemplaire n&deg; '.$_GET['id'].' a été ajouté au panier.';
+            $params['success'] = 'L\'exemplaire n&deg; '.$_GET['id'].' a été ajouté au panier.';
             $cm->updateFromStock($cart);
         }
         catch (Exception $e)
@@ -162,12 +161,12 @@ if (isset($_GET['add']) && isset($_GET['id']))
             $stocks = $cm->getStock($cart);
             foreach ($stocks as $stock) {
                 if ($stock->get('id') == $_GET['id']) {
-                    $p['line'] = $cart->getLine($stock);
+                    $params['line'] = $cart->getLine($stock);
                 }
             }
-            return new JsonResponse($p);
+            return new JsonResponse($params);
         } else {
-            redirect('/pages/adm_checkout', $p);
+            return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
         }
     }
 }
@@ -179,30 +178,28 @@ elseif ($copyToRemoveId)
     $copy_to_remove = $sm->getById($copyToRemoveId);
     if ($copy_to_remove) {
         if ($cm->removeStock($cart, $copy_to_remove)) {
-            $p['success'] = 'L\'exemplaire n&deg; '.$copy_to_remove->get('id').' a été retiré du panier et remis en stock.';
+            $params['success'] = 'L\'exemplaire n&deg; '.$copy_to_remove->get('id').' a été retiré du panier et remis en stock.';
             $cm->updateFromStock($cart);
         }
     }
-    else $p['error'] = 'L\'exemplaire n&deg; '.$_GET['id'].' n\'a pas pu être supprimé du panier.';
+    else $params['error'] = 'L\'exemplaire n&deg; '.$_GET['id'].' n\'a pas pu être supprimé du panier.';
     if ($request->isXmlHttpRequest()) {
-        return new JsonResponse($p);
+        return new JsonResponse($params);
     } else {
-        redirect('/pages/adm_checkout',$p);
+        return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
     }
 }
 
 // Vider le panier
-elseif (isset($_GET['vacuum_cart']))
-{
+elseif (isset($_GET['vacuum_cart'])) {
 
-    if ($cm->vacuum($cart))
-    {
+    if ($cm->vacuum($cart)) {
         $params['success'] = 'Le panier n&deg; '.$cart->get('cart_id').' a été vidé !';
+    } else {
+        $params['error'] = 'Le panier n&deg; '.$cart->get('cart_id').' n\'a pas pu être vidé.';
     }
-    else $params['error'] = 'Le panier n&deg; '.$cart->get('cart_id').' n\'a pas pu être vidé.';
 
-//        $params['cart_id'] = $cart->get('cart_id');
-    redirect('/pages/adm_checkout',$params);
+    return new RedirectResponse(sprintf("/pages/adm_checkout?%s", http_build_query($params)));
 }
 
 
