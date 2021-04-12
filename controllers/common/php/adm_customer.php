@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CustomerManager();
@@ -35,7 +36,7 @@ if ($request->getMethod() === "POST") {
 
     /** @var $request */
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($params));
+        return new JsonResponse($params);
     } else {
         if (!isset($error)) redirect('/pages/adm_customer', $params);
     }
