@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+
 $_JS_CALLS[] =  '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
 $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
 
@@ -9,6 +11,7 @@ $um = new UserManager();
 /* SELECTION DU PANIER COURANT */
 
 // Si aucun panier n'est specifié, on recherche un panier magasin pour ce vendeur avec 0 livre, sinon on en créera un
+/** @var Visitor $_V */
 $where = array('cart_type' => 'shop', 'cart_seller_id' => $_V->get('user_id'), 'cart_count' => 0);
 
 // Si un panier en particulier est demandé
@@ -16,6 +19,7 @@ if (isset($_GET['cart_id']))
 {
     if ($getcart = $cm->get(array('cart_id' => $_GET['cart_id'])))
     {
+        /** @var Cart $cart */
         $cart = $getcart;
     }
     else // s'il existe pas
@@ -36,6 +40,7 @@ else
 {
     $cart = $cm->create();
     $cart->set('cart_type', 'shop');
+    /** @var Visitor $_LOG */
     $cart->set('cart_seller_id', $_LOG['user_id']);
     $cart = $cm->update($cart);
     redirect('/pages/adm_checkout', array('cart_id' => $cart->get('id')));
@@ -49,10 +54,12 @@ if (isset($_POST['validate']))
 
     try
     {
+        /** @var PDO $_SQL */
         $_SQL->beginTransaction();
 
         // Create new order
         $_O = new OrderManager();
+        /** @var Order $order */
         $order = $_O->create();
 
         // Update order info
@@ -87,6 +94,7 @@ if (isset($_POST['validate']))
 
     $r = array('created_order' => $order->get('order_id'));
 
+    /** @var Request $request */
     if ($request->isXmlHttpRequest()) {
         die(json_encode($r));
     }
@@ -129,7 +137,7 @@ elseif (isset($_POST['set_customer']))
     else redirect('/pages/adm_checkout',$p);
 }
 
-$copy_to_remove_id = $request->query->get('remove_stock', false);
+$copyToRemoveId = (int) $request->query->get('remove_stock', false);
 
 // Ajouter au panier
 if (isset($_GET['add']) && isset($_GET['id']))
@@ -163,10 +171,10 @@ if (isset($_GET['add']) && isset($_GET['id']))
 }
 
 // Retirer du panier
-elseif ($copy_to_remove_id)
+elseif ($copyToRemoveId)
 {
     $sm = new StockManager();
-    $copy_to_remove = $sm->getById($copy_to_remove_id);
+    $copy_to_remove = $sm->getById($copyToRemoveId);
     if ($copy_to_remove) {
         if ($cm->removeStock($cart, $copy_to_remove)) {
             $p['success'] = 'L\'exemplaire n&deg; '.$copy_to_remove->get('id').' a été retiré du panier et remis en stock.';
@@ -222,7 +230,7 @@ if ($cart->has('customer_id'))
             <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." value="'.$customer->get('customer_last_name').', '.$customer->get('customer_first_name').' ('.$customer->get('customer_email').')'.'" readonly class="pointer event verylong">
             <input type="hidden" name="customer_id" id="customer_id" value="'.$customer->get('customer_id').'" required>
             <span id="newsletter">
-                <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled'.$newsletter_checked.'>
+                <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled="disabled" '.$newsletter_checked.'>
                 <label for="customer_mailing" class="after">Abonné à la newsletter</label>
             </span>
         ';
@@ -290,7 +298,9 @@ elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a �
 else $alert = NULL;
 
 $_PAGE_TITLE = 'Caisse';
+$_ECHO = '';
 
+/** @var Site $_SITE */
 if ($_SITE['site_tva'] === 'fr') {
     $_ECHO .= '
         <p class="alert alert-warning">
@@ -456,5 +466,3 @@ $_ECHO .= '
     </table //-->
 
 ';
-
-?>
