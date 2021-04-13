@@ -53,6 +53,8 @@ $mailingQuery = [
 
 $emails = $mm->getAll($mailingQuery);
 $emailsCount = count($emails);
+$errorsCount = $request->request->get('errors_count', 0);
+$sentSuccess = $request->request->get('sent_success', 0);
 
 // Envoi
 if (!empty($_POST)) {
@@ -129,6 +131,7 @@ if (!empty($_POST)) {
         $baseHeaders["X-Mailjet-DeduplicateCampaign"] = "true";
     }
 
+    $errors = [];
     foreach ($mails as $m) {
         $m["message"] = '<html lang="fr"><head><title>'.$m["subject"].'</title><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><style>'.$_POST['css'].'</style></head><body>'.$message.stripslashes($m["footer"]).'</body></html>';
 
@@ -136,14 +139,19 @@ if (!empty($_POST)) {
         $headers["List-Unsubscribe"] = "<".$m["unsubscribeLink"].">";
 
         $mailer = new Mailer();
-        $mailer->send(
-            $m["to"], // to
-            $m["subject"], // subject
-            $m["message"], // body
-            [$site->get('site_contact') => $site->get('site_title')], // from
-            [], // options
-            $headers // headers
-        );
+        try {
+            $mailer->send(
+                $m["to"], // to
+                $m["subject"], // subject
+                $m["message"], // body
+                [$site->get('site_contact') => $site->get('site_title')], // from
+                [], // options
+                $headers // headers
+            );
+            $sentSuccess++;
+        } catch (InvalidArgumentException $exception) {
+            $errors[] = $exception->getMessage();
+        }
 
         $sent++;
     }
@@ -151,7 +159,10 @@ if (!empty($_POST)) {
     if ($sendAll) {
         $totalSent = $offset + $sent;
         $offset = $totalSent;
-        
+        $errorsCount += count($errors);
+        $errorsDisplay = array_map(function($error) {
+            return '<p class="alert alert-warning">'.$error.'</p>';
+        }, $errors);
 
         if ($totalSent < $emailsCount) {
             $percent = round(($totalSent / $emailsCount) * 100);
@@ -166,12 +177,13 @@ if (!empty($_POST)) {
                         <span style="display: inline-block; width:50px;">'.$percent.'&nbsp;%</span>
                     </div>
                 </div>
+                '.join($errorsDisplay).'
                 <script>
                     setTimeout(function() { $("#newsletter").submit(); }, 100);
                 </script>
             ';
         } else {
-            $content .='<p class="success">La newsletter a été envoyée à '.$totalSent.' inscrit'.s($totalSent).'.</p>';
+            $content .='<p class="success">La newsletter a été envoyée à '.$sentSuccess.' inscrit'.s($sentSuccess).' sur '.$emailsCount.' (avec '.$errorsCount.' erreur'.s($errorsCount).').</p>';
         }
 
     } else {
@@ -186,6 +198,8 @@ $content .= '
 
         <legend>En-tête</legend>
         <input type="hidden" name="offset" value="'.$offset.'" />
+        <input type="hidden" name="errors_count" value="'.$errorsCount.'" />
+        <input type="hidden" name="sent_success" value="'.$sentSuccess.'" />
 
         <label for="from">De :</label>
         <input type="text" id="from" name="from" value="'.$site->get("title").' &lt;'.$site->get("contact").'&gt;" class="long" readonly />
