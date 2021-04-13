@@ -67,20 +67,22 @@ if (!empty($_POST)) {
     $message = stripslashes($_POST["message"]); // Retiré utf8_encode de $_POST[message] le 29/10/2013 pour Lettre d'Ys
 
     // Ajout des liens utm au message;
-    function process_link_matches(array $matches): string
-    {
-        global $_SITE, $campaignName;
-        $vars = 'utm_source=newsletter-'.$_SITE["site_name"].'&utm_medium=e-mail&utm_campaign='.slugify($campaignName);
-        if (preg_match('/\\?[^"]/', $matches[2])) {
-            $matches[2] .= '&'.$vars;
-        } // link already contains $_GET parameters
-        else {
-            $matches[2] .= '?'.$vars;
-        } // starting a new list of parameters
-        return '<a href="'.$matches[2].'">'.$matches[3].'</a>';
-    }
     $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
-    $message = preg_replace_callback("/$regexp/siU", 'process_link_matches', $message);
+    $message = preg_replace_callback(
+        "/$regexp/siU",
+        function (array $matches) use($site, $campaignName)
+        {
+            $vars = 'utm_source=newsletter-'.$site->get("name").'&utm_medium=e-mail&utm_campaign='.slugify($campaignName);
+            if (preg_match('/\\?[^"]/', $matches[2])) {
+                $matches[2] .= '&'.$vars;
+            } // link already contains $_GET parameters
+            else {
+                $matches[2] .= '?'.$vars;
+            } // starting a new list of parameters
+            return '<a href="'.$matches[2].'">'.$matches[3].'</a>';
+        },
+        $message
+    );
 
     // By default, send only to current user
     $users = [["mailing_email" => $this->user->get('email')]];
