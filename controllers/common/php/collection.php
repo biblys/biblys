@@ -55,24 +55,6 @@ if ($collection) {
         $content .= '<p>'.$c["collection_desc"].'</p>';
     }
 
-    if (auth("admin")) {
-        $content .= '
-        <div class="admin">
-            <p>Collection n&deg; '.$c["collection_id"].'</p>
-            <p><a href="/admin/collection/'.$c["collection_id"].'/edit">modifier</a></p>
-    ';
-        if ($site->has("shop")) {
-            $content .= '<p><a href="/pages/adm_stocks?collection_id='.$c["collection_id"].'">stock</a></p>';
-        }
-        if (!empty($c["pricegrid_id"])) {
-            $content .= '<p><a href="/pages/adm_prices?pricegrid_id='.$c["pricegrid_id"].'">grille de prix</a></p>';
-            $content .= '<p><a href="/pages/adm_catprices?id='.$c["pricegrid_id"].'">catégorie</a></p>';
-        }
-        $content .= '
-        </div>
-    ';
-    }
-
     $_REQ = "`collection_id` = '".$c["collection_id"]."'";
 
     // Trier par numero de collection
