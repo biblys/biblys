@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $query = null;
@@ -10,6 +11,12 @@ $filters = null;
 
 /** @var $request */
 $input = $request->query->get('q', false);
+
+/** @var Site $site */
+$useOldArticleController = $site->getOpt("use_old_article_controller");
+if (!$useOldArticleController) {
+    return new RedirectResponse("/articles/search?q=$input");
+}
 
 $content = '';
 
