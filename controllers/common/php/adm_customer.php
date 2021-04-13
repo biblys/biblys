@@ -21,7 +21,10 @@ if ($request->getMethod() === "POST") {
     }
 
     // Update object
-    foreach ($_POST as $key => $val) {
+    foreach ($request->request->all() as $key => $val) {
+        if ($key === "customer_newsletter") {
+            continue;
+        }
         $customer->set($key, $val);
     }
 
