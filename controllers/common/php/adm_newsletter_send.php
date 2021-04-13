@@ -1,12 +1,15 @@
 <?php
 
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 
+$config = new Config();
 $smtp = $config->get('smtp');
 if (!$smtp) {
     throw new Exception('SMTP doit être configuré pour envoyer la newsletter.');
 }
 
+/** @var $request */
 $offset = $request->query->get('offset', 0);
 
 $sent = 0;
@@ -14,12 +17,13 @@ $sendAll = false;
 
 $mm = new MailingManager();
 
+/** @var Site $site */
 $bulkEmailBatch = $site->getOpt('bulk_email_batch');
 if (!$bulkEmailBatch) {
     $bulkEmailBatch = 10;
 }
 
-$defaultCampaignName = 'newsletter-'.$_SITE["site_name"].'-'.date('Y-m-d');
+$defaultCampaignName = 'newsletter-'.$site->get("name").'-'.date('Y-m-d');
 $campaignName = $request->request->get('campaignName', $defaultCampaignName);
 
 $_PAGE_TITLE = 'Envoyer la newsletter';
@@ -38,7 +42,7 @@ $_ECHO .= '<p class="alert alert-warning">
 // Destinataires
 $req = null;
 if (empty($_POST["envoi"])) {
-    $req = " AND `mailing_email` = '".$_LOG["user_email"]."' ";
+    $req = " AND `mailing_email` = '".$this->user->get("email")."' ";
 }
 
 $mailingQuery = [
@@ -62,7 +66,7 @@ if (!empty($_POST)) {
     $message = stripslashes($_POST["message"]); // Retiré utf8_encode de $_POST[message] le 29/10/2013 pour Lettre d'Ys
 
     // Ajout des liens utm au message;
-    function process_link_matches($matches)
+    function process_link_matches(array $matches): string
     {
         global $_SITE, $campaignName;
         $vars = 'utm_source=newsletter-'.$_SITE["site_name"].'&utm_medium=e-mail&utm_campaign='.slugify($campaignName);
@@ -78,7 +82,7 @@ if (!empty($_POST)) {
     $message = preg_replace_callback("/$regexp/siU", 'process_link_matches', $message);
 
     // By default, send only to current user
-    $users = [["mailing_email" => $_V->get('email')]];
+    $users = [["mailing_email" => $this->user->get('email')]];
     
     // If checked, 
     if ($sendAll) {
@@ -89,11 +93,12 @@ if (!empty($_POST)) {
     }
 
     $mails = array();
+    $protocol = $request->isSecure() ? 'https' : 'http';
     foreach ($users as $u) {
         $m = [];
         $m["to"] = $u["mailing_email"];
         $m["subject"] = $subject;
-        $m["unsubscribeLink"] = 'http://'.$_SITE["site_domain"].'/mailing/unsubscribe?email='.$m["to"];
+        $m["unsubscribeLink"] = $protocol.'://'.$site->get("domain").'/mailing/unsubscribe?email='.$m["to"];
         $m["footer"] = '
             <div id="footer">
                 <p style="text-align: center;">
@@ -101,7 +106,7 @@ if (!empty($_POST)) {
                     <a href="'.$m["unsubscribeLink"].'">'.$m["unsubscribeLink"].'</a>
                 </p>
                 <p style="text-align: center;">
-                    Ce courriel a été transmis via <a href="http://www.biblys.fr/">Biblys</a>.<br />
+                    Ce courriel a été transmis via <a href="'.$protocol.'://www.biblys.fr/">Biblys</a>.<br />
                     Si vous pensez qu\'il s\'agit d\'un spam, merci de le faire suivre &agrave; <a href="mailto:abuse@biblys.fr">abuse@biblys.fr</a>
                 </p>
             </div>
@@ -122,11 +127,11 @@ if (!empty($_POST)) {
     }
 
     foreach ($mails as $m) {
-        $m["message"] = '<html><head><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><style>'.$_POST['css'].'</style></head><body>'.$message.stripslashes($m["footer"]).'</body></html>';
-       
+        $m["message"] = '<html lang="fr"><head><title>'.$m["subject"].'</title><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><style>'.$_POST['css'].'</style></head><body>'.$message.stripslashes($m["footer"]).'</body></html>';
+
         $headers = $baseHeaders;
         $headers["List-Unsubscribe"] = "<".$m["unsubscribeLink"].">";
-        
+
         $mailer = new Mailer();
         $mailer->send(
             $m["to"], // to
@@ -167,7 +172,7 @@ if (!empty($_POST)) {
         }
 
     } else {
-        $_ECHO .= '<p class="success">Une newsletter de test a été envoyée à '.$_V->get('email').'</p>';
+        $_ECHO .= '<p class="success">Une newsletter de test a été envoyée à '.$this->user->get('email').'</p>';
     }
 }
 
@@ -180,7 +185,7 @@ $_ECHO .= '
         <input type="hidden" name="offset" value="'.$offset.'" />
 
         <label for="from">De :</label>
-        <input type="text" id="from" name="from" value="'.$_SITE["site_title"].' &lt;'.$_SITE["site_contact"].'&gt;" class="long" readonly />
+        <input type="text" id="from" name="from" value="'.$site->get("title").' &lt;'.$site->get("contact").'&gt;" class="long" readonly />
         <br />
 
         <label for="to">&Agrave; :</label>
@@ -206,11 +211,11 @@ $_ECHO .= '
     <fieldset>
         <legend>Envoi</legend>
 
-        <input type="radio" id="sendAll-0" name="sendAll" value="0"'.($sendAll ? '' : ' checked').'>
-        <label for="sendAll-0" class="after">Envoyer un e-mail de test à '.$_V->get('email').'</label>
+        <input type="radio" id="sendAll-0" name="sendAll" value="0" '.($sendAll ? '' : ' checked').'>
+        <label for="sendAll-0" class="after">Envoyer un e-mail de test à '.$this->user->get('email').'</label>
         <br/>
 
-        <input type="radio" id="sendAll-1" name="sendAll" value="1"'.($sendAll ? ' checked' : '').'>
+        <input type="radio" id="sendAll-1" name="sendAll" value="1" '.($sendAll ? ' checked' : '').'>
         <label for="sendAll-1" class="after">Envoyer pour de bon à '.$emailsCount.' abonnés</label>
         <br/>
 

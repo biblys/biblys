@@ -6,6 +6,7 @@ $sql = null;
 $_REQ = null;
 $filters = null;
 
+/** @var $request */
 $input = $request->query->get('q', false);
 
 if (!$input) {
@@ -94,7 +95,8 @@ if (!$input) {
 			}
 			elseif ($q == "commande")
 			{
-				$sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$_SITE['site_id']."]%' AND `article_availability` = 1";
+                /** @var $site */
+                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$site->get("id")."]%' AND `article_availability` = 1";
 				$filters .= ' sur commande';
 			}
 			elseif ($q == "indisp")
@@ -146,7 +148,7 @@ if (!$input) {
 	}
 
 	$_ECHO .= '
-		<p class="floatR"><a href="http://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
+		<p class="floatR"><a href="https://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
 		<h2>'.$_PAGE_TITLE.'</h2>
 	';
 
