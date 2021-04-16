@@ -243,11 +243,9 @@ $request = Request::createFromGlobals();
 /* ENVIRONNEMENT */
 
 if ('dev' == $config->get('environment')) {
-    define('DEV', true);
     error_reporting(E_ALL);
     set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED);
 } else {
-    define('DEV', false);
     error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
     set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED ^ E_NOTICE);
 }
