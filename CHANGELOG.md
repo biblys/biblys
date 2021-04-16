@@ -1,6 +1,17 @@
 
 # Historique des modifications
 
+### 2.52.2 (16 avril 2021)
+
+Corrections
+
+- La présence d'une adresse e-mail invalide dans les abonnés ne bloque plus 
+  l'envoi de la newsletter
+- L'envoi d'une newsletter avec un nom de campagne fonctionne à nouveau
+- L'utilisation de l'ancienne page de recherche renvoie vers la nouvelle plutôt
+  que d'afficher une erreur
+- La création d'un client depuis la caisse fonctionne à nouveau
+
 ### 2.52.1 (9 avril 2021)
 
 Corrections
