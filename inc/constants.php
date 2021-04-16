@@ -1,12 +1,8 @@
 <?php
 
-define('BIBLYS_VERSION', '2.53.0-dev.1');
-
-if (!defined('BIBLYS_PATH')) {
-    define('BIBLYS_PATH', dirname(dirname(__FILE__)) . '/');
-}
-
-define('DL_PATH', BIBLYS_PATH . '/../../dl');
-define('DL_URL', 'http://dl.biblys.fr');
-define('IMAGES_PATH', BIBLYS_PATH . '/../../images/files');
-define('IMAGES_URL', 'http://images.biblys.fr');
+const BIBLYS_VERSION = '2.53.0-dev.1';
+const BIBLYS_PATH = __DIR__."/../";
+const DL_PATH = BIBLYS_PATH . '/../../dl';
+const DL_URL = 'http://dl.biblys.fr';
+const IMAGES_PATH = BIBLYS_PATH . '/../../images/files';
+const IMAGES_URL = 'http://images.biblys.fr';
