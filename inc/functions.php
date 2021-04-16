@@ -224,10 +224,7 @@ if ($rollbarConfig) {
 require_once BIBLYS_PATH . '/inc/autoload-entity.php';
 
 // Media path
-$media_path = BIBLYS_PATH . '/public/media';
-if ($config->get('media_path')) {
-    $media_path = BIBLYS_PATH . $config->get('media_path');
-}
+$media_path = BIBLYS_PATH . $config->get("media_path");
 define('MEDIA_PATH', $media_path);
 
 // Media url
