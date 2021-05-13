@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $_JS_CALLS[] = "/common/js/_list.js";
 
@@ -35,7 +36,7 @@ if ($listOrderBy != null && !in_array($listOrderBy, [
     'article_number', 'article_cycle', 'article_tome', 'article_pubdate',
     'stock_purchase_date', 'best_price', 'random'
 ])) {
-    throw new Exception('Unauthorized list sort order parameter '
+    throw new BadRequestHttpException('Unauthorized list sort order parameter '
         .htmlentities($listOrderBy));
 }
 
