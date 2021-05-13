@@ -195,11 +195,40 @@ $numQ->execute(["site_id" => $site->get("id")]);
 $num = count($numQ->fetchAll());
 
 // Requête de résultat
-$sql = $_SQL->prepare("SELECT `articles`.`article_id`, `article_title`, `article_title_alphabetic`, `article_url`, `article_authors`, `article_authors_alphabetic`, `article_collection`, `article_publisher`, `article_number`, `article_cycle`, `article_tome`, `article_availability`, `article_copyright`,
-        `article_pubdate`, `article_price`, `article_copyright`, `article_ean`, `article_links`, `article_keywords`,
-        `stock_id`, `stock_selling_date`, `stock_return_date`, `stock_lost_date`, `stock_purchase_date`, GROUP_CONCAT(`stock_condition` SEPARATOR '/') AS `stock_conditions`, MIN(`stock_selling_price`) AS `best_price`, `stock_stockage`
-        ".$sql_query." ".$_REQ_ORDER." ".$_REQ_LIMIT) or error($_SQL->errorInfo());
-$sql->execute(["site_id" => $site->get("id")]);
+$sql = EntityManager::prepareAndExecute("
+    SELECT 
+        MAX(`articles`.`article_id`) AS `article_id`, 
+        MAX(`article_title`) AS `article_title`, 
+        MAX(`article_title_alphabetic`) AS `article_title_alphabetic`, 
+        MAX(`article_url`) AS `article_url`, 
+        MAX(`article_authors`) AS `article_authors`, 
+        MAX(`article_authors_alphabetic`) AS `article_authors_alphabetic`, 
+        MAX(`article_collection`) AS `article_collection`, 
+        MAX(`article_publisher`) AS `article_publisher`, 
+        MAX(`article_number`) AS `article_number`, 
+        MAX(`article_cycle`) AS `article_cycle`, 
+        MAX(`article_tome`) AS `article_tome`, 
+        MAX(`article_availability`) AS `article_availability`, 
+        MAX(`article_copyright`) AS `article_copyright`,
+        MAX(`article_pubdate`) AS `article_pubdate`, 
+        MAX(`article_price`) AS `article_price`, 
+        MAX(`article_copyright`) AS `article_copyright`, 
+        MAX(`article_ean`) AS `article_ean`, 
+        MAX(`article_links`) AS `article_links`,
+        MAX(`article_keywords`) AS `article_keywords`,
+        MAX(`stock_id`) AS `stock_id`, 
+        MAX(`stock_selling_date`) AS `stock_selling_date`, 
+        MAX(`stock_return_date`) AS `stock_return_date`, 
+        MAX(`stock_lost_date`) AS `stock_lost_date`, 
+        MAX(`stock_purchase_date`) AS `stock_purchase_date`, 
+        GROUP_CONCAT(`stock_condition` SEPARATOR '/') AS `stock_conditions`, 
+        MIN(`stock_selling_price`) AS `best_price`, 
+        MAX(`stock_stockage`)
+    ".$sql_query." 
+    ".$_REQ_ORDER." 
+    ".$_REQ_LIMIT,
+    ["site_id" => $site->get("id")]
+);
 
 $ix = $_GET['s']; $covers = array(); $table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
