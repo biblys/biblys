@@ -1224,7 +1224,7 @@ class ArticleManager extends EntityManager
         // Check if article is already in rayon
         $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
-            throw new Exception("L'article « " . $article->get('title') . " » est déjà dans le rayon « " . $this->get('name') . " ».");
+            throw new Exception("L'article « " . $article->get('title') . " » est déjà dans le rayon « " . $rayon->get('name') . " ».");
         }
 
         // Create link

@@ -3,8 +3,12 @@
 
 ### 2.52.3-dev (DEV)
 
-Correction: l'utilisation d'un mauvais paramètre de tri dans une liste de
-résultats de recherche ne renvoie plus une erreur serveur.
+Corrections
+
+- L'utilisation d'un mauvais paramètre de tri dans une liste de
+  résultats de recherche ne renvoie plus une erreur serveur.
+- Le message d'erreur lors de l'ajout d'un article dans un rayon dans lequel
+  cet article est déjà s'affiche désormais correctement
 
 
 ### 2.52.2 (16 avril 2021)
