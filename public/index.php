@@ -1,42 +1,35 @@
 <?php
 
 use AppBundle\Controller\ErrorController;
-use AppBundle\Controller\LegacyController;
 use Biblys\Axys\Client as AxysClient;
+use Biblys\Service\Config;
 use Framework\Exception\ServiceUnavailableException;
-
-// INCLUDES
-include __DIR__."/../inc/functions.php";
-
 use Framework\Framework;
-use Framework\RequestListener;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
-use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+
+// INCLUDES
+include __DIR__."/../inc/functions.php";
 
 // Create session
 $session = new Session();
 $session->start();
 
 // Identification utilisateur
+/** @var $_V */
 if ($_V->isLogged()) {
     $_LOG = $_V;
 }
 
 // Load Encore assets
+$config = new Config();
 $_JS_CALLS = loadEncoreAssets($config->get('environment'), 'js');
 $_CSS_CALLS = loadEncoreAssets($config->get('environment'), 'css');
 
@@ -78,6 +71,7 @@ $_JS_CALLS[] = '/libs/ckeditor/adapters/jquery.js?4.5.7';
 $axysConfig = $config->get('axys') ?: [];
 $axys = new AxysClient($axysConfig);
 
+/** @var Site $site */
 if ($site->get('axys') || $_V->isAdmin()) {
     if ($_V->isLogged()) {
         $_JS_CALLS[] = $axys->getWidgetUrl($_COOKIE['user_uid']);
@@ -122,28 +116,18 @@ if ($closed) {
     );
 }
 
-$request = Request::createFromGlobals();
-$requestStack = new RequestStack();
 $routes = require __DIR__ . "/../src/routes.php";
+$urlgenerator = new UrlGenerator($routes, new RequestContext());
 
-$context = new RequestContext();
-$matcher = new UrlMatcher($routes, $context);
+$container = include __DIR__."/../src/container.php";
+$container->setParameter("routes", $routes);
+$container->register("listener.error", ErrorListener::class)
+    ->setArguments(["AppBundle\Controller\ErrorController::exception"]);
+$container->getDefinition("dispatcher")
+    ->addMethodCall("addSubscriber", [new Reference("listener.error")]);
 
-$controllerResolver = new ControllerResolver();
-$argumentResolver = new ArgumentResolver();
-
-$dispatcher = new EventDispatcher();
-$dispatcher->addSubscriber(new RouterListener($matcher, $requestStack));
-
-$requestListener = new RequestListener();
-$dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onUnsecureRequest"], 1);
-$dispatcher->addListener(KernelEvents::REQUEST, [$requestListener, "onReturningFromAxysRequest"], -1);
-
-$dispatcher->addSubscriber(new ErrorListener("AppBundle\Controller\ErrorController::exception"));
-
-$framework = new Framework($dispatcher, $controllerResolver, $requestStack, $argumentResolver);
-$urlgenerator = new UrlGenerator($routes, $context);
-
+$framework = $container->get("framework");
+$request = Request::createFromGlobals();
 $response = $framework->handle($request);
 
 // Set security headers
