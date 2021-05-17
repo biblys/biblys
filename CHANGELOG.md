@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.52.4-dev
+
+Corrections
+
+- Le calcul des frais de port ne provoque plus d'erreurs serveur lorsqu'appelé
+  avec de mauvais paramètres
+
 ### 2.52.3 (14 mai 2021)
 
 Corrections
