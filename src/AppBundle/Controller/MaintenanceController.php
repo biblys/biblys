@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Updater;
 use Framework\Controller;
 use Framework\Framework;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +21,7 @@ class MaintenanceController extends Controller
     {
         global $urlgenerator;
 
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $this->setPageTitle('Mise à jour de Biblys');
         $this->auth('admin');
@@ -91,7 +92,7 @@ class MaintenanceController extends Controller
     {
         $this->setPageTitle('Historique des mises à jour');
 
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $releases = $updater->getReleases();
         $releases = $updater->getReleasesDetails($releases);
@@ -103,7 +104,7 @@ class MaintenanceController extends Controller
     {
         $this->setPageTitle("Mise à jour $version");
 
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $release = $updater->getRelease($version);
         $release = $updater->getReleasesDetails([$release]);

@@ -1,9 +1,12 @@
 <?php
 
+namespace Biblys\Service\Updater;
+
+use Exception;
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException;
 
-class PhpGitAutoupdate
+class Updater
 {
     private $repository_path,
         $current_version,
@@ -19,43 +22,45 @@ class PhpGitAutoupdate
 
     /**
      * Download available updates from repo
-     * @return boolean true if repository was successfuly reached
+     * @return bool true if repository was successfuly reached
      */
-    public function downloadUpdates()
+    public function downloadUpdates(): bool
     {
-        $repository = $this->getRepository();
-
         try {
+            $repository = $this->getRepository();
             $repository->run('fetch', ['origin', '--tags']);
-        } catch(ProcessException $e) {
-            return false;
+            return true;
+        } catch (ProcessException $exception) {
+            throw new UpdaterException(
+                "Une erreur est survenue pendant la récupération des mises à jour.",
+                $exception->getCode(),
+                $exception
+            );
         }
-
-        return true;
     }
 
     /**
      * Compare git tags to get the latest update
-     * @return string latest update
+     * @return array latest update
      */
-    public function getLatestRelease()
+    public function getLatestRelease(): array
     {
         if (isset($this->latest)) {
             return $this->latest;
         }
 
-        // Get latest version & check if uptodate
+        // Get latest version & check if up-to-date
         $releases = $this->getReleases();
 
         if (count($releases) === 0) {
-            return null;
+            return [];
         }
 
         $this->latest = $releases[0];
         return $this->latest;
     }
 
-    public function getReleases()
+    public function getReleases(): array
     {
         if (isset($this->releases)) {
             return $this->releases;
@@ -85,20 +90,16 @@ class PhpGitAutoupdate
     public function getRelease($version)
     {
         $releases = $this->getReleases();
-
-        foreach ($releases as $release) {
-            if ($release["version"] == $version) {
-                return $release;
-            }
-        }
+        $key = array_search($version, $releases);
+        return $releases[$key];
     }
 
     /**
      * Filters releases to return only those newer than a version
-     * @param String $version: the version to compare
-     * @return Array: the releases that are newer
+     * @param string $version: the version to compare
+     * @return array the releases that are newer
      */
-    public function getReleasesNewerThan($version)
+    public function getReleasesNewerThan(string $version): array
     {
         $releases = $this->getReleases();
 
@@ -113,10 +114,10 @@ class PhpGitAutoupdate
 
     /**
      * Get details for provided releases
-     * @param Array $releases: the releases for which we want details
-     * @return Array: the provided releases with details
+     * @param array $releases the releases for which we want details
+     * @return array the provided releases with details
      */
-    public function getReleasesDetails($releases)
+    public function getReleasesDetails(array $releases): array
     {
         return array_map(function($release) {
             $release["date"] = $release["tag"]->getLastModification()->getAuthorDate();
@@ -127,9 +128,9 @@ class PhpGitAutoupdate
 
     /**
      * Checks if latest update is higher than current version
-     * @return boolean
+     * @return bool
      */
-    public function updateAvailable()
+    public function isUpdateAvailable(): bool
     {
         $latest = $this->getLatestRelease();
         return version_compare($latest["version"], $this->current_version, ">");
@@ -144,10 +145,10 @@ class PhpGitAutoupdate
 
     /**
      * Apply update with a git checkout
-     * @param  string  $version the git tag to use
-     * @return boolean          returns true if success
+     * @param  array  $release the git tag to use
+     * @return bool true on success
      */
-    public function applyRelease($release)
+    public function applyRelease(array $release): bool
     {
         $repository = $this->getRepository();
         try {

@@ -2,6 +2,8 @@
 
 namespace Biblys\Admin;
 
+use Biblys\Service\Updater;
+
 class Entry
 {
     private $_name;
@@ -154,13 +156,13 @@ class Entry
 
         // Biblys update available
         $updates = 0;
-        $updater = new \PhpGitAutoupdate(BIBLYS_PATH, BIBLYS_VERSION);
+        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
         $diff = time() - $site->getOpt('updates_last_checked');
         if ($diff > 60 * 60 * 24) {
             $updater->downloadUpdates();
             $site->setOpt('updates_last_checked', time());
         }
-        if ($updater->updateAvailable()) {
+        if ($updater->isUpdateAvailable()) {
             $updates = 1;
         }
 
