@@ -7,6 +7,8 @@ Corrections
 
 - Le calcul des frais de port ne provoque plus d'erreurs serveur lorsqu'appelé
   avec de mauvais paramètres
+- L'affichage d'une version de Biblys inexistante provoque une erreur 404 
+  plutôt qu'une erreur serveur
 
 ### 2.52.3 (14 mai 2021)
 

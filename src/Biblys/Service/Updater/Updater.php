@@ -5,6 +5,7 @@ namespace Biblys\Service\Updater;
 use Exception;
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Updater
 {
@@ -92,6 +93,11 @@ class Updater
     {
         $releases = $this->getReleases();
         $key = array_search($version, $releases);
+
+        if (!isset($releases[$key])) {
+            return new NotFoundHttpException(sprintf("Cannot find release for version %s", $version));
+        }
+
         return $releases[$key];
     }
 
