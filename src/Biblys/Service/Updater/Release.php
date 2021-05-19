@@ -4,29 +4,31 @@
 namespace Biblys\Service\Updater;
 
 
+use DateTime;
 use Gitonomy\Git\Reference\Tag;
 use Gitonomy\Git\Repository;
 
 class Release
 {
+    private $tag;
+    private $repository;
     public $version;
-    public $date;
-    public $notes;
 
-    public function __construct($version, $date, $notes)
+    public function __construct(Tag $tag, Repository $repository)
     {
-        $this->version = $version;
-        $this->date = $date;
-        $this->notes = $notes;
+        $this->tag = $tag;
+        $this->repository = $repository;
+        $this->version = $tag->getName();
     }
 
-    public static function buildFromTag(Tag $tag, Repository $repository): Release
+    public function getDate(): DateTime
     {
-        $version = $tag->getName();
-        $date = $tag->getLastModification()->getAuthorDate();
-        $notes = $repository->run('tag', ['-l', '-n99', $tag->getName()]);
-        $notesWithoutVersion = str_replace($version, "", $notes);
+        return $this->tag->getLastModification()->getAuthorDate();
+    }
 
-        return new Release($version, $date, $notesWithoutVersion);
+    public function getNotes(): string
+    {
+        $notes = $this->repository->run('tag', ['-l', '-n99', $this->version]);
+        return str_replace($this->version, "", $notes);
     }
 }
