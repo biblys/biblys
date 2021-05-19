@@ -76,7 +76,8 @@ class Updater
         $tags = $repository->getReferences()->getTags();
         foreach ($tags as $tag) {
             if (preg_match("/^\\d/", $tag->getName())) {
-                $releases[] = Release::buildFromTag($tag, $this->repository);
+                $release = new Release($tag, $repository);
+                $releases[] = $release;
             }
         }
 
