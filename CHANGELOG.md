@@ -9,6 +9,7 @@ Corrections
   avec de mauvais paramètres
 - L'affichage d'une version de Biblys inexistante provoque une erreur 404 
   plutôt qu'une erreur serveur
+- Les performances de la page « Historique des mises à jour » ont été améliorées
 
 ### 2.52.3 (14 mai 2021)
 
