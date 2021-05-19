@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Pagination;
 use Biblys\Service\Updater\ReleaseNotFoundException;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -107,7 +108,7 @@ class MaintenanceController extends Controller
         return $this->render('AppBundle:Maintenance:composer.html.twig');
     }
 
-    public function changelogIndexAction(): Response
+    public function changelogIndexAction(Request $request): Response
     {
         $this->setPageTitle('Historique des mises à jour');
 
@@ -115,7 +116,14 @@ class MaintenanceController extends Controller
 
         $releases = $updater->getReleases();
 
-        return $this->render('AppBundle:Maintenance:changelogIndex.html.twig', ['releases' => $releases]);
+        $page = (int) $request->query->get('p', 0);
+        $pagination = new Pagination($page, count($releases));
+        $currentPageReleases = array_slice($releases, $pagination->getOffset(), $pagination->getLimit());
+
+        return $this->render('AppBundle:Maintenance:changelogIndex.html.twig', [
+            'releases' => $currentPageReleases,
+            'pages' => $pagination,
+        ]);
     }
 
     public function changelogShowAction($version): Response
