@@ -2,7 +2,9 @@
 
 namespace Biblys\Admin;
 
-use Biblys\Service\Updater;
+use Biblys\Service\Updater\Updater;
+use Biblys\Service\Updater\UpdaterException;
+use OrderManager;
 
 class Entry
 {
@@ -100,7 +102,7 @@ class Entry
         return $this->_icon;
     }
 
-    public function hasClass()
+    public function hasClass(): bool
     {
         return $this->_hasClass;
     }
@@ -135,7 +137,7 @@ class Entry
         return $this->_subscription;
     }
 
-    public function hasSubscription()
+    public function hasSubscription(): bool
     {
         return $this->_hasSubscription;
     }
@@ -150,7 +152,11 @@ class Entry
         return $this->_category;
     }
 
-    public static function findAll()
+    /**
+     * @return Entry[]
+     * @throws UpdaterException
+     */
+    public static function findAll(): array
     {
         global $site, $config;
 
@@ -167,7 +173,7 @@ class Entry
         }
 
         // Orders to be shipped
-        $om = new \OrderManager();
+        $om = new OrderManager();
         $orders = $om->count(['order_type' => 'web', 'order_payment_date' => 'NOT NULL', 'order_shipping_date' => 'NULL', 'order_cancel_date' => 'NULL']);
 
         $entries = [];
@@ -245,7 +251,11 @@ class Entry
         return $entries;
     }
 
-    public static function getCustomEntries()
+
+    /**
+     * @return Entry[]
+     */
+    public static function getCustomEntries(): array
     {
         global $site;
 
@@ -273,7 +283,12 @@ class Entry
         return $custom;
     }
 
-    public static function findByCategory($category)
+    /**
+     * @param string $category
+     * @return Entry[]
+     * @throws UpdaterException
+     */
+    public static function findByCategory(string $category): array
     {
         if ($category === 'custom') {
             return self::getCustomEntries();

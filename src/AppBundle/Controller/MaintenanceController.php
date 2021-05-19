@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Updater\ReleaseNotFoundException;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MaintenanceController extends Controller
 {
@@ -56,7 +58,7 @@ class MaintenanceController extends Controller
             $updater->applyRelease($latest);
 
             return new RedirectResponse($urlgenerator->generate('maintenance_updating', [
-                'version' => $latest['version'],
+                'version' => $latest->version,
             ]));
         }
 
@@ -112,22 +114,23 @@ class MaintenanceController extends Controller
         $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $releases = $updater->getReleases();
-        $releases = $updater->getReleasesDetails($releases);
 
         return $this->render('AppBundle:Maintenance:changelogIndex.html.twig', ['releases' => $releases]);
     }
 
     public function changelogShowAction($version): Response
     {
+
+        try {
+            $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
+            $release = $updater->getRelease($version);
+        } catch(ReleaseNotFoundException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception->getPrevious());
+        }
+
         $this->setPageTitle("Mise à jour $version");
-
-        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
-
-        $release = $updater->getRelease($version);
-        $release = $updater->getReleasesDetails([$release]);
-
         return $this->render('AppBundle:Maintenance:changelogShow.html.twig', [
-            'release' => $release[0],
+            'release' => $release,
         ]);
     }
 }
