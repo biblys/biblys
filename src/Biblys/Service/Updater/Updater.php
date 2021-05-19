@@ -23,6 +23,7 @@ class Updater
     /**
      * Download available updates from repo
      * @return bool true if repository was successfuly reached
+     * @throws UpdaterException
      */
     public function downloadUpdates(): bool
     {

@@ -33,11 +33,10 @@
         </fieldset>
     </form>
 
-{% elseif offline %}
+{% elseif error %}
 
-    <p class="alert alert-warning">
-        <i class="fa fa-warning"></i>
-        Impossible de joindre le serveur de mise à jour.
+    <p class="alert alert-danger">
+        {{ error }}
     </p>
 
 {% else %}
