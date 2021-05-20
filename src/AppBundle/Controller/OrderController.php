@@ -172,7 +172,7 @@ class OrderController extends Controller
         return $this->redirect('/order/'.$order->get('url'));
     }
 
-    public function payplugNotificationAction(Request $request, $url)
+    public function payplugNotificationAction(Request $request, $url): Response
     {
         global $config;
 
@@ -204,6 +204,11 @@ class OrderController extends Controller
         $input = $request->getContent();
         try {
             $resource = \Payplug\Notification::treat($input);
+
+            if ($resource instanceof \Payplug\Resource\Refund) {
+                Log::payplug("INFO", 'Ignoring resource ' . $resource->id . ' (refund)');
+                return new Response();
+            }
 
             if (!$resource instanceof \Payplug\Resource\Payment) {
                 Log::payplug("ERROR", 'Resource ' . $resource->id . '  is not a Payment.');
