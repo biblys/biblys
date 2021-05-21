@@ -1,7 +1,7 @@
 
 # Historique des modifications
 
-### 2.52.4-dev
+### 2.52.4 (21 mai 2021)
 
 Corrections
 

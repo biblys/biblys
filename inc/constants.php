@@ -1,6 +1,6 @@
 <?php
 
-define('BIBLYS_VERSION', '2.52.4-dev');
+define('BIBLYS_VERSION', '2.52.4');
 
 if (!defined('BIBLYS_PATH')) {
     define('BIBLYS_PATH', dirname(dirname(__FILE__)) . '/');
