@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" namespace="Model" defaultPhpNamingMethod="underscore">
+  <table name="alerts" idMethod="native" phpName="Alert">
+    <column name="alert_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="alert_max_price" phpName="MaxPrice" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="alert_pub_year" phpName="PubYear" type="INTEGER" size="4" sqlType="int(4) unsigned"/>
+    <column name="alert_condition" phpName="Condition" type="VARCHAR" size="4"/>
+    <column name="alert_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="alert_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="alert_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="alert_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="alert_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="articles" idMethod="native" phpName="Article">
+    <column name="article_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="article_item" phpName="Item" type="INTEGER"/>
+    <column name="article_textid" phpName="Textid" type="VARCHAR" size="32"/>
+    <column name="article_ean" phpName="Ean" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="article_ean_others" phpName="EanOthers" type="VARCHAR" size="255"/>
+    <column name="article_asin" phpName="Asin" type="VARCHAR" size="32"/>
+    <column name="article_noosfere_id" phpName="NoosfereId" type="INTEGER" size="10"/>
+    <column name="article_url" phpName="Url" type="VARCHAR" size="256"/>
+    <column name="type_id" phpName="TypeId" type="TINYINT" size="11"/>
+    <column name="article_title" phpName="Title" type="VARCHAR" size="256"/>
+    <column name="article_title_alphabetic" phpName="TitleAlphabetic" type="VARCHAR" size="256"/>
+    <column name="article_title_original" phpName="TitleOriginal" type="VARCHAR" size="256"/>
+    <column name="article_title_others" phpName="TitleOthers" type="VARCHAR" size="256"/>
+    <column name="article_subtitle" phpName="Subtitle" type="VARCHAR" size="256"/>
+    <column name="article_lang_current" phpName="LangCurrent" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="article_lang_original" phpName="LangOriginal" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="article_origin_country" phpName="OriginCountry" type="INTEGER"/>
+    <column name="article_theme_bisac" phpName="ThemeBisac" type="VARCHAR" size="16"/>
+    <column name="article_theme_clil" phpName="ThemeClil" type="VARCHAR" size="16"/>
+    <column name="article_theme_dewey" phpName="ThemeDewey" type="VARCHAR" size="16"/>
+    <column name="article_theme_electre" phpName="ThemeElectre" type="VARCHAR" size="16"/>
+    <column name="article_source_id" phpName="SourceId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_authors" phpName="Authors" type="VARCHAR" size="256"/>
+    <column name="article_authors_alphabetic" phpName="AuthorsAlphabetic" type="VARCHAR" size="256"/>
+    <column name="collection_id" phpName="CollectionId" type="INTEGER" size="10"/>
+    <column name="article_collection" phpName="Collection" type="VARCHAR" size="256"/>
+    <column name="article_number" phpName="Number" type="VARCHAR" size="8"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
+    <column name="article_publisher" phpName="Publisher" type="VARCHAR" size="256"/>
+    <column name="cycle_id" phpName="CycleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_cycle" phpName="Cycle" type="VARCHAR" size="256"/>
+    <column name="article_tome" phpName="Tome" type="VARCHAR" size="8"/>
+    <column name="article_cover_version" phpName="CoverVersion" type="INTEGER" defaultValue="0"/>
+    <column name="article_availability" phpName="Availability" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="article_availability_dilicom" phpName="AvailabilityDilicom" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" defaultValue="1"/>
+    <column name="article_preorder" phpName="Preorder" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="article_price" phpName="Price" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_price_editable" phpName="PriceEditable" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="article_new_price" phpName="NewPrice" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_category" phpName="Category" type="VARCHAR" size="8"/>
+    <column name="article_tva" phpName="Tva" type="TINYINT" defaultValue="1"/>
+    <column name="article_pdf_ean" phpName="PdfEan" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="article_pdf_version" phpName="PdfVersion" type="VARCHAR" size="8" defaultValue="0"/>
+    <column name="article_epub_ean" phpName="EpubEan" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="article_epub_version" phpName="EpubVersion" type="VARCHAR" size="8" defaultValue="0"/>
+    <column name="article_azw_ean" phpName="AzwEan" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="article_azw_version" phpName="AzwVersion" type="VARCHAR" size="8" defaultValue="0"/>
+    <column name="article_pages" phpName="Pages" type="INTEGER"/>
+    <column name="article_weight" phpName="Weight" type="INTEGER"/>
+    <column name="article_shaping" phpName="Shaping" type="VARCHAR" size="128"/>
+    <column name="article_format" phpName="Format" type="VARCHAR" size="128"/>
+    <column name="article_printing_process" phpName="PrintingProcess" type="VARCHAR" size="256"/>
+    <column name="article_age_min" phpName="AgeMin" type="INTEGER"/>
+    <column name="article_age_max" phpName="AgeMax" type="INTEGER"/>
+    <column name="article_summary" phpName="Summary" type="LONGVARCHAR"/>
+    <column name="article_contents" phpName="Contents" type="LONGVARCHAR"/>
+    <column name="article_bonus" phpName="Bonus" type="LONGVARCHAR"/>
+    <column name="article_catchline" phpName="Catchline" type="LONGVARCHAR"/>
+    <column name="article_biography" phpName="Biography" type="LONGVARCHAR"/>
+    <column name="article_motsv" phpName="Motsv" type="LONGVARCHAR"/>
+    <column name="article_copyright" phpName="Copyright" type="SMALLINT" size="4" sqlType="mediumint(4) unsigned"/>
+    <column name="article_pubdate" phpName="Pubdate" type="DATE"/>
+    <column name="article_keywords" phpName="Keywords" type="VARCHAR" size="1024"/>
+    <column name="article_links" phpName="Links" type="VARCHAR" size="1024"/>
+    <column name="article_keywords_generated" phpName="KeywordsGenerated" type="TIMESTAMP"/>
+    <column name="article_publisher_stock" phpName="PublisherStock" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="article_hits" phpName="Hits" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="article_editing_user" phpName="EditingUser" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="article_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="article_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="article_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="article_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <column name="article_done" phpName="Done" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="article_to_check" phpName="ToCheck" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="article_pushed_to_data" phpName="PushedToData" type="TIMESTAMP"/>
+    <column name="article_deletion_by" phpName="DeletionBy" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_deletion_date" phpName="DeletionDate" type="TIMESTAMP"/>
+    <column name="article_deletion_reason" phpName="DeletionReason" type="VARCHAR" size="512"/>
+    <index name="publisher_id">
+      <index-column name="publisher_id"/>
+    </index>
+    <index name="article_links">
+      <index-column name="article_links" size="767"/>
+    </index>
+    <index name="article_keywords">
+      <index-column name="article_keywords" size="767"/>
+    </index>
+    <index name="article_url">
+      <index-column name="article_url"/>
+    </index>
+    <index name="article_ean">
+      <index-column name="article_ean"/>
+    </index>
+    <unique name="article_pdf_ean">
+      <unique-column name="article_pdf_ean"/>
+    </unique>
+    <unique name="article_epub_ean">
+      <unique-column name="article_epub_ean"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="awards" idMethod="native" phpName="Award">
+    <column name="award_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="book_id" phpName="BookId" type="INTEGER"/>
+    <column name="award_name" phpName="Name" type="LONGVARCHAR"/>
+    <column name="award_year" phpName="Year" type="LONGVARCHAR"/>
+    <column name="award_category" phpName="Category" type="LONGVARCHAR"/>
+    <column name="award_note" phpName="Note" type="LONGVARCHAR"/>
+    <column name="award_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="award_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="award_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="award_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="bookshops" idMethod="native" phpName="Bookshop">
+    <column name="bookshop_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="bookshop_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="bookshop_name_alphabetic" phpName="NameAlphabetic" type="VARCHAR" size="256"/>
+    <column name="bookshop_url" phpName="Url" type="VARCHAR" size="128"/>
+    <column name="bookshop_representative" phpName="Representative" type="VARCHAR" size="256"/>
+    <column name="bookshop_address" phpName="Address" type="VARCHAR" size="256"/>
+    <column name="bookshop_postal_code" phpName="PostalCode" type="VARCHAR" size="8"/>
+    <column name="bookshop_city" phpName="City" type="VARCHAR" size="128"/>
+    <column name="bookshop_country" phpName="Country" type="VARCHAR" size="128"/>
+    <column name="bookshop_phone" phpName="Phone" type="VARCHAR" size="16"/>
+    <column name="bookshop_fax" phpName="Fax" type="VARCHAR" size="16"/>
+    <column name="bookshop_website" phpName="Website" type="VARCHAR" size="128"/>
+    <column name="bookshop_email" phpName="Email" type="VARCHAR" size="128"/>
+    <column name="bookshop_facebook" phpName="Facebook" type="VARCHAR" size="32"/>
+    <column name="bookshop_twitter" phpName="Twitter" type="VARCHAR" size="15"/>
+    <column name="bookshop_legal_form" phpName="LegalForm" type="VARCHAR" size="128"/>
+    <column name="bookshop_creation_year" phpName="CreationYear" type="VARCHAR" size="4"/>
+    <column name="bookshop_specialities" phpName="Specialities" type="VARCHAR" size="256"/>
+    <column name="bookshop_membership" phpName="Membership" type="VARCHAR" size="512"/>
+    <column name="bookshop_motto" phpName="Motto" type="VARCHAR" size="128"/>
+    <column name="bookshop_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="bookshop_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="bookshop_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="bookshop_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="publisher_url">
+      <unique-column name="bookshop_url"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="carts" idMethod="native" phpName="Cart">
+    <column name="cart_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="cart_uid" phpName="Uid" type="VARCHAR" size="32"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="cart_seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="cart_title" phpName="Title" type="VARCHAR" size="128"/>
+    <column name="cart_type" phpName="Type" type="VARCHAR" size="4" defaultValue=""/>
+    <column name="cart_ip" phpName="Ip" type="LONGVARCHAR"/>
+    <column name="cart_count" phpName="Count" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="cart_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="cart_as-a-gift" phpName="As-a-gift" type="VARCHAR" size="16"/>
+    <column name="cart_gift-recipient" phpName="Gift-recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="cart_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="cart_insert" phpName="Insert" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="cart_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="cart_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="cart_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="cart_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="categories" idMethod="native" phpName="Category">
+    <column name="category_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="category_name" phpName="Name" type="VARCHAR" size="64"/>
+    <column name="category_url" phpName="Url" type="VARCHAR" size="256"/>
+    <column name="category_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="category_order" phpName="Order" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="category_hidden" phpName="Hidden" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="category_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="category_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="category_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="category_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="category_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="cf_campaigns" idMethod="native" phpName="CrowdfundingCampaign">
+    <column name="campaign_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_title" phpName="Title" type="VARCHAR" size="255"/>
+    <column name="campaign_url" phpName="Url" type="VARCHAR" size="128"/>
+    <column name="campaign_description" phpName="Description" type="LONGVARCHAR"/>
+    <column name="campaign_image" phpName="Image" type="VARCHAR" size="256"/>
+    <column name="campaign_goal" phpName="Goal" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_pledged" phpName="Pledged" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_backers" phpName="Backers" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_starts" phpName="Starts" type="DATE"/>
+    <column name="campaign_ends" phpName="Ends" type="DATE"/>
+    <column name="campaign_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="campaign_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="campaign_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="campaign_url">
+      <unique-column name="campaign_url"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="cf_rewards" idMethod="native" phpName="CrowfundingReward">
+    <column name="reward_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_id" phpName="CampaignId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="reward_content" phpName="Content" type="VARCHAR" size="1025"/>
+    <column name="reward_articles" phpName="Articles" type="VARCHAR" size="255"/>
+    <column name="reward_price" phpName="Price" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="reward_limited" phpName="Limited" type="BOOLEAN" size="1"/>
+    <column name="reward_highlighted" phpName="Highlighted" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="reward_image" phpName="Image" type="VARCHAR" size="256"/>
+    <column name="reward_quantity" phpName="Quantity" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="reward_backers" phpName="Backers" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="reward_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="reward_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="reward_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="collections" idMethod="native" phpName="Collection">
+    <column name="collection_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="pricegrid_id" phpName="PricegridId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="collection_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="collection_url" phpName="Url" type="VARCHAR" size="255"/>
+    <column name="collection_publisher" phpName="Publisher" type="VARCHAR" size="255"/>
+    <column name="collection_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="collection_ignorenum" phpName="Ignorenum" type="BOOLEAN" size="1"/>
+    <column name="collection_orderby" phpName="Orderby" type="LONGVARCHAR"/>
+    <column name="collection_incorrect_weights" phpName="IncorrectWeights" type="BOOLEAN" size="1"/>
+    <column name="collection_noosfere_id" phpName="NoosfereId" type="INTEGER"/>
+    <column name="collection_insert" phpName="Insert" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="collection_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="collection_hits" phpName="Hits" type="INTEGER"/>
+    <column name="collection_duplicate" phpName="Duplicate" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="collection_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="collection_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="collection_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="site_id">
+      <index-column name="site_id"/>
+    </index>
+    <unique name="collection_noosfere_id">
+      <unique-column name="collection_noosfere_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="countries" idMethod="native" phpName="Country">
+    <column name="country_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="country_code" phpName="Code" type="VARCHAR" size="3"/>
+    <column name="country_name" phpName="Name" type="VARCHAR" size="200"/>
+    <column name="country_name_en" phpName="NameEn" type="VARCHAR" size="200"/>
+    <column name="shipping_zone" phpName="ShippingZone" type="VARCHAR" size="8"/>
+    <column name="country_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="country_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="country_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="coupons" idMethod="native" phpName="Coupon">
+    <column name="coupon_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="coupon_code" phpName="Code" type="VARCHAR" size="6"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_id" phpName="StockId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="coupon_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="coupon_note" phpName="Note" type="VARCHAR" size="256"/>
+    <column name="coupon_used" phpName="Used" type="TIMESTAMP"/>
+    <column name="coupon_creator" phpName="Creator" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="coupon_insert" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="coupon_update" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <unique name="coupon_code">
+      <unique-column name="coupon_code"/>
+    </unique>
+    <unique name="stock_id">
+      <unique-column name="stock_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="cron_jobs" idMethod="native" phpName="CronJob">
+    <column name="cron_job_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="cron_job_task" phpName="Task" type="VARCHAR" size="128"/>
+    <column name="cron_job_result" phpName="Result" type="VARCHAR" size="16"/>
+    <column name="cron_job_message" phpName="Message" type="VARCHAR" size="256"/>
+    <column name="cron_job_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="cron_job_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="cron_job_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="customers" idMethod="native" phpName="Customer">
+    <column name="customer_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="customer_type" phpName="Type" type="VARCHAR" size="16" defaultValue="Particulier"/>
+    <column name="customer_first_name" phpName="FirstName" type="VARCHAR" size="64"/>
+    <column name="customer_last_name" phpName="LastName" type="VARCHAR" size="64"/>
+    <column name="customer_email" phpName="Email" type="VARCHAR" size="128"/>
+    <column name="customer_phone" phpName="Phone" type="VARCHAR" size="16"/>
+    <column name="country_id" phpName="CountryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="customer_privatization" phpName="Privatization" type="DATE"/>
+    <column name="customer_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="customer_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="customer_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="customer_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="customer_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="site_id">
+      <unique-column name="site_id"/>
+      <unique-column name="user_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="cycles" idMethod="native" phpName="Cycle">
+    <column name="cycle_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="cycle_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="cycle_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="cycle_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="cycle_hits" phpName="Hits" type="INTEGER"/>
+    <column name="cycle_noosfere_id" phpName="NoosfereId" type="INTEGER"/>
+    <column name="cycle_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="cycle_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="cycle_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="cycle_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="cycle_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="cycle_name">
+      <index-column name="cycle_name"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="downloads" idMethod="native" phpName="Download">
+    <column name="download_id" phpName="Id" type="BIGINT" sqlType="bigint(20) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="file_id" phpName="FileId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="book_id" phpName="BookId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="download_filetype" phpName="Filetype" type="LONGVARCHAR"/>
+    <column name="download_version" phpName="Version" type="VARCHAR" size="8"/>
+    <column name="download_ip" phpName="Ip" type="LONGVARCHAR"/>
+    <column name="download_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="download_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="download_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="download_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="events" idMethod="native" phpName="Event">
+    <column name="event_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
+    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="event_url" phpName="Url" type="VARCHAR" size="128"/>
+    <column name="event_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="event_subtitle" phpName="Subtitle" type="LONGVARCHAR"/>
+    <column name="event_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="event_location" phpName="Location" type="LONGVARCHAR"/>
+    <column name="event_illustration_legend" phpName="IllustrationLegend" type="VARCHAR" size="64"/>
+    <column name="event_highlighted" phpName="Highlighted" type="BOOLEAN" size="1"/>
+    <column name="event_start" phpName="Start" type="TIMESTAMP"/>
+    <column name="event_end" phpName="End" type="TIMESTAMP"/>
+    <column name="event_date" phpName="Date" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="event_status" phpName="Status" type="BOOLEAN" size="1"/>
+    <column name="event_insert_" phpName="Insert" type="TIMESTAMP"/>
+    <column name="event_update_" phpName="Update" type="TIMESTAMP"/>
+    <column name="event_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="event_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="event_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="url">
+      <unique-column name="site_id"/>
+      <unique-column name="event_url"/>
+      <unique-column name="event_deleted"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="files" idMethod="native" phpName="File">
+    <column name="file_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="file_title" phpName="Title" type="VARCHAR" size="32"/>
+    <column name="file_type" phpName="Type" type="VARCHAR" size="32"/>
+    <column name="file_access" phpName="Access" type="BOOLEAN" size="1" defaultValue="true"/>
+    <column name="file_version" phpName="Version" type="VARCHAR" size="8" defaultValue="1.0"/>
+    <column name="file_hash" phpName="Hash" type="VARCHAR" size="32"/>
+    <column name="file_size" phpName="Size" type="BIGINT" sqlType="bigint(20) unsigned" defaultValue="0"/>
+    <column name="file_ean" phpName="Ean" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="file_inserted" phpName="Inserted" type="TIMESTAMP"/>
+    <column name="file_uploaded" phpName="Uploaded" type="TIMESTAMP"/>
+    <column name="file_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="file_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <column name="file_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <index name="file_hash">
+      <index-column name="file_hash"/>
+    </index>
+    <index name="file_ean">
+      <index-column name="file_ean"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="galleries" idMethod="native" phpName="Gallery">
+    <column name="gallery_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="gallery_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="media_dir" phpName="MediaDir" type="LONGVARCHAR"/>
+    <column name="gallery_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="gallery_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="gallery_created" phpName="Created" type="TIMESTAMP"/>
+    <column name="gallery_updated" phpName="Updated" type="TIMESTAMP"/>
+    <column name="gallery_deleted" phpName="Deleted" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="images" idMethod="native" phpName="Image">
+    <column name="image_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="bookshop_id" phpName="BookshopId" type="INTEGER"/>
+    <column name="event_id" phpName="EventId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="image_nature" phpName="Nature" type="VARCHAR" size="16"/>
+    <column name="image_legend" phpName="Legend" type="VARCHAR" size="32"/>
+    <column name="image_type" phpName="Type" type="VARCHAR" size="32"/>
+    <column name="image_size" phpName="Size" type="BIGINT" sqlType="bigint(20) unsigned" defaultValue="0"/>
+    <column name="image_inserted" phpName="Inserted" type="TIMESTAMP"/>
+    <column name="image_uploaded" phpName="Uploaded" type="TIMESTAMP"/>
+    <column name="image_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="image_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="inventory" idMethod="native" phpName="Inventory">
+    <column name="inventory_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="inventory_title" phpName="Title" type="VARCHAR" size="32"/>
+    <column name="inventory_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="inventory_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="inventory_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="inventory_item" idMethod="native" phpName="InventoryItem">
+    <column name="ii_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="inventory_id" phpName="InventoryId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="ii_ean" phpName="Ean" type="VARCHAR" size="32"/>
+    <column name="ii_quantity" phpName="Quantity" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="ii_stock" phpName="Stock" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="ii_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="ii_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="ii_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="inventory_id">
+      <index-column name="inventory_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="jobs" idMethod="native" phpName="Job">
+    <column name="job_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="job_name" phpName="Name" type="VARCHAR" size="64"/>
+    <column name="job_name_f" phpName="NameF" type="VARCHAR" size="64"/>
+    <column name="job_other_names" phpName="OtherNames" type="VARCHAR" size="256"/>
+    <column name="job_event" phpName="Event" type="BOOLEAN" size="1"/>
+    <column name="job_order" phpName="Order" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" required="true" defaultValue="0"/>
+    <column name="job_onix" phpName="Onix" type="VARCHAR" size="3"/>
+    <column name="job_date" phpName="Date" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="job_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="job_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="job_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="langs" idMethod="native" phpName="Lang">
+    <column name="lang_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="lang_iso_639-1" phpName="Iso639-1" type="VARCHAR" size="2"/>
+    <column name="lang_iso_639-2" phpName="Iso639-2" type="VARCHAR" size="7"/>
+    <column name="lang_iso_639-3" phpName="Iso639-3" type="VARCHAR" size="7"/>
+    <column name="lang_name" phpName="Name" type="VARCHAR" size="27"/>
+    <column name="lang_name_original" phpName="NameOriginal" type="VARCHAR" size="35"/>
+    <column name="lang_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="lang_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="lang_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="libraries" idMethod="native" phpName="Library">
+    <column name="library_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="library_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="library_name_alphabetic" phpName="NameAlphabetic" type="VARCHAR" size="256"/>
+    <column name="library_url" phpName="Url" type="VARCHAR" size="128"/>
+    <column name="library_representative" phpName="Representative" type="VARCHAR" size="256"/>
+    <column name="library_address" phpName="Address" type="VARCHAR" size="256"/>
+    <column name="library_postal_code" phpName="PostalCode" type="VARCHAR" size="8"/>
+    <column name="library_city" phpName="City" type="VARCHAR" size="128"/>
+    <column name="library_country" phpName="Country" type="VARCHAR" size="128"/>
+    <column name="library_phone" phpName="Phone" type="VARCHAR" size="16"/>
+    <column name="library_fax" phpName="Fax" type="VARCHAR" size="16"/>
+    <column name="library_website" phpName="Website" type="VARCHAR" size="128"/>
+    <column name="library_email" phpName="Email" type="VARCHAR" size="128"/>
+    <column name="library_facebook" phpName="Facebook" type="VARCHAR" size="128"/>
+    <column name="library_twitter" phpName="Twitter" type="VARCHAR" size="15"/>
+    <column name="library_creation_year" phpName="CreationYear" type="VARCHAR" size="4"/>
+    <column name="library_specialities" phpName="Specialities" type="VARCHAR" size="256"/>
+    <column name="library_readings" phpName="Readings" type="VARCHAR" size="512"/>
+    <column name="library_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="library_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="library_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="library_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="publisher_url">
+      <unique-column name="library_url"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="links" idMethod="native" phpName="Link">
+    <column name="link_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_id" phpName="StockId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="list_id" phpName="ListId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="book_id" phpName="BookId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="people_id" phpName="PeopleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="job_id" phpName="JobId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="rayon_id" phpName="RayonId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="tag_id" phpName="TagId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="event_id" phpName="EventId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="post_id" phpName="PostId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="collection_id" phpName="CollectionId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="supplier_id" phpName="SupplierId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="media_id" phpName="MediaId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="bundle_id" phpName="BundleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="link_hide" phpName="Hide" type="BOOLEAN" size="1"/>
+    <column name="link_do_not_reorder" phpName="DoNotReorder" type="BOOLEAN" size="1"/>
+    <column name="link_sponsor_user_id" phpName="SponsorUserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="link_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="link_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="link_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="link_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="post_id">
+      <index-column name="post_id"/>
+    </index>
+    <unique name="sponsorship">
+      <unique-column name="site_id"/>
+      <unique-column name="user_id"/>
+      <unique-column name="link_sponsor_user_id"/>
+    </unique>
+    <unique name="suppliers">
+      <unique-column name="site_id"/>
+      <unique-column name="publisher_id"/>
+      <unique-column name="supplier_id"/>
+    </unique>
+    <unique name="myEvents">
+      <unique-column name="site_id"/>
+      <unique-column name="user_id"/>
+      <unique-column name="event_id"/>
+    </unique>
+    <unique name="rayons">
+      <unique-column name="rayon_id"/>
+      <unique-column name="article_id"/>
+      <unique-column name="site_id"/>
+    </unique>
+    <unique name="stock_id">
+      <unique-column name="stock_id"/>
+      <unique-column name="list_id"/>
+    </unique>
+    <unique name="site_id">
+      <unique-column name="site_id"/>
+      <unique-column name="article_id"/>
+      <unique-column name="link_do_not_reorder"/>
+      <unique-column name="link_deleted"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="lists" idMethod="native" phpName="List">
+    <column name="list_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="list_title" phpName="Title" type="VARCHAR" size="256"/>
+    <column name="list_url" phpName="Url" type="VARCHAR" size="256"/>
+    <column name="list_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="list_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="list_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="mailing" idMethod="native" phpName="Mailing">
+    <column name="mailing_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="mailing_email" phpName="Email" type="VARCHAR" size="256" defaultValue=""/>
+    <column name="mailing_block" phpName="Block" type="BOOLEAN" size="1"/>
+    <column name="mailing_checked" phpName="Checked" type="BOOLEAN" size="1"/>
+    <column name="mailing_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="mailing_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="mailing_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="mailing_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="site_id">
+      <index-column name="site_id"/>
+      <index-column name="mailing_email"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="medias" idMethod="native" phpName="Media">
+    <column name="media_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="category_id" phpName="CategoryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="media_dir" phpName="Dir" type="LONGVARCHAR"/>
+    <column name="media_file" phpName="File" type="LONGVARCHAR"/>
+    <column name="media_ext" phpName="Ext" type="LONGVARCHAR"/>
+    <column name="media_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="media_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="media_link" phpName="Link" type="LONGVARCHAR"/>
+    <column name="media_headline" phpName="Headline" type="LONGVARCHAR"/>
+    <column name="media_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="media_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="media_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="media_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="media_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="option" idMethod="native" phpName="Option">
+    <column name="option_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="option_key" phpName="Key" type="VARCHAR" size="32"/>
+    <column name="option_value" phpName="Value" type="VARCHAR" size="2048"/>
+    <column name="option_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="option_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="option_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="orders" idMethod="native" phpName="Order">
+    <column name="order_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="order_url" phpName="Url" type="VARCHAR" size="16"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="order_type" phpName="Type" type="VARCHAR" size="8" defaultValue=""/>
+    <column name="order_as-a-gift" phpName="As-a-gift" type="VARCHAR" size="16"/>
+    <column name="order_gift-recipient" phpName="Gift-recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="order_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_discount" phpName="Discount" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="order_amount_tobepaid" phpName="AmountTobepaid" type="INTEGER" defaultValue="0"/>
+    <column name="shipping_id" phpName="ShippingId" type="INTEGER"/>
+    <column name="country_id" phpName="CountryId" type="INTEGER"/>
+    <column name="order_shipping" phpName="Shipping" type="INTEGER" defaultValue="0"/>
+    <column name="order_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="32"/>
+    <column name="order_track_number" phpName="TrackNumber" type="VARCHAR" size="16"/>
+    <column name="order_payment_mode" phpName="PaymentMode" type="VARCHAR" size="32"/>
+    <column name="order_payment_cash" phpName="PaymentCash" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_payment_cheque" phpName="PaymentCheque" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_payment_transfer" phpName="PaymentTransfer" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_payment_card" phpName="PaymentCard" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_payment_paypal" phpName="PaymentPaypal" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_payment_payplug" phpName="PaymentPayplug" type="INTEGER" sqlType="int(11) unsigned" defaultValue="0"/>
+    <column name="order_payment_left" phpName="PaymentLeft" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="order_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="order_firstname" phpName="Firstname" type="LONGVARCHAR"/>
+    <column name="order_lastname" phpName="Lastname" type="LONGVARCHAR"/>
+    <column name="order_address1" phpName="Address1" type="LONGVARCHAR"/>
+    <column name="order_address2" phpName="Address2" type="LONGVARCHAR"/>
+    <column name="order_postalcode" phpName="Postalcode" type="LONGVARCHAR"/>
+    <column name="order_city" phpName="City" type="LONGVARCHAR"/>
+    <column name="order_country" phpName="Country" type="VARCHAR" size="64"/>
+    <column name="order_email" phpName="Email" type="LONGVARCHAR"/>
+    <column name="order_phone" phpName="Phone" type="LONGVARCHAR"/>
+    <column name="order_comment" phpName="Comment" type="VARCHAR" size="1024"/>
+    <column name="order_utmz" phpName="Utmz" type="VARCHAR" size="1024"/>
+    <column name="order_utm_source" phpName="UtmSource" type="VARCHAR" size="256"/>
+    <column name="order_utm_campaign" phpName="UtmCampaign" type="VARCHAR" size="256"/>
+    <column name="order_utm_medium" phpName="UtmMedium" type="VARCHAR" size="256"/>
+    <column name="order_referer" phpName="Referer" type="LONGVARCHAR"/>
+    <column name="order_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="order_payment_date" phpName="PaymentDate" type="TIMESTAMP"/>
+    <column name="order_shipping_date" phpName="ShippingDate" type="TIMESTAMP"/>
+    <column name="order_followup_date" phpName="FollowupDate" type="TIMESTAMP"/>
+    <column name="order_confirmation_date" phpName="ConfirmationDate" type="TIMESTAMP"/>
+    <column name="order_cancel_date" phpName="CancelDate" type="TIMESTAMP"/>
+    <column name="order_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="order_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="order_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="order_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="country_id">
+      <index-column name="country_id"/>
+    </index>
+    <index name="site_id">
+      <index-column name="site_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="pages" idMethod="native" phpName="Page">
+    <column name="page_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="page_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="page_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="page_content" phpName="Content" type="LONGVARCHAR"/>
+    <column name="page_status" phpName="Status" type="BOOLEAN" size="1"/>
+    <column name="page_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="page_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="page_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="page_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="page_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="payments" idMethod="native" phpName="Payment">
+    <column name="payment_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="order_id" phpName="OrderId" type="INTEGER"/>
+    <column name="payment_amount" phpName="Amount" type="INTEGER"/>
+    <column name="payment_mode" phpName="Mode" type="VARCHAR" size="16"/>
+    <column name="payment_provider_id" phpName="ProviderId" type="VARCHAR" size="256"/>
+    <column name="payment_url" phpName="Url" type="VARCHAR" size="1024"/>
+    <column name="payment_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="payment_executed" phpName="Executed" type="TIMESTAMP"/>
+    <column name="payment_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="payment_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="people" idMethod="native" phpName="People" description="Intervenants">
+    <column name="people_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="people_first_name" phpName="FirstName" type="VARCHAR" size="256"/>
+    <column name="people_last_name" phpName="LastName" type="VARCHAR" size="256"/>
+    <column name="people_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="people_alpha" phpName="Alpha" type="VARCHAR" size="256"/>
+    <column name="people_url_old" phpName="UrlOld" type="VARCHAR" size="128"/>
+    <column name="people_url" phpName="Url" type="VARCHAR" size="128"/>
+    <column name="people_pseudo" phpName="Pseudo" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="people_noosfere_id" phpName="NoosfereId" type="INTEGER"/>
+    <column name="people_birth" phpName="Birth" type="INTEGER" size="4"/>
+    <column name="people_death" phpName="Death" type="INTEGER" size="4"/>
+    <column name="people_gender" phpName="Gender" type="CHAR" sqlType="set('M','F')"/>
+    <column name="people_nation" phpName="Nation" type="VARCHAR"/>
+    <column name="people_bio" phpName="Bio" type="LONGVARCHAR"/>
+    <column name="people_site" phpName="Site" type="VARCHAR" size="255"/>
+    <column name="people_facebook" phpName="Facebook" type="VARCHAR" size="256"/>
+    <column name="people_twitter" phpName="Twitter" type="VARCHAR" size="256"/>
+    <column name="people_hits" phpName="Hits" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="people_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="people_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="people_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="people_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="people_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="people_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="people_name">
+      <index-column name="people_name"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="permissions" idMethod="native" phpName="Permission">
+    <column name="permission_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="permission_rank" phpName="Rank" type="VARCHAR" size="8"/>
+    <column name="permission_last" phpName="Last" type="TIMESTAMP"/>
+    <column name="permission_date" phpName="Date" type="TIMESTAMP"/>
+    <unique name="user_id">
+      <unique-column name="user_id"/>
+      <unique-column name="site_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="posts" idMethod="native" phpName="Post">
+    <column name="post_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="category_id" phpName="CategoryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="post_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="post_title" phpName="Title" type="LONGVARCHAR"/>
+    <column name="post_content" phpName="Content" type="LONGVARCHAR"/>
+    <column name="post_illustration_legend" phpName="IllustrationLegend" type="VARCHAR" size="64"/>
+    <column name="post_selected" phpName="Selected" type="BOOLEAN" size="1"/>
+    <column name="post_link" phpName="Link" type="LONGVARCHAR"/>
+    <column name="post_status" phpName="Status" type="BOOLEAN" size="1"/>
+    <column name="post_keywords" phpName="Keywords" type="VARCHAR" size="512"/>
+    <column name="post_links" phpName="Links" type="VARCHAR" size="512"/>
+    <column name="post_keywords_generated" phpName="KeywordsGenerated" type="TIMESTAMP"/>
+    <column name="post_fb_id" phpName="FbId" type="BIGINT"/>
+    <column name="post_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="post_hits" phpName="Hits" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="post_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="post_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="post_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="post_updated" phpName="UpdatedAt" type="DATE"/>
+    <column name="post_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="prices" idMethod="native" phpName="Price">
+    <column name="price_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="pricegrid_id" phpName="gridId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="price_cat" phpName="Cat" type="LONGVARCHAR"/>
+    <column name="price_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="price_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="price_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="price_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="publishers" idMethod="native" phpName="Publisher">
+    <column name="publisher_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="publisher_name_alphabetic" phpName="NameAlphabetic" type="VARCHAR" size="256"/>
+    <column name="publisher_url" phpName="Url" type="VARCHAR" size="256"/>
+    <column name="publisher_noosfere_id" phpName="NoosfereId" type="INTEGER"/>
+    <column name="publisher_representative" phpName="Representative" type="VARCHAR" size="256"/>
+    <column name="publisher_address" phpName="Address" type="LONGVARCHAR"/>
+    <column name="publisher_postal_code" phpName="PostalCode" type="VARCHAR" size="8"/>
+    <column name="publisher_city" phpName="City" type="VARCHAR" size="128"/>
+    <column name="publisher_country" phpName="Country" type="VARCHAR" size="128"/>
+    <column name="publisher_phone" phpName="Phone" type="VARCHAR" size="16"/>
+    <column name="publisher_fax" phpName="Fax" type="VARCHAR" size="16"/>
+    <column name="publisher_website" phpName="Website" type="VARCHAR" size="128"/>
+    <column name="publisher_buy_link" phpName="BuyLink" type="VARCHAR" size="256"/>
+    <column name="publisher_email" phpName="Email" type="VARCHAR" size="128"/>
+    <column name="publisher_facebook" phpName="Facebook" type="VARCHAR" size="128"/>
+    <column name="publisher_twitter" phpName="Twitter" type="VARCHAR" size="15"/>
+    <column name="publisher_legal_form" phpName="LegalForm" type="VARCHAR" size="128"/>
+    <column name="publisher_creation_year" phpName="CreationYear" type="VARCHAR" size="4"/>
+    <column name="publisher_isbn" phpName="Isbn" type="VARCHAR" size="13"/>
+    <column name="publisher_volumes" phpName="Volumes" type="INTEGER"/>
+    <column name="publisher_average_run" phpName="AverageRun" type="INTEGER"/>
+    <column name="publisher_specialities" phpName="Specialities" type="LONGVARCHAR"/>
+    <column name="publisher_diffuseur" phpName="Diffuseur" type="VARCHAR" size="128"/>
+    <column name="publisher_distributeur" phpName="Distributeur" type="VARCHAR" size="128"/>
+    <column name="publisher_vpc" phpName="Vpc" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="publisher_paypal" phpName="Paypal" type="VARCHAR" size="128"/>
+    <column name="publisher_shipping_mode" phpName="ShippingMode" type="VARCHAR" size="9" defaultValue="offerts"/>
+    <column name="publisher_shipping_fee" phpName="ShippingFee" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_gln" phpName="Gln" type="BIGINT" size="13" sqlType="bigint(13) unsigned"/>
+    <column name="publisher_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="publisher_desc_short" phpName="DescShort" type="VARCHAR" size="512"/>
+    <column name="publisher_order_by" phpName="OrderBy" type="VARCHAR" size="128" defaultValue="article_pubdate"/>
+    <column name="publisher_insert" phpName="Insert" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
+    <column name="publisher_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="publisher_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="publisher_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="publisher_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="site_id">
+      <index-column name="site_id"/>
+    </index>
+    <unique name="publisher_gln">
+      <unique-column name="publisher_gln"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rayons" idMethod="native" phpName="Rayon">
+    <column name="rayon_id" phpName="Id" type="BIGINT" size="4" sqlType="bigint(4) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
+    <column name="rayon_name" phpName="Name" type="LONGVARCHAR"/>
+    <column name="rayon_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="rayon_desc" phpName="Desc" type="LONGVARCHAR"/>
+    <column name="rayon_order" phpName="Order" type="TINYINT" size="2"/>
+    <column name="rayon_sort_by" phpName="SortBy" type="VARCHAR" size="64" defaultValue="id"/>
+    <column name="rayon_sort_order" phpName="SortOrder" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="rayon_show_upcoming" phpName="ShowUpcoming" type="BOOLEAN" size="1" sqlType="tinyint(1) unsigned" defaultValue="false"/>
+    <column name="rayon_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="rayon_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="rayon_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="redirections" idMethod="native" phpName="Redirection">
+    <column name="redirection_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="redirection_old" phpName="Old" type="VARCHAR" size="256"/>
+    <column name="redirection_new" phpName="New" type="VARCHAR" size="256"/>
+    <column name="redirection_hits" phpName="Hits" type="INTEGER" defaultValue="0"/>
+    <column name="redirection_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="redirection_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="redirection_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="redirection_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="redirection_old">
+      <unique-column name="redirection_old"/>
+    </unique>
+    <unique name="site_id">
+      <unique-column name="site_id"/>
+      <unique-column name="redirection_old"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="rights" idMethod="native" phpName="Right">
+    <column name="right_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="right_uid" phpName="Uid" type="VARCHAR" size="32"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="right_current" phpName="Current" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="right_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="right_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="right_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="roles" idMethod="native" phpName="Role">
+    <column name="id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="book_id" phpName="BookId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="event_id" phpName="EventId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="people_id" phpName="PeopleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="job_id" phpName="JobId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="role_hide" phpName="Hide" type="BOOLEAN" size="1" sqlType="tinyint(1) unsigned"/>
+    <column name="role_presence" phpName="Presence" type="VARCHAR" size="256"/>
+    <column name="role_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="role_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="role_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="role_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="book_id">
+      <index-column name="book_id"/>
+    </index>
+    <index name="people_id">
+      <index-column name="people_id"/>
+    </index>
+    <index name="job_id">
+      <index-column name="job_id"/>
+    </index>
+    <index name="article_id">
+      <index-column name="article_id"/>
+    </index>
+    <index name="book_id_2">
+      <index-column name="book_id"/>
+      <index-column name="people_id"/>
+      <index-column name="job_id"/>
+    </index>
+    <unique name="event_id">
+      <unique-column name="event_id"/>
+      <unique-column name="people_id"/>
+      <unique-column name="job_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="session" idMethod="native" phpName="Session">
+    <column name="session_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="session_token" phpName="Token" type="VARCHAR" size="32"/>
+    <column name="session_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="session_expires" phpName="ExpiresAt" type="TIMESTAMP"/>
+    <column name="session_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="session_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="shipping" idMethod="native" phpName="ShippingFee">
+    <column name="shipping_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="shipping_mode" phpName="Mode" type="VARCHAR" size="64"/>
+    <column name="shipping_type" phpName="Type" type="VARCHAR" size="16"/>
+    <column name="shipping_zone" phpName="Zone" type="VARCHAR" size="4"/>
+    <column name="shipping_min_weight" phpName="MinWeight" type="INTEGER"/>
+    <column name="shipping_max_weight" phpName="MaxWeight" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="shipping_max_articles" phpName="MaxArticles" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="shipping_min_amount" phpName="MinAmount" type="INTEGER"/>
+    <column name="shipping_max_amount" phpName="MaxAmount" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="shipping_fee" phpName="Fee" type="INTEGER"/>
+    <column name="shipping_info" phpName="Info" type="VARCHAR" size="512"/>
+    <column name="shipping_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="shipping_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="shipping_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="signings" idMethod="native" phpName="Signing">
+    <column name="signing_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="people_id" phpName="PeopleId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="signing_date" phpName="Date" type="DATE"/>
+    <column name="signing_starts" phpName="Starts" type="TIME"/>
+    <column name="signing_ends" phpName="Ends" type="TIME"/>
+    <column name="signing_location" phpName="Location" type="VARCHAR" size="255"/>
+    <column name="signing_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="signing_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="signing_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="site_id">
+      <index-column name="site_id"/>
+    </index>
+    <index name="people_id">
+      <index-column name="people_id"/>
+    </index>
+    <index name="publisher_id">
+      <index-column name="publisher_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="sites" idMethod="native" phpName="Site">
+    <column name="site_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_name" phpName="Name" type="VARCHAR" size="16" defaultValue=""/>
+    <column name="site_pass" phpName="Pass" type="VARCHAR" size="8" defaultValue=""/>
+    <column name="site_title" phpName="Title" type="VARCHAR" size="32" defaultValue=""/>
+    <column name="site_domain" phpName="Domain" type="VARCHAR" size="255"/>
+    <column name="site_version" phpName="Version" type="VARCHAR" size="16"/>
+    <column name="site_tag" phpName="Tag" type="VARCHAR" size="16" defaultValue=""/>
+    <column name="site_flag" phpName="Flag" type="VARCHAR" size="2"/>
+    <column name="site_contact" phpName="Contact" type="VARCHAR" size="128" defaultValue=""/>
+    <column name="site_address" phpName="Address" type="VARCHAR" size="256" defaultValue=""/>
+    <column name="site_tva" phpName="Tva" type="VARCHAR" size="2"/>
+    <column name="site_html_renderer" phpName="HtmlRenderer" type="BOOLEAN" size="1"/>
+    <column name="site_axys" phpName="Axys" type="BOOLEAN" size="1" defaultValue="true"/>
+    <column name="site_noosfere" phpName="Noosfere" type="BOOLEAN" size="1"/>
+    <column name="site_amazon" phpName="Amazon" type="BOOLEAN" size="1"/>
+    <column name="site_event_id" phpName="EventId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_event_date" phpName="EventDate" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="site_shop" phpName="Shop" type="BOOLEAN" size="1"/>
+    <column name="site_vpc" phpName="Vpc" type="BOOLEAN" size="1"/>
+    <column name="site_shipping_fee" phpName="ShippingFee" type="VARCHAR" size="8"/>
+    <column name="site_alerts" phpName="Alerts" type="BOOLEAN" size="1"/>
+    <column name="site_wishlist" phpName="Wishlist" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="site_payment_cheque" phpName="PaymentCheque" type="BOOLEAN" size="1" defaultValue="true"/>
+    <column name="site_payment_paypal" phpName="PaymentPaypal" type="VARCHAR" size="32"/>
+    <column name="site_payment_payplug" phpName="PaymentPayplug" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="site_payment_transfer" phpName="PaymentTransfer" type="BOOLEAN" size="1"/>
+    <column name="site_bookshop" phpName="Bookshop" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="site_bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_publisher" phpName="Publisher" type="BOOLEAN" size="1"/>
+    <column name="site_publisher_stock" phpName="PublisherStock" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_ebook_bundle" phpName="EbookBundle" type="INTEGER"/>
+    <column name="site_fb_page_id" phpName="FbPageId" type="BIGINT" sqlType="bigint(20) unsigned"/>
+    <column name="site_fb_page_token" phpName="FbPageToken" type="LONGVARCHAR"/>
+    <column name="site_analytics_id" phpName="AnalyticsId" type="VARCHAR" size="16"/>
+    <column name="site_piwik_id" phpName="PiwikId" type="INTEGER"/>
+    <column name="site_sitemap_updated" phpName="SitemapUpdated" type="TIMESTAMP"/>
+    <column name="site_monitoring" phpName="Monitoring" type="BOOLEAN" size="1" defaultValue="true"/>
+    <column name="site_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="site_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="site_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="stock" idMethod="native" phpName="Stock">
+    <column name="stock_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="TINYINT" sqlType="tinyint(4) unsigned"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="campaign_id" phpName="CampaignId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="reward_id" phpName="RewardId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10"/>
+    <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="wish_id" phpName="WishId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="cart_id" phpName="CartId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="order_id" phpName="OrderId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="coupon_id" phpName="CouponId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_shop" phpName="Shop" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_invoice" phpName="Invoice" type="VARCHAR" size="256"/>
+    <column name="stock_depot" phpName="Depot" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="stock_stockage" phpName="Stockage" type="VARCHAR" size="16"/>
+    <column name="stock_condition" phpName="Condition" type="VARCHAR" size="16"/>
+    <column name="stock_condition_details" phpName="ConditionDetails" type="LONGVARCHAR"/>
+    <column name="stock_purchase_price" phpName="PurchasePrice" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_selling_price" phpName="SellingPrice" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_selling_price2" phpName="SellingPrice2" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_selling_price_saved" phpName="SellingPriceSaved" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_selling_price_ht" phpName="SellingPriceHt" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_selling_price_tva" phpName="SellingPriceTva" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_tva_rate" phpName="TvaRate" type="FLOAT"/>
+    <column name="stock_weight" phpName="Weight" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="stock_pub_year" phpName="PubYear" type="INTEGER" size="4" sqlType="int(4) unsigned"/>
+    <column name="stock_allow_predownload" phpName="AllowPredownload" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="stock_photo_version" phpName="PhotoVersion" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
+    <column name="stock_purchase_date" phpName="PurchaseDate" type="TIMESTAMP"/>
+    <column name="stock_onsale_date" phpName="OnsaleDate" type="TIMESTAMP"/>
+    <column name="stock_cart_date" phpName="CartDate" type="TIMESTAMP"/>
+    <column name="stock_selling_date" phpName="SellingDate" type="TIMESTAMP"/>
+    <column name="stock_return_date" phpName="ReturnDate" type="TIMESTAMP"/>
+    <column name="stock_lost_date" phpName="LostDate" type="TIMESTAMP"/>
+    <column name="stock_media_ok" phpName="MediaOk" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="stock_file_updated" phpName="FileUpdated" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="stock_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="stock_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="stock_dl" phpName="Dl" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="stock_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="stock_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="stock_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="site_id">
+      <index-column name="site_id"/>
+    </index>
+    <index name="cart_id">
+      <index-column name="cart_id"/>
+    </index>
+    <index name="article_id">
+      <index-column name="article_id"/>
+    </index>
+    <index name="stock_return_date">
+      <index-column name="stock_return_date"/>
+    </index>
+    <index name="stock_shop">
+      <index-column name="stock_shop"/>
+    </index>
+    <index name="order_id">
+      <index-column name="order_id"/>
+    </index>
+    <index name="customer_id">
+      <index-column name="customer_id"/>
+    </index>
+    <unique name="coupon_id">
+      <unique-column name="coupon_id"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="subscriptions" idMethod="native" phpName="Subscription">
+    <column name="subscription_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="subscription_type" phpName="Type" type="VARCHAR" size="16"/>
+    <column name="subscription_email" phpName="Email" type="VARCHAR" size="256"/>
+    <column name="subscription_ends" phpName="Ends" type="SMALLINT" size="16"/>
+    <column name="subscription_option" phpName="Option" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="subscription_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="subscription_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="subscription_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="subscription_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="subscription_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="publisher_id">
+      <index-column name="publisher_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="suppliers" idMethod="native" phpName="Supplier">
+    <column name="supplier_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned" defaultValue="1"/>
+    <column name="supplier_name" phpName="Name" type="VARCHAR" size="256"/>
+    <column name="supplier_gln" phpName="Gln" type="BIGINT"/>
+    <column name="supplier_remise" phpName="Remise" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="supplier_notva" phpName="Notva" type="BOOLEAN" size="1"/>
+    <column name="supplier_on_order" phpName="OnOrder" type="BOOLEAN" size="1"/>
+    <column name="supplier_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="supplier_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="supplier_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="supplier_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="supplier_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="tags" idMethod="native" phpName="Tag">
+    <column name="tag_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="tag_name" phpName="Name" type="LONGVARCHAR"/>
+    <column name="tag_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="tag_description" phpName="Description" type="LONGVARCHAR"/>
+    <column name="tag_date" phpName="Date" type="TIMESTAMP"/>
+    <column name="tag_num" phpName="Num" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="tag_insert" phpName="Insert" type="TIMESTAMP"/>
+    <column name="tag_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="tag_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="tag_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="tag_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <index name="tag_num">
+      <index-column name="tag_num"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="ticket" idMethod="native" phpName="Ticket">
+    <column name="ticket_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
+    <column name="ticket_type" phpName="Type" type="VARCHAR" size="16" defaultValue=""/>
+    <column name="ticket_title" phpName="Title" type="VARCHAR" size="255"/>
+    <column name="ticket_content" phpName="Content" type="LONGVARCHAR"/>
+    <column name="ticket_priority" phpName="Priority" type="INTEGER" defaultValue="0"/>
+    <column name="ticket_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="ticket_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="ticket_resolved" phpName="Resolved" type="TIMESTAMP"/>
+    <column name="ticket_closed" phpName="Closed" type="TIMESTAMP"/>
+    <column name="ticket_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="ticket_comment" idMethod="native" phpName="TicketComment">
+    <column name="ticket_comment_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="ticket_id" phpName="TicketId" type="INTEGER"/>
+    <column name="user_id" phpName="UserId" type="INTEGER"/>
+    <column name="ticket_comment_content" phpName="Content" type="LONGVARCHAR"/>
+    <column name="ticket_comment_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="ticket_comment_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="ticket_comment_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="users" idMethod="native" phpName="User">
+    <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="Email" phpName="Email" type="VARCHAR" size="255"/>
+    <column name="user_password" phpName="Password" type="VARCHAR" size="255"/>
+    <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
+    <column name="email_key" phpName="EmailKey" type="VARCHAR" size="32"/>
+    <column name="facebook_uid" phpName="FacebookUid" type="INTEGER"/>
+    <column name="user_screen_name" phpName="ScreenName" type="VARCHAR" size="128"/>
+    <column name="user_slug" phpName="Slug" type="VARCHAR" size="32"/>
+    <column name="user_wishlist_ship" phpName="WishlistShip" type="BOOLEAN" size="1" defaultValue="false"/>
+    <column name="user_top" phpName="Top" type="BOOLEAN" size="1"/>
+    <column name="user_biblio" phpName="Biblio" type="BOOLEAN" size="1"/>
+    <column name="adresse_ip" phpName="AdresseIp" type="VARCHAR" size="255"/>
+    <column name="recaptcha_score" phpName="RecaptchaScore" type="FLOAT"/>
+    <column name="DateInscription" phpName="Dateinscription" type="TIMESTAMP"/>
+    <column name="DateConnexion" phpName="Dateconnexion" type="TIMESTAMP"/>
+    <column name="publisher_id" phpName="PublisherId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="bookshop_id" phpName="BookshopId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="library_id" phpName="LibraryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_civilite" phpName="Civilite" type="LONGVARCHAR"/>
+    <column name="user_nom" phpName="Nom" type="LONGVARCHAR"/>
+    <column name="user_prenom" phpName="Prenom" type="LONGVARCHAR"/>
+    <column name="user_adresse1" phpName="Adresse1" type="LONGVARCHAR"/>
+    <column name="user_adresse2" phpName="Adresse2" type="LONGVARCHAR"/>
+    <column name="user_codepostal" phpName="Codepostal" type="LONGVARCHAR"/>
+    <column name="user_ville" phpName="Ville" type="LONGVARCHAR"/>
+    <column name="user_pays" phpName="Pays" type="LONGVARCHAR"/>
+    <column name="user_telephone" phpName="Telephone" type="LONGVARCHAR"/>
+    <column name="user_pref_articles_show" phpName="PrefArticlesShow" type="VARCHAR" size="8"/>
+    <column name="user_fb_id" phpName="FbId" type="BIGINT"/>
+    <column name="user_fb_token" phpName="FbToken" type="VARCHAR" size="256"/>
+    <column name="country_id" phpName="CountryId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="user_password_reset_token" phpName="PasswordResetToken" type="VARCHAR" size="32"/>
+    <column name="user_password_reset_token_created" phpName="PasswordResetTokenCreated" type="TIMESTAMP"/>
+    <column name="user_update" phpName="Update" type="TIMESTAMP"/>
+    <column name="user_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="user_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="user_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <column name="user_deleted_why" phpName="DeletedWhy" type="VARCHAR" size="1024"/>
+    <index name="publisher_id">
+      <index-column name="publisher_id"/>
+    </index>
+    <index name="Email">
+      <index-column name="Email"/>
+    </index>
+    <unique name="user_screen_name">
+      <unique-column name="user_screen_name"/>
+    </unique>
+    <unique name="user_slug">
+      <unique-column name="user_slug"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="votes" idMethod="native" phpName="Vote">
+    <column name="vote_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="vote_F" phpName="F" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="vote_E" phpName="E" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="vote_date" phpName="Date" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="MyISAM"/>
+    </vendor>
+  </table>
+  <table name="wishes" idMethod="native" phpName="Wish">
+    <column name="wish_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="wishlist_id" phpName="WishlistId" type="INTEGER"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="wish_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="wish_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="wish_bought" phpName="Bought" type="TIMESTAMP"/>
+    <column name="wish_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <unique name="user_id">
+      <unique-column name="user_id"/>
+      <unique-column name="article_id"/>
+      <unique-column name="wish_deleted"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="wishlist" idMethod="native" phpName="Wishlist">
+    <column name="wishlist_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="wishlist_name" phpName="Name" type="VARCHAR" size="128"/>
+    <column name="wishlist_current" phpName="Current" type="BOOLEAN" size="1"/>
+    <column name="wishlist_public" phpName="Public" type="BOOLEAN" size="1"/>
+    <column name="wishlist_created" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="wishlist_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="wishlist_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+</database>
