@@ -59,7 +59,7 @@ class MaintenanceController extends Controller
             $updater->applyRelease($latest);
 
             return new RedirectResponse($urlgenerator->generate('maintenance_updating', [
-                'version' => $latest['version'],
+                'version' => $latest->version,
             ]));
         }
 

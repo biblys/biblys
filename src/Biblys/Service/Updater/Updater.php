@@ -115,7 +115,7 @@ class Updater
 
         // Filter release by version number
         return array_filter($releases, function($release) use($version) {
-            return version_compare($release["version"], $version, ">");
+            return version_compare($release->version, $version, ">");
         });
     }
 
@@ -137,7 +137,7 @@ class Updater
     {
         $repository = $this->getRepository();
         $wc = $repository->getWorkingCopy();
-        $wc->checkout($release["version"]);
+        $wc->checkout($release->version);
     }
 
     /**
