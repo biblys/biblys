@@ -18,6 +18,11 @@ use Symfony\Component\Routing\RequestContext;
 // INCLUDES
 include __DIR__."/../inc/functions.php";
 
+$config = new Config();
+
+$dbConfig = $config->get("db");
+Biblys\Database\Connection::initPropel($dbConfig);
+
 // Create session
 $session = new Session();
 $session->start();
@@ -29,7 +34,6 @@ if ($_V->isLogged()) {
 }
 
 // Load Encore assets
-$config = new Config();
 $_JS_CALLS = loadEncoreAssets($config->get('environment'), 'js');
 $_CSS_CALLS = loadEncoreAssets($config->get('environment'), 'css');
 

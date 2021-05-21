@@ -13,9 +13,9 @@ require_once __DIR__."/../inc/constants.php";
 $config = new Biblys\Service\Config();
 $dbConfig = $config->get("db");
 
-
 // Connect to test
 $testDb = Biblys\Database\Connection::init($dbConfig);
+Biblys\Database\Connection::initPropel($dbConfig);
 
 // Reset test database
 $testBaseName = $dbConfig["base"];

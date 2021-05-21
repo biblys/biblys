@@ -15,7 +15,8 @@
       "@theme:refresh"
     ],
     "theme:watch": "./scripts/watch",
-    "post-install-cmd": "hash yarn 2>/dev/null && yarn && composer build || { echo >&2 \"Yarn is not installed: skipping front dependencies.\"; }"
+    "post-install-cmd": "hash yarn 2>/dev/null && yarn && composer build || { echo >&2 \"Yarn is not installed: skipping front dependencies.\"; }",
+    "propel:build": "vendor/bin/propel model:build --output-dir src"
   },
   "require": {
     "php": "^7.2",
