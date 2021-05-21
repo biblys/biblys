@@ -60,10 +60,7 @@
   },
   "autoload": {
     "psr-0": {
-      "Framework": "src/",
-      "ApiBundle": "src/",
-      "AppBundle": "src/",
-      "Biblys": "src"
+      "": "src"
     }
   },
   "config": {
