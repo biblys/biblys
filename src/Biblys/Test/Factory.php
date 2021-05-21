@@ -11,11 +11,11 @@ use Collection;
 use CollectionManager;
 use DateTime;
 use Exception;
-use Model\Right;
 use Model\Session;
 use Model\ShippingFee;
-use Model\SiteQuery;
 use Model\User;
+use Model\Right;
+use Model\SiteQuery;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -190,6 +190,52 @@ class Factory
     /**
      * @throws PropelException
      */
+    public static function createUserSession(User $user = null): Session
+    {
+        if (!$user) {
+            $user = Factory::createUser();
+        }
+
+        $session = new Session();
+        $session->setUser($user);
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt(new DateTime('tomorrow'));
+        $session->save();
+
+        return $session;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAuthRequest(string $content = "", User $user = null): Request
+    {
+        $session = Factory::createUserSession($user);
+        return Request::create(
+            "",
+            "",
+            [],
+            ["user_uid" => $session->getToken()],
+            [],
+            [],
+            $content
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createShippingFee(): ShippingFee
+    {
+        $shippingFee = new ShippingFee();
+        $shippingFee->save();
+
+        return $shippingFee;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createAdminUser(): User
     {
         $user = new User();
@@ -207,46 +253,6 @@ class Factory
     }
 
     /**
-     * @throws PropelException
-     */
-    public static function createUserSession(User $user = null): Session
-    {
-        if ($user === null) {
-            $user = Factory::createUser();
-        }
-
-        $session = new Session();
-        $session->setUser($user);
-        $session->setToken(Session::generateToken());
-        $session->setExpiresAt(new DateTime('tomorrow'));
-        $session->save();
-
-        return $session;
-    }
-
-    /**
-     * @param string $content
-     * @return Request
-     * @throws PropelException
-     */
-    public static function createAuthRequest(
-        string $content = "",
-        User $user = null
-    ): Request
-    {
-        $session = Factory::createUserSession($user);
-        return Request::create(
-            "",
-            "",
-            [],
-            ["user_uid" => $session->getToken()],
-            [],
-            [],
-            $content
-        );
-    }
-
-    /**
      * @param string $content
      * @return Request
      * @throws PropelException
@@ -255,16 +261,5 @@ class Factory
     {
         $adminUser = Factory::createAdminUser();
         return Factory::createAuthRequest($content, $adminUser);
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public static function createShippingFee(): ShippingFee
-    {
-        $shippingFee = new ShippingFee();
-        $shippingFee->save();
-
-        return $shippingFee;
     }
 }

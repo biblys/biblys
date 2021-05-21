@@ -3,28 +3,29 @@
 namespace ApiBundle\Controller;
 
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Model\ShippingFee;
+use Model\ShippingFeeQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ShippingController extends Controller
 {
+
     /**
      * Returns shipping fees.
      *
      * GET /api/shipping
      */
-    public function indexAction(Request $request)
+    public function indexAction(): JsonResponse
     {
-        global $site;
+        $allFees = ShippingFeeQuery::create()->find();
 
-        $sm = $this->entityManager('Shipping');
-        $fees = $sm->getAll(['site_id' => $site->get('id')]);
-
-        $fees = array_map(
-            function ($fee) {
-                return $this->feeToJson($fee);
-            }, $fees
+        $fees = array_map(function ($fee) {
+                return self::_feeToJson($fee);
+            }, $allFees->getData()
         );
 
         return new JsonResponse($fees);
@@ -34,120 +35,134 @@ class ShippingController extends Controller
      * Create a new shipping fee.
      *
      * POST /api/shipping
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): JsonResponse
     {
-        global $site;
+        self::authAdmin($request);
 
-        $this->auth('admin');
+        $data = self::_getDataFromRequest($request);
 
-        $sm = $this->entityManager('Shipping');
+        $fee = new ShippingFee();
+        self::_hydrateFee($fee, $data);
+        $fee->save();
 
-        $fee = $sm->create(['site_id' => $site->get('id')]);
-
-        $postData = json_decode($request->getContent());
-
-        $maxWeight = $postData->max_weight;
-        $maxWeight = $maxWeight === '' ? null : $maxWeight;
-
-        $minAmount = $postData->min_amount;
-        $minAmount = $minAmount === '' ? null : $minAmount;
-
-        $maxAmount = $postData->max_amount;
-        $maxAmount = $maxAmount === '' ? null : $maxAmount;
-
-        $maxArticles = $postData->max_articles;
-        $maxArticles = $maxArticles === '' ? null : $maxArticles;
-
-        $fee->set('shipping_mode', $postData->mode);
-        $fee->set('shipping_type', $postData->type);
-        $fee->set('shipping_zone', $postData->zone);
-        $fee->set('shipping_max_weight', $maxWeight);
-        $fee->set('shipping_min_amount', $minAmount);
-        $fee->set('shipping_max_amount', $maxAmount);
-        $fee->set('shipping_max_articles', $maxArticles);
-        $fee->set('shipping_fee', (int) $postData->fee);
-        $fee->set('shipping_info', $postData->info);
-
-        $fee = $sm->update($fee);
-
-        return new JsonResponse($this->feeToJson($fee));
+        return new JsonResponse($this->_feeToJson($fee), 201);
     }
 
     /**
      * Update a shipping range.
      *
      * @route PUT /api/shipping/{id}
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function updateAction(Request $request, int $id)
+    public function updateAction(Request $request, int $id): JsonResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $sm = $this->entityManager('Shipping');
-        $fee = $sm->getById($id);
-
+        $fee = ShippingFeeQuery::create()->findPk($id);
         if (!$fee) {
-            return new NotFoundException();
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find shipping fee with id %s", $id)
+            );
         }
 
-        $putData = json_decode($request->getContent());
+        $data = self::_getDataFromRequest($request);
+        $fee = self::_hydrateFee($fee, $data);
+        $fee->save();
 
-        $maxWeight = $putData->max_weight;
-        $maxWeight = $maxWeight === '' ? null : $maxWeight;
-
-        $minAmount = $putData->min_amount;
-        $minAmount = $minAmount === '' ? null : $minAmount;
-
-        $maxAmount = $putData->max_amount;
-        $maxAmount = $maxAmount === '' ? null : $maxAmount;
-
-        $maxArticles = $putData->max_articles;
-        $maxArticles = $maxArticles === '' ? null : $maxArticles;
-
-        $fee->set('shipping_mode', $putData->mode);
-        $fee->set('shipping_type', $putData->type);
-        $fee->set('shipping_zone', $putData->zone);
-        $fee->set('shipping_max_weight', $maxWeight);
-        $fee->set('shipping_min_amount', $minAmount);
-        $fee->set('shipping_max_amount', $maxAmount);
-        $fee->set('shipping_max_articles', $maxArticles);
-        $fee->set('shipping_fee', (int) $putData->fee);
-        $fee->set('shipping_info', $putData->info);
-
-        $fee = $sm->update($fee);
-
-        return new JsonResponse($this->feeToJson($fee));
+        return new JsonResponse($this->_feeToJson($fee));
     }
 
-    public function deleteAction($id)
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function deleteAction(Request $request, int $id): JsonResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $sm = $this->entityManager('Shipping');
-        $range = $sm->getById($id);
-
-        if (!$range) {
-            return new NotFoundException();
+        $fee = ShippingFeeQuery::create()->findPk($id);
+        if (!$fee) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find shipping fee with id %s", $id)
+            );
         }
 
-        $sm->delete($range);
+        $fee->delete();
 
-        return new JsonResponse([]);
+        return new JsonResponse(null, 204);
     }
 
-    private function feeToJson($fee)
+    private static function _feeToJson(ShippingFee $fee): array
     {
         return [
-            'id' => $fee->get('id'),
-            'mode' => $fee->get('mode'),
-            'type' => $fee->get('type'),
-            'zone' => $fee->get('zone'),
-            'max_weight' => $fee->get('max_weight'),
-            'min_amount' => $fee->get('min_amount'),
-            'max_amount' => $fee->get('max_amount'),
-            'max_articles' => $fee->get('max_articles'),
-            'fee' => $fee->get('fee'),
-            'info' => $fee->get('info'),
+            'id' => $fee->getId(),
+            'mode' => $fee->getMode(),
+            'type' => $fee->getType(),
+            'zone' => $fee->getZone(),
+            'max_weight' => $fee->getMaxWeight(),
+            'min_amount' => $fee->getMinAmount(),
+            'max_amount' => $fee->getMaxAmount(),
+            'max_articles' => $fee->getMaxArticles(),
+            'fee' => $fee->getFee(),
+            'info' => $fee->getInfo(),
         ];
+    }
+
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    private static function _getDataFromRequest(Request $request): array
+    {
+        $data = json_decode($request->getContent());
+
+        $maxWeight = $data->max_weight;
+        $maxWeight = $maxWeight === '' ? null : $maxWeight;
+
+        $minAmount = $data->min_amount;
+        $minAmount = $minAmount === '' ? null : $minAmount;
+
+        $maxAmount = $data->max_amount;
+        $maxAmount = $maxAmount === '' ? null : $maxAmount;
+
+        $maxArticles = $data->max_articles;
+        $maxArticles = $maxArticles === '' ? null : $maxArticles;
+
+        return [
+            "mode" => $data->mode,
+            "type" => $data->type,
+            "zone" => $data->zone,
+            "fee" => $data->fee,
+            "info" => $data->info,
+            "maxWeight" => $maxWeight,
+            "minAmount" => $minAmount,
+            "maxAmount" => $maxAmount,
+            "maxArticles" => $maxArticles
+        ];
+    }
+
+    /**
+     * @param ShippingFee $fee
+     * @param array $data
+     * @return ShippingFee
+     */
+    private static function _hydrateFee(ShippingFee $fee, array $data): ShippingFee
+    {
+        $fee->setMode($data["mode"]);
+        $fee->setType($data["type"]);
+        $fee->setZone($data["zone"]);
+        $fee->setMaxWeight($data["maxWeight"]);
+        $fee->setMinAmount($data["minAmount"]);
+        $fee->setMaxAmount($data["maxAmount"]);
+        $fee->setMaxArticles($data["maxArticles"]);
+        $fee->setFee($data["fee"]);
+        $fee->setInfo($data["info"]);
+
+        return $fee;
     }
 }
