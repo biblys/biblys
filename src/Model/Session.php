@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Base\Session as BaseSession;
+use RandomLib\Factory;
 
 /**
  * Skeleton subclass for representing a row from the 'session' table.
@@ -15,5 +16,10 @@ use Model\Base\Session as BaseSession;
  */
 class Session extends BaseSession
 {
-
+    public static function generateToken(): string
+    {
+        $factory = new Factory();
+        $generator = $factory->getMediumStrengthGenerator();
+        return $generator->generateString(32);
+    }
 }
