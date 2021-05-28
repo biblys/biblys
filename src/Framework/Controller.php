@@ -70,6 +70,7 @@ class Controller
      * @param string $entity the entity we want a manager for
      *
      * @return EntityManager child class
+     * @deprecated
      */
     public function entityManager($entity)
     {
