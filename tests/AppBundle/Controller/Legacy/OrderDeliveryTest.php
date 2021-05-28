@@ -6,6 +6,8 @@ use AppBundle\Controller\LegacyController;
 use ArticleManager;
 use Biblys\Test\Factory;
 use CartManager;
+use EntityManager;
+use Model\ShippingFeeQuery;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
 use ShippingManager;
@@ -78,5 +80,13 @@ class OrderDeliveryTest extends TestCase
             $response->headers->get("Location"),
             "it should redirect to the correct url"
         );
+
+        // cleanup
+        $shm->delete($shipping);
+    }
+
+    public function tearDown(): void
+    {
+        EntityManager::prepareAndExecute("TRUNCATE TABLE `shipping`", []);
     }
 }
