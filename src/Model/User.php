@@ -15,5 +15,17 @@ use Model\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
+    public function isAdminForSite(Site $site): bool
+    {
+        $adminRight = RightQuery::create()
+            ->filterByUserId($this->getId())
+            ->filterBySiteId($site->getId())
+            ->findOne();
 
+        if($adminRight) {
+            return true;
+        }
+
+        return false;
+    }
 }
