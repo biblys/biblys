@@ -28,4 +28,17 @@ class SessionTest extends TestCase
         $this->assertEquals($user, $session->getUser(), "it associates given user");
         $this->assertTrue($session->getExpiresAt() > new DateTime(), "it sets an expire date in the future");
     }
+
+    public function testGenerateToken()
+    {
+        // when
+        $token = Session::generateToken();
+
+        // then
+        $this->assertEquals(
+            32,
+            strlen($token),
+            "it should return a 32 chars string"
+        );
+    }
 }
