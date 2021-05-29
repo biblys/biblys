@@ -71,4 +71,9 @@ class CurrentUser
 
         return false;
     }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 }
