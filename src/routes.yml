@@ -2,10 +2,12 @@
 
 api_auth:
   path: /api/auth
+  methods: POST
   controller: ApiBundle\Controller\AuthController::authAction
 
 api_me:
   path: /api/me
+  methods: GET
   controller: ApiBundle\Controller\AuthController::meAction
 
 # Shipping

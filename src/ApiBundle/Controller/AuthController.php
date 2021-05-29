@@ -2,113 +2,71 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\Log;
+use DateTime;
+use Framework\Controller;
+use Framework\Exception\AuthException;
+use Model\Session;
+use Model\UserQuery;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class AuthController
+class AuthController extends Controller
 {
-    public function __construct()
-    {
-        global $urlgenerator, $_V, $_SITE;
-        
-        $this->site = $_SITE;
-        $this->user = $_V;
-        $this->url = $urlgenerator;
-        
-        $this->um = new \UserManager();
-        $this->sm = new \SessionManager();
-    }
-    
+
     /**
      * POST /api/auth
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function authAction(Request $request)
+    public function authAction(Request $request): JsonResponse
     {
-        $response = new JsonResponse();
-        if ($request->getMethod() == "POST") {
-            
-            $login = $request->request->get('login', false);
-            $password = $request->request->get('password', false);
-            
-            if ($login && $password) {
-              
-                $user = $this->um->authenticate($login, $password);
-                
-                // If credentials are correct, create a new session and return token
-                if ($user) {
-                    
-                    // If e-mail has not been validated
-                    if ($user->has('email_key')) {
-                        $response = new JsonResponse(['error' => 'E-mail address has not been validated']);
-                        $response->setStatusCode(403);
-                    } else {
-                        $session = $this->sm->create([
-                            'user_id' => $user->get('id')
-                        ]);
-                        $response = new JsonResponse(['token' => $session->get('token')]);
-                    }
-                } else {
-                    $response = new JsonResponse(['error' => 'Bad credentials']);
-                    $response->setStatusCode(403);
-                }
-            
-            // Else if missing credentials
-            } else {
-                $response = new JsonResponse(['error' => 'Missing credentials']);
-                $response->setStatusCode(412);
-            }
-        
-        // Else if not POST
-        } else {
-            $response = new JsonResponse(['error' => 'Bad request']);
-            $response->setStatusCode(400);
+        $login = $request->request->get('login', false);
+        $password = $request->request->get('password', false);
+
+        if (!$login || !$password) {
+            throw new BadRequestHttpException("Credentials are missing");
         }
-        return $response;
-    }
-    
-    public function meAction(Request $request)    
-    {
-        $user = $this->getUser($request);
-        
-        if ($user) {
-            $response = new JsonResponse(['user' => [
-                'id' => $user->get('id'),
-                'email' => $user->get('email'),
-                'username' => $user->get('screen_name')
-            ]]);
-        } else {
-            $response = new JsonResponse(['error' => 'Not authorized']);
-            $response->setStatusCode(403);
+
+        $userByEmail = UserQuery::create()->findOneByEmail($login);
+        $userByUsername = UserQuery::create()->findOneByScreenName($login);
+        $user = $userByEmail ?: $userByUsername;
+
+        if (!$user) {
+            Log::security("ERROR", "User unknown for login $login");
+            throw new AuthException("Bad credentials");
         }
-        
-        return $response;
+
+        if (!password_verify($password, $user->getPassword())) {
+            Log::security("ERROR", "Wrong password for login $login");
+            throw new AuthException("Bad credentials");
+        }
+
+        if ($user->getEmailKey() !== null) {
+            throw new AuthException("Email address has not been validated");
+        }
+
+        $session = Session::buildForUser($user);
+        $session->save();
+
+        return new JsonResponse(['token' => $session->getToken()]);
     }
-    
-    private function getUser($request)
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function meAction(Request $request): JsonResponse
     {
-        
-        // If a token has been sent in HTTP headers
-        $sent_token = $request->headers->get('AuthToken');
-        if ($sent_token) {
-            
-            // And if there is a session with this header
-            $session = $this->sm->get(['session_token' => $sent_token]);
-            if ($session) {
-                
-                // And if session is still valid
-                if ($session->isValid()) {
-                    
-                    // And if User's session exists
-                    $user = $this->um->getById($session->get('user_id'));
-                    if ($user) {
-                        
-                        // Then, return User
-                        return $user;
-                    }
-                }
-            }
-        } 
-        
-        return false;
+        $currentUserService = self::authUser($request);
+        $user = $currentUserService->getUser();
+
+        return new JsonResponse(['user' => [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'username' => $user->getScreenName(),
+        ]]);
     }
 }
