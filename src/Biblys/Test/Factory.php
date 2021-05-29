@@ -190,14 +190,14 @@ class Factory
             return $userByEmail;
         }
 
-        $userByUsername = UserQuery::create()->findOneByScreenName($attributes["username"]);
+        $userByUsername = UserQuery::create()->findOneByUsername($attributes["username"]);
         if ($userByUsername) {
             return $userByUsername;
         }
 
         $user = new User();
         $user->setEmail($attributes["email"]);
-        $user->setScreenName($attributes["username"]);
+        $user->setUsername($attributes["username"]);
         $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
         $user->save();
 

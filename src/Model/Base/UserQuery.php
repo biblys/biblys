@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByKey($order = Criteria::ASC) Order by the user_key column
  * @method     ChildUserQuery orderByEmailKey($order = Criteria::ASC) Order by the email_key column
  * @method     ChildUserQuery orderByFacebookUid($order = Criteria::ASC) Order by the facebook_uid column
- * @method     ChildUserQuery orderByScreenName($order = Criteria::ASC) Order by the user_screen_name column
+ * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the user_screen_name column
  * @method     ChildUserQuery orderBySlug($order = Criteria::ASC) Order by the user_slug column
  * @method     ChildUserQuery orderByWishlistShip($order = Criteria::ASC) Order by the user_wishlist_ship column
  * @method     ChildUserQuery orderByTop($order = Criteria::ASC) Order by the user_top column
@@ -65,7 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupByKey() Group by the user_key column
  * @method     ChildUserQuery groupByEmailKey() Group by the email_key column
  * @method     ChildUserQuery groupByFacebookUid() Group by the facebook_uid column
- * @method     ChildUserQuery groupByScreenName() Group by the user_screen_name column
+ * @method     ChildUserQuery groupByUsername() Group by the user_screen_name column
  * @method     ChildUserQuery groupBySlug() Group by the user_slug column
  * @method     ChildUserQuery groupByWishlistShip() Group by the user_wishlist_ship column
  * @method     ChildUserQuery groupByTop() Group by the user_top column
@@ -137,7 +137,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser|null findOneByKey(string $user_key) Return the first ChildUser filtered by the user_key column
  * @method     ChildUser|null findOneByEmailKey(string $email_key) Return the first ChildUser filtered by the email_key column
  * @method     ChildUser|null findOneByFacebookUid(int $facebook_uid) Return the first ChildUser filtered by the facebook_uid column
- * @method     ChildUser|null findOneByScreenName(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column
+ * @method     ChildUser|null findOneByUsername(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column
  * @method     ChildUser|null findOneBySlug(string $user_slug) Return the first ChildUser filtered by the user_slug column
  * @method     ChildUser|null findOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildUser filtered by the user_wishlist_ship column
  * @method     ChildUser|null findOneByTop(boolean $user_top) Return the first ChildUser filtered by the user_top column
@@ -179,7 +179,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByKey(string $user_key) Return the first ChildUser filtered by the user_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByEmailKey(string $email_key) Return the first ChildUser filtered by the email_key column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByFacebookUid(int $facebook_uid) Return the first ChildUser filtered by the facebook_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByScreenName(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByUsername(string $user_screen_name) Return the first ChildUser filtered by the user_screen_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneBySlug(string $user_slug) Return the first ChildUser filtered by the user_slug column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByWishlistShip(boolean $user_wishlist_ship) Return the first ChildUser filtered by the user_wishlist_ship column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByTop(boolean $user_top) Return the first ChildUser filtered by the user_top column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -219,7 +219,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser[]|ObjectCollection findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
  * @method     ChildUser[]|ObjectCollection findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
  * @method     ChildUser[]|ObjectCollection findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
- * @method     ChildUser[]|ObjectCollection findByScreenName(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
+ * @method     ChildUser[]|ObjectCollection findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
  * @method     ChildUser[]|ObjectCollection findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
  * @method     ChildUser[]|ObjectCollection findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
  * @method     ChildUser[]|ObjectCollection findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
@@ -626,24 +626,24 @@ abstract class UserQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByScreenName('fooValue');   // WHERE user_screen_name = 'fooValue'
-     * $query->filterByScreenName('%fooValue%', Criteria::LIKE); // WHERE user_screen_name LIKE '%fooValue%'
+     * $query->filterByUsername('fooValue');   // WHERE user_screen_name = 'fooValue'
+     * $query->filterByUsername('%fooValue%', Criteria::LIKE); // WHERE user_screen_name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $screenName The value to use as filter.
+     * @param     string $username The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByScreenName($screenName = null, $comparison = null)
+    public function filterByUsername($username = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($screenName)) {
+            if (is_array($username)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_SCREEN_NAME, $screenName, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
     }
 
     /**

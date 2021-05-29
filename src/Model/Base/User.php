@@ -671,7 +671,7 @@ abstract class User implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getScreenName()
+    public function getUsername()
     {
         return $this->user_screen_name;
     }
@@ -1212,7 +1212,7 @@ abstract class User implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this|\Model\User The current object (for fluent API support)
      */
-    public function setScreenName($v)
+    public function setUsername($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -1224,7 +1224,7 @@ abstract class User implements ActiveRecordInterface
         }
 
         return $this;
-    } // setScreenName()
+    } // setUsername()
 
     /**
      * Set the value of [user_slug] column.
@@ -1928,7 +1928,7 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('FacebookUid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->facebook_uid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('ScreenName', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_screen_name = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
@@ -2613,7 +2613,7 @@ abstract class User implements ActiveRecordInterface
                 return $this->getFacebookUid();
                 break;
             case 6:
-                return $this->getScreenName();
+                return $this->getUsername();
                 break;
             case 7:
                 return $this->getSlug();
@@ -2744,7 +2744,7 @@ abstract class User implements ActiveRecordInterface
             $keys[3] => $this->getKey(),
             $keys[4] => $this->getEmailKey(),
             $keys[5] => $this->getFacebookUid(),
-            $keys[6] => $this->getScreenName(),
+            $keys[6] => $this->getUsername(),
             $keys[7] => $this->getSlug(),
             $keys[8] => $this->getWishlistShip(),
             $keys[9] => $this->getTop(),
@@ -2894,7 +2894,7 @@ abstract class User implements ActiveRecordInterface
                 $this->setFacebookUid($value);
                 break;
             case 6:
-                $this->setScreenName($value);
+                $this->setUsername($value);
                 break;
             case 7:
                 $this->setSlug($value);
@@ -3034,7 +3034,7 @@ abstract class User implements ActiveRecordInterface
             $this->setFacebookUid($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setScreenName($arr[$keys[6]]);
+            $this->setUsername($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setSlug($arr[$keys[7]]);
@@ -3375,7 +3375,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setKey($this->getKey());
         $copyObj->setEmailKey($this->getEmailKey());
         $copyObj->setFacebookUid($this->getFacebookUid());
-        $copyObj->setScreenName($this->getScreenName());
+        $copyObj->setUsername($this->getUsername());
         $copyObj->setSlug($this->getSlug());
         $copyObj->setWishlistShip($this->getWishlistShip());
         $copyObj->setTop($this->getTop());

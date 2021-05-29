@@ -1297,7 +1297,7 @@
     <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
     <column name="email_key" phpName="EmailKey" type="VARCHAR" size="32"/>
     <column name="facebook_uid" phpName="FacebookUid" type="INTEGER"/>
-    <column name="user_screen_name" phpName="ScreenName" type="VARCHAR" size="128"/>
+    <column name="user_screen_name" phpName="Username" type="VARCHAR" size="128"/>
     <column name="user_slug" phpName="Slug" type="VARCHAR" size="32"/>
     <column name="user_wishlist_ship" phpName="WishlistShip" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="user_top" phpName="Top" type="BOOLEAN" size="1"/>

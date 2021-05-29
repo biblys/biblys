@@ -31,7 +31,7 @@ class AuthController extends Controller
         }
 
         $userByEmail = UserQuery::create()->findOneByEmail($login);
-        $userByUsername = UserQuery::create()->findOneByScreenName($login);
+        $userByUsername = UserQuery::create()->findOneByUsername($login);
         $user = $userByEmail ?: $userByUsername;
 
         if (!$user) {
@@ -66,7 +66,7 @@ class AuthController extends Controller
         return new JsonResponse(['user' => [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'username' => $user->getScreenName(),
+            'username' => $user->getUsername(),
         ]]);
     }
 }
