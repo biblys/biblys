@@ -1,0 +1,688 @@
+<?php
+
+namespace Model\Map;
+
+use Model\Subscription;
+use Model\SubscriptionQuery;
+use Propel\Runtime\Propel;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\InstancePoolTrait;
+use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\DataFetcher\DataFetcherInterface;
+use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Map\RelationMap;
+use Propel\Runtime\Map\TableMap;
+use Propel\Runtime\Map\TableMapTrait;
+
+
+/**
+ * This class defines the structure of the 'subscriptions' table.
+ *
+ *
+ *
+ * This map class is used by Propel to do runtime db structure discovery.
+ * For example, the createSelectSql() method checks the type of a given column used in an
+ * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
+ * (i.e. if it's a text column type).
+ */
+class SubscriptionTableMap extends TableMap
+{
+    use InstancePoolTrait;
+    use TableMapTrait;
+
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'Model.Map.SubscriptionTableMap';
+
+    /**
+     * The default database name for this class
+     */
+    const DATABASE_NAME = 'default';
+
+    /**
+     * The table name for this class
+     */
+    const TABLE_NAME = 'subscriptions';
+
+    /**
+     * The related Propel class for this table
+     */
+    const OM_CLASS = '\\Model\\Subscription';
+
+    /**
+     * A class that can be returned by this tableMap
+     */
+    const CLASS_DEFAULT = 'Model.Subscription';
+
+    /**
+     * The total number of columns
+     */
+    const NUM_COLUMNS = 15;
+
+    /**
+     * The number of lazy-loaded columns
+     */
+    const NUM_LAZY_LOAD_COLUMNS = 0;
+
+    /**
+     * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
+     */
+    const NUM_HYDRATE_COLUMNS = 15;
+
+    /**
+     * the column name for the subscription_id field
+     */
+    const COL_SUBSCRIPTION_ID = 'subscriptions.subscription_id';
+
+    /**
+     * the column name for the site_id field
+     */
+    const COL_SITE_ID = 'subscriptions.site_id';
+
+    /**
+     * the column name for the user_id field
+     */
+    const COL_USER_ID = 'subscriptions.user_id';
+
+    /**
+     * the column name for the publisher_id field
+     */
+    const COL_PUBLISHER_ID = 'subscriptions.publisher_id';
+
+    /**
+     * the column name for the bookshop_id field
+     */
+    const COL_BOOKSHOP_ID = 'subscriptions.bookshop_id';
+
+    /**
+     * the column name for the library_id field
+     */
+    const COL_LIBRARY_ID = 'subscriptions.library_id';
+
+    /**
+     * the column name for the subscription_type field
+     */
+    const COL_SUBSCRIPTION_TYPE = 'subscriptions.subscription_type';
+
+    /**
+     * the column name for the subscription_email field
+     */
+    const COL_SUBSCRIPTION_EMAIL = 'subscriptions.subscription_email';
+
+    /**
+     * the column name for the subscription_ends field
+     */
+    const COL_SUBSCRIPTION_ENDS = 'subscriptions.subscription_ends';
+
+    /**
+     * the column name for the subscription_option field
+     */
+    const COL_SUBSCRIPTION_OPTION = 'subscriptions.subscription_option';
+
+    /**
+     * the column name for the subscription_insert field
+     */
+    const COL_SUBSCRIPTION_INSERT = 'subscriptions.subscription_insert';
+
+    /**
+     * the column name for the subscription_update field
+     */
+    const COL_SUBSCRIPTION_UPDATE = 'subscriptions.subscription_update';
+
+    /**
+     * the column name for the subscription_created field
+     */
+    const COL_SUBSCRIPTION_CREATED = 'subscriptions.subscription_created';
+
+    /**
+     * the column name for the subscription_updated field
+     */
+    const COL_SUBSCRIPTION_UPDATED = 'subscriptions.subscription_updated';
+
+    /**
+     * the column name for the subscription_deleted field
+     */
+    const COL_SUBSCRIPTION_DELETED = 'subscriptions.subscription_deleted';
+
+    /**
+     * The default string format for model objects of the related table
+     */
+    const DEFAULT_STRING_FORMAT = 'YAML';
+
+    /**
+     * holds an array of fieldnames
+     *
+     * first dimension keys are the type constants
+     * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     */
+    protected static $fieldNames = array (
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'PublisherId', 'BookshopId', 'LibraryId', 'Type', 'Email', 'Ends', 'Option', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'publisherId', 'bookshopId', 'libraryId', 'type', 'email', 'ends', 'option', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
+        self::TYPE_COLNAME       => array(SubscriptionTableMap::COL_SUBSCRIPTION_ID, SubscriptionTableMap::COL_SITE_ID, SubscriptionTableMap::COL_USER_ID, SubscriptionTableMap::COL_PUBLISHER_ID, SubscriptionTableMap::COL_BOOKSHOP_ID, SubscriptionTableMap::COL_LIBRARY_ID, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, SubscriptionTableMap::COL_SUBSCRIPTION_DELETED, ),
+        self::TYPE_FIELDNAME     => array('subscription_id', 'site_id', 'user_id', 'publisher_id', 'bookshop_id', 'library_id', 'subscription_type', 'subscription_email', 'subscription_ends', 'subscription_option', 'subscription_insert', 'subscription_update', 'subscription_created', 'subscription_updated', 'subscription_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+    );
+
+    /**
+     * holds an array of keys for quick access to the fieldnames array
+     *
+     * first dimension keys are the type constants
+     * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     */
+    protected static $fieldKeys = array (
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'PublisherId' => 3, 'BookshopId' => 4, 'LibraryId' => 5, 'Type' => 6, 'Email' => 7, 'Ends' => 8, 'Option' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'DeletedAt' => 14, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'publisherId' => 3, 'bookshopId' => 4, 'libraryId' => 5, 'type' => 6, 'email' => 7, 'ends' => 8, 'option' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'deletedAt' => 14, ),
+        self::TYPE_COLNAME       => array(SubscriptionTableMap::COL_SUBSCRIPTION_ID => 0, SubscriptionTableMap::COL_SITE_ID => 1, SubscriptionTableMap::COL_USER_ID => 2, SubscriptionTableMap::COL_PUBLISHER_ID => 3, SubscriptionTableMap::COL_BOOKSHOP_ID => 4, SubscriptionTableMap::COL_LIBRARY_ID => 5, SubscriptionTableMap::COL_SUBSCRIPTION_TYPE => 6, SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL => 7, SubscriptionTableMap::COL_SUBSCRIPTION_ENDS => 8, SubscriptionTableMap::COL_SUBSCRIPTION_OPTION => 9, SubscriptionTableMap::COL_SUBSCRIPTION_INSERT => 10, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE => 11, SubscriptionTableMap::COL_SUBSCRIPTION_CREATED => 12, SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED => 13, SubscriptionTableMap::COL_SUBSCRIPTION_DELETED => 14, ),
+        self::TYPE_FIELDNAME     => array('subscription_id' => 0, 'site_id' => 1, 'user_id' => 2, 'publisher_id' => 3, 'bookshop_id' => 4, 'library_id' => 5, 'subscription_type' => 6, 'subscription_email' => 7, 'subscription_ends' => 8, 'subscription_option' => 9, 'subscription_insert' => 10, 'subscription_update' => 11, 'subscription_created' => 12, 'subscription_updated' => 13, 'subscription_deleted' => 14, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+    );
+
+    /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'Id' => 'SUBSCRIPTION_ID',
+        'Subscription.Id' => 'SUBSCRIPTION_ID',
+        'id' => 'SUBSCRIPTION_ID',
+        'subscription.id' => 'SUBSCRIPTION_ID',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_ID' => 'SUBSCRIPTION_ID',
+        'COL_SUBSCRIPTION_ID' => 'SUBSCRIPTION_ID',
+        'subscription_id' => 'SUBSCRIPTION_ID',
+        'subscriptions.subscription_id' => 'SUBSCRIPTION_ID',
+        'SiteId' => 'SITE_ID',
+        'Subscription.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'subscription.siteId' => 'SITE_ID',
+        'SubscriptionTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'subscriptions.site_id' => 'SITE_ID',
+        'UserId' => 'USER_ID',
+        'Subscription.UserId' => 'USER_ID',
+        'userId' => 'USER_ID',
+        'subscription.userId' => 'USER_ID',
+        'SubscriptionTableMap::COL_USER_ID' => 'USER_ID',
+        'COL_USER_ID' => 'USER_ID',
+        'user_id' => 'USER_ID',
+        'subscriptions.user_id' => 'USER_ID',
+        'PublisherId' => 'PUBLISHER_ID',
+        'Subscription.PublisherId' => 'PUBLISHER_ID',
+        'publisherId' => 'PUBLISHER_ID',
+        'subscription.publisherId' => 'PUBLISHER_ID',
+        'SubscriptionTableMap::COL_PUBLISHER_ID' => 'PUBLISHER_ID',
+        'COL_PUBLISHER_ID' => 'PUBLISHER_ID',
+        'publisher_id' => 'PUBLISHER_ID',
+        'subscriptions.publisher_id' => 'PUBLISHER_ID',
+        'BookshopId' => 'BOOKSHOP_ID',
+        'Subscription.BookshopId' => 'BOOKSHOP_ID',
+        'bookshopId' => 'BOOKSHOP_ID',
+        'subscription.bookshopId' => 'BOOKSHOP_ID',
+        'SubscriptionTableMap::COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
+        'COL_BOOKSHOP_ID' => 'BOOKSHOP_ID',
+        'bookshop_id' => 'BOOKSHOP_ID',
+        'subscriptions.bookshop_id' => 'BOOKSHOP_ID',
+        'LibraryId' => 'LIBRARY_ID',
+        'Subscription.LibraryId' => 'LIBRARY_ID',
+        'libraryId' => 'LIBRARY_ID',
+        'subscription.libraryId' => 'LIBRARY_ID',
+        'SubscriptionTableMap::COL_LIBRARY_ID' => 'LIBRARY_ID',
+        'COL_LIBRARY_ID' => 'LIBRARY_ID',
+        'library_id' => 'LIBRARY_ID',
+        'subscriptions.library_id' => 'LIBRARY_ID',
+        'Type' => 'SUBSCRIPTION_TYPE',
+        'Subscription.Type' => 'SUBSCRIPTION_TYPE',
+        'type' => 'SUBSCRIPTION_TYPE',
+        'subscription.type' => 'SUBSCRIPTION_TYPE',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_TYPE' => 'SUBSCRIPTION_TYPE',
+        'COL_SUBSCRIPTION_TYPE' => 'SUBSCRIPTION_TYPE',
+        'subscription_type' => 'SUBSCRIPTION_TYPE',
+        'subscriptions.subscription_type' => 'SUBSCRIPTION_TYPE',
+        'Email' => 'SUBSCRIPTION_EMAIL',
+        'Subscription.Email' => 'SUBSCRIPTION_EMAIL',
+        'email' => 'SUBSCRIPTION_EMAIL',
+        'subscription.email' => 'SUBSCRIPTION_EMAIL',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL' => 'SUBSCRIPTION_EMAIL',
+        'COL_SUBSCRIPTION_EMAIL' => 'SUBSCRIPTION_EMAIL',
+        'subscription_email' => 'SUBSCRIPTION_EMAIL',
+        'subscriptions.subscription_email' => 'SUBSCRIPTION_EMAIL',
+        'Ends' => 'SUBSCRIPTION_ENDS',
+        'Subscription.Ends' => 'SUBSCRIPTION_ENDS',
+        'ends' => 'SUBSCRIPTION_ENDS',
+        'subscription.ends' => 'SUBSCRIPTION_ENDS',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_ENDS' => 'SUBSCRIPTION_ENDS',
+        'COL_SUBSCRIPTION_ENDS' => 'SUBSCRIPTION_ENDS',
+        'subscription_ends' => 'SUBSCRIPTION_ENDS',
+        'subscriptions.subscription_ends' => 'SUBSCRIPTION_ENDS',
+        'Option' => 'SUBSCRIPTION_OPTION',
+        'Subscription.Option' => 'SUBSCRIPTION_OPTION',
+        'option' => 'SUBSCRIPTION_OPTION',
+        'subscription.option' => 'SUBSCRIPTION_OPTION',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_OPTION' => 'SUBSCRIPTION_OPTION',
+        'COL_SUBSCRIPTION_OPTION' => 'SUBSCRIPTION_OPTION',
+        'subscription_option' => 'SUBSCRIPTION_OPTION',
+        'subscriptions.subscription_option' => 'SUBSCRIPTION_OPTION',
+        'Insert' => 'SUBSCRIPTION_INSERT',
+        'Subscription.Insert' => 'SUBSCRIPTION_INSERT',
+        'insert' => 'SUBSCRIPTION_INSERT',
+        'subscription.insert' => 'SUBSCRIPTION_INSERT',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_INSERT' => 'SUBSCRIPTION_INSERT',
+        'COL_SUBSCRIPTION_INSERT' => 'SUBSCRIPTION_INSERT',
+        'subscription_insert' => 'SUBSCRIPTION_INSERT',
+        'subscriptions.subscription_insert' => 'SUBSCRIPTION_INSERT',
+        'Update' => 'SUBSCRIPTION_UPDATE',
+        'Subscription.Update' => 'SUBSCRIPTION_UPDATE',
+        'update' => 'SUBSCRIPTION_UPDATE',
+        'subscription.update' => 'SUBSCRIPTION_UPDATE',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE' => 'SUBSCRIPTION_UPDATE',
+        'COL_SUBSCRIPTION_UPDATE' => 'SUBSCRIPTION_UPDATE',
+        'subscription_update' => 'SUBSCRIPTION_UPDATE',
+        'subscriptions.subscription_update' => 'SUBSCRIPTION_UPDATE',
+        'CreatedAt' => 'SUBSCRIPTION_CREATED',
+        'Subscription.CreatedAt' => 'SUBSCRIPTION_CREATED',
+        'createdAt' => 'SUBSCRIPTION_CREATED',
+        'subscription.createdAt' => 'SUBSCRIPTION_CREATED',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_CREATED' => 'SUBSCRIPTION_CREATED',
+        'COL_SUBSCRIPTION_CREATED' => 'SUBSCRIPTION_CREATED',
+        'subscription_created' => 'SUBSCRIPTION_CREATED',
+        'subscriptions.subscription_created' => 'SUBSCRIPTION_CREATED',
+        'UpdatedAt' => 'SUBSCRIPTION_UPDATED',
+        'Subscription.UpdatedAt' => 'SUBSCRIPTION_UPDATED',
+        'updatedAt' => 'SUBSCRIPTION_UPDATED',
+        'subscription.updatedAt' => 'SUBSCRIPTION_UPDATED',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED' => 'SUBSCRIPTION_UPDATED',
+        'COL_SUBSCRIPTION_UPDATED' => 'SUBSCRIPTION_UPDATED',
+        'subscription_updated' => 'SUBSCRIPTION_UPDATED',
+        'subscriptions.subscription_updated' => 'SUBSCRIPTION_UPDATED',
+        'DeletedAt' => 'SUBSCRIPTION_DELETED',
+        'Subscription.DeletedAt' => 'SUBSCRIPTION_DELETED',
+        'deletedAt' => 'SUBSCRIPTION_DELETED',
+        'subscription.deletedAt' => 'SUBSCRIPTION_DELETED',
+        'SubscriptionTableMap::COL_SUBSCRIPTION_DELETED' => 'SUBSCRIPTION_DELETED',
+        'COL_SUBSCRIPTION_DELETED' => 'SUBSCRIPTION_DELETED',
+        'subscription_deleted' => 'SUBSCRIPTION_DELETED',
+        'subscriptions.subscription_deleted' => 'SUBSCRIPTION_DELETED',
+    ];
+
+    /**
+     * Initialize the table attributes and columns
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return void
+     * @throws PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('subscriptions');
+        $this->setPhpName('Subscription');
+        $this->setIdentifierQuoting(false);
+        $this->setClassName('\\Model\\Subscription');
+        $this->setPackage('Model');
+        $this->setUseIdGenerator(true);
+        // columns
+        $this->addPrimaryKey('subscription_id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
+        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
+        $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
+        $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
+        $this->addColumn('subscription_type', 'Type', 'VARCHAR', false, 16, null);
+        $this->addColumn('subscription_email', 'Email', 'VARCHAR', false, 256, null);
+        $this->addColumn('subscription_ends', 'Ends', 'SMALLINT', false, 16, null);
+        $this->addColumn('subscription_option', 'Option', 'BOOLEAN', false, 1, false);
+        $this->addColumn('subscription_insert', 'Insert', 'TIMESTAMP', false, null, null);
+        $this->addColumn('subscription_update', 'Update', 'TIMESTAMP', false, null, null);
+        $this->addColumn('subscription_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('subscription_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('subscription_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
+    } // initialize()
+
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+    } // buildRelations()
+
+    /**
+     * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
+     *
+     * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+     * a multi-column primary key, a serialize()d version of the primary key will be returned.
+     *
+     * @param array  $row       resultset row.
+     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
+     *
+     * @return string The primary key hash of the row
+     */
+    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    {
+        // If the PK cannot be derived from the row, return NULL.
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+            return null;
+        }
+
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+    }
+
+    /**
+     * Retrieves the primary key from the DB resultset row
+     * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
+     * a multi-column primary key, an array of the primary key columns will be returned.
+     *
+     * @param array  $row       resultset row.
+     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
+     *
+     * @return mixed The primary key of the row
+     */
+    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    {
+        return (int) $row[
+            $indexType == TableMap::TYPE_NUM
+                ? 0 + $offset
+                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+        ];
+    }
+
+    /**
+     * The class that the tableMap will make instances of.
+     *
+     * If $withPrefix is true, the returned path
+     * uses a dot-path notation which is translated into a path
+     * relative to a location on the PHP include_path.
+     * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
+     *
+     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @return string path.to.ClassName
+     */
+    public static function getOMClass($withPrefix = true)
+    {
+        return $withPrefix ? SubscriptionTableMap::CLASS_DEFAULT : SubscriptionTableMap::OM_CLASS;
+    }
+
+    /**
+     * Populates an object of the default type or an object that inherit from the default.
+     *
+     * @param array  $row       row returned by DataFetcher->fetch().
+     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
+                                 One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
+     *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
+     *
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     * @return array           (Subscription object, last column rank)
+     */
+    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    {
+        $key = SubscriptionTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = SubscriptionTableMap::getInstanceFromPool($key))) {
+            // We no longer rehydrate the object, since this can cause data loss.
+            // See http://www.propelorm.org/ticket/509
+            // $obj->hydrate($row, $offset, true); // rehydrate
+            $col = $offset + SubscriptionTableMap::NUM_HYDRATE_COLUMNS;
+        } else {
+            $cls = SubscriptionTableMap::OM_CLASS;
+            /** @var Subscription $obj */
+            $obj = new $cls();
+            $col = $obj->hydrate($row, $offset, false, $indexType);
+            SubscriptionTableMap::addInstanceToPool($obj, $key);
+        }
+
+        return array($obj, $col);
+    }
+
+    /**
+     * The returned array will contain objects of the default type or
+     * objects that inherit from the default.
+     *
+     * @param DataFetcherInterface $dataFetcher
+     * @return array
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    {
+        $results = array();
+
+        // set the class once to avoid overhead in the loop
+        $cls = static::getOMClass(false);
+        // populate the object(s)
+        while ($row = $dataFetcher->fetch()) {
+            $key = SubscriptionTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = SubscriptionTableMap::getInstanceFromPool($key))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj->hydrate($row, 0, true); // rehydrate
+                $results[] = $obj;
+            } else {
+                /** @var Subscription $obj */
+                $obj = new $cls();
+                $obj->hydrate($row);
+                $results[] = $obj;
+                SubscriptionTableMap::addInstanceToPool($obj, $key);
+            } // if key exists
+        }
+
+        return $results;
+    }
+    /**
+     * Add all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be added to the select list and only loaded
+     * on demand.
+     *
+     * @param Criteria $criteria object containing the columns to add.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SITE_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_PUBLISHER_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_BOOKSHOP_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_LIBRARY_ID);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_TYPE);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ENDS);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_OPTION);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_INSERT);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+            $criteria->addSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_DELETED);
+        } else {
+            $criteria->addSelectColumn($alias . '.subscription_id');
+            $criteria->addSelectColumn($alias . '.site_id');
+            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.publisher_id');
+            $criteria->addSelectColumn($alias . '.bookshop_id');
+            $criteria->addSelectColumn($alias . '.library_id');
+            $criteria->addSelectColumn($alias . '.subscription_type');
+            $criteria->addSelectColumn($alias . '.subscription_email');
+            $criteria->addSelectColumn($alias . '.subscription_ends');
+            $criteria->addSelectColumn($alias . '.subscription_option');
+            $criteria->addSelectColumn($alias . '.subscription_insert');
+            $criteria->addSelectColumn($alias . '.subscription_update');
+            $criteria->addSelectColumn($alias . '.subscription_created');
+            $criteria->addSelectColumn($alias . '.subscription_updated');
+            $criteria->addSelectColumn($alias . '.subscription_deleted');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SITE_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_PUBLISHER_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_BOOKSHOP_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_LIBRARY_ID);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_TYPE);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_ENDS);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_OPTION);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_INSERT);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+            $criteria->removeSelectColumn(SubscriptionTableMap::COL_SUBSCRIPTION_DELETED);
+        } else {
+            $criteria->removeSelectColumn($alias . '.subscription_id');
+            $criteria->removeSelectColumn($alias . '.site_id');
+            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.publisher_id');
+            $criteria->removeSelectColumn($alias . '.bookshop_id');
+            $criteria->removeSelectColumn($alias . '.library_id');
+            $criteria->removeSelectColumn($alias . '.subscription_type');
+            $criteria->removeSelectColumn($alias . '.subscription_email');
+            $criteria->removeSelectColumn($alias . '.subscription_ends');
+            $criteria->removeSelectColumn($alias . '.subscription_option');
+            $criteria->removeSelectColumn($alias . '.subscription_insert');
+            $criteria->removeSelectColumn($alias . '.subscription_update');
+            $criteria->removeSelectColumn($alias . '.subscription_created');
+            $criteria->removeSelectColumn($alias . '.subscription_updated');
+            $criteria->removeSelectColumn($alias . '.subscription_deleted');
+        }
+    }
+
+    /**
+     * Returns the TableMap related to this object.
+     * This method is not needed for general use but a specific application could have a need.
+     * @return TableMap
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function getTableMap()
+    {
+        return Propel::getServiceContainer()->getDatabaseMap(SubscriptionTableMap::DATABASE_NAME)->getTable(SubscriptionTableMap::TABLE_NAME);
+    }
+
+    /**
+     * Add a TableMap instance to the database for this tableMap class.
+     */
+    public static function buildTableMap()
+    {
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SubscriptionTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(SubscriptionTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new SubscriptionTableMap());
+        }
+    }
+
+    /**
+     * Performs a DELETE on the database, given a Subscription or Criteria object OR a primary key value.
+     *
+     * @param mixed               $values Criteria or Subscription object or primary key or array of primary keys
+     *              which is used to create the DELETE statement
+     * @param  ConnectionInterface $con the connection to use
+     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     *                         if supported by native driver or if emulated using Propel.
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+     public static function doDelete($values, ConnectionInterface $con = null)
+     {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(SubscriptionTableMap::DATABASE_NAME);
+        }
+
+        if ($values instanceof Criteria) {
+            // rename for clarity
+            $criteria = $values;
+        } elseif ($values instanceof \Model\Subscription) { // it's a model object
+            // create criteria based on pk values
+            $criteria = $values->buildPkeyCriteria();
+        } else { // it's a primary key, or an array of pks
+            $criteria = new Criteria(SubscriptionTableMap::DATABASE_NAME);
+            $criteria->add(SubscriptionTableMap::COL_SUBSCRIPTION_ID, (array) $values, Criteria::IN);
+        }
+
+        $query = SubscriptionQuery::create()->mergeWith($criteria);
+
+        if ($values instanceof Criteria) {
+            SubscriptionTableMap::clearInstancePool();
+        } elseif (!is_object($values)) { // it's a primary key, or an array of pks
+            foreach ((array) $values as $singleval) {
+                SubscriptionTableMap::removeInstanceFromPool($singleval);
+            }
+        }
+
+        return $query->delete($con);
+    }
+
+    /**
+     * Deletes all rows from the subscriptions table.
+     *
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    public static function doDeleteAll(ConnectionInterface $con = null)
+    {
+        return SubscriptionQuery::create()->doDeleteAll($con);
+    }
+
+    /**
+     * Performs an INSERT on the database, given a Subscription or Criteria object.
+     *
+     * @param mixed               $criteria Criteria or Subscription object containing data that is used to create the INSERT statement.
+     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @return mixed           The new primary key.
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function doInsert($criteria, ConnectionInterface $con = null)
+    {
+        if (null === $con) {
+            $con = Propel::getServiceContainer()->getWriteConnection(SubscriptionTableMap::DATABASE_NAME);
+        }
+
+        if ($criteria instanceof Criteria) {
+            $criteria = clone $criteria; // rename for clarity
+        } else {
+            $criteria = $criteria->buildCriteria(); // build Criteria from Subscription object
+        }
+
+        if ($criteria->containsKey(SubscriptionTableMap::COL_SUBSCRIPTION_ID) && $criteria->keyContainsValue(SubscriptionTableMap::COL_SUBSCRIPTION_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.SubscriptionTableMap::COL_SUBSCRIPTION_ID.')');
+        }
+
+
+        // Set the correct dbName
+        $query = SubscriptionQuery::create()->mergeWith($criteria);
+
+        // use transaction because $criteria could contain info
+        // for more than one table (I guess, conceivably)
+        return $con->transaction(function () use ($con, $query) {
+            return $query->doInsert($con);
+        });
+    }
+
+} // SubscriptionTableMap
+// This is the static code needed to register the TableMap for this table with the main Propel class.
+//
+SubscriptionTableMap::buildTableMap();
