@@ -16,6 +16,40 @@ class ControllerTest extends TestCase
     /**
      * @throws ReflectionException
      */
+    public function testAuthUserForAnonymousUser()
+    {
+        // then
+        $this->expectException("Framework\Exception\AuthException");
+        $this->expectExceptionMessage("Identification requise.");
+
+        // given
+        $controller = new Controller();
+        $request = new Request();
+
+        // when
+        Helpers::callPrivateMethod($controller, "authUser", [$request]);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws PropelException
+     */
+    public function testAuthUserForAuthentifiedUser()
+    {
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // given
+        $controller = new Controller();
+        $request = Factory::createAuthRequest();
+
+        // when
+        Helpers::callPrivateMethod($controller, "authUser", [$request]);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
     public function testAuthAdminForAnonymousUser()
     {
         // then

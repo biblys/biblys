@@ -350,22 +350,36 @@ class Controller
 
     /**
      * @param Request $request
+     * @return CurrentUser
      * @throws AuthException
      * @throws PropelException
      */
-    protected static function authAdmin(Request $request): void
+    protected static function authUser(Request $request): CurrentUser
     {
-        $currentUser = CurrentUser::buildFromRequest($request);
-        $currentSite = CurrentSite::buildFromConfig(new Config());
-
         // TODO: distinguish between unauthentified (401) and unautorized (403)
-
+        $currentUser = CurrentUser::buildFromRequest($request);
         if (!$currentUser->isAuthentified()) {
             throw new AuthException("Identification requise.");
         }
 
+        return $currentUser;
+    }
+
+    /**
+     * @param Request $request
+     * @return CurrentUser
+     * @throws AuthException
+     * @throws PropelException
+     */
+    protected static function authAdmin(Request $request): CurrentUser
+    {
+        // TODO: distinguish between unauthentified (401) and unautorized (403)
+        $currentUser = self::authUser($request);
+        $currentSite = CurrentSite::buildFromConfig(new Config());
         if (!$currentUser->isAdminForSite($currentSite->getSite())) {
             throw new AuthException("Accès réservé aux administrateurs.");
         }
+
+        return $currentUser;
     }
 }
