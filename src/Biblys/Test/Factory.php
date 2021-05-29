@@ -9,13 +9,13 @@ use CFReward;
 use CFRewardManager;
 use Collection;
 use CollectionManager;
-use DateTime;
 use Exception;
 use Model\Session;
 use Model\ShippingFee;
 use Model\User;
 use Model\Right;
 use Model\SiteQuery;
+use Model\UserQuery;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -179,9 +179,26 @@ class Factory
     /**
      * @throws PropelException
      */
-    public static function createUser(): User
+    public static function createUser(array $attributes = []): User
     {
+        $attributes["email"] = $attributes["email"] ?? "user@biblys.fr";
+        $attributes["username"] = $attributes["username"] ?? "User";
+        $attributes["password"] = $attributes["password"] ?? "password";
+
+        $userByEmail = UserQuery::create()->findOneByEmail($attributes["email"]);
+        if ($userByEmail) {
+            return $userByEmail;
+        }
+
+        $userByUsername = UserQuery::create()->findOneByScreenName($attributes["username"]);
+        if ($userByUsername) {
+            return $userByUsername;
+        }
+
         $user = new User();
+        $user->setEmail($attributes["email"]);
+        $user->setScreenName($attributes["username"]);
+        $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
         $user->save();
 
         return $user;
@@ -208,15 +225,19 @@ class Factory
     public static function createAuthRequest(string $content = "", User $user = null): Request
     {
         $session = Factory::createUserSession($user);
-        return Request::create(
+        $request = Request::create(
             "",
             "",
             [],
-            ["user_uid" => $session->getToken()],
+            [],
             [],
             [],
             $content
         );
+        $request->cookies->set("user_uid", $session->getToken());
+        $request->headers->set("AuthToken", $session->getToken());
+
+        return $request;
     }
 
     /**
