@@ -196,10 +196,7 @@ class Factory
             $user = Factory::createUser();
         }
 
-        $session = new Session();
-        $session->setUser($user);
-        $session->setToken(Session::generateToken());
-        $session->setExpiresAt(new DateTime('tomorrow'));
+        $session = Session::buildForUser($user);
         $session->save();
 
         return $session;
