@@ -109,9 +109,13 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/object-reflector" />
       <path value="$PROJECT_DIR$/vendor/sebastian/type" />
       <path value="" />
+      <path value="$PROJECT_DIR$/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/vendor/propel/propel" />
+      <path value="$PROJECT_DIR$/vendor/ircmaxell/random-lib" />
+      <path value="$PROJECT_DIR$/vendor/ircmaxell/security-lib" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.3">
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>
   <component name="PhpUnit">
