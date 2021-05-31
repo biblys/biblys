@@ -2,6 +2,7 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
+use Framework\ArgumentResolver\ConfigValueResolver;
 use Framework\RequestListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -23,7 +24,11 @@ $container->register("matcher", UrlMatcher::class)
 $container->register("request_stack", RequestStack::class);
 
 $container->register("controller_resolver", ControllerResolver::class);
-$container->register("argument_resolver", ArgumentResolver::class);
+
+$argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
+$argumentResolvers[] = new ConfigValueResolver();
+$container->register("argument_resolver", ArgumentResolver::class)
+    ->setArguments([null, $argumentResolvers]);
 
 $container->register("listener.router", RouterListener::class)
     ->setArguments([new Reference("matcher"), new Reference("request_stack")]);

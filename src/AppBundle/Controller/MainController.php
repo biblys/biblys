@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Admin\Entry;
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
@@ -11,6 +12,7 @@ use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class ContactPageException extends Exception {}
@@ -196,9 +198,9 @@ class MainController extends Controller
         ]);
     }
 
-    public function adminAction(Request $request)
+    public function adminAction(Config $config): Response
     {
-        global $_V, $site, $config;
+        global $_V, $site;
 
         $this->setPageTitle('Administration Biblys');
         $this->auth('admin');
