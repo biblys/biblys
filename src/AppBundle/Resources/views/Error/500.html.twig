@@ -23,3 +23,24 @@ Détails:
         </li>
     {% endfor %}
 </ul>
+
+{% if previousExceptions %}
+
+    <h2>Erreurs précédentes</h2>
+
+    {% for previousException in previousExceptions %}
+        <p class="alert alert-danger">
+            {{ previousException.message }}
+        </p>
+
+        <ul>
+            <li>
+                in
+                <strong>{{ exception.file }}</strong>
+                on line
+                <strong>{{ exception.line }}</strong>
+            </li>
+        </ul>
+    {% endfor %}
+
+{% endif %}

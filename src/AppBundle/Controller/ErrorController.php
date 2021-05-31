@@ -224,9 +224,17 @@ class ErrorController extends Controller
             ], 500);
         }
 
+        $currentException = $exception;
+        $previousExceptions = [];
+        while ($previous = $currentException->getPrevious()) {
+            $previousExceptions[] = $previous;
+            $currentException = $previous;
+        }
+
         $response = $this->render("AppBundle:Error:500.html.twig", [
             "exception" => $exception,
             "exceptionClass" => get_class($exception),
+            "previousExceptions" => $previousExceptions,
         ]);
         $response->setStatusCode(500);
 
