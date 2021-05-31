@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Service\Config;
+use Biblys\Service\Updater\Updater;
 use Framework\RequestListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -39,5 +41,9 @@ $container->register("framework", HttpKernel::class)
         new Reference("request_stack"),
         new Reference("argument_resolver"),
     ]);
+
+$container->register("config", Config::class);
+$container->register("updater", Updater::class)
+    ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
 
 return $container;

@@ -162,7 +162,8 @@ class Entry
 
         // Biblys update available
         $updates = 0;
-        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
+        $container = include __DIR__."/../../container.php";
+        $updater = $container->get("updater");
         $diff = time() - $site->getOpt('updates_last_checked');
         if ($diff > 60 * 60 * 24) {
             $updater->downloadUpdates();

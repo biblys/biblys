@@ -2,6 +2,7 @@
 
 namespace Biblys\Service\Updater;
 
+use Biblys\Service\Config;
 use Gitonomy\Git\Repository;
 use Gitonomy\Git\Exception\ProcessException;
 
@@ -12,11 +13,20 @@ class Updater
         $repository,
         $releases,
         $latest;
+    /**
+     * @var Config
+     */
+    private $config;
 
-    public function __construct($repository_path, $current_version)
+    public function __construct(
+        string $repository_path,
+        string $current_version,
+        Config $config
+    )
     {
         $this->repository_path = $repository_path;
         $this->current_version = $current_version;
+        $this->config = $config;
     }
 
     /**
@@ -26,6 +36,10 @@ class Updater
      */
     public function downloadUpdates(): bool
     {
+        if ($this->config->get("environment") === "dev") {
+            return false;
+        }
+
         try {
             $repository = $this->getRepository();
             $repository->run('fetch', ['origin', '--tags']);
