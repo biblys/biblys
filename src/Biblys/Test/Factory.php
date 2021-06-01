@@ -4,19 +4,28 @@ namespace Biblys\Test;
 
 use Article;
 use ArticleManager;
+use Biblys\Service\Config;
 use CFReward;
 use CFRewardManager;
 use Collection;
 use CollectionManager;
+use DateTime;
 use Exception;
+use Model\Right;
+use Model\Session;
+use Model\ShippingFee;
+use Model\SiteQuery;
+use Model\User;
 use People;
 use PeopleManager;
+use Propel\Runtime\Exception\PropelException;
 use Publisher;
 use PublisherManager;
 use Rayon;
 use RayonManager;
 use Stock;
 use StockManager;
+use Symfony\Component\HttpFoundation\Request;
 
 class Factory
 {
@@ -165,5 +174,97 @@ class Factory
         return $cfrm->create([
             "reward_articles"=> "[".$article->get("id")."]",
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createUser(): User
+    {
+        $user = new User();
+        $user->save();
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAdminUser(): User
+    {
+        $user = new User();
+        $user->save();
+
+        $config = new Config();
+        $site = SiteQuery::create()->findOneById($config->get("site"));
+
+        $right = new Right();
+        $right->setUser($user);
+        $right->setSite($site);
+        $right->save();
+
+        return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createUserSession(User $user = null): Session
+    {
+        if ($user === null) {
+            $user = Factory::createUser();
+        }
+
+        $session = new Session();
+        $session->setUser($user);
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt(new DateTime('tomorrow'));
+        $session->save();
+
+        return $session;
+    }
+
+    /**
+     * @param string $content
+     * @return Request
+     * @throws PropelException
+     */
+    public static function createAuthRequest(
+        string $content = "",
+        User $user = null
+    ): Request
+    {
+        $session = Factory::createUserSession($user);
+        return Request::create(
+            "",
+            "",
+            [],
+            ["user_uid" => $session->getToken()],
+            [],
+            [],
+            $content
+        );
+    }
+
+    /**
+     * @param string $content
+     * @return Request
+     * @throws PropelException
+     */
+    public static function createAuthRequestForAdminUser(string $content = ""): Request
+    {
+        $adminUser = Factory::createAdminUser();
+        return Factory::createAuthRequest($content, $adminUser);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createShippingFee(): ShippingFee
+    {
+        $shippingFee = new ShippingFee();
+        $shippingFee->save();
+
+        return $shippingFee;
     }
 }

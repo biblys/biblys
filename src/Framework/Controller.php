@@ -3,7 +3,11 @@
 namespace Framework;
 
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
@@ -342,5 +346,26 @@ class Controller
             ->getFormFactory();
 
         return $formFactory;
+    }
+
+    /**
+     * @param Request $request
+     * @throws AuthException
+     * @throws PropelException
+     */
+    protected static function authAdmin(Request $request): void
+    {
+        $currentUser = CurrentUser::buildFromRequest($request);
+        $currentSite = CurrentSite::buildFromConfig(new Config());
+
+        // TODO: distinguish between unauthentified (401) and unautorized (403)
+
+        if (!$currentUser->isAuthentified()) {
+            throw new AuthException("Identification requise.");
+        }
+
+        if (!$currentUser->isAdminForSite($currentSite->getSite())) {
+            throw new AuthException("Accès réservé aux administrateurs.");
+        }
     }
 }
