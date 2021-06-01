@@ -2,28 +2,35 @@
 
 namespace Biblys\Database;
 
-use Biblys\Service\Log;
+use Exception;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use PDO;
+use PDOException;
+use Propel\Runtime\Connection\ConnectionManagerSingle;
+use Propel\Runtime\Propel;
 
 class Connection
 {
-    public static function init(array $config): \PDO
+    /**
+     * @throws Exception
+     */
+    public static function init(array $config): PDO
     {
 
         try {
-            $_SQL = new \PDO(
-                self::_getDsnFromConfig($config),
+            $_SQL = new PDO(
+                self::getDsnFromConfig($config),
                 $config["user"],
                 $config["pass"]
             );
             $_SQL->exec("SET CHARACTER SET utf8");
-            $_SQL->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $_SQL->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $GLOBALS["_SQL"] = $_SQL;
 
             return $_SQL;
-        } catch (\PDOException $e) {
-            throw new \Exception(
+        } catch (PDOException $e) {
+            throw new Exception(
                 "Cannot connect to MySQL server " . $config["host"] . ":" . $config["port"] . " #" . $e->getCode() . ": " . $e->getMessage()
             );
         }
@@ -31,13 +38,13 @@ class Connection
 
     public static function initPropel(array $config)
     {
-        $serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
+        $serviceContainer = Propel::getServiceContainer();
         $serviceContainer->checkVersion("2.0.0-dev");
         $serviceContainer->setAdapterClass("default", "mysql");
-        $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
+        $manager = new ConnectionManagerSingle();
 
         $propelConfig = [
-            "dsn" => self::_getDsnFromConfig($config),
+            "dsn" => self::getDsnFromConfig($config),
             "user" => $config["user"],
             "password" => $config["pass"],
             "settings" => [
@@ -63,7 +70,7 @@ class Connection
         $serviceContainer->setLogger("defaultLogger", $defaultLogger);
     }
     
-    private static function _getDsnFromConfig(array $config): string
+    public static function getDsnFromConfig(array $config): string
     {
         $dbPort = self::_getDbPortFromConfig($config);
         return "mysql:host=" . $config["host"] . ";port=" . $dbPort . ";dbname=" . $config["base"];   

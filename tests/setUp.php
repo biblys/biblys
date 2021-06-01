@@ -1,5 +1,10 @@
 <?php
 
+use Biblys\Service\Config;
+use Propel\Runtime\Exception\PropelException;
+
+require_once __DIR__ . "/../inc/constants.php";
+
 ini_set("display_errors", "On");
 error_reporting(E_ALL);
 
@@ -8,39 +13,42 @@ $_SERVER["REQUEST_URI"] = "/";
 $_SERVER["SERVER_NAME"] = "localhost";
 $_SERVER["SCRIPT_NAME"] = "index.php";
 
-// Load database config
-require_once __DIR__."/../inc/constants.php";
-$config = new Biblys\Service\Config();
-$dbConfig = $config->get("db");
 
-// Connect to test
-$testDb = Biblys\Database\Connection::init($dbConfig);
-Biblys\Database\Connection::initPropel($dbConfig);
-
-// Reset test database
-$testBaseName = $dbConfig["base"];
-$testDb->exec("DROP DATABASE IF EXISTS `$testBaseName`");
-$testDb->exec("CREATE DATABASE `$testBaseName`");
-$testDb->exec("USE `$testBaseName`");
-$sql = file_get_contents(__DIR__."/../db-schema.sql");
-$testDb->exec($sql);
-
-// Include entity autoloader
-require_once BIBLYS_PATH . "inc/autoload-entity.php";
-
-// Create fixtures
-$sm = new SiteManager();
-$jm = new JobManager();
-$cm = new CountryManager();
-$sm->create([
-    "site_id" => 1,
-    "site_tva" => "fr",
-    "site_title" => "Librairie Ys",
-    "site_contact" => "contact@biblys.fr",
-]);
-$jm->create(["job_id" => 1]);
-$jm->create(["job_id" => 2]);
-$cm->create(["country_id" => 67, "country_name" => "France"]);
-
+$config = new Config();
+setUpTestDatabase($config->get("db"));
 require_once BIBLYS_PATH . "inc/functions.php";
 $config->set("environment", "test");
+
+/**
+ * @throws PropelException
+ */
+function createFixtures(): void
+{
+    $site = new \Model\Site();
+    $site->setTva(1);
+    $site->setTitle("Librairie Ys");
+    $site->setContact("contact@biblys.fr");
+    $site->save();
+
+    $job1 = new \Model\Job();
+    $job1->save();
+
+    $job2 = new \Model\Job();
+    $job2->save();
+
+    $country = new \Model\Country();
+    $country->setName("France");
+    $country->save();
+}
+
+/**
+ * @throws PropelException
+ * @throws Exception
+ */
+function setUpTestDatabase($dbConfig)
+{
+    $db = new Biblys\Database\Database($dbConfig);
+    $db->reset();
+    $db->migrate();
+    createFixtures();
+}

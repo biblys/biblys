@@ -2,6 +2,7 @@
 
 namespace Framework\Composer;
 
+use Biblys\Service\Config;
 use Composer\Console\Application;
 use Exception;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -14,7 +15,7 @@ class ScriptRunner
      */
     public static function run(string $command)
     {
-        global $config;
+        $config = new Config();
 
         // Set composer home
         $composer_home = $config->get('composer_home');

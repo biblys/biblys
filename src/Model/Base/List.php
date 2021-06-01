@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\List as ChildList;
 use Model\ListQuery as ChildListQuery;
 use Model\Map\ListTableMap;
 use Propel\Runtime\Propel;
@@ -823,8 +824,21 @@ abstract class List implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(ListTableMap::COL_LIST_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1435,6 +1449,20 @@ abstract class List implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(ListTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildList The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[ListTableMap::COL_LIST_UPDATED] = true;
+
+        return $this;
     }
 
     /**

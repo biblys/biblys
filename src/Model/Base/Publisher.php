@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Map\PublisherTableMap;
 use Propel\Runtime\Propel;
@@ -2138,8 +2139,21 @@ abstract class Publisher implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(PublisherTableMap::COL_PUBLISHER_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(PublisherTableMap::COL_PUBLISHER_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(PublisherTableMap::COL_PUBLISHER_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -3410,6 +3424,20 @@ abstract class Publisher implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(PublisherTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildPublisher The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[PublisherTableMap::COL_PUBLISHER_UPDATED] = true;
+
+        return $this;
     }
 
     /**

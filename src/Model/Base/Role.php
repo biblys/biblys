@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Role as ChildRole;
 use Model\RoleQuery as ChildRoleQuery;
 use Model\Map\RoleTableMap;
 use Propel\Runtime\Propel;
@@ -1054,8 +1055,21 @@ abstract class Role implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(RoleTableMap::COL_ROLE_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(RoleTableMap::COL_ROLE_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(RoleTableMap::COL_ROLE_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1775,6 +1789,20 @@ abstract class Role implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(RoleTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildRole The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[RoleTableMap::COL_ROLE_UPDATED] = true;
+
+        return $this;
     }
 
     /**

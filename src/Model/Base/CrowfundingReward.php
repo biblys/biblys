@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\CrowfundingReward as ChildCrowfundingReward;
 use Model\CrowfundingRewardQuery as ChildCrowfundingRewardQuery;
 use Model\Map\CrowfundingRewardTableMap;
 use Propel\Runtime\Propel;
@@ -1123,8 +1124,21 @@ abstract class CrowfundingReward implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1862,6 +1876,20 @@ abstract class CrowfundingReward implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(CrowfundingRewardTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildCrowfundingReward The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[CrowfundingRewardTableMap::COL_REWARD_UPDATED] = true;
+
+        return $this;
     }
 
     /**

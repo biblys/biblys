@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\InventoryItem as ChildInventoryItem;
 use Model\InventoryItemQuery as ChildInventoryItemQuery;
 use Model\Map\InventoryItemTableMap;
 use Propel\Runtime\Propel;
@@ -823,8 +824,21 @@ abstract class InventoryItem implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(InventoryItemTableMap::COL_II_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(InventoryItemTableMap::COL_II_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(InventoryItemTableMap::COL_II_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1435,6 +1449,20 @@ abstract class InventoryItem implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(InventoryItemTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildInventoryItem The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[InventoryItemTableMap::COL_II_UPDATED] = true;
+
+        return $this;
     }
 
     /**

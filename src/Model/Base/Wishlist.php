@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Wishlist as ChildWishlist;
 use Model\WishlistQuery as ChildWishlistQuery;
 use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
@@ -859,8 +860,21 @@ abstract class Wishlist implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(WishlistTableMap::COL_WISHLIST_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(WishlistTableMap::COL_WISHLIST_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(WishlistTableMap::COL_WISHLIST_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1471,6 +1485,20 @@ abstract class Wishlist implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(WishlistTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildWishlist The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[WishlistTableMap::COL_WISHLIST_UPDATED] = true;
+
+        return $this;
     }
 
     /**

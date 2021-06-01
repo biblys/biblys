@@ -77,6 +77,10 @@ class Config
             return "/public/media";
         }
 
+        if ($key === "composer_home") {
+            return "~/.composer";
+        }
+
         return null;
     }
 }

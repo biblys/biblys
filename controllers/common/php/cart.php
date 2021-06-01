@@ -447,7 +447,7 @@ if (isset($Articles) && $Articles > 0) {
             }
             return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
         }, $countries);
-        $default_destination = $com->getById(67);
+        $default_destination = $com->get(["country_name" => "France"]);
 
         if ($_V->isLogged() && $customer = $_V->getCustomer()) {
             $country_id = $customer->get('country_id');

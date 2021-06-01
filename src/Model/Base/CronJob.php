@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\CronJob as ChildCronJob;
 use Model\CronJobQuery as ChildCronJobQuery;
 use Model\Map\CronJobTableMap;
 use Propel\Runtime\Propel;
@@ -823,8 +824,21 @@ abstract class CronJob implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(CronJobTableMap::COL_CRON_JOB_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(CronJobTableMap::COL_CRON_JOB_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(CronJobTableMap::COL_CRON_JOB_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1435,6 +1449,20 @@ abstract class CronJob implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(CronJobTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildCronJob The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[CronJobTableMap::COL_CRON_JOB_UPDATED] = true;
+
+        return $this;
     }
 
     /**

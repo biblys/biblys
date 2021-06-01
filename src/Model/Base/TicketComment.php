@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\TicketComment as ChildTicketComment;
 use Model\TicketCommentQuery as ChildTicketCommentQuery;
 use Model\Map\TicketCommentTableMap;
 use Propel\Runtime\Propel;
@@ -783,8 +784,21 @@ abstract class TicketComment implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(TicketCommentTableMap::COL_TICKET_COMMENT_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE)) {
+                    $this->setUpdate($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE)) {
+                    $this->setUpdate(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1374,6 +1388,20 @@ abstract class TicketComment implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(TicketCommentTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildTicketComment The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE] = true;
+
+        return $this;
     }
 
     /**

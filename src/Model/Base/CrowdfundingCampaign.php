@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
 use Model\CrowdfundingCampaignQuery as ChildCrowdfundingCampaignQuery;
 use Model\Map\CrowdfundingCampaignTableMap;
 use Propel\Runtime\Propel;
@@ -1089,8 +1090,21 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1835,6 +1849,20 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(CrowdfundingCampaignTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildCrowdfundingCampaign The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED] = true;
+
+        return $this;
     }
 
     /**

@@ -75,7 +75,7 @@ class ShippingTest extends PHPUnit\Framework\TestCase
             "shipping_max_amount" => 2000,
         ]);
 
-        $country = $cm->getById(67); // France
+        $country = $cm->getById(1); // France
         $order_weight = 500;
         $order_amount = 1500;
 

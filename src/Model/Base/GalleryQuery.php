@@ -695,4 +695,70 @@ abstract class GalleryQuery extends ModelCriteria
         });
     }
 
+    // timestampable behavior
+
+    /**
+     * Filter by the latest updated
+     *
+     * @param      int $nbDays Maximum age of the latest update in days
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function recentlyUpdated($nbDays = 7)
+    {
+        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by update date desc
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function lastUpdatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+    }
+
+    /**
+     * Order by update date asc
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function firstUpdatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+    }
+
+    /**
+     * Order by create date desc
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function lastCreatedFirst()
+    {
+        return $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+    }
+
+    /**
+     * Filter by the latest created
+     *
+     * @param      int $nbDays Maximum age of in days
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function recentlyCreated($nbDays = 7)
+    {
+        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+    }
+
+    /**
+     * Order by create date asc
+     *
+     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     */
+    public function firstCreatedFirst()
+    {
+        return $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+    }
+
 } // GalleryQuery

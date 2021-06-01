@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Supplier as ChildSupplier;
 use Model\SupplierQuery as ChildSupplierQuery;
 use Model\Map\SupplierTableMap;
 use Propel\Runtime\Propel;
@@ -1063,8 +1064,21 @@ abstract class Supplier implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(SupplierTableMap::COL_SUPPLIER_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(SupplierTableMap::COL_SUPPLIER_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(SupplierTableMap::COL_SUPPLIER_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1768,6 +1782,20 @@ abstract class Supplier implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(SupplierTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildSupplier The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[SupplierTableMap::COL_SUPPLIER_UPDATED] = true;
+
+        return $this;
     }
 
     /**

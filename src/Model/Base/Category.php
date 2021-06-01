@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Category as ChildCategory;
 use Model\CategoryQuery as ChildCategoryQuery;
 use Model\Map\CategoryTableMap;
 use Propel\Runtime\Propel;
@@ -1045,8 +1046,21 @@ abstract class Category implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(CategoryTableMap::COL_CATEGORY_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -1750,6 +1764,20 @@ abstract class Category implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(CategoryTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildCategory The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_UPDATED] = true;
+
+        return $this;
     }
 
     /**

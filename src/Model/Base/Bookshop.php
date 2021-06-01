@@ -5,6 +5,7 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Bookshop as ChildBookshop;
 use Model\BookshopQuery as ChildBookshopQuery;
 use Model\Map\BookshopTableMap;
 use Propel\Runtime\Propel;
@@ -1476,8 +1477,21 @@ abstract class Bookshop implements ActiveRecordInterface
             $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
+                // timestampable behavior
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                if (!$this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_CREATED)) {
+                    $this->setCreatedAt($highPrecision);
+                }
+                if (!$this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_UPDATED)) {
+                    $this->setUpdatedAt($highPrecision);
+                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
+                // timestampable behavior
+                if ($this->isModified() && !$this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_UPDATED)) {
+                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -2425,6 +2439,20 @@ abstract class Bookshop implements ActiveRecordInterface
     public function __toString()
     {
         return (string) $this->exportTo(BookshopTableMap::DEFAULT_STRING_FORMAT);
+    }
+
+    // timestampable behavior
+
+    /**
+     * Mark the current object so that the update date doesn't get updated during next save
+     *
+     * @return     $this|ChildBookshop The current object (for fluent API support)
+     */
+    public function keepUpdateDateUnchanged()
+    {
+        $this->modifiedColumns[BookshopTableMap::COL_BOOKSHOP_UPDATED] = true;
+
+        return $this;
     }
 
     /**

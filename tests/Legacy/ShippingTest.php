@@ -15,7 +15,7 @@ class ShippingTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->query->set("country_id", 67);
+        $request->query->set("country_id", 1);
         $request->query->set("order_weight", 1500);
         $request->query->set("order_amount", 2295);
 
@@ -35,7 +35,7 @@ class ShippingTest extends TestCase
     {
         // given
         $request = new Request();
-        $request->query->set("country_id", 67);
+        $request->query->set("country_id", 1);
 
         // when
         /** @var Response $response */

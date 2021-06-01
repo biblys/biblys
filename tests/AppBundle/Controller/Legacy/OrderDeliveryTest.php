@@ -43,7 +43,7 @@ class OrderDeliveryTest extends TestCase
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->query->set("page", "order_delivery");
-        $request->query->set("country_id", 67);
+        $request->query->set("country_id", 1);
         $request->query->set("shipping_id", $shipping->get("id"));
         $request->request->set("order_firstname", "Barnabé");
         $request->request->set("order_lastname", "Famagouste");
@@ -51,7 +51,7 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_postalcode", "69009");
         $request->request->set("order_city", "Lyon");
         $request->request->set("order_email", "customer@biblys.fr");
-        $request->request->set("country_id", 67);
+        $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
 
         $_POST["order_firstname"] = "Barnabé";
@@ -60,7 +60,7 @@ class OrderDeliveryTest extends TestCase
         $_POST["order_postalcode"] = "69009";
         $_POST["order_city"] = "Lyon";
         $_POST["order_email"] = "customer@biblys.fr";
-        $_POST["country_id"] = 67;
+        $_POST["country_id"] = 1;
         $_POST["cgv_checkbox"] = 1;
 
         // when
