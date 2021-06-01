@@ -222,20 +222,21 @@ class Factory
     /**
      * @throws PropelException
      */
-    public static function createAuthRequest(string $content = "", User $user = null): Request
+    public static function createAuthRequest(
+        string $content = "",
+        User $user = null,
+        string $authMethod = "cookie"): Request
     {
         $session = Factory::createUserSession($user);
-        $request = Request::create(
-            "",
-            "",
-            [],
-            [],
-            [],
-            [],
-            $content
-        );
-        $request->cookies->set("user_uid", $session->getToken());
-        $request->headers->set("AuthToken", $session->getToken());
+        $request = Request::create("", "", [], [], [], [], $content);
+
+        if ($authMethod === "cookie") {
+            $request->cookies->set("user_uid", $session->getToken());
+        }
+
+        if ($authMethod === "header") {
+            $request->headers->set("AuthToken", $session->getToken());
+        }
 
         return $request;
     }

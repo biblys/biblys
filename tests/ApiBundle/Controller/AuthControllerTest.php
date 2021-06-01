@@ -55,7 +55,7 @@ class AuthControllerTest extends TestCase
             "email" => "me@biblys.fr",
             "username" => "Me",
         ]);
-        $request = Factory::createAuthRequest("", $user);
+        $request = Factory::createAuthRequest("", $user, $method = "header");
 
         // when
         $response = $controller->meAction($request);

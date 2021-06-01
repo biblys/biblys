@@ -29,15 +29,15 @@ class CurrentUser
      */
     public static function buildFromRequest(Request $request): CurrentUser
     {
-        $userUid = $request->cookies->get("user_uid");
+        $cookieToken = $request->cookies->get("user_uid");
+        $headerToken = $request->headers->get("AuthToken");
+        $token = $cookieToken ?: $headerToken;
 
-        if ($userUid === null) {
+        if ($token === null) {
             return new CurrentUser(null);
         }
 
-        $session = SessionQuery::create()
-            ->filterByToken($userUid)
-            ->findOne();
+        $session = SessionQuery::create()->filterByToken($token)->findOne();
         if (!$session) {
             return new CurrentUser(null);
         }
