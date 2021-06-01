@@ -9,9 +9,8 @@
     {
         protected $prefix = 'role',
                   $table = 'roles',
-                  $object = 'Role',
-                  $delete = 'hard';
-                  
+                  $object = 'Role';
+
         public function __construct()
         {
             parent::__construct();

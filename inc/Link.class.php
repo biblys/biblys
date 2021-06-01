@@ -10,7 +10,6 @@ class LinkManager extends EntityManager
 {
     protected $prefix = 'link',
 			  $table = 'links',
-			  $object = 'Link',
-              $delete = 'hard';
-    
+			  $object = 'Link';
+
 }

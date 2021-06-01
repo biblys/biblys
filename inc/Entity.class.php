@@ -200,7 +200,6 @@ class EntityManager
     protected $object = 'Entity';
     protected $select = '*';
     protected $entities = array();
-    protected $delete = 'soft';
     protected $siteAgnostic = true;
     protected $_entityProperties = [];
 
@@ -643,13 +642,8 @@ class EntityManager
         $this->beforeDelete($entity);
 
         try {
-            if ($this->delete == 'soft') {
-                $query = 'UPDATE `' . $this->table . '` SET `' . $this->prefix . '_deleted` = NOW() WHERE `' . $this->idField . '` = ' . $entity->get('id');
-            } elseif ($this->delete == 'hard') {
-                $query = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->idField . '` = ' . $entity->get('id');
-            }
-
-            $sql = $this->db->exec($query);
+            $query = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->idField . '` = ' . $entity->get('id');
+            $this->db->exec($query);
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage().' <br> Query: '.$query);
         }
