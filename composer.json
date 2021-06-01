@@ -20,7 +20,7 @@
   "require": {
     "php": "^7.2",
     "biblys/eurotax": "1.*",
-    "symfony/http-foundation": "^5",
+    "symfony/http-foundation": "^5.3",
     "twig/twig": "^3.0",
     "symfony/routing": "^4.4.3",
     "symfony/var-dumper": "~5.1",
@@ -35,7 +35,7 @@
     "biblys/isbn": "^2.0",
     "biblys/data-client-php": "~0",
     "symfony/form": "^5.1",
-    "symfony/security-csrf": "^5.1.0",
+    "symfony/security-csrf": "^5.3",
     "payplug/payplug-php": "^3.1",
     "composer/composer": "dev-master",
     "jflight/gacookie": "~2.0",

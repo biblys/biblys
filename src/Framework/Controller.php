@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
@@ -188,8 +189,9 @@ class Controller
 
         // CRSF
         $session = new Session();
+        $requestStack = new RequestStack();
         $csrfGenerator = new UriSafeTokenGenerator();
-        $csrfStorage = new SessionTokenStorage($session);
+        $csrfStorage = new SessionTokenStorage($requestStack);
         $csrfManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
 
         // Forms
