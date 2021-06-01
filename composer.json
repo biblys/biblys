@@ -16,7 +16,9 @@
     ],
     "theme:watch": "./scripts/watch",
     "post-install-cmd": "hash yarn 2>/dev/null && yarn && composer build || { echo >&2 \"Yarn is not installed: skipping front dependencies.\"; }",
-    "propel:build": "vendor/bin/propel model:build --output-dir src"
+    "propel:build": "vendor/bin/propel model:build --output-dir src",
+    "propel:diff": "vendor/bin/propel diff",
+    "propel:migrate": "vendor/bin/propel migrate"
   },
   "require": {
     "php": "^7.2",
