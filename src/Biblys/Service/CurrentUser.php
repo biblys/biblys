@@ -4,6 +4,7 @@
 namespace Biblys\Service;
 
 
+use DateTime;
 use Framework\Exception\AuthException;
 use Model\SessionQuery;
 use Model\Site;
@@ -43,7 +44,7 @@ class CurrentUser
             return new CurrentUser(null);
         }
 
-        if (($session->getExpiresAt() < date('Y-m-d H:i:s'))) {
+        if (($session->getExpiresAt() < new DateTime())) {
             return new CurrentUser(null);
         }
 
