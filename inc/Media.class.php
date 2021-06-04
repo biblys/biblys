@@ -243,7 +243,7 @@ class Media
         $this->_url = (string) $url;
     }
 
-    private function setExists($exists)
+    public function setExists(bool $exists)
     {
         $this->_exists = (bool) $exists;
     }
@@ -366,13 +366,8 @@ class Media
         return MEDIA_URL.$baseUrl;
     }
 
-    public function exists()
+    public function exists(): bool
     {
-        global $config;
-        if (getenv("PHP_ENV") === "test") {
-            return true;
-        }
-
         return (bool) $this->_exists;
     }
 }

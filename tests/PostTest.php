@@ -75,6 +75,7 @@ class PostTest extends PHPUnit\Framework\TestCase
      */
     public function testHasIllustration(Post $post)
     {
+        $post->getIllustration()->setExists(true);
         $this->assertTrue($post->hasIllustration());
     }
 

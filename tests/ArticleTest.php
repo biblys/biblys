@@ -128,11 +128,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test generating cover tag
+     * @throws Exception
      */
     public function testGetCoverTag()
     {
         $am = new ArticleManager();
         $article = $am->create(['article_title' => 'Bara Yogoi']);
+        $article->getCover("object")->setExists(true);
 
         $tag = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "size" => "w250"]);
         $tagWithWidth = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "width" => 250]);
@@ -163,6 +165,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testGetCoverUrl(Article $article)
     {
+        $article->getCover("object")->setExists(true);
         $url = $article->getCoverUrl();
 
         $this->assertRegExp("/\/media\/book\/\d+\/\d+\.jpg/", $url);
