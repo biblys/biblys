@@ -1,9 +1,11 @@
 
 # Historique des modifications
 
-## 2.53.0-dev.1 (8 avril 2021)
+## 2.53.0 (4 juin 2021)
 
-- Refonte technique des actions du panier
+Cette mise à jour apporte un certain nombre de modifications purement
+techniques visant à améliorer la stabilité et la maintenabilité de Biblys,
+tout en préparant la refonte prochaine du panier.
 
 ### 2.52.4 (21 mai 2021)
 
