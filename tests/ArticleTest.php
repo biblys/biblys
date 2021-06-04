@@ -775,6 +775,31 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am->addRayon($article, $rayon);
     }
 
+    public function testHasCoverWithCover()
+    {
+        // given
+        $article = new Article([]);
+        $article->getCover("object")->setExists(true);
+
+        // when
+        $hasCover = $article->hasCover();
+
+        // then
+        $this->assertTrue($hasCover, "it returns true when there is a cover");
+    }
+
+    public function testHasCoverWithoutCover()
+    {
+        // given
+        $article = new Article([]);
+        $article->getCover("object")->setExists(false);
+
+        // when
+        $hasCover = $article->hasCover();
+
+        // then
+        $this->assertFalse($hasCover, "it returns false when there is no cover");
+    }
 
     /**
      * Test deleting a copy

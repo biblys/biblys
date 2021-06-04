@@ -243,23 +243,21 @@ class Article extends Entity
             $this->cover = new Media('article', $this->get('id'));
         }
 
-        if ($this->cover->exists()) {
-            if ($size === 'object') {
-                return $this->cover;
-            } elseif ($size === 'url') {
-                return $this->getCoverUrl();
-            } else {
-                trigger_error('Article.getCover() method is depreciated. Use Article.getCoverTag() instead.');
-                return '<a href="' . $this->getCoverUrl() . '" rel="fancybox"><img src="' . $this->getCoverUrl($size) . '" alt="' . $this->get('title') . '"></a>';
-            }
+        if ($size === 'object') {
+            return $this->cover;
+        } elseif ($size === 'url') {
+            return $this->getCoverUrl();
+        } else {
+            trigger_error('Article.getCover() method is depreciated. Use Article.getCoverTag() instead.');
+            return '<a href="' . $this->getCoverUrl() . '" rel="fancybox"><img src="' . $this->getCoverUrl($size) . '" alt="' . $this->get('title') . '"></a>';
         }
     }
 
     /**
      * Returns true if article has a cover
-     * @return boolean
+     * @return bool
      */
-    public function hasCover()
+    public function hasCover(): bool
     {
         $cover = $this->getCover("object");
         return $cover->exists();
