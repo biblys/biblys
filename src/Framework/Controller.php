@@ -190,10 +190,6 @@ class Controller
 
         // CRSF
         $session = new Session();
-        $requestStack = new RequestStack();
-        $csrfGenerator = new UriSafeTokenGenerator();
-        $csrfStorage = new SessionTokenStorage($requestStack);
-        $csrfManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
 
         // Forms
         $formEngine = new TwigRendererEngine([$defaultFormTheme], $twig);
