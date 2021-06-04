@@ -3,6 +3,7 @@
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\ConfigValueResolver;
+use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\RequestListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -27,6 +28,7 @@ $container->register("controller_resolver", ControllerResolver::class);
 
 $argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
 $argumentResolvers[] = new ConfigValueResolver();
+$argumentResolvers[] = new UpdaterValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
     ->setArguments([null, $argumentResolvers]);
 
