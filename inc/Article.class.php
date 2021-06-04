@@ -236,43 +236,65 @@ class Article extends Entity
 
     /**
      * Get article cover
+     * @throws Exception
      */
-    public function getCover($size = 0)
+    public function getCover($size = null)
     {
         if (!isset($this->cover)) {
             $this->cover = new Media('article', $this->get('id'));
         }
 
-        if ($size === 'object') {
+        if ($size === null) {
             return $this->cover;
-        } elseif ($size === 'url') {
-            return $this->getCoverUrl();
-        } else {
-            trigger_error('Article.getCover() method is depreciated. Use Article.getCoverTag() instead.');
-            return '<a href="' . $this->getCoverUrl() . '" rel="fancybox"><img src="' . $this->getCoverUrl($size) . '" alt="' . $this->get('title') . '"></a>';
         }
+
+        if ($size === "object") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.1",
+                "Article->getCover(\"object\") is deprecated, use Article->getCover() instead."
+            );
+            return $this->cover;
+        }
+
+        if ($size === "url") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.53.1",
+                "Article->getCover(\"url\") is depreciated, use Article->getCoverUrl() instead."
+            );
+            return $this->getCoverUrl();
+        }
+
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.53.1",
+            "Article->getCover(\$size) is depreciated, use Article->getCoverTag() instead."
+        );
+        return $this->getCoverTag(["size" => $size]);
     }
 
     /**
      * Returns true if article has a cover
      * @return bool
+     * @throws Exception
      */
     public function hasCover(): bool
     {
-        $cover = $this->getCover("object");
+        $cover = $this->getCover();
         return $cover->exists();
     }
 
     /**
      * Returns an HTML IMG tag with link
-     * @param  array $options (link, size, class)
+     * @param array $options (link, size, class)
      * @return string
+     * @throws Exception
      */
-    public function getCoverTag(array $options = [])
+    public function getCoverTag(array $options = []): string
     {
-        $cover = $this->getCover("object");
+        $cover = $this->getCover();
         if (!$cover->exists()) {
-            throw new Exception("No cover at " . $cover->path() . " for article " . $this->get("id"));
         }
 
         if (!isset($options["link"])) {

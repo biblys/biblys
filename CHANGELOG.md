@@ -6,6 +6,7 @@
 Corrections
 
 - Le système de mise à jour automatique fonctionne à nouveau
+- Les articles sans couverture s'affichent correctement
 
 ## 2.53.0 (4 juin 2021)
 
