@@ -32,9 +32,9 @@ class MaintenanceController extends Controller
     {
         global $urlgenerator;
 
+        $request->attributes->set("page_title", "Mise à jour de Biblys");
         $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
-        $this->setPageTitle('Mise à jour de Biblys');
         $this->auth('admin');
 
         // Download available updates
@@ -73,12 +73,12 @@ class MaintenanceController extends Controller
     /**
      * @throws AuthException
      */
-    public function updatingAction($version)
+    public function updatingAction(string $version, Request $request)
     {
         global $urlgenerator;
 
         $this->auth('admin');
-        $this->setPageTitle('Mise à jour de Biblys en cours');
+        $request->attributes->set("page_title", "Mise à jour de Biblys en cours");
 
         if (BIBLYS_VERSION == $version) {
             return $this->redirect($urlgenerator->generate('maintenance_composer'));
@@ -110,7 +110,7 @@ class MaintenanceController extends Controller
 
     public function changelogIndexAction(Request $request): Response
     {
-        $this->setPageTitle('Historique des mises à jour');
+        $request->attributes->set("page_title", "Historique des mises à jour");
 
         $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
@@ -126,7 +126,10 @@ class MaintenanceController extends Controller
         ]);
     }
 
-    public function changelogShowAction($version): Response
+    public function changelogShowAction(
+        string $version,
+        Request $request
+    ): Response
     {
 
         try {
@@ -136,7 +139,7 @@ class MaintenanceController extends Controller
             throw new NotFoundHttpException($exception->getMessage(), $exception->getPrevious());
         }
 
-        $this->setPageTitle("Mise à jour $version");
+        $request->attributes->set("page_title", "Mise à jour $version");
         return $this->render('AppBundle:Maintenance:changelogShow.html.twig', [
             'release' => $release,
         ]);

@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -253,10 +254,19 @@ class Controller
      * Set the page title as a Request attribute.
      *
      * @param string $title page title
+     * @deprecated Calling Controller->setPageTitle is deprecated,
+     *             use $request->attributes->set("page_title") instead.
      */
-    public function setPageTitle($title)
+    public function setPageTitle(string $title)
     {
         global $request;
+
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.53.1",
+            "Calling Controller->setPageTitle is deprecated, use \$request->attributes->set(\"page_title\") instead."
+        );
+
         $request->attributes->set('page_title', $title);
     }
 
