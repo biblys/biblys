@@ -6,7 +6,7 @@
 
 use Biblys\Test\Factory;
 
-require_once 'inc/functions.php';
+require_once __DIR__."/setUp.php";
 
 class StockTest extends PHPUnit\Framework\TestCase
 {

@@ -7,7 +7,7 @@
 
 use Biblys\Service\Config;
 
-require_once "tests/setUp.php";
+require_once __DIR__."/../../setUp.php";
 
 
 class ConfigTest extends PHPUnit\Framework\TestCase

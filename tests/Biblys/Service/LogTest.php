@@ -8,7 +8,7 @@
 use Biblys\Service\Log;
 use Monolog\Logger;
 
-require_once "tests/setUp.php";
+require_once __DIR__."/../../setUp.php";
 
 
 class LogTest extends PHPUnit\Framework\TestCase

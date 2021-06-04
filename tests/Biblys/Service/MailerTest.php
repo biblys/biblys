@@ -4,7 +4,7 @@ namespace Biblys\Service;
 
 use PHPUnit\Framework\TestCase;
 
-require_once "tests/setUp.php";
+require_once __DIR__."/../../setUp.php";
 
 class MailerTest extends TestCase
 {

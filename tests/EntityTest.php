@@ -3,7 +3,10 @@
  * @backupGlobals disabled
  * @backupStaticAttributes disabled
  */
-require_once 'inc/functions.php';
+
+use PHPUnit\Framework\Error\Deprecated;
+
+require_once __DIR__."/setUp.php";
 
 class EntityTest extends PHPUnit\Framework\TestCase
 {
