@@ -2,12 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Framework\Composer;
 use Biblys\Service\Pagination;
 use Biblys\Service\Updater\ReleaseNotFoundException;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
+use Framework\Composer\ComposerException;
+use Framework\Composer\ScriptRunner;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -90,16 +91,18 @@ class MaintenanceController extends Controller
 
     /**
      * @throws AuthException
+     * @throws Exception
      */
     public function composerAction(): Response
     {
         $this->auth('admin');
 
         try {
-            Composer::runScript('install');
-        } catch (Exception $exception) {
+            ScriptRunner::run('install');
+        } catch (ComposerException $exception) {
             return $this->render('AppBundle:Maintenance:composer.html.twig', [
                 'error' => $exception->getMessage(),
+                'output' => $exception->getOutput(),
             ]);
         }
 

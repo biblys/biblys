@@ -3,7 +3,7 @@
 namespace Biblys\Template;
 
 use Exception;
-use Framework\Composer;
+use Framework\ScriptRunner;
 
 class Template
 {
@@ -136,7 +136,7 @@ class Template
 
         // If css was modified, refresh theme and bump assets version
         if ($this->getSlug() === 'css') {
-            Composer::runScript("theme:refresh");
+            ScriptRunner::run("theme:refresh");
 
             $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
             $site->setOpt('assets_version', $assetsVersion + 1);

@@ -1,19 +1,18 @@
 <?php
 
-
-namespace Framework;
-
+namespace Framework\Composer;
 
 use Composer\Console\Application;
 use Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 
-class Composer
+class ScriptRunner
 {
     /**
+     * @throws ComposerException
      * @throws Exception
      */
-    public static function runScript(string $command)
+    public static function run(string $command)
     {
         global $config;
 
@@ -30,11 +29,14 @@ class Composer
         // Updating composer packages
         $application = new Application();
         $application->setAutoExit(false);
-        $code = $application->run(new ArrayInput(['command' => $command]));
+        $output = new MessageAccumulator();
+        $code = $application->run(new ArrayInput(['command' => $command]), $output);
 
         if ($code !== 0) {
-            throw new Exception('Une erreur est survenue lors de la mise à jour automatique
-                    des composants.');
+            throw new ComposerException(
+                "Une erreur est survenue lors de la mise à jour automatique des composants.",
+                $output->getOutput()
+            );
         }
     }
 }
