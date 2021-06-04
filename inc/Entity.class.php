@@ -472,9 +472,10 @@ class EntityManager
             }
 
             if (!in_array($property, $this->_getEntityProperties())) {
-                trigger_error(
-                    "Trying to create $this->object with invalid property $property",
-                    E_USER_DEPRECATED
+                trigger_deprecation(
+                    "biblys/biblys",
+                    "2.53.1",
+                    "Trying to create $this->object with invalid property $property"
                 );
                 continue;
             }
@@ -538,9 +539,10 @@ class EntityManager
             }
 
             if (!in_array($property, $this->_getEntityProperties())) {
-                trigger_error(
-                    "Trying to update $this->object with invalid property $property",
-                    E_USER_DEPRECATED
+                trigger_deprecation(
+                    "biblys/biblys",
+                    "2.53.1",
+                    "Trying to update $this->object with invalid property $property"
                 );
                 continue;
             }

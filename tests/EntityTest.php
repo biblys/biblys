@@ -38,11 +38,6 @@ class EntityTest extends PHPUnit\Framework\TestCase
 
     public function testCreateEntityWithInvalidProperty()
     {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage(
-            "Trying to create Order with invalid property cgv_checkbox"
-        );
-
         // given
         $om = new OrderManager();
 
@@ -58,11 +53,6 @@ class EntityTest extends PHPUnit\Framework\TestCase
 
     public function testUpdateEntityWithInvalidProperty()
     {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage(
-            "Trying to update Order with invalid property newsletter"
-        );
-
         // given
         $om = new OrderManager();
 

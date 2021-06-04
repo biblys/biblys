@@ -100,7 +100,12 @@ function biblys_error($level, $message, $file, $line, $trace = null, Throwable $
 
     // CLI mode
     if (!isset($request) || 'cli' == php_sapi_name()) {
-        throw new Exception("$level: $message\nin $file on line $line");
+        if ($level === "DEPRECATED") {
+            trigger_error($message, E_USER_DEPRECATED);
+            return;
+        } else {
+            throw new Exception("$level: $message\nin $file on line $line");
+        }
         // XHR mode
     } elseif ($request->isXmlHttpRequest() || 'application/json' == $request->headers->get('Accept')) {
         $response = new JsonResponse();
