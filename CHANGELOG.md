@@ -1,6 +1,12 @@
 
 # Historique des modifications
 
+### 2.53.1 (DEV)
+
+Corrections
+
+- Le système de mise à jour automatique fonctionne à nouveau
+
 ## 2.53.0 (4 juin 2021)
 
 Cette mise à jour apporte un certain nombre de modifications purement

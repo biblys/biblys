@@ -28,13 +28,11 @@ class MaintenanceController extends Controller
     /**
      * @throws AuthException
      */
-    public function updateAction(Request $request): Response
+    public function updateAction(Request $request, Updater $updater): Response
     {
         global $urlgenerator;
 
         $request->attributes->set("page_title", "Mise à jour de Biblys");
-        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
-
         $this->auth('admin');
 
         // Download available updates
@@ -108,11 +106,9 @@ class MaintenanceController extends Controller
         return $this->render('AppBundle:Maintenance:composer.html.twig');
     }
 
-    public function changelogIndexAction(Request $request): Response
+    public function changelogIndexAction(Request $request, Updater $updater): Response
     {
         $request->attributes->set("page_title", "Historique des mises à jour");
-
-        $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
 
         $releases = $updater->getReleases();
 
@@ -128,12 +124,12 @@ class MaintenanceController extends Controller
 
     public function changelogShowAction(
         string $version,
+        Updater $updater,
         Request $request
     ): Response
     {
 
         try {
-            $updater = new Updater(BIBLYS_PATH, BIBLYS_VERSION);
             $release = $updater->getRelease($version);
         } catch(ReleaseNotFoundException $exception) {
             throw new NotFoundHttpException($exception->getMessage(), $exception->getPrevious());
