@@ -1005,19 +1005,31 @@ function reloadEvents(scope) {
   // Create & delete wish
   $('[data-wish].event')
     .click(function() {
-      var button = $(this);
+      const button = $(this);
       button
         .find('i.fa')
         .removeClass('fa-heart-o fa-heart red')
         .addClass('fa-spin fa-spinner');
-      $.post(
-        '/pages/log_mywishes',
-        {
-          article_id: $(this).attr('data-wish')
-        },
-        function(data) {
-          if (data.error) _alert(data.error);
-          else if (data.created) {
+
+      fetch('/pages/log_mywishes', {
+        method: 'post',
+        credentials: 'include',
+        headers: { Accept: 'application/json' },
+        body: JSON.stringify({
+          article_id: $(this).attr('data-wish'),
+        }),
+      })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          if (data.error) {
+            _alert(data.error);
+            button
+              .find('i.fa')
+              .removeClass('fa-spin fa-spinner')
+              .addClass('fa-heart-o');
+          } else if (data.created) {
             button
               .find('i.fa')
               .removeClass('fa-spin fa-spinner')
@@ -1030,9 +1042,8 @@ function reloadEvents(scope) {
               .addClass('fa-heart-o');
             new Biblys.Notification(data.message, { type: 'success' });
           }
-        },
-        'json'
-      );
+        });
+
     })
     .removeClass('event');
 

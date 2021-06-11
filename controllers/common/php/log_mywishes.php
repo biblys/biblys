@@ -33,11 +33,16 @@ if (!$wishlist) {
     }
 }
 
-if (isset($_POST['article_id'])) {
+/** @var Request $request */
+if ($request->getMethod() === "POST") {
 
-    $article = $am->getById($_POST['article_id']);
+    $content = $request->getContent();
+    $params = json_decode($content, true);
+    $articleId = $params["article_id"];
+    $article = $am->getById($articleId);
+
     if (!$article) {
-        trigger_error('Article #' . $_POST['article_id'] . ' introuvable.');
+        trigger_error('Article #' . $articleId . ' introuvable.');
     }
 
     $wish = $wm->get(array('article_id' => $article->get('id'), 'wishlist_id' => $wishlist->get('id')));
@@ -61,7 +66,7 @@ if (isset($_POST['article_id'])) {
     }
 
     /** @var Request $request */
-    if ($request->isXmlHttpRequest()) {
+    if ($request->headers->get("Accept") === "application/json") {
         return new JsonResponse($p);
     }
 
