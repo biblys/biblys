@@ -18,11 +18,7 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = $am->create([
-            "article_title" => "Out of stock!",
-            "article_url" => "out-of-stock",
-            "article_publisher_stock" => 0,
-        ]);
+        $article = Factory::createArticle();
         $controller = new ArticleController();
         $request = new Request();
         $request->request->set("article_publisher_stock", "     1   ");

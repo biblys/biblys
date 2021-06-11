@@ -27,7 +27,7 @@ class StockTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $am = new ArticleManager();
 
-        $article = $am->create(['type_id' => 1]);
+        $article = Factory::createArticle(["type_id" => 1]);
 
         $stock = $sm->create(['article_id' => $article->get('id')]);
 

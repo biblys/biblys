@@ -4,6 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Test\Factory;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once "setUp.php";
@@ -130,11 +131,11 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $order->set('country_id', 65);
         $om->update($order);
-        $book = $am->create(array('type_id' => 1, 'article_price' => 1000));
+        $book = Factory::createArticle(["type_id" => 1, "article_price" => 1000]);
         $book = $sm->create(array('article_id' => $book->get('id'), 'stock_selling_price' => $book->get('price')));
         $om->addStock($order, $book);
         $book = $sm->reload($book);
-        $ebook = $am->create(array('type_id' => 2, 'article_price' => 500));
+        $ebook = Factory::createArticle(["type_id" => 2, "article_price" => 500]);
         $ebook = $sm->create(array('article_id' => $ebook->get('id'), 'stock_selling_price' => $ebook->get('price')));
 
         // when
@@ -322,7 +323,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
 
         $order = $om->create();
-        $article = $am->create(['type_id' => 2]);
+        $article = Factory::createArticle(["type_id" => 2]);
         $copy = $sm->create([
             'article_id' => $article->get('id'),
             'stock_weight' => 1000

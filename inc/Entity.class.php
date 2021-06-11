@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Service\Mailer;
 use Biblys\Service\Log;
 
@@ -176,6 +177,17 @@ class Entity implements ArrayAccess, Iterator, Countable
     {
         return json_encode($this->_attributes);
     }
+
+    /**
+     * Validates an entity based only on it's internal properties
+     * CANNOT call it's manager or any other entity manager
+     * CANNOT make any database query
+     * Called after an entity was fetched from database
+     * Throws MalformedEntityFetchedException
+     */
+    public function validateOnFetch(): void
+    {
+    }
 }
 
 class EntityManager
@@ -296,8 +308,10 @@ class EntityManager
         $qu = self::prepareAndExecute($query, $params);
 
         $entities = array();
-        while ($entity = $qu->fetch(PDO::FETCH_ASSOC)) {
-            $entities[] = new $this->object($entity, $withJoins);
+        while ($row = $qu->fetch(PDO::FETCH_ASSOC)) {
+            $entity = new $this->object($row, $withJoins);
+            $entity->validateOnFetch();
+            $entities[] = $entity;
         }
 
         return $entities;
@@ -532,7 +546,7 @@ class EntityManager
 
         // Build update query from modified fields
         $i = 0;
-        $updatedEntity = new $this->object([]);
+        $updatedProperties = [];
         foreach ($entity as $property => $value) {
             if (is_object($value)) {
                 continue;
@@ -564,7 +578,6 @@ class EntityManager
                 }
             }
             ++$i;
-            $updatedEntity->set($property, $value);
         }
 
         // Update database
@@ -586,7 +599,7 @@ class EntityManager
             }
         }
 
-        return $updatedEntity;
+        return $this->getById($entity->get("id"));
     }
 
     /**

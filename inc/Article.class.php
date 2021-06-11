@@ -1,7 +1,8 @@
 <?php
 
-use Biblys\Isbn\Isbn as Isbn;
-use Biblys\Article\Type as Type;
+use Biblys\Exception\InvalidEntityFetchedException;
+use Biblys\Isbn\Isbn;
+use Biblys\Article\Type;
 
 class Article extends Entity
 {
@@ -70,6 +71,25 @@ class Article extends Entity
         }
 
         parent::__construct($data);
+    }
+
+    /**
+     * @throws InvalidEntityFetchedException
+     */
+    public function validateOnFetch(): void
+    {
+        // An article with an editing user has not been yet fully created
+        if ($this->has("article_editing_user")) {
+            return;
+        }
+
+        if (!$this->has("publisher_id")) {
+            throw new InvalidEntityFetchedException(
+                "missing publisher_id",
+                "Article",
+                $this
+            );
+        }
     }
 
     /**

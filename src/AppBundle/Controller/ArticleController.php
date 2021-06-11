@@ -34,7 +34,9 @@ class ArticleController extends Controller
 
         $request->attributes->set(
             "page_title",
-            $article->get('title').' de '.authors($article->get('authors')).' ('.$article->get('publisher')->get('name').')'
+            $article->get('title').' de '.
+            authors($article->get('authors')).' ('.
+            $article->get('publisher')->get('name').')'
         );
 
         // Opengraph tags

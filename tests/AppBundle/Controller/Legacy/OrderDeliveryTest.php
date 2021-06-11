@@ -4,6 +4,7 @@ namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
+use Biblys\Test\Factory;
 use CartManager;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +26,7 @@ class OrderDeliveryTest extends TestCase
         // given
         $cart = $_V->getCart("create");
         $am  = new ArticleManager();
-        $article = $am->create(["type_id" => 1]);
+        $article = Factory::createArticle();
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
         $cm = new CartManager();

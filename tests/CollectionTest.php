@@ -4,6 +4,8 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Test\Factory;
+
 require_once "setUp.php";
 
 class CollectionTest extends PHPUnit\Framework\TestCase
@@ -147,15 +149,15 @@ class CollectionTest extends PHPUnit\Framework\TestCase
      * Test deleting a collection with articles
      * @depends testGet
      */
-    public function testBeforeDelete(Collection $collection)
+    public function testBeforeDelete()
     {
         $this->expectException("Exception");
         $this->expectExceptionMessage("Impossible de supprimer la collection car des articles y sont associés.");
 
-        $am = new ArticleManager();
         $cm = new CollectionManager();
 
-        $am->create(['collection_id' => $collection->get('id')]);
+        $article = Factory::createArticle();
+        $collection = $article->get("collection");
 
         $cm->delete($collection);
     }
@@ -166,16 +168,17 @@ class CollectionTest extends PHPUnit\Framework\TestCase
      */
     public function testDelete(Collection $collection)
     {
+        // given
         $cm = new CollectionManager();
         $am = new ArticleManager();
-
-        $article = $am->get(['collection_id' => $collection->get('id')]);
+        $article = Factory::createArticle(["collection_id" => $collection->get("id")]);
         $am->delete($article);
 
+        // when
         $cm->delete($collection);
 
+        // then
         $collection = $cm->getById($collection->get('id'));
-
         $this->assertFalse($collection);
     }
 

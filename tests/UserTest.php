@@ -4,6 +4,8 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Test\Factory;
+
 require_once "setUp.php";
 
 class UserTest extends PHPUnit\Framework\TestCase
@@ -99,7 +101,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     public function testHasPurchased(User $user)
     {
         $am = new ArticleManager();
-        $article = $am->create();
+        $article = Factory::createArticle();
 
         $this->assertFalse($user->hasPurchased($article));
 
@@ -221,11 +223,18 @@ class UserTest extends PHPUnit\Framework\TestCase
 
     public function testAddToLibrary()
     {
+        global $site;
+
         // given
+        $publisher = Factory::createPublisher();
+        $site->set("publisher_id", $publisher->get("id"));
         $um = new UserManager();
         $user = $um->create(["user_email" => "customer@biblys.fr"]);
         $am = new ArticleManager();
-        $article = $am->create(["type_id" => 2]);
+        $article = $am->create([
+            "type_id" => 2,
+            "publisher_id" => $publisher->get("id"),
+        ]);
         $sm = new StockManager();
 
         // when

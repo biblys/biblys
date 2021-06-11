@@ -16,11 +16,55 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test creating a copy
+     * @throws Exception
      */
+    public function testValidateOnFetch()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = Factory::createArticle();
+        EntityManager::prepareAndExecute(
+            "UPDATE `articles` SET `publisher_id` = NULL WHERE `article_id` = :id LIMIT 1",
+            ["id" => $article->get("id")]
+        );
+
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityFetchedException");
+        $this->expectExceptionMessage(
+            sprintf("Article %s is invalid: missing publisher_id", $article->get("id"))
+        );
+
+        // when
+        $am->getById($article->get("id"));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testValidateOnFetchIsSkippedIfNoTitle()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = Factory::createArticle();
+        EntityManager::prepareAndExecute(
+            "UPDATE `articles` SET `article_editing_user` = 1, `publisher_id` = NULL WHERE `article_id` = :id LIMIT 1",
+            ["id" => $article->get("id")]
+        );
+
+        // when
+        $article = $am->getById($article->get("id"));
+
+        // then
+        $this->assertInstanceOf(
+            "Article",
+            $article,
+            "should return an Article"
+        );
+    }
+
     public function testCreate()
     {
-        $article = $this->m->create();
+        $article = $this->m->create(["publisher_id" => 1]);
 
         $this->assertInstanceOf('Article', $article);
 
@@ -79,7 +123,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         );
 
         $articleWithoutJoins = $this->m->create([
-            "article_collection" => "Présence du futur"
+            "article_collection" => "Présence du futur",
+            "publisher_id" => 1000,
         ]);
         $this->m->refreshMetadata($articleWithoutJoins);
         $this->assertEquals(
@@ -133,7 +178,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testGetCoverTag()
     {
         $am = new ArticleManager();
-        $article = $am->create(['article_title' => 'Bara Yogoi']);
+        $article = $am->create([
+            "article_title" => "Bara Yogoi",
+            "publisher_id" => 1,
+        ]);
         $article->getCover("object")->setExists(true);
 
         $tag = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "size" => "w250"]);
@@ -359,7 +407,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $rm = new RoleManager();
         $pm = new PeopleManager();
 
-        $article = $am->create([]);
+        $article = $am->create([
+            "publisher_id" => 1,
+        ]);
 
         $people = $pm->create(["people_first_name" => "Luke", "people_last_name" => "Skywalker"]);
         $article->addContributor($people, 1);
@@ -379,8 +429,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $pm = new PeopleManager();
 
-        $article = $am->create([]);
-        $people = $pm->create(["people_first_name" => "Luke", "people_last_name" => "Skywalker"]);
+        $article = $am->create(["publisher_id" => 1]);
+        $people = $pm->create([
+            "people_first_name" => "Luke",
+            "people_last_name" => "Skywalker"
+        ]);
         $article->addContributor($people, 25);
 
         $pm->delete($people);
@@ -391,9 +444,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     * Test getting article contributors
     * @depends testUpdate
     */
-    public function testGetContributors(Article $article)
+    public function testGetContributors()
     {
-        $article = $this->m->create([]);
+        $article = Factory::createArticle(["article_title" => "Rebellion!"], []);
         $this->assertEmpty($article->getContributors());
         $this->assertFalse($article->hasOtherContributors());
 
@@ -466,7 +519,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $sm = new StockManager();
 
-        $article = $am->create();
+        $article = Factory::createArticle();
         $new = $sm->create([
             "article_id" => $article->get('id'),
             "stock_condition" => "Neuf"
@@ -494,7 +547,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $sm = new StockManager();
 
-        $article = $am->create();
+        $article = Factory::createArticle();
         $expensive = $sm->create([
             "article_id" => $article->get('id'),
             "stock_condition" => "Neuf",
@@ -533,7 +586,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testSetGetType()
     {
-        $article = new Article([]);
+        $article = new Article(["publisher_id" => 1]);
         $type = Biblys\Article\Type::getById(1);
 
         $article->setType($type);
@@ -625,7 +678,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         $rm = new RayonManager();
         $pm = new PeopleManager();
-        $article = $this->m->create(["article_title" => "A Book"]);
+        $article = Factory::createArticle();
         $people = $pm->create(["people_last_name" => "An author"]);
         $article->addContributor($people, 1);
 
@@ -665,7 +718,10 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("Le champ Auteurs ne peut pas dépasser 256 caractères.");
 
         $am = new ArticleManager();
-        $article = new Article(['url' => 'article/url']);
+        $article = new Article([
+            "url" => "article/url",
+            "publisher_id" => 1,
+        ]);
         $article->set(
             'article_authors',
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
@@ -687,7 +743,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("L'article doit avoir une url");
 
         $am = new ArticleManager();
-        $article = $am->create([]);
+        $article = $am->create(["publisher_id" => 1]);
 
         $am->update($article);
     }
@@ -696,20 +752,16 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = $am->create(["article_title" => "Légumes du jour"]);
-        $pm = new PeopleManager();
-        $people = $pm->create([
-            "people_first_name" => "Jean-Sol",
-            "people_last_name" => "Partre"
+        $article = Factory::createArticle([
+            "article_title" => "Pénates du soir"
         ]);
-        $article->addContributor($people, 1);
 
         // when
         $article = $am->preprocess($article);
 
         // then
         $this->assertEquals(
-            "jean-sol-partre/legumes-du-jour",
+            "herve-le-terrier/penates-du-soir",
             $article->get('url'),
             "it should generate correct slug for one author"
         );
@@ -719,14 +771,14 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = $am->create(["article_title" => "La Bande à Picsou"]);
         $pm = new PeopleManager();
         $riri = $pm->create(["people_last_name" => "Riri"]);
         $fifi = $pm->create(["people_last_name" => "Fifi"]);
         $loulou = $pm->create(["people_last_name" => "Loulou"]);
-        $article->addContributor($riri, 1);
-        $article->addContributor($fifi, 1);
-        $article->addContributor($loulou, 1);
+        $article = Factory::createArticle(
+            ["article_title" => "La Bande à Picsou"],
+            [$riri, $fifi, $loulou]
+        );
 
         // when
         $article = $am->preprocess($article);
@@ -778,7 +830,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testHasCoverWithCover()
     {
         // given
-        $article = new Article([]);
+        $article = new Article(["publisher_id" => 1]);
         $article->getCover("object")->setExists(true);
 
         // when
@@ -791,7 +843,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testHasCoverWithoutCover()
     {
         // given
-        $article = new Article([]);
+        $article = new Article(["publisher_id" => 1]);
         $article->getCover("object")->setExists(false);
 
         // when

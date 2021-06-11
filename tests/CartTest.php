@@ -101,13 +101,10 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $am = new ArticleManager();
 
-        // Create a fake stock copy
-        $article = $am->create(['type_id' => 1]);
-        $webStock = $sm->create(array(
-            'article_id' => $article->get('id'),
+        $webStock = Factory::createStock([
             'stock_selling_price' => 500,
             'stock_weight' => 100
-        ));
+        ]);
 
         // Try adding it to cart & updating cart
         $cm->addStock($webCart, $webStock);
@@ -147,13 +144,10 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $am = new ArticleManager();
 
-        // Create a fake stock copy
-        $article = $am->create(['type_id' => 1]);
-        $shopStock = $sm->create(array(
-            'article_id' => $article->get('id'),
+        $shopStock = Factory::createStock([
             'stock_selling_price' => 500,
             'stock_weight' => 100
-        ));
+        ]);
 
         // Try adding it to cart & updating cart
         $cm->addStock($shopCart, $shopStock);
@@ -204,12 +198,13 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectException("Exception");
         $this->expectExceptionMessage("Cet article est indisponible.");
 
-        $am = new ArticleManager();
         $sm = new StockManager();
         $cm = new CartManager();
 
-        $article = $am->create(['type_id' => 2, 'article_availability_dilicom' => 6]);
-        $stock = $sm->create(['article_id' => $article->get('id')]);
+        $article = Factory::createArticle(
+            ["type_id" => 2, "article_availability_dilicom" => 6]
+        );
+        Factory::createStock(["article_id" => $article->get("id")]);
         $cart = $cm->create();
 
         $cm->addArticle($cart, $article);
@@ -232,13 +227,19 @@ class CartTest extends PHPUnit\Framework\TestCase
         }
 
         $cart = $cm->create();
-        $this->assertFalse($cart->needsShipping(), "Empty cart don't need shipping");
+        $this->assertFalse(
+            $cart->needsShipping(),
+            "Empty cart don't need shipping"
+        );
 
-        $downloadable = $am->create(["type_id" => 2]);
-        $added = $cm->addArticle($cart, $downloadable);
-        $this->assertFalse($cart->needsShipping(), "Carts with downloadable article don't need shipping");
+        $downloadable = Factory::createArticle(["type_id" => 2]);
+        $cm->addArticle($cart, $downloadable);
+        $this->assertFalse(
+            $cart->needsShipping(),
+            "Carts with downloadable article don't need shipping"
+        );
 
-        $physical = $am->create(["type_id" => 1]);
+        $physical = Factory::createArticle(["type_id" => 1]);
         $cm->addArticle($cart, $physical);
         $this->assertTrue($cart->needsShipping(), "Carts with physical article need shipping");
 
@@ -266,7 +267,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         }
 
         $cart = $cm->create();
-        $article = $am->create(["article_availability_dilicom" => 1]);
+        $article = Factory::createArticle(["article_availability_dilicom" => 1]);
 
         $cm->addArticle($cart, $article);
 
@@ -294,7 +295,7 @@ class CartTest extends PHPUnit\Framework\TestCase
             $not_virtual_stock = true;
         }
 
-        $article = $am->create([
+        $article = Factory::createArticle([
             "article_availability_dilicom" => 1,
             "article_price" => 1000,
         ]);
@@ -358,7 +359,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         }
 
         $cart = $cm->create();
-        $article = $am->create(
+        $article = Factory::createArticle(
             ["article_title" => "Plop", "article_availability_dilicom" => 10]
         );
 

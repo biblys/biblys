@@ -23,10 +23,14 @@ class Factory
 
     /**
      * @param array $attributes
+     * @param People[]|null $authors
      * @return Article
      * @throws Exception
      */
-    public static function createArticle(array $attributes = []): Article
+    public static function createArticle(
+        array $attributes = [],
+        array $authors = null
+    ): Article
     {
         if (!isset($attributes["article_title"])) {
             $attributes["article_title"] = "L'Animalie";
@@ -37,10 +41,20 @@ class Factory
             $attributes["collection_id"] = $collection->get("id");
         }
 
+        if (!isset($attributes["publisher_id"])) {
+            $collection = self::createPublisher();
+            $attributes["publisher_id"] = $collection->get("publisher_id");
+        }
+
         $am = new ArticleManager();
         $article = $am->create($attributes);
-        $author = self::createPeople();
-        $article->addContributor($author, 1);
+
+        if ($authors === null) {
+            $authors = [self::createPeople()];
+        }
+        foreach ($authors as $author) {
+            $article->addContributor($author, 1);
+        }
 
         return $article;
     }
