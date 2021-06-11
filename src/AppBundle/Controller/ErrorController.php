@@ -178,7 +178,7 @@ class ErrorController extends Controller
             $response = new Response();
             $response->setStatusCode(404);
 
-            $this->setPageTitle("Erreur 404");
+            $request->attributes->set("page_title", "Erreur 404");
             $content = '
               <h2>Erreur 404</h2>
               <p>Cette page  n\'existe pas !</p>
