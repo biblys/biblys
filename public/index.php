@@ -128,6 +128,7 @@ $container->getDefinition("dispatcher")
 
 $framework = $container->get("framework");
 $request = Request::createFromGlobals();
+$originalRequest = $request; // used by LegacyController
 $response = $framework->handle($request);
 
 // Set security headers

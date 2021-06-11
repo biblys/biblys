@@ -57,7 +57,8 @@ class ErrorController extends Controller
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\NotFoundHttpException")) {
             $legacyController = new LegacyController();
             try {
-                return $legacyController->defaultAction($request);
+                global $originalRequest;
+                return $legacyController->defaultAction($originalRequest);
             } catch (Exception $exception) {
                 // TODO: find a better way
                 // This is necessary because of legacy controller can throw exceptions
