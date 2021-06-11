@@ -58,7 +58,9 @@ class ErrorController extends Controller
             $legacyController = new LegacyController();
             try {
                 global $originalRequest;
-                return $legacyController->defaultAction($originalRequest);
+                $response = $legacyController->defaultAction($originalRequest);
+                $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
+                return $response;
             } catch (Exception $exception) {
                 // TODO: find a better way
                 // This is necessary because of legacy controller can throw exceptions

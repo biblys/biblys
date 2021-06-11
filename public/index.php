@@ -129,7 +129,18 @@ $container->getDefinition("dispatcher")
 $framework = $container->get("framework");
 $request = Request::createFromGlobals();
 $originalRequest = $request; // used by LegacyController
+/** @var Response $response */
 $response = $framework->handle($request);
+
+// Ugly hack to prevent HttpKernel to set response's status code to 404
+// when request when through the ErrorController and LegacyController
+// because routes does not exist in new controllers
+if (
+    $response->getStatusCode() === 404 &&
+    $response->headers->has("should-reset-status-code-to-200")
+) {
+    $response->setStatusCode(200);
+}
 
 // Set security headers
 $response->headers->set('X-XSS-Protection', '1; mode=block');
