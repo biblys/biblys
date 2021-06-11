@@ -245,7 +245,6 @@ class MainController extends Controller
         global $_V, $site;
 
         $this->auth('admin');
-        $this->setPageTitle('Gestion des raccourcis');
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
@@ -269,6 +268,7 @@ class MainController extends Controller
         }
 
         // Default home page
+        $this->setPageTitle('Gestion des raccourcis');
         return $this->render('AppBundle:Main:adminShortcuts.html.twig', [
             'shortcuts' => $_V->getOpt('shortcuts'),
             'articles' => Entry::findByCategory('articles'),
