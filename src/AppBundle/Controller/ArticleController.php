@@ -32,7 +32,10 @@ class ArticleController extends Controller
             return $this->redirect('/'.$slug);
         }
 
-        $this->setPageTitle($article->get('title').' de '.authors($article->get('authors')).' ('.$article->get('publisher')->get('name').')');
+        $request->attributes->set(
+            "page_title",
+            $article->get('title').' de '.authors($article->get('authors')).' ('.$article->get('publisher')->get('name').')'
+        );
 
         // Opengraph tags
         $opengraphTags = [
@@ -43,7 +46,7 @@ class ArticleController extends Controller
             'description' => truncate(strip_tags($article->get('summary')), '500', '...', true),
         ];
         if ($article->hasCover()) {
-            $opengraphTags['image'] = $article->getCover('url');
+            $opengraphTags['image'] = $article->getCoverUrl();
         }
         if ($article->has('ean')) {
             $opengraphTags['isbn'] = $article->get('ean');
@@ -62,7 +65,7 @@ class ArticleController extends Controller
             'description' => truncate(strip_tags($article->get('summary')), '500', '...', true),
         ];
         if ($article->hasCover()) {
-            $twitterCardsTags['image'] = $article->getCover('url');
+            $twitterCardsTags['image'] = $article->getCoverUrl();
             $twitterCardsTags['image:alt'] = $article->get('title');
         }
         $this->setTwitterCardsTags($twitterCardsTags);
