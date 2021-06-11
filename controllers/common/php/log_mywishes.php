@@ -2,6 +2,9 @@
 
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 $config = new Config();
 $axys = new Client($config->get("axys"));
@@ -9,6 +12,8 @@ $axys = new Client($config->get("axys"));
 $wlm = new WishlistManager();
 $wm = new WishManager();
 $am = new ArticleManager();
+
+$content = "";
 
 // Get or create current wishlist
 $wishlist = $wlm->get(array('user_id' => $_V->get('id'), 'wishlist_current' => 1));
@@ -55,10 +60,12 @@ if (isset($_POST['article_id'])) {
         $p['message'] = "&laquo;&nbsp;" . $article->get('title') . "&nbsp;&raquo a bien été ajouté à votre <a href='/pages/log_mywishes'>liste d'envies</a>.";
     }
 
+    /** @var Request $request */
     if ($request->isXmlHttpRequest()) {
-        die(json_encode($p));
+        return new JsonResponse($p);
     }
-    redirect('/pages/log_wishes', $p);
+
+    return new RedirectResponse(sprintf("/pages/log_wishes?%s", http_build_query($p)));
 }
 
 // Show wish list
@@ -100,7 +107,7 @@ else {
     }
 
 
-    $_ECHO .= '
+    $content .= '
 
 			<div class="pull-right">
 				<button class="btn btn-success" data-toggle="share">
@@ -124,7 +131,7 @@ else {
     $wishes = $_V->getWishes();
 
     if (!count($wishes)) {
-        $_ECHO .= '
+        $content .= '
 				<p class="center">Votre liste d\'envies est vide !</p>
 				<p class="center">Rendez-vous sur la fiche d\'un livre<br>qui vous intéresse et cliquez sur :<br></p>
 				<p class="center">
@@ -139,7 +146,7 @@ else {
 				</p>
 			';
     } else {
-        $_ECHO .= '
+        $content .= '
 				<div class="center">
 
 				</div><br>
@@ -153,5 +160,9 @@ else {
         $_REQ .= ')';
         if ($_SITE['site_publisher']) $_REQ .= ' AND `articles`.`publisher_id` = ' . $_SITE['publisher_id'];
         require_once '_list.php';
+        $content .= $_ECHO;
+        $_ECHO = null;
     }
 }
+
+return new Response($content);
