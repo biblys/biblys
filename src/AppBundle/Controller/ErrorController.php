@@ -218,7 +218,10 @@ class ErrorController extends Controller
         ]);
 
         // FIXME: Use ApiBundle for request excepting json
-        if ($request->headers->get("Accept") === "application/json") {
+        if (
+            $request->headers->get("Accept") === "application/json" ||
+            $request->isXmlHttpRequest()
+        ) {
             return new JsonResponse([
                 "error" => $exception->getMessage(),
                 "file" => $exception->getFile(),
