@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $query = null;
 $terms = null;
-$sql = null;
+$sql = [];
 $_REQ = null;
 $filters = null;
 

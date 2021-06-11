@@ -127,8 +127,8 @@ if (!empty($_GET["q"])) {
     }
 }
 
-if (empty($_REQ)) {
-    $_REQ = "article_id = 0";
+if (!empty($_REQ)) {
+    $_REQ .= " AND ";
 }
 
 // Tri
@@ -187,12 +187,13 @@ $sql_query = "
         `stock_return_date` IS NULL AND 
         `stock_lost_date` IS NULL AND 
         `stock_deleted` IS NULL".$active_stock_query."
-    WHERE $_REQ AND `type_id` != 2 AND `article_deleted` IS NULL
+    WHERE $_REQ `type_id` != 2 AND `article_deleted` IS NULL
     GROUP BY `articles`.`article_id`";
 
 // Compter le nombre de résultats
-$numQ = $_SQL->prepare("SELECT `articles`.`article_id` ".$sql_query) or error($_SQL->errorInfo());
-$numQ->execute(["site_id" => $site->get("id")]);
+$numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
+    "site_id" => $site->get("id"),
+]);
 $num = count($numQ->fetchAll());
 
 // Requête de résultat
