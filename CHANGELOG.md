@@ -1,12 +1,14 @@
 
 # Historique des modifications
 
-### 2.53.1 (DEV)
+### 2.53.1 (11 juin 2021)
 
 Corrections
 
 - Le système de mise à jour automatique fonctionne à nouveau
-- Les articles sans couverture s'affichent correctement
+- Les articles sans image couverture s'affichent correctement
+- L'ajout d'un article à la liste d'envies par un utilisateur non authentifié
+  affiche un message d'erreur
 
 ## 2.53.0 (4 juin 2021)
 
