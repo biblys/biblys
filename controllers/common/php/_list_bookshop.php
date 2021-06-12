@@ -416,7 +416,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
-    $_ECHO .= $covers_lane.'
+    $listContent = $covers_lane.'
 
         <div id="listOptions">
             <span>
@@ -485,3 +485,6 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         <meta property="og:site_name" content="'.$_SITE["site_name"].'"/>
     '.$_og_image;
 }
+
+$_ECHO .= $listContent;
+return $listContent;
