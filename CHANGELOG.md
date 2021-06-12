@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.53.2 (DEV)
+
+Corrections
+
+- Les utilisateurs avec des droits sur un éditeur ne peuvent plus gérer cet
+  éditeur sur un site où l'éditeur n'est pas autorisé
+
 ### 2.53.1 (11 juin 2021)
 
 Corrections
