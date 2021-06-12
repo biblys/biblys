@@ -9,6 +9,8 @@ Corrections
   éditeur sur un site où l'éditeur n'est pas autorisé
 - Le message d'erreur affiché lorsqu'un nouvel article est soumis avec un code
   ISBN invalide a été amélioré
+- Le message d'erreur affiché lorsqu'un nouvel article est soumis avec une url
+  déjà existante a été amélioré
 
 ### 2.53.1 (11 juin 2021)
 

@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Symfony\Component\HttpFoundation\Response;
 use Biblys\Service\Browser;
@@ -217,8 +218,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } catch (IsbnParsingException $exception) {
         throw new BadRequestHttpException(
             sprintf(
-                "Le code EAN %s est invalide. Le validateur a renvoyé l'erreur \"%s\"",
+                "Le code EAN %s est invalide. Le validateur a renvoyé l'erreur : \"%s\".",
                 $request->request->get("article_ean"),
+                $exception->getMessage()
+            )
+        );
+    } catch (InvalidEntityException $exception) {
+        throw new BadRequestHttpException(
+            sprintf(
+                "L'enregistrement de l'article a échoué. Le validateur a renvoyé l'erreur : \"%s\".",
                 $exception->getMessage()
             )
         );
