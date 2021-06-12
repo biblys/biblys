@@ -1,18 +1,21 @@
 <?php
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $content = "";
 
 $pm = new PeopleManager();
+/** @var Request $request */
 $url = $request->query->get('url');
 $people = $pm->get(['people_url' => $url]);
 if (!$people) {
     throw new ResourceNotFoundException('No people found for url '.htmlentities($url));
 }
 
+/** @var Site $site */
 $use_old_controller = $site->getOpt("use_old_people_controller");
 if (!$use_old_controller) {
     return new RedirectResponse("/p/$url/", 301);
@@ -21,6 +24,7 @@ if (!$use_old_controller) {
 
 $p = $people;
 
+/** @var Site $_SITE */
 $_OPENGRAPH = '
     <meta property="og:title" content="'.$p["people_name"].'"/>
     <meta property="og:type" content="author"/>
@@ -77,6 +81,7 @@ if ($people->has('pseudo')) {
 }
 
 // Linked post
+/** @var PDO $_SQL */
 $sql = $_SQL->query("SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `links`.`people_id` = '".$p["people_id"]."'");
 $posts = $sql->fetchAll();
 
@@ -117,18 +122,6 @@ $content .= '
 ';
 
 $content .= '<div id="people-bio">'.$p["people_bio"].'</div>';
-
-// Linked post
-$sql = $_SQL->query("SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `links`.`people_id` = '".$p["people_id"]."'");
-$posts = $sql->fetchAll();
-
-if ($posts) {
-    $posts = array_map(function ($p) {
-        return '<li><a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a></li>';
-    }, $posts);
-
-    $content .= '<h3>À propos</h3><ul>'.implode($posts).'</ul>';
-}
 
 $_REQ = "`article_links` LIKE '%[people:".$p["people_id"]."]%'";
 
