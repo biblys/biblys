@@ -119,11 +119,11 @@ if (!empty($_GET["q"])) {
         }
     }
 
-    foreach ($sql as $s) {
+    foreach ($sql as $offset) {
         if (isset($_REQ)) {
             $_REQ .= ' AND ';
         }
-        $_REQ .= $s;
+        $_REQ .= $offset;
     }
 }
 
@@ -165,11 +165,9 @@ if ($articles_per_page) {
     $npp = $articles_per_page;
 }
 
-if (empty($_GET['s'])) {
-    $_GET['s'] = 0;
-}
-$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$_GET['s'];
-$nextPageNum = $_GET['s'] + $npp;
+$offset = (int) $request->query->get("s", 0);
+$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
+$nextPageNum = $offset + $npp;
 
 $active_stock_query = null;
 $active_stock = $site->getOpt("active_stock");
@@ -232,7 +230,7 @@ $sql = EntityManager::prepareAndExecute("
     ["site_id" => $site->get("id")]
 );
 
-$ix = $_GET['s']; $covers = array(); $table = null;
+$ix = $offset;$covers = [];$table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
     $x['used'] = 0;
