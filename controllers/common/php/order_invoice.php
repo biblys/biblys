@@ -20,11 +20,14 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         $customer = $order->get('customer');
 
         // Check access right
+        /** @var Visitor $_V */
         if ($customer->get('user_id') != $_V->get('id') && !$_V->isAdmin()) {
             throw new AuthException('Accès non autorisé.');
         }
 
         // Calculate customer reference
+        /** @var PDO $_SQL */
+        /** @var Site $_SITE */
         $stock = $_SQL->query("SELECT COUNT(`order_id`) AS `orders`, SUM(`order_amount`) AS `revenue` FROM `orders` WHERE `customer_id` = '".$customer->get('id')."' AND `site_id` = ".$_SITE["site_id"]." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         if ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
             $customer_ref = '<p>Ref. client '.$customer->get('id').'-'.$s["orders"].'-'.round($s["revenue"]/100).'</p>';
@@ -173,6 +176,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     ';
 
+    /** @var Site $site */
     $notice = $site->getOpt('invoice_notice');
     if ($notice) {
         $content .= '<p class="text-center">'.str_replace('\n', '<br/>', $notice).'</p>';
