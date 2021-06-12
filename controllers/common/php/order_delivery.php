@@ -8,15 +8,20 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrderDetailsValidationException extends Exception {};
+class OrderDetailsValidationException extends Exception {}
 
 $config = new Config();
 $axys = new Client($config->get("axys"));
 
 $content = "";
 
+/**
+ * @throws OrderDetailsValidationException
+ * @throws Exception
+ */
 function validateOrderDetails($request) {
     if (empty($request->request->get('order_firstname'))) {
         throw new OrderDetailsValidationException(
@@ -92,6 +97,7 @@ $um = new UserManager();
 $mailer = new Mailer();
 $shm = new ShippingManager();
 
+/** @var Visitor $_V */
 if ($cart = $_V->getCart()) {
 
     $article_count = 0;
@@ -133,6 +139,7 @@ if ($cart = $_V->getCart()) {
     $shipping_mode = 'Offerts';
 
     if ($cart->needsShipping()) {
+        /** @var Request $request */
         $country_id = $request->query->get('country_id');
         $country = $com->getById($country_id);
         if (!$country) {
@@ -168,7 +175,7 @@ if ($cart = $_V->getCart()) {
             if ($country->get('name') === $_V->get('country')) {
                 $selected = " selected";
             }
-            return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
+            return '<option value="'.$country->get('id').'" '.$selected.'>'.$country->get('name').'</option>';
         }, $countries);
 
         $country_input = '
@@ -189,6 +196,7 @@ if ($cart = $_V->getCart()) {
     } else {
 
         // Confirm order
+        /** @var Request $request */
         if ($request->getMethod() == "POST") {
 
             $error = null;
@@ -199,17 +207,18 @@ if ($cart = $_V->getCart()) {
             }
 
             if ($error === null) {
+                /** @var PDO $_SQL */
                 $_SQL->beginTransaction();
 
 
                 /* MAILING */
                 $newsletter_checked = $request->request->get('newsletter', false);
-                $email = $request->request->get('order_email', null);
+                $email = $request->request->get('order_email');
                 if ($newsletter_checked) {
                     $mm = new MailingManager();
                     try {
                         $result = $mm->addSubscriber($email, true);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         // Ignore errors
                     }
                 }
@@ -340,6 +349,7 @@ if ($cart = $_V->getCart()) {
                     $mail['shipping'] = 'Frais de port offerts<br>';
                 }
 
+                /** @var Site $_SITE */
                 $mail['subject'] = $_SITE["site_tag"].' | Commande n° '.$order->get('id');
                 if ($order_update) {
                     $mail['subject'] .= ' (mise à jour)';
@@ -473,6 +483,7 @@ if ($cart = $_V->getCart()) {
                         <td>'.$article_count.'</td>
                     </tr>
         ';
+        /** @var Site $_SITE */
         if ($_SITE["site_shipping_fee"] == 'fr') {
             $content .= '
                         <tr>
@@ -502,6 +513,7 @@ if ($cart = $_V->getCart()) {
             </table>
         ';
 
+        /** @var Site $site */
         $shipping_date = $site->getOpt('shipping_date');
         if ($shipping_date) {
             $content .= '
@@ -676,7 +688,7 @@ if ($cart = $_V->getCart()) {
                     </p>
                     <p>
                         <label for="order_lastname">Nom :</label>
-                        <input type="text" name="order_lastname" id="order_lastname" class="form-control" value="'.$order->get('lastname').'" style="text-transform : uppercase;"; required />
+                        <input type="text" name="order_lastname" id="order_lastname" class="form-control" value="'.$order->get('lastname').'" style="text-transform : uppercase;" required />
                     </p>
                     <br>
 
