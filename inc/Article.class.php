@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Article\Type as Type;
 
@@ -1521,7 +1522,7 @@ class ArticleManager extends EntityManager
     {
 
         if (strlen($article->get('authors')) > 256) {
-            throw new Exception("Le champ Auteurs ne peut pas dépasser 256 caractères.");
+            throw new InvalidEntityException("Le champ Auteurs ne peut pas dépasser 256 caractères.");
         }
 
         // If slug is already used
@@ -1532,16 +1533,21 @@ class ArticleManager extends EntityManager
             ]
         );
         if ($other) {
-            throw new Exception('Il existe déjà un article avec cette l\'url ' . $article->get('url'));
+            throw new InvalidEntityException('Il existe déjà un article avec l\'url ' . $article->get('url'));
         }
     }
 
+    /**
+     * @param Article $article
+     * @throws InvalidEntityException
+     * @throws Exception
+     */
     public function validateBeforeUpdate($article): void
     {
         parent::validateBeforeUpdate($article);
 
         if (!$article->has("url")) {
-            throw new Exception("L'article doit avoir une url.");
+            throw new InvalidEntityException("L'article doit avoir une url.");
         }
     }
 }
