@@ -8,11 +8,14 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderDetailsValidationException extends Exception {};
 
 $config = new Config();
 $axys = new Client($config->get("axys"));
+
+$content = "";
 
 function validateOrderDetails($request) {
     if (empty($request->request->get('order_firstname'))) {
@@ -182,7 +185,7 @@ if ($cart = $_V->getCart()) {
     $total = $total_price + $shipping_fee;
 
     if (empty($article_count)) {
-        $_ECHO .= '<p class="error">Erreur : Votre panier est vide !</p>';
+        $content .= '<p class="error">Erreur : Votre panier est vide !</p>';
     } else {
 
         // Confirm order
@@ -447,17 +450,17 @@ if ($cart = $_V->getCart()) {
             }
         }
 
-        $_ECHO .= '
+        $content .= '
             <h2>'.$_PAGE_TITLE.'</h2>
 
             <h3>R&eacute;capitulatif</h3>
         ';
 
         if (isset($o["order_id"])) {
-            $_ECHO .= '<p class="warning">Les livres du panier seront ajout&eacute;s &agrave; votre <a href="/order/'.$o["order_url"].'">commande en cours</a>.</p><br />';
+            $content .= '<p class="warning">Les livres du panier seront ajout&eacute;s &agrave; votre <a href="/order/'.$o["order_url"].'">commande en cours</a>.</p><br />';
         }
 
-        $_ECHO .= '
+        $content .= '
             <table class="table" style="width: 300px; margin: auto;">
                 <thead>
                     <tr>
@@ -471,7 +474,7 @@ if ($cart = $_V->getCart()) {
                     </tr>
         ';
         if ($_SITE["site_shipping_fee"] == 'fr') {
-            $_ECHO .= '
+            $content .= '
                         <tr>
                             <td class="right">Poids : </td>
                             <td>'.$total_weight.'g</td>
@@ -479,7 +482,7 @@ if ($cart = $_V->getCart()) {
             ';
         }
         if ($cart->needsShipping()) {
-            $_ECHO .= '
+            $content .= '
                     <tr>
                         <td class="right">Sous-total : </td>
                         <td>'.currency($total_price / 100).'</td>
@@ -490,7 +493,7 @@ if ($cart = $_V->getCart()) {
                     </tr>
             ';
         }
-        $_ECHO .= '
+        $content .= '
                     <tr>
                         <td class="right">Montant &agrave; r&eacute;gler : </td>
                         <td>'.currency($total / 100).'</td>
@@ -501,7 +504,7 @@ if ($cart = $_V->getCart()) {
 
         $shipping_date = $site->getOpt('shipping_date');
         if ($shipping_date) {
-            $_ECHO .= '
+            $content .= '
                 <h3>Date d\'expédition</h3>
                 <p>'.$site->getOpt('shipping_date').'</p>
             ';
@@ -509,7 +512,7 @@ if ($cart = $_V->getCart()) {
 
         $form_class = null;
         if (!auth()) {
-            $_ECHO .= '
+            $content .= '
                 <h3>Vos coordonn&eacute;es</h3>
                 <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$axys->getLoginUrl().'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonn&eacute;es.</p>
                 <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="'.$axys->getSignupUrl().'" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonn&eacute;es pour une prochaine commande.</p>
@@ -521,7 +524,7 @@ if ($cart = $_V->getCart()) {
         }
 
         if (isset($error)) {
-            $_ECHO .= '<p class="error">'.$error.'</p>';
+            $content .= '<p class="error">'.$error.'</p>';
         }
 
         $save_data_checkbox = null;
@@ -617,7 +620,7 @@ if ($cart = $_V->getCart()) {
 
         if ($previousOrder) {
             $url = '/pages/order_delivery?country_id='.$country_id.'&shipping_id='.$shipping_id.'&reuse=1';
-            $_ECHO .= '
+            $content .= '
                 <div class="previous-order">
                     <p>
                         <span class="fa fa-lightbulb-o"></span>
@@ -663,7 +666,7 @@ if ($cart = $_V->getCart()) {
             $order->set('comment', $request->request->get('order_comment'));
         }
 
-        $_ECHO .= '
+        $content .= '
             <form id="orderForm" method="post" class="order-delivery-form fieldset check '.$form_class.'">
                 <fieldset>
                     <legend>Vos coordonnées</legend>
@@ -728,5 +731,7 @@ if ($cart = $_V->getCart()) {
         ';
     }
 } else {
-    $_ECHO .= '<p class="error">Votre panier est vide !</p>';
+    $content .= '<p class="error">Votre panier est vide !</p>';
 }
+
+return new Response($content);
