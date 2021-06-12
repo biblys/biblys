@@ -92,7 +92,7 @@ class ErrorController extends Controller
             ]);
         } else {
             $response = new Response('
-            <div class="text-center">
+            <div>
                 <h1>Error: Bad request</h1>
                 <p>' . $exception->getMessage() . '</p>
             </div>
