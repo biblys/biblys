@@ -10,6 +10,7 @@ $colspan = 2;
 
 $content = "";
 
+/** @var Order $order */
 if ($order = $om->get(array('order_url' => $_GET['url']))) {
     $_PAGE_TITLE = 'Facture n&deg; '.$order->get('id');
 
@@ -113,7 +114,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                 '.$order->get('address1').'<br>
                 '.($order->has('address2') ? $order->get('address2').'<br>' : null).'
                 '.$order->get('postalcode').' '.$order->get('city').'<br>
-                '.($order->has('country') ? $order->get('country')->get('name') : null).'
+                '.($order->getCountryName()).'
             </p>
             <p>'.$order->get('order_email').'</p>
         </div>
