@@ -1,7 +1,10 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/** @var Visitor $_V */
 if (!$_V->isAdmin()) {
     trigger_error("Vous n'avez pas le droit d'accéder à cette page.");
 }
@@ -16,8 +19,10 @@ $content = '
     <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
 ';
 
+/** @var Request $request */
 $newList = $request->request->get('new_list');
 if ($newList) {
+    /** @var Liste $list */
     $list = $lm->create([
         'user_id' => $_V->get('user_id'),
     ]);
@@ -37,7 +42,7 @@ if ($newList) {
     $list->set('list_url', $listUrl);
     $lm->update($list);
 
-    redirect('/list/'.$listUrl);
+    return new RedirectResponse('/list/'.$listUrl);
 }
 
 $content .= '
@@ -98,7 +103,7 @@ if ($list) {
             $linm->delete($link);
         }
         $lm->delete($list);
-        redirect('/pages/list?deleted=1');
+        return new RedirectResponse('/pages/list?deleted=1');
     }
 
     $Total = 0;
@@ -153,7 +158,7 @@ if ($list) {
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'return' and auth('admin')) {
-        redirect('/list/'.$l['list_url'].'?returned=1');
+        return new RedirectResponse('/list/'.$l['list_url'].'?returned=1');
     }
 
     $_PAGE_TITLE = $list->get('title');
