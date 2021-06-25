@@ -1,6 +1,12 @@
 
 # Historique des modifications
 
+### 2.53.3 (25 juin 2021)
+
+Corrections
+
+- L'ajout d'un exemplaire dans une liste n'envoie plus plusieurs requêtes
+
 ### 2.53.2 (18 juin 2021)
 
 Corrections

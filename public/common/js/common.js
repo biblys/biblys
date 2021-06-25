@@ -282,19 +282,26 @@ function sleep(ms) {
 function autocomplete(field) {
   $('.autocompleteResults').remove();
   field.addClass('loading');
-  field_value = field.val();
-  field_id = field.attr('id');
-  field_data = field.data();
-  field_data.query = field_value;
-  if (field_value.length >= 3) {
-    $.post('/x/' + field_id, field_data, function(data) {
-      field.removeClass('loading');
-      if (data.indexOf('ERROR') >= 0) alert(data.split('>')[1]);
-      else {
-        field.after('<ul class="autocompleteResults">' + data + '</ul>');
-      }
-    });
+  const searchQuery = field.val();
+  const entityToSearch = field.attr('id');
+
+  if (searchQuery.length < 3) {
+    return;
   }
+
+  fetch(`/x/${entityToSearch}?query=${searchQuery}`)
+    .then((response) => {
+      field.removeClass('loading');
+      return response.text();
+    })
+    .then((data) => {
+      if (data.indexOf('ERROR') >= 0) {
+        alert(data.split('>')[1]);
+        return;
+      }
+
+      field.after('<ul class="autocompleteResults">' + data + '</ul>');
+    });
 }
 
 function choose(field, id, value) {
@@ -662,19 +669,21 @@ function reloadEvents(scope) {
 
   /* AUTOCOMPLETE */
 
-  var ac_timer;
-  $('.autocomplete', scope).keyup(function() {
-    // rechercher un article
-    var field = $(this);
-    if (field.val().length >= 3) {
-      if (ac_timer) {
-        clearTimeout(ac_timer);
+  let ac_timer;
+  $('.autocomplete.event')
+    .keyup(function() {
+      const field = $(this);
+      if (field.val().length >= 3) {
+        if (ac_timer) {
+          clearTimeout(ac_timer);
+        }
+        ac_timer = setTimeout(function() {
+          autocomplete(field);
+        }, 500);
       }
-      ac_timer = setTimeout(function() {
-        autocomplete(field);
-      }, 500);
-    }
-  });
+    })
+    .removeClass('event');
+
   // Fermer autocomplete suggestion
   $('body').click(function() {
     $('.autocompleteResults').hide();

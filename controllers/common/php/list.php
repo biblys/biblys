@@ -166,7 +166,15 @@ if ($list) {
                 <h2><a href="/list/'.$l['list_url'].'">'.$_PAGE_TITLE.'</a></h2>
 
                 <label for="list">Ajouter &agrave; la liste :</label>
-                <input type="text" name="list" id="list" class="autocomplete verylong" placeholder="Titre, auteur, &eacute;diteur, ISBN..." data-list_id="'.$l['list_id'].'" autofocus />
+                <input 
+                    type="text" 
+                    name="list" 
+                    id="list" 
+                    class="autocomplete event verylong" 
+                    placeholder="Titre, auteur, éditeur, ISBN..." 
+                    data-list_id="'.$l['list_id'].'" 
+                    autofocus 
+                />
                 <input type="hidden" id="var1" value="'.$l['list_id'].'" />
                 <input type="hidden" id="list_id" value="'.$l['list_id'].'" />
                 <br><br>
