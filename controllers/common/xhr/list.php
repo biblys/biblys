@@ -122,7 +122,7 @@ if ($query) {
             $article = $stock->getArticle();
 
             echo '
-                <tr id="link_'.$stock->get("link_id").'">
+                <tr id="link_'.$link->get("id").'">
                     <td>
                         <img src="/common/img/'.$led.'.png" width="8" height="8"
                             title="'.$ledTitle.'">
@@ -152,7 +152,7 @@ if ($query) {
                         </a>
                         <img src="/common/icons/delete.svg" width=16 class="pointer"
                             alt="Retirer de la liste" title="Retirer de la liste"
-                            onClick="delFromList('.$stock->get("link_id").')" />
+                            onClick="delFromList('.$link->get("id").')" />
                     </td>
                 </tr>
             ';
