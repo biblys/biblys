@@ -21,6 +21,8 @@ Corrections
   déjà existante a été amélioré
 - Il est à nouveau possible de retirer un exemplaire d'une liste immédiatement
   après l'y avoir ajouté
+- Les éditeurs filtrés n'apparaissent plus dans les propositions lors de 
+  l'association d'une collection à une fiche article
 
 ### 2.53.1 (11 juin 2021)
 
