@@ -191,7 +191,11 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
             $content .= '
                 <form id="incident" method="post" class="hidden" data-title="Signaler un incident">
                     <fieldset>
-                        <p>Nous voulons que vous soyez totalement satisfait' . userE() . ' de votre commande. En cas de probl&egrave;me, vous pouvez la renvoyer int&eacute;gralement ou en partie &agrave; l\'adresse ci-dessous sous 7 jours. Le montant des livres retourn&eacute;s, ainsi que les frais de retour, vous seront rembours&eacute;s int&eacute;gralement.</p>
+                        <p>
+                            Nous voulons que vous soyez totalement satisfait·e de votre commande. En cas de
+                            problème, vous pouvez la renvoyer intégralement ou en partie à l\'adresse ci-dessous sous 7
+                            jours. Le montant des livres retournés vous sera remboursés intégralement.
+                        </p>
                         <p class="center"><strong>' . $_SITE["site_title"] . '<br />' . str_replace("|", "<br />", $_SITE["site_address"]) . '</strong></p>
                         <p>Merci d\'indiquer les raisons pour lesquelles vous souhaitez renvoyer votre commande :</p>
                         <textarea name="incident"></textarea>

@@ -6,6 +6,8 @@
 Corrections
 
 - L'ajout d'un exemplaire dans une liste n'envoie plus plusieurs requêtes
+- Le message affiché lors d'une demande de remboursement ne mentionne plus la
+  gratuité des frais de port
 
 ### 2.53.2 (18 juin 2021)
 
