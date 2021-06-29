@@ -14,25 +14,13 @@ if ($searchTerm) {
     $publisher->bindValue(':term', '%'.$searchTerm.'%', PDO::PARAM_STR);
     $publisher->execute();
 
-    $allowedPublisherIds = [];
-    $publisherFilter = $site->getOpt("publisher_filter");
-    if ($publisherFilter) {
-        $allowedPublisherIds = explode(",", $publisherFilter);
-    }
-
     while ($p = $publisher->fetch()) {
-        // If collection is not from an allowed publisher, skip
-        if (
-            count($allowedPublisherIds) >= 1 &&
-            !in_array($p["publisher_id"], $allowedPublisherIds)
-        ) {
-            continue;
-        }
-
         $json[$i]["label"] = $p["publisher_name"];
         $json[$i]["value"] = $p["publisher_name"];
         $json[$i]["publisher_name"] = $p["publisher_name"];
         $json[$i]["publisher_id"] = $p["publisher_id"];
+        /** @var Site $site */
+        $json[$i]["allowed_on_site"] = $site->allowsPublisherWithId($p["publisher_id"]) ? 1 : 0;
         $i++;
     }
     $json[$i]["label"] = '=> Créer : '.$_GET["term"];

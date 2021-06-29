@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.53.4 (DEV)
+
+Corrections
+
+- L'association d'un article à un éditeur filtré ou à une collection appartenant
+  à un éditeur filtré est à nouveau possible mais affiche une erreur claire
+
 ### 2.53.3 (25 juin 2021)
 
 Corrections
