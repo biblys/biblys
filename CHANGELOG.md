@@ -7,6 +7,7 @@ Corrections
 
 - L'association d'un article à un éditeur filtré ou à une collection appartenant
   à un éditeur filtré est à nouveau possible mais affiche une erreur claire
+- La recherche d'un client par nom ne provoque plus d'erreur  
 
 ### 2.53.3 (25 juin 2021)
 
