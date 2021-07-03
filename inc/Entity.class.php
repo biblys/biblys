@@ -277,6 +277,9 @@ class EntityManager
 
         $offset = null;
         if (isset($options['offset'])) {
+            if ($options["offset"] < 0) {
+                throw new InvalidArgumentException("Offset options cannot be less than 0.");
+            }
             $offset = ' OFFSET '.$options['offset'];
         }
 
