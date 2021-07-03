@@ -28,7 +28,7 @@ class PostCategoryController extends Controller
             throw new NotFoundException("Category $slug not found.");
         }
 
-        $this->setPageTitle($category->get("name"));
+        $request->attributes->set("page_title", $category->get("name"));
 
         $queryParams = [
             "category_id" => $category->get('id'),
