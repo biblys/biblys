@@ -125,33 +125,6 @@ class Cart extends Entity
         return self::buildOneLine();
     }
 
-    public function contains($type, $id)
-    {
-        if ($type === "stock") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.0",
-                "Use Cart->containsStock instead."
-            );
-            $sm = new StockManager();
-            $stock = $sm->getById($id);
-            return $this->containsStock($stock);
-        }
-
-        if ($type === "article") {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.53.0",
-                "Use Cart->containsArticle instead."
-            );
-            $am = new ArticleManager();
-            $article = $am->getById($id);
-            return $this->containsArticle($article);
-        }
-
-        throw new InvalidArgumentException("Unknown type $type");
-    }
-
     /**
      * Returns true if the cart contains stock
      *
