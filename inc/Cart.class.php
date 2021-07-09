@@ -1,5 +1,7 @@
 <?php
 
+use Entity\Exception\CartException;
+
 class Cart extends Entity
 {
     protected $prefix = 'cart';
@@ -403,10 +405,10 @@ class CartManager extends EntityManager
      * Add an article to cart (create copy if needed)
      * @param Cart $cart
      * @param Article $article
-     * @return boolean
+     * @return bool
      * @throws Exception
      */
-    public function addArticle(Cart $cart, $article, CFReward $reward = null)
+    public function addArticle(Cart $cart, $article, CFReward $reward = null): bool
     {
 
         $sm = new StockManager();
@@ -415,7 +417,7 @@ class CartManager extends EntityManager
         if (is_int($article)) {
             $article = $am->getById($article);
             if (!$article) {
-                throw new Exception('Article ' . $article_id . ' inexistant.');
+                throw new CartException('Article ' . $article_id . ' inexistant.');
             }
         }
         $a = $article;
@@ -427,7 +429,7 @@ class CartManager extends EntityManager
         }
 
         if ($article->isDownloadable() && !$article->isPurchasable()) {
-            throw new Exception('Cet article est indisponible.');
+            throw new CartException('Cet article est indisponible.');
         }
 
         global $_V;
@@ -473,16 +475,16 @@ class CartManager extends EntityManager
         if ($this->site->getOpt('virtual_stock') || $reward && !$reward->isLimited()) {
 
             if (!$article->isPublished() && !$article->isPreorderable()) {
-                throw new Exception('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
+                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est pas encore disponible.');
             }
 
             if ($article->isSoldOut()) {
-                throw new Exception('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
+                throw new CartException('L\'article <a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a> n\'a pas pu être ajouté au panier car il n\'est plus disponible.');
             }
 
             if ($article->isPrivatelyPrinted()) {
                 $title = $article->get("title");
-                throw new Exception(
+                throw new CartException(
                     "L'article $title n'a pas pu être ajouté au panier car il est hors commerce."
                 );
             }

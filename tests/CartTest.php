@@ -259,11 +259,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $am = new ArticleManager();
 
-        $not_virtual_stock = false;
-        if (!$site->getOpt('virtual_stock')) {
-            $site->setOpt('virtual_stock', 1);
-            $not_virtual_stock = true;
-        }
+        $site->setOpt('virtual_stock', 1);
 
         $cart = $cm->create();
         $article = $am->create(["article_availability_dilicom" => 1]);
@@ -272,9 +268,32 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         $this->assertTrue($cart->containsArticle($article));
 
-        if ($not_virtual_stock) {
-            $site->setOpt('virtual_stock', 0);
-        }
+    }
+
+    /**
+     * Test adding article from virtual stock
+     * @throws Exception
+     */
+    public function testAddArticleForUnreleaseArticle()
+    {
+        global $site;
+
+        // given
+        $this->expectException("Entity\Exception\CartException");
+        $this->expectExceptionMessage("L'article <a href=\"/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible.");
+
+        // given
+        $cm = new CartManager();
+        $site->setOpt('virtual_stock', 1);
+        $cart = $cm->create();
+        $tomorrow = new DateTime("tomorrow");
+        $article = Factory::createArticle([
+            "article_pubdate" => $tomorrow->format("Y-m-d"),
+            "article_availability_dilicom" => 1
+        ]);
+
+        // when
+        $cm->addArticle($cart, $article);
     }
 
     /**
