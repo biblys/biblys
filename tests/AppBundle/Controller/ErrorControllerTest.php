@@ -6,6 +6,7 @@ use Framework\Exception\ServiceUnavailableException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -106,6 +107,35 @@ class ErrorControllerTest extends TestCase
             503,
             $response->getStatusCode(),
             "it should response with HTTP status 503"
+        );
+    }
+
+    public function testHandleConflict()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+        $exception = new ConflictHttpException("Cannot add article to cart because it is unavailable.");
+
+        // when
+        $response = $controller->exception($request, $exception);
+
+        // then
+        $this->assertEquals(
+            409,
+            $response->getStatusCode(),
+            "it should response with HTTP status 409"
+        );
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\JsonResponse",
+            $response,
+            "it should return a JsonResponse"
+        );
+        $this->assertStringContainsString(
+            "Cannot add article to cart because it is unavailable.",
+            $response->getContent(),
+            "it should contain error message"
         );
     }
 

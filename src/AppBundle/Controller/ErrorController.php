@@ -47,6 +47,10 @@ class ErrorController extends Controller
             return $this->handleUnauthorizedAccess($request, $exception, $axys);
         }
 
+        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
+            return $this->handleConflictException($exception);
+        }
+
         if (is_a($exception, "Framework\Exception\ServiceUnavailableException")) {
             return $this->handleServiceUnavailable();
         }
@@ -197,6 +201,19 @@ class ErrorController extends Controller
             $response->setContent($content);
         }
         return $response;
+    }
+
+    /**
+     * HTTP 409
+     *
+     * @param Exception $exception
+     * @return JsonResponse
+     */
+    private function handleConflictException(Exception $exception): JsonResponse
+    {
+        return new JsonResponse([
+            "error" => $exception->getMessage(),
+        ], 409);
     }
 
     /**
