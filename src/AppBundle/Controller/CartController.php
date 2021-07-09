@@ -7,6 +7,7 @@ use ArticleManager;
 use Cart;
 use CartManager;
 use CFRewardManager;
+use Entity\Exception\CartException;
 use Framework\Controller;
 use StockManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CartController extends Controller
 {
@@ -27,10 +29,14 @@ class CartController extends Controller
             );
         }
 
-        $cm = new CartManager();
-        $cart = $this->user->getCart("create");
-        $cm->addArticle($cart, $article);
-        $cm->updateFromStock($cart);
+        try {
+            $cm = new CartManager();
+            $cart = $this->user->getCart("create");
+            $cm->addArticle($cart, $article);
+            $cm->updateFromStock($cart);
+        } catch(CartException $exception) {
+            throw new ConflictHttpException($exception->getMessage());
+        }
 
         return new JsonResponse();
     }

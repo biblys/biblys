@@ -47,6 +47,46 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    public function testAddArticleNotYetAvailable()
+    {
+        global $_V, $site;
+
+        $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
+        $this->expectExceptionMessage(
+            "L'article <a href=\"/\">L'Animalie</a> n'a pas pu être ajouté au panier car il n'est pas encore disponible."
+        );
+
+        // given
+        $cm = new CartManager();
+        $site->setOpt("virtual_stock", 1);
+        $controller = new CartController();
+        $cart = $_V->getCart("create");
+        $cm->vacuum($cart);
+        $tomorrow = new DateTime('tomorrow');
+        $article = Factory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
+
+        // when
+        $response = $controller->addArticleAction(
+            $article->get("id")
+        );
+
+        // then
+        $this->assertEquals(
+            409,
+            $response->getStatusCode(),
+            "it should respond with http 409"
+        );
+        $this->assertStringContainsString(
+            "L'article n'a pas pu être ajouté au panier car il n'est pas encore disponible.",
+            $response->getContent(),
+            "it should contain error message"
+        );
+        $this->assertFalse(
+            $cart->containsArticle($article),
+            "it should not have added article to cart"
+        );
+    }
+
     public function testAddStockCopy()
     {
         global $_V, $site;
