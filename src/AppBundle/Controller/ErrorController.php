@@ -47,6 +47,10 @@ class ErrorController extends Controller
             return $this->handleUnauthorizedAccess($request, $exception, $axys);
         }
 
+        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
+            return $this->handleMethodNotAllowed($exception);
+        }
+
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
             return $this->handleConflictException($exception);
         }
@@ -201,6 +205,19 @@ class ErrorController extends Controller
             $response->setContent($content);
         }
         return $response;
+    }
+
+    /**
+     * HTTP 405
+     *
+     * @param Exception $exception
+     * @return JsonResponse
+     */
+    private function handleMethodNotAllowed(Exception $exception): JsonResponse
+    {
+        return new JsonResponse([
+            "error" => $exception->getMessage(),
+        ], 405);
     }
 
     /**

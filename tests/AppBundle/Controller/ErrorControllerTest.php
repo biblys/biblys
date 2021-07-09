@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -107,6 +108,35 @@ class ErrorControllerTest extends TestCase
             503,
             $response->getStatusCode(),
             "it should response with HTTP status 503"
+        );
+    }
+
+    public function testMethodNotAllowed()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $request->headers->set("Accept", "application/json");
+        $exception = new MethodNotAllowedHttpException(["GET"],"Method PUT is not allowed");
+
+        // when
+        $response = $controller->exception($request, $exception);
+
+        // then
+        $this->assertEquals(
+            405,
+            $response->getStatusCode(),
+            "it should response with HTTP status 405"
+        );
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\JsonResponse",
+            $response,
+            "it should return a JsonResponse"
+        );
+        $this->assertStringContainsString(
+            "Method PUT is not allowed",
+            $response->getContent(),
+            "it should contain error message"
         );
     }
 
