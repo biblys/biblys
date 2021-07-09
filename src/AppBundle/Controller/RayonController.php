@@ -6,6 +6,7 @@ use Biblys\Isbn\Isbn as Isbn;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class RayonController extends Controller
@@ -39,10 +40,14 @@ class RayonController extends Controller
 
         $request->attributes->set("page_title", $rayon->get('name'));
 
+        $pageNumber = $request->query->get('p', 0);
+        if (!is_int($pageNumber) || $pageNumber < 0) {
+            throw new BadRequestHttpException("Page number must be a positive integer");
+        }
+
         // Pagination
-        $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromRayon($rayon);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalCount);
 
         $articles = $am->getAllFromRayon($rayon, [
             'order' => 'article_pubdate',
