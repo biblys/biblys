@@ -10,13 +10,13 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 
 class RayonController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $this->auth('admin');
 
         $rm = $this->entityManager('Rayon');
 
-        $this->setPageTitle('Rayons');
+        $request->attributes->set("page_title", "Rayons");
 
         $rayons = $rm->getAll([], ['order' => 'rayon_name']);
 
@@ -37,7 +37,7 @@ class RayonController extends Controller
             throw new NotFoundException("Rayon $url not found.");
         }
 
-        $this->setPageTitle($rayon->get('name'));
+        $request->attributes->set("page_title", $rayon->get('name'));
 
         // Pagination
         $page = (int) $request->query->get('p', 0);
@@ -71,7 +71,7 @@ class RayonController extends Controller
             throw new NotFoundException("Rayon $id not found.");
         }
 
-        $this->setPageTitle('Modifier le rayon '.$rayon->get('name'));
+        $request->attributes->set("page_title", 'Modifier le rayon '.$rayon->get('name'));
 
         if ($request->getMethod() == 'POST') {
             $rayon->set('rayon_name', $request->request->get('name'))
@@ -99,7 +99,7 @@ class RayonController extends Controller
 
         $rayon = new \Rayon([]);
 
-        $this->setPageTitle('Créer un nouveau rayon ');
+        $request->attributes->set("page_title", 'Créer un nouveau rayon ');
 
         $error = null;
         if ($request->getMethod() == 'POST') {
@@ -211,14 +211,14 @@ class RayonController extends Controller
             ]));
         }
 
-        $this->setPageTitle('Ajouter au rayon '.$rayon->get('name'));
+        $request->attributes->set("page_title", 'Ajouter au rayon '.$rayon->get('name'));
 
         $types = \Biblys\Article\Type::getAll();
 
         return $this->render('AppBundle:Rayon:addArticle.html.twig', [
             'rayon' => $rayon,
-            'added' => $request->query->get('added', []),
-            'not_added' => $request->query->get('not_added', []),
+            'added' => $request->query->get('added', null),
+            'not_added' => $request->query->get('not_added', null),
             'types' => $types,
         ]);
     }
