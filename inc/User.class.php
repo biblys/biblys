@@ -132,7 +132,8 @@ class User extends Entity
     /**
      * Check if User has article in cart.
      *
-     * @param int $article_id
+     * @param $type
+     * @param $id
      *
      * @return bool
      */
@@ -149,7 +150,13 @@ class User extends Entity
             return $cart->containsStock($stock);
         }
 
-        return $cart->contains($type, $id);
+        if ($type === "article") {
+            $am = new ArticleManager();
+            $article = $am->getById($id);
+            return $cart->containsArticle($article);
+        }
+
+        throw new InvalidArgumentException("Unknown type $type");
     }
 
     /**
