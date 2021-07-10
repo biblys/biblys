@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.53.5 (10 juillet 2021)
+
+Corrections
+
+- L'appel d'une page paginée avec un numéro de page inférieur à zéro ne
+  provoque plus une erreur serveur
+
 ### 2.53.4 (2 juillet 2021)
 
 Corrections
