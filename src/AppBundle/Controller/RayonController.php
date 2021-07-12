@@ -40,8 +40,8 @@ class RayonController extends Controller
 
         $request->attributes->set("page_title", $rayon->get('name'));
 
-        $pageNumber = $request->query->get('p', 0);
-        if (!is_int($pageNumber) || $pageNumber < 0) {
+        $pageNumber = (int) $request->query->get("p", 0);
+        if ($pageNumber < 0) {
             throw new BadRequestHttpException("Page number must be a positive integer");
         }
 
