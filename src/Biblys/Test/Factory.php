@@ -200,6 +200,10 @@ class Factory
         $user->setEmail($attributes["email"]);
         $user->setUsername($attributes["username"]);
         $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
+
+        if (isset($attributes["email_key"])) {
+            $user->setEmailKey($attributes["email_key"]);
+        }
         $user->save();
 
         return $user;
