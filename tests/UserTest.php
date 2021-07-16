@@ -5,6 +5,7 @@
 */
 
 use Biblys\Test\Factory;
+use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
 
@@ -112,113 +113,6 @@ class UserTest extends PHPUnit\Framework\TestCase
         ]);
 
         $this->assertTrue($user->hasPurchased($article));
-    }
-
-    public function testAuthenticateWithCorrectEmail()
-    {
-        // given
-        $um = new UserManager();
-        $user = $um->create([
-            "user_email" => "hackerman@biblys.fr",
-            "user_screen_name" => "hackerman",
-            "user_new_password" => "password",
-        ]);
-
-        // when
-        $user = $um->authenticate("hackerman@biblys.fr", "password");
-
-        // then
-        $this->assertInstanceOf("User", $user, "it should return a user");
-        $this->assertEquals(
-            "hackerman",
-            $user->get("screen_name"),
-            "it should return the correct user"
-        );
-    }
-
-    public function testAuthenticateWithCorrectUsername()
-    {
-        // given
-        $um = new UserManager();
-        $user = $um->create([
-            "user_email" => "graceomalley@biblys.fr",
-            "user_screen_name" => "grace",
-            "user_new_password" => "password",
-        ]);
-
-        // when
-        $user = $um->authenticate("hackerman", "password");
-
-        // then
-        $this->assertInstanceOf("User", $user, "it should return a user");
-        $this->assertEquals(
-            "hackerman",
-            $user->get("screen_name"),
-            "it should return the correct user"
-        );
-    }
-
-    public function testAuthenticateWithIncorrectEmail()
-    {
-        // given
-        $um = new UserManager();
-        $user = $um->create([
-            "user_email" => "user@biblys.fr",
-            "user_screen_name" => "user",
-            "user_new_password" => "password",
-        ]);
-
-        // when
-        $user = $um->authenticate("youseur@biblys.fr", "password");
-
-        // then
-        $this->assertEquals(
-            false,
-            $user,
-            "it should return false"
-        );
-    }
-
-    public function testAuthenticateWithIncorrectUsername()
-    {
-        // given
-        $um = new UserManager();
-        $user = $um->create([
-            "user_email" => "user2@biblys.fr",
-            "user_screen_name" => "User Two",
-            "user_new_password" => "password",
-        ]);
-
-        // when
-        $user = $um->authenticate("Youzeur Tou", "password");
-
-        // then
-        $this->assertEquals(
-            false,
-            $user,
-            "it should return false"
-        );
-    }
-
-    public function testAuthenticateWithIncorrectPassword()
-    {
-        // given
-        $um = new UserManager();
-        $user = $um->create([
-            "user_email" => "user3@biblys.fr",
-            "user_screen_name" => "User Three",
-            "user_new_password" => "password",
-        ]);
-
-        // when
-        $user = $um->authenticate("User Three", "passw0rd");
-
-        // then
-        $this->assertEquals(
-            false,
-            $user,
-            "it should return false"
-        );
     }
 
     public function testAddToLibrary()

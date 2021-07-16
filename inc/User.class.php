@@ -461,50 +461,6 @@ class UserManager extends EntityManager
     }
 
     /**
-     * Authenticate user from given credentials.
-     *
-     * @param string $login    can be username or e-mail
-     * @param string $password raw password
-     * @param User returns User if successfully authentificated, false otherwise
-     */
-    public function authenticate($login, $password)
-    {
-        try {
-            return $this->_authenticate($login, $password);
-        } catch (InvalidCredentialsException $exception) {
-            Log::security("ERROR", 'Login error: user unknown for login ' . $login);
-            return false;
-        }
-    }
-
-    /**
-     * Throw if login and password does not match a password
-     *
-     * @param string $login    can be username or e-mail
-     * @param string $password raw password
-     *
-     * @return User
-     *
-     * @throws InvalidCredentialsException
-     */
-    private function _authenticate($userNameOrEmail, $password): User
-    {
-        $userByEmail = $this->get(["user_email" => $userNameOrEmail]);
-        $userByUsername = $this->get(["user_screen_name" => $userNameOrEmail]);
-        $user = $userByEmail ? $userByEmail : $userByUsername;
-
-        if (!$user) {
-            throw new InvalidCredentialsException("User unknown for login $userNameOrEmail");
-        }
-
-        if (!password_verify($password, $user->get("password"))) {
-            throw new InvalidCredentialsException("Wrong password for login $userNameOrEmail");
-        }
-
-        return $user;
-    }
-
-    /**
      * Send a mail to the user.
      *
      * @param User   $user    The mail's recipient
