@@ -2,7 +2,10 @@
 
 namespace Model;
 
+use Biblys\Service\Validator\Validator;
+use Exception;
 use Model\Base\User as BaseUser;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'users' table.
@@ -27,5 +30,17 @@ class User extends BaseUser
         }
 
         return false;
+    }
+
+    /**
+     * @param ConnectionInterface|null $con
+     * @return bool
+     * @throws Exception
+     */
+    public function preSave(ConnectionInterface $con = null)
+    {
+        Validator::validate($this);
+
+        return true;
     }
 }

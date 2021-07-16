@@ -1548,6 +1548,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <behavior name="validate">
+      <parameter name="rule1" value="{column: email, validator: Email}" />
+    </behavior>
   </table>
   <table name="votes" idMethod="native" phpName="Vote">
     <column name="vote_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

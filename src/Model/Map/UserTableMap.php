@@ -694,6 +694,7 @@ class UserTableMap extends TableMap
     {
         return array(
             'timestampable' => array('create_column' => 'user_created', 'update_column' => 'user_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'validate' => array('rule1' => array ('column' => 'email','validator' => 'Email',), ),
         );
     } // getBehaviors()
 
