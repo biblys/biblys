@@ -12,6 +12,7 @@ use CollectionManager;
 use Exception;
 use Model\Session;
 use Model\ShippingFee;
+use Model\Site;
 use Model\User;
 use Model\Right;
 use Model\SiteQuery;
@@ -280,5 +281,13 @@ class Factory
     {
         $adminUser = Factory::createAdminUser();
         return Factory::createAuthRequest($content, $adminUser);
+    }
+
+    public static function createSite()
+    {
+        $site = new Site();
+        $site->save();
+
+        return $site;
     }
 }
