@@ -197,7 +197,7 @@ class InventoryController
         // Reset all inventory items stocks & delete items with no quantity
         if ($offset === 0) {
             $_SQL->exec("UPDATE inventory_item SET ii_stock = 0 WHERE inventory_id = ".$id);
-            $_SQL->exec("UPDATE inventory_item SET ii_deleted = NOW() WHERE inventory_id = ".$id." AND (ii_quantity = 0 OR ii_quantity IS NULL)");
+            $_SQL->exec("DELETE FROM inventory_item WHERE inventory_id = ".$id." AND (ii_quantity = 0 OR ii_quantity IS NULL)");
         }
 
         // Count all available copies

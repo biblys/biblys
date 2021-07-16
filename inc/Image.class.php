@@ -235,7 +235,7 @@
 			$query = $this->_db->prepare('
 				SELECT `image_id`
 				FROM `images`
-				WHERE '.$q['where'].' AND `image_deleted` IS NULL LIMIT 1');
+				WHERE '.$q['where'].' LIMIT 1');
 			$query->execute($q['params']) or error($query->errorInfo());
 
 			if ($query->fetch(PDO::FETCH_ASSOC)) return true;
@@ -254,7 +254,7 @@
 			$query = $this->_db->prepare('
 				SELECT *
 				FROM `images`
-				WHERE '.$q['where'].' AND `image_deleted` IS NULL
+				WHERE '.$q['where'].'
 				GROUP BY `image_id`');
 			$query->execute($q['params']) or error($query->errorInfo());
 
@@ -389,7 +389,7 @@
 		{
 			try
 			{
-				$delete = $this->_db->query('UPDATE `images` SET `image_deleted` = NOW() WHERE `image_id` = '.$image->get('image_id').' LIMIT 1');
+				$delete = $this->_db->query('DELETE FROM `images` WHERE `image_id` = '.$image->get('image_id').' LIMIT 1');
 			}
 			catch (PDOException $e)
 			{

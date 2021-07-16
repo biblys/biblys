@@ -285,7 +285,7 @@ class CartManager extends EntityManager
             $params['site_id'] = $this->site['site_id'];
 
             $query = 'SELECT * FROM `carts`
-                    WHERE `cart_deleted` IS NULL AND `carts`.`site_id` = :site_id ' . $query . '
+                    WHERE `carts`.`site_id` = :site_id ' . $query . '
                     GROUP BY `cart_id`';
             $qu = $this->db->prepare($query);
             $qu->execute($params);

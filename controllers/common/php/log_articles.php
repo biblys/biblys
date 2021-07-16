@@ -23,8 +23,8 @@
     $query = "SELECT `articles`.`article_id`, `article_title`, `article_preorder`, `article_title_alphabetic`, `article_url`, `article_authors`, `article_authors_alphabetic`, `article_collection`, `article_publisher`, `article_ean`, `article_pubdate`, `article_availability`,
             GROUP_CONCAT(`file_ean`) AS `eans`
         FROM `articles`
-        LEFT JOIN `files` ON `files`.`article_id` = `articles`.`article_id` AND `file_deleted` IS NULL
-        WHERE ".$_REQ." AND `article_deleted` IS NULL
+        LEFT JOIN `files` ON `files`.`article_id` = `articles`.`article_id`
+        WHERE ".$_REQ."
         GROUP BY `articles`.`article_id`
         ORDER BY `collection_id`, `article_pubdate` DESC";
 

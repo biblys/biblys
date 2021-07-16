@@ -119,7 +119,7 @@ if ($list) {
         FROM `links`
         JOIN `stock` USING(`stock_id`)
         JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id`
-        WHERE `list_id` = :list_id AND `link_deleted` IS NULL
+        WHERE `list_id` = :list_id
         ORDER BY `link_id` DESC',
         ["list_id" => $list->get('id')]
     );

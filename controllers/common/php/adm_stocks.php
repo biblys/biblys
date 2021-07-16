@@ -273,7 +273,7 @@ $sql_query = 'SELECT `article_id`, `article_title`, `article_title_alphabetic`, 
     JOIN `stock` USING(`article_id`)
     JOIN `sites` USING(`site_id`)
     LEFT JOIN `customers` USING(`customer_id`)
-    '.$req.' AND `stock`.`site_id` = :site_id AND `stock_deleted` IS NULL
+    '.$req.' AND `stock`.`site_id` = :site_id
     GROUP BY `stock_id`
     ORDER BY `stock`.`article_id`, `stock_id` DESC
     '.$limit.'

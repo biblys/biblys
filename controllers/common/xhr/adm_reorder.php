@@ -5,7 +5,7 @@ $cm = new CollectionManager();
 if ($collection = $cm->getById($_GET['collection_id'])) {
 
     $query = "SELECT `articles`.`article_id`, `article_title`, `article_url`, `article_ean`,
-        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = '".$_SITE['site_id']." AND `link_deleted` IS NOT NULL') AS `dnr`
+        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = '".$_SITE['site_id']."') AS `dnr`
         FROM `articles`
         WHERE `articles`.`collection_id` = '".$_GET["collection_id"]."' AND `type_id` != '2'";
 

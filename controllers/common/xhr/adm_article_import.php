@@ -399,9 +399,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
         $publishers = $_SQL->prepare(
             "SELECT `publisher_id`, `publisher_name` FROM `publishers`
-                WHERE (`publisher_noosfere_id` = :noosfere_IdEditeur OR
-                    `publisher_name` = :publisher_name) AND
-                    `publisher_deleted` IS NULL
+                WHERE `publisher_noosfere_id` = :noosfere_IdEditeur OR `publisher_name` = :publisher_name
                 ORDER BY `publisher_noosfere_id` LIMIT 1"
         );
         $publishers->execute(
@@ -544,12 +542,9 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $people = $_SQL->prepare(
                 "SELECT `people_id`, `people_name` FROM `people`
                 WHERE
-                    `people_deleted` IS NULL AND
-                        (
-                            `people_noosfere_id` = :people_noosfere_id OR
-                            `people_name` = :people_name OR
-                            `people_url` = :people_url
-                        )
+                    `people_noosfere_id` = :people_noosfere_id OR
+                    `people_name` = :people_name OR
+                    `people_url` = :people_url
                 ORDER BY `people_noosfere_id` DESC LIMIT 1"
             );
             $people->execute(

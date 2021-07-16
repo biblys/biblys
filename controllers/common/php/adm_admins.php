@@ -32,8 +32,6 @@ $rights = $_SQL->prepare("
         FROM `rights`
         JOIN `$usersTableName` ON `$usersTableName`.`id` = `rights`.`user_id`
     WHERE `rights`.`site_id` = :site_id
-        AND `right_deleted` IS NULL
-        AND `user_deleted` IS NULL
     ORDER BY `DateConnexion` DESC
 ");
 $rights->execute(["site_id" => $site->get("id")]);

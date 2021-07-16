@@ -56,8 +56,7 @@ if (isset($_POST['article_id'])) {
                 AND `stock_selling_date` IS NULL 
                 AND `stock_return_date` IS NULL 
                 AND `stock_lost_date` IS NULL
-                AND `stock_deleted` IS NULL
-        WHERE `alerts`.`user_id` = :user_id AND `alert_deleted` IS NULL
+        WHERE `alerts`.`user_id` = :user_id
         GROUP BY `alert_id`
         ORDER BY `alert_id`, `stock_purchase_date`
     ");

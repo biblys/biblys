@@ -31,7 +31,7 @@ $collections = $_SQL->prepare("SELECT `publisher_name`, `supplier_id`, `supplier
     FROM `suppliers`
     LEFT JOIN `links` USING(`supplier_id`)
     LEFT JOIN `publishers` USING(`publisher_id`)
-    WHERE `suppliers`.`site_id` = :site_id AND `supplier_deleted` IS NULL
+    WHERE `suppliers`.`site_id` = :site_id
     ORDER BY `publisher_name`");
 $collections->execute(['site_id' => $site->get('id')]);
 while ($c = $collections->fetch(PDO::FETCH_ASSOC)) {

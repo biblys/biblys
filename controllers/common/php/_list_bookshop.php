@@ -184,8 +184,7 @@ $sql_query = "
         `stock_selling_date` IS NULL AND 
         `stock_return_date` IS NULL AND 
         `stock_lost_date` IS NULL AND 
-        `stock_deleted` IS NULL".$active_stock_query."
-    WHERE $_REQ `type_id` != 2 AND `article_deleted` IS NULL
+    WHERE $_REQ `type_id` != 2
     GROUP BY `articles`.`article_id`";
 
 // Compter le nombre de résultats
@@ -230,7 +229,9 @@ $sql = EntityManager::prepareAndExecute("
     ["site_id" => $site->get("id")]
 );
 
-$ix = $offset;$covers = [];$table = null;
+$ix = $offset;
+$covers = [];
+$table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
     $x['used'] = 0;

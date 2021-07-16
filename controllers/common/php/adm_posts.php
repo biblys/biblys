@@ -44,7 +44,7 @@ $posts = EntityManager::prepareAndExecute(
     JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
-    WHERE `posts`.`site_id` = :site_id $req AND `post_deleted` IS NULL
+    WHERE `posts`.`site_id` = :site_id $req
     ORDER BY `post_date` DESC, `post_id` DESC",
     ["site_id" => $site->get('id')]
 );

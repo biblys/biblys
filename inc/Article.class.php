@@ -149,8 +149,7 @@ class Article extends Entity
                     `people_id`, `people_first_name`, `people_last_name`, `people_url`, `job_id`, `job_name`
                 FROM `people` JOIN `roles` USING(`people_id`) JOIN `jobs` USING(`job_id`)
                 WHERE
-                    `roles`.`article_id` = :article_id AND
-                    `people_deleted` IS NULL
+                    `roles`.`article_id` = :article_id
                 ORDER BY `id`';
             $contributors = EntityManager::prepareAndExecute(
                 $query,
@@ -716,9 +715,7 @@ class Article extends Entity
             JOIN `rayons` USING(`rayon_id`)
             WHERE `article_id` = :article_id
                 AND `links`.`site_id` = :site_id
-                AND `link_deleted` IS NULL
                 AND `rayons`.`site_id` = :site_id
-                AND `rayon_deleted` IS NULL
             ORDER BY `rayon_name`
         ");
         $sql->execute([
@@ -1047,7 +1044,7 @@ class ArticleManager extends EntityManager
     {
         $where = $this->addSiteFilters([]);
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1057,7 +1054,7 @@ class ArticleManager extends EntityManager
     {
         $where = $this->addSiteFilters([]);
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
         if (!empty($q['where'])) {
             $query .=  ' AND ' . $q['where'];
         }
@@ -1073,7 +1070,7 @@ class ArticleManager extends EntityManager
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1092,7 +1089,7 @@ class ArticleManager extends EntityManager
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1124,7 +1121,7 @@ class ArticleManager extends EntityManager
         $where = $this->addSiteFilters($where);
 
         $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . $q['where'];
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1171,7 +1168,7 @@ class ArticleManager extends EntityManager
     {
         $q = $this->buildSearchQuery($keywords);
 
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `' . $this->prefix . '_deleted` IS NULL AND ' . implode(' AND ', $q['query']);
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . implode(' AND ', $q['query']);
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
         return $res->fetchColumn();
@@ -1405,7 +1402,7 @@ class ArticleManager extends EntityManager
         }
 
         if ($article->has('publisher_id')) {
-            $onorders = $_SQL->query("SELECT `links`.`site_id` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = " . $article->get('publisher_id') . " AND `supplier_on_order` = 1 AND `supplier_deleted` IS NULL");
+            $onorders = $_SQL->query("SELECT `links`.`site_id` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `publisher_id` = " . $article->get('publisher_id') . " AND `supplier_on_order` = 1");
             while ($oo = $onorders->fetch()) {
                 $links .= ' [onorder:' . $oo["site_id"] . ']';
             }
@@ -1448,7 +1445,7 @@ class ArticleManager extends EntityManager
         }
 
         // Check for stocks on all sites
-        $stock = $_SQL->prepare('SELECT `stock_id` FROM `stock` WHERE `article_id` = :id AND `stock_deleted` IS NULL');
+        $stock = $_SQL->prepare('SELECT `stock_id` FROM `stock` WHERE `article_id` = :id');
         $stock->execute(['id' => $article->get('id')]);
         $stock = count($stock->fetchAll());
 
@@ -1457,7 +1454,7 @@ class ArticleManager extends EntityManager
         }
 
         // Check for links on all sites
-        $links = $_SQL->prepare('SELECT `link_id`, `tag_id`, `rayon_id` FROM `links` WHERE `article_id` = :id AND `link_deleted` IS NULL');
+        $links = $_SQL->prepare('SELECT `link_id`, `tag_id`, `rayon_id` FROM `links` WHERE `article_id` = :id');
         $links->execute(['id' => $article->get('id')]);
         $other_links = [];
         foreach ($links as $link) {

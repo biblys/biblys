@@ -64,7 +64,7 @@ class Publisher extends Entity
     {
         global $site, $_SQL;
 
-        $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher AND `supplier_deleted` IS NULL");
+        $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher");
         $query->execute(['site' => $site->get('id'), 'publisher' => $this->get('id')]);
         $query = $query->fetchAll();
 

@@ -240,7 +240,6 @@ if (!isset($_GET['id'])) {
 $articles = EntityManager::prepareAndExecute(
     'SELECT * FROM `articles`
     WHERE (`article_id` = :article_id OR `article_editing_user` = :user_id)
-        AND `article_deleted` IS NULL
     ORDER BY `article_editing_user` LIMIT 1',
     [
         'article_id' => $request->query->get('id'),
@@ -515,7 +514,6 @@ $people = $_SQL->prepare(
         JOIN `jobs` USING(`job_id`)
         WHERE
             `article_id` = :article_id AND
-            `role_deleted` IS NULL
         ORDER BY `job_id`'
 );
 $people->execute(['article_id' => $article->get('id')]);
@@ -560,7 +558,6 @@ $links = $_SQL->query("
     JOIN `rayons` USING(`rayon_id`)
     WHERE `article_id` = '".$a['article_id']."'
         AND `links`.`site_id` = '".$_SITE['site_id']."'
-        AND `rayon_deleted` IS NULL
     ORDER BY `link_id`");
 $rayons_actuels = null;
 while ($r = $links->fetch(PDO::FETCH_ASSOC)) {
@@ -597,7 +594,7 @@ while ($t = $tags->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Recompenses
-$awards = $_SQL->prepare('SELECT `award_id`, `award_name`, `award_year`, `award_category` FROM `awards` WHERE `article_id` = :article_id AND `award_deleted` IS NULL ORDER BY `award_year` DESC');
+$awards = $_SQL->prepare('SELECT `award_id`, `award_name`, `award_year`, `award_category` FROM `awards` WHERE `article_id` = :article_id ORDER BY `award_year` DESC');
 $awards->execute(['article_id' => $article->get('id')]);
 $the_awards = null;
 while ($aw = $awards->fetch(PDO::FETCH_ASSOC)) {

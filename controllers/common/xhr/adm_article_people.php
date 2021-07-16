@@ -42,7 +42,7 @@ if (isset($term)) {
     
     $people = $_SQL->prepare(
         "SELECT `people_id`, `people_name` FROM `people` 
-        WHERE ".$req." AND `people_deleted` IS NULL ORDER BY `people_alpha`"
+        WHERE ".$req." ORDER BY `people_alpha`"
     );
     $people->execute($params);
     while ($p = $people->fetch(PDO::FETCH_ASSOC)) {

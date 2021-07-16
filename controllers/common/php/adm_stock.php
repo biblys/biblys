@@ -263,7 +263,7 @@ if ($request->getMethod() === 'POST') {
             FROM `alerts`
             JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
             JOIN `articles` USING(`article_id`)
-            WHERE `article_id` = :article_id AND `alert_deleted` IS NULL"
+            WHERE `article_id` = :article_id"
         );
         $alerts->bindValue('article_id', $_POST['article_id'], PDO::PARAM_INT);
         $alerts->execute() or error($alerts->errorInfo());

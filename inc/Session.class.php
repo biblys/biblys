@@ -33,13 +33,3 @@ class SessionManager extends EntityManager
 
 }
 
-// CREATE TABLE `session` (
-//   `session_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-//   `user_id` int(11) unsigned NOT NULL,
-//   `session_token` varchar(32) DEFAULT NULL,
-//   `session_created` datetime NOT NULL,
-//   `session_expires` datetime DEFAULT NULL,
-//   `session_updated` datetime DEFAULT NULL,
-//   `session_deleted` datetime DEFAULT NULL,
-//   PRIMARY KEY (`session_id`)
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

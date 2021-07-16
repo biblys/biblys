@@ -65,7 +65,7 @@ $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `pos
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `$usersTableName` ON `posts`.`user_id` = `$usersTableName`.`id`
     LEFT JOIN `links` USING(`post_id`)
-WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' AND `post_deleted` IS NULL ".$aut_req." ".$cat_req.""
+WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' ".$aut_req." ".$cat_req.""
         . "GROUP BY `post_id`";
 
 // Pagination

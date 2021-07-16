@@ -16,7 +16,7 @@
     } else {
         $list = $lm->getById($_GET['list_id']);
         if ($list) {
-            $stocks = $_SQL->prepare('SELECT `stock_id`, `stock`.`site_id` FROM `stock` JOIN `links` USING(`stock_id`) WHERE `list_id` = :list_id AND `stock_deleted` IS NULL');
+            $stocks = $_SQL->prepare('SELECT `stock_id`, `stock`.`site_id` FROM `stock` JOIN `links` USING(`stock_id`) WHERE `list_id` = :list_id');
             $stocks->bindParam('list_id', $_GET['list_id'], PDO::PARAM_INT);
             $stocks->execute();
             $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);

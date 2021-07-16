@@ -45,8 +45,7 @@ if ($getTerm) {
     $qu1 = "SELECT `collection_id`, `collection_name`, `publisher_id`, 
             `publisher_name`, `pricegrid_id` 
         FROM `collections` JOIN `publishers` USING(`publisher_id`) 
-        WHERE `collection_deleted` IS NULL AND 
-            `collection_name` LIKE :query 
+        WHERE `collection_name` LIKE :query 
             ".$_REQ_SITE." 
         ORDER BY `collection_name`";
     $collectionQuery = $_SQL->prepare($qu1);
@@ -59,7 +58,7 @@ if ($getTerm) {
     $qu2 = "SELECT `collection_id`, `collection_name`, `publisher_id`, 
             `publisher_name`, `pricegrid_id` 
         FROM `collections` JOIN `publishers` USING(`publisher_id`) 
-        WHERE `collection_deleted` IS NULL AND ".$_REQ." ".$_REQ_SITE." 
+        WHERE ".$_REQ." ".$_REQ_SITE." 
         ORDER BY `collection_name`";
     $collectionsQuery = $_SQL->prepare($qu2);
     $collectionsQuery->execute(array_merge($params, $termsParams));

@@ -7,7 +7,7 @@ $_FEED["channel"]["description"] = 'Les derniers billets du blog';
 $posts = $_SQL->query(
     "SELECT * FROM `posts` 
 	WHERE `site_id` = '".$_SITE["site_id"]."' AND `post_status` = 1 
-		AND `post_date` <= NOW() AND `post_deleted` IS NULL 
+		AND `post_date` <= NOW() 
 	ORDER BY `post_date` DESC LIMIT 15"
 );
 while ($p = $posts->fetch()) {

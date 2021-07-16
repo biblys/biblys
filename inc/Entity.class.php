@@ -267,10 +267,6 @@ class EntityManager
      */
     public function getQuery($query, $params, $options = array(), $withJoins = true)
     {
-        if (!empty($query)) {
-            $query = ' AND '.$query;
-        }
-
         $order = null;
         if (isset($options['order'])) {
             if ($options['order'] == 'shuffle') {
@@ -306,7 +302,11 @@ class EntityManager
             $this->select = $options['fields'];
         }
 
-        $query = 'SELECT '.$this->select.' FROM `'.$this->table.'`'.$leftjoin.' WHERE `'.$this->prefix.'_deleted` IS NULL '.$query.$order.$sort.$limit.$offset;
+        if ($query) {
+            $query = "WHERE ".$query;
+        }
+
+        $query = 'SELECT '.$this->select.' FROM `'.$this->table.'`'.$leftjoin.$query.$order.$sort.$limit.$offset;
 
         $qu = self::prepareAndExecute($query, $params);
 
@@ -356,10 +356,10 @@ class EntityManager
 
         $queryWhere = '';
         if ($q['where']) {
-            $queryWhere = ' AND '.$q['where'];
+            $queryWhere = ' WHERE '.$q['where'];
         }
 
-        $query = 'SELECT COUNT(*) FROM `'.$this->table.'` WHERE `'.$this->prefix.'_deleted` IS NULL '.$queryWhere;
+        $query = 'SELECT COUNT(*) FROM `'.$this->table.'`'.$queryWhere;
         $res = EntityManager::prepareAndExecute($query, $q['params']);
 
         return $res->fetchColumn();
@@ -409,7 +409,7 @@ class EntityManager
             if (isset($query)) {
                 $query .= ' OR';
             }
-            $query .= ' `'.$this->idField.'` = :id'.$i.' AND `'.$this->prefix.'_deleted` IS NULL';
+            $query .= ' `'.$this->idField.'` = :id'.$i;
             $params['id'.$i] = $id;
             ++$i;
         }

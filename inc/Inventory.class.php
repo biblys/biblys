@@ -34,13 +34,3 @@ class InventoryManager extends EntityManager
     }
 
 }
-
-// CREATE TABLE `inventory` (
-//   `inventory_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-//   `site_id` int(11) unsigned DEFAULT NULL,
-//   `inventory_title` varchar(32) DEFAULT NULL,
-//   `inventory_created` datetime NOT NULL,
-//   `inventory_updated` datetime DEFAULT NULL,
-//   `inventory_deleted` datetime DEFAULT NULL,
-//   PRIMARY KEY (`inventory_id`)
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

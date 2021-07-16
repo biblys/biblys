@@ -83,7 +83,7 @@ $carts = $_SQL->prepare("
     FROM `carts`
     LEFT JOIN `$usersTableName` ON `carts`.`user_id` = `$usersTableName`.`id`
     LEFT JOIN `stock` USING(`cart_id`)
-    WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web' AND `cart_deleted` IS NULL
+    WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web'
     GROUP BY `cart_id`
     ORDER BY `stock_cart_date` DESC
 ");

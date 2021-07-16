@@ -626,7 +626,7 @@ class OrderManager extends EntityManager
             $limit_req = null;
         }
 
-        $sql = $this->db->prepare("SELECT * FROM `orders` WHERE `site_id` = :site_id AND `order_utmz` IS NOT NULL ".join(" ", $req)." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL AND `order_deleted` IS NULL ORDER BY `order_payment_date` DESC ".$limit_req);
+        $sql = $this->db->prepare("SELECT * FROM `orders` WHERE `site_id` = :site_id AND `order_utmz` IS NOT NULL ".join(" ", $req)." AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL ORDER BY `order_payment_date` DESC ".$limit_req);
         $sql->execute($params);
         $orders = $sql->fetchAll(PDO::FETCH_ASSOC);
 

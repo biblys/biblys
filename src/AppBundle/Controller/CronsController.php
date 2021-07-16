@@ -191,7 +191,6 @@ class CronsController extends Controller
                     AND `article_ean` IS NOT NULL
                     AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
                     AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
-                    AND `stock_deleted` IS NULL AND `article_deleted` IS NULL
                     ".$active_stock_query.'
                 GROUP BY `article_ean`';
             $stock = EntityManager::prepareAndExecute(

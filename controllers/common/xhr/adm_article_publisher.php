@@ -8,7 +8,7 @@ if ($searchTerm) {
     $publisher = $_SQL->prepare(
         "SELECT `publisher_id`, `publisher_name` 
         FROM `publishers` 
-        WHERE `publisher_name` LIKE :term AND `publisher_deleted` IS NULL
+        WHERE `publisher_name` LIKE :term
         ORDER BY `publisher_name`"
     );
     $publisher->bindValue(':term', '%'.$searchTerm.'%', PDO::PARAM_STR);
