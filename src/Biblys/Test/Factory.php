@@ -256,13 +256,15 @@ class Factory
     /**
      * @throws PropelException
      */
-    public static function createAdminUser(): User
+    public static function createAdminUser(Site $site = null): User
     {
         $user = new User();
         $user->save();
 
         $config = new Config();
-        $site = SiteQuery::create()->findOneById($config->get("site"));
+        if ($site === null) {
+            $site = SiteQuery::create()->findOneById($config->get("site"));
+        }
 
         $right = new Right();
         $right->setUser($user);
