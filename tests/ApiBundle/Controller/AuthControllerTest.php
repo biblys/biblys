@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Biblys\Test\Factory;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
@@ -56,9 +57,10 @@ class AuthControllerTest extends TestCase
             "username" => "Me",
         ]);
         $request = Factory::createAuthRequest("", $user, $method = "header");
+        $currentUserService = CurrentUser::buildFromRequest($request);
 
         // when
-        $response = $controller->meAction($request);
+        $response = $controller->meAction($currentUserService);
 
         // then
         $this->assertEquals(

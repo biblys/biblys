@@ -4,6 +4,7 @@
 namespace Biblys\Service;
 
 
+use Framework\Exception\AuthException;
 use Model\SessionQuery;
 use Model\Site;
 use Model\User;
@@ -72,8 +73,15 @@ class CurrentUser
         return false;
     }
 
+    /**
+     * @throws AuthException
+     */
     public function getUser(): User
     {
+        if ($this->user === null) {
+            throw new AuthException("Identification requise.");
+        }
+
         return $this->user;
     }
 }

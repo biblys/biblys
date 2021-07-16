@@ -2,8 +2,8 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
-use DateTime;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\Session;
@@ -56,11 +56,9 @@ class AuthController extends Controller
 
     /**
      * @throws AuthException
-     * @throws PropelException
      */
-    public function meAction(Request $request): JsonResponse
+    public function meAction(CurrentUser $currentUserService): JsonResponse
     {
-        $currentUserService = self::authUser($request);
         $user = $currentUserService->getUser();
 
         return new JsonResponse(['user' => [
