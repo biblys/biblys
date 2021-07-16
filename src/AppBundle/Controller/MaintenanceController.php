@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Database\Database;
+use Biblys\Service\Config;
 use Biblys\Service\Pagination;
 use Biblys\Service\Updater\ReleaseNotFoundException;
 use Biblys\Service\Updater\Updater;
@@ -107,6 +109,28 @@ class MaintenanceController extends Controller
         }
 
         return $this->render('AppBundle:Maintenance:composer.html.twig');
+    }
+
+    /**
+     * @throws AuthException
+     * @throws Exception
+     */
+    public function migrateAction(Config $config): Response
+    {
+        $this->auth('admin');
+
+        try {
+            $dbConfig = $config->get("db");
+            $db = new Database($dbConfig);
+            $db->migrate();
+        } catch (ComposerException $exception) {
+            return $this->render('AppBundle:Maintenance:migrate.html.twig', [
+                'error' => $exception->getMessage(),
+                'output' => $exception->getOutput(),
+            ]);
+        }
+
+        return $this->render('AppBundle:Maintenance:migrate.html.twig');
     }
 
     public function changelogIndexAction(Request $request, Updater $updater): Response

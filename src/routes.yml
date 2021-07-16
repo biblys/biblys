@@ -52,6 +52,10 @@ maintenance_composer:
   path: /admin/composer
   controller: AppBundle\Controller\MaintenanceController::composerAction
 
+maintenance_migrate:
+  path: /admin/migrate
+  controller: AppBundle\Controller\MaintenanceController::migrateAction
+
 maintenance_changelog_index:
   path: /biblys/changelog
   controller: AppBundle\Controller\MaintenanceController::changelogIndexAction

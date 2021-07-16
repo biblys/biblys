@@ -1,13 +1,15 @@
 <h1>
-  <span class="fa fa-puzzle-piece"></span>
-  Composants
+  <span class="fa fa-database"></span>
+  Migration BDD
 </h1>
 
 {% if error is defined %}
 
   <p class="alert alert-danger">
-    {{ error }} Avant de continuer, la mise à jour devra être effectuée manuellement à l'aide de <em>composer</em>.
+    {{ error }} Avant de continuer, la migration devra être effectuée manuellement à l'aide de la commande :
   </p>
+
+  <pre>composer run propel:migrate</pre>
 
   <h2>Sortie :</h2>
 
@@ -20,12 +22,12 @@
 {% else %}
 
   <p class="alert alert-info">
-    <i class="fa fa-cog fa-spin"></i> Mise à jour des composants en cours...
+    <i class="fa fa-cog fa-spin"></i> Mise à jour du schéma de la base de données en cours...
   </p>
 
   <script type="text/javascript">
     setTimeout(function() {
-      window.location.href = "{{ path('maintenance_migrate') }}";
+      window.location.href = "{{ path('main_admin') }}";
     }, 5000)
   </script>
 
