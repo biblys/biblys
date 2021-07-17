@@ -1,0 +1,31 @@
+# External Auth
+
+api_auth:
+  path: /api/auth
+  controller: ApiBundle\Controller\AuthController::authAction
+
+api_me:
+  path: /api/me
+  controller: ApiBundle\Controller\AuthController::meAction
+
+# Shipping
+
+api_shipping:
+  path: /api/shipping
+  methods: GET
+  controller: ApiBundle\Controller\ShippingController::indexAction
+
+api_shipping_create:
+  path: /api/shipping
+  methods: POST
+  controller: ApiBundle\Controller\ShippingController::createAction
+
+api_shipping_update:
+  path: /api/shipping/{id}
+  methods: PUT
+  controller: ApiBundle\Controller\ShippingController::updateAction
+
+api_shipping_delete:
+  path: /api/shipping/{id}
+  methods: DELETE
+  controller: ApiBundle\Controller\ShippingController::deleteAction

@@ -3,6 +3,8 @@ RewriteEngine on
 
 ErrorDocument 404 /pages/404
 
+RewriteRule ^api/(.*)$  /api.php [QSA,L]
+
 # Redirections /mobile & /m
 RewriteRule ^mobile/(.*)$  /$1 [R=301,L]
 RewriteRule ^m/(.*)$  /$1 [R=301,L]
