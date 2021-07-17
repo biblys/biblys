@@ -20,11 +20,4 @@ class ShippingController extends Controller
 
         return $this->render("AppBundle:Shipping:admin.html.twig");
     }
-
-    /**
-     * @route /shipping/
-     */
-    public function allAction()
-    {
-    }
 }
