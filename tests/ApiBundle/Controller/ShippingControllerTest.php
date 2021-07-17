@@ -9,7 +9,7 @@ use Model\ShippingFee;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class ShippingControllerTest extends TestCase
 {
@@ -21,7 +21,7 @@ class ShippingControllerTest extends TestCase
     {
         // given
         $shipping1 = new ShippingFee();
-   @     $shipping1->save();
+        $shipping1->save();
         $shipping2 = new ShippingFee();
         $shipping2->save();
         $controller = new ShippingController();
