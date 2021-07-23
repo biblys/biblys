@@ -1,7 +1,7 @@
 
 # Historique des modifications
 
-### 2.53.6 (DEV)
+### 2.53.6 (22 juillet 2021)
 
 Corrections
 
