@@ -512,8 +512,7 @@ $people = $_SQL->prepare(
     'SELECT `id`, `people_id`, `people_name`, `job_id`, `job_name` FROM `people`
         JOIN `roles` USING(`people_id`)
         JOIN `jobs` USING(`job_id`)
-        WHERE
-            `article_id` = :article_id AND
+        WHERE `article_id` = :article_id
         ORDER BY `job_id`'
 );
 $people->execute(['article_id' => $article->get('id')]);
