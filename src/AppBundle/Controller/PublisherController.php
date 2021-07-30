@@ -21,7 +21,7 @@ class PublisherController extends Controller
     {
         global $site;
         
-        $this->setPageTitle('Éditeurs');
+        $request->attributes->set("page_title", "Éditeurs");
 
         $pm = new \PublisherManager();
 

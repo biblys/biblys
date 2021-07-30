@@ -40,7 +40,7 @@ class PostController extends Controller
             'offset' => $pagination->getOffset(),
         ]);
 
-        $this->setPageTitle("Actualités");
+        $request->attributes->set("page_title", "Actualités");
 
         return $this->render('AppBundle:Post:index.html.twig', [
             'posts' => $posts,
