@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.53.7 (30 juillet 2021)
+
+Corrections
+
+- L'erreur affichée lors de l'ajout au panier d'un livre pour lequel aucun
+  exemplaire n'est disponible a été améliorée.
+
 ### 2.53.6 (22 juillet 2021)
 
 Corrections
