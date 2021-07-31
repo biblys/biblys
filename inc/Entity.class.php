@@ -517,7 +517,9 @@ class EntityManager
         $new = $this->getById($id);
         if (!$new) {
             // This error is probably caused by differents defaults in create and getAll methods
-            throw new Exception('Error creating Entity');
+            throw new Exception(
+                "Cannot get new ".$this->object." with id ".$id." created with query \"".$qu."\" and params ".join($params)
+            );
         }
 
         return $new;
