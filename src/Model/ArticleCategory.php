@@ -2,7 +2,9 @@
 
 namespace Model;
 
+use Biblys\Service\Config;
 use Model\Base\ArticleCategory as BaseArticleCategory;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'rayons' table.
@@ -15,5 +17,12 @@ use Model\Base\ArticleCategory as BaseArticleCategory;
  */
 class ArticleCategory extends BaseArticleCategory
 {
+    public function preSave(ConnectionInterface $con = null)
+    {
+        $config = new Config();
 
+        $this->setSiteId($config->get("site"));
+
+        return true;
+    }
 }
