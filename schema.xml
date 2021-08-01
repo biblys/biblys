@@ -1035,7 +1035,7 @@
     <column name="rayon_id" phpName="Id" type="BIGINT" size="4" sqlType="bigint(4) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
     <column name="rayon_name" phpName="Name" type="LONGVARCHAR"/>
-    <column name="rayon_url" phpName="Url" type="LONGVARCHAR"/>
+    <column name="rayon_url" phpName="Url" type="VARCHAR" size="256" />
     <column name="rayon_desc" phpName="Desc" type="LONGVARCHAR"/>
     <column name="rayon_order" phpName="Order" type="TINYINT" size="2"/>
     <column name="rayon_sort_by" phpName="SortBy" type="VARCHAR" size="64" defaultValue="id"/>
