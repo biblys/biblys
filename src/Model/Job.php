@@ -4,16 +4,12 @@ namespace Model;
 
 use Model\Base\Job as BaseJob;
 
-/**
- * Skeleton subclass for representing a row from the 'jobs' table.
- *
- *
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class Job extends BaseJob
 {
-
+    public const AUTHOR = 1;
+    public const ANTHOLOGIST = 2;
+    public const TRANSLATOR = 3;
+    public const COVER_ARTIST = 4;
+    public const PREFACE = 5;
+    public const POSTFACE = 14;
 }
