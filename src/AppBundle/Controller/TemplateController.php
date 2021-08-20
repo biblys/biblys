@@ -45,8 +45,9 @@ class TemplateController extends Controller
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
+            global $site;
             $content = $request->request->get('content');
-            $template->updateContent($content);
+            $template->updateContent($site, $content);
         }
 
         return $this->render('AppBundle:Template:edit.html.twig', [
