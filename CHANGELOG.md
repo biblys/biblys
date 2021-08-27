@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.53.8 (27 août 2021)
+
+Corrections
+
+- La mise à jour du fichier CSS via l'éditeur de thème fonctionne à nouveau
+- Le filtrage des billets par catégorie fonctionne à nouveau
+
 ### 2.53.7 (30 juillet 2021)
 
 Corrections
