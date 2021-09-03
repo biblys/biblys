@@ -2,6 +2,7 @@
 
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
@@ -213,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $articleUrl = $urlgenerator->generate('article_show', [
                 'slug' => $article->get('url'),
             ]);
-            redirect($articleUrl);
+            return new RedirectResponse($articleUrl);
         }
     } catch (IsbnParsingException $exception) {
         throw new BadRequestHttpException(
