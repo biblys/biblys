@@ -29,7 +29,7 @@
           et
           {% for people in article.getOtherContributors %}
             <a href="{{ path('people_show', { slug: people.url }) }}">{{ people.name }}</a>
-            ({{ people.job_name}})
+            ({{ people.role}})
             {% if not loop.last %},
             {% endif %}
           {% endfor %}
