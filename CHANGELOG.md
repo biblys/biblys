@@ -6,6 +6,8 @@
 Corrections
 
 - Ajout des identifiants nécessaires pour la migration de la base de données
+- L'affichage des résultats sur l'ancienne page des résultats de recherche
+  fonctionne à nouveau
 
 ## 2.54.0 (3 septembre 2021)
 
