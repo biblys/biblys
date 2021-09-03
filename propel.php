@@ -6,15 +6,15 @@ use Biblys\Service\Config;
 $config = new Config();
 $dbConfig = $config->get("db");
 
-return [
+$propelConfig = [
     'propel' => [
         'database' => [
             'connections' => [
                 'default' => [
                     'adapter' => 'mysql',
                     'dsn' => Connection::getDsnFromConfig($dbConfig),
-                    'user' => 'root',
-                    'password' => '',
+                    'user' => $dbConfig["user"],
+                    'password' => $dbConfig["pass"],
                     'settings' => [
                         'charset' => 'utf8'
                     ]
@@ -23,3 +23,5 @@ return [
         ]
     ]
 ];
+
+return $propelConfig;

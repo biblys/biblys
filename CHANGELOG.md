@@ -1,6 +1,12 @@
 
 # Historique des modifications
 
+### 2.54.1 (DEV)
+
+Corrections
+
+- Ajout des identifiants nécessaires pour la migration de la base de données
+
 ## 2.54.0 (3 septembre 2021)
 
 Cette mise à jour apporte un certain nombre de modifications purement
