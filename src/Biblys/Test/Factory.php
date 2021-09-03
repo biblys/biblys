@@ -74,14 +74,13 @@ class Factory
      * @return People
      * @throws Exception
      */
-    public static function createPeople(): People
+    public static function createPeople($attributes = []): People
     {
         $pm = new PeopleManager();
 
-        $attributes = [
-            "people_first_name" => "Hervé",
-            "people_last_name" => "LE TERRIER",
-        ];
+        $attributes["people_first_name"] = $attributes["people_first_name"] ?? "Hervé";
+        $attributes["people_last_name"] = $attributes["people_last_name"] ?? "LE TERRIER";
+        $attributes["people_gender"] = $attributes["people_gender"] ?? "F";
 
         $people = $pm->get($attributes);
         if ($people) {
