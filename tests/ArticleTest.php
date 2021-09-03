@@ -466,16 +466,16 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             count($contributors),
             "it should return 2 contributors"
         );
-        $this->assertEquals($contributors[0]->get('id'), $people1->get('id'));
-        $this->assertEquals($contributors[1]->get('id'), $people2->get('id'));
+        $this->assertEquals($people1->get('id'), $contributors[0]->get('id'));
+        $this->assertEquals($people2->get('id'), $contributors[1]->get('id'));
 
         $authors = $article->getAuthors();
         $this->assertEquals($authors[0]->get('id'), $people1->get('id'));
-        $this->assertEquals($authors[0]->get('job_id'), 1);
+        $this->assertEquals($authors[0]->getJobId(), 1);
 
         $otherContributors = $article->getOtherContributors();
         $this->assertEquals($otherContributors[0]->get('id'), $people2->get('id'));
-        $this->assertEquals($otherContributors[0]->get('job_id'), 2);
+        $this->assertEquals($otherContributors[0]->getJobId(), 2);
 
         $pm->delete($people1);
         $pm->delete($people2);

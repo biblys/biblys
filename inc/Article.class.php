@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Contributor\Contributor;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
@@ -139,26 +140,24 @@ class Article extends Entity
 
     /**
      * Get all article contributors
-     * @return array of People
+     * @return Contributor[]
      */
-    public function getContributors()
+    public function getContributors(): array
     {
-        if (!isset($this->contributors)) {
-            $result = [];
-            $query = 'SELECT
-                    `people_id`, `people_first_name`, `people_last_name`, `people_url`, `job_id`, `job_name`
-                FROM `people` JOIN `roles` USING(`people_id`) JOIN `jobs` USING(`job_id`)
-                WHERE
-                    `roles`.`article_id` = :article_id
-                ORDER BY `id`';
-            $contributors = EntityManager::prepareAndExecute(
-                $query,
-                ["article_id" => $this->get("id")]
-            );
-            while ($c = $contributors->fetch(PDO::FETCH_ASSOC)) {
-                $result[] = new People($c);
-            }
-            $this->contributors = $result;
+        if (isset($this->contributors)) {
+            return $this->contributors;
+        }
+
+        $this->contributors = [];
+
+        $rm = new RoleManager();
+        $pm = new PeopleManager();
+
+        $roles = $rm->getAll(["article_id" => $this->get("id")]);
+        foreach ($roles as $role) {
+            $people = $pm->getById($role->get("people_id"));
+            $job = \Biblys\Contributor\Job::getById($role->get("job_id"));
+            $this->contributors[] = new Contributor($people, $job, $role->get("id"));
         }
 
         return $this->contributors;
@@ -166,7 +165,7 @@ class Article extends Entity
 
     /**
      * Get all article contributors except authors
-     * @return People[]
+     * @return Contributor[]
      */
     public function getAuthors(): array
     {
@@ -174,7 +173,7 @@ class Article extends Entity
             $contributors = $this->getContributors();
             $this->authors = [];
             foreach ($contributors as $contributor) {
-                if ($contributor->get('job_id') == "1") {
+                if ($contributor->isAuthor()) {
                     $this->authors[] = $contributor;
                 }
             }
@@ -202,7 +201,7 @@ class Article extends Entity
             $contributors = $this->getContributors();
             $this->otherContributors = [];
             foreach ($contributors as $contributor) {
-                if ($contributor->get('job_id') != "1") {
+                if (!$contributor->isAuthor()) {
                     $this->otherContributors[] = $contributor;
                 }
             }
