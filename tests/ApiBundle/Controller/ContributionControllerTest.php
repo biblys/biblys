@@ -52,4 +52,41 @@ class ContributionControllerTest extends TestCase
             "it should response with authors"
         );
     }
+
+    /**
+     * @throws PropelException
+     * @throws AuthException
+     * @throws Exception
+     */
+    public function testDeleteAction()
+    {
+        // given
+        $article = Factory::createArticle();
+        $request = Factory::createAuthRequestForAdminUser();
+        $contribution = new Role();
+        $contribution->setArticleId($article->get("id"));
+        $contribution->setJobId(1);
+        $contribution->save();
+        $controller = new ContributionController();
+
+        // when
+        $response = $controller->delete($request, $contribution->getId());
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $deletedContribution = RoleQuery::create()->findPk($contribution->getId());
+        $this->assertNull(
+            $deletedContribution,
+            "it should have deleted the contribution"
+        );
+        $this->assertEquals(
+            "{\"authors\":\"Herv\u00e9 LE TERRIER\"}",
+            $response->getContent(),
+            "it should response with authors"
+        );
+    }
 }

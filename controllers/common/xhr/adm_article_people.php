@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 $pm = new PeopleManager();
 $rm = new RoleManager();
@@ -28,6 +29,7 @@ $json = [];
 if (isset($term)) {
     $i = 0;
     $req = null;
+    /** @var Request $request */
     $term = $request->query->get('term');
     $query = explode(" ", trim($term));
     $params = [];
@@ -39,7 +41,8 @@ if (isset($term)) {
         $params['q'.$i] = '%'.$q.'%';
         $i++;
     }
-    
+
+    /** @var PDO $_SQL */
     $people = $_SQL->prepare(
         "SELECT `people_id`, `people_name` FROM `people` 
         WHERE ".$req." ORDER BY `people_alpha`"
@@ -54,14 +57,6 @@ if (isset($term)) {
     $json[$i]["label"] = '=> Créer un nouveau contributeur ';
     $json[$i]["value"] = $term;
     $json[$i]["create"] = 1;
-
-} elseif ($action === 'remove') {
-
-    // Remove a role (contributor / article / job association)
-    $role = $rm->getById($roleId);
-    if ($role) {
-        $rm->delete($role);
-    }
 
 } elseif ($action === 'add') {
 
@@ -84,7 +79,8 @@ if (isset($term)) {
     ';
 
 } elseif ($action === 'create') {
-    
+
+    /** @var Request $request */
     $peopleFirstName = $request->request->get('people_first_name');
     $peopleLastName = $request->request->get('people_last_name');
     

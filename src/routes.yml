@@ -17,6 +17,11 @@ api_contribution_update:
   methods: POST
   controller: ApiBundle\Controller\ContributionController::update
 
+api_contribution_delete:
+  path: /api/admin/contributions/{id}/delete
+  methods: POST
+  controller: ApiBundle\Controller\ContributionController::delete
+
 # Shipping
 
 api_shipping:

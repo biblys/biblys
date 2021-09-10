@@ -32,4 +32,38 @@ class ContributionController extends Controller
         $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
         return new JsonResponse(["authors" => $authorNamesAsString]);
     }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function delete(Request $request, int $id): JsonResponse
+    {
+        self::authAdmin($request);
+
+        $contribution = RoleQuery::create()->findPk($id);
+        $contribution->delete();
+
+        $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
+        return new JsonResponse(["authors" => $authorNamesAsString]);
+    }
+
+    /**
+     * @param Role $contribution
+     * @return string
+     * @throws PropelException
+     */
+    private function _getAuthorNamesAsString(Role $contribution): string
+    {
+        $article = $contribution->getArticle();
+        $contributionsByAuthors = RoleQuery::create()
+            ->filterByArticleId($article->getId())
+            ->filterByJobId(1)
+            ->find();
+        $authorNames = array_map(function (Role $contribution) {
+            return $contribution->getPeople()->getName();
+        }, $contributionsByAuthors->getData());
+
+        return join(", ", $authorNames);
+    }
 }
