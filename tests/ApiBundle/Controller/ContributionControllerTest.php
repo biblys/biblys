@@ -19,6 +19,56 @@ class ContributionControllerTest extends TestCase
      * @throws AuthException
      * @throws Exception
      */
+    public function testAddAction()
+    {
+        // given
+        $article = Factory::createArticle();
+        $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
+        $content = json_encode([
+            "article_id" => $article->get("id"),
+            "people_id" => $person->get("id"),
+            "job_id" => 3,
+        ]);
+        $request = Factory::createAuthRequestForAdminUser($content);
+        $controller = new ContributionController();
+
+        // when
+        $response = $controller->add($request);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $content = json_decode($response->getContent(), true);
+        $updatedContribution = RoleQuery::create()->findPk($content["contribution_id"]);
+        $this->assertNotNull(
+            $updatedContribution,
+            "it should have added the contribution"
+        );
+        $this->assertEquals(
+            "Lili RATON",
+            $content["contributor_name"],
+            "it should include name in response"
+        );
+        $this->assertEquals(
+            "Traductrice",
+            $content["contributor_role"],
+            "it should include role in response"
+        );
+        $this->assertEquals(
+            "Hervé LE TERRIER",
+            $content["authors"],
+            "it should include authors in response"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws AuthException
+     * @throws Exception
+     */
     public function testUpdateAction()
     {
         // given

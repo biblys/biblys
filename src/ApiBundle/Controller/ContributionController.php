@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Contributor\Contributor;
+use Biblys\Contributor\Job;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\Role;
@@ -12,6 +14,39 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ContributionController extends Controller
 {
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws \Biblys\Contributor\UnknownJobException
+     */
+    public function add(Request $request): JsonResponse
+    {
+        self::authAdmin($request);
+
+        $encodedContent = $request->getContent();
+        $params = json_decode($encodedContent, true);
+
+        $contribution = new Role();
+        $contribution->setArticleId($params["article_id"]);
+        $contribution->setPeopleId($params["people_id"]);
+        $contribution->setJobId($params["job_id"]);
+        $contribution->save();
+
+        $contributor = new Contributor(
+            $contribution->getPeople(),
+            Job::getById($contribution->getJobId()),
+            $contribution->getId()
+        );
+
+        $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
+        return new JsonResponse([
+            "contribution_id" => $contribution->getId(),
+            "contributor_name" => $contributor->getName(),
+            "contributor_role" => $contributor->getRole(),
+            "authors" => $authorNamesAsString
+        ]);
+    }
 
     /**
      * @throws PropelException
@@ -57,7 +92,7 @@ class ContributionController extends Controller
     {
         $article = $contribution->getArticle();
         $contributionsByAuthors = RoleQuery::create()
-            ->filterByArticleId($article->getId())
+            ->filterByArticle($article)
             ->filterByJobId(1)
             ->find();
         $authorNames = array_map(function (Role $contribution) {
