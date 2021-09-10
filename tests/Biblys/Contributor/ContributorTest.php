@@ -4,6 +4,8 @@ namespace Biblys\Contributor;
 
 use Biblys\Test\Factory;
 use Exception;
+use Model\PeopleQuery;
+use People;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__."/../../setUp.php";
@@ -36,7 +38,7 @@ class ContributorTest extends TestCase
     public function testGetRole()
     {
         // given
-        $people = Factory::createPeople(["people_gender" => "F"]);
+        $entityPeople = Factory::createPeople(["people_gender" => "F"]);
         $contributor = new Contributor(
             PeopleQuery::create()->findPk($entityPeople->get("id")),
             Job::getById(3),

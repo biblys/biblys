@@ -107,38 +107,6 @@ class Article extends Entity
     }
 
     /**
-     * Add a contributor to article
-     * @param People $people
-     * @param Integer $job_id
-     */
-    public function addContributor($people, $jobId)
-    {
-        $rm = new RoleManager();
-
-        $jm = new JobManager();
-        $job = $jm->getById($jobId);
-        if (!$job) {
-            throw new Exception("Cannot add contributor with invalid job $jobId");
-        }
-
-        $roleParams = [
-            'article_id' => $this->get('id'),
-            'people_id' => $people->get('id'),
-            'job_id' => $jobId,
-        ];
-        $role = $rm->get($roleParams);
-
-        if ($role) {
-            return $role;
-        }
-
-        $role = $rm->create($roleParams);
-        unset($this->contributors, $this->authors, $this->otherContributors);
-
-        return $role;
-    }
-
-    /**
      * Get all article contributors
      * @return Contributor[]
      */

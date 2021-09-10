@@ -10,6 +10,7 @@ use CFRewardManager;
 use Collection;
 use CollectionManager;
 use Exception;
+use Model\Role;
 use Model\Session;
 use Model\ShippingFee;
 use Model\Site;
@@ -63,7 +64,11 @@ class Factory
             $authors = [self::createPeople()];
         }
         foreach ($authors as $author) {
-            $article->addContributor($author, 1);
+            $contribution = new Role();
+            $contribution->setArticleId($article->get('id'));
+            $contribution->setPeopleId($author->get('id'));
+            $contribution->setJobId(1);
+            $contribution->save();
         }
 
         return $article;

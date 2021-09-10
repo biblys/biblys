@@ -88,15 +88,15 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     /**
      * Test updating a copy
      * @depends testGet
+     * @throws Exception
      */
-    public function testUpdate(Article $article)
+    public function testUpdate()
     {
         // given
+        $article = Factory::createArticle();
         $article->set("article_title", "Bara Yogoi");
         $article->set("publisher_id", 262);
         $pm = new PeopleManager();
-        $author = $pm->create(["people_first_name" => "Léo", "people_last_name" => "Henry"]);
-        $article->addContributor($author, 1);
         $this->m->update($article);
 
         // when
@@ -114,11 +114,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      * Test keywords & links generation
      * @depends testUpdate
      */
-    public function testRefreshMetadata(Article $article)
+    public function testRefreshMetadata()
     {
+        $article = Factory::createArticle();
         $this->m->refreshMetadata($article);
         $this->assertEquals(
-            "Bara Yogoi      Léo HENRY",
+            "L'Animalie     La Blanche PARONYMIE  Hervé LE TERRIER",
             $article->get("keywords")
         );
 
@@ -399,48 +400,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test adding contributor to article
-     */
-    public function testAddContributor()
-    {
-        $am = new ArticleManager();
-        $rm = new RoleManager();
-        $pm = new PeopleManager();
-
-        $article = $am->create([
-            "publisher_id" => 1,
-        ]);
-
-        $people = $pm->create(["people_first_name" => "Luke", "people_last_name" => "Skywalker"]);
-        $article->addContributor($people, 1);
-
-        $role = $rm->get(['article_id' => $article->get('id'), 'people_id' => $people->get('id'), 'job_id' => 1]);
-        $this->assertInstanceOf('Role', $role);
-
-        $pm->delete($people);
-    }
-
-    public function testAddContributorWrongJob()
-    {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("Cannot add contributor with invalid job 25");
-
-        // given
-        $am = new ArticleManager();
-        $pm = new PeopleManager();
-
-        $article = $am->create(["publisher_id" => 1]);
-        $people = $pm->create([
-            "people_first_name" => "Luke",
-            "people_last_name" => "Skywalker"
-        ]);
-        $article->addContributor($people, 25);
-
-        $pm->delete($people);
-        $am->delete($article);
-    }
-
-    /**
     * Test getting article contributors
     * @depends testUpdate
     */
@@ -451,19 +410,15 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($article->hasOtherContributors());
 
         $pm = new PeopleManager();
-        $rm = new RoleManager();
-        $am = new ArticleManager();
 
         $people1 = $pm->create(["people_first_name" => "Han", "people_last_name" => "Solo"]);
         $people2 = $pm->create(["people_first_name" => "Leia", "people_last_name" => "Organa"]);
-
-        $article->addContributor($people1, 1);
-        $article->addContributor($people2, 2);
+        $article = Factory::createArticle(["article_title" => "Rebellion!"], [$people1, $people2]);
 
         $contributors = $article->getContributors();
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($contributors),
+            $contributors,
             "it should return 2 contributors"
         );
         $this->assertEquals($people1->get('id'), $contributors[0]->get('id'));
@@ -471,11 +426,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         $authors = $article->getAuthors();
         $this->assertEquals($authors[0]->get('id'), $people1->get('id'));
-        $this->assertEquals($authors[0]->getJobId(), 1);
-
-        $otherContributors = $article->getOtherContributors();
-        $this->assertEquals($otherContributors[0]->get('id'), $people2->get('id'));
-        $this->assertEquals($otherContributors[0]->getJobId(), 2);
+        $this->assertEquals(1, $authors[0]->getJobId());
 
         $pm->delete($people1);
         $pm->delete($people2);
@@ -677,10 +628,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testGetJsArray()
     {
         $rm = new RayonManager();
-        $pm = new PeopleManager();
         $article = Factory::createArticle();
-        $people = $pm->create(["people_last_name" => "An author"]);
-        $article->addContributor($people, 1);
 
         $rayon1 = $rm->create(["rayon_name" => "Rayon 1"]);
         $rayon2 = $rm->create(["rayon_name" => "Rayon 2"]);

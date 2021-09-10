@@ -2,9 +2,8 @@
 
 namespace Biblys\Contributor;
 
-use http\Exception\InvalidArgumentException;
-use Model\Article;
-use People;
+use InvalidArgumentException;
+use Model\People;
 
 class Contributor
 {
@@ -31,11 +30,11 @@ class Contributor
 
     public function getRole(): string
     {
-        if ($this->_people->get("gender") === "F") {
+        if ($this->_people->getGender() === "F") {
             return $this->_job->getFeminineName();
         }
 
-        if ($this->_people->get("gender") === "M") {
+        if ($this->_people->getGender() === "M") {
             return $this->_job->getMasculineName();
         }
 
