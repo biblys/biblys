@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Contributor\Contributor;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,6 +27,7 @@ if (!$browser->isUpToDate()) {
 $_JS_CALLS[] = '/common/js/adm_article.js';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    /** @var Article $article */
     $article = $am->getById($_POST['article_id']);
 
     $params = array();
@@ -497,39 +499,35 @@ if ($cycle) {
 // ** PEOPLE ** //
 
 // Roles
-$jobs = $_SQL->query('SELECT `job_id`, `job_name` FROM `jobs` ORDER BY `job_order` DESC, `job_name`');
-$jobs_options = null;
-while ($j = $jobs->fetch(PDO::FETCH_ASSOC)) {
-    $jobs_options .= '<option value="'.$j['job_id'].'">'.$j['job_name'].'</option>';
-}
-$content .= '<div id="new_people_job" hidden><select id="new_people_job">'.$jobs_options.'</select></div>';
+$jobs = \Biblys\Contributor\Job::getAll();
+$jobOptions = array_map(function(\Biblys\Contributor\Job $job) {
+    return '<option value="'.$job->getId().'">'.$job->getNeutralName().'</option>';
+}, $jobs);
+$content .= '<select id="new_people_job" hidden>'.join($jobOptions).'</select>';
 
 // Contributeurs
 if ($_MODE == 'insert') {
     $delete = $_SQL->prepare('DELETE FROM `roles` WHERE `article_id` = :article_id');
     $delete->execute(['article_id' => $article->get('id')]);
 }
-$people = $_SQL->prepare(
-    'SELECT `id`, `people_id`, `people_name`, `job_id`, `job_name` FROM `people`
-        JOIN `roles` USING(`people_id`)
-        JOIN `jobs` USING(`job_id`)
-        WHERE `article_id` = :article_id
-        ORDER BY `job_id`'
-);
-$people->execute(['article_id' => $article->get('id')]);
-$peoples = null;
-while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
-    $peoples .= '
-        <p id="role_'.$p['id'].'" class="article_role">
-            <label for="job_id_'.$p['id'].'">'.$p['people_name'].'&nbsp;:</label>
-            <select id="job_id_'.$p['id'].'" class="change_role" data-role_id="'.$p['id'].'">
-                <option value="'.$p['job_id'].'">'.$p['job_name'].'</option>
-                '.$jobs_options.'
+$contributors = $article->getContributors();
+$contributorLines = array_map(function(Contributor $contributor) use($jobOptions) {
+    return '
+        <p id="contribution_'.$contributor->getContributionId().'" class="article_role">
+            <label>'.$contributor->getName().'&nbsp;:</label>
+            <select class="contribution-role-selector" data-contribution_id="'.$contributor->getContributionId().'">
+                <option value="'.$contributor->getJobId().'">'.$contributor->getRole().'</option>
+                '.join($jobOptions).'
             </select>
-            <a class="btn btn-danger btn-xs remove_people" data-role_id="'.$p['id'].'" ><i class="fa fa-remove"></i></a>
+            <a 
+                class="btn btn-danger btn-xs contribution-delete-button" 
+                data-contribution_id="'.$contributor->getContributionId().'"
+            >
+                <span class="fa fa-remove"></span>
+            </a>
         </p>
     ';
-}
+}, $contributors);
 
 // ** FICHIERS ** //
 
@@ -766,7 +764,7 @@ $content .= '
                 <a href="http://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
             <legend>Contributeurs</legend>
                 <div id="people_list">
-                    '.$peoples.'
+                    '.join($contributorLines).'
                 </div>
             <br /><br />
 

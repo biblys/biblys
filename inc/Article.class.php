@@ -5,6 +5,7 @@ use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
 use Biblys\Article\Type;
+use Model\PeopleQuery;
 
 class Article extends Entity
 {
@@ -123,7 +124,7 @@ class Article extends Entity
 
         $roles = $rm->getAll(["article_id" => $this->get("id")]);
         foreach ($roles as $role) {
-            $people = $pm->getById($role->get("people_id"));
+            $people = PeopleQuery::create()->findPk($role->get("people_id"));
             $job = \Biblys\Contributor\Job::getById($role->get("job_id"));
             $this->contributors[] = new Contributor($people, $job, $role->get("id"));
         }

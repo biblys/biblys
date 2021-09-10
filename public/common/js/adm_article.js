@@ -48,35 +48,6 @@ function choose_cycle(cycle_id, cycle_name) {
   $('#article_tome').focus();
 }
 
-// Choisir un contributeur
-function choose_people(people_id, people_name, job_id) {
-  $.ajax({
-    url: '/x/adm_article_people',
-    method: 'POST',
-    data: {
-      action: 'add',
-      article_id: $('#article_id').val(),
-      people_id: people_id,
-      people_name: people_name,
-      job_id: job_id
-    },
-    complete: function (jqXHR) {
-      var data = jqXHR.responseJSON;
-      $('#article_people').removeAttr('readonly').removeClass('loading');
-      if (data.error) {
-        window._alert(data.error);
-      } else {
-        $('#people_list').append(data.people);
-        $('#job_id_' + data.role_id).html($('#new_people_job').html()).focus();
-        $('#job_id_' + data.role_id + ' option[value=' + job_id + ']').attr('selected', 'selected');
-        $('#article_authors').val(data.authors);
-        $('#article_people').val('');
-        reloadEvents($('#people_list'));
-      }
-    }
-  });
-}
-
 // Recherche dans les bases externes
 function article_search() {
   var field;
@@ -253,7 +224,7 @@ function reloadEvents(scope) {
             // var count = res.article_people.length;
             $.each(res.article_people, function (pkey, pval) {
               overlay('Importation en cours...');
-              choose_people(pval.people_id, pval.people_name, pval.job_id);
+              _addContribution(pval.people_id, pval.job_id);
             });
           }
           $('#article_people').val('');
@@ -319,48 +290,6 @@ function reloadEvents(scope) {
       }
     });
   }).removeClass('event');
-
-  // CONTRIBUTEURS
-
-  // Changer le role d'un contributeur
-  $('.change_role', scope).change(function () {
-    var role_id = $(this).data('role_id');
-    var job_id = $(this).val();
-    $('#role_' + role_id).fadeTo('slow', '0.5');
-    $.post('/x/adm_article_people', {
-      action: 'update',
-      article_id: $('#article_id').val(),
-      role_id: role_id,
-      job_id: job_id
-    }, function (data) {
-      $('#role_' + role_id).fadeTo('fast', '1');
-      if (data.error) _alert(data.error);
-      else {
-        $('#article_authors').val(data.authors);
-        $('#article_people').focus();
-      }
-    });
-  });
-
-  // Retirer un contributeur
-  $('.remove_people', scope).click(function (e) {
-    e.preventDefault();
-    var role_id = $(this).data('role_id');
-    $('#role_' + role_id).fadeTo('fast', '0.5');
-    $.post('/x/adm_article_people', {
-      action: 'remove',
-      article_id: $('#article_id').val(),
-      role_id: role_id,
-    }, function (data) {
-      if (data.error) {
-        _alert(data.error);
-        $('#role_' + role_id).fadeTo('fast', '1');
-      } else {
-        $('#role_' + role_id).slideUp();
-        $('#article_authors').val(data.authors);
-      }
-    });
-  });
 
   // Supprimer un lien
   $('.deleteLink').click(function () {
@@ -462,7 +391,7 @@ $(document).ready(function () {
           $('#people_first_name').val('');
           $('#people_last_name').val('');
           $('#create_people').dialog('close');
-          choose_people(data.people_id, data.people_name, data.job_id);
+          _addContribution(data.people_id, data.job_id);
         }
       },
       error: function(jqXHR) {
@@ -507,7 +436,7 @@ $(document).ready(function () {
           return;
         }
 
-        _alert("Impossible d'associer cette collection à un article car l'éditeur correspondant n'est pas autorisé sur le site.")
+        _alert('Impossible d\'associer cette collection à un article car l\'éditeur correspondant n\'est pas autorisé sur le site.');
       }
     }
   });
@@ -541,7 +470,7 @@ $(document).ready(function () {
             choose_publisher(ui.item.publisher_id, ui.item.value, ui.item);
             return;
           }
-          _alert("Impossible d'associer cet éditeur à un article car il n'est pas autorisé sur le site.");
+          _alert('Impossible d\'associer cet éditeur à un article car il n\'est pas autorisé sur le site.');
         }
       }
     });
@@ -618,7 +547,8 @@ $(document).ready(function () {
         });
         $('#people_first_name').focus();
       } else { // Selectionner un contributeur existant
-        choose_people(ui.item.id, ui.item.label, 1);
+        _addContribution(ui.item.id, 1);
+        field.removeAttr('readonly').removeClass('loading').val('');
       }
     }
   });
@@ -852,11 +782,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Importation a partir du titre
-  // $('#article_title', scope).blur(function () {
-  //   if ($('#article_form').data('mode') == 'insert' && !$('#article_ean').val() && $('#article_title').val()) article_search();
-  // });
-
   const titleElement = document.querySelector('#article_title');
   titleElement.addEventListener('blur', function() {
     const form = document.querySelector('#article_form');
@@ -866,3 +791,136 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.contribution-role-selector').forEach(element => {
+    element.addEventListener('change', _changeContributionRole);
+  });
+  document.querySelectorAll('.contribution-delete-button').forEach(element => {
+    element.addEventListener('click', _removeContribution);
+  });
+});
+
+function _addContribution(peopleId, jobId) {
+  const articleId = document.querySelector('#article_id').value;
+  fetch('/api/admin/contributions/add', {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      article_id: articleId,
+      people_id: peopleId,
+      job_id: jobId
+    }),
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+
+    const {
+      contribution_id: contributionId,
+      contributor_name: contributorName,
+      contributor_role: contributorRole,
+    } = data;
+
+    $('#contribution_' + contributionId).fadeTo('fast', '1');
+
+    if (data.error) {
+      return _alert(data.error);
+    }
+
+    const contributionLineSelector = `#contribution_${contributionId}`;
+
+    const contributorLine = _createElementFromHTML(`
+      <p id="contribution_${contributionId}" class="article_role">
+        <label>${contributorName}&nbsp;:</label>
+        <select class="contribution-role-selector" data-contribution_id="${contributionId}">
+            <option value="${jobId}">${contributorRole}</option>
+        </select>
+        <a 
+            class="btn btn-danger btn-xs contribution-delete-button" 
+            data-contribution_id="${contributionId}"
+        >
+            <span class="fa fa-remove"></span>
+        </a>
+      </p>
+    `);
+
+    $('#people_list').append(contributorLine);
+    $(`${contributionLineSelector} select`).html($('#new_people_job').html()).focus();
+    $(`${contributionLineSelector} option[value=${jobId}]`).attr('selected', 'selected');
+    $('#article_authors').val(data.authors);
+    $('#article_people').val('');
+
+    const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
+    const deleteButton = document.querySelector(`${contributionLineSelector} .contribution-delete-button`);
+    roleSelector.addEventListener('change', _changeContributionRole);
+    deleteButton.addEventListener('click', _removeContribution);
+  });
+}
+
+function _changeContributionRole() {
+  const contributionId = this.dataset.contribution_id;
+  const jobId = this.value;
+
+  $('#contribution_' + contributionId).fadeTo('slow', '0.5');
+
+  fetch(`/api/admin/contributions/${contributionId}/update`, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    method: 'POST',
+    body: JSON.stringify({ job_id: jobId }),
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+
+    $('#contribution_' + contributionId).fadeTo('fast', '1');
+
+    if (data.error) {
+      return _alert(data.error);
+    }
+
+    $('#article_authors').val(data.authors);
+    $('#article_people').focus();
+  });
+}
+
+function _removeContribution() {
+  const contributionId = this.dataset.contribution_id;
+  const contributionElement = $('#contribution_' + contributionId);
+
+  contributionElement.fadeTo('slow', '0.5');
+
+  fetch(`/api/admin/contributions/${contributionId}/delete`, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    method: 'POST',
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+
+    contributionElement.fadeTo('fast', '1');
+
+    if (data.error) {
+      _alert(data.error);
+    }
+
+    contributionElement.slideUp();
+    $('#article_authors').val(data.authors);
+  });
+}
+
+function _createElementFromHTML(html) {
+  const template = document.createElement('template');
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
+}

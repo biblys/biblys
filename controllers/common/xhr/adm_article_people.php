@@ -58,26 +58,6 @@ if (isset($term)) {
     $json[$i]["value"] = $term;
     $json[$i]["create"] = 1;
 
-} elseif ($action === 'add') {
-
-    // Add a new role (contributor / article / job association)
-    $people = $pm->getById($peopleId);
-    $role = $article->addContributor($people, $jobId);
-
-    $json["role_id"] = $role->get('id');
-    $json["job_id"] = $role->get('job_id');
-    $json["people"] = '
-        <p id="role_'.$json["role_id"].'" class="article_role">
-            <label for="job_id_'.$json["role_id"].'">'.$peopleName.'&nbsp;:</label>
-            <select id="job_id_'.$json["role_id"].'" 
-                class="change_role" data-role_id="'.$json["role_id"].'"></select>
-            <a class="btn btn-danger btn-xs remove_people" 
-                data-role_id="'.$json["role_id"].'">
-                    <span class="fa fa-remove"></span>
-            </a>
-        </p>
-    ';
-
 } elseif ($action === 'create') {
 
     /** @var Request $request */
