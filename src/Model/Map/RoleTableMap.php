@@ -302,7 +302,7 @@ class RoleTableMap extends TableMap
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
         $this->addColumn('event_id', 'EventId', 'INTEGER', false, 10, null);
-        $this->addColumn('people_id', 'PeopleId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('people_id', 'PeopleId', 'INTEGER', 'people', 'people_id', false, 10, null);
         $this->addColumn('job_id', 'JobId', 'INTEGER', false, 10, null);
         $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
         $this->addColumn('role_hide', 'Hide', 'BOOLEAN', false, 1, null);
@@ -323,6 +323,13 @@ class RoleTableMap extends TableMap
   array (
     0 => ':article_id',
     1 => ':article_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('People', '\\Model\\People', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':people_id',
+    1 => ':people_id',
   ),
 ), null, null, null, false);
     } // buildRelations()

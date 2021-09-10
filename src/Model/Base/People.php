@@ -7,12 +7,16 @@ use \Exception;
 use \PDO;
 use Model\People as ChildPeople;
 use Model\PeopleQuery as ChildPeopleQuery;
+use Model\Role as ChildRole;
+use Model\RoleQuery as ChildRoleQuery;
 use Model\Map\PeopleTableMap;
+use Model\Map\RoleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -231,12 +235,24 @@ abstract class People implements ActiveRecordInterface
     protected $people_deleted;
 
     /**
+     * @var        ObjectCollection|ChildRole[] Collection to store aggregation of ChildRole objects.
+     */
+    protected $collRoles;
+    protected $collRolesPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildRole[]
+     */
+    protected $rolesScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Model\Base\People object.
@@ -1437,6 +1453,8 @@ abstract class People implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collRoles = null;
+
         } // if (deep)
     }
 
@@ -1562,6 +1580,24 @@ abstract class People implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->rolesScheduledForDeletion !== null) {
+                if (!$this->rolesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->rolesScheduledForDeletion as $role) {
+                        // need to save related object because we set the relation to null
+                        $role->save($con);
+                    }
+                    $this->rolesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRoles !== null) {
+                foreach ($this->collRoles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1896,10 +1932,11 @@ abstract class People implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['People'][$this->hashCode()])) {
@@ -1962,6 +1999,23 @@ abstract class People implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collRoles) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'roles';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'roless';
+                        break;
+                    default:
+                        $key = 'Roles';
+                }
+
+                $result[$key] = $this->collRoles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -2387,6 +2441,20 @@ abstract class People implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setDeletedAt($this->getDeletedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getRoles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRole($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2413,6 +2481,282 @@ abstract class People implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Role' === $relationName) {
+            $this->initRoles();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collRoles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addRoles()
+     */
+    public function clearRoles()
+    {
+        $this->collRoles = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collRoles collection loaded partially.
+     */
+    public function resetPartialRoles($v = true)
+    {
+        $this->collRolesPartial = $v;
+    }
+
+    /**
+     * Initializes the collRoles collection.
+     *
+     * By default this just sets the collRoles collection to an empty array (like clearcollRoles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRoles($overrideExisting = true)
+    {
+        if (null !== $this->collRoles && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = RoleTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collRoles = new $collectionClassName;
+        $this->collRoles->setModel('\Model\Role');
+    }
+
+    /**
+     * Gets an array of ChildRole objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPeople is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildRole[] List of ChildRole objects
+     * @throws PropelException
+     */
+    public function getRoles(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collRolesPartial && !$this->isNew();
+        if (null === $this->collRoles || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collRoles) {
+                    $this->initRoles();
+                } else {
+                    $collectionClassName = RoleTableMap::getTableMap()->getCollectionClassName();
+
+                    $collRoles = new $collectionClassName;
+                    $collRoles->setModel('\Model\Role');
+
+                    return $collRoles;
+                }
+            } else {
+                $collRoles = ChildRoleQuery::create(null, $criteria)
+                    ->filterByPeople($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collRolesPartial && count($collRoles)) {
+                        $this->initRoles(false);
+
+                        foreach ($collRoles as $obj) {
+                            if (false == $this->collRoles->contains($obj)) {
+                                $this->collRoles->append($obj);
+                            }
+                        }
+
+                        $this->collRolesPartial = true;
+                    }
+
+                    return $collRoles;
+                }
+
+                if ($partial && $this->collRoles) {
+                    foreach ($this->collRoles as $obj) {
+                        if ($obj->isNew()) {
+                            $collRoles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRoles = $collRoles;
+                $this->collRolesPartial = false;
+            }
+        }
+
+        return $this->collRoles;
+    }
+
+    /**
+     * Sets a collection of ChildRole objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $roles A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPeople The current object (for fluent API support)
+     */
+    public function setRoles(Collection $roles, ConnectionInterface $con = null)
+    {
+        /** @var ChildRole[] $rolesToDelete */
+        $rolesToDelete = $this->getRoles(new Criteria(), $con)->diff($roles);
+
+
+        $this->rolesScheduledForDeletion = $rolesToDelete;
+
+        foreach ($rolesToDelete as $roleRemoved) {
+            $roleRemoved->setPeople(null);
+        }
+
+        $this->collRoles = null;
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        $this->collRoles = $roles;
+        $this->collRolesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Role objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Role objects.
+     * @throws PropelException
+     */
+    public function countRoles(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collRolesPartial && !$this->isNew();
+        if (null === $this->collRoles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRoles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRoles());
+            }
+
+            $query = ChildRoleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPeople($this)
+                ->count($con);
+        }
+
+        return count($this->collRoles);
+    }
+
+    /**
+     * Method called to associate a ChildRole object to this object
+     * through the ChildRole foreign key attribute.
+     *
+     * @param  ChildRole $l ChildRole
+     * @return $this|\Model\People The current object (for fluent API support)
+     */
+    public function addRole(ChildRole $l)
+    {
+        if ($this->collRoles === null) {
+            $this->initRoles();
+            $this->collRolesPartial = true;
+        }
+
+        if (!$this->collRoles->contains($l)) {
+            $this->doAddRole($l);
+
+            if ($this->rolesScheduledForDeletion and $this->rolesScheduledForDeletion->contains($l)) {
+                $this->rolesScheduledForDeletion->remove($this->rolesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildRole $role The ChildRole object to add.
+     */
+    protected function doAddRole(ChildRole $role)
+    {
+        $this->collRoles[]= $role;
+        $role->setPeople($this);
+    }
+
+    /**
+     * @param  ChildRole $role The ChildRole object to remove.
+     * @return $this|ChildPeople The current object (for fluent API support)
+     */
+    public function removeRole(ChildRole $role)
+    {
+        if ($this->getRoles()->contains($role)) {
+            $pos = $this->collRoles->search($role);
+            $this->collRoles->remove($pos);
+            if (null === $this->rolesScheduledForDeletion) {
+                $this->rolesScheduledForDeletion = clone $this->collRoles;
+                $this->rolesScheduledForDeletion->clear();
+            }
+            $this->rolesScheduledForDeletion[]= $role;
+            $role->setPeople(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this People is new, it will return
+     * an empty collection; or if this People has previously
+     * been saved, it will retrieve related Roles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in People.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRole[] List of ChildRole objects
+     */
+    public function getRolesJoinArticle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRoleQuery::create(null, $criteria);
+        $query->joinWith('Article', $joinBehavior);
+
+        return $this->getRoles($query, $con);
     }
 
     /**
@@ -2464,8 +2808,14 @@ abstract class People implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collRoles) {
+                foreach ($this->collRoles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collRoles = null;
     }
 
     /**

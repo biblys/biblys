@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
+use Model\People as ChildPeople;
+use Model\PeopleQuery as ChildPeopleQuery;
 use Model\Role as ChildRole;
 use Model\RoleQuery as ChildRoleQuery;
 use Model\Map\RoleTableMap;
@@ -159,6 +161,11 @@ abstract class Role implements ActiveRecordInterface
      * @var        ChildArticle
      */
     protected $aArticle;
+
+    /**
+     * @var        ChildPeople
+     */
+    protected $aPeople;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -674,6 +681,10 @@ abstract class Role implements ActiveRecordInterface
             $this->modifiedColumns[RoleTableMap::COL_PEOPLE_ID] = true;
         }
 
+        if ($this->aPeople !== null && $this->aPeople->getId() !== $v) {
+            $this->aPeople = null;
+        }
+
         return $this;
     } // setPeopleId()
 
@@ -964,6 +975,9 @@ abstract class Role implements ActiveRecordInterface
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
+        if ($this->aPeople !== null && $this->people_id !== $this->aPeople->getId()) {
+            $this->aPeople = null;
+        }
     } // ensureConsistency
 
     /**
@@ -1004,6 +1018,7 @@ abstract class Role implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aArticle = null;
+            $this->aPeople = null;
         } // if (deep)
     }
 
@@ -1130,6 +1145,13 @@ abstract class Role implements ActiveRecordInterface
                     $affectedRows += $this->aArticle->save($con);
                 }
                 $this->setArticle($this->aArticle);
+            }
+
+            if ($this->aPeople !== null) {
+                if ($this->aPeople->isModified() || $this->aPeople->isNew()) {
+                    $affectedRows += $this->aPeople->save($con);
+                }
+                $this->setPeople($this->aPeople);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1439,6 +1461,21 @@ abstract class Role implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aArticle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aPeople) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'people';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'people';
+                        break;
+                    default:
+                        $key = 'People';
+                }
+
+                $result[$key] = $this->aPeople->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1836,6 +1873,57 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildPeople object.
+     *
+     * @param  ChildPeople|null $v
+     * @return $this|\Model\Role The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPeople(ChildPeople $v = null)
+    {
+        if ($v === null) {
+            $this->setPeopleId(NULL);
+        } else {
+            $this->setPeopleId($v->getId());
+        }
+
+        $this->aPeople = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPeople object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRole($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPeople object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPeople|null The associated ChildPeople object.
+     * @throws PropelException
+     */
+    public function getPeople(ConnectionInterface $con = null)
+    {
+        if ($this->aPeople === null && ($this->people_id != 0)) {
+            $this->aPeople = ChildPeopleQuery::create()->findPk($this->people_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPeople->addRoles($this);
+             */
+        }
+
+        return $this->aPeople;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1844,6 +1932,9 @@ abstract class Role implements ActiveRecordInterface
     {
         if (null !== $this->aArticle) {
             $this->aArticle->removeRole($this);
+        }
+        if (null !== $this->aPeople) {
+            $this->aPeople->removeRole($this);
         }
         $this->id = null;
         $this->article_id = null;
@@ -1879,6 +1970,7 @@ abstract class Role implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aArticle = null;
+        $this->aPeople = null;
     }
 
     /**

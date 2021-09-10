@@ -1183,6 +1183,9 @@
     <foreign-key foreignTable="articles">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
+    <foreign-key foreignTable="people">
+      <reference local="people_id" foreign="people_id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>

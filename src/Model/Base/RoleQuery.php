@@ -66,7 +66,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
  * @method     ChildRoleQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
  *
- * @method     \Model\ArticleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildRoleQuery leftJoinPeople($relationAlias = null) Adds a LEFT JOIN clause to the query using the People relation
+ * @method     ChildRoleQuery rightJoinPeople($relationAlias = null) Adds a RIGHT JOIN clause to the query using the People relation
+ * @method     ChildRoleQuery innerJoinPeople($relationAlias = null) Adds a INNER JOIN clause to the query using the People relation
+ *
+ * @method     ChildRoleQuery joinWithPeople($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the People relation
+ *
+ * @method     ChildRoleQuery leftJoinWithPeople() Adds a LEFT JOIN clause and with to the query using the People relation
+ * @method     ChildRoleQuery rightJoinWithPeople() Adds a RIGHT JOIN clause and with to the query using the People relation
+ * @method     ChildRoleQuery innerJoinWithPeople() Adds a INNER JOIN clause and with to the query using the People relation
+ *
+ * @method     \Model\ArticleQuery|\Model\PeopleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRole|null findOne(ConnectionInterface $con = null) Return the first ChildRole matching the query
  * @method     ChildRole findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRole matching the query, or a new ChildRole object populated from the query conditions when no match is found
@@ -480,6 +490,8 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByPeopleId(array('min' => 12)); // WHERE people_id > 12
      * </code>
      *
+     * @see       filterByPeople()
+     *
      * @param     mixed $peopleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -892,6 +904,83 @@ abstract class RoleQuery extends ModelCriteria
         return $this
             ->joinArticle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Article', '\Model\ArticleQuery');
+    }
+
+    /**
+     * Filter the query by a related \Model\People object
+     *
+     * @param \Model\People|ObjectCollection $people The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildRoleQuery The current query, for fluid interface
+     */
+    public function filterByPeople($people, $comparison = null)
+    {
+        if ($people instanceof \Model\People) {
+            return $this
+                ->addUsingAlias(RoleTableMap::COL_PEOPLE_ID, $people->getId(), $comparison);
+        } elseif ($people instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RoleTableMap::COL_PEOPLE_ID, $people->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByPeople() only accepts arguments of type \Model\People or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the People relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRoleQuery The current query, for fluid interface
+     */
+    public function joinPeople($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('People');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'People');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the People relation People object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PeopleQuery A secondary query class using the current class as primary query
+     */
+    public function usePeopleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPeople($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'People', '\Model\PeopleQuery');
     }
 
     /**
