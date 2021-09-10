@@ -299,7 +299,7 @@ class RoleTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
         $this->addColumn('event_id', 'EventId', 'INTEGER', false, 10, null);
         $this->addColumn('people_id', 'PeopleId', 'INTEGER', false, 10, null);
@@ -318,6 +318,13 @@ class RoleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

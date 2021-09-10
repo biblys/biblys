@@ -1242,6 +1242,13 @@ class ArticleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Role', '\\Model\\Role', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, 'Roles', false);
     } // buildRelations()
 
     /**

@@ -1180,6 +1180,9 @@
       <unique-column name="people_id"/>
       <unique-column name="job_id"/>
     </unique>
+    <foreign-key foreignTable="articles">
+      <reference local="article_id" foreign="article_id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>

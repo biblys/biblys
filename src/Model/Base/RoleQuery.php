@@ -10,6 +10,7 @@ use Model\Map\RoleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -54,6 +55,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildRoleQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildRoleQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildRoleQuery leftJoinArticle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Article relation
+ * @method     ChildRoleQuery rightJoinArticle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Article relation
+ * @method     ChildRoleQuery innerJoinArticle($relationAlias = null) Adds a INNER JOIN clause to the query using the Article relation
+ *
+ * @method     ChildRoleQuery joinWithArticle($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Article relation
+ *
+ * @method     ChildRoleQuery leftJoinWithArticle() Adds a LEFT JOIN clause and with to the query using the Article relation
+ * @method     ChildRoleQuery rightJoinWithArticle() Adds a RIGHT JOIN clause and with to the query using the Article relation
+ * @method     ChildRoleQuery innerJoinWithArticle() Adds a INNER JOIN clause and with to the query using the Article relation
+ *
+ * @method     \Model\ArticleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildRole|null findOne(ConnectionInterface $con = null) Return the first ChildRole matching the query
  * @method     ChildRole findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRole matching the query, or a new ChildRole object populated from the query conditions when no match is found
@@ -341,6 +354,8 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByArticleId(array(12, 34)); // WHERE article_id IN (12, 34)
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
+     *
+     * @see       filterByArticle()
      *
      * @param     mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
@@ -800,6 +815,83 @@ abstract class RoleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RoleTableMap::COL_ROLE_DELETED, $deletedAt, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Model\Article object
+     *
+     * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildRoleQuery The current query, for fluid interface
+     */
+    public function filterByArticle($article, $comparison = null)
+    {
+        if ($article instanceof \Model\Article) {
+            return $this
+                ->addUsingAlias(RoleTableMap::COL_ARTICLE_ID, $article->getId(), $comparison);
+        } elseif ($article instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RoleTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Article relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildRoleQuery The current query, for fluid interface
+     */
+    public function joinArticle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Article');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Article');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Article relation Article object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ArticleQuery A secondary query class using the current class as primary query
+     */
+    public function useArticleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinArticle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Article', '\Model\ArticleQuery');
     }
 
     /**
