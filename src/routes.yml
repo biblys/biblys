@@ -10,6 +10,13 @@ api_me:
   methods: GET
   controller: ApiBundle\Controller\AuthController::meAction
 
+# Contribution
+
+api_contribution_update:
+  path: /api/admin/contributions/{id}/update
+  methods: POST
+  controller: ApiBundle\Controller\ContributionController::update
+
 # Shipping
 
 api_shipping:

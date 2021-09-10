@@ -63,15 +63,6 @@ if (isset($term)) {
         $rm->delete($role);
     }
 
-} elseif ($action === 'update') {
-
-    // Update a role to change contributor's role
-    $role = $rm->getById($roleId);
-    if ($role) {
-        $role->set('job_id', $jobId);
-        $rm->update($role);
-    }
-
 } elseif ($action === 'add') {
 
     // Add a new role (contributor / article / job association)
