@@ -7,12 +7,12 @@
 {% else %}
 
   {% if not query %}
-    <form>
+    <form class="search-form">
       <div class="form-group">
-        <input type="search" class="form-control" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
+        <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
       </div>
       <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary">Rechercher</button>
+        <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
       </div>
     </form>
   {% else %}
