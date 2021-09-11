@@ -70,13 +70,12 @@ class ContributionControllerTest extends TestCase
      * @throws AuthException
      * @throws Exception
      */
-    public function testAddAction()
+    public function testCreateAction()
     {
         // given
         $article = Factory::createArticle();
         $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
         $content = json_encode([
-            "article_id" => $article->get("id"),
             "people_id" => $person->get("id"),
             "job_id" => 14,
         ]);
@@ -84,7 +83,7 @@ class ContributionControllerTest extends TestCase
         $controller = new ContributionController();
 
         // when
-        $response = $controller->add($request);
+        $response = $controller->create($request, $article->get("id"));
 
         // then
         $this->assertEquals(

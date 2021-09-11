@@ -17,19 +17,19 @@ api_contribution:
   methods: GET
   controller: ApiBundle\Controller\ContributionController::index
 
-api_contribution_add:
-  path: /api/admin/contributions/add
+api_contribution_create:
+  path: /api/admin/articles/{articleId}/contributions
   methods: POST
-  controller: ApiBundle\Controller\ContributionController::add
+  controller: ApiBundle\Controller\ContributionController::create
 
 api_contribution_update:
-  path: /api/admin/contributions/{id}/update
-  methods: POST
+  path: /api/admin/articles/{articleId}/contributions/{id}
+  methods: PUT
   controller: ApiBundle\Controller\ContributionController::update
 
 api_contribution_delete:
-  path: /api/admin/contributions/{id}/delete
-  methods: POST
+  path: /api/admin/articles/{articleId}/contributions/{id}
+  methods: DELETE
   controller: ApiBundle\Controller\ContributionController::delete
 
 # Shipping

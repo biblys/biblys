@@ -54,7 +54,7 @@ class ContributionController extends Controller
      * @throws PropelException
      * @throws UnknownJobException
      */
-    public function add(Request $request): JsonResponse
+    public function create(Request $request, int $articleId): JsonResponse
     {
         self::authAdmin($request);
 
@@ -62,7 +62,7 @@ class ContributionController extends Controller
         $params = json_decode($encodedContent, true);
 
         $contribution = new Role();
-        $contribution->setArticleId($params["article_id"]);
+        $contribution->setArticleId($articleId);
         $contribution->setPeopleId($params["people_id"]);
         $contribution->setJobId($params["job_id"]);
         $contribution->save();

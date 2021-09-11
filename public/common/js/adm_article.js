@@ -805,12 +805,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function _loadContributions() {
   const articleId = document.querySelector('#article_id').value;
   fetch(`/api/admin/articles/${articleId}/contributions`, {
+    method: 'GET',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
-    method: 'GET',
   }).then(function (response) {
     return response.json();
   }).then(function (data) {
@@ -823,15 +823,14 @@ function _loadContributions() {
 
 function _addContribution(peopleId, jobId) {
   const articleId = document.querySelector('#article_id').value;
-  fetch('/api/admin/contributions/add', {
+  fetch(`/api/admin/articles/${articleId}/contributions`, {
+    method: 'POST',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
-    method: 'POST',
     body: JSON.stringify({
-      article_id: articleId,
       people_id: peopleId,
       job_id: jobId
     }),
@@ -849,18 +848,19 @@ function _addContribution(peopleId, jobId) {
 }
 
 function _changeContributionRole() {
+  const articleId = document.querySelector('#article_id').value;
   const contributionId = this.dataset.contribution_id;
   const jobId = this.value;
 
   $('#contribution_' + contributionId).fadeTo('slow', '0.5');
 
-  fetch(`/api/admin/contributions/${contributionId}/update`, {
+  fetch(`/api/admin/articles/${articleId}/contributions/${contributionId}`, {
+    method: 'PUT',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
-    method: 'POST',
     body: JSON.stringify({ job_id: jobId }),
   }).then(function (response) {
     return response.json();
@@ -878,18 +878,19 @@ function _changeContributionRole() {
 }
 
 function _removeContribution() {
+  const articleId = document.querySelector('#article_id').value;
   const contributionId = this.dataset.contribution_id;
   const contributionElement = $('#contribution_' + contributionId);
 
   contributionElement.fadeTo('slow', '0.5');
 
-  fetch(`/api/admin/contributions/${contributionId}/delete`, {
+  fetch(`/api/admin/articles/${articleId}/contributions/${contributionId}`, {
+    method: 'DELETE',
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
     },
-    method: 'POST',
   }).then(function (response) {
     return response.json();
   }).then(function (data) {
