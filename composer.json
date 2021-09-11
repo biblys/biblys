@@ -23,7 +23,7 @@
     "db:seed": "bin/console db:seed"
   },
   "require": {
-    "php": "^7.2",
+    "php": "^7.3",
     "ext-json": "*",
     "ext-pdo": "*",
     "biblys/eurotax": "1.*",
