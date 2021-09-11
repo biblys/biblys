@@ -35,11 +35,16 @@ class ContributionController extends Controller
                 Job::getById($contribution->getJobId()),
                 $contribution->getId()
             );
+
+            $gender = $contribution->getPeople()->getGender();
+            $jobsForGender = $this->getJobsForGender($gender);
+
             return [
                 "contribution_id" => $contributor->getContributionId(),
                 "contributor_name" => $contributor->getName(),
                 "contributor_role" => $contributor->getRole(),
                 "contributor_job_id" => $contributor->getJobId(),
+                "job_options" => $jobsForGender,
             ];
         }, $contributions->getData());
 
@@ -73,6 +78,9 @@ class ContributionController extends Controller
             $contribution->getId()
         );
 
+        $gender = $contribution->getPeople()->getGender();
+        $jobsForGender = $this->getJobsForGender($gender);
+
         $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
         return new JsonResponse([
             "contributor" => [
@@ -80,6 +88,7 @@ class ContributionController extends Controller
                 "contributor_name" => $contributor->getName(),
                 "contributor_role" => $contributor->getRole(),
                 "contributor_job_id" => $contributor->getJobId(),
+                "job_options" => $jobsForGender,
             ],
             "authors" => $authorNamesAsString
         ]);
@@ -137,5 +146,29 @@ class ContributionController extends Controller
         }, $contributionsByAuthors->getData());
 
         return join(", ", $authorNames);
+    }
+
+    /**
+     * @param string|null $gender
+     * @return array|array[]
+     */
+    private function getJobsForGender(?string $gender): array
+    {
+        $jobs = Job::getAll();
+        return array_map(function (Job $job) use ($gender) {
+
+            if ($gender === "F") {
+                $jobName = $job->getFeminineName();
+            } elseif ($gender === "M") {
+                $jobName = $job->getMasculineName();
+            } else {
+                $jobName = $job->getNeutralName();
+            }
+
+            return [
+                "job_id" => $job->getId(),
+                "job_name" => $jobName,
+            ];
+        }, $jobs);
     }
 }

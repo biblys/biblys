@@ -496,16 +496,8 @@ if ($cycle) {
     ';
 }
 
-// ** PEOPLE ** //
+// ** CONTRIBUTIONS ** //
 
-// Roles
-$jobs = \Biblys\Contributor\Job::getAll();
-$jobOptions = array_map(function(\Biblys\Contributor\Job $job) {
-    return '<option value="'.$job->getId().'">'.$job->getNeutralName().'</option>';
-}, $jobs);
-$content .= '<select id="new_people_job" hidden>'.join($jobOptions).'</select>';
-
-// Contributeurs
 if ($_MODE == 'insert') {
     $delete = $_SQL->prepare('DELETE FROM `roles` WHERE `article_id` = :article_id');
     $delete->execute(['article_id' => $article->get('id')]);

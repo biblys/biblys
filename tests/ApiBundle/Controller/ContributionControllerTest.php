@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Controller;
 
-use Biblys\Contributor\UnknownJobException;
 use Biblys\Test\Factory;
 use Exception;
 use Framework\Exception\AuthException;
@@ -63,6 +62,11 @@ class ContributionControllerTest extends TestCase
             $contributor1["contributor_job_id"],
             "it should include job id in response"
         );
+        $this->assertEquals(
+            ["job_id" => 1, "job_name" => "Autrice"],
+            $contributor1["job_options"][2],
+            "it should include jobs with correct gender"
+        );
     }
 
     /**
@@ -117,6 +121,11 @@ class ContributionControllerTest extends TestCase
             14,
             $contributor["contributor_job_id"],
             "it should include job id in response"
+        );
+        $this->assertEquals(
+            ["job_id" => 1, "job_name" => "Autrice"],
+            $contributor["job_options"][2],
+            "it should include jobs with correct gender"
         );
         $this->assertEquals(
             "Hervé LE TERRIER",

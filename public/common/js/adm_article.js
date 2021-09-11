@@ -909,8 +909,8 @@ function _removeContribution() {
 function _addContributorLine({
   contribution_id: contributionId,
   contributor_name: contributorName,
-  contributor_role: contributorRole,
   contributor_job_id: contributorJobId,
+  job_options: jobOptions,
 }) {
   const contributionLineSelector = `#contribution_${contributionId}`;
 
@@ -918,7 +918,6 @@ function _addContributorLine({
     <p id="contribution_${contributionId}" class="article_role">
       <label>${contributorName}&nbsp;:</label>
       <select class="contribution-role-selector" data-contribution_id="${contributionId}">
-          <option value="${contributorJobId}">${contributorRole}</option>
       </select>
       <a 
           class="btn btn-danger btn-xs contribution-delete-button" 
@@ -930,7 +929,13 @@ function _addContributorLine({
   `);
 
   $('#people_list').append(contributorLine);
-  $(`${contributionLineSelector} select`).append($('#new_people_job').html()).focus();
+
+  const jobOptionsElements = jobOptions.map((jobOption) => {
+    return _createElementFromHTML(`
+      <option value="${jobOption.job_id}">${jobOption.job_name}</option>
+    `);
+  });
+  $(`${contributionLineSelector} select`).append(jobOptionsElements).focus();
   $(`${contributionLineSelector} option[value=${contributorJobId}]`).attr('selected', 'selected');
 
   const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
