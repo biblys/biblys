@@ -110,9 +110,9 @@ class ArticleController extends Controller
             ]);
         }
 
-        $this->setPageTitle('Recherche');
+        $request->attributes->set("page_title", "Recherche");
         if ($query) {
-            $this->setPageTitle('Recherche de '.$query);
+            $request->attributes->set("page_title", "Recherche de ".$query);
         }
 
         return $this->render('AppBundle:Article:search.html.twig', [
