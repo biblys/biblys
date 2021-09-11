@@ -510,24 +510,6 @@ if ($_MODE == 'insert') {
     $delete = $_SQL->prepare('DELETE FROM `roles` WHERE `article_id` = :article_id');
     $delete->execute(['article_id' => $article->get('id')]);
 }
-$contributors = $article->getContributors();
-$contributorLines = array_map(function(Contributor $contributor) use($jobOptions) {
-    return '
-        <p id="contribution_'.$contributor->getContributionId().'" class="article_role">
-            <label>'.$contributor->getName().'&nbsp;:</label>
-            <select class="contribution-role-selector" data-contribution_id="'.$contributor->getContributionId().'">
-                <option value="'.$contributor->getJobId().'">'.$contributor->getRole().'</option>
-                '.join($jobOptions).'
-            </select>
-            <a 
-                class="btn btn-danger btn-xs contribution-delete-button" 
-                data-contribution_id="'.$contributor->getContributionId().'"
-            >
-                <span class="fa fa-remove"></span>
-            </a>
-        </p>
-    ';
-}, $contributors);
 
 // ** FICHIERS ** //
 
@@ -761,11 +743,9 @@ $content .= '
         </fieldset>
 
         <fieldset id="Contributeurs">
-                <a href="http://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
+            <a href="http://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
             <legend>Contributeurs</legend>
-                <div id="people_list">
-                    '.join($contributorLines).'
-                </div>
+            <div id="people_list"></div>
             <br /><br />
 
             <label for="article_people">Ajouter :</label>

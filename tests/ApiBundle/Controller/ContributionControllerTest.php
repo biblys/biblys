@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Contributor\UnknownJobException;
 use Biblys\Test\Factory;
 use Exception;
 use Framework\Exception\AuthException;
@@ -16,6 +17,56 @@ class ContributionControllerTest extends TestCase
 {
     /**
      * @throws PropelException
+     * @throws Exception
+     */
+    public function testIndexAction()
+    {
+        // given
+        $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
+        $article = Factory::createArticle([], []);
+        $contribution = new Role();
+        $contribution->setArticleId($article->get("id"));
+        $contribution->setPeopleId($person->get("id"));
+        $contribution->setJobId(1);
+        $contribution->save();
+        $request = Factory::createAuthRequestForAdminUser();
+        $controller = new ContributionController();
+
+        // when
+        $response = $controller->index($request, $article->get("id"));
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $content = json_decode($response->getContent(), true);
+        $contributor1 = $content["contributors"][0];
+        $this->assertEquals(
+            $contribution->getId(),
+            $contributor1["contribution_id"],
+            "it should include contribution id in response"
+        );
+        $this->assertEquals(
+            "Lili RATON",
+            $contributor1["contributor_name"],
+            "it should include name in response"
+        );
+        $this->assertEquals(
+            "Autrice",
+            $contributor1["contributor_role"],
+            "it should include role in response"
+        );
+        $this->assertEquals(
+            1,
+            $contributor1["contributor_job_id"],
+            "it should include job id in response"
+        );
+    }
+
+    /**
+     * @throws PropelException
      * @throws AuthException
      * @throws Exception
      */
@@ -27,7 +78,7 @@ class ContributionControllerTest extends TestCase
         $content = json_encode([
             "article_id" => $article->get("id"),
             "people_id" => $person->get("id"),
-            "job_id" => 3,
+            "job_id" => 14,
         ]);
         $request = Factory::createAuthRequestForAdminUser($content);
         $controller = new ContributionController();
@@ -42,20 +93,31 @@ class ContributionControllerTest extends TestCase
             "it should respond with http 200"
         );
         $content = json_decode($response->getContent(), true);
-        $updatedContribution = RoleQuery::create()->findPk($content["contribution_id"]);
+        $contributor = $content["contributor"];
+        $addedContribution = RoleQuery::create()->findPk($contributor["contribution_id"]);
         $this->assertNotNull(
-            $updatedContribution,
+            $addedContribution,
             "it should have added the contribution"
         );
         $this->assertEquals(
+            $addedContribution->getId(),
+            $contributor["contribution_id"],
+            "it should include contribution id in response"
+        );
+        $this->assertEquals(
             "Lili RATON",
-            $content["contributor_name"],
+            $contributor["contributor_name"],
             "it should include name in response"
         );
         $this->assertEquals(
-            "Traductrice",
-            $content["contributor_role"],
+            "Autrice de la postface",
+            $contributor["contributor_role"],
             "it should include role in response"
+        );
+        $this->assertEquals(
+            14,
+            $contributor["contributor_job_id"],
+            "it should include job id in response"
         );
         $this->assertEquals(
             "Hervé LE TERRIER",

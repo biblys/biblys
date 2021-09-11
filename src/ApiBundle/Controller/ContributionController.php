@@ -4,8 +4,10 @@ namespace ApiBundle\Controller;
 
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
+use Biblys\Contributor\UnknownJobException;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Model\ArticleQuery;
 use Model\Role;
 use Model\RoleQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -14,11 +16,43 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ContributionController extends Controller
 {
+    /**
+     * @route /api/admin/articles/{articleId}/contributions
+     * @throws AuthException
+     * @throws PropelException
+     * @throws UnknownJobException
+     */
+    public function index(Request $request, $articleId): JsonResponse
+    {
+        self::authAdmin($request);
+
+        $article = ArticleQuery::create()->findPk($articleId);
+        $contributions = $article->getRolesJoinPeople();
+
+        $contributors = array_map(function(Role $contribution) {
+            $contributor = new Contributor(
+                $contribution->getPeople(),
+                Job::getById($contribution->getJobId()),
+                $contribution->getId()
+            );
+            return [
+                "contribution_id" => $contributor->getContributionId(),
+                "contributor_name" => $contributor->getName(),
+                "contributor_role" => $contributor->getRole(),
+                "contributor_job_id" => $contributor->getJobId(),
+            ];
+        }, $contributions->getData());
+
+
+        return new JsonResponse([
+            "contributors" => $contributors,
+        ]);
+    }
 
     /**
      * @throws AuthException
      * @throws PropelException
-     * @throws \Biblys\Contributor\UnknownJobException
+     * @throws UnknownJobException
      */
     public function add(Request $request): JsonResponse
     {
@@ -41,9 +75,12 @@ class ContributionController extends Controller
 
         $authorNamesAsString = $this->_getAuthorNamesAsString($contribution);
         return new JsonResponse([
-            "contribution_id" => $contribution->getId(),
-            "contributor_name" => $contributor->getName(),
-            "contributor_role" => $contributor->getRole(),
+            "contributor" => [
+                "contribution_id" => $contributor->getContributionId(),
+                "contributor_name" => $contributor->getName(),
+                "contributor_role" => $contributor->getRole(),
+                "contributor_job_id" => $contributor->getJobId(),
+            ],
             "authors" => $authorNamesAsString
         ]);
     }

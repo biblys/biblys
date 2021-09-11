@@ -12,6 +12,11 @@ api_me:
 
 # Contribution
 
+api_contribution:
+  path: /api/admin/articles/{articleId}/contributions
+  methods: GET
+  controller: ApiBundle\Controller\ContributionController::index
+
 api_contribution_add:
   path: /api/admin/contributions/add
   methods: POST

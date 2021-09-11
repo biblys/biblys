@@ -793,6 +793,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+  _loadContributions();
   document.querySelectorAll('.contribution-role-selector').forEach(element => {
     element.addEventListener('change', _changeContributionRole);
   });
@@ -800,6 +801,25 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', _removeContribution);
   });
 });
+
+function _loadContributions() {
+  const articleId = document.querySelector('#article_id').value;
+  fetch(`/api/admin/articles/${articleId}/contributions`, {
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    method: 'GET',
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    if (data.error) {
+      return _alert(data.error);
+    }
+    data.contributors.forEach(_addContributorLine);
+  });
+}
 
 function _addContribution(peopleId, jobId) {
   const articleId = document.querySelector('#article_id').value;
@@ -818,46 +838,13 @@ function _addContribution(peopleId, jobId) {
   }).then(function (response) {
     return response.json();
   }).then(function (data) {
-
-    const {
-      contribution_id: contributionId,
-      contributor_name: contributorName,
-      contributor_role: contributorRole,
-    } = data;
-
-    $('#contribution_' + contributionId).fadeTo('fast', '1');
-
     if (data.error) {
       return _alert(data.error);
     }
 
-    const contributionLineSelector = `#contribution_${contributionId}`;
-
-    const contributorLine = _createElementFromHTML(`
-      <p id="contribution_${contributionId}" class="article_role">
-        <label>${contributorName}&nbsp;:</label>
-        <select class="contribution-role-selector" data-contribution_id="${contributionId}">
-            <option value="${jobId}">${contributorRole}</option>
-        </select>
-        <a 
-            class="btn btn-danger btn-xs contribution-delete-button" 
-            data-contribution_id="${contributionId}"
-        >
-            <span class="fa fa-remove"></span>
-        </a>
-      </p>
-    `);
-
-    $('#people_list').append(contributorLine);
-    $(`${contributionLineSelector} select`).html($('#new_people_job').html()).focus();
-    $(`${contributionLineSelector} option[value=${jobId}]`).attr('selected', 'selected');
+    _addContributorLine(data.contributor);
     $('#article_authors').val(data.authors);
     $('#article_people').val('');
-
-    const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
-    const deleteButton = document.querySelector(`${contributionLineSelector} .contribution-delete-button`);
-    roleSelector.addEventListener('change', _changeContributionRole);
-    deleteButton.addEventListener('click', _removeContribution);
   });
 }
 
@@ -916,6 +903,39 @@ function _removeContribution() {
     contributionElement.slideUp();
     $('#article_authors').val(data.authors);
   });
+}
+
+function _addContributorLine({
+  contribution_id: contributionId,
+  contributor_name: contributorName,
+  contributor_role: contributorRole,
+  contributor_job_id: contributorJobId,
+}) {
+  const contributionLineSelector = `#contribution_${contributionId}`;
+
+  const contributorLine = _createElementFromHTML(`
+    <p id="contribution_${contributionId}" class="article_role">
+      <label>${contributorName}&nbsp;:</label>
+      <select class="contribution-role-selector" data-contribution_id="${contributionId}">
+          <option value="${contributorJobId}">${contributorRole}</option>
+      </select>
+      <a 
+          class="btn btn-danger btn-xs contribution-delete-button" 
+          data-contribution_id="${contributionId}"
+      >
+          <span class="fa fa-remove"></span>
+      </a>
+    </p>
+  `);
+
+  $('#people_list').append(contributorLine);
+  $(`${contributionLineSelector} select`).append($('#new_people_job').html()).focus();
+  $(`${contributionLineSelector} option[value=${contributorJobId}]`).attr('selected', 'selected');
+
+  const roleSelector = document.querySelector(`${contributionLineSelector} .contribution-role-selector`);
+  const deleteButton = document.querySelector(`${contributionLineSelector} .contribution-delete-button`);
+  roleSelector.addEventListener('change', _changeContributionRole);
+  deleteButton.addEventListener('click', _removeContribution);
 }
 
 function _createElementFromHTML(html) {
