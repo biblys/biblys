@@ -4,6 +4,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $content = "";
 
@@ -39,10 +40,11 @@ if (media_exists('people', $p["people_id"])) {
 }
 
 if (auth("admin")) {
+    /** @var UrlGenerator $urlgenerator */
     $content .= '
         <div class="admin">
             <p>Intervenant n° '.$p["people_id"].'</p>
-            <p><a href="/pages/adm_people?id='.$p["people_id"].'">modifier</a></p>
+            <p><a href="'.$urlgenerator->generate("people_edit", ["id" => $people->get("id")]).'">modifier</a></p>
         </div>
     ';
 }
@@ -53,15 +55,6 @@ $content .= '
 ';
 
 $p = $people;
-
-if (auth("admin")) {
-    $content .= '
-        <div class="admin">
-            <p>Intervenant n° '.$p["people_id"].'</p>
-            <p><a href="/pages/adm_people?id='.$p["people_id"].'">modifier</a></p>
-        </div>
-    ';
-}
 
 // Aliases
 $aliases = $pm->getAll(['people_pseudo' => $people->get('id')]);
