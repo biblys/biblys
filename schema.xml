@@ -927,7 +927,7 @@
     <column name="people_noosfere_id" phpName="NoosfereId" type="INTEGER"/>
     <column name="people_birth" phpName="Birth" type="INTEGER" size="4"/>
     <column name="people_death" phpName="Death" type="INTEGER" size="4"/>
-    <column name="people_gender" phpName="Gender" type="CHAR" sqlType="set('M','F')"/>
+    <column name="people_gender" phpName="Gender" type="CHAR" sqlType="set('M','F','N')"/>
     <column name="people_nation" phpName="Nation" type="VARCHAR"/>
     <column name="people_bio" phpName="Bio" type="LONGVARCHAR"/>
     <column name="people_site" phpName="Site" type="VARCHAR" size="255"/>
