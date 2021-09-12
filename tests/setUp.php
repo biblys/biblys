@@ -30,12 +30,6 @@ function createFixtures(): void
     $site->setContact("contact@biblys.fr");
     $site->save();
 
-    $job1 = new \Model\Job();
-    $job1->save();
-
-    $job2 = new \Model\Job();
-    $job2->save();
-
     $country = new \Model\Country();
     $country->setName("France");
     $country->save();

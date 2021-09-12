@@ -52,17 +52,6 @@ class CreateSeedsCommand extends Command
         $user->save();
         $output->writeln(["Inserted user: user@librys.fr (password: password)"]);
 
-        $job1 = new Job();
-        $job1->setName("Auteur·trice");
-        $job1->save();
-        $job2 = new Job();
-        $job2->setName("Traducteur·trice");
-        $job2->save();
-        $job3 = new Job();
-        $job3->setName("Illustrateur·trice");
-        $job3->save();
-        $output->writeln(["Inserted jobs: Auteur·trice, Traducteur·trice, Illustrateur·trice"]);
-
         $country = new Country();
         $country->setName("France");
         $country->save();
