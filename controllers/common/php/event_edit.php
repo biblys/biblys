@@ -1,5 +1,9 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+/** @var Visitor $_V */
 if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary()) $mode = 'admin';
 else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
@@ -7,7 +11,8 @@ $buttons = '<button type="submit" form="event" class="btn btn-primary"><i class=
 
 $em = new EventManager();
 
-$where = array('events`.`site_id' => $_SITE['site_id']);
+/** @var Site $site */
+$where = array('events`.`site_id' => $site->get("id"));
 
 if (!$_V->isAdmin())
 {
@@ -19,7 +24,7 @@ if (!$_V->isAdmin())
 // Edit an existing event
 if (isset($_GET['id']))
 {
-    if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $_SITE['site_id'])))
+    if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $site->get("id"))))
     {
         $_PAGE_TITLE = 'Modifier <a href="/evenement/'.$e['event_url'].'">'.$e['event_title'].'</a>';
         $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
@@ -34,19 +39,21 @@ else
     $e = new Event(array());
 }
 
+$content = null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
     if (isset($_GET['delete']))
     {
-        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $_SITE['site_id'])))
+        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $site->get("id"))))
         {
-            $params['success'] = $e->get('title').' a bien été supprimé.';
 
             try
             {
                 $em->delete($e);
-                redirect('/pages/log_events_admin', $params);
+                $success = $e->get('title').' a bien été supprimé.';
+                return new RedirectResponse("/pages/log_events_admin?success=$success");
             } catch (Exception $ex) {
                 trigger_error($ex->getMessage());
             }
@@ -65,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             $_POST['event_id'] = $e->get('id');
         }
 
-        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $_SITE['site_id'])))
+        if ($e = $em->get(array('event_id' => $_POST['event_id'], 'site_id' => $site->get("id"))))
         {
             foreach ($_POST as $key => $val)
             {
@@ -88,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             $e = $em->update($e);
 
-            $params['success'] = $e->get('title').' a bien été mise à jour.';
-            redirect('/evenement/'.$e->get('url'), $params);
+            $success = $e->get('title').' a bien été mise à jour.';
+            return new RedirectResponse("/evenement/".$e->get('url')."?success=$success");
         }
         else trigger_error('Cet évènement n\'existe pas.', E_USER_ERROR);
     }
@@ -100,9 +107,10 @@ else
 
     // Images
     require_once BIBLYS_PATH.'/inc/Image.class.php';
+    /** @var PDO $_SQL */
     $im = new ImagesManager($_SQL);
 
-    $_ECHO .= '
+    $content = '
         <h1><i class="fa fa-calendar"></i> '.$_PAGE_TITLE.'</h1>
         <p>'.$buttons.'</p>
 
@@ -148,14 +156,14 @@ else
                 <p>
                     <label for="event_status">État :</label>
                     <select name="event_status">
-                        <option value="0"'.($e->get('status') == 0 ? ' selected' : null).'>Hors-ligne</option>
-                        <option value="1"'.($e->get('status') == 1 ? ' selected' : null).'>En ligne</option>
+                        <option value="0" '.($e->get('status') == 0 ? ' selected' : null).'>Hors-ligne</option>
+                        <option value="1" '.($e->get('status') == 1 ? ' selected' : null).'>En ligne</option>
                     </select>
                 </p>
 
                 <p>
                     <label for="event_highlighted">Mise en avant :</label>
-                    <input type="checkbox" name="event_highlighted" id="event_highlighted" value="1"'.($e->get('highlighted') == 1 ? ' checked' : null).' >
+                    <input type="checkbox" name="event_highlighted" id="event_highlighted" value="1" '.($e->get('highlighted') == 1 ? ' checked' : null).' >
                 </p>
             </fieldset>
             
@@ -200,3 +208,5 @@ else
     
     ';
 }
+
+return new Response($content);
