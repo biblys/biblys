@@ -23,11 +23,6 @@ RewriteRule ^o/blog/$  /index.php?page=posts [QSA,L]
 RewriteRule ^o/blog/author/(.*)/$  /index.php?page=posts&author=$1 [QSA,L]
 RewriteRule ^o/blog/(.*)/$  /index.php?page=posts&category=$1 [QSA,L]
 RewriteRule ^o/blog/(.*)$  /index.php?page=post&url=$1 [QSA,L]
-# RewriteRule ^post/(.*)$  /blog/$1 [R=301,L] # was messing with /posts/x/delete route
-
-# Redirection /programme/ & Rewrite /evenement/
-RewriteRule ^programme/(.*)$  /evenement/$1 [R=301,NC,L]
-RewriteRule ^evenement/(.*)$  /index.php?page=event&url=$1 [QSA,L]
 
 # Redirection /order/
 RewriteRule ^order/(.*)$  /index.php?page=order&url=$1 [QSA,L]

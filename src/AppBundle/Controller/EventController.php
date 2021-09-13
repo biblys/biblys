@@ -51,11 +51,6 @@ class EventController extends Controller
     {
         global $site, $urlgenerator;
 
-        $use_old_controller = $site->getOpt('use_old_event_controller');
-        if ($use_old_controller) {
-            return $this->redirect('/o/blog/'.$slug);
-        }
-
         $em = new EventManager();
         $event = $em->get(["event_url" => $slug]);
 
@@ -75,11 +70,6 @@ class EventController extends Controller
 
         if (!$event) {
             throw new NotFoundException("Event $slug not found.");
-        }
-
-        $use_old_controller = $site->getOpt('use_old_event_controller');
-        if ($use_old_controller) {
-            return $this->redirect('/event/'.$slug, 301);
         }
 
         $request->attributes->set("page_title", $event->get("title"));
