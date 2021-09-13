@@ -1,6 +1,9 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
 // Check user rights
+/** @var Visitor $_V */
 if ($_V->isAdmin()) $mode = 'admin';
 elseif ($_V->isPublisher()) $mode = 'publisher';
 elseif ($_V->isBookshop()) $mode = 'bookshop';
@@ -11,7 +14,8 @@ $_PAGE_TITLE = 'Gestion des évènements';
 
 $em = new EventManager();
 
-$where = array('events`.`site_id' => $_SITE['site_id']);
+/** @var Site $site */
+$where = array('events`.`site_id' => $site->get("id"));
 
 if (!$_V->isAdmin())
 {
@@ -51,7 +55,7 @@ foreach ($events as $e)
 $alert = null;
 if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</p><br>';
 
-$_ECHO .= '
+$content = '
     <h1><span class="fa fa-calendar"></span> '.$_PAGE_TITLE.'</h1>
     <p class="buttonset">
         <a href="/pages/event_edit" class="btn btn-primary"><i class="fa fa-calendar-o"></i> Nouveau</a>
@@ -74,5 +78,6 @@ $_ECHO .= '
             '.$table.'
         </tbody>
     </table>
-
 ';
+
+return new Response($content);
