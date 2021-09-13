@@ -24,6 +24,8 @@
   },
   "require": {
     "php": "^7.2",
+    "ext-json": "*",
+    "ext-pdo": "*",
     "biblys/eurotax": "1.*",
     "symfony/http-foundation": "^5.3",
     "twig/twig": "^3.0",
@@ -58,7 +60,6 @@
     "egulias/email-validator": "3.1.1",
     "symfony/mime": "^5.2",
     "rollbar/rollbar": "~2.1",
-    "ext-json": "*",
     "propel/propel": "2.0.0-alpha12",
     "ircmaxell/random-lib": "^1.2"
   },

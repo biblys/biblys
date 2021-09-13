@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e90ca7f76fb9cc5d2fc7d04d282342e5",
+    "content-hash": "30b985660d6db12fe6b70b7951d83d86",
     "packages": [
         {
             "name": "biblys/data-client-php",
@@ -8555,7 +8555,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
