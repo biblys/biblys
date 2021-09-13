@@ -2,35 +2,26 @@
 
 namespace AppBundle\Controller;
 
+use EventManager;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-
-use \Exception;
 
 class EventController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
-        // global $site;
-
-        // $use_old_controller = $site->getOpt('use_old_event_controller');
-        // if ($use_old_controller) {
-        //     return $this->redirect('/o/blog/');
-        // }
-
         $queryParams = [
             "event_status" => 1,
             "event_start" => ">= ".date("Y-m-d H:i:s", time() - 60 * 60 * 24)
         ];
 
-        $pm = $this->entityManager("Event");
+        $em = new EventManager();
 
         // Pagination
         $page = (int) $request->query->get('p', 0);
-        $totalEventCount = $pm->count($queryParams);
+        $totalEventCount = $em->count($queryParams);
         $eventPerPage = 10;
         $totalPages = ceil($totalEventCount / $eventPerPage) + 1;
         $offset = $page * $eventPerPage;
@@ -38,14 +29,14 @@ class EventController extends Controller
         $prevPage = $page > 0 ? $page - 1 : false;
         $nextPage = $page < $totalPages-1 ? $page + 1 : false;
 
-        $events = $pm->getAll($queryParams, [
+        $events = $em->getAll($queryParams, [
             "order" => "event_start",
             "sort" => "asc",
             "limit" => 10,
             "offset" => $offset
         ]);
 
-        $this->setPageTitle("Évènements");
+        $request->attributes->set("page_title", "Évènements");
 
         return $this->render('AppBundle:Event:index.html.twig', [
             'events' => $events,
@@ -65,8 +56,8 @@ class EventController extends Controller
             return $this->redirect('/o/blog/'.$slug);
         }
 
-        $pm = $this->entityManager("Event");
-        $event = $pm->get(["event_url" => $slug]);
+        $em = new EventManager();
+        $event = $em->get(["event_url" => $slug]);
 
         // Offline event
         if ($event && $event->get('status') == 0
@@ -91,12 +82,12 @@ class EventController extends Controller
             return $this->redirect('/event/'.$slug, 301);
         }
 
-        $this->setPageTitle($event->get("title"));
+        $request->attributes->set("page_title", $event->get("title"));
 
         $opengraphTags = [
             "type" => "article",
             "title" => $event->get("title"),
-            "url" => "http://".$request->getHost().
+            "url" => "https://".$request->getHost().
                 $urlgenerator->generate("event_show", ["slug" => $event->get("url")]),
             "description" => truncate(strip_tags($event->get('content')), '500', '...', true),
             "site_name" => $site->get("title"),
