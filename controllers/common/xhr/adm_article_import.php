@@ -193,94 +193,6 @@ function noosfere($x, $mode = null)
     return $articles;
 }
 
-// IMPORT AMAZON
-function amazon($x)
-{
-    $public_key = "AKIAJIGPXJ6YGVTJJXGA";
-    $private_key = "Av62y5M7mXeY86FI1Yil3CMKQSJd07UVAEbiM9wr";
-    $params = array("Operation"=>"ItemSearch","SearchIndex"=>"Books","Keywords"=>$x,"ResponseGroup"=>"Large");
-    $params["Service"] = "AWSECommerceService";
-    $params["AWSAccessKeyId"] = $public_key;
-    $params["Timestamp"] = gmdate("Y-m-d\TH:i:s\Z");
-    $params["Version"] = "2009-03-31";
-    $params["AssociateTag"] = "librys-20";
-    $params["ProductGroup"] = "Book";
-    ksort($params);
-    $canonicalized_query = array();
-    foreach ($params as $param=>$value) {
-        $param = str_replace("%7E", "~", rawurlencode($param));
-        $value = str_replace("%7E", "~", rawurlencode($value));
-        $canonicalized_query[] = $param."=".$value;
-    }
-    $canonicalized_query = implode("&", $canonicalized_query);
-    $string_to_sign = "GET"."\n"."ecs.amazonaws.fr"."\n"."/onca/xml"."\n".$canonicalized_query;
-    $signature = base64_encode(hash_hmac("sha256", $string_to_sign, $private_key, true));
-    $signature = str_replace("%7E", "~", rawurlencode($signature));
-    $request = "http://"."ecs.amazonaws.fr"."/onca/xml"."?".$canonicalized_query."&Signature=".$signature;
-    $try = 0;
-    while (empty($response)) {
-        $response = @file_get_contents($request);
-        if (empty($response)) {
-            sleep(0.1);
-        }
-        $try++;
-        if ($try > 10) {
-            break;
-        }
-    }
-    if ($response === false) {
-        echo '<p class="erreur">Erreur r&eacute;ponse Amazon pour '.$x.' (<a href="'.$request.'">requ&ecirc;te</a>)</p>';
-    } else {
-        $pxml = simplexml_load_string($response);
-        if ($pxml === false) {
-            return false;
-        } // no xml
-        elseif (!empty($pxml->Error->Code)) {
-            die('{"error":"Erreur importation Amazon : '.$pxml->Error->Message.'"}');
-        } elseif ($pxml->Items->Request->IsValid == "False") {
-            die('{"error":"Erreur importation Amazon : '.$pxml->Items->Request->Errors->Error->Message.'"}');
-        } else {
-            foreach ($pxml->Items->Item as $item) {
-                $a = array();
-                $a["article_title"] = (string) $item->ItemAttributes->Title;
-                $a["article_cover_import"] = (string) $item->LargeImage->URL;
-                $a["article_asin"] = (string) $item->ASIN;
-                $a["article_ean"] = (string) $item->ItemAttributes->EAN;
-                $a["article_price"] = (string) $item->ItemAttributes->ListPrice->Amount;
-                $a["article_pages"] = (string) $item->ItemAttributes->NumberOfPages;
-                $a["article_pubdate"] = (string) $item->ItemAttributes->PublicationDate;
-                $a["article_shaping"] = (string) $item->ItemAttributes->Biding;
-                //$a["article_weight"] = round($item->ItemAttributes->PackageDimensions->Weight * 4.5359237);
-                $a["article_collection"] = (string) $item->ItemAttributes->Publisher;
-
-                $p = 0;
-                $a['article_authors'] = null;
-                foreach ($item->ItemAttributes->Author as $author) {
-                    $a["article_people"][$p]["people_name"] = (string) $author;
-                    $a["article_people"][$p]["people_role"] = "Auteur";
-                    if (isset($a["article_authors"])) {
-                        $a["article_authors"] .= ', ';
-                    }
-                    $a["article_authors"] .= (string) $author;
-                    $p++;
-                }
-                foreach ($item->ItemAttributes->Creator as $creator) {
-                    $a["article_people"][$p]["people_name"] = (string) $creator;
-                    $a["article_people"][$p]["people_role"] = (string) $creator->attributes()->Role;
-                    $p++;
-                }
-
-                $a["article_uid"] = $a["article_ean"];
-                $a["article_import_source"] = "amazon";
-                $articles[] = $a;
-            }
-        }
-    }
-    if (isset($articles)) {
-        return $articles;
-    }
-}
-
 if ($_GET["mode"] == "search") { // Mode recherche
     $r = null;
     $articles_noosfere = noosfere($_GET["q"]); // ne fonctionne plus le 16 avril 2015
@@ -325,28 +237,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $results++;
         }
     }
-    if (isset($articles_amazon)) {
-        foreach ($articles_amazon as $a) {
-            $result = '
-                <div data-ean="'.$a["article_ean"].'" data-asin="'.$a["article_asin"].'" data-noosfere_id="'.(isset($a["article_noosfere_id"]) ? $a['article_noosfere_id'] : null).'" class="article-thumb article-import pointer" title="Importer de '.$a["article_import_source"].'">
-                    <img src="'.$a["article_cover_import"].'" height="85" class="article-thumb-cover" />
-                    <h3>'.truncate($a["article_title"], 50, '...', true).'</h3>
-                    <p>
-                        de '.truncate($a["article_authors"], 65, '...', true).'<br />
-                        coll. '.$a["article_collection"].'<br />
-                        ISBN : '.Isbn::convertToIsbn13($a["article_ean"]).'
-                    </p>
-                </div>
-            ';
-
-            if ($results < 3) {
-                $r .= $result;
-            } else {
-                $additional_results .= $result;
-            }
-            $results++;
-        }
-    }
     $r .= '</div>';
     if (empty($results)) {
         $r .= '<p class="center">Aucun r&eacute;sultat dans les bases externes.</p>';
@@ -362,8 +252,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
         $n = noosfere($_GET["noosfere_id"], 'noosfere_id');
         $n = $n[0];
         if (!empty($n["article_ean"])) { // Infos complementaires d'Amazon si EAN
-            //$a = amazon($n["article_ean"]);
-            //$a = $a[0];
             if (!empty($a)) {
                 foreach ($a as $key => $val) { // Champ a recuperer d'Amazon uniquement si vide chez noosfere
                     if (empty($n[$key])) {
@@ -383,9 +271,6 @@ if ($_GET["mode"] == "search") { // Mode recherche
             }
         }
         $x = $n;
-    } elseif (!empty($_GET["asin"])) {
-        //$x = amazon($_GET["asin"]);
-        //$x = $x[0];
     }
 
     // Reconnaissance d'editeur
@@ -397,6 +282,7 @@ if ($_GET["mode"] == "search") { // Mode recherche
             $x['article_publisher'] = null;
         }
 
+        /** @var PDO $_SQL */
         $publishers = $_SQL->prepare(
             "SELECT `publisher_id`, `publisher_name` FROM `publishers`
                 WHERE `publisher_noosfere_id` = :noosfere_IdEditeur OR `publisher_name` = :publisher_name
@@ -607,7 +493,4 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Resultat en json
     echo str_replace("\u0092", "\u2019", json_encode($x));
-} else {
-    echo '<pre>'.print_r($articles, 1).'</pre>';
 }
-
