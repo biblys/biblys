@@ -1,5 +1,6 @@
 <?php
 
+use AppBundle\Controller\ErrorController;
 use Biblys\Service\Config;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -109,7 +110,10 @@ function biblys_error($level, $message, $file, $line, $trace = null, Throwable $
         // XHR mode
     } elseif ($request->isXmlHttpRequest() || 'application/json' == $request->headers->get('Accept')) {
         // TODO: find some way to add deprecated notices to JSON response
-        return;
+        $errorController = new ErrorController();
+        $response = $errorController->exception($request, $exception);
+        $response->send();
+        die();
 
         // Web mode
     } else {

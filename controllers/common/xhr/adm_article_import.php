@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Contributor\Job;
+use Biblys\Contributor\UnknownJobException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Biblys\Isbn\Isbn;
 use Biblys\Noosfere\Noosfere;
@@ -9,7 +11,7 @@ $cm = new CollectionManager();
 $pom = new PeopleManager();
 
 // IMPORT NOOSFERE
-function noosfere($x, $mode = null)
+function noosfere($x, $mode = null): array
 {
     $noosfere = new Noosfere();
     $articles = [];
@@ -402,23 +404,9 @@ if ($_GET["mode"] == "search") { // Mode recherche
         $x["article_people"] = array_unique($x["article_people"], SORT_REGULAR);
         foreach ($x["article_people"] as $k => $c) {
 
-            // Reconnaissance des jobs
             if (!empty($c["people_role"])) {
-                $jobs = $_SQL->prepare(
-                    "SELECT `job_id` FROM `jobs`
-                    WHERE `job_name` = :people_role OR
-                        `job_other_names` LIKE :like_people_role LIMIT 1"
-                );
-                $jobs->execute(
-                    [
-                       'people_role' => $c['people_role'],
-                       'like_people_role' => '%'.$c['people_role'].'%',
-                    ]
-                );
-
-                if ($j = $jobs->fetch(PDO::FETCH_ASSOC)) {
-                    $x["article_people"][$k]["job_id"] = $j["job_id"];
-                }
+                $job = _getJobFromNoosfereName($c["people_role"]);
+                $x["article_people"][$k]["job_id"] = $job->getId();
             }
 
             if (!isset($c['people_noosfere_id']) || empty($c['people_noosfere_id'])) {
@@ -493,4 +481,24 @@ if ($_GET["mode"] == "search") { // Mode recherche
 
     // Resultat en json
     echo str_replace("\u0092", "\u2019", json_encode($x));
+}
+
+
+
+/**
+ * @param string $name
+ * @return Job
+ * @throws UnknownJobException
+ */
+function _getJobFromNoosfereName(string $name): Job
+{
+    if ($name === "Illustrateur") {
+        return Job::getByName("Illustrateur (couverture)");
+    }
+
+    if ($name === "Illustrateur intérieur") {
+        return Job::getByName("Illustrateur (intérieur)");
+    }
+
+    return Job::getByName($name);
 }
