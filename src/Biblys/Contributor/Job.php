@@ -230,7 +230,7 @@ class Job
     /**
      * @throws UnknownJobException
      */
-    public static function getById(int $id): ?Job
+    public static function getById(int $id): Job
     {
         $jobs = self::getAll();
 
@@ -244,6 +244,33 @@ class Job
             sprintf(
                 "Cannot find a job for id %s",
                 $id
+            )
+        );
+    }
+
+    /**
+     * @throws UnknownJobException
+     */
+    public static function getByName(string $name): Job
+    {
+        $jobs = self::getAll();
+
+        foreach ($jobs as $job) {
+            if ($job->getFeminineName() === $name) {
+                return $job;
+            }
+            if ($job->getMasculineName() === $name) {
+                return $job;
+            }
+            if ($job->getNeutralName() === $name) {
+                return $job;
+            }
+        }
+
+        throw new UnknownJobException(
+            sprintf(
+                "Cannot find a job named $name",
+                $name
             )
         );
     }

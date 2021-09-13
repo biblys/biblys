@@ -32,4 +32,30 @@ class JobTest extends TestCase
         // when
         Job::getById(99999);
     }
+
+    /**
+     * @throws UnknownJobException
+     */
+    public function testGetByName()
+    {
+        // when
+        $job = Job::getByName("Auteur");
+
+        // then
+        $this->assertEquals(
+            "Autrice",
+            $job->getFeminineName(),
+            "should return author job for id 1"
+        );
+    }
+
+    public function testGetByNameNonExistingJob()
+    {
+        // then
+        $this->expectException("Biblys\Contributor\UnknownJobException");
+        $this->expectExceptionMessage("Cannot find a job named Chauffeur");
+
+        // when
+        Job::getByName("Chauffeur");
+    }
 }
