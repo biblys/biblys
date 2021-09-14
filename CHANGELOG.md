@@ -1,6 +1,14 @@
 
 # Historique des modifications
 
+### 2.55.0 (DEV)
+
+Améliorations
+
+- Il est désormais possible de préciser le genre à utiliser pour les 
+  contributeurs ("féminin", "masculin" ou "neutre")
+- Le genre par défaut est désormais "neutre" et plus "masculin"
+
 ### 2.54.1 (10 septembre 2021)
 
 Corrections
