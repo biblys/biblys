@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.54.2 (DEV)
+
+Corrections
+
+- Les erreurs provoquées lors de l'association d'un article et d'un rayon
+  s'affichent désormais correctement 
+
 ### 2.54.1 (10 septembre 2021)
 
 Corrections

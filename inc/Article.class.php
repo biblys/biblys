@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
@@ -1252,6 +1253,7 @@ class ArticleManager extends EntityManager
      * Add rayon to article (and update article links)
      * @param $article {Article}
      * @param $rayon {Rayon}
+     * @throws ArticleAlreadyInRayonException
      */
     public function addRayon($article, $rayon)
     {
@@ -1262,7 +1264,7 @@ class ArticleManager extends EntityManager
         // Check if article is already in rayon
         $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
-            throw new Exception("L'article « " . $article->get('title') . " » est déjà dans le rayon « " . $rayon->get('name') . " ».");
+            throw new ArticleAlreadyInRayonException($article->get("title"), $rayon->get("name"));
         }
 
         // Create link

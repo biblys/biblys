@@ -855,10 +855,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($link);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testAddArticleAlreadyInRayon()
     {
         // then
-        $this->expectException("Exception");
+        $this->expectException("Biblys\Exception\ArticleAlreadyInRayonException");
         $this->expectExceptionMessage("L'article « C'est mon rayon » est déjà dans le rayon « Mon rayon ».");
 
         // given
