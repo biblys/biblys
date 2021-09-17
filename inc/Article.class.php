@@ -1573,6 +1573,10 @@ class ArticleManager extends EntityManager
     {
         parent::validateBeforeUpdate($article);
 
+        if ($article->isBeingCreated()) {
+            return;
+        }
+
         if (!$article->has("url")) {
             throw new InvalidEntityException("L'article doit avoir une url.");
         }

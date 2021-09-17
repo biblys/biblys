@@ -6,7 +6,9 @@
 Corrections
 
 - Les erreurs provoquées lors de l'association d'un article et d'un rayon
-  s'affichent désormais correctement 
+  s'affichent désormais correctement
+- L'ajout d'un rayon à un article en cours de création ne provoque plus
+  d'erreurs
 
 ### 2.54.1 (10 septembre 2021)
 

@@ -749,6 +749,22 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testUpdatingArticleWithoutUrlAndBeingEdited()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = $am->create(["publisher_id" => 1, "article_editing_user" => 1]);
+
+        // when
+        $am->update($article);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
      * Test that updating an article without an url throws
      */
     public function testUpdatingArticleExistingUrl()
