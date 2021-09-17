@@ -9,6 +9,8 @@ Corrections
   s'affichent désormais correctement
 - L'ajout d'un rayon à un article en cours de création ne provoque plus
   d'erreurs
+- La page frais de port de l'administration affiche uniquement les frais
+  de port du site en cours
 
 ### 2.54.1 (10 septembre 2021)
 

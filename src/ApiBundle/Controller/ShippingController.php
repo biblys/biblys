@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Controller;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
@@ -18,10 +20,16 @@ class ShippingController extends Controller
      * Returns shipping fees.
      *
      * GET /api/shipping
+     *
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function indexAction(): JsonResponse
+    public function indexAction(Request $request, Config $config): JsonResponse
     {
-        $allFees = ShippingFeeQuery::create()->find();
+        self::authAdmin($request);
+
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $allFees = ShippingFeeQuery::createForSite($currentSite)->find();
 
         $fees = array_map(function ($fee) {
                 return self::_feeToJson($fee);
@@ -58,11 +66,12 @@ class ShippingController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function updateAction(Request $request, int $id): JsonResponse
+    public function updateAction(Request $request, Config $config, int $id): JsonResponse
     {
         self::authAdmin($request);
 
-        $fee = ShippingFeeQuery::create()->findPk($id);
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)
@@ -80,11 +89,12 @@ class ShippingController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function deleteAction(Request $request, int $id): JsonResponse
+    public function deleteAction(Request $request, Config $config, int $id): JsonResponse
     {
         self::authAdmin($request);
 
-        $fee = ShippingFeeQuery::create()->findPk($id);
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
         if (!$fee) {
             throw new ResourceNotFoundException(
                 sprintf("Cannot find shipping fee with id %s", $id)
