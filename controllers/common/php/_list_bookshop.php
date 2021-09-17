@@ -183,7 +183,7 @@ $sql_query = "
         `site_id` = :site_id AND 
         `stock_selling_date` IS NULL AND 
         `stock_return_date` IS NULL AND 
-        `stock_lost_date` IS NULL
+        `stock_lost_date` IS NULL".$active_stock_query."
     WHERE $_REQ `type_id` != 2
     GROUP BY `articles`.`article_id`";
 
