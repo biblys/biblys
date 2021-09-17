@@ -80,8 +80,7 @@ class Article extends Entity
      */
     public function validateOnFetch(): void
     {
-        // An article with an editing user has not been yet fully created
-        if ($this->has("article_editing_user")) {
+        if ($this->isBeingCreated()) {
             return;
         }
 
@@ -975,6 +974,12 @@ class Article extends Entity
             "inCart" => $inCart,
         ];
     }
+
+    public function isBeingCreated(): bool
+    {
+        return $this->has("article_editing_user");
+    }
+
 }
 
 class ArticleManager extends EntityManager

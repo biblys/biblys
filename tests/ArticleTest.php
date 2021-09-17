@@ -923,4 +923,23 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         $this->assertFalse($articleExists);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testIsBeingCreated()
+    {
+        // given
+        $article = Factory::createArticle();
+        $article->set("article_editing_user", 1);
+
+        // when
+        $isBeingCreated = $article->isBeingCreated();
+
+        // then
+        $this->assertTrue(
+            $isBeingCreated,
+            "should be true when there is an editing user"
+        );
+    }
 }
