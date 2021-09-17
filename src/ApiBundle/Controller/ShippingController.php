@@ -19,7 +19,7 @@ class ShippingController extends Controller
     /**
      * Returns shipping fees.
      *
-     * GET /api/shipping
+     * @route GET /api/shipping
      *
      * @throws AuthException
      * @throws PropelException
@@ -42,7 +42,8 @@ class ShippingController extends Controller
     /**
      * Create a new shipping fee.
      *
-     * POST /api/shipping
+     * @route POST /api/shipping
+     *
      * @throws AuthException
      * @throws PropelException
      */
@@ -65,6 +66,7 @@ class ShippingController extends Controller
      * Update a shipping range.
      *
      * @route PUT /api/shipping/{id}
+     *
      * @throws AuthException
      * @throws PropelException
      */
@@ -72,14 +74,7 @@ class ShippingController extends Controller
     {
         self::authAdmin($request);
 
-        $currentSite = CurrentSite::buildFromConfig($config);
-        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
-        if (!$fee) {
-            throw new ResourceNotFoundException(
-                sprintf("Cannot find shipping fee with id %s", $id)
-            );
-        }
-
+        $fee = self::_getFeeFromId($config, $id);
         $data = self::_getDataFromRequest($request);
         $fee = self::_hydrateFee($fee, $data);
         $fee->save();
@@ -88,6 +83,8 @@ class ShippingController extends Controller
     }
 
     /**
+     * @route DELETE /api/shipping/{id}
+     *
      * @throws AuthException
      * @throws PropelException
      */
@@ -95,14 +92,7 @@ class ShippingController extends Controller
     {
         self::authAdmin($request);
 
-        $currentSite = CurrentSite::buildFromConfig($config);
-        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
-        if (!$fee) {
-            throw new ResourceNotFoundException(
-                sprintf("Cannot find shipping fee with id %s", $id)
-            );
-        }
-
+        $fee = self::_getFeeFromId($config, $id);
         $fee->delete();
 
         return new JsonResponse(null, 204);
@@ -175,6 +165,23 @@ class ShippingController extends Controller
         $fee->setFee($data["fee"]);
         $fee->setInfo($data["info"]);
 
+        return $fee;
+    }
+
+    /**
+     * @param Config $config
+     * @param int $id
+     * @return ShippingFee
+     */
+    private static function _getFeeFromId(Config $config, int $id): ShippingFee
+    {
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $fee = ShippingFeeQuery::createForSite($currentSite)->findPk($id);
+        if (!$fee) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find shipping fee with id %s", $id)
+            );
+        }
         return $fee;
     }
 }
