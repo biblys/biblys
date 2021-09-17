@@ -46,14 +46,16 @@ class ShippingController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function createAction(Request $request): JsonResponse
+    public function createAction(Request $request, Config $config): JsonResponse
     {
         self::authAdmin($request);
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         $data = self::_getDataFromRequest($request);
 
         $fee = new ShippingFee();
         self::_hydrateFee($fee, $data);
+        $fee->setSiteId($currentSite->getSite()->getId());
         $fee->save();
 
         return new JsonResponse($this->_feeToJson($fee), 201);

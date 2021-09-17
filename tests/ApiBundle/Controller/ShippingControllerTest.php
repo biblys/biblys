@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Test\Factory;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
+use Model\ShippingFeeQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -60,9 +61,10 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = Factory::createAuthRequestForAdminUser($content);
+        $config = new Config();
 
         // when
-        $response = $controller->createAction($request);
+        $response = $controller->createAction($request, $config);
 
         // then
         $this->assertEquals(
@@ -80,6 +82,12 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(76, $fee["max_amount"]);
         $this->assertEquals(90, $fee["max_articles"]);
         $this->assertEquals("Expedition sous 72h", $fee["info"]);
+        $createdFee = ShippingFeeQuery::create()->findPk($fee["id"]);
+        $this->assertEquals(
+            1,
+            $createdFee->getSiteId(),
+            "should have created ShippingFee with site id"
+        );
     }
 
     /**
