@@ -105,18 +105,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight requireOneByDeletedAt(string $right_deleted) Return the first ChildRight filtered by the right_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRight[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> find(ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
  * @method     ChildRight[]|ObjectCollection findById(int $right_id) Return ChildRight objects filtered by the right_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findById(int $right_id) Return ChildRight objects filtered by the right_id column
  * @method     ChildRight[]|ObjectCollection findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
  * @method     ChildRight[]|ObjectCollection findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
  * @method     ChildRight[]|ObjectCollection findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
  * @method     ChildRight[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
  * @method     ChildRight[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
  * @method     ChildRight[]|ObjectCollection findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
  * @method     ChildRight[]|ObjectCollection findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
  * @method     ChildRight[]|ObjectCollection findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
  * @method     ChildRight[]|ObjectCollection findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
  * @method     ChildRight[]|ObjectCollection findByDeletedAt(string $right_deleted) Return ChildRight objects filtered by the right_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildRight> findByDeletedAt(string $right_deleted) Return ChildRight objects filtered by the right_deleted column
  * @method     ChildRight[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRight> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RightQuery extends ModelCriteria
@@ -813,6 +826,61 @@ abstract class RightQuery extends ModelCriteria
     }
 
     /**
+     * Use the User relation User object
+     *
+     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withUserQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useUserQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to User table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     */
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to User table for a NOT EXISTS query.
+     *
+     * @see useUserExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
+    /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
@@ -889,6 +957,61 @@ abstract class RightQuery extends ModelCriteria
             ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
     }
 
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

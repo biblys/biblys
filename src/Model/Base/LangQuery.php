@@ -74,16 +74,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLang requireOneByDeletedAt(string $lang_deleted) Return the first ChildLang filtered by the lang_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLang[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> find(ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
  * @method     ChildLang[]|ObjectCollection findById(int $lang_id) Return ChildLang objects filtered by the lang_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findById(int $lang_id) Return ChildLang objects filtered by the lang_id column
  * @method     ChildLang[]|ObjectCollection findByIso639-1(string $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByIso639-1(string $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
  * @method     ChildLang[]|ObjectCollection findByIso639-2(string $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByIso639-2(string $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
  * @method     ChildLang[]|ObjectCollection findByIso639-3(string $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByIso639-3(string $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
  * @method     ChildLang[]|ObjectCollection findByName(string $lang_name) Return ChildLang objects filtered by the lang_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByName(string $lang_name) Return ChildLang objects filtered by the lang_name column
  * @method     ChildLang[]|ObjectCollection findByNameOriginal(string $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByNameOriginal(string $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
  * @method     ChildLang[]|ObjectCollection findByCreatedAt(string $lang_created) Return ChildLang objects filtered by the lang_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByCreatedAt(string $lang_created) Return ChildLang objects filtered by the lang_created column
  * @method     ChildLang[]|ObjectCollection findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
  * @method     ChildLang[]|ObjectCollection findByDeletedAt(string $lang_deleted) Return ChildLang objects filtered by the lang_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildLang> findByDeletedAt(string $lang_deleted) Return ChildLang objects filtered by the lang_deleted column
  * @method     ChildLang[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLang> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class LangQuery extends ModelCriteria
@@ -334,7 +345,7 @@ abstract class LangQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LangTableMap::COL_LANG_ISO_639-1, $iso639-1, $comparison);
+        return $this->addUsingAlias(LangTableMap::COL_ISO639_1, $iso639-1, $comparison);
     }
 
     /**
@@ -359,7 +370,7 @@ abstract class LangQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LangTableMap::COL_LANG_ISO_639-2, $iso639-2, $comparison);
+        return $this->addUsingAlias(LangTableMap::COL_ISO639_2, $iso639-2, $comparison);
     }
 
     /**
@@ -384,7 +395,7 @@ abstract class LangQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LangTableMap::COL_LANG_ISO_639-3, $iso639-3, $comparison);
+        return $this->addUsingAlias(LangTableMap::COL_ISO639_3, $iso639-3, $comparison);
     }
 
     /**

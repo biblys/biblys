@@ -204,7 +204,6 @@ class BookCollectionTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'COLLECTION_ID',
         'BookCollection.Id' => 'COLLECTION_ID',
         'id' => 'COLLECTION_ID',
@@ -413,7 +412,7 @@ class BookCollectionTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'collection_created', 'update_column' => 'collection_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'collection_created', 'update_column' => 'collection_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -669,17 +668,6 @@ class BookCollectionTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(BookCollectionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(BookCollectionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new BookCollectionTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a BookCollection or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or BookCollection object or primary key or array of primary keys
@@ -768,6 +756,3 @@ class BookCollectionTableMap extends TableMap
     }
 
 } // BookCollectionTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-BookCollectionTableMap::buildTableMap();

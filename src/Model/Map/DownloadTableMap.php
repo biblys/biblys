@@ -169,7 +169,6 @@ class DownloadTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'DOWNLOAD_ID',
         'Download.Id' => 'DOWNLOAD_ID',
         'id' => 'DOWNLOAD_ID',
@@ -315,7 +314,7 @@ class DownloadTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'download_created', 'update_column' => 'download_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'download_created', 'update_column' => 'download_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -543,17 +542,6 @@ class DownloadTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(DownloadTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(DownloadTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new DownloadTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Download or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Download object or primary key or array of primary keys
@@ -642,6 +630,3 @@ class DownloadTableMap extends TableMap
     }
 
 } // DownloadTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-DownloadTableMap::buildTableMap();

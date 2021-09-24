@@ -154,7 +154,6 @@ class GalleryTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'GALLERY_ID',
         'Gallery.Id' => 'GALLERY_ID',
         'id' => 'GALLERY_ID',
@@ -273,7 +272,7 @@ class GalleryTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'gallery_created', 'update_column' => 'gallery_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'gallery_created', 'update_column' => 'gallery_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -489,17 +488,6 @@ class GalleryTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(GalleryTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(GalleryTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new GalleryTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Gallery or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Gallery object or primary key or array of primary keys
@@ -588,6 +576,3 @@ class GalleryTableMap extends TableMap
     }
 
 } // GalleryTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-GalleryTableMap::buildTableMap();

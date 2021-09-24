@@ -98,22 +98,39 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia requireOneByDeletedAt(string $media_deleted) Return the first ChildMedia filtered by the media_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMedia[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
  * @method     ChildMedia[]|ObjectCollection findById(int $media_id) Return ChildMedia objects filtered by the media_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findById(int $media_id) Return ChildMedia objects filtered by the media_id column
  * @method     ChildMedia[]|ObjectCollection findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
  * @method     ChildMedia[]|ObjectCollection findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
  * @method     ChildMedia[]|ObjectCollection findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
  * @method     ChildMedia[]|ObjectCollection findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
  * @method     ChildMedia[]|ObjectCollection findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
  * @method     ChildMedia[]|ObjectCollection findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
  * @method     ChildMedia[]|ObjectCollection findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
  * @method     ChildMedia[]|ObjectCollection findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
  * @method     ChildMedia[]|ObjectCollection findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
  * @method     ChildMedia[]|ObjectCollection findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
  * @method     ChildMedia[]|ObjectCollection findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
  * @method     ChildMedia[]|ObjectCollection findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
  * @method     ChildMedia[]|ObjectCollection findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
  * @method     ChildMedia[]|ObjectCollection findByDeletedAt(string $media_deleted) Return ChildMedia objects filtered by the media_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDeletedAt(string $media_deleted) Return ChildMedia objects filtered by the media_deleted column
  * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class MediaQuery extends ModelCriteria

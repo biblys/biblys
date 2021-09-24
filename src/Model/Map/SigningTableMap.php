@@ -164,7 +164,6 @@ class SigningTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'SIGNING_ID',
         'Signing.Id' => 'SIGNING_ID',
         'id' => 'SIGNING_ID',
@@ -301,7 +300,7 @@ class SigningTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'signing_created', 'update_column' => 'signing_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'signing_created', 'update_column' => 'signing_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class SigningTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SigningTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(SigningTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new SigningTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Signing or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Signing object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class SigningTableMap extends TableMap
     }
 
 } // SigningTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-SigningTableMap::buildTableMap();

@@ -174,14 +174,12 @@ class RoleTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'ID',
         'Role.Id' => 'ID',
         'id' => 'ID',
         'role.id' => 'ID',
         'RoleTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'id' => 'ID',
         'roles.id' => 'ID',
         'ArticleId' => 'ARTICLE_ID',
         'Role.ArticleId' => 'ARTICLE_ID',
@@ -343,7 +341,7 @@ class RoleTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'role_created', 'update_column' => 'role_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'role_created', 'update_column' => 'role_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -575,17 +573,6 @@ class RoleTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RoleTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(RoleTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new RoleTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Role or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Role object or primary key or array of primary keys
@@ -674,6 +661,3 @@ class RoleTableMap extends TableMap
     }
 
 } // RoleTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-RoleTableMap::buildTableMap();

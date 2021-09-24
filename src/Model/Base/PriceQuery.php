@@ -66,14 +66,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPrice requireOneByDeletedAt(string $price_deleted) Return the first ChildPrice filtered by the price_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPrice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> find(ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
  * @method     ChildPrice[]|ObjectCollection findById(int $price_id) Return ChildPrice objects filtered by the price_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findById(int $price_id) Return ChildPrice objects filtered by the price_id column
  * @method     ChildPrice[]|ObjectCollection findBygridId(int $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findBygridId(int $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
  * @method     ChildPrice[]|ObjectCollection findByCat(string $price_cat) Return ChildPrice objects filtered by the price_cat column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByCat(string $price_cat) Return ChildPrice objects filtered by the price_cat column
  * @method     ChildPrice[]|ObjectCollection findByAmount(int $price_amount) Return ChildPrice objects filtered by the price_amount column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByAmount(int $price_amount) Return ChildPrice objects filtered by the price_amount column
  * @method     ChildPrice[]|ObjectCollection findByCreatedAt(string $price_created) Return ChildPrice objects filtered by the price_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByCreatedAt(string $price_created) Return ChildPrice objects filtered by the price_created column
  * @method     ChildPrice[]|ObjectCollection findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
  * @method     ChildPrice[]|ObjectCollection findByDeletedAt(string $price_deleted) Return ChildPrice objects filtered by the price_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByDeletedAt(string $price_deleted) Return ChildPrice objects filtered by the price_deleted column
  * @method     ChildPrice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPrice> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PriceQuery extends ModelCriteria

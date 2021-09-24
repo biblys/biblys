@@ -309,9 +309,7 @@ abstract class Cart implements ActiveRecordInterface
     public function resetModified($col = null)
     {
         if (null !== $col) {
-            if (isset($this->modifiedColumns[$col])) {
-                unset($this->modifiedColumns[$col]);
-            }
+            unset($this->modifiedColumns[$col]);
         } else {
             $this->modifiedColumns = array();
         }
@@ -417,15 +415,16 @@ abstract class Cart implements ActiveRecordInterface
      *
      * @param  mixed   $parser                 A AbstractParser instance, or a format name ('XML', 'YAML', 'JSON', 'CSV')
      * @param  boolean $includeLazyLoadColumns (optional) Whether to include lazy load(ed) columns. Defaults to TRUE.
+     * @param  string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME, TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to TableMap::TYPE_PHPNAME.
      * @return string  The exported data
      */
-    public function exportTo($parser, $includeLazyLoadColumns = true)
+    public function exportTo($parser, $includeLazyLoadColumns = true, $keyType = TableMap::TYPE_PHPNAME)
     {
         if (!$parser instanceof AbstractParser) {
             $parser = AbstractParser::getParser($parser);
         }
 
-        return $parser->fromArray($this->toArray(TableMap::TYPE_PHPNAME, $includeLazyLoadColumns, array(), true));
+        return $parser->fromArray($this->toArray($keyType, $includeLazyLoadColumns, array(), true));
     }
 
     /**
@@ -587,6 +586,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getDate($format = null)
     {
@@ -607,6 +608,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getInsert($format = null)
     {
@@ -627,6 +630,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getUpdate($format = null)
     {
@@ -647,6 +652,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getCreatedAt($format = null)
     {
@@ -667,6 +674,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getUpdatedAt($format = null)
     {
@@ -687,6 +696,8 @@ abstract class Cart implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getDeletedAt($format = null)
     {
@@ -931,7 +942,7 @@ abstract class Cart implements ActiveRecordInterface
 
         if ($this->cart_as-a-gift !== $v) {
             $this->cart_as-a-gift = $v;
-            $this->modifiedColumns[CartTableMap::COL_CART_AS-A-GIFT] = true;
+            $this->modifiedColumns[CartTableMap::COL_AS_A_GIFT] = true;
         }
 
         return $this;
@@ -951,7 +962,7 @@ abstract class Cart implements ActiveRecordInterface
 
         if ($this->cart_gift-recipient !== $v) {
             $this->cart_gift-recipient = $v;
-            $this->modifiedColumns[CartTableMap::COL_CART_GIFT-RECIPIENT] = true;
+            $this->modifiedColumns[CartTableMap::COL_GIFT_RECIPIENT] = true;
         }
 
         return $this;
@@ -1454,10 +1465,10 @@ abstract class Cart implements ActiveRecordInterface
         if ($this->isColumnModified(CartTableMap::COL_CART_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = 'cart_amount';
         }
-        if ($this->isColumnModified(CartTableMap::COL_CART_AS-A-GIFT)) {
+        if ($this->isColumnModified(CartTableMap::COL_AS_A_GIFT)) {
             $modifiedColumns[':p' . $index++]  = 'cart_as-a-gift';
         }
-        if ($this->isColumnModified(CartTableMap::COL_CART_GIFT-RECIPIENT)) {
+        if ($this->isColumnModified(CartTableMap::COL_GIFT_RECIPIENT)) {
             $modifiedColumns[':p' . $index++]  = 'cart_gift-recipient';
         }
         if ($this->isColumnModified(CartTableMap::COL_CART_DATE)) {
@@ -1853,7 +1864,7 @@ abstract class Cart implements ActiveRecordInterface
      *
      * @param      array  $arr     An array to populate the object from.
      * @param      string $keyType The type of keys the array uses.
-     * @return void
+     * @return     $this|\Model\Cart
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1916,6 +1927,8 @@ abstract class Cart implements ActiveRecordInterface
         if (array_key_exists($keys[18], $arr)) {
             $this->setDeletedAt($arr[$keys[18]]);
         }
+
+        return $this;
     }
 
      /**
@@ -1990,11 +2003,11 @@ abstract class Cart implements ActiveRecordInterface
         if ($this->isColumnModified(CartTableMap::COL_CART_AMOUNT)) {
             $criteria->add(CartTableMap::COL_CART_AMOUNT, $this->cart_amount);
         }
-        if ($this->isColumnModified(CartTableMap::COL_CART_AS-A-GIFT)) {
-            $criteria->add(CartTableMap::COL_CART_AS-A-GIFT, $this->cart_as-a-gift);
+        if ($this->isColumnModified(CartTableMap::COL_AS_A_GIFT)) {
+            $criteria->add(CartTableMap::COL_AS_A_GIFT, $this->cart_as-a-gift);
         }
-        if ($this->isColumnModified(CartTableMap::COL_CART_GIFT-RECIPIENT)) {
-            $criteria->add(CartTableMap::COL_CART_GIFT-RECIPIENT, $this->cart_gift-recipient);
+        if ($this->isColumnModified(CartTableMap::COL_GIFT_RECIPIENT)) {
+            $criteria->add(CartTableMap::COL_GIFT_RECIPIENT, $this->cart_gift-recipient);
         }
         if ($this->isColumnModified(CartTableMap::COL_CART_DATE)) {
             $criteria->add(CartTableMap::COL_CART_DATE, $this->cart_date);
@@ -2319,15 +2332,18 @@ abstract class Cart implements ActiveRecordInterface
 
         if (0 === strpos($name, 'from')) {
             $format = substr($name, 4);
+            $inputData = $params[0];
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->importFrom($format, reset($params));
+            return $this->importFrom($format, $inputData, $keyType);
         }
 
         if (0 === strpos($name, 'to')) {
             $format = substr($name, 2);
-            $includeLazyLoadColumns = isset($params[0]) ? $params[0] : true;
+            $includeLazyLoadColumns = $params[0] ?? true;
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->exportTo($format, $includeLazyLoadColumns);
+            return $this->exportTo($format, $includeLazyLoadColumns, $keyType);
         }
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));

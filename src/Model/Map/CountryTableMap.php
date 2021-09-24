@@ -149,7 +149,6 @@ class CountryTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'COUNTRY_ID',
         'Country.Id' => 'COUNTRY_ID',
         'id' => 'COUNTRY_ID',
@@ -259,7 +258,7 @@ class CountryTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'country_created', 'update_column' => 'country_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'country_created', 'update_column' => 'country_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -471,17 +470,6 @@ class CountryTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CountryTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CountryTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CountryTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Country or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Country object or primary key or array of primary keys
@@ -570,6 +558,3 @@ class CountryTableMap extends TableMap
     }
 
 } // CountryTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-CountryTableMap::buildTableMap();

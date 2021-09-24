@@ -194,46 +194,87 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisher requireOneByDeletedAt(string $publisher_deleted) Return the first ChildPublisher filtered by the publisher_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPublisher[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
  * @method     ChildPublisher[]|ObjectCollection findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
  * @method     ChildPublisher[]|ObjectCollection findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
  * @method     ChildPublisher[]|ObjectCollection findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
  * @method     ChildPublisher[]|ObjectCollection findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
  * @method     ChildPublisher[]|ObjectCollection findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
  * @method     ChildPublisher[]|ObjectCollection findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
  * @method     ChildPublisher[]|ObjectCollection findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
  * @method     ChildPublisher[]|ObjectCollection findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
  * @method     ChildPublisher[]|ObjectCollection findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
  * @method     ChildPublisher[]|ObjectCollection findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
  * @method     ChildPublisher[]|ObjectCollection findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
  * @method     ChildPublisher[]|ObjectCollection findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
  * @method     ChildPublisher[]|ObjectCollection findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
  * @method     ChildPublisher[]|ObjectCollection findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
  * @method     ChildPublisher[]|ObjectCollection findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
  * @method     ChildPublisher[]|ObjectCollection findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
  * @method     ChildPublisher[]|ObjectCollection findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
  * @method     ChildPublisher[]|ObjectCollection findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
  * @method     ChildPublisher[]|ObjectCollection findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
  * @method     ChildPublisher[]|ObjectCollection findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
  * @method     ChildPublisher[]|ObjectCollection findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
  * @method     ChildPublisher[]|ObjectCollection findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
  * @method     ChildPublisher[]|ObjectCollection findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
  * @method     ChildPublisher[]|ObjectCollection findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
  * @method     ChildPublisher[]|ObjectCollection findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
  * @method     ChildPublisher[]|ObjectCollection findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
  * @method     ChildPublisher[]|ObjectCollection findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
  * @method     ChildPublisher[]|ObjectCollection findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
  * @method     ChildPublisher[]|ObjectCollection findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
  * @method     ChildPublisher[]|ObjectCollection findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
  * @method     ChildPublisher[]|ObjectCollection findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
  * @method     ChildPublisher[]|ObjectCollection findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
  * @method     ChildPublisher[]|ObjectCollection findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
  * @method     ChildPublisher[]|ObjectCollection findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
  * @method     ChildPublisher[]|ObjectCollection findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
  * @method     ChildPublisher[]|ObjectCollection findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
  * @method     ChildPublisher[]|ObjectCollection findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
  * @method     ChildPublisher[]|ObjectCollection findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
  * @method     ChildPublisher[]|ObjectCollection findByDeletedAt(string $publisher_deleted) Return ChildPublisher objects filtered by the publisher_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDeletedAt(string $publisher_deleted) Return ChildPublisher objects filtered by the publisher_deleted column
  * @method     ChildPublisher[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPublisher> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PublisherQuery extends ModelCriteria

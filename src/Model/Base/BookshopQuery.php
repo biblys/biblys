@@ -134,31 +134,57 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshop requireOneByDeletedAt(string $bookshop_deleted) Return the first ChildBookshop filtered by the bookshop_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildBookshop[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
  * @method     ChildBookshop[]|ObjectCollection findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
  * @method     ChildBookshop[]|ObjectCollection findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
  * @method     ChildBookshop[]|ObjectCollection findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
  * @method     ChildBookshop[]|ObjectCollection findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
  * @method     ChildBookshop[]|ObjectCollection findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
  * @method     ChildBookshop[]|ObjectCollection findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
  * @method     ChildBookshop[]|ObjectCollection findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
  * @method     ChildBookshop[]|ObjectCollection findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
  * @method     ChildBookshop[]|ObjectCollection findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
  * @method     ChildBookshop[]|ObjectCollection findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
  * @method     ChildBookshop[]|ObjectCollection findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
  * @method     ChildBookshop[]|ObjectCollection findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
  * @method     ChildBookshop[]|ObjectCollection findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
  * @method     ChildBookshop[]|ObjectCollection findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
  * @method     ChildBookshop[]|ObjectCollection findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
  * @method     ChildBookshop[]|ObjectCollection findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
  * @method     ChildBookshop[]|ObjectCollection findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
  * @method     ChildBookshop[]|ObjectCollection findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
  * @method     ChildBookshop[]|ObjectCollection findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
  * @method     ChildBookshop[]|ObjectCollection findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
  * @method     ChildBookshop[]|ObjectCollection findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
  * @method     ChildBookshop[]|ObjectCollection findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
  * @method     ChildBookshop[]|ObjectCollection findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
  * @method     ChildBookshop[]|ObjectCollection findByDeletedAt(string $bookshop_deleted) Return ChildBookshop objects filtered by the bookshop_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByDeletedAt(string $bookshop_deleted) Return ChildBookshop objects filtered by the bookshop_deleted column
  * @method     ChildBookshop[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookshop> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class BookshopQuery extends ModelCriteria

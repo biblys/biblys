@@ -149,7 +149,6 @@ class WishlistTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'WISHLIST_ID',
         'Wishlist.Id' => 'WISHLIST_ID',
         'id' => 'WISHLIST_ID',
@@ -259,7 +258,7 @@ class WishlistTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'wishlist_created', 'update_column' => 'wishlist_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'wishlist_created', 'update_column' => 'wishlist_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -471,17 +470,6 @@ class WishlistTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(WishlistTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(WishlistTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new WishlistTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Wishlist or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Wishlist object or primary key or array of primary keys
@@ -570,6 +558,3 @@ class WishlistTableMap extends TableMap
     }
 
 } // WishlistTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-WishlistTableMap::buildTableMap();

@@ -74,16 +74,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing requireOneByDeletedAt(string $mailing_deleted) Return the first ChildMailing filtered by the mailing_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMailing[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
  * @method     ChildMailing[]|ObjectCollection findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
  * @method     ChildMailing[]|ObjectCollection findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
  * @method     ChildMailing[]|ObjectCollection findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
  * @method     ChildMailing[]|ObjectCollection findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
  * @method     ChildMailing[]|ObjectCollection findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
  * @method     ChildMailing[]|ObjectCollection findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
  * @method     ChildMailing[]|ObjectCollection findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
  * @method     ChildMailing[]|ObjectCollection findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
  * @method     ChildMailing[]|ObjectCollection findByDeletedAt(string $mailing_deleted) Return ChildMailing objects filtered by the mailing_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByDeletedAt(string $mailing_deleted) Return ChildMailing objects filtered by the mailing_deleted column
  * @method     ChildMailing[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMailing> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class MailingQuery extends ModelCriteria

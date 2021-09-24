@@ -213,45 +213,85 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByDeletedWhy(string $user_deleted_why) Return the first ChildUser filtered by the user_deleted_why column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @method     ChildUser[]|ObjectCollection findById(int $id) Return ChildUser objects filtered by the id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findById(int $id) Return ChildUser objects filtered by the id column
  * @method     ChildUser[]|ObjectCollection findByEmail(string $Email) Return ChildUser objects filtered by the Email column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByEmail(string $Email) Return ChildUser objects filtered by the Email column
  * @method     ChildUser[]|ObjectCollection findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
  * @method     ChildUser[]|ObjectCollection findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
  * @method     ChildUser[]|ObjectCollection findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
  * @method     ChildUser[]|ObjectCollection findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
  * @method     ChildUser[]|ObjectCollection findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
  * @method     ChildUser[]|ObjectCollection findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
  * @method     ChildUser[]|ObjectCollection findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
  * @method     ChildUser[]|ObjectCollection findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
  * @method     ChildUser[]|ObjectCollection findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
  * @method     ChildUser[]|ObjectCollection findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
  * @method     ChildUser[]|ObjectCollection findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
  * @method     ChildUser[]|ObjectCollection findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
  * @method     ChildUser[]|ObjectCollection findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
  * @method     ChildUser[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
  * @method     ChildUser[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
  * @method     ChildUser[]|ObjectCollection findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
  * @method     ChildUser[]|ObjectCollection findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
  * @method     ChildUser[]|ObjectCollection findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
  * @method     ChildUser[]|ObjectCollection findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
  * @method     ChildUser[]|ObjectCollection findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
  * @method     ChildUser[]|ObjectCollection findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
  * @method     ChildUser[]|ObjectCollection findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
  * @method     ChildUser[]|ObjectCollection findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
  * @method     ChildUser[]|ObjectCollection findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
  * @method     ChildUser[]|ObjectCollection findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
  * @method     ChildUser[]|ObjectCollection findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
  * @method     ChildUser[]|ObjectCollection findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
  * @method     ChildUser[]|ObjectCollection findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
  * @method     ChildUser[]|ObjectCollection findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
  * @method     ChildUser[]|ObjectCollection findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
  * @method     ChildUser[]|ObjectCollection findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
  * @method     ChildUser[]|ObjectCollection findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
  * @method     ChildUser[]|ObjectCollection findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
  * @method     ChildUser[]|ObjectCollection findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
  * @method     ChildUser[]|ObjectCollection findByDeletedAt(string $user_deleted) Return ChildUser objects filtered by the user_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDeletedAt(string $user_deleted) Return ChildUser objects filtered by the user_deleted column
  * @method     ChildUser[]|ObjectCollection findByDeletedWhy(string $user_deleted_why) Return ChildUser objects filtered by the user_deleted_why column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDeletedWhy(string $user_deleted_why) Return ChildUser objects filtered by the user_deleted_why column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class UserQuery extends ModelCriteria
@@ -1723,6 +1763,61 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
+     * Use the Right relation Right object
+     *
+     * @param callable(\Model\RightQuery):\Model\RightQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withRightQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useRightQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Right table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\RightQuery The inner query object of the EXISTS statement
+     */
+    public function useRightExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Right table for a NOT EXISTS query.
+     *
+     * @see useRightExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RightQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useRightNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
+    /**
      * Filter the query by a related \Model\Session object
      *
      * @param \Model\Session|ObjectCollection $session the related object to use as filter
@@ -1795,6 +1890,61 @@ abstract class UserQuery extends ModelCriteria
             ->useQuery($relationAlias ? $relationAlias : 'Session', '\Model\SessionQuery');
     }
 
+    /**
+     * Use the Session relation Session object
+     *
+     * @param callable(\Model\SessionQuery):\Model\SessionQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSessionQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSessionQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Session table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SessionQuery The inner query object of the EXISTS statement
+     */
+    public function useSessionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Session', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Session table for a NOT EXISTS query.
+     *
+     * @see useSessionExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SessionQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSessionNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Session', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

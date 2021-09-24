@@ -206,49 +206,93 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByDeletedAt(string $stock_deleted) Return the first ChildStock filtered by the stock_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStock[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
  * @method     ChildStock[]|ObjectCollection findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
  * @method     ChildStock[]|ObjectCollection findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
  * @method     ChildStock[]|ObjectCollection findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
  * @method     ChildStock[]|ObjectCollection findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
  * @method     ChildStock[]|ObjectCollection findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
  * @method     ChildStock[]|ObjectCollection findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
  * @method     ChildStock[]|ObjectCollection findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
  * @method     ChildStock[]|ObjectCollection findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
  * @method     ChildStock[]|ObjectCollection findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
  * @method     ChildStock[]|ObjectCollection findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
  * @method     ChildStock[]|ObjectCollection findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
  * @method     ChildStock[]|ObjectCollection findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
  * @method     ChildStock[]|ObjectCollection findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
  * @method     ChildStock[]|ObjectCollection findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
  * @method     ChildStock[]|ObjectCollection findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
  * @method     ChildStock[]|ObjectCollection findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
  * @method     ChildStock[]|ObjectCollection findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
  * @method     ChildStock[]|ObjectCollection findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
  * @method     ChildStock[]|ObjectCollection findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
  * @method     ChildStock[]|ObjectCollection findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
  * @method     ChildStock[]|ObjectCollection findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
  * @method     ChildStock[]|ObjectCollection findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
  * @method     ChildStock[]|ObjectCollection findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
  * @method     ChildStock[]|ObjectCollection findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
  * @method     ChildStock[]|ObjectCollection findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
  * @method     ChildStock[]|ObjectCollection findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
  * @method     ChildStock[]|ObjectCollection findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
  * @method     ChildStock[]|ObjectCollection findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
  * @method     ChildStock[]|ObjectCollection findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
  * @method     ChildStock[]|ObjectCollection findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
  * @method     ChildStock[]|ObjectCollection findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
  * @method     ChildStock[]|ObjectCollection findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
  * @method     ChildStock[]|ObjectCollection findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
  * @method     ChildStock[]|ObjectCollection findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
  * @method     ChildStock[]|ObjectCollection findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
  * @method     ChildStock[]|ObjectCollection findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
  * @method     ChildStock[]|ObjectCollection findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
  * @method     ChildStock[]|ObjectCollection findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
  * @method     ChildStock[]|ObjectCollection findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
  * @method     ChildStock[]|ObjectCollection findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
  * @method     ChildStock[]|ObjectCollection findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
  * @method     ChildStock[]|ObjectCollection findByDeletedAt(string $stock_deleted) Return ChildStock objects filtered by the stock_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDeletedAt(string $stock_deleted) Return ChildStock objects filtered by the stock_deleted column
  * @method     ChildStock[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStock> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class StockQuery extends ModelCriteria

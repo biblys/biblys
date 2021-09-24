@@ -4,9 +4,9 @@ namespace Model\Base;
 
 use \Exception;
 use \PDO;
-use Model\List as ChildList;
-use Model\ListQuery as ChildListQuery;
-use Model\Map\ListTableMap;
+use Model\StockItemList as ChildStockItemList;
+use Model\StockItemListQuery as ChildStockItemListQuery;
+use Model\Map\StockItemListTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -19,98 +19,108 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildListQuery orderById($order = Criteria::ASC) Order by the list_id column
- * @method     ChildListQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     ChildListQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
- * @method     ChildListQuery orderByTitle($order = Criteria::ASC) Order by the list_title column
- * @method     ChildListQuery orderByUrl($order = Criteria::ASC) Order by the list_url column
- * @method     ChildListQuery orderByCreatedAt($order = Criteria::ASC) Order by the list_created column
- * @method     ChildListQuery orderByUpdatedAt($order = Criteria::ASC) Order by the list_updated column
- * @method     ChildListQuery orderByDeletedAt($order = Criteria::ASC) Order by the list_deleted column
+ * @method     ChildStockItemListQuery orderById($order = Criteria::ASC) Order by the list_id column
+ * @method     ChildStockItemListQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
+ * @method     ChildStockItemListQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
+ * @method     ChildStockItemListQuery orderByTitle($order = Criteria::ASC) Order by the list_title column
+ * @method     ChildStockItemListQuery orderByUrl($order = Criteria::ASC) Order by the list_url column
+ * @method     ChildStockItemListQuery orderByCreatedAt($order = Criteria::ASC) Order by the list_created column
+ * @method     ChildStockItemListQuery orderByUpdatedAt($order = Criteria::ASC) Order by the list_updated column
+ * @method     ChildStockItemListQuery orderByDeletedAt($order = Criteria::ASC) Order by the list_deleted column
  *
- * @method     ChildListQuery groupById() Group by the list_id column
- * @method     ChildListQuery groupByUserId() Group by the user_id column
- * @method     ChildListQuery groupBySiteId() Group by the site_id column
- * @method     ChildListQuery groupByTitle() Group by the list_title column
- * @method     ChildListQuery groupByUrl() Group by the list_url column
- * @method     ChildListQuery groupByCreatedAt() Group by the list_created column
- * @method     ChildListQuery groupByUpdatedAt() Group by the list_updated column
- * @method     ChildListQuery groupByDeletedAt() Group by the list_deleted column
+ * @method     ChildStockItemListQuery groupById() Group by the list_id column
+ * @method     ChildStockItemListQuery groupByUserId() Group by the user_id column
+ * @method     ChildStockItemListQuery groupBySiteId() Group by the site_id column
+ * @method     ChildStockItemListQuery groupByTitle() Group by the list_title column
+ * @method     ChildStockItemListQuery groupByUrl() Group by the list_url column
+ * @method     ChildStockItemListQuery groupByCreatedAt() Group by the list_created column
+ * @method     ChildStockItemListQuery groupByUpdatedAt() Group by the list_updated column
+ * @method     ChildStockItemListQuery groupByDeletedAt() Group by the list_deleted column
  *
- * @method     ChildListQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildListQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildListQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildStockItemListQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildStockItemListQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildStockItemListQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildListQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildListQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildListQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildStockItemListQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildStockItemListQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildStockItemListQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildList|null findOne(ConnectionInterface $con = null) Return the first ChildList matching the query
- * @method     ChildList findOneOrCreate(ConnectionInterface $con = null) Return the first ChildList matching the query, or a new ChildList object populated from the query conditions when no match is found
+ * @method     ChildStockItemList|null findOne(ConnectionInterface $con = null) Return the first ChildStockItemList matching the query
+ * @method     ChildStockItemList findOneOrCreate(ConnectionInterface $con = null) Return the first ChildStockItemList matching the query, or a new ChildStockItemList object populated from the query conditions when no match is found
  *
- * @method     ChildList|null findOneById(int $list_id) Return the first ChildList filtered by the list_id column
- * @method     ChildList|null findOneByUserId(int $user_id) Return the first ChildList filtered by the user_id column
- * @method     ChildList|null findOneBySiteId(int $site_id) Return the first ChildList filtered by the site_id column
- * @method     ChildList|null findOneByTitle(string $list_title) Return the first ChildList filtered by the list_title column
- * @method     ChildList|null findOneByUrl(string $list_url) Return the first ChildList filtered by the list_url column
- * @method     ChildList|null findOneByCreatedAt(string $list_created) Return the first ChildList filtered by the list_created column
- * @method     ChildList|null findOneByUpdatedAt(string $list_updated) Return the first ChildList filtered by the list_updated column
- * @method     ChildList|null findOneByDeletedAt(string $list_deleted) Return the first ChildList filtered by the list_deleted column *
+ * @method     ChildStockItemList|null findOneById(int $list_id) Return the first ChildStockItemList filtered by the list_id column
+ * @method     ChildStockItemList|null findOneByUserId(int $user_id) Return the first ChildStockItemList filtered by the user_id column
+ * @method     ChildStockItemList|null findOneBySiteId(int $site_id) Return the first ChildStockItemList filtered by the site_id column
+ * @method     ChildStockItemList|null findOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column
+ * @method     ChildStockItemList|null findOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column
+ * @method     ChildStockItemList|null findOneByCreatedAt(string $list_created) Return the first ChildStockItemList filtered by the list_created column
+ * @method     ChildStockItemList|null findOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column
+ * @method     ChildStockItemList|null findOneByDeletedAt(string $list_deleted) Return the first ChildStockItemList filtered by the list_deleted column *
 
- * @method     ChildList requirePk($key, ConnectionInterface $con = null) Return the ChildList by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOne(ConnectionInterface $con = null) Return the first ChildList matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requirePk($key, ConnectionInterface $con = null) Return the ChildStockItemList by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOne(ConnectionInterface $con = null) Return the first ChildStockItemList matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildList requireOneById(int $list_id) Return the first ChildList filtered by the list_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByUserId(int $user_id) Return the first ChildList filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneBySiteId(int $site_id) Return the first ChildList filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByTitle(string $list_title) Return the first ChildList filtered by the list_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByUrl(string $list_url) Return the first ChildList filtered by the list_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByCreatedAt(string $list_created) Return the first ChildList filtered by the list_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByUpdatedAt(string $list_updated) Return the first ChildList filtered by the list_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildList requireOneByDeletedAt(string $list_deleted) Return the first ChildList filtered by the list_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneById(int $list_id) Return the first ChildStockItemList filtered by the list_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByUserId(int $user_id) Return the first ChildStockItemList filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneBySiteId(int $site_id) Return the first ChildStockItemList filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByCreatedAt(string $list_created) Return the first ChildStockItemList filtered by the list_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStockItemList requireOneByDeletedAt(string $list_deleted) Return the first ChildStockItemList filtered by the list_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildList[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildList objects based on current ModelCriteria
- * @method     ChildList[]|ObjectCollection findById(int $list_id) Return ChildList objects filtered by the list_id column
- * @method     ChildList[]|ObjectCollection findByUserId(int $user_id) Return ChildList objects filtered by the user_id column
- * @method     ChildList[]|ObjectCollection findBySiteId(int $site_id) Return ChildList objects filtered by the site_id column
- * @method     ChildList[]|ObjectCollection findByTitle(string $list_title) Return ChildList objects filtered by the list_title column
- * @method     ChildList[]|ObjectCollection findByUrl(string $list_url) Return ChildList objects filtered by the list_url column
- * @method     ChildList[]|ObjectCollection findByCreatedAt(string $list_created) Return ChildList objects filtered by the list_created column
- * @method     ChildList[]|ObjectCollection findByUpdatedAt(string $list_updated) Return ChildList objects filtered by the list_updated column
- * @method     ChildList[]|ObjectCollection findByDeletedAt(string $list_deleted) Return ChildList objects filtered by the list_deleted column
- * @method     ChildList[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildStockItemList[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> find(ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
+ * @method     ChildStockItemList[]|ObjectCollection findById(int $list_id) Return ChildStockItemList objects filtered by the list_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findById(int $list_id) Return ChildStockItemList objects filtered by the list_id column
+ * @method     ChildStockItemList[]|ObjectCollection findByUserId(int $user_id) Return ChildStockItemList objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByUserId(int $user_id) Return ChildStockItemList objects filtered by the user_id column
+ * @method     ChildStockItemList[]|ObjectCollection findBySiteId(int $site_id) Return ChildStockItemList objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findBySiteId(int $site_id) Return ChildStockItemList objects filtered by the site_id column
+ * @method     ChildStockItemList[]|ObjectCollection findByTitle(string $list_title) Return ChildStockItemList objects filtered by the list_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByTitle(string $list_title) Return ChildStockItemList objects filtered by the list_title column
+ * @method     ChildStockItemList[]|ObjectCollection findByUrl(string $list_url) Return ChildStockItemList objects filtered by the list_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByUrl(string $list_url) Return ChildStockItemList objects filtered by the list_url column
+ * @method     ChildStockItemList[]|ObjectCollection findByCreatedAt(string $list_created) Return ChildStockItemList objects filtered by the list_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByCreatedAt(string $list_created) Return ChildStockItemList objects filtered by the list_created column
+ * @method     ChildStockItemList[]|ObjectCollection findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
+ * @method     ChildStockItemList[]|ObjectCollection findByDeletedAt(string $list_deleted) Return ChildStockItemList objects filtered by the list_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByDeletedAt(string $list_deleted) Return ChildStockItemList objects filtered by the list_deleted column
+ * @method     ChildStockItemList[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStockItemList> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class ListQuery extends ModelCriteria
+abstract class StockItemListQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Model\Base\ListQuery object.
+     * Initializes internal state of \Model\Base\StockItemListQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\List', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\StockItemList', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildListQuery object.
+     * Returns a new ChildStockItemListQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildListQuery
+     * @return ChildStockItemListQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildListQuery) {
+        if ($criteria instanceof ChildStockItemListQuery) {
             return $criteria;
         }
-        $query = new ChildListQuery();
+        $query = new ChildStockItemListQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -133,7 +143,7 @@ abstract class ListQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildList|array|mixed the result, formatted by the current formatter
+     * @return ChildStockItemList|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -142,7 +152,7 @@ abstract class ListQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -155,7 +165,7 @@ abstract class ListQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = ListTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = StockItemListTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -172,7 +182,7 @@ abstract class ListQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildList A model object, or null if the key is not found
+     * @return ChildStockItemList A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -187,10 +197,10 @@ abstract class ListQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildList $obj */
-            $obj = new ChildList();
+            /** @var ChildStockItemList $obj */
+            $obj = new ChildStockItemList();
             $obj->hydrate($row);
-            ListTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            StockItemListTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -203,7 +213,7 @@ abstract class ListQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildList|array|mixed the result, formatted by the current formatter
+     * @return ChildStockItemList|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -245,12 +255,12 @@ abstract class ListQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -258,12 +268,12 @@ abstract class ListQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -282,18 +292,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -304,7 +314,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_ID, $id, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $id, $comparison);
     }
 
     /**
@@ -323,18 +333,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByUserId($userId = null, $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
             if (isset($userId['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($userId['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -345,7 +355,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_USER_ID, $userId, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_USER_ID, $userId, $comparison);
     }
 
     /**
@@ -364,18 +374,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterBySiteId($siteId = null, $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
             if (isset($siteId['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($siteId['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -386,7 +396,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_SITE_ID, $siteId, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_SITE_ID, $siteId, $comparison);
     }
 
     /**
@@ -401,7 +411,7 @@ abstract class ListQuery extends ModelCriteria
      * @param     string $title The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByTitle($title = null, $comparison = null)
     {
@@ -411,7 +421,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_TITLE, $title, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_TITLE, $title, $comparison);
     }
 
     /**
@@ -426,7 +436,7 @@ abstract class ListQuery extends ModelCriteria
      * @param     string $url The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByUrl($url = null, $comparison = null)
     {
@@ -436,7 +446,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_URL, $url, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_URL, $url, $comparison);
     }
 
     /**
@@ -457,18 +467,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByCreatedAt($createdAt = null, $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
             if (isset($createdAt['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_CREATED, $createdAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($createdAt['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_CREATED, $createdAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -479,7 +489,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_CREATED, $createdAt, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_CREATED, $createdAt, $comparison);
     }
 
     /**
@@ -500,18 +510,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByUpdatedAt($updatedAt = null, $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
             if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_UPDATED, $updatedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_UPDATED, $updatedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -522,7 +532,7 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_UPDATED, $updatedAt, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_UPDATED, $updatedAt, $comparison);
     }
 
     /**
@@ -543,18 +553,18 @@ abstract class ListQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function filterByDeletedAt($deletedAt = null, $comparison = null)
     {
         if (is_array($deletedAt)) {
             $useMinMax = false;
             if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(ListTableMap::COL_LIST_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -565,20 +575,20 @@ abstract class ListQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ListTableMap::COL_LIST_DELETED, $deletedAt, $comparison);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt, $comparison);
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildList $list Object to remove from the list of results
+     * @param   ChildStockItemList $stockItemList Object to remove from the list of results
      *
-     * @return $this|ChildListQuery The current query, for fluid interface
+     * @return $this|ChildStockItemListQuery The current query, for fluid interface
      */
-    public function prune($list = null)
+    public function prune($stockItemList = null)
     {
-        if ($list) {
-            $this->addUsingAlias(ListTableMap::COL_LIST_ID, $list->getId(), Criteria::NOT_EQUAL);
+        if ($stockItemList) {
+            $this->addUsingAlias(StockItemListTableMap::COL_LIST_ID, $stockItemList->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -593,7 +603,7 @@ abstract class ListQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -604,8 +614,8 @@ abstract class ListQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            ListTableMap::clearInstancePool();
-            ListTableMap::clearRelatedInstancePool();
+            StockItemListTableMap::clearInstancePool();
+            StockItemListTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -623,23 +633,23 @@ abstract class ListQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(ListTableMap::DATABASE_NAME);
+        $criteria->setDbName(StockItemListTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            ListTableMap::removeInstanceFromPool($criteria);
+            StockItemListTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            ListTableMap::clearRelatedInstancePool();
+            StockItemListTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -652,41 +662,41 @@ abstract class ListQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(ListTableMap::COL_LIST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ListTableMap::COL_LIST_UPDATED);
+        return $this->addDescendingOrderByColumn(StockItemListTableMap::COL_LIST_UPDATED);
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ListTableMap::COL_LIST_UPDATED);
+        return $this->addAscendingOrderByColumn(StockItemListTableMap::COL_LIST_UPDATED);
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ListTableMap::COL_LIST_CREATED);
+        return $this->addDescendingOrderByColumn(StockItemListTableMap::COL_LIST_CREATED);
     }
 
     /**
@@ -694,21 +704,21 @@ abstract class ListQuery extends ModelCriteria
      *
      * @param      int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(ListTableMap::COL_LIST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildListQuery The current query, for fluid interface
+     * @return     $this|ChildStockItemListQuery The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ListTableMap::COL_LIST_CREATED);
+        return $this->addAscendingOrderByColumn(StockItemListTableMap::COL_LIST_CREATED);
     }
 
-} // ListQuery
+} // StockItemListQuery

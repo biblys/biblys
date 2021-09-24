@@ -94,21 +94,37 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowfundingReward requireOneByDeletedAt(string $reward_deleted) Return the first ChildCrowfundingReward filtered by the reward_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCrowfundingReward[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCrowfundingReward objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> find(ConnectionInterface $con = null) Return ChildCrowfundingReward objects based on current ModelCriteria
  * @method     ChildCrowfundingReward[]|ObjectCollection findById(int $reward_id) Return ChildCrowfundingReward objects filtered by the reward_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findById(int $reward_id) Return ChildCrowfundingReward objects filtered by the reward_id column
  * @method     ChildCrowfundingReward[]|ObjectCollection findBySiteId(int $site_id) Return ChildCrowfundingReward objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findBySiteId(int $site_id) Return ChildCrowfundingReward objects filtered by the site_id column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByCampaignId(int $campaign_id) Return ChildCrowfundingReward objects filtered by the campaign_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByCampaignId(int $campaign_id) Return ChildCrowfundingReward objects filtered by the campaign_id column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByContent(string $reward_content) Return ChildCrowfundingReward objects filtered by the reward_content column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByContent(string $reward_content) Return ChildCrowfundingReward objects filtered by the reward_content column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByArticles(string $reward_articles) Return ChildCrowfundingReward objects filtered by the reward_articles column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByArticles(string $reward_articles) Return ChildCrowfundingReward objects filtered by the reward_articles column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByPrice(int $reward_price) Return ChildCrowfundingReward objects filtered by the reward_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByPrice(int $reward_price) Return ChildCrowfundingReward objects filtered by the reward_price column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByLimited(boolean $reward_limited) Return ChildCrowfundingReward objects filtered by the reward_limited column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByLimited(boolean $reward_limited) Return ChildCrowfundingReward objects filtered by the reward_limited column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByHighlighted(boolean $reward_highlighted) Return ChildCrowfundingReward objects filtered by the reward_highlighted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByHighlighted(boolean $reward_highlighted) Return ChildCrowfundingReward objects filtered by the reward_highlighted column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByImage(string $reward_image) Return ChildCrowfundingReward objects filtered by the reward_image column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByImage(string $reward_image) Return ChildCrowfundingReward objects filtered by the reward_image column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByQuantity(int $reward_quantity) Return ChildCrowfundingReward objects filtered by the reward_quantity column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByQuantity(int $reward_quantity) Return ChildCrowfundingReward objects filtered by the reward_quantity column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByBackers(int $reward_backers) Return ChildCrowfundingReward objects filtered by the reward_backers column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByBackers(int $reward_backers) Return ChildCrowfundingReward objects filtered by the reward_backers column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByCreatedAt(string $reward_created) Return ChildCrowfundingReward objects filtered by the reward_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByCreatedAt(string $reward_created) Return ChildCrowfundingReward objects filtered by the reward_created column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByUpdatedAt(string $reward_updated) Return ChildCrowfundingReward objects filtered by the reward_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByUpdatedAt(string $reward_updated) Return ChildCrowfundingReward objects filtered by the reward_updated column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByDeletedAt(string $reward_deleted) Return ChildCrowfundingReward objects filtered by the reward_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByDeletedAt(string $reward_deleted) Return ChildCrowfundingReward objects filtered by the reward_deleted column
  * @method     ChildCrowfundingReward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowfundingReward> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CrowfundingRewardQuery extends ModelCriteria

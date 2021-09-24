@@ -98,22 +98,39 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer requireOneByDeletedAt(string $customer_deleted) Return the first ChildCustomer filtered by the customer_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCustomer[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
  * @method     ChildCustomer[]|ObjectCollection findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
  * @method     ChildCustomer[]|ObjectCollection findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
  * @method     ChildCustomer[]|ObjectCollection findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
  * @method     ChildCustomer[]|ObjectCollection findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
  * @method     ChildCustomer[]|ObjectCollection findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
  * @method     ChildCustomer[]|ObjectCollection findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
  * @method     ChildCustomer[]|ObjectCollection findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
  * @method     ChildCustomer[]|ObjectCollection findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
  * @method     ChildCustomer[]|ObjectCollection findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
  * @method     ChildCustomer[]|ObjectCollection findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
  * @method     ChildCustomer[]|ObjectCollection findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
  * @method     ChildCustomer[]|ObjectCollection findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
  * @method     ChildCustomer[]|ObjectCollection findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
  * @method     ChildCustomer[]|ObjectCollection findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
  * @method     ChildCustomer[]|ObjectCollection findByDeletedAt(string $customer_deleted) Return ChildCustomer objects filtered by the customer_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByDeletedAt(string $customer_deleted) Return ChildCustomer objects filtered by the customer_deleted column
  * @method     ChildCustomer[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCustomer> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CustomerQuery extends ModelCriteria

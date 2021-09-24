@@ -179,7 +179,6 @@ class CrowfundingRewardTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'REWARD_ID',
         'CrowfundingReward.Id' => 'REWARD_ID',
         'id' => 'REWARD_ID',
@@ -343,7 +342,7 @@ class CrowfundingRewardTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'reward_created', 'update_column' => 'reward_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'reward_created', 'update_column' => 'reward_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -579,17 +578,6 @@ class CrowfundingRewardTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CrowfundingRewardTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CrowfundingRewardTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CrowfundingRewardTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a CrowfundingReward or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or CrowfundingReward object or primary key or array of primary keys
@@ -678,6 +666,3 @@ class CrowfundingRewardTableMap extends TableMap
     }
 
 } // CrowfundingRewardTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-CrowfundingRewardTableMap::buildTableMap();

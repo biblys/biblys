@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByDeletedAt(string $payment_deleted) Return the first ChildPayment filtered by the payment_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPayment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
  * @method     ChildPayment[]|ObjectCollection findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
  * @method     ChildPayment[]|ObjectCollection findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
  * @method     ChildPayment[]|ObjectCollection findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
  * @method     ChildPayment[]|ObjectCollection findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
  * @method     ChildPayment[]|ObjectCollection findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
  * @method     ChildPayment[]|ObjectCollection findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
  * @method     ChildPayment[]|ObjectCollection findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
  * @method     ChildPayment[]|ObjectCollection findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
  * @method     ChildPayment[]|ObjectCollection findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
  * @method     ChildPayment[]|ObjectCollection findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
  * @method     ChildPayment[]|ObjectCollection findByDeletedAt(string $payment_deleted) Return ChildPayment objects filtered by the payment_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByDeletedAt(string $payment_deleted) Return ChildPayment objects filtered by the payment_deleted column
  * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PaymentQuery extends ModelCriteria

@@ -229,7 +229,6 @@ class BookshopTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'BOOKSHOP_ID',
         'Bookshop.Id' => 'BOOKSHOP_ID',
         'id' => 'BOOKSHOP_ID',
@@ -483,7 +482,7 @@ class BookshopTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'bookshop_created', 'update_column' => 'bookshop_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'bookshop_created', 'update_column' => 'bookshop_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -759,17 +758,6 @@ class BookshopTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(BookshopTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(BookshopTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new BookshopTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Bookshop or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Bookshop object or primary key or array of primary keys
@@ -858,6 +846,3 @@ class BookshopTableMap extends TableMap
     }
 
 } // BookshopTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-BookshopTableMap::buildTableMap();

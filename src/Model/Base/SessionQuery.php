@@ -79,14 +79,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSession requireOneByDeletedAt(string $session_deleted) Return the first ChildSession filtered by the session_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSession[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> find(ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
  * @method     ChildSession[]|ObjectCollection findById(int $session_id) Return ChildSession objects filtered by the session_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findById(int $session_id) Return ChildSession objects filtered by the session_id column
  * @method     ChildSession[]|ObjectCollection findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
  * @method     ChildSession[]|ObjectCollection findByToken(string $session_token) Return ChildSession objects filtered by the session_token column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByToken(string $session_token) Return ChildSession objects filtered by the session_token column
  * @method     ChildSession[]|ObjectCollection findByCreatedAt(string $session_created) Return ChildSession objects filtered by the session_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByCreatedAt(string $session_created) Return ChildSession objects filtered by the session_created column
  * @method     ChildSession[]|ObjectCollection findByExpiresAt(string $session_expires) Return ChildSession objects filtered by the session_expires column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByExpiresAt(string $session_expires) Return ChildSession objects filtered by the session_expires column
  * @method     ChildSession[]|ObjectCollection findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
  * @method     ChildSession[]|ObjectCollection findByDeletedAt(string $session_deleted) Return ChildSession objects filtered by the session_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findByDeletedAt(string $session_deleted) Return ChildSession objects filtered by the session_deleted column
  * @method     ChildSession[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSession> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SessionQuery extends ModelCriteria
@@ -632,6 +641,61 @@ abstract class SessionQuery extends ModelCriteria
             ->useQuery($relationAlias ? $relationAlias : 'User', '\Model\UserQuery');
     }
 
+    /**
+     * Use the User relation User object
+     *
+     * @param callable(\Model\UserQuery):\Model\UserQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withUserQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useUserQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to User table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\UserQuery The inner query object of the EXISTS statement
+     */
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to User table for a NOT EXISTS query.
+     *
+     * @see useUserExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

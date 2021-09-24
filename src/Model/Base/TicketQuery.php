@@ -86,19 +86,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicket requireOneByDeletedAt(string $ticket_deleted) Return the first ChildTicket filtered by the ticket_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTicket[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> find(ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
  * @method     ChildTicket[]|ObjectCollection findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
  * @method     ChildTicket[]|ObjectCollection findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
  * @method     ChildTicket[]|ObjectCollection findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
  * @method     ChildTicket[]|ObjectCollection findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
  * @method     ChildTicket[]|ObjectCollection findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
  * @method     ChildTicket[]|ObjectCollection findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
  * @method     ChildTicket[]|ObjectCollection findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
  * @method     ChildTicket[]|ObjectCollection findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
  * @method     ChildTicket[]|ObjectCollection findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
  * @method     ChildTicket[]|ObjectCollection findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
  * @method     ChildTicket[]|ObjectCollection findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
  * @method     ChildTicket[]|ObjectCollection findByDeletedAt(string $ticket_deleted) Return ChildTicket objects filtered by the ticket_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByDeletedAt(string $ticket_deleted) Return ChildTicket objects filtered by the ticket_deleted column
  * @method     ChildTicket[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicket> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class TicketQuery extends ModelCriteria

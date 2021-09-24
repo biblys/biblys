@@ -70,15 +70,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist requireOneByDeletedAt(string $wishlist_deleted) Return the first ChildWishlist filtered by the wishlist_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildWishlist[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> find(ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
  * @method     ChildWishlist[]|ObjectCollection findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
  * @method     ChildWishlist[]|ObjectCollection findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
  * @method     ChildWishlist[]|ObjectCollection findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
  * @method     ChildWishlist[]|ObjectCollection findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
  * @method     ChildWishlist[]|ObjectCollection findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
  * @method     ChildWishlist[]|ObjectCollection findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
  * @method     ChildWishlist[]|ObjectCollection findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
  * @method     ChildWishlist[]|ObjectCollection findByDeletedAt(string $wishlist_deleted) Return ChildWishlist objects filtered by the wishlist_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByDeletedAt(string $wishlist_deleted) Return ChildWishlist objects filtered by the wishlist_deleted column
  * @method     ChildWishlist[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWishlist> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class WishlistQuery extends ModelCriteria

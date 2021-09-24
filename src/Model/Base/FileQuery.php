@@ -98,22 +98,39 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile requireOneByCreatedAt(string $file_created) Return the first ChildFile filtered by the file_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildFile[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> find(ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
  * @method     ChildFile[]|ObjectCollection findById(int $file_id) Return ChildFile objects filtered by the file_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findById(int $file_id) Return ChildFile objects filtered by the file_id column
  * @method     ChildFile[]|ObjectCollection findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
  * @method     ChildFile[]|ObjectCollection findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
  * @method     ChildFile[]|ObjectCollection findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
  * @method     ChildFile[]|ObjectCollection findByType(string $file_type) Return ChildFile objects filtered by the file_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByType(string $file_type) Return ChildFile objects filtered by the file_type column
  * @method     ChildFile[]|ObjectCollection findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
  * @method     ChildFile[]|ObjectCollection findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
  * @method     ChildFile[]|ObjectCollection findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
  * @method     ChildFile[]|ObjectCollection findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
  * @method     ChildFile[]|ObjectCollection findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
  * @method     ChildFile[]|ObjectCollection findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
  * @method     ChildFile[]|ObjectCollection findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
  * @method     ChildFile[]|ObjectCollection findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
  * @method     ChildFile[]|ObjectCollection findByDeletedAt(string $file_deleted) Return ChildFile objects filtered by the file_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByDeletedAt(string $file_deleted) Return ChildFile objects filtered by the file_deleted column
  * @method     ChildFile[]|ObjectCollection findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildFile> findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
  * @method     ChildFile[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildFile> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class FileQuery extends ModelCriteria

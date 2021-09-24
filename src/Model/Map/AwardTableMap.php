@@ -164,7 +164,6 @@ class AwardTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'AWARD_ID',
         'Award.Id' => 'AWARD_ID',
         'id' => 'AWARD_ID',
@@ -301,7 +300,7 @@ class AwardTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'award_created', 'update_column' => 'award_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'award_created', 'update_column' => 'award_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class AwardTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(AwardTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(AwardTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new AwardTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Award or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Award object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class AwardTableMap extends TableMap
     }
 
 } // AwardTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-AwardTableMap::buildTableMap();

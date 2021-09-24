@@ -74,16 +74,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWish requireOneByDeletedAt(string $wish_deleted) Return the first ChildWish filtered by the wish_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildWish[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildWish objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> find(ConnectionInterface $con = null) Return ChildWish objects based on current ModelCriteria
  * @method     ChildWish[]|ObjectCollection findById(int $wish_id) Return ChildWish objects filtered by the wish_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findById(int $wish_id) Return ChildWish objects filtered by the wish_id column
  * @method     ChildWish[]|ObjectCollection findByWishlistId(int $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByWishlistId(int $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
  * @method     ChildWish[]|ObjectCollection findByUserId(int $user_id) Return ChildWish objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByUserId(int $user_id) Return ChildWish objects filtered by the user_id column
  * @method     ChildWish[]|ObjectCollection findBySiteId(int $site_id) Return ChildWish objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findBySiteId(int $site_id) Return ChildWish objects filtered by the site_id column
  * @method     ChildWish[]|ObjectCollection findByArticleId(int $article_id) Return ChildWish objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByArticleId(int $article_id) Return ChildWish objects filtered by the article_id column
  * @method     ChildWish[]|ObjectCollection findByCreatedAt(string $wish_created) Return ChildWish objects filtered by the wish_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByCreatedAt(string $wish_created) Return ChildWish objects filtered by the wish_created column
  * @method     ChildWish[]|ObjectCollection findByUpdatedAt(string $wish_updated) Return ChildWish objects filtered by the wish_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByUpdatedAt(string $wish_updated) Return ChildWish objects filtered by the wish_updated column
  * @method     ChildWish[]|ObjectCollection findByBought(string $wish_bought) Return ChildWish objects filtered by the wish_bought column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByBought(string $wish_bought) Return ChildWish objects filtered by the wish_bought column
  * @method     ChildWish[]|ObjectCollection findByDeletedAt(string $wish_deleted) Return ChildWish objects filtered by the wish_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildWish> findByDeletedAt(string $wish_deleted) Return ChildWish objects filtered by the wish_deleted column
  * @method     ChildWish[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWish> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class WishQuery extends ModelCriteria

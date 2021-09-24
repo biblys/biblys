@@ -70,15 +70,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOption requireOneByDeletedAt(string $option_deleted) Return the first ChildOption filtered by the option_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOption[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOption objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> find(ConnectionInterface $con = null) Return ChildOption objects based on current ModelCriteria
  * @method     ChildOption[]|ObjectCollection findById(int $option_id) Return ChildOption objects filtered by the option_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findById(int $option_id) Return ChildOption objects filtered by the option_id column
  * @method     ChildOption[]|ObjectCollection findBySiteId(int $site_id) Return ChildOption objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findBySiteId(int $site_id) Return ChildOption objects filtered by the site_id column
  * @method     ChildOption[]|ObjectCollection findByUserId(int $user_id) Return ChildOption objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByUserId(int $user_id) Return ChildOption objects filtered by the user_id column
  * @method     ChildOption[]|ObjectCollection findByKey(string $option_key) Return ChildOption objects filtered by the option_key column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByKey(string $option_key) Return ChildOption objects filtered by the option_key column
  * @method     ChildOption[]|ObjectCollection findByValue(string $option_value) Return ChildOption objects filtered by the option_value column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByValue(string $option_value) Return ChildOption objects filtered by the option_value column
  * @method     ChildOption[]|ObjectCollection findByCreatedAt(string $option_created) Return ChildOption objects filtered by the option_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByCreatedAt(string $option_created) Return ChildOption objects filtered by the option_created column
  * @method     ChildOption[]|ObjectCollection findByUpdatedAt(string $option_updated) Return ChildOption objects filtered by the option_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByUpdatedAt(string $option_updated) Return ChildOption objects filtered by the option_updated column
  * @method     ChildOption[]|ObjectCollection findByDeletedAt(string $option_deleted) Return ChildOption objects filtered by the option_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildOption> findByDeletedAt(string $option_deleted) Return ChildOption objects filtered by the option_deleted column
  * @method     ChildOption[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildOption> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class OptionQuery extends ModelCriteria

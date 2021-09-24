@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycle requireOneByDeletedAt(string $cycle_deleted) Return the first ChildCycle filtered by the cycle_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCycle[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
  * @method     ChildCycle[]|ObjectCollection findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
  * @method     ChildCycle[]|ObjectCollection findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
  * @method     ChildCycle[]|ObjectCollection findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
  * @method     ChildCycle[]|ObjectCollection findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
  * @method     ChildCycle[]|ObjectCollection findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
  * @method     ChildCycle[]|ObjectCollection findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
  * @method     ChildCycle[]|ObjectCollection findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
  * @method     ChildCycle[]|ObjectCollection findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
  * @method     ChildCycle[]|ObjectCollection findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
  * @method     ChildCycle[]|ObjectCollection findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
  * @method     ChildCycle[]|ObjectCollection findByDeletedAt(string $cycle_deleted) Return ChildCycle objects filtered by the cycle_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByDeletedAt(string $cycle_deleted) Return ChildCycle objects filtered by the cycle_deleted column
  * @method     ChildCycle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCycle> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CycleQuery extends ModelCriteria

@@ -633,6 +633,7 @@ abstract class Article implements ActiveRecordInterface
 
     /**
      * @var        ObjectCollection|ChildRole[] Collection to store aggregation of ChildRole objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildRole> Collection to store aggregation of ChildRole objects.
      */
     protected $collRoles;
     protected $collRolesPartial;
@@ -648,6 +649,7 @@ abstract class Article implements ActiveRecordInterface
     /**
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildRole[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildRole>
      */
     protected $rolesScheduledForDeletion = null;
 
@@ -762,9 +764,7 @@ abstract class Article implements ActiveRecordInterface
     public function resetModified($col = null)
     {
         if (null !== $col) {
-            if (isset($this->modifiedColumns[$col])) {
-                unset($this->modifiedColumns[$col]);
-            }
+            unset($this->modifiedColumns[$col]);
         } else {
             $this->modifiedColumns = array();
         }
@@ -870,15 +870,16 @@ abstract class Article implements ActiveRecordInterface
      *
      * @param  mixed   $parser                 A AbstractParser instance, or a format name ('XML', 'YAML', 'JSON', 'CSV')
      * @param  boolean $includeLazyLoadColumns (optional) Whether to include lazy load(ed) columns. Defaults to TRUE.
+     * @param  string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME, TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to TableMap::TYPE_PHPNAME.
      * @return string  The exported data
      */
-    public function exportTo($parser, $includeLazyLoadColumns = true)
+    public function exportTo($parser, $includeLazyLoadColumns = true, $keyType = TableMap::TYPE_PHPNAME)
     {
         if (!$parser instanceof AbstractParser) {
             $parser = AbstractParser::getParser($parser);
         }
 
-        return $parser->fromArray($this->toArray(TableMap::TYPE_PHPNAME, $includeLazyLoadColumns, array(), true));
+        return $parser->fromArray($this->toArray($keyType, $includeLazyLoadColumns, array(), true));
     }
 
     /**
@@ -1540,6 +1541,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getPubdate($format = null)
     {
@@ -1580,6 +1583,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getKeywordsGenerated($format = null)
     {
@@ -1630,6 +1635,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getInsert($format = null)
     {
@@ -1650,6 +1657,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getUpdate($format = null)
     {
@@ -1670,6 +1679,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getCreatedAt($format = null)
     {
@@ -1690,6 +1701,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getUpdatedAt($format = null)
     {
@@ -1710,6 +1723,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getDeletedAt($format = null)
     {
@@ -1770,6 +1785,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getPushedToData($format = null)
     {
@@ -1800,6 +1817,8 @@ abstract class Article implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getDeletionDate($format = null)
     {
@@ -4453,7 +4472,7 @@ abstract class Article implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->article_copyright, PDO::PARAM_INT);
                         break;
                     case 'article_pubdate':
-                        $stmt->bindValue($identifier, $this->article_pubdate ? $this->article_pubdate->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->article_pubdate ? $this->article_pubdate->format("Y-m-d") : null, PDO::PARAM_STR);
                         break;
                     case 'article_keywords':
                         $stmt->bindValue($identifier, $this->article_keywords, PDO::PARAM_STR);
@@ -5263,7 +5282,7 @@ abstract class Article implements ActiveRecordInterface
      *
      * @param      array  $arr     An array to populate the object from.
      * @param      string $keyType The type of keys the array uses.
-     * @return void
+     * @return     $this|\Model\Article
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -5506,6 +5525,8 @@ abstract class Article implements ActiveRecordInterface
         if (array_key_exists($keys[78], $arr)) {
             $this->setDeletionReason($arr[$keys[78]]);
         }
+
+        return $this;
     }
 
      /**
@@ -6065,6 +6086,7 @@ abstract class Article implements ActiveRecordInterface
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @return ObjectCollection|ChildRole[] List of ChildRole objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRole> List of ChildRole objects
      * @throws PropelException
      */
     public function getRoles(Criteria $criteria = null, ConnectionInterface $con = null)
@@ -6257,6 +6279,7 @@ abstract class Article implements ActiveRecordInterface
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildRole[] List of ChildRole objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRole}> List of ChildRole objects
      */
     public function getRolesJoinPeople(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
@@ -6505,15 +6528,18 @@ abstract class Article implements ActiveRecordInterface
 
         if (0 === strpos($name, 'from')) {
             $format = substr($name, 4);
+            $inputData = $params[0];
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->importFrom($format, reset($params));
+            return $this->importFrom($format, $inputData, $keyType);
         }
 
         if (0 === strpos($name, 'to')) {
             $format = substr($name, 2);
-            $includeLazyLoadColumns = isset($params[0]) ? $params[0] : true;
+            $includeLazyLoadColumns = $params[0] ?? true;
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->exportTo($format, $includeLazyLoadColumns);
+            return $this->exportTo($format, $includeLazyLoadColumns, $keyType);
         }
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));

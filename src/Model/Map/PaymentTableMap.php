@@ -164,7 +164,6 @@ class PaymentTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'PAYMENT_ID',
         'Payment.Id' => 'PAYMENT_ID',
         'id' => 'PAYMENT_ID',
@@ -301,7 +300,7 @@ class PaymentTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'payment_created', 'update_column' => 'payment_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'payment_created', 'update_column' => 'payment_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class PaymentTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PaymentTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PaymentTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PaymentTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Payment or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Payment object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class PaymentTableMap extends TableMap
     }
 
 } // PaymentTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-PaymentTableMap::buildTableMap();

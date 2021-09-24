@@ -154,7 +154,6 @@ class RedirectionTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'REDIRECTION_ID',
         'Redirection.Id' => 'REDIRECTION_ID',
         'id' => 'REDIRECTION_ID',
@@ -273,7 +272,7 @@ class RedirectionTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'redirection_created', 'update_column' => 'redirection_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'redirection_created', 'update_column' => 'redirection_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -489,17 +488,6 @@ class RedirectionTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RedirectionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(RedirectionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new RedirectionTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Redirection or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Redirection object or primary key or array of primary keys
@@ -588,6 +576,3 @@ class RedirectionTableMap extends TableMap
     }
 
 } // RedirectionTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-RedirectionTableMap::buildTableMap();

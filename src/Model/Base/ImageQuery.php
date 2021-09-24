@@ -90,20 +90,35 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage requireOneByDeletedAt(string $image_deleted) Return the first ChildImage filtered by the image_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildImage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
  * @method     ChildImage[]|ObjectCollection findById(int $image_id) Return ChildImage objects filtered by the image_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findById(int $image_id) Return ChildImage objects filtered by the image_id column
  * @method     ChildImage[]|ObjectCollection findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
  * @method     ChildImage[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
  * @method     ChildImage[]|ObjectCollection findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
  * @method     ChildImage[]|ObjectCollection findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
  * @method     ChildImage[]|ObjectCollection findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
  * @method     ChildImage[]|ObjectCollection findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
  * @method     ChildImage[]|ObjectCollection findByType(string $image_type) Return ChildImage objects filtered by the image_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByType(string $image_type) Return ChildImage objects filtered by the image_type column
  * @method     ChildImage[]|ObjectCollection findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
  * @method     ChildImage[]|ObjectCollection findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
  * @method     ChildImage[]|ObjectCollection findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
  * @method     ChildImage[]|ObjectCollection findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
  * @method     ChildImage[]|ObjectCollection findByDeletedAt(string $image_deleted) Return ChildImage objects filtered by the image_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildImage> findByDeletedAt(string $image_deleted) Return ChildImage objects filtered by the image_deleted column
  * @method     ChildImage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildImage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ImageQuery extends ModelCriteria

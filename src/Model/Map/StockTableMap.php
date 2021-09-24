@@ -319,7 +319,6 @@ class StockTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'STOCK_ID',
         'Stock.Id' => 'STOCK_ID',
         'id' => 'STOCK_ID',
@@ -735,7 +734,7 @@ class StockTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'stock_created', 'update_column' => 'stock_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'stock_created', 'update_column' => 'stock_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -1083,17 +1082,6 @@ class StockTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(StockTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(StockTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new StockTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Stock or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Stock object or primary key or array of primary keys
@@ -1182,6 +1170,3 @@ class StockTableMap extends TableMap
     }
 
 } // StockTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-StockTableMap::buildTableMap();

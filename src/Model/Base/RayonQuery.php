@@ -86,19 +86,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRayon requireOneByDeletedAt(string $rayon_deleted) Return the first ChildRayon filtered by the rayon_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRayon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRayon objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> find(ConnectionInterface $con = null) Return ChildRayon objects based on current ModelCriteria
  * @method     ChildRayon[]|ObjectCollection findById(string $rayon_id) Return ChildRayon objects filtered by the rayon_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findById(string $rayon_id) Return ChildRayon objects filtered by the rayon_id column
  * @method     ChildRayon[]|ObjectCollection findBySiteId(int $site_id) Return ChildRayon objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findBySiteId(int $site_id) Return ChildRayon objects filtered by the site_id column
  * @method     ChildRayon[]|ObjectCollection findByName(string $rayon_name) Return ChildRayon objects filtered by the rayon_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByName(string $rayon_name) Return ChildRayon objects filtered by the rayon_name column
  * @method     ChildRayon[]|ObjectCollection findByUrl(string $rayon_url) Return ChildRayon objects filtered by the rayon_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByUrl(string $rayon_url) Return ChildRayon objects filtered by the rayon_url column
  * @method     ChildRayon[]|ObjectCollection findByDesc(string $rayon_desc) Return ChildRayon objects filtered by the rayon_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByDesc(string $rayon_desc) Return ChildRayon objects filtered by the rayon_desc column
  * @method     ChildRayon[]|ObjectCollection findByOrder(int $rayon_order) Return ChildRayon objects filtered by the rayon_order column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByOrder(int $rayon_order) Return ChildRayon objects filtered by the rayon_order column
  * @method     ChildRayon[]|ObjectCollection findBySortBy(string $rayon_sort_by) Return ChildRayon objects filtered by the rayon_sort_by column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findBySortBy(string $rayon_sort_by) Return ChildRayon objects filtered by the rayon_sort_by column
  * @method     ChildRayon[]|ObjectCollection findBySortOrder(boolean $rayon_sort_order) Return ChildRayon objects filtered by the rayon_sort_order column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findBySortOrder(boolean $rayon_sort_order) Return ChildRayon objects filtered by the rayon_sort_order column
  * @method     ChildRayon[]|ObjectCollection findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildRayon objects filtered by the rayon_show_upcoming column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildRayon objects filtered by the rayon_show_upcoming column
  * @method     ChildRayon[]|ObjectCollection findByCreatedAt(string $rayon_created) Return ChildRayon objects filtered by the rayon_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByCreatedAt(string $rayon_created) Return ChildRayon objects filtered by the rayon_created column
  * @method     ChildRayon[]|ObjectCollection findByUpdatedAt(string $rayon_updated) Return ChildRayon objects filtered by the rayon_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByUpdatedAt(string $rayon_updated) Return ChildRayon objects filtered by the rayon_updated column
  * @method     ChildRayon[]|ObjectCollection findByDeletedAt(string $rayon_deleted) Return ChildRayon objects filtered by the rayon_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildRayon> findByDeletedAt(string $rayon_deleted) Return ChildRayon objects filtered by the rayon_deleted column
  * @method     ChildRayon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRayon> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RayonQuery extends ModelCriteria

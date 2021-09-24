@@ -164,7 +164,6 @@ class TagTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'TAG_ID',
         'Tag.Id' => 'TAG_ID',
         'id' => 'TAG_ID',
@@ -301,7 +300,7 @@ class TagTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'tag_created', 'update_column' => 'tag_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'tag_created', 'update_column' => 'tag_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class TagTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TagTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TagTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TagTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Tag or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Tag object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class TagTableMap extends TableMap
     }
 
 } // TagTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-TagTableMap::buildTableMap();

@@ -174,7 +174,6 @@ class ImageTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'IMAGE_ID',
         'Image.Id' => 'IMAGE_ID',
         'id' => 'IMAGE_ID',
@@ -329,7 +328,7 @@ class ImageTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'image_inserted', 'update_column' => 'image_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'image_inserted', 'update_column' => 'image_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -561,17 +560,6 @@ class ImageTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(ImageTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(ImageTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new ImageTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Image or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Image object or primary key or array of primary keys
@@ -660,6 +648,3 @@ class ImageTableMap extends TableMap
     }
 
 } // ImageTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-ImageTableMap::buildTableMap();

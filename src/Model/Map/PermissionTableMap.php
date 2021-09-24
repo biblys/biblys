@@ -139,7 +139,6 @@ class PermissionTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'PERMISSION_ID',
         'Permission.Id' => 'PERMISSION_ID',
         'id' => 'PERMISSION_ID',
@@ -422,17 +421,6 @@ class PermissionTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PermissionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PermissionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PermissionTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Permission or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Permission object or primary key or array of primary keys
@@ -521,6 +509,3 @@ class PermissionTableMap extends TableMap
     }
 
 } // PermissionTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-PermissionTableMap::buildTableMap();

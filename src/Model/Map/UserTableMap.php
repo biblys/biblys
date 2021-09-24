@@ -299,14 +299,12 @@ class UserTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'ID',
         'User.Id' => 'ID',
         'id' => 'ID',
         'user.id' => 'ID',
         'UserTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'id' => 'ID',
         'users.id' => 'ID',
         'Email' => 'EMAIL',
         'User.Email' => 'EMAIL',
@@ -314,7 +312,6 @@ class UserTableMap extends TableMap
         'user.email' => 'EMAIL',
         'UserTableMap::COL_EMAIL' => 'EMAIL',
         'COL_EMAIL' => 'EMAIL',
-        'Email' => 'EMAIL',
         'users.Email' => 'EMAIL',
         'Password' => 'USER_PASSWORD',
         'User.Password' => 'USER_PASSWORD',
@@ -693,8 +690,8 @@ class UserTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'user_created', 'update_column' => 'user_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-            'validate' => array('rule1' => array ('column' => 'email','validator' => 'Email',), ),
+            'timestampable' => ['create_column' => 'user_created', 'update_column' => 'user_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'validate' => ['rule1' => ['column' => 'email', 'validator' => 'Email']],
         );
     } // getBehaviors()
 
@@ -1026,17 +1023,6 @@ class UserTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(UserTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new UserTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or User object or primary key or array of primary keys
@@ -1125,6 +1111,3 @@ class UserTableMap extends TableMap
     }
 
 } // UserTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-UserTableMap::buildTableMap();

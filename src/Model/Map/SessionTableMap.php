@@ -144,7 +144,6 @@ class SessionTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'SESSION_ID',
         'Session.Id' => 'SESSION_ID',
         'id' => 'SESSION_ID',
@@ -252,7 +251,7 @@ class SessionTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'session_created', 'update_column' => 'session_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'session_created', 'update_column' => 'session_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -460,17 +459,6 @@ class SessionTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SessionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(SessionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new SessionTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Session or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Session object or primary key or array of primary keys
@@ -559,6 +547,3 @@ class SessionTableMap extends TableMap
     }
 
 } // SessionTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-SessionTableMap::buildTableMap();

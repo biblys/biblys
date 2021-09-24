@@ -367,86 +367,167 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildArticle[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> find(ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
  * @method     ChildArticle[]|ObjectCollection findById(int $article_id) Return ChildArticle objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findById(int $article_id) Return ChildArticle objects filtered by the article_id column
  * @method     ChildArticle[]|ObjectCollection findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
  * @method     ChildArticle[]|ObjectCollection findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
  * @method     ChildArticle[]|ObjectCollection findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
  * @method     ChildArticle[]|ObjectCollection findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
  * @method     ChildArticle[]|ObjectCollection findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
  * @method     ChildArticle[]|ObjectCollection findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
  * @method     ChildArticle[]|ObjectCollection findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
  * @method     ChildArticle[]|ObjectCollection findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
  * @method     ChildArticle[]|ObjectCollection findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
  * @method     ChildArticle[]|ObjectCollection findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
  * @method     ChildArticle[]|ObjectCollection findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
  * @method     ChildArticle[]|ObjectCollection findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
  * @method     ChildArticle[]|ObjectCollection findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
  * @method     ChildArticle[]|ObjectCollection findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
  * @method     ChildArticle[]|ObjectCollection findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
  * @method     ChildArticle[]|ObjectCollection findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
  * @method     ChildArticle[]|ObjectCollection findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
  * @method     ChildArticle[]|ObjectCollection findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
  * @method     ChildArticle[]|ObjectCollection findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
  * @method     ChildArticle[]|ObjectCollection findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
  * @method     ChildArticle[]|ObjectCollection findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
  * @method     ChildArticle[]|ObjectCollection findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
  * @method     ChildArticle[]|ObjectCollection findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
  * @method     ChildArticle[]|ObjectCollection findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
  * @method     ChildArticle[]|ObjectCollection findByCollection(string $article_collection) Return ChildArticle objects filtered by the article_collection column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollection(string $article_collection) Return ChildArticle objects filtered by the article_collection column
  * @method     ChildArticle[]|ObjectCollection findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
  * @method     ChildArticle[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
  * @method     ChildArticle[]|ObjectCollection findByPublisher(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisher(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
  * @method     ChildArticle[]|ObjectCollection findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
  * @method     ChildArticle[]|ObjectCollection findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
  * @method     ChildArticle[]|ObjectCollection findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
  * @method     ChildArticle[]|ObjectCollection findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
  * @method     ChildArticle[]|ObjectCollection findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
  * @method     ChildArticle[]|ObjectCollection findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
  * @method     ChildArticle[]|ObjectCollection findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
  * @method     ChildArticle[]|ObjectCollection findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
  * @method     ChildArticle[]|ObjectCollection findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
  * @method     ChildArticle[]|ObjectCollection findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
  * @method     ChildArticle[]|ObjectCollection findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
  * @method     ChildArticle[]|ObjectCollection findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
  * @method     ChildArticle[]|ObjectCollection findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
  * @method     ChildArticle[]|ObjectCollection findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
  * @method     ChildArticle[]|ObjectCollection findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
  * @method     ChildArticle[]|ObjectCollection findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
  * @method     ChildArticle[]|ObjectCollection findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
  * @method     ChildArticle[]|ObjectCollection findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
  * @method     ChildArticle[]|ObjectCollection findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
  * @method     ChildArticle[]|ObjectCollection findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
  * @method     ChildArticle[]|ObjectCollection findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
  * @method     ChildArticle[]|ObjectCollection findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
  * @method     ChildArticle[]|ObjectCollection findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
  * @method     ChildArticle[]|ObjectCollection findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
  * @method     ChildArticle[]|ObjectCollection findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
  * @method     ChildArticle[]|ObjectCollection findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
  * @method     ChildArticle[]|ObjectCollection findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
  * @method     ChildArticle[]|ObjectCollection findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
  * @method     ChildArticle[]|ObjectCollection findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
  * @method     ChildArticle[]|ObjectCollection findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
  * @method     ChildArticle[]|ObjectCollection findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
  * @method     ChildArticle[]|ObjectCollection findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
  * @method     ChildArticle[]|ObjectCollection findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
  * @method     ChildArticle[]|ObjectCollection findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
  * @method     ChildArticle[]|ObjectCollection findByLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
  * @method     ChildArticle[]|ObjectCollection findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
  * @method     ChildArticle[]|ObjectCollection findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
  * @method     ChildArticle[]|ObjectCollection findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
  * @method     ChildArticle[]|ObjectCollection findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
  * @method     ChildArticle[]|ObjectCollection findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
  * @method     ChildArticle[]|ObjectCollection findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
  * @method     ChildArticle[]|ObjectCollection findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
  * @method     ChildArticle[]|ObjectCollection findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
  * @method     ChildArticle[]|ObjectCollection findByDeletedAt(string $article_deleted) Return ChildArticle objects filtered by the article_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletedAt(string $article_deleted) Return ChildArticle objects filtered by the article_deleted column
  * @method     ChildArticle[]|ObjectCollection findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
  * @method     ChildArticle[]|ObjectCollection findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
  * @method     ChildArticle[]|ObjectCollection findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
  * @method     ChildArticle[]|ObjectCollection findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
  * @method     ChildArticle[]|ObjectCollection findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
  * @method     ChildArticle[]|ObjectCollection findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
  * @method     ChildArticle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticle> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ArticleQuery extends ModelCriteria
@@ -3332,6 +3413,61 @@ abstract class ArticleQuery extends ModelCriteria
             ->useQuery($relationAlias ? $relationAlias : 'Role', '\Model\RoleQuery');
     }
 
+    /**
+     * Use the Role relation Role object
+     *
+     * @param callable(\Model\RoleQuery):\Model\RoleQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withRoleQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useRoleQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Role table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\RoleQuery The inner query object of the EXISTS statement
+     */
+    public function useRoleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Role', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Role table for a NOT EXISTS query.
+     *
+     * @see useRoleExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RoleQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useRoleNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Role', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

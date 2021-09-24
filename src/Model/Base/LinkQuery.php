@@ -138,32 +138,59 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink requireOneByDeletedAt(string $link_deleted) Return the first ChildLink filtered by the link_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLink[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
  * @method     ChildLink[]|ObjectCollection findById(int $link_id) Return ChildLink objects filtered by the link_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findById(int $link_id) Return ChildLink objects filtered by the link_id column
  * @method     ChildLink[]|ObjectCollection findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
  * @method     ChildLink[]|ObjectCollection findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
  * @method     ChildLink[]|ObjectCollection findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
  * @method     ChildLink[]|ObjectCollection findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
  * @method     ChildLink[]|ObjectCollection findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
  * @method     ChildLink[]|ObjectCollection findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
  * @method     ChildLink[]|ObjectCollection findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
  * @method     ChildLink[]|ObjectCollection findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
  * @method     ChildLink[]|ObjectCollection findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
  * @method     ChildLink[]|ObjectCollection findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
  * @method     ChildLink[]|ObjectCollection findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
  * @method     ChildLink[]|ObjectCollection findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
  * @method     ChildLink[]|ObjectCollection findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
  * @method     ChildLink[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
  * @method     ChildLink[]|ObjectCollection findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
  * @method     ChildLink[]|ObjectCollection findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
  * @method     ChildLink[]|ObjectCollection findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
  * @method     ChildLink[]|ObjectCollection findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
  * @method     ChildLink[]|ObjectCollection findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
  * @method     ChildLink[]|ObjectCollection findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
  * @method     ChildLink[]|ObjectCollection findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
  * @method     ChildLink[]|ObjectCollection findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
  * @method     ChildLink[]|ObjectCollection findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
  * @method     ChildLink[]|ObjectCollection findByDeletedAt(string $link_deleted) Return ChildLink objects filtered by the link_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDeletedAt(string $link_deleted) Return ChildLink objects filtered by the link_deleted column
  * @method     ChildLink[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLink> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class LinkQuery extends ModelCriteria

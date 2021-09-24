@@ -66,14 +66,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketComment requireOneByDeletedAt(string $ticket_comment_deleted) Return the first ChildTicketComment filtered by the ticket_comment_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTicketComment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> find(ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
  * @method     ChildTicketComment[]|ObjectCollection findById(int $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findById(int $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
  * @method     ChildTicketComment[]|ObjectCollection findByTicketId(int $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByTicketId(int $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
  * @method     ChildTicketComment[]|ObjectCollection findByUserId(int $user_id) Return ChildTicketComment objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByUserId(int $user_id) Return ChildTicketComment objects filtered by the user_id column
  * @method     ChildTicketComment[]|ObjectCollection findByContent(string $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByContent(string $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
  * @method     ChildTicketComment[]|ObjectCollection findByCreatedAt(string $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByCreatedAt(string $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
  * @method     ChildTicketComment[]|ObjectCollection findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
  * @method     ChildTicketComment[]|ObjectCollection findByDeletedAt(string $ticket_comment_deleted) Return ChildTicketComment objects filtered by the ticket_comment_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByDeletedAt(string $ticket_comment_deleted) Return ChildTicketComment objects filtered by the ticket_comment_deleted column
  * @method     ChildTicketComment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicketComment> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class TicketCommentQuery extends ModelCriteria

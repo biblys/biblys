@@ -86,19 +86,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier requireOneByDeletedAt(string $supplier_deleted) Return the first ChildSupplier filtered by the supplier_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSupplier[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
  * @method     ChildSupplier[]|ObjectCollection findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
  * @method     ChildSupplier[]|ObjectCollection findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
  * @method     ChildSupplier[]|ObjectCollection findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
  * @method     ChildSupplier[]|ObjectCollection findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
  * @method     ChildSupplier[]|ObjectCollection findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
  * @method     ChildSupplier[]|ObjectCollection findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
  * @method     ChildSupplier[]|ObjectCollection findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
  * @method     ChildSupplier[]|ObjectCollection findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
  * @method     ChildSupplier[]|ObjectCollection findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
  * @method     ChildSupplier[]|ObjectCollection findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
  * @method     ChildSupplier[]|ObjectCollection findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
  * @method     ChildSupplier[]|ObjectCollection findByDeletedAt(string $supplier_deleted) Return ChildSupplier objects filtered by the supplier_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByDeletedAt(string $supplier_deleted) Return ChildSupplier objects filtered by the supplier_deleted column
  * @method     ChildSupplier[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSupplier> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SupplierQuery extends ModelCriteria

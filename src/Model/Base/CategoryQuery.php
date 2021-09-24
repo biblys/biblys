@@ -86,19 +86,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory requireOneByDeletedAt(string $category_deleted) Return the first ChildCategory filtered by the category_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCategory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
  * @method     ChildCategory[]|ObjectCollection findById(int $category_id) Return ChildCategory objects filtered by the category_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findById(int $category_id) Return ChildCategory objects filtered by the category_id column
  * @method     ChildCategory[]|ObjectCollection findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
  * @method     ChildCategory[]|ObjectCollection findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
  * @method     ChildCategory[]|ObjectCollection findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
  * @method     ChildCategory[]|ObjectCollection findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
  * @method     ChildCategory[]|ObjectCollection findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
  * @method     ChildCategory[]|ObjectCollection findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
  * @method     ChildCategory[]|ObjectCollection findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
  * @method     ChildCategory[]|ObjectCollection findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
  * @method     ChildCategory[]|ObjectCollection findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
  * @method     ChildCategory[]|ObjectCollection findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
  * @method     ChildCategory[]|ObjectCollection findByDeletedAt(string $category_deleted) Return ChildCategory objects filtered by the category_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByDeletedAt(string $category_deleted) Return ChildCategory objects filtered by the category_deleted column
  * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CategoryQuery extends ModelCriteria

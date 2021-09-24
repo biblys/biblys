@@ -164,7 +164,6 @@ class JobTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'JOB_ID',
         'Job.Id' => 'JOB_ID',
         'id' => 'JOB_ID',
@@ -301,7 +300,7 @@ class JobTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'job_created', 'update_column' => 'job_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'job_created', 'update_column' => 'job_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class JobTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(JobTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(JobTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new JobTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Job or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Job object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class JobTableMap extends TableMap
     }
 
 } // JobTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-JobTableMap::buildTableMap();

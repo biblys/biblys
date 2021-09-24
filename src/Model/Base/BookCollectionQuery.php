@@ -114,26 +114,47 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection requireOneByDeletedAt(string $collection_deleted) Return the first ChildBookCollection filtered by the collection_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildBookCollection[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> find(ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
  * @method     ChildBookCollection[]|ObjectCollection findById(int $collection_id) Return ChildBookCollection objects filtered by the collection_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findById(int $collection_id) Return ChildBookCollection objects filtered by the collection_id column
  * @method     ChildBookCollection[]|ObjectCollection findBySiteId(int $site_id) Return ChildBookCollection objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findBySiteId(int $site_id) Return ChildBookCollection objects filtered by the site_id column
  * @method     ChildBookCollection[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByPublisherId(int $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
  * @method     ChildBookCollection[]|ObjectCollection findByPricegridId(int $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByPricegridId(int $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
  * @method     ChildBookCollection[]|ObjectCollection findByName(string $collection_name) Return ChildBookCollection objects filtered by the collection_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByName(string $collection_name) Return ChildBookCollection objects filtered by the collection_name column
  * @method     ChildBookCollection[]|ObjectCollection findByUrl(string $collection_url) Return ChildBookCollection objects filtered by the collection_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByUrl(string $collection_url) Return ChildBookCollection objects filtered by the collection_url column
  * @method     ChildBookCollection[]|ObjectCollection findByPublisher(string $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByPublisher(string $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
  * @method     ChildBookCollection[]|ObjectCollection findByDesc(string $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByDesc(string $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
  * @method     ChildBookCollection[]|ObjectCollection findByIgnorenum(boolean $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByIgnorenum(boolean $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
  * @method     ChildBookCollection[]|ObjectCollection findByOrderby(string $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByOrderby(string $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
  * @method     ChildBookCollection[]|ObjectCollection findByIncorrectWeights(boolean $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByIncorrectWeights(boolean $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
  * @method     ChildBookCollection[]|ObjectCollection findByNoosfereId(int $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByNoosfereId(int $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
  * @method     ChildBookCollection[]|ObjectCollection findByInsert(string $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByInsert(string $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
  * @method     ChildBookCollection[]|ObjectCollection findByUpdate(string $collection_update) Return ChildBookCollection objects filtered by the collection_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByUpdate(string $collection_update) Return ChildBookCollection objects filtered by the collection_update column
  * @method     ChildBookCollection[]|ObjectCollection findByHits(int $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByHits(int $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
  * @method     ChildBookCollection[]|ObjectCollection findByDuplicate(boolean $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByDuplicate(boolean $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
  * @method     ChildBookCollection[]|ObjectCollection findByCreatedAt(string $collection_created) Return ChildBookCollection objects filtered by the collection_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByCreatedAt(string $collection_created) Return ChildBookCollection objects filtered by the collection_created column
  * @method     ChildBookCollection[]|ObjectCollection findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
  * @method     ChildBookCollection[]|ObjectCollection findByDeletedAt(string $collection_deleted) Return ChildBookCollection objects filtered by the collection_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByDeletedAt(string $collection_deleted) Return ChildBookCollection objects filtered by the collection_deleted column
  * @method     ChildBookCollection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookCollection> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class BookCollectionQuery extends ModelCriteria

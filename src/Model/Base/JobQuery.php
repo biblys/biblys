@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob requireOneByDeletedAt(string $job_deleted) Return the first ChildJob filtered by the job_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildJob[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
  * @method     ChildJob[]|ObjectCollection findById(int $job_id) Return ChildJob objects filtered by the job_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findById(int $job_id) Return ChildJob objects filtered by the job_id column
  * @method     ChildJob[]|ObjectCollection findByName(string $job_name) Return ChildJob objects filtered by the job_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByName(string $job_name) Return ChildJob objects filtered by the job_name column
  * @method     ChildJob[]|ObjectCollection findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
  * @method     ChildJob[]|ObjectCollection findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
  * @method     ChildJob[]|ObjectCollection findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
  * @method     ChildJob[]|ObjectCollection findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
  * @method     ChildJob[]|ObjectCollection findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
  * @method     ChildJob[]|ObjectCollection findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
  * @method     ChildJob[]|ObjectCollection findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
  * @method     ChildJob[]|ObjectCollection findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
  * @method     ChildJob[]|ObjectCollection findByDeletedAt(string $job_deleted) Return ChildJob objects filtered by the job_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildJob> findByDeletedAt(string $job_deleted) Return ChildJob objects filtered by the job_deleted column
  * @method     ChildJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildJob> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class JobQuery extends ModelCriteria

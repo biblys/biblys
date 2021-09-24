@@ -214,7 +214,6 @@ class EventTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'EVENT_ID',
         'Event.Id' => 'EVENT_ID',
         'id' => 'EVENT_ID',
@@ -441,7 +440,7 @@ class EventTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'event_created', 'update_column' => 'event_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'event_created', 'update_column' => 'event_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -705,17 +704,6 @@ class EventTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EventTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(EventTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new EventTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Event or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Event object or primary key or array of primary keys
@@ -804,6 +792,3 @@ class EventTableMap extends TableMap
     }
 
 } // EventTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-EventTableMap::buildTableMap();

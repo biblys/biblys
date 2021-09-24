@@ -184,7 +184,6 @@ class MediaTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'MEDIA_ID',
         'Media.Id' => 'MEDIA_ID',
         'id' => 'MEDIA_ID',
@@ -357,7 +356,7 @@ class MediaTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'media_created', 'update_column' => 'media_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'media_created', 'update_column' => 'media_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -597,17 +596,6 @@ class MediaTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MediaTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(MediaTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new MediaTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Media or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Media object or primary key or array of primary keys
@@ -696,6 +684,3 @@ class MediaTableMap extends TableMap
     }
 
 } // MediaTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-MediaTableMap::buildTableMap();

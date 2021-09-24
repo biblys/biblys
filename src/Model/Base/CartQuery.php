@@ -114,26 +114,47 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart requireOneByDeletedAt(string $cart_deleted) Return the first ChildCart filtered by the cart_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCart[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> find(ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
  * @method     ChildCart[]|ObjectCollection findById(int $cart_id) Return ChildCart objects filtered by the cart_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findById(int $cart_id) Return ChildCart objects filtered by the cart_id column
  * @method     ChildCart[]|ObjectCollection findByUid(string $cart_uid) Return ChildCart objects filtered by the cart_uid column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByUid(string $cart_uid) Return ChildCart objects filtered by the cart_uid column
  * @method     ChildCart[]|ObjectCollection findBySiteId(int $site_id) Return ChildCart objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findBySiteId(int $site_id) Return ChildCart objects filtered by the site_id column
  * @method     ChildCart[]|ObjectCollection findByUserId(int $user_id) Return ChildCart objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByUserId(int $user_id) Return ChildCart objects filtered by the user_id column
  * @method     ChildCart[]|ObjectCollection findBySellerId(int $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findBySellerId(int $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
  * @method     ChildCart[]|ObjectCollection findByCustomerId(int $customer_id) Return ChildCart objects filtered by the customer_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByCustomerId(int $customer_id) Return ChildCart objects filtered by the customer_id column
  * @method     ChildCart[]|ObjectCollection findByTitle(string $cart_title) Return ChildCart objects filtered by the cart_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByTitle(string $cart_title) Return ChildCart objects filtered by the cart_title column
  * @method     ChildCart[]|ObjectCollection findByType(string $cart_type) Return ChildCart objects filtered by the cart_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByType(string $cart_type) Return ChildCart objects filtered by the cart_type column
  * @method     ChildCart[]|ObjectCollection findByIp(string $cart_ip) Return ChildCart objects filtered by the cart_ip column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByIp(string $cart_ip) Return ChildCart objects filtered by the cart_ip column
  * @method     ChildCart[]|ObjectCollection findByCount(int $cart_count) Return ChildCart objects filtered by the cart_count column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByCount(int $cart_count) Return ChildCart objects filtered by the cart_count column
  * @method     ChildCart[]|ObjectCollection findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
  * @method     ChildCart[]|ObjectCollection findByAs-a-gift(string $cart_as-a-gift) Return ChildCart objects filtered by the cart_as-a-gift column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByAs-a-gift(string $cart_as-a-gift) Return ChildCart objects filtered by the cart_as-a-gift column
  * @method     ChildCart[]|ObjectCollection findByGift-recipient(int $cart_gift-recipient) Return ChildCart objects filtered by the cart_gift-recipient column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByGift-recipient(int $cart_gift-recipient) Return ChildCart objects filtered by the cart_gift-recipient column
  * @method     ChildCart[]|ObjectCollection findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
  * @method     ChildCart[]|ObjectCollection findByInsert(string $cart_insert) Return ChildCart objects filtered by the cart_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByInsert(string $cart_insert) Return ChildCart objects filtered by the cart_insert column
  * @method     ChildCart[]|ObjectCollection findByUpdate(string $cart_update) Return ChildCart objects filtered by the cart_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByUpdate(string $cart_update) Return ChildCart objects filtered by the cart_update column
  * @method     ChildCart[]|ObjectCollection findByCreatedAt(string $cart_created) Return ChildCart objects filtered by the cart_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByCreatedAt(string $cart_created) Return ChildCart objects filtered by the cart_created column
  * @method     ChildCart[]|ObjectCollection findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
  * @method     ChildCart[]|ObjectCollection findByDeletedAt(string $cart_deleted) Return ChildCart objects filtered by the cart_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByDeletedAt(string $cart_deleted) Return ChildCart objects filtered by the cart_deleted column
  * @method     ChildCart[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCart> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CartQuery extends ModelCriteria
@@ -730,7 +751,7 @@ abstract class CartQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CartTableMap::COL_CART_AS-A-GIFT, $as-a-gift, $comparison);
+        return $this->addUsingAlias(CartTableMap::COL_AS_A_GIFT, $as-a-gift, $comparison);
     }
 
     /**
@@ -756,11 +777,11 @@ abstract class CartQuery extends ModelCriteria
         if (is_array($gift-recipient)) {
             $useMinMax = false;
             if (isset($gift-recipient['min'])) {
-                $this->addUsingAlias(CartTableMap::COL_CART_GIFT-RECIPIENT, $gift-recipient['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($gift-recipient['max'])) {
-                $this->addUsingAlias(CartTableMap::COL_CART_GIFT-RECIPIENT, $gift-recipient['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -771,7 +792,7 @@ abstract class CartQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CartTableMap::COL_CART_GIFT-RECIPIENT, $gift-recipient, $comparison);
+        return $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient, $comparison);
     }
 
     /**

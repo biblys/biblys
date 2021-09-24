@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert requireOneByDeletedAt(string $alert_deleted) Return the first ChildAlert filtered by the alert_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlert[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
  * @method     ChildAlert[]|ObjectCollection findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
  * @method     ChildAlert[]|ObjectCollection findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
  * @method     ChildAlert[]|ObjectCollection findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
  * @method     ChildAlert[]|ObjectCollection findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
  * @method     ChildAlert[]|ObjectCollection findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
  * @method     ChildAlert[]|ObjectCollection findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
  * @method     ChildAlert[]|ObjectCollection findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
  * @method     ChildAlert[]|ObjectCollection findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
  * @method     ChildAlert[]|ObjectCollection findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
  * @method     ChildAlert[]|ObjectCollection findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
  * @method     ChildAlert[]|ObjectCollection findByDeletedAt(string $alert_deleted) Return ChildAlert objects filtered by the alert_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByDeletedAt(string $alert_deleted) Return ChildAlert objects filtered by the alert_deleted column
  * @method     ChildAlert[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAlert> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class AlertQuery extends ModelCriteria

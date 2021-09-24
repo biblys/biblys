@@ -215,48 +215,91 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByDeletedAt(string $site_deleted) Return the first ChildSite filtered by the site_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSite[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
  * @method     ChildSite[]|ObjectCollection findById(int $site_id) Return ChildSite objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findById(int $site_id) Return ChildSite objects filtered by the site_id column
  * @method     ChildSite[]|ObjectCollection findByName(string $site_name) Return ChildSite objects filtered by the site_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByName(string $site_name) Return ChildSite objects filtered by the site_name column
  * @method     ChildSite[]|ObjectCollection findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
  * @method     ChildSite[]|ObjectCollection findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
  * @method     ChildSite[]|ObjectCollection findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
  * @method     ChildSite[]|ObjectCollection findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
  * @method     ChildSite[]|ObjectCollection findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
  * @method     ChildSite[]|ObjectCollection findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
  * @method     ChildSite[]|ObjectCollection findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
  * @method     ChildSite[]|ObjectCollection findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
  * @method     ChildSite[]|ObjectCollection findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
  * @method     ChildSite[]|ObjectCollection findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
  * @method     ChildSite[]|ObjectCollection findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
  * @method     ChildSite[]|ObjectCollection findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
  * @method     ChildSite[]|ObjectCollection findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
  * @method     ChildSite[]|ObjectCollection findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
  * @method     ChildSite[]|ObjectCollection findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
  * @method     ChildSite[]|ObjectCollection findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
  * @method     ChildSite[]|ObjectCollection findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
  * @method     ChildSite[]|ObjectCollection findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
  * @method     ChildSite[]|ObjectCollection findByAlerts(boolean $site_alerts) Return ChildSite objects filtered by the site_alerts column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAlerts(boolean $site_alerts) Return ChildSite objects filtered by the site_alerts column
  * @method     ChildSite[]|ObjectCollection findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
  * @method     ChildSite[]|ObjectCollection findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
  * @method     ChildSite[]|ObjectCollection findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
  * @method     ChildSite[]|ObjectCollection findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
  * @method     ChildSite[]|ObjectCollection findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
  * @method     ChildSite[]|ObjectCollection findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
  * @method     ChildSite[]|ObjectCollection findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
  * @method     ChildSite[]|ObjectCollection findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
  * @method     ChildSite[]|ObjectCollection findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
  * @method     ChildSite[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
  * @method     ChildSite[]|ObjectCollection findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
  * @method     ChildSite[]|ObjectCollection findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
  * @method     ChildSite[]|ObjectCollection findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
  * @method     ChildSite[]|ObjectCollection findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
  * @method     ChildSite[]|ObjectCollection findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
  * @method     ChildSite[]|ObjectCollection findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
  * @method     ChildSite[]|ObjectCollection findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
  * @method     ChildSite[]|ObjectCollection findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
  * @method     ChildSite[]|ObjectCollection findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
  * @method     ChildSite[]|ObjectCollection findByDeletedAt(string $site_deleted) Return ChildSite objects filtered by the site_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildSite> findByDeletedAt(string $site_deleted) Return ChildSite objects filtered by the site_deleted column
  * @method     ChildSite[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSite> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SiteQuery extends ModelCriteria
@@ -1772,6 +1815,61 @@ abstract class SiteQuery extends ModelCriteria
             ->useQuery($relationAlias ? $relationAlias : 'Right', '\Model\RightQuery');
     }
 
+    /**
+     * Use the Right relation Right object
+     *
+     * @param callable(\Model\RightQuery):\Model\RightQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withRightQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useRightQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Right table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\RightQuery The inner query object of the EXISTS statement
+     */
+    public function useRightExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Right table for a NOT EXISTS query.
+     *
+     * @see useRightExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RightQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useRightNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

@@ -2,10 +2,10 @@
 
 namespace Model;
 
-use Model\Base\ListQuery as BaseListQuery;
+use Model\Base\StockItemList as BaseStockItemList;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'lists' table.
+ * Skeleton subclass for representing a row from the 'lists' table.
  *
  *
  *
@@ -13,7 +13,7 @@ use Model\Base\ListQuery as BaseListQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class ListQuery extends BaseListQuery
+class StockItemList extends BaseStockItemList
 {
 
 }

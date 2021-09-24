@@ -229,7 +229,6 @@ class PeopleTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'PEOPLE_ID',
         'People.Id' => 'PEOPLE_ID',
         'id' => 'PEOPLE_ID',
@@ -490,7 +489,7 @@ class PeopleTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'people_created', 'update_column' => 'people_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'people_created', 'update_column' => 'people_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -766,17 +765,6 @@ class PeopleTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PeopleTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PeopleTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PeopleTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a People or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or People object or primary key or array of primary keys
@@ -865,6 +853,3 @@ class PeopleTableMap extends TableMap
     }
 
 } // PeopleTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-PeopleTableMap::buildTableMap();

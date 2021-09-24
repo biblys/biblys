@@ -169,7 +169,6 @@ class CategoryTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'CATEGORY_ID',
         'Category.Id' => 'CATEGORY_ID',
         'id' => 'CATEGORY_ID',
@@ -315,7 +314,7 @@ class CategoryTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'category_created', 'update_column' => 'category_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'category_created', 'update_column' => 'category_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -543,17 +542,6 @@ class CategoryTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CategoryTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CategoryTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CategoryTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Category or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Category object or primary key or array of primary keys
@@ -642,6 +630,3 @@ class CategoryTableMap extends TableMap
     }
 
 } // CategoryTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-CategoryTableMap::buildTableMap();

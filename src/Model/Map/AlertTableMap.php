@@ -164,7 +164,6 @@ class AlertTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'ALERT_ID',
         'Alert.Id' => 'ALERT_ID',
         'id' => 'ALERT_ID',
@@ -301,7 +300,7 @@ class AlertTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'alert_created', 'update_column' => 'alert_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'alert_created', 'update_column' => 'alert_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -525,17 +524,6 @@ class AlertTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(AlertTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(AlertTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new AlertTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Alert or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Alert object or primary key or array of primary keys
@@ -624,6 +612,3 @@ class AlertTableMap extends TableMap
     }
 
 } // AlertTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-AlertTableMap::buildTableMap();

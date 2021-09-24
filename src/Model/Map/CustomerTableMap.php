@@ -184,7 +184,6 @@ class CustomerTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'CUSTOMER_ID',
         'Customer.Id' => 'CUSTOMER_ID',
         'id' => 'CUSTOMER_ID',
@@ -357,7 +356,7 @@ class CustomerTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'customer_created', 'update_column' => 'customer_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'customer_created', 'update_column' => 'customer_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -597,17 +596,6 @@ class CustomerTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CustomerTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CustomerTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CustomerTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Customer or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Customer object or primary key or array of primary keys
@@ -696,6 +684,3 @@ class CustomerTableMap extends TableMap
     }
 
 } // CustomerTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-CustomerTableMap::buildTableMap();

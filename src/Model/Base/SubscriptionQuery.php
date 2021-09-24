@@ -98,22 +98,39 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription requireOneByDeletedAt(string $subscription_deleted) Return the first ChildSubscription filtered by the subscription_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSubscription[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
  * @method     ChildSubscription[]|ObjectCollection findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
  * @method     ChildSubscription[]|ObjectCollection findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
  * @method     ChildSubscription[]|ObjectCollection findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
  * @method     ChildSubscription[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
  * @method     ChildSubscription[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
  * @method     ChildSubscription[]|ObjectCollection findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
  * @method     ChildSubscription[]|ObjectCollection findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
  * @method     ChildSubscription[]|ObjectCollection findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
  * @method     ChildSubscription[]|ObjectCollection findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
  * @method     ChildSubscription[]|ObjectCollection findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
  * @method     ChildSubscription[]|ObjectCollection findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
  * @method     ChildSubscription[]|ObjectCollection findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
  * @method     ChildSubscription[]|ObjectCollection findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
  * @method     ChildSubscription[]|ObjectCollection findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
  * @method     ChildSubscription[]|ObjectCollection findByDeletedAt(string $subscription_deleted) Return ChildSubscription objects filtered by the subscription_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByDeletedAt(string $subscription_deleted) Return ChildSubscription objects filtered by the subscription_deleted column
  * @method     ChildSubscription[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSubscription> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SubscriptionQuery extends ModelCriteria

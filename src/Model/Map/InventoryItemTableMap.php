@@ -149,7 +149,6 @@ class InventoryItemTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'II_ID',
         'InventoryItem.Id' => 'II_ID',
         'id' => 'II_ID',
@@ -259,7 +258,7 @@ class InventoryItemTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'ii_created', 'update_column' => 'ii_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'ii_created', 'update_column' => 'ii_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -471,17 +470,6 @@ class InventoryItemTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(InventoryItemTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(InventoryItemTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new InventoryItemTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a InventoryItem or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or InventoryItem object or primary key or array of primary keys
@@ -570,6 +558,3 @@ class InventoryItemTableMap extends TableMap
     }
 
 } // InventoryItemTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-InventoryItemTableMap::buildTableMap();

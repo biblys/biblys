@@ -130,30 +130,55 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOneByDeletedAt(string $post_deleted) Return the first ChildPost filtered by the post_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPost[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
  * @method     ChildPost[]|ObjectCollection findById(int $post_id) Return ChildPost objects filtered by the post_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findById(int $post_id) Return ChildPost objects filtered by the post_id column
  * @method     ChildPost[]|ObjectCollection findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
  * @method     ChildPost[]|ObjectCollection findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
  * @method     ChildPost[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
  * @method     ChildPost[]|ObjectCollection findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
  * @method     ChildPost[]|ObjectCollection findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
  * @method     ChildPost[]|ObjectCollection findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
  * @method     ChildPost[]|ObjectCollection findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
  * @method     ChildPost[]|ObjectCollection findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
  * @method     ChildPost[]|ObjectCollection findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
  * @method     ChildPost[]|ObjectCollection findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
  * @method     ChildPost[]|ObjectCollection findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
  * @method     ChildPost[]|ObjectCollection findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
  * @method     ChildPost[]|ObjectCollection findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
  * @method     ChildPost[]|ObjectCollection findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
  * @method     ChildPost[]|ObjectCollection findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
  * @method     ChildPost[]|ObjectCollection findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
  * @method     ChildPost[]|ObjectCollection findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
  * @method     ChildPost[]|ObjectCollection findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
  * @method     ChildPost[]|ObjectCollection findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
  * @method     ChildPost[]|ObjectCollection findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
  * @method     ChildPost[]|ObjectCollection findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
  * @method     ChildPost[]|ObjectCollection findByDeletedAt(string $post_deleted) Return ChildPost objects filtered by the post_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildPost> findByDeletedAt(string $post_deleted) Return ChildPost objects filtered by the post_deleted column
  * @method     ChildPost[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPost> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PostQuery extends ModelCriteria

@@ -74,16 +74,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection requireOneByDeletedAt(string $redirection_deleted) Return the first ChildRedirection filtered by the redirection_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRedirection[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
  * @method     ChildRedirection[]|ObjectCollection findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
  * @method     ChildRedirection[]|ObjectCollection findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
  * @method     ChildRedirection[]|ObjectCollection findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
  * @method     ChildRedirection[]|ObjectCollection findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
  * @method     ChildRedirection[]|ObjectCollection findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
  * @method     ChildRedirection[]|ObjectCollection findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
  * @method     ChildRedirection[]|ObjectCollection findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
  * @method     ChildRedirection[]|ObjectCollection findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
  * @method     ChildRedirection[]|ObjectCollection findByDeletedAt(string $redirection_deleted) Return ChildRedirection objects filtered by the redirection_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByDeletedAt(string $redirection_deleted) Return ChildRedirection objects filtered by the redirection_deleted column
  * @method     ChildRedirection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRedirection> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RedirectionQuery extends ModelCriteria

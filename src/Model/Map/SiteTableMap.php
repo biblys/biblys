@@ -314,7 +314,6 @@ class SiteTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'SITE_ID',
         'Site.Id' => 'SITE_ID',
         'id' => 'SITE_ID',
@@ -728,7 +727,7 @@ class SiteTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'site_created', 'update_column' => 'site_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'site_created', 'update_column' => 'site_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -1072,17 +1071,6 @@ class SiteTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SiteTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(SiteTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new SiteTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Site or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Site object or primary key or array of primary keys
@@ -1171,6 +1159,3 @@ class SiteTableMap extends TableMap
     }
 
 } // SiteTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-SiteTableMap::buildTableMap();

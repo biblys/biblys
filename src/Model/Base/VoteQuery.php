@@ -58,12 +58,19 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote requireOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildVote[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> find(ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
  * @method     ChildVote[]|ObjectCollection findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
  * @method     ChildVote[]|ObjectCollection findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
  * @method     ChildVote[]|ObjectCollection findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
  * @method     ChildVote[]|ObjectCollection findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
  * @method     ChildVote[]|ObjectCollection findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildVote> findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
  * @method     ChildVote[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildVote> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class VoteQuery extends ModelCriteria

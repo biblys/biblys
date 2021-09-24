@@ -149,7 +149,6 @@ class CronJobTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'CRON_JOB_ID',
         'CronJob.Id' => 'CRON_JOB_ID',
         'id' => 'CRON_JOB_ID',
@@ -259,7 +258,7 @@ class CronJobTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'cron_job_created', 'update_column' => 'cron_job_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'cron_job_created', 'update_column' => 'cron_job_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -471,17 +470,6 @@ class CronJobTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CronJobTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(CronJobTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new CronJobTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a CronJob or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or CronJob object or primary key or array of primary keys
@@ -570,6 +558,3 @@ class CronJobTableMap extends TableMap
     }
 
 } // CronJobTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-CronJobTableMap::buildTableMap();

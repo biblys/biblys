@@ -169,7 +169,6 @@ class TicketTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'TICKET_ID',
         'Ticket.Id' => 'TICKET_ID',
         'id' => 'TICKET_ID',
@@ -315,7 +314,7 @@ class TicketTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'ticket_created', 'update_column' => 'ticket_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'ticket_created', 'update_column' => 'ticket_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -543,17 +542,6 @@ class TicketTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TicketTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TicketTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TicketTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Ticket or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Ticket object or primary key or array of primary keys
@@ -642,6 +630,3 @@ class TicketTableMap extends TableMap
     }
 
 } // TicketTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-TicketTableMap::buildTableMap();

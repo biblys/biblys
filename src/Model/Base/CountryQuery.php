@@ -70,15 +70,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry requireOneByDeletedAt(string $country_deleted) Return the first ChildCountry filtered by the country_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCountry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
  * @method     ChildCountry[]|ObjectCollection findById(int $country_id) Return ChildCountry objects filtered by the country_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findById(int $country_id) Return ChildCountry objects filtered by the country_id column
  * @method     ChildCountry[]|ObjectCollection findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
  * @method     ChildCountry[]|ObjectCollection findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
  * @method     ChildCountry[]|ObjectCollection findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
  * @method     ChildCountry[]|ObjectCollection findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
  * @method     ChildCountry[]|ObjectCollection findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
  * @method     ChildCountry[]|ObjectCollection findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
  * @method     ChildCountry[]|ObjectCollection findByDeletedAt(string $country_deleted) Return ChildCountry objects filtered by the country_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByDeletedAt(string $country_deleted) Return ChildCountry objects filtered by the country_deleted column
  * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CountryQuery extends ModelCriteria

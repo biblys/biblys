@@ -122,28 +122,51 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent requireOneByDeletedAt(string $event_deleted) Return the first ChildEvent filtered by the event_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvent[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
  * @method     ChildEvent[]|ObjectCollection findById(int $event_id) Return ChildEvent objects filtered by the event_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findById(int $event_id) Return ChildEvent objects filtered by the event_id column
  * @method     ChildEvent[]|ObjectCollection findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
  * @method     ChildEvent[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
  * @method     ChildEvent[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
  * @method     ChildEvent[]|ObjectCollection findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
  * @method     ChildEvent[]|ObjectCollection findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
  * @method     ChildEvent[]|ObjectCollection findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
  * @method     ChildEvent[]|ObjectCollection findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
  * @method     ChildEvent[]|ObjectCollection findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
  * @method     ChildEvent[]|ObjectCollection findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
  * @method     ChildEvent[]|ObjectCollection findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
  * @method     ChildEvent[]|ObjectCollection findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
  * @method     ChildEvent[]|ObjectCollection findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
  * @method     ChildEvent[]|ObjectCollection findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
  * @method     ChildEvent[]|ObjectCollection findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
  * @method     ChildEvent[]|ObjectCollection findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
  * @method     ChildEvent[]|ObjectCollection findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
  * @method     ChildEvent[]|ObjectCollection findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
  * @method     ChildEvent[]|ObjectCollection findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
  * @method     ChildEvent[]|ObjectCollection findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
  * @method     ChildEvent[]|ObjectCollection findByDeletedAt(string $event_deleted) Return ChildEvent objects filtered by the event_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDeletedAt(string $event_deleted) Return ChildEvent objects filtered by the event_deleted column
  * @method     ChildEvent[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildEvent> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class EventQuery extends ModelCriteria

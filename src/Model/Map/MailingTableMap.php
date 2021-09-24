@@ -154,7 +154,6 @@ class MailingTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'MAILING_ID',
         'Mailing.Id' => 'MAILING_ID',
         'id' => 'MAILING_ID',
@@ -273,7 +272,7 @@ class MailingTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'mailing_created', 'update_column' => 'mailing_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'mailing_created', 'update_column' => 'mailing_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -489,17 +488,6 @@ class MailingTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(MailingTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(MailingTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new MailingTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Mailing or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Mailing object or primary key or array of primary keys
@@ -588,6 +576,3 @@ class MailingTableMap extends TableMap
     }
 
 } // MailingTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-MailingTableMap::buildTableMap();

@@ -62,13 +62,21 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventory requireOneByDeletedAt(string $inventory_deleted) Return the first ChildInventory filtered by the inventory_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInventory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
  * @method     ChildInventory[]|ObjectCollection findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
  * @method     ChildInventory[]|ObjectCollection findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
  * @method     ChildInventory[]|ObjectCollection findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
  * @method     ChildInventory[]|ObjectCollection findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
  * @method     ChildInventory[]|ObjectCollection findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
  * @method     ChildInventory[]|ObjectCollection findByDeletedAt(string $inventory_deleted) Return ChildInventory objects filtered by the inventory_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByDeletedAt(string $inventory_deleted) Return ChildInventory objects filtered by the inventory_deleted column
  * @method     ChildInventory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildInventory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class InventoryQuery extends ModelCriteria

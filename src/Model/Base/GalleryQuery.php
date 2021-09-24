@@ -74,16 +74,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGallery requireOneByDeleted(string $gallery_deleted) Return the first ChildGallery filtered by the gallery_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGallery[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
  * @method     ChildGallery[]|ObjectCollection findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
  * @method     ChildGallery[]|ObjectCollection findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
  * @method     ChildGallery[]|ObjectCollection findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
  * @method     ChildGallery[]|ObjectCollection findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
  * @method     ChildGallery[]|ObjectCollection findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
  * @method     ChildGallery[]|ObjectCollection findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
  * @method     ChildGallery[]|ObjectCollection findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
  * @method     ChildGallery[]|ObjectCollection findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
  * @method     ChildGallery[]|ObjectCollection findByDeleted(string $gallery_deleted) Return ChildGallery objects filtered by the gallery_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByDeleted(string $gallery_deleted) Return ChildGallery objects filtered by the gallery_deleted column
  * @method     ChildGallery[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildGallery> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class GalleryQuery extends ModelCriteria

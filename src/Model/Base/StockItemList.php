@@ -5,9 +5,9 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use Model\List as ChildList;
-use Model\ListQuery as ChildListQuery;
-use Model\Map\ListTableMap;
+use Model\StockItemList as ChildStockItemList;
+use Model\StockItemListQuery as ChildStockItemListQuery;
+use Model\Map\StockItemListTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -28,12 +28,12 @@ use Propel\Runtime\Util\PropelDateTime;
  *
  * @package    propel.generator.Model.Base
  */
-abstract class List implements ActiveRecordInterface
+abstract class StockItemList implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Model\\Map\\ListTableMap';
+    const TABLE_MAP = '\\Model\\Map\\StockItemListTableMap';
 
 
     /**
@@ -127,7 +127,7 @@ abstract class List implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Model\Base\List object.
+     * Initializes internal state of Model\Base\StockItemList object.
      */
     public function __construct()
     {
@@ -213,18 +213,16 @@ abstract class List implements ActiveRecordInterface
     public function resetModified($col = null)
     {
         if (null !== $col) {
-            if (isset($this->modifiedColumns[$col])) {
-                unset($this->modifiedColumns[$col]);
-            }
+            unset($this->modifiedColumns[$col]);
         } else {
             $this->modifiedColumns = array();
         }
     }
 
     /**
-     * Compares this with another <code>List</code> instance.  If
-     * <code>obj</code> is an instance of <code>List</code>, delegates to
-     * <code>equals(List)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>StockItemList</code> instance.  If
+     * <code>obj</code> is an instance of <code>StockItemList</code>, delegates to
+     * <code>equals(StockItemList)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -321,15 +319,16 @@ abstract class List implements ActiveRecordInterface
      *
      * @param  mixed   $parser                 A AbstractParser instance, or a format name ('XML', 'YAML', 'JSON', 'CSV')
      * @param  boolean $includeLazyLoadColumns (optional) Whether to include lazy load(ed) columns. Defaults to TRUE.
+     * @param  string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME, TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to TableMap::TYPE_PHPNAME.
      * @return string  The exported data
      */
-    public function exportTo($parser, $includeLazyLoadColumns = true)
+    public function exportTo($parser, $includeLazyLoadColumns = true, $keyType = TableMap::TYPE_PHPNAME)
     {
         if (!$parser instanceof AbstractParser) {
             $parser = AbstractParser::getParser($parser);
         }
 
-        return $parser->fromArray($this->toArray(TableMap::TYPE_PHPNAME, $includeLazyLoadColumns, array(), true));
+        return $parser->fromArray($this->toArray($keyType, $includeLazyLoadColumns, array(), true));
     }
 
     /**
@@ -411,6 +410,8 @@ abstract class List implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getCreatedAt($format = null)
     {
@@ -431,6 +432,8 @@ abstract class List implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getUpdatedAt($format = null)
     {
@@ -451,6 +454,8 @@ abstract class List implements ActiveRecordInterface
      * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
      */
     public function getDeletedAt($format = null)
     {
@@ -465,7 +470,7 @@ abstract class List implements ActiveRecordInterface
      * Set the value of [list_id] column.
      *
      * @param int $v New value
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -475,7 +480,7 @@ abstract class List implements ActiveRecordInterface
 
         if ($this->list_id !== $v) {
             $this->list_id = $v;
-            $this->modifiedColumns[ListTableMap::COL_LIST_ID] = true;
+            $this->modifiedColumns[StockItemListTableMap::COL_LIST_ID] = true;
         }
 
         return $this;
@@ -485,7 +490,7 @@ abstract class List implements ActiveRecordInterface
      * Set the value of [user_id] column.
      *
      * @param int|null $v New value
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setUserId($v)
     {
@@ -495,7 +500,7 @@ abstract class List implements ActiveRecordInterface
 
         if ($this->user_id !== $v) {
             $this->user_id = $v;
-            $this->modifiedColumns[ListTableMap::COL_USER_ID] = true;
+            $this->modifiedColumns[StockItemListTableMap::COL_USER_ID] = true;
         }
 
         return $this;
@@ -505,7 +510,7 @@ abstract class List implements ActiveRecordInterface
      * Set the value of [site_id] column.
      *
      * @param int|null $v New value
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setSiteId($v)
     {
@@ -515,7 +520,7 @@ abstract class List implements ActiveRecordInterface
 
         if ($this->site_id !== $v) {
             $this->site_id = $v;
-            $this->modifiedColumns[ListTableMap::COL_SITE_ID] = true;
+            $this->modifiedColumns[StockItemListTableMap::COL_SITE_ID] = true;
         }
 
         return $this;
@@ -525,7 +530,7 @@ abstract class List implements ActiveRecordInterface
      * Set the value of [list_title] column.
      *
      * @param string|null $v New value
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setTitle($v)
     {
@@ -535,7 +540,7 @@ abstract class List implements ActiveRecordInterface
 
         if ($this->list_title !== $v) {
             $this->list_title = $v;
-            $this->modifiedColumns[ListTableMap::COL_LIST_TITLE] = true;
+            $this->modifiedColumns[StockItemListTableMap::COL_LIST_TITLE] = true;
         }
 
         return $this;
@@ -545,7 +550,7 @@ abstract class List implements ActiveRecordInterface
      * Set the value of [list_url] column.
      *
      * @param string|null $v New value
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setUrl($v)
     {
@@ -555,7 +560,7 @@ abstract class List implements ActiveRecordInterface
 
         if ($this->list_url !== $v) {
             $this->list_url = $v;
-            $this->modifiedColumns[ListTableMap::COL_LIST_URL] = true;
+            $this->modifiedColumns[StockItemListTableMap::COL_LIST_URL] = true;
         }
 
         return $this;
@@ -566,7 +571,7 @@ abstract class List implements ActiveRecordInterface
      *
      * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -574,7 +579,7 @@ abstract class List implements ActiveRecordInterface
         if ($this->list_created !== null || $dt !== null) {
             if ($this->list_created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->list_created->format("Y-m-d H:i:s.u")) {
                 $this->list_created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[ListTableMap::COL_LIST_CREATED] = true;
+                $this->modifiedColumns[StockItemListTableMap::COL_LIST_CREATED] = true;
             }
         } // if either are not null
 
@@ -586,7 +591,7 @@ abstract class List implements ActiveRecordInterface
      *
      * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -594,7 +599,7 @@ abstract class List implements ActiveRecordInterface
         if ($this->list_updated !== null || $dt !== null) {
             if ($this->list_updated === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->list_updated->format("Y-m-d H:i:s.u")) {
                 $this->list_updated = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[ListTableMap::COL_LIST_UPDATED] = true;
+                $this->modifiedColumns[StockItemListTableMap::COL_LIST_UPDATED] = true;
             }
         } // if either are not null
 
@@ -606,7 +611,7 @@ abstract class List implements ActiveRecordInterface
      *
      * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Model\List The current object (for fluent API support)
+     * @return $this|\Model\StockItemList The current object (for fluent API support)
      */
     public function setDeletedAt($v)
     {
@@ -614,7 +619,7 @@ abstract class List implements ActiveRecordInterface
         if ($this->list_deleted !== null || $dt !== null) {
             if ($this->list_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->list_deleted->format("Y-m-d H:i:s.u")) {
                 $this->list_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[ListTableMap::COL_LIST_DELETED] = true;
+                $this->modifiedColumns[StockItemListTableMap::COL_LIST_DELETED] = true;
             }
         } // if either are not null
 
@@ -657,34 +662,34 @@ abstract class List implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ListTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : StockItemListTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->list_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ListTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : StockItemListTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ListTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : StockItemListTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->site_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ListTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : StockItemListTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
             $this->list_title = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ListTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : StockItemListTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
             $this->list_url = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ListTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : StockItemListTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->list_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ListTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : StockItemListTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->list_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : ListTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : StockItemListTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -697,10 +702,10 @@ abstract class List implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = ListTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = StockItemListTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\List'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\StockItemList'), 0, $e);
         }
     }
 
@@ -742,13 +747,13 @@ abstract class List implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildListQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildStockItemListQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -767,8 +772,8 @@ abstract class List implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see List::setDeleted()
-     * @see List::isDeleted()
+     * @see StockItemList::setDeleted()
+     * @see StockItemList::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -777,11 +782,11 @@ abstract class List implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildListQuery::create()
+            $deleteQuery = ChildStockItemListQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -816,7 +821,7 @@ abstract class List implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(ListTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StockItemListTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -827,16 +832,16 @@ abstract class List implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(ListTableMap::COL_LIST_CREATED)) {
+                if (!$this->isColumnModified(StockItemListTableMap::COL_LIST_CREATED)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
+                if (!$this->isColumnModified(StockItemListTableMap::COL_LIST_UPDATED)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
+                if ($this->isModified() && !$this->isColumnModified(StockItemListTableMap::COL_LIST_UPDATED)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -848,7 +853,7 @@ abstract class List implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                ListTableMap::addInstanceToPool($this);
+                StockItemListTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -905,34 +910,34 @@ abstract class List implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[ListTableMap::COL_LIST_ID] = true;
+        $this->modifiedColumns[StockItemListTableMap::COL_LIST_ID] = true;
         if (null !== $this->list_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ListTableMap::COL_LIST_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . StockItemListTableMap::COL_LIST_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(ListTableMap::COL_LIST_ID)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_ID)) {
             $modifiedColumns[':p' . $index++]  = 'list_id';
         }
-        if ($this->isColumnModified(ListTableMap::COL_USER_ID)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(ListTableMap::COL_SITE_ID)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_SITE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'site_id';
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_TITLE)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_TITLE)) {
             $modifiedColumns[':p' . $index++]  = 'list_title';
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_URL)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_URL)) {
             $modifiedColumns[':p' . $index++]  = 'list_url';
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_CREATED)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'list_created';
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'list_updated';
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_DELETED)) {
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_DELETED)) {
             $modifiedColumns[':p' . $index++]  = 'list_deleted';
         }
 
@@ -1016,7 +1021,7 @@ abstract class List implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ListTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = StockItemListTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1079,11 +1084,11 @@ abstract class List implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['List'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['StockItemList'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['List'][$this->hashCode()] = true;
-        $keys = ListTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['StockItemList'][$this->hashCode()] = true;
+        $keys = StockItemListTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUserId(),
@@ -1124,11 +1129,11 @@ abstract class List implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Model\List
+     * @return $this|\Model\StockItemList
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = ListTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = StockItemListTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1139,7 +1144,7 @@ abstract class List implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Model\List
+     * @return $this|\Model\StockItemList
      */
     public function setByPosition($pos, $value)
     {
@@ -1188,11 +1193,11 @@ abstract class List implements ActiveRecordInterface
      *
      * @param      array  $arr     An array to populate the object from.
      * @param      string $keyType The type of keys the array uses.
-     * @return void
+     * @return     $this|\Model\StockItemList
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = ListTableMap::getFieldNames($keyType);
+        $keys = StockItemListTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
@@ -1218,6 +1223,8 @@ abstract class List implements ActiveRecordInterface
         if (array_key_exists($keys[7], $arr)) {
             $this->setDeletedAt($arr[$keys[7]]);
         }
+
+        return $this;
     }
 
      /**
@@ -1237,7 +1244,7 @@ abstract class List implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Model\List The current object, for fluid interface
+     * @return $this|\Model\StockItemList The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1257,31 +1264,31 @@ abstract class List implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(ListTableMap::DATABASE_NAME);
+        $criteria = new Criteria(StockItemListTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(ListTableMap::COL_LIST_ID)) {
-            $criteria->add(ListTableMap::COL_LIST_ID, $this->list_id);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_ID)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_ID, $this->list_id);
         }
-        if ($this->isColumnModified(ListTableMap::COL_USER_ID)) {
-            $criteria->add(ListTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(StockItemListTableMap::COL_USER_ID)) {
+            $criteria->add(StockItemListTableMap::COL_USER_ID, $this->user_id);
         }
-        if ($this->isColumnModified(ListTableMap::COL_SITE_ID)) {
-            $criteria->add(ListTableMap::COL_SITE_ID, $this->site_id);
+        if ($this->isColumnModified(StockItemListTableMap::COL_SITE_ID)) {
+            $criteria->add(StockItemListTableMap::COL_SITE_ID, $this->site_id);
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_TITLE)) {
-            $criteria->add(ListTableMap::COL_LIST_TITLE, $this->list_title);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_TITLE)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_TITLE, $this->list_title);
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_URL)) {
-            $criteria->add(ListTableMap::COL_LIST_URL, $this->list_url);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_URL)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_URL, $this->list_url);
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_CREATED)) {
-            $criteria->add(ListTableMap::COL_LIST_CREATED, $this->list_created);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_CREATED)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_CREATED, $this->list_created);
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_UPDATED)) {
-            $criteria->add(ListTableMap::COL_LIST_UPDATED, $this->list_updated);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_UPDATED)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_UPDATED, $this->list_updated);
         }
-        if ($this->isColumnModified(ListTableMap::COL_LIST_DELETED)) {
-            $criteria->add(ListTableMap::COL_LIST_DELETED, $this->list_deleted);
+        if ($this->isColumnModified(StockItemListTableMap::COL_LIST_DELETED)) {
+            $criteria->add(StockItemListTableMap::COL_LIST_DELETED, $this->list_deleted);
         }
 
         return $criteria;
@@ -1299,8 +1306,8 @@ abstract class List implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildListQuery::create();
-        $criteria->add(ListTableMap::COL_LIST_ID, $this->list_id);
+        $criteria = ChildStockItemListQuery::create();
+        $criteria->add(StockItemListTableMap::COL_LIST_ID, $this->list_id);
 
         return $criteria;
     }
@@ -1362,7 +1369,7 @@ abstract class List implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Model\List (or compatible) type.
+     * @param      object $copyObj An object of \Model\StockItemList (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1391,7 +1398,7 @@ abstract class List implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\List Clone of current object.
+     * @return \Model\StockItemList Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1448,7 +1455,7 @@ abstract class List implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(ListTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(StockItemListTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1456,11 +1463,11 @@ abstract class List implements ActiveRecordInterface
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     $this|ChildList The current object (for fluent API support)
+     * @return     $this|ChildStockItemList The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[ListTableMap::COL_LIST_UPDATED] = true;
+        $this->modifiedColumns[StockItemListTableMap::COL_LIST_UPDATED] = true;
 
         return $this;
     }
@@ -1565,15 +1572,18 @@ abstract class List implements ActiveRecordInterface
 
         if (0 === strpos($name, 'from')) {
             $format = substr($name, 4);
+            $inputData = $params[0];
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->importFrom($format, reset($params));
+            return $this->importFrom($format, $inputData, $keyType);
         }
 
         if (0 === strpos($name, 'to')) {
             $format = substr($name, 2);
-            $includeLazyLoadColumns = isset($params[0]) ? $params[0] : true;
+            $includeLazyLoadColumns = $params[0] ?? true;
+            $keyType = $params[1] ?? TableMap::TYPE_PHPNAME;
 
-            return $this->exportTo($format, $includeLazyLoadColumns);
+            return $this->exportTo($format, $includeLazyLoadColumns, $keyType);
         }
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));

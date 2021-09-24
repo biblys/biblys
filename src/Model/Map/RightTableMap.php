@@ -164,7 +164,6 @@ class RightTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'RIGHT_ID',
         'Right.Id' => 'RIGHT_ID',
         'id' => 'RIGHT_ID',
@@ -315,7 +314,7 @@ class RightTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'right_created', 'update_column' => 'right_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'right_created', 'update_column' => 'right_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -539,17 +538,6 @@ class RightTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(RightTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(RightTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new RightTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Right or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Right object or primary key or array of primary keys
@@ -638,6 +626,3 @@ class RightTableMap extends TableMap
     }
 
 } // RightTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-RightTableMap::buildTableMap();

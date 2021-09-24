@@ -134,7 +134,6 @@ class VoteTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'VOTE_ID',
         'Vote.Id' => 'VOTE_ID',
         'id' => 'VOTE_ID',
@@ -404,17 +403,6 @@ class VoteTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(VoteTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(VoteTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new VoteTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Vote or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Vote object or primary key or array of primary keys
@@ -503,6 +491,3 @@ class VoteTableMap extends TableMap
     }
 
 } // VoteTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-VoteTableMap::buildTableMap();

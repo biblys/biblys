@@ -78,17 +78,17 @@ class LangTableMap extends TableMap
     /**
      * the column name for the lang_iso_639-1 field
      */
-    const COL_LANG_ISO_639-1 = 'langs.lang_iso_639-1';
+    const COL_ISO639_1 = 'langs.lang_iso_639-1';
 
     /**
      * the column name for the lang_iso_639-2 field
      */
-    const COL_LANG_ISO_639-2 = 'langs.lang_iso_639-2';
+    const COL_ISO639_2 = 'langs.lang_iso_639-2';
 
     /**
      * the column name for the lang_iso_639-3 field
      */
-    const COL_LANG_ISO_639-3 = 'langs.lang_iso_639-3';
+    const COL_ISO639_3 = 'langs.lang_iso_639-3';
 
     /**
      * the column name for the lang_name field
@@ -129,7 +129,7 @@ class LangTableMap extends TableMap
     protected static $fieldNames = array (
         self::TYPE_PHPNAME       => array('Id', 'Iso639-1', 'Iso639-2', 'Iso639-3', 'Name', 'NameOriginal', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
         self::TYPE_CAMELNAME     => array('id', 'iso639-1', 'iso639-2', 'iso639-3', 'name', 'nameOriginal', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID, LangTableMap::COL_LANG_ISO_639-1, LangTableMap::COL_LANG_ISO_639-2, LangTableMap::COL_LANG_ISO_639-3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, LangTableMap::COL_LANG_DELETED, ),
+        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID, LangTableMap::COL_ISO639_1, LangTableMap::COL_ISO639_2, LangTableMap::COL_ISO639_3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, LangTableMap::COL_LANG_DELETED, ),
         self::TYPE_FIELDNAME     => array('lang_id', 'lang_iso_639-1', 'lang_iso_639-2', 'lang_iso_639-3', 'lang_name', 'lang_name_original', 'lang_created', 'lang_updated', 'lang_deleted', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
@@ -143,7 +143,7 @@ class LangTableMap extends TableMap
     protected static $fieldKeys = array (
         self::TYPE_PHPNAME       => array('Id' => 0, 'Iso639-1' => 1, 'Iso639-2' => 2, 'Iso639-3' => 3, 'Name' => 4, 'NameOriginal' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'DeletedAt' => 8, ),
         self::TYPE_CAMELNAME     => array('id' => 0, 'iso639-1' => 1, 'iso639-2' => 2, 'iso639-3' => 3, 'name' => 4, 'nameOriginal' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'deletedAt' => 8, ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_LANG_ISO_639-1 => 1, LangTableMap::COL_LANG_ISO_639-2 => 2, LangTableMap::COL_LANG_ISO_639-3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, LangTableMap::COL_LANG_DELETED => 8, ),
+        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_ISO639_1 => 1, LangTableMap::COL_ISO639_2 => 2, LangTableMap::COL_ISO639_3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, LangTableMap::COL_LANG_DELETED => 8, ),
         self::TYPE_FIELDNAME     => array('lang_id' => 0, 'lang_iso_639-1' => 1, 'lang_iso_639-2' => 2, 'lang_iso_639-3' => 3, 'lang_name' => 4, 'lang_name_original' => 5, 'lang_created' => 6, 'lang_updated' => 7, 'lang_deleted' => 8, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
@@ -154,7 +154,6 @@ class LangTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'LANG_ID',
         'Lang.Id' => 'LANG_ID',
         'id' => 'LANG_ID',
@@ -167,24 +166,24 @@ class LangTableMap extends TableMap
         'Lang.Iso639-1' => 'LANG_ISO_639-1',
         'iso639-1' => 'LANG_ISO_639-1',
         'lang.iso639-1' => 'LANG_ISO_639-1',
-        'LangTableMap::COL_LANG_ISO_639-1' => 'LANG_ISO_639-1',
-        'COL_LANG_ISO_639-1' => 'LANG_ISO_639-1',
+        'LangTableMap::COL_ISO639_1' => 'LANG_ISO_639-1',
+        'COL_ISO639_1' => 'LANG_ISO_639-1',
         'lang_iso_639-1' => 'LANG_ISO_639-1',
         'langs.lang_iso_639-1' => 'LANG_ISO_639-1',
         'Iso639-2' => 'LANG_ISO_639-2',
         'Lang.Iso639-2' => 'LANG_ISO_639-2',
         'iso639-2' => 'LANG_ISO_639-2',
         'lang.iso639-2' => 'LANG_ISO_639-2',
-        'LangTableMap::COL_LANG_ISO_639-2' => 'LANG_ISO_639-2',
-        'COL_LANG_ISO_639-2' => 'LANG_ISO_639-2',
+        'LangTableMap::COL_ISO639_2' => 'LANG_ISO_639-2',
+        'COL_ISO639_2' => 'LANG_ISO_639-2',
         'lang_iso_639-2' => 'LANG_ISO_639-2',
         'langs.lang_iso_639-2' => 'LANG_ISO_639-2',
         'Iso639-3' => 'LANG_ISO_639-3',
         'Lang.Iso639-3' => 'LANG_ISO_639-3',
         'iso639-3' => 'LANG_ISO_639-3',
         'lang.iso639-3' => 'LANG_ISO_639-3',
-        'LangTableMap::COL_LANG_ISO_639-3' => 'LANG_ISO_639-3',
-        'COL_LANG_ISO_639-3' => 'LANG_ISO_639-3',
+        'LangTableMap::COL_ISO639_3' => 'LANG_ISO_639-3',
+        'COL_ISO639_3' => 'LANG_ISO_639-3',
         'lang_iso_639-3' => 'LANG_ISO_639-3',
         'langs.lang_iso_639-3' => 'LANG_ISO_639-3',
         'Name' => 'LANG_NAME',
@@ -273,7 +272,7 @@ class LangTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'lang_created', 'update_column' => 'lang_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'lang_created', 'update_column' => 'lang_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -419,9 +418,9 @@ class LangTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(LangTableMap::COL_LANG_ID);
-            $criteria->addSelectColumn(LangTableMap::COL_LANG_ISO_639-1);
-            $criteria->addSelectColumn(LangTableMap::COL_LANG_ISO_639-2);
-            $criteria->addSelectColumn(LangTableMap::COL_LANG_ISO_639-3);
+            $criteria->addSelectColumn(LangTableMap::COL_ISO639_1);
+            $criteria->addSelectColumn(LangTableMap::COL_ISO639_2);
+            $criteria->addSelectColumn(LangTableMap::COL_ISO639_3);
             $criteria->addSelectColumn(LangTableMap::COL_LANG_NAME);
             $criteria->addSelectColumn(LangTableMap::COL_LANG_NAME_ORIGINAL);
             $criteria->addSelectColumn(LangTableMap::COL_LANG_CREATED);
@@ -455,9 +454,9 @@ class LangTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_ID);
-            $criteria->removeSelectColumn(LangTableMap::COL_LANG_ISO_639-1);
-            $criteria->removeSelectColumn(LangTableMap::COL_LANG_ISO_639-2);
-            $criteria->removeSelectColumn(LangTableMap::COL_LANG_ISO_639-3);
+            $criteria->removeSelectColumn(LangTableMap::COL_ISO639_1);
+            $criteria->removeSelectColumn(LangTableMap::COL_ISO639_2);
+            $criteria->removeSelectColumn(LangTableMap::COL_ISO639_3);
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_NAME);
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_NAME_ORIGINAL);
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_CREATED);
@@ -486,17 +485,6 @@ class LangTableMap extends TableMap
     public static function getTableMap()
     {
         return Propel::getServiceContainer()->getDatabaseMap(LangTableMap::DATABASE_NAME)->getTable(LangTableMap::TABLE_NAME);
-    }
-
-    /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(LangTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(LangTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new LangTableMap());
-        }
     }
 
     /**
@@ -588,6 +576,3 @@ class LangTableMap extends TableMap
     }
 
 } // LangTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-LangTableMap::buildTableMap();

@@ -144,7 +144,6 @@ class PriceTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'PRICE_ID',
         'Price.Id' => 'PRICE_ID',
         'id' => 'PRICE_ID',
@@ -155,7 +154,6 @@ class PriceTableMap extends TableMap
         'prices.price_id' => 'PRICE_ID',
         'gridId' => 'PRICEGRID_ID',
         'Price.gridId' => 'PRICEGRID_ID',
-        'gridId' => 'PRICEGRID_ID',
         'price.gridId' => 'PRICEGRID_ID',
         'PriceTableMap::COL_PRICEGRID_ID' => 'PRICEGRID_ID',
         'COL_PRICEGRID_ID' => 'PRICEGRID_ID',
@@ -245,7 +243,7 @@ class PriceTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'price_created', 'update_column' => 'price_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'price_created', 'update_column' => 'price_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -453,17 +451,6 @@ class PriceTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PriceTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PriceTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PriceTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Price or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Price object or primary key or array of primary keys
@@ -552,6 +539,3 @@ class PriceTableMap extends TableMap
     }
 
 } // PriceTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-PriceTableMap::buildTableMap();

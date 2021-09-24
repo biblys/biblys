@@ -184,7 +184,6 @@ class SubscriptionTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'SUBSCRIPTION_ID',
         'Subscription.Id' => 'SUBSCRIPTION_ID',
         'id' => 'SUBSCRIPTION_ID',
@@ -357,7 +356,7 @@ class SubscriptionTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'subscription_created', 'update_column' => 'subscription_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'subscription_created', 'update_column' => 'subscription_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -597,17 +596,6 @@ class SubscriptionTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SubscriptionTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(SubscriptionTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new SubscriptionTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Subscription or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Subscription object or primary key or array of primary keys
@@ -696,6 +684,3 @@ class SubscriptionTableMap extends TableMap
     }
 
 } // SubscriptionTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-SubscriptionTableMap::buildTableMap();

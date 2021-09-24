@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPage requireOneByDeletedAt(string $page_deleted) Return the first ChildPage filtered by the page_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
  * @method     ChildPage[]|ObjectCollection findById(int $page_id) Return ChildPage objects filtered by the page_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findById(int $page_id) Return ChildPage objects filtered by the page_id column
  * @method     ChildPage[]|ObjectCollection findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
  * @method     ChildPage[]|ObjectCollection findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
  * @method     ChildPage[]|ObjectCollection findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
  * @method     ChildPage[]|ObjectCollection findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
  * @method     ChildPage[]|ObjectCollection findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
  * @method     ChildPage[]|ObjectCollection findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
  * @method     ChildPage[]|ObjectCollection findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
  * @method     ChildPage[]|ObjectCollection findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
  * @method     ChildPage[]|ObjectCollection findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
  * @method     ChildPage[]|ObjectCollection findByDeletedAt(string $page_deleted) Return ChildPage objects filtered by the page_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildPage> findByDeletedAt(string $page_deleted) Return ChildPage objects filtered by the page_deleted column
  * @method     ChildPage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PageQuery extends ModelCriteria

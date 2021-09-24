@@ -169,7 +169,6 @@ class SupplierTableMap extends TableMap
      * @var string[]
      */
     protected $normalizedColumnNameMap = [
-
         'Id' => 'SUPPLIER_ID',
         'Supplier.Id' => 'SUPPLIER_ID',
         'id' => 'SUPPLIER_ID',
@@ -315,7 +314,7 @@ class SupplierTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'timestampable' => array('create_column' => 'supplier_created', 'update_column' => 'supplier_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
+            'timestampable' => ['create_column' => 'supplier_created', 'update_column' => 'supplier_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
         );
     } // getBehaviors()
 
@@ -543,17 +542,6 @@ class SupplierTableMap extends TableMap
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(SupplierTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(SupplierTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new SupplierTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a Supplier or Criteria object OR a primary key value.
      *
      * @param mixed               $values Criteria or Supplier object or primary key or array of primary keys
@@ -642,6 +630,3 @@ class SupplierTableMap extends TableMap
     }
 
 } // SupplierTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-SupplierTableMap::buildTableMap();

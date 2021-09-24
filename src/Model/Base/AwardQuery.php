@@ -82,18 +82,31 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAward requireOneByDeletedAt(string $award_deleted) Return the first ChildAward filtered by the award_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAward[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> find(ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
  * @method     ChildAward[]|ObjectCollection findById(int $award_id) Return ChildAward objects filtered by the award_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findById(int $award_id) Return ChildAward objects filtered by the award_id column
  * @method     ChildAward[]|ObjectCollection findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
  * @method     ChildAward[]|ObjectCollection findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
  * @method     ChildAward[]|ObjectCollection findByName(string $award_name) Return ChildAward objects filtered by the award_name column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByName(string $award_name) Return ChildAward objects filtered by the award_name column
  * @method     ChildAward[]|ObjectCollection findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
  * @method     ChildAward[]|ObjectCollection findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
  * @method     ChildAward[]|ObjectCollection findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
  * @method     ChildAward[]|ObjectCollection findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
  * @method     ChildAward[]|ObjectCollection findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
  * @method     ChildAward[]|ObjectCollection findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
  * @method     ChildAward[]|ObjectCollection findByDeletedAt(string $award_deleted) Return ChildAward objects filtered by the award_deleted column
+ * @psalm-method ObjectCollection&\Traversable<ChildAward> findByDeletedAt(string $award_deleted) Return ChildAward objects filtered by the award_deleted column
  * @method     ChildAward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAward> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class AwardQuery extends ModelCriteria
