@@ -39,9 +39,8 @@ class Connection
     public static function initPropel(array $config)
     {
         $serviceContainer = Propel::getServiceContainer();
-        $serviceContainer->checkVersion("2.0.0-dev");
+        $serviceContainer->checkVersion(2);
         $serviceContainer->setAdapterClass("default", "mysql");
-        $manager = new ConnectionManagerSingle();
 
         $propelConfig = [
             "dsn" => self::getDsnFromConfig($config),
@@ -57,7 +56,7 @@ class Connection
                 1 => "vendor",
             ],
         ];
-
+        $manager = new ConnectionManagerSingle();
         $manager->setConfiguration($propelConfig);
         $manager->setName("default");
 
@@ -66,8 +65,9 @@ class Connection
 
         $defaultLogger = new Logger("defaultLogger");
         $defaultLogger->pushHandler(new StreamHandler(__DIR__ . "/../app/logs/propel.log", Logger::WARNING));
-
         $serviceContainer->setLogger("defaultLogger", $defaultLogger);
+
+        require_once __DIR__ . "/./loadDatabase.php";
     }
     
     public static function getDsnFromConfig(array $config): string
