@@ -190,19 +190,19 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $tagWithHeight = $article->getCoverTag(["class" => "aClass", "rel" => "aRel", "height" => 85]);
         $tagWithoutLink = $article->getCoverTag(['link' => false]);
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\"><\/a>/",
             $tag
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" width=\"250\"><\/a>/",
             $tagWithWidth
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<a href=\"\/media\/book\/\d+\/\d+\.jpg\" rel=\"aRel\"><img src=\"\/media\/book\/\d+\/\d+.jpg\" class=\"aClass\" alt=\"Bara Yogoi\" height=\"85\"><\/a>/",
             $tagWithHeight
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/<img src=\"\/media\/book\/\d+\/\d+\.jpg\" alt=\"Bara Yogoi\">/",
             $tagWithoutLink
         );
@@ -217,7 +217,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $article->getCover("object")->setExists(true);
         $url = $article->getCoverUrl();
 
-        $this->assertRegExp("/\/media\/book\/\d+\/\d+\.jpg/", $url);
+        $this->assertMatchesRegularExpression("/\/media\/book\/\d+\/\d+\.jpg/", $url);
     }
 
     /**

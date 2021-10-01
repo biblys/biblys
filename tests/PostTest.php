@@ -92,7 +92,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $illustration = $post->getIllustration();
         $tag = $post->getIllustrationTag();
 
-        $this->assertRegExp('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
+        $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
     }
 
     /**
