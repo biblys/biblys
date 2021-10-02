@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\CurrentUser;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,7 @@ class AuthControllerTest extends TestCase
     {
         // given
         $controller = new AuthController();
-        EntityFactory::createUser([
+        ModelFactory::createUser([
             "email" => "login@biblys.fr",
             "username" => "validUser",
             "password" => "p4ssword",
@@ -92,7 +93,7 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException("Framework\Exception\AuthException");
         $this->expectErrorMessage("Bad credentials");
-        EntityFactory::createUser([
+        ModelFactory::createUser([
             "email" => "login@biblys.fr",
             "username" => "validUser",
             "password" => "p4ssword",
@@ -117,7 +118,7 @@ class AuthControllerTest extends TestCase
         // then
         $this->expectException("Framework\Exception\AuthException");
         $this->expectErrorMessage("Email address has not been validated");
-        EntityFactory::createUser([
+        ModelFactory::createUser([
             "email" => "non-validated-email@biblys.fr",
             "username" => "nonValidatedEmail",
             "password" => "p4ssword",
@@ -143,7 +144,7 @@ class AuthControllerTest extends TestCase
     {
         // given
         $controller = new AuthController();
-        $user = EntityFactory::createUser([
+        $user = ModelFactory::createUser([
             "email" => "me@biblys.fr",
             "username" => "Me",
         ]);

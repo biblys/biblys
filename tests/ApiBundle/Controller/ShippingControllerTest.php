@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
@@ -100,7 +101,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = EntityFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = EntityFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingFee();
         $config = new Config();
 
         // when
@@ -135,7 +136,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = EntityFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = EntityFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingFee();
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();
@@ -159,7 +160,7 @@ class ShippingControllerTest extends TestCase
         // given
         $controller = new ShippingController();
         $request = EntityFactory::createAuthRequestForAdminUser();
-        $shippingFee = EntityFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingFee();
         $config = new Config();
 
         // when
@@ -183,7 +184,7 @@ class ShippingControllerTest extends TestCase
         $controller = new ShippingController();
         $content = '{"id":"","mode":"Colissimo","type":"suivi","zone":"OM2","max_weight":"21","min_amount":"71","max_amount":"76","max_articles":"90","fee":"57","info":"Expedition sous 72h"}';
         $request = EntityFactory::createAuthRequestForAdminUser($content);
-        $shippingFee = EntityFactory::createShippingFee();
+        $shippingFee = ModelFactory::createShippingFee();
         $shippingFee->setSiteId(2);
         $shippingFee->save();
         $config = new Config();

@@ -3,6 +3,7 @@
 namespace Biblys\Service;
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use DateTime;
 use Framework\Exception\AuthException;
 use Model\SiteQuery;
@@ -22,7 +23,7 @@ class CurrentUserTest extends TestCase
     public function testBuildFromRequestWithCookie()
     {
         // given
-        $user = EntityFactory::createUser();
+        $user = ModelFactory::createUser();
         $request = EntityFactory::createAuthRequest("", $user, "cookie");
 
         // when
@@ -43,7 +44,7 @@ class CurrentUserTest extends TestCase
     public function testBuildFromRequestWithHeader()
     {
         // given
-        $user = EntityFactory::createUser();
+        $user = ModelFactory::createUser();
         $request = EntityFactory::createAuthRequest("", $user, "header");
 
         // when
@@ -105,7 +106,7 @@ class CurrentUserTest extends TestCase
         $this->expectExceptionMessage("Identification requise.");
 
         // given
-        $session = EntityFactory::createUserSession();
+        $session = ModelFactory::createUserSession();
         $session->setExpiresAt(new DateTime("yesterday"));
         $session->save();
         $request = new Request();
@@ -127,7 +128,7 @@ class CurrentUserTest extends TestCase
         $this->expectExceptionMessage("Identification requise.");
 
         // given
-        $session = EntityFactory::createUserSession();
+        $session = ModelFactory::createUserSession();
         $session->setUser(null);
         $session->setUserId(12345);
         $request = new Request();
@@ -144,7 +145,7 @@ class CurrentUserTest extends TestCase
     public function testIsAuthentifiedForUser()
     {
         // given
-        $user = EntityFactory::createUser();
+        $user = ModelFactory::createUser();
 
         // when
         $currentUser = new CurrentUser($user);
@@ -176,7 +177,7 @@ class CurrentUserTest extends TestCase
         // given
         $config = new Config();
         $site = SiteQuery::create()->findOneById($config->get("site"));
-        $admin = EntityFactory::createAdminUser();
+        $admin = ModelFactory::createAdminUser();
 
         // when
         $currentUser = new CurrentUser($admin);
@@ -196,7 +197,7 @@ class CurrentUserTest extends TestCase
         // given
         $config = new Config();
         $site = SiteQuery::create()->findOneById($config->get("site"));
-        $user = EntityFactory::createUser();
+        $user = ModelFactory::createUser();
 
         // when
         $currentUser = new CurrentUser($user);

@@ -3,6 +3,7 @@
 namespace Model;
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -18,7 +19,7 @@ class SessionTest extends TestCase
     public function testBuildForUser()
     {
         // given
-        $user = EntityFactory::createUser();
+        $user = ModelFactory::createUser();
 
         // when
         $session = Session::buildForUser($user);

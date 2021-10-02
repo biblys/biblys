@@ -4,21 +4,13 @@ namespace Biblys\Test;
 
 use Article;
 use ArticleManager;
-use Biblys\Service\Config;
-use Biblys\Service\CurrentSite;
 use CFReward;
 use CFRewardManager;
 use Collection;
 use CollectionManager;
 use Exception;
 use Model\Role;
-use Model\Session;
-use Model\ShippingFee;
-use Model\Site;
 use Model\User;
-use Model\Right;
-use Model\SiteQuery;
-use Model\UserQuery;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -77,10 +69,11 @@ class EntityFactory
 
     /**
      *
+     * @param array $attributes
      * @return People
      * @throws Exception
      */
-    public static function createPeople($attributes = []): People
+    public static function createPeople(array $attributes = []): People
     {
         $pm = new PeopleManager();
 
@@ -185,59 +178,12 @@ class EntityFactory
     /**
      * @throws PropelException
      */
-    public static function createUser(array $attributes = []): User
-    {
-        $attributes["email"] = $attributes["email"] ?? "user@biblys.fr";
-        $attributes["username"] = $attributes["username"] ?? "User";
-        $attributes["password"] = $attributes["password"] ?? "password";
-
-        $userByEmail = UserQuery::create()->findOneByEmail($attributes["email"]);
-        if ($userByEmail) {
-            return $userByEmail;
-        }
-
-        $userByUsername = UserQuery::create()->findOneByUsername($attributes["username"]);
-        if ($userByUsername) {
-            return $userByUsername;
-        }
-
-        $user = new User();
-        $user->setEmail($attributes["email"]);
-        $user->setUsername($attributes["username"]);
-        $user->setPassword(password_hash($attributes["password"], PASSWORD_DEFAULT));
-
-        if (isset($attributes["email_key"])) {
-            $user->setEmailKey($attributes["email_key"]);
-        }
-        $user->save();
-
-        return $user;
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public static function createUserSession(User $user = null): Session
-    {
-        if (!$user) {
-            $user = EntityFactory::createUser();
-        }
-
-        $session = Session::buildForUser($user);
-        $session->save();
-
-        return $session;
-    }
-
-    /**
-     * @throws PropelException
-     */
     public static function createAuthRequest(
         string $content = "",
         User $user = null,
         string $authMethod = "cookie"): Request
     {
-        $session = EntityFactory::createUserSession($user);
+        $session = ModelFactory::createUserSession($user);
         $request = Request::create("", "", [], [], [], [], $content);
 
         if ($authMethod === "cookie") {
@@ -252,54 +198,14 @@ class EntityFactory
     }
 
     /**
-     * @throws PropelException
-     */
-    public static function createShippingFee(): ShippingFee
-    {
-        $shippingFee = new ShippingFee();
-        $shippingFee->setSiteId(1);
-        $shippingFee->save();
-
-        return $shippingFee;
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public static function createAdminUser(Site $site = null): User
-    {
-        $user = new User();
-        $user->save();
-
-        $config = new Config();
-        if ($site === null) {
-            $site = SiteQuery::create()->findOneById($config->get("site"));
-        }
-
-        $right = new Right();
-        $right->setUser($user);
-        $right->setSite($site);
-        $right->save();
-
-        return $user;
-    }
-
-    /**
      * @param string $content
      * @return Request
      * @throws PropelException
      */
     public static function createAuthRequestForAdminUser(string $content = ""): Request
     {
-        $adminUser = EntityFactory::createAdminUser();
+        $adminUser = ModelFactory::createAdminUser();
         return EntityFactory::createAuthRequest($content, $adminUser);
     }
 
-    public static function createSite()
-    {
-        $site = new Site();
-        $site->save();
-
-        return $site;
-    }
 }

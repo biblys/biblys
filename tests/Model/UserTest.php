@@ -3,6 +3,7 @@
 namespace Model;
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -16,8 +17,8 @@ class UserTest extends TestCase
     public function testIsAdminForSiteWithNonAdmin()
     {
         // when
-        $site = EntityFactory::createSite();
-        $user = EntityFactory::createUser();
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser();
 
         // when
         $isAdmin = $user->isAdminForSite($site);
@@ -35,8 +36,8 @@ class UserTest extends TestCase
     public function testIsAdminForSiteWithAdmin()
     {
         // when
-        $site = EntityFactory::createSite();
-        $user = EntityFactory::createAdminUser($site);
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createAdminUser($site);
 
         // when
         $isAdmin = $user->isAdminForSite($site);
