@@ -3,7 +3,10 @@
 namespace Biblys\Test;
 
 use Biblys\Service\Config;
+use Model\Article;
+use Model\People;
 use Model\Right;
+use Model\Role;
 use Model\Session;
 use Model\ShippingFee;
 use Model\Site;
@@ -103,5 +106,17 @@ class ModelFactory
         $site->save();
 
         return $site;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createContribution(Article $article, People $contributor): void
+    {
+        $contribution = new Role();
+        $contribution->setArticle($article);
+        $contribution->setPeople($contributor);
+        $contribution->setJobId(1);
+        $contribution->save();
     }
 }

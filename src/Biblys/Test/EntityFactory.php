@@ -9,9 +9,11 @@ use CFRewardManager;
 use Collection;
 use CollectionManager;
 use Exception;
-use Model\Role;
+use Model\ArticleQuery;
+use Model\PeopleQuery;
 use People;
 use PeopleManager;
+use Propel\Runtime\Exception\PropelException;
 use Publisher;
 use PublisherManager;
 use Rayon;
@@ -53,11 +55,7 @@ class EntityFactory
             $authors = [self::createPeople()];
         }
         foreach ($authors as $author) {
-            $contribution = new Role();
-            $contribution->setArticleId($article->get('id'));
-            $contribution->setPeopleId($author->get('id'));
-            $contribution->setJobId(1);
-            $contribution->save();
+            self::createContribution($article, $author);
         }
 
         return $article;
@@ -169,5 +167,15 @@ class EntityFactory
         return $cfrm->create([
             "reward_articles"=> "[".$article->get("id")."]",
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createContribution(Article $article, People $contributor): void
+    {
+        $article = ArticleQuery::create()->findPk($article->get("id"));
+        $contributor = PeopleQuery::create()->findPk($contributor->get("id"));
+        ModelFactory::createContribution($article, $contributor);
     }
 }
