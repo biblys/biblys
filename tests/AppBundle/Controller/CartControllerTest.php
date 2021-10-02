@@ -6,7 +6,7 @@
  */
 
 use AppBundle\Controller\CartController;
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/../../setUp.php";
@@ -23,7 +23,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $controller = new CartController();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
 
         // when
         $response = $controller->addArticleAction(
@@ -63,7 +63,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
         $tomorrow = new DateTime('tomorrow');
-        $article = Factory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
+        $article = EntityFactory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
 
         // when
         $response = $controller->addArticleAction(
@@ -97,7 +97,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $controller = new CartController();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $stock = Factory::createStock();
+        $stock = EntityFactory::createStock();
 
         // when
         $response = $controller->addStockAction(
@@ -130,7 +130,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $controller = new CartController();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $reward = Factory::createCrowfundingReward();
+        $reward = EntityFactory::createCrowfundingReward();
 
         // when
         $response = $controller->addCrowdfundingRewardAction(
@@ -162,7 +162,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $stock = Factory::createStock();
+        $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
         $controller = new CartController();
@@ -200,7 +200,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $stock = Factory::createStock();
+        $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
         $controller = new CartController();
@@ -272,7 +272,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cart = $_V->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
-        $stock = Factory::createStock(["stock_selling_price" => 500]);
+        $stock = EntityFactory::createStock(["stock_selling_price" => 500]);
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
         $controller = new CartController();

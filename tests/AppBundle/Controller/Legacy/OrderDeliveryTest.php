@@ -4,7 +4,7 @@ namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use CartManager;
 use EntityManager;
 use Model\ShippingFeeQuery;
@@ -28,7 +28,7 @@ class OrderDeliveryTest extends TestCase
         // given
         $cart = $_V->getCart("create");
         $am  = new ArticleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
         $cm = new CartManager();

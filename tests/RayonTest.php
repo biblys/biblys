@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -105,7 +105,7 @@ class RayonTest extends PHPUnit\Framework\TestCase
         $rm = new RayonManager();
         $am = new ArticleManager();
         $pm = new PeopleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
 
         // when
         $rayon->addArticle($article);
@@ -123,7 +123,7 @@ class RayonTest extends PHPUnit\Framework\TestCase
         $this->expectException("Exception");
         $this->expectExceptionMessage("L'article « Banane » est déjà dans le rayon « Fruits & légumes ».");
 
-        $article = Factory::createArticle(["article_title" => "Banane", "article_url" => "banane"]);
+        $article = EntityFactory::createArticle(["article_title" => "Banane", "article_url" => "banane"]);
 
         $rayon->addArticle($article);
         $rayon->addArticle($article);

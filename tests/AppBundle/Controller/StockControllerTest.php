@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use CartManager;
 use PHPUnit\Framework\TestCase;
 use StockManager;
@@ -18,11 +18,11 @@ class StockControllerTest extends TestCase
 
         // given
         $controller = new StockController();
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_price" => 500,
             "article_price_editable" => 1
         ]);
-        $stock = Factory::createStock(["article_id" => $article->get("id")]);
+        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cart = $_V->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
@@ -63,11 +63,11 @@ class StockControllerTest extends TestCase
 
         // given
         $controller = new StockController();
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_price" => 500,
             "article_price_editable" => 1
         ]);
-        $stock = Factory::createStock(["article_id" => $article->get("id")]);
+        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $request = new Request();
         $request->request->set("new_price", 600);
         $sm = new StockManager();
@@ -82,11 +82,11 @@ class StockControllerTest extends TestCase
 
         // given
         $controller = new StockController();
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_price" => 500,
             "article_price_editable" => 1
         ]);
-        $stock = Factory::createStock(["article_id" => $article->get("id")]);
+        $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cart = $_V->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);

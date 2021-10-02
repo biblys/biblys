@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -22,7 +22,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         EntityManager::prepareAndExecute(
             "UPDATE `articles` SET `publisher_id` = NULL WHERE `article_id` = :id LIMIT 1",
             ["id" => $article->get("id")]
@@ -45,7 +45,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         EntityManager::prepareAndExecute(
             "UPDATE `articles` SET `article_editing_user` = 1, `publisher_id` = NULL WHERE `article_id` = :id LIMIT 1",
             ["id" => $article->get("id")]
@@ -93,7 +93,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testUpdate()
     {
         // given
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $article->set("article_title", "Bara Yogoi");
         $article->set("publisher_id", 262);
         $pm = new PeopleManager();
@@ -116,7 +116,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testRefreshMetadata()
     {
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $this->m->refreshMetadata($article);
         $this->assertEquals(
             "L'Animalie     La Blanche PARONYMIE  Hervé LE TERRIER",
@@ -405,7 +405,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     */
     public function testGetContributors()
     {
-        $article = Factory::createArticle(["article_title" => "Rebellion!"], []);
+        $article = EntityFactory::createArticle(["article_title" => "Rebellion!"], []);
         $this->assertEmpty($article->getContributors());
         $this->assertFalse($article->hasOtherContributors());
 
@@ -413,7 +413,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         $people1 = $pm->create(["people_first_name" => "Han", "people_last_name" => "Solo"]);
         $people2 = $pm->create(["people_first_name" => "Leia", "people_last_name" => "Organa"]);
-        $article = Factory::createArticle(["article_title" => "Rebellion!"], [$people1, $people2]);
+        $article = EntityFactory::createArticle(["article_title" => "Rebellion!"], [$people1, $people2]);
 
         $contributors = $article->getContributors();
         $this->assertCount(
@@ -470,7 +470,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $sm = new StockManager();
 
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $new = $sm->create([
             "article_id" => $article->get('id'),
             "stock_condition" => "Neuf"
@@ -498,7 +498,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am = new ArticleManager();
         $sm = new StockManager();
 
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $expensive = $sm->create([
             "article_id" => $article->get('id'),
             "stock_condition" => "Neuf",
@@ -628,7 +628,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testGetJsArray()
     {
         $rm = new RayonManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
 
         $rayon1 = $rm->create(["rayon_name" => "Rayon 1"]);
         $rayon2 = $rm->create(["rayon_name" => "Rayon 2"]);
@@ -723,7 +723,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         // given
         $am = new ArticleManager();
-        Factory::createArticle(["article_url" => "anne-onyme/hous"]);
+        EntityFactory::createArticle(["article_url" => "anne-onyme/hous"]);
         $article = $am->create(["article_url" => "anne-onyme/hous"]);
 
         // when
@@ -761,7 +761,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_title" => "Pénates du soir"
         ]);
 
@@ -784,7 +784,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $riri = $pm->create(["people_last_name" => "Riri"]);
         $fifi = $pm->create(["people_last_name" => "Fifi"]);
         $loulou = $pm->create(["people_last_name" => "Loulou"]);
-        $article = Factory::createArticle(
+        $article = EntityFactory::createArticle(
             ["article_title" => "La Bande à Picsou"],
             [$riri, $fifi, $loulou]
         );
@@ -804,8 +804,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle();
-        $rayon = Factory::createRayon();
+        $article = EntityFactory::createArticle();
+        $rayon = EntityFactory::createRayon();
         $lm = new LinkManager();
 
         // when
@@ -830,8 +830,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle(["article_title" => "C'est mon rayon"]);
-        $rayon = Factory::createRayon(["rayon_name" => "Mon rayon"]);
+        $article = EntityFactory::createArticle(["article_title" => "C'est mon rayon"]);
+        $rayon = EntityFactory::createRayon(["rayon_name" => "Mon rayon"]);
         $lm = new LinkManager();
 
         // when
@@ -894,7 +894,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testIsBeingCreated()
     {
         // given
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $article->set("article_editing_user", 1);
 
         // when

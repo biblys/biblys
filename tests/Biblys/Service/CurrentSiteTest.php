@@ -2,7 +2,7 @@
 
 namespace Biblys\Service;
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__."/../../setUp.php";
@@ -13,7 +13,7 @@ class CurrentSiteTest extends TestCase
     public function testBuildFromConfig()
     {
         // given
-        $site = Factory::createSite();
+        $site = EntityFactory::createSite();
         $config = new Config();
         $config->set("site", $site->getId());
 

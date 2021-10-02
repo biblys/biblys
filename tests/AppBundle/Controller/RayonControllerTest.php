@@ -6,7 +6,7 @@
  */
 
 use AppBundle\Controller\RayonController;
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__."/../../setUp.php";
@@ -16,7 +16,7 @@ class RayonControllerTest extends PHPUnit\Framework\TestCase
     public function testRayonShow()
     {
         // given
-        $rayon = Factory::createRayon();
+        $rayon = EntityFactory::createRayon();
         $controller = new RayonController();
         $request = new Request();
         $request->query->set("p", "3");
@@ -44,7 +44,7 @@ class RayonControllerTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("Page number must be a positive integer");
 
         // given
-        $rayon = Factory::createRayon();
+        $rayon = EntityFactory::createRayon();
         $controller = new RayonController();
         $request = new Request();
         $request->query->set("p", "-1690");

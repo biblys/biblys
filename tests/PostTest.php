@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -149,7 +149,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $postWithoutArticles = $pm->create();
         $postWithArticles = $pm->create();
 
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $links = $lm->create([
             "article_id" => $article->get('id'),
             "post_id" => $postWithArticles->get('id')

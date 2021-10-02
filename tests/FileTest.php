@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -68,7 +68,7 @@ class FileTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $fm = new FileManager();
 
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $soldCopy = $sm->create([
             "article_id" => $article->get("id"),
             "stock_selling_date" => date("Y-m-d H:i:s")

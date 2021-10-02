@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Propel\Runtime\Exception\PropelException;
 
 require_once "setUp.php";
@@ -102,7 +102,7 @@ class UserTest extends PHPUnit\Framework\TestCase
     public function testHasPurchased(User $user)
     {
         $am = new ArticleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
 
         $this->assertFalse($user->hasPurchased($article));
 
@@ -120,7 +120,7 @@ class UserTest extends PHPUnit\Framework\TestCase
         global $site;
 
         // given
-        $publisher = Factory::createPublisher();
+        $publisher = EntityFactory::createPublisher();
         $site->set("publisher_id", $publisher->get("id"));
         $um = new UserManager();
         $user = $um->create(["user_email" => "customer@biblys.fr"]);

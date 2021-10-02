@@ -4,7 +4,7 @@ namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use CartManager;
 use CollectionManager;
 use OrderManager;
@@ -37,7 +37,7 @@ class CartTest extends TestCase
         $request = new Request();
         $request->query->set("page", "cart");
         $cart = $_V->getCart("create");
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_title" => "Papeete",
             "type_id" => 1,
         ]);

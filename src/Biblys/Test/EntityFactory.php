@@ -30,7 +30,7 @@ use Stock;
 use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 
-class Factory
+class EntityFactory
 {
 
     /**
@@ -220,7 +220,7 @@ class Factory
     public static function createUserSession(User $user = null): Session
     {
         if (!$user) {
-            $user = Factory::createUser();
+            $user = EntityFactory::createUser();
         }
 
         $session = Session::buildForUser($user);
@@ -237,7 +237,7 @@ class Factory
         User $user = null,
         string $authMethod = "cookie"): Request
     {
-        $session = Factory::createUserSession($user);
+        $session = EntityFactory::createUserSession($user);
         $request = Request::create("", "", [], [], [], [], $content);
 
         if ($authMethod === "cookie") {
@@ -291,8 +291,8 @@ class Factory
      */
     public static function createAuthRequestForAdminUser(string $content = ""): Request
     {
-        $adminUser = Factory::createAdminUser();
-        return Factory::createAuthRequest($content, $adminUser);
+        $adminUser = EntityFactory::createAdminUser();
+        return EntityFactory::createAuthRequest($content, $adminUser);
     }
 
     public static function createSite()

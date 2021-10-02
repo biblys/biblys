@@ -5,7 +5,7 @@
  * @backupStaticAttributes disabled
  */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -101,7 +101,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $am = new ArticleManager();
 
-        $webStock = Factory::createStock([
+        $webStock = EntityFactory::createStock([
             'stock_selling_price' => 500,
             'stock_weight' => 100
         ]);
@@ -144,7 +144,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $am = new ArticleManager();
 
-        $shopStock = Factory::createStock([
+        $shopStock = EntityFactory::createStock([
             'stock_selling_price' => 500,
             'stock_weight' => 100
         ]);
@@ -201,10 +201,10 @@ class CartTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $cm = new CartManager();
 
-        $article = Factory::createArticle(
+        $article = EntityFactory::createArticle(
             ["type_id" => 2, "article_availability_dilicom" => 6]
         );
-        Factory::createStock(["article_id" => $article->get("id")]);
+        EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cart = $cm->create();
 
         $cm->addArticle($cart, $article);
@@ -232,14 +232,14 @@ class CartTest extends PHPUnit\Framework\TestCase
             "Empty cart don't need shipping"
         );
 
-        $downloadable = Factory::createArticle(["type_id" => 2]);
+        $downloadable = EntityFactory::createArticle(["type_id" => 2]);
         $cm->addArticle($cart, $downloadable);
         $this->assertFalse(
             $cart->needsShipping(),
             "Carts with downloadable article don't need shipping"
         );
 
-        $physical = Factory::createArticle(["type_id" => 1]);
+        $physical = EntityFactory::createArticle(["type_id" => 1]);
         $cm->addArticle($cart, $physical);
         $this->assertTrue($cart->needsShipping(), "Carts with physical article need shipping");
 
@@ -263,7 +263,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $site->setOpt('virtual_stock', 1);
 
         $cart = $cm->create();
-        $article = Factory::createArticle(["article_availability_dilicom" => 1]);
+        $article = EntityFactory::createArticle(["article_availability_dilicom" => 1]);
 
         $cm->addArticle($cart, $article);
 
@@ -288,7 +288,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $site->setOpt('virtual_stock', 1);
         $cart = $cm->create();
         $tomorrow = new DateTime("tomorrow");
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_pubdate" => $tomorrow->format("Y-m-d"),
             "article_availability_dilicom" => 1
         ]);
@@ -314,7 +314,7 @@ class CartTest extends PHPUnit\Framework\TestCase
             $not_virtual_stock = true;
         }
 
-        $article = Factory::createArticle([
+        $article = EntityFactory::createArticle([
             "article_availability_dilicom" => 1,
             "article_price" => 1000,
         ]);
@@ -378,7 +378,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         }
 
         $cart = $cm->create();
-        $article = Factory::createArticle(
+        $article = EntityFactory::createArticle(
             ["article_title" => "Plop", "article_availability_dilicom" => 10]
         );
 
@@ -404,7 +404,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CartManager();
         $cart = $cm->create([]);
-        $stock = Factory::createStock();
+        $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
 
         // when / then
@@ -419,7 +419,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CartManager();
         $cart = $cm->create([]);
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $cm->addArticle($cart, $article);
 
         // when / then
@@ -434,7 +434,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CartManager();
         $cart = $cm->create([]);
-        $reward = Factory::createCrowfundingReward();
+        $reward = EntityFactory::createCrowfundingReward();
         $cm->addCFReward($cart, $reward);
 
         // when / then

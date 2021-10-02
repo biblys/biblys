@@ -4,7 +4,7 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 
 require_once "setUp.php";
 
@@ -156,7 +156,7 @@ class CollectionTest extends PHPUnit\Framework\TestCase
 
         $cm = new CollectionManager();
 
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $collection = $article->get("collection");
 
         $cm->delete($collection);
@@ -171,7 +171,7 @@ class CollectionTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CollectionManager();
         $am = new ArticleManager();
-        $article = Factory::createArticle(["collection_id" => $collection->get("id")]);
+        $article = EntityFactory::createArticle(["collection_id" => $collection->get("id")]);
         $am->delete($article);
 
         // when

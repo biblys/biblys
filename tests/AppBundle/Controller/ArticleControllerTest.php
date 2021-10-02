@@ -6,7 +6,7 @@
  */
 
 use AppBundle\Controller\ArticleController;
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -18,7 +18,7 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
     {
         // given
         $am = new ArticleManager();
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $controller = new ArticleController();
         $request = new Request();
         $request->request->set("article_publisher_stock", "     1   ");
@@ -42,7 +42,7 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
     public function testByIsbn()
     {
         // given
-        Factory::createArticle(["article_ean" => "9781234567895"]);
+        EntityFactory::createArticle(["article_ean" => "9781234567895"]);
         $controller = new ArticleController();
 
         $urlGenerator = $this->createMock(UrlGenerator::class);

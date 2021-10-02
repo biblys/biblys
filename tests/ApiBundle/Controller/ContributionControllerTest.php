@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Controller;
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Exception;
 use Framework\Exception\AuthException;
 use Model\Role;
@@ -21,14 +21,14 @@ class ContributionControllerTest extends TestCase
     public function testIndexAction()
     {
         // given
-        $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
-        $article = Factory::createArticle([], []);
+        $person = EntityFactory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
+        $article = EntityFactory::createArticle([], []);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setPeopleId($person->get("id"));
         $contribution->setJobId(1);
         $contribution->save();
-        $request = Factory::createAuthRequestForAdminUser();
+        $request = EntityFactory::createAuthRequestForAdminUser();
         $controller = new ContributionController();
 
         // when
@@ -77,13 +77,13 @@ class ContributionControllerTest extends TestCase
     public function testCreateAction()
     {
         // given
-        $article = Factory::createArticle();
-        $person = Factory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
+        $article = EntityFactory::createArticle();
+        $person = EntityFactory::createPeople(["people_first_name" => "Lili", "people_last_name" => "Raton"]);
         $content = json_encode([
             "people_id" => $person->get("id"),
             "job_id" => 14,
         ]);
-        $request = Factory::createAuthRequestForAdminUser($content);
+        $request = EntityFactory::createAuthRequestForAdminUser($content);
         $controller = new ContributionController();
 
         // when
@@ -142,9 +142,9 @@ class ContributionControllerTest extends TestCase
     public function testUpdateAction()
     {
         // given
-        $article = Factory::createArticle();
+        $article = EntityFactory::createArticle();
         $content = '{"job_id":"2"}';
-        $request = Factory::createAuthRequestForAdminUser($content);
+        $request = EntityFactory::createAuthRequestForAdminUser($content);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setJobId(1);
@@ -181,8 +181,8 @@ class ContributionControllerTest extends TestCase
     public function testDeleteAction()
     {
         // given
-        $article = Factory::createArticle();
-        $request = Factory::createAuthRequestForAdminUser();
+        $article = EntityFactory::createArticle();
+        $request = EntityFactory::createAuthRequestForAdminUser();
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setJobId(1);

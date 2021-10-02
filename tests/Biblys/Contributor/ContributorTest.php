@@ -2,7 +2,7 @@
 
 namespace Biblys\Contributor;
 
-use Biblys\Test\Factory;
+use Biblys\Test\EntityFactory;
 use Exception;
 use Model\PeopleQuery;
 use People;
@@ -38,7 +38,7 @@ class ContributorTest extends TestCase
     public function testGetRole()
     {
         // given
-        $entityPeople = Factory::createPeople(["people_gender" => "F"]);
+        $entityPeople = EntityFactory::createPeople(["people_gender" => "F"]);
         $contributor = new Contributor(
             PeopleQuery::create()->findPk($entityPeople->get("id")),
             Job::getById(3),
@@ -63,7 +63,7 @@ class ContributorTest extends TestCase
     public function testGetContributionId()
     {
         // given
-        $entityPeople = Factory::createPeople(["people_gender" => "F"]);
+        $entityPeople = EntityFactory::createPeople(["people_gender" => "F"]);
         $contributor = new Contributor(
             PeopleQuery::create()->findPk($entityPeople->get("id")),
             Job::getById(5),
@@ -88,7 +88,7 @@ class ContributorTest extends TestCase
     public function testLegacyGet()
     {
         // given
-        $entityPeople = Factory::createPeople([
+        $entityPeople = EntityFactory::createPeople([
             "people_first_name" => "Monsieur",
             "people_last_name" => "Poulpe",
         ]);
