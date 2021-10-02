@@ -119,13 +119,6 @@ abstract class Gallery implements ActiveRecordInterface
     protected $gallery_updated;
 
     /**
-     * The value for the gallery_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $gallery_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -486,28 +479,6 @@ abstract class Gallery implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [gallery_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeleted($format = null)
-    {
-        if ($format === null) {
-            return $this->gallery_deleted;
-        } else {
-            return $this->gallery_deleted instanceof \DateTimeInterface ? $this->gallery_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [gallery_id] column.
      *
      * @param int $v New value
@@ -668,26 +639,6 @@ abstract class Gallery implements ActiveRecordInterface
     } // setUpdated()
 
     /**
-     * Sets the value of [gallery_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Gallery The current object (for fluent API support)
-     */
-    public function setDeleted($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->gallery_deleted !== null || $dt !== null) {
-            if ($this->gallery_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->gallery_deleted->format("Y-m-d H:i:s.u")) {
-                $this->gallery_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[GalleryTableMap::COL_GALLERY_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeleted()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -758,12 +709,6 @@ abstract class Gallery implements ActiveRecordInterface
                 $col = null;
             }
             $this->gallery_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : GalleryTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->gallery_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -772,7 +717,7 @@ abstract class Gallery implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = GalleryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = GalleryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Gallery'), 0, $e);
@@ -1010,9 +955,6 @@ abstract class Gallery implements ActiveRecordInterface
         if ($this->isColumnModified(GalleryTableMap::COL_GALLERY_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'gallery_updated';
         }
-        if ($this->isColumnModified(GalleryTableMap::COL_GALLERY_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'gallery_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO galleries (%s) VALUES (%s)',
@@ -1047,9 +989,6 @@ abstract class Gallery implements ActiveRecordInterface
                         break;
                     case 'gallery_updated':
                         $stmt->bindValue($identifier, $this->gallery_updated ? $this->gallery_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'gallery_deleted':
-                        $stmt->bindValue($identifier, $this->gallery_deleted ? $this->gallery_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1137,9 +1076,6 @@ abstract class Gallery implements ActiveRecordInterface
             case 7:
                 return $this->getUpdated();
                 break;
-            case 8:
-                return $this->getDeleted();
-                break;
             default:
                 return null;
                 break;
@@ -1177,7 +1113,6 @@ abstract class Gallery implements ActiveRecordInterface
             $keys[5] => $this->getUpdate(),
             $keys[6] => $this->getCreated(),
             $keys[7] => $this->getUpdated(),
-            $keys[8] => $this->getDeleted(),
         );
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
@@ -1193,10 +1128,6 @@ abstract class Gallery implements ActiveRecordInterface
 
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[8]] instanceof \DateTimeInterface) {
-            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1261,9 +1192,6 @@ abstract class Gallery implements ActiveRecordInterface
             case 7:
                 $this->setUpdated($value);
                 break;
-            case 8:
-                $this->setDeleted($value);
-                break;
         } // switch()
 
         return $this;
@@ -1313,9 +1241,6 @@ abstract class Gallery implements ActiveRecordInterface
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setUpdated($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setDeleted($arr[$keys[8]]);
         }
 
         return $this;
@@ -1383,9 +1308,6 @@ abstract class Gallery implements ActiveRecordInterface
         }
         if ($this->isColumnModified(GalleryTableMap::COL_GALLERY_UPDATED)) {
             $criteria->add(GalleryTableMap::COL_GALLERY_UPDATED, $this->gallery_updated);
-        }
-        if ($this->isColumnModified(GalleryTableMap::COL_GALLERY_DELETED)) {
-            $criteria->add(GalleryTableMap::COL_GALLERY_DELETED, $this->gallery_deleted);
         }
 
         return $criteria;
@@ -1480,7 +1402,6 @@ abstract class Gallery implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreated($this->getCreated());
         $copyObj->setUpdated($this->getUpdated());
-        $copyObj->setDeleted($this->getDeleted());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1524,7 +1445,6 @@ abstract class Gallery implements ActiveRecordInterface
         $this->gallery_update = null;
         $this->gallery_created = null;
         $this->gallery_updated = null;
-        $this->gallery_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

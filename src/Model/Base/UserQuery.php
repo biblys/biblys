@@ -56,8 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByUpdate($order = Criteria::ASC) Order by the user_update column
  * @method     ChildUserQuery orderByCreatedAt($order = Criteria::ASC) Order by the user_created column
  * @method     ChildUserQuery orderByUpdatedAt($order = Criteria::ASC) Order by the user_updated column
- * @method     ChildUserQuery orderByDeletedAt($order = Criteria::ASC) Order by the user_deleted column
- * @method     ChildUserQuery orderByDeletedWhy($order = Criteria::ASC) Order by the user_deleted_why column
  *
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupByEmail() Group by the Email column
@@ -95,8 +93,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupByUpdate() Group by the user_update column
  * @method     ChildUserQuery groupByCreatedAt() Group by the user_created column
  * @method     ChildUserQuery groupByUpdatedAt() Group by the user_updated column
- * @method     ChildUserQuery groupByDeletedAt() Group by the user_deleted column
- * @method     ChildUserQuery groupByDeletedWhy() Group by the user_deleted_why column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -166,9 +162,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser|null findOneByPasswordResetTokenCreated(string $user_password_reset_token_created) Return the first ChildUser filtered by the user_password_reset_token_created column
  * @method     ChildUser|null findOneByUpdate(string $user_update) Return the first ChildUser filtered by the user_update column
  * @method     ChildUser|null findOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column
- * @method     ChildUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column
- * @method     ChildUser|null findOneByDeletedAt(string $user_deleted) Return the first ChildUser filtered by the user_deleted column
- * @method     ChildUser|null findOneByDeletedWhy(string $user_deleted_why) Return the first ChildUser filtered by the user_deleted_why column *
+ * @method     ChildUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -209,8 +203,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByUpdate(string $user_update) Return the first ChildUser filtered by the user_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByDeletedAt(string $user_deleted) Return the first ChildUser filtered by the user_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByDeletedWhy(string $user_deleted_why) Return the first ChildUser filtered by the user_deleted_why column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildUser> find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
@@ -286,10 +278,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
  * @method     ChildUser[]|ObjectCollection findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
- * @method     ChildUser[]|ObjectCollection findByDeletedAt(string $user_deleted) Return ChildUser objects filtered by the user_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDeletedAt(string $user_deleted) Return ChildUser objects filtered by the user_deleted column
- * @method     ChildUser[]|ObjectCollection findByDeletedWhy(string $user_deleted_why) Return ChildUser objects filtered by the user_deleted_why column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDeletedWhy(string $user_deleted_why) Return ChildUser objects filtered by the user_deleted_why column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -389,7 +377,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, Email, user_password, user_key, email_key, facebook_uid, user_screen_name, user_slug, user_wishlist_ship, user_top, user_biblio, adresse_ip, recaptcha_score, DateInscription, DateConnexion, publisher_id, bookshop_id, library_id, user_civilite, user_nom, user_prenom, user_adresse1, user_adresse2, user_codepostal, user_ville, user_pays, user_telephone, user_pref_articles_show, user_fb_id, user_fb_token, country_id, user_password_reset_token, user_password_reset_token_created, user_update, user_created, user_updated, user_deleted, user_deleted_why FROM users WHERE id = :p0';
+        $sql = 'SELECT id, Email, user_password, user_key, email_key, facebook_uid, user_screen_name, user_slug, user_wishlist_ship, user_top, user_biblio, adresse_ip, recaptcha_score, DateInscription, DateConnexion, publisher_id, bookshop_id, library_id, user_civilite, user_nom, user_prenom, user_adresse1, user_adresse2, user_codepostal, user_ville, user_pays, user_telephone, user_pref_articles_show, user_fb_id, user_fb_token, country_id, user_password_reset_token, user_password_reset_token_created, user_update, user_created, user_updated FROM users WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1619,74 +1607,6 @@ abstract class UserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the user_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE user_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE user_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE user_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_USER_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(UserTableMap::COL_USER_DELETED, $deletedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the user_deleted_why column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedWhy('fooValue');   // WHERE user_deleted_why = 'fooValue'
-     * $query->filterByDeletedWhy('%fooValue%', Criteria::LIKE); // WHERE user_deleted_why LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $deletedWhy The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByDeletedWhy($deletedWhy = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($deletedWhy)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(UserTableMap::COL_USER_DELETED_WHY, $deletedWhy, $comparison);
     }
 
     /**

@@ -58,7 +58,7 @@ class SigningTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class SigningTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the signing_id field
@@ -121,11 +121,6 @@ class SigningTableMap extends TableMap
     const COL_SIGNING_UPDATED = 'signings.signing_updated';
 
     /**
-     * the column name for the signing_deleted field
-     */
-    const COL_SIGNING_DELETED = 'signings.signing_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class SigningTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PeopleId', 'Date', 'Starts', 'Ends', 'Location', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'peopleId', 'date', 'starts', 'ends', 'location', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID, SigningTableMap::COL_SITE_ID, SigningTableMap::COL_PUBLISHER_ID, SigningTableMap::COL_PEOPLE_ID, SigningTableMap::COL_SIGNING_DATE, SigningTableMap::COL_SIGNING_STARTS, SigningTableMap::COL_SIGNING_ENDS, SigningTableMap::COL_SIGNING_LOCATION, SigningTableMap::COL_SIGNING_CREATED, SigningTableMap::COL_SIGNING_UPDATED, SigningTableMap::COL_SIGNING_DELETED, ),
-        self::TYPE_FIELDNAME     => array('signing_id', 'site_id', 'publisher_id', 'people_id', 'signing_date', 'signing_starts', 'signing_ends', 'signing_location', 'signing_created', 'signing_updated', 'signing_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PeopleId', 'Date', 'Starts', 'Ends', 'Location', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'peopleId', 'date', 'starts', 'ends', 'location', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID, SigningTableMap::COL_SITE_ID, SigningTableMap::COL_PUBLISHER_ID, SigningTableMap::COL_PEOPLE_ID, SigningTableMap::COL_SIGNING_DATE, SigningTableMap::COL_SIGNING_STARTS, SigningTableMap::COL_SIGNING_ENDS, SigningTableMap::COL_SIGNING_LOCATION, SigningTableMap::COL_SIGNING_CREATED, SigningTableMap::COL_SIGNING_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('signing_id', 'site_id', 'publisher_id', 'people_id', 'signing_date', 'signing_starts', 'signing_ends', 'signing_location', 'signing_created', 'signing_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class SigningTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PeopleId' => 3, 'Date' => 4, 'Starts' => 5, 'Ends' => 6, 'Location' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'peopleId' => 3, 'date' => 4, 'starts' => 5, 'ends' => 6, 'location' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID => 0, SigningTableMap::COL_SITE_ID => 1, SigningTableMap::COL_PUBLISHER_ID => 2, SigningTableMap::COL_PEOPLE_ID => 3, SigningTableMap::COL_SIGNING_DATE => 4, SigningTableMap::COL_SIGNING_STARTS => 5, SigningTableMap::COL_SIGNING_ENDS => 6, SigningTableMap::COL_SIGNING_LOCATION => 7, SigningTableMap::COL_SIGNING_CREATED => 8, SigningTableMap::COL_SIGNING_UPDATED => 9, SigningTableMap::COL_SIGNING_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('signing_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'people_id' => 3, 'signing_date' => 4, 'signing_starts' => 5, 'signing_ends' => 6, 'signing_location' => 7, 'signing_created' => 8, 'signing_updated' => 9, 'signing_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PeopleId' => 3, 'Date' => 4, 'Starts' => 5, 'Ends' => 6, 'Location' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'peopleId' => 3, 'date' => 4, 'starts' => 5, 'ends' => 6, 'location' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID => 0, SigningTableMap::COL_SITE_ID => 1, SigningTableMap::COL_PUBLISHER_ID => 2, SigningTableMap::COL_PEOPLE_ID => 3, SigningTableMap::COL_SIGNING_DATE => 4, SigningTableMap::COL_SIGNING_STARTS => 5, SigningTableMap::COL_SIGNING_ENDS => 6, SigningTableMap::COL_SIGNING_LOCATION => 7, SigningTableMap::COL_SIGNING_CREATED => 8, SigningTableMap::COL_SIGNING_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('signing_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'people_id' => 3, 'signing_date' => 4, 'signing_starts' => 5, 'signing_ends' => 6, 'signing_location' => 7, 'signing_created' => 8, 'signing_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class SigningTableMap extends TableMap
         'COL_SIGNING_UPDATED' => 'SIGNING_UPDATED',
         'signing_updated' => 'SIGNING_UPDATED',
         'signings.signing_updated' => 'SIGNING_UPDATED',
-        'DeletedAt' => 'SIGNING_DELETED',
-        'Signing.DeletedAt' => 'SIGNING_DELETED',
-        'deletedAt' => 'SIGNING_DELETED',
-        'signing.deletedAt' => 'SIGNING_DELETED',
-        'SigningTableMap::COL_SIGNING_DELETED' => 'SIGNING_DELETED',
-        'COL_SIGNING_DELETED' => 'SIGNING_DELETED',
-        'signing_deleted' => 'SIGNING_DELETED',
-        'signings.signing_deleted' => 'SIGNING_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class SigningTableMap extends TableMap
         $this->addColumn('signing_location', 'Location', 'VARCHAR', false, 255, null);
         $this->addColumn('signing_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('signing_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('signing_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class SigningTableMap extends TableMap
             $criteria->addSelectColumn(SigningTableMap::COL_SIGNING_LOCATION);
             $criteria->addSelectColumn(SigningTableMap::COL_SIGNING_CREATED);
             $criteria->addSelectColumn(SigningTableMap::COL_SIGNING_UPDATED);
-            $criteria->addSelectColumn(SigningTableMap::COL_SIGNING_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.signing_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -467,7 +452,6 @@ class SigningTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.signing_location');
             $criteria->addSelectColumn($alias . '.signing_created');
             $criteria->addSelectColumn($alias . '.signing_updated');
-            $criteria->addSelectColumn($alias . '.signing_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class SigningTableMap extends TableMap
             $criteria->removeSelectColumn(SigningTableMap::COL_SIGNING_LOCATION);
             $criteria->removeSelectColumn(SigningTableMap::COL_SIGNING_CREATED);
             $criteria->removeSelectColumn(SigningTableMap::COL_SIGNING_UPDATED);
-            $criteria->removeSelectColumn(SigningTableMap::COL_SIGNING_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.signing_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -507,7 +490,6 @@ class SigningTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.signing_location');
             $criteria->removeSelectColumn($alias . '.signing_created');
             $criteria->removeSelectColumn($alias . '.signing_updated');
-            $criteria->removeSelectColumn($alias . '.signing_deleted');
         }
     }
 

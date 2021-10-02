@@ -58,7 +58,7 @@ class PeopleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 24;
+    const NUM_COLUMNS = 23;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PeopleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 24;
+    const NUM_HYDRATE_COLUMNS = 23;
 
     /**
      * the column name for the people_id field
@@ -186,11 +186,6 @@ class PeopleTableMap extends TableMap
     const COL_PEOPLE_UPDATED = 'people.people_updated';
 
     /**
-     * the column name for the people_deleted field
-     */
-    const COL_PEOPLE_DELETED = 'people.people_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -202,11 +197,11 @@ class PeopleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'FirstName', 'LastName', 'Name', 'Alpha', 'UrlOld', 'Url', 'Pseudo', 'NoosfereId', 'Birth', 'Death', 'Gender', 'Nation', 'Bio', 'Site', 'Facebook', 'Twitter', 'Hits', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'firstName', 'lastName', 'name', 'alpha', 'urlOld', 'url', 'pseudo', 'noosfereId', 'birth', 'death', 'gender', 'nation', 'bio', 'site', 'facebook', 'twitter', 'hits', 'date', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID, PeopleTableMap::COL_PEOPLE_FIRST_NAME, PeopleTableMap::COL_PEOPLE_LAST_NAME, PeopleTableMap::COL_PEOPLE_NAME, PeopleTableMap::COL_PEOPLE_ALPHA, PeopleTableMap::COL_PEOPLE_URL_OLD, PeopleTableMap::COL_PEOPLE_URL, PeopleTableMap::COL_PEOPLE_PSEUDO, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, PeopleTableMap::COL_PEOPLE_BIRTH, PeopleTableMap::COL_PEOPLE_DEATH, PeopleTableMap::COL_PEOPLE_GENDER, PeopleTableMap::COL_PEOPLE_NATION, PeopleTableMap::COL_PEOPLE_BIO, PeopleTableMap::COL_PEOPLE_SITE, PeopleTableMap::COL_PEOPLE_FACEBOOK, PeopleTableMap::COL_PEOPLE_TWITTER, PeopleTableMap::COL_PEOPLE_HITS, PeopleTableMap::COL_PEOPLE_DATE, PeopleTableMap::COL_PEOPLE_INSERT, PeopleTableMap::COL_PEOPLE_UPDATE, PeopleTableMap::COL_PEOPLE_CREATED, PeopleTableMap::COL_PEOPLE_UPDATED, PeopleTableMap::COL_PEOPLE_DELETED, ),
-        self::TYPE_FIELDNAME     => array('people_id', 'people_first_name', 'people_last_name', 'people_name', 'people_alpha', 'people_url_old', 'people_url', 'people_pseudo', 'people_noosfere_id', 'people_birth', 'people_death', 'people_gender', 'people_nation', 'people_bio', 'people_site', 'people_facebook', 'people_twitter', 'people_hits', 'people_date', 'people_insert', 'people_update', 'people_created', 'people_updated', 'people_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        self::TYPE_PHPNAME       => array('Id', 'FirstName', 'LastName', 'Name', 'Alpha', 'UrlOld', 'Url', 'Pseudo', 'NoosfereId', 'Birth', 'Death', 'Gender', 'Nation', 'Bio', 'Site', 'Facebook', 'Twitter', 'Hits', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'firstName', 'lastName', 'name', 'alpha', 'urlOld', 'url', 'pseudo', 'noosfereId', 'birth', 'death', 'gender', 'nation', 'bio', 'site', 'facebook', 'twitter', 'hits', 'date', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID, PeopleTableMap::COL_PEOPLE_FIRST_NAME, PeopleTableMap::COL_PEOPLE_LAST_NAME, PeopleTableMap::COL_PEOPLE_NAME, PeopleTableMap::COL_PEOPLE_ALPHA, PeopleTableMap::COL_PEOPLE_URL_OLD, PeopleTableMap::COL_PEOPLE_URL, PeopleTableMap::COL_PEOPLE_PSEUDO, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, PeopleTableMap::COL_PEOPLE_BIRTH, PeopleTableMap::COL_PEOPLE_DEATH, PeopleTableMap::COL_PEOPLE_GENDER, PeopleTableMap::COL_PEOPLE_NATION, PeopleTableMap::COL_PEOPLE_BIO, PeopleTableMap::COL_PEOPLE_SITE, PeopleTableMap::COL_PEOPLE_FACEBOOK, PeopleTableMap::COL_PEOPLE_TWITTER, PeopleTableMap::COL_PEOPLE_HITS, PeopleTableMap::COL_PEOPLE_DATE, PeopleTableMap::COL_PEOPLE_INSERT, PeopleTableMap::COL_PEOPLE_UPDATE, PeopleTableMap::COL_PEOPLE_CREATED, PeopleTableMap::COL_PEOPLE_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('people_id', 'people_first_name', 'people_last_name', 'people_name', 'people_alpha', 'people_url_old', 'people_url', 'people_pseudo', 'people_noosfere_id', 'people_birth', 'people_death', 'people_gender', 'people_nation', 'people_bio', 'people_site', 'people_facebook', 'people_twitter', 'people_hits', 'people_date', 'people_insert', 'people_update', 'people_created', 'people_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -216,11 +211,11 @@ class PeopleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'FirstName' => 1, 'LastName' => 2, 'Name' => 3, 'Alpha' => 4, 'UrlOld' => 5, 'Url' => 6, 'Pseudo' => 7, 'NoosfereId' => 8, 'Birth' => 9, 'Death' => 10, 'Gender' => 11, 'Nation' => 12, 'Bio' => 13, 'Site' => 14, 'Facebook' => 15, 'Twitter' => 16, 'Hits' => 17, 'Date' => 18, 'Insert' => 19, 'Update' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, 'DeletedAt' => 23, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'firstName' => 1, 'lastName' => 2, 'name' => 3, 'alpha' => 4, 'urlOld' => 5, 'url' => 6, 'pseudo' => 7, 'noosfereId' => 8, 'birth' => 9, 'death' => 10, 'gender' => 11, 'nation' => 12, 'bio' => 13, 'site' => 14, 'facebook' => 15, 'twitter' => 16, 'hits' => 17, 'date' => 18, 'insert' => 19, 'update' => 20, 'createdAt' => 21, 'updatedAt' => 22, 'deletedAt' => 23, ),
-        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID => 0, PeopleTableMap::COL_PEOPLE_FIRST_NAME => 1, PeopleTableMap::COL_PEOPLE_LAST_NAME => 2, PeopleTableMap::COL_PEOPLE_NAME => 3, PeopleTableMap::COL_PEOPLE_ALPHA => 4, PeopleTableMap::COL_PEOPLE_URL_OLD => 5, PeopleTableMap::COL_PEOPLE_URL => 6, PeopleTableMap::COL_PEOPLE_PSEUDO => 7, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID => 8, PeopleTableMap::COL_PEOPLE_BIRTH => 9, PeopleTableMap::COL_PEOPLE_DEATH => 10, PeopleTableMap::COL_PEOPLE_GENDER => 11, PeopleTableMap::COL_PEOPLE_NATION => 12, PeopleTableMap::COL_PEOPLE_BIO => 13, PeopleTableMap::COL_PEOPLE_SITE => 14, PeopleTableMap::COL_PEOPLE_FACEBOOK => 15, PeopleTableMap::COL_PEOPLE_TWITTER => 16, PeopleTableMap::COL_PEOPLE_HITS => 17, PeopleTableMap::COL_PEOPLE_DATE => 18, PeopleTableMap::COL_PEOPLE_INSERT => 19, PeopleTableMap::COL_PEOPLE_UPDATE => 20, PeopleTableMap::COL_PEOPLE_CREATED => 21, PeopleTableMap::COL_PEOPLE_UPDATED => 22, PeopleTableMap::COL_PEOPLE_DELETED => 23, ),
-        self::TYPE_FIELDNAME     => array('people_id' => 0, 'people_first_name' => 1, 'people_last_name' => 2, 'people_name' => 3, 'people_alpha' => 4, 'people_url_old' => 5, 'people_url' => 6, 'people_pseudo' => 7, 'people_noosfere_id' => 8, 'people_birth' => 9, 'people_death' => 10, 'people_gender' => 11, 'people_nation' => 12, 'people_bio' => 13, 'people_site' => 14, 'people_facebook' => 15, 'people_twitter' => 16, 'people_hits' => 17, 'people_date' => 18, 'people_insert' => 19, 'people_update' => 20, 'people_created' => 21, 'people_updated' => 22, 'people_deleted' => 23, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'FirstName' => 1, 'LastName' => 2, 'Name' => 3, 'Alpha' => 4, 'UrlOld' => 5, 'Url' => 6, 'Pseudo' => 7, 'NoosfereId' => 8, 'Birth' => 9, 'Death' => 10, 'Gender' => 11, 'Nation' => 12, 'Bio' => 13, 'Site' => 14, 'Facebook' => 15, 'Twitter' => 16, 'Hits' => 17, 'Date' => 18, 'Insert' => 19, 'Update' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'firstName' => 1, 'lastName' => 2, 'name' => 3, 'alpha' => 4, 'urlOld' => 5, 'url' => 6, 'pseudo' => 7, 'noosfereId' => 8, 'birth' => 9, 'death' => 10, 'gender' => 11, 'nation' => 12, 'bio' => 13, 'site' => 14, 'facebook' => 15, 'twitter' => 16, 'hits' => 17, 'date' => 18, 'insert' => 19, 'update' => 20, 'createdAt' => 21, 'updatedAt' => 22, ),
+        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID => 0, PeopleTableMap::COL_PEOPLE_FIRST_NAME => 1, PeopleTableMap::COL_PEOPLE_LAST_NAME => 2, PeopleTableMap::COL_PEOPLE_NAME => 3, PeopleTableMap::COL_PEOPLE_ALPHA => 4, PeopleTableMap::COL_PEOPLE_URL_OLD => 5, PeopleTableMap::COL_PEOPLE_URL => 6, PeopleTableMap::COL_PEOPLE_PSEUDO => 7, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID => 8, PeopleTableMap::COL_PEOPLE_BIRTH => 9, PeopleTableMap::COL_PEOPLE_DEATH => 10, PeopleTableMap::COL_PEOPLE_GENDER => 11, PeopleTableMap::COL_PEOPLE_NATION => 12, PeopleTableMap::COL_PEOPLE_BIO => 13, PeopleTableMap::COL_PEOPLE_SITE => 14, PeopleTableMap::COL_PEOPLE_FACEBOOK => 15, PeopleTableMap::COL_PEOPLE_TWITTER => 16, PeopleTableMap::COL_PEOPLE_HITS => 17, PeopleTableMap::COL_PEOPLE_DATE => 18, PeopleTableMap::COL_PEOPLE_INSERT => 19, PeopleTableMap::COL_PEOPLE_UPDATE => 20, PeopleTableMap::COL_PEOPLE_CREATED => 21, PeopleTableMap::COL_PEOPLE_UPDATED => 22, ),
+        self::TYPE_FIELDNAME     => array('people_id' => 0, 'people_first_name' => 1, 'people_last_name' => 2, 'people_name' => 3, 'people_alpha' => 4, 'people_url_old' => 5, 'people_url' => 6, 'people_pseudo' => 7, 'people_noosfere_id' => 8, 'people_birth' => 9, 'people_death' => 10, 'people_gender' => 11, 'people_nation' => 12, 'people_bio' => 13, 'people_site' => 14, 'people_facebook' => 15, 'people_twitter' => 16, 'people_hits' => 17, 'people_date' => 18, 'people_insert' => 19, 'people_update' => 20, 'people_created' => 21, 'people_updated' => 22, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -413,14 +408,6 @@ class PeopleTableMap extends TableMap
         'COL_PEOPLE_UPDATED' => 'PEOPLE_UPDATED',
         'people_updated' => 'PEOPLE_UPDATED',
         'people.people_updated' => 'PEOPLE_UPDATED',
-        'DeletedAt' => 'PEOPLE_DELETED',
-        'People.DeletedAt' => 'PEOPLE_DELETED',
-        'deletedAt' => 'PEOPLE_DELETED',
-        'people.deletedAt' => 'PEOPLE_DELETED',
-        'PeopleTableMap::COL_PEOPLE_DELETED' => 'PEOPLE_DELETED',
-        'COL_PEOPLE_DELETED' => 'PEOPLE_DELETED',
-        'people_deleted' => 'PEOPLE_DELETED',
-        'people.people_deleted' => 'PEOPLE_DELETED',
     ];
 
     /**
@@ -463,7 +450,6 @@ class PeopleTableMap extends TableMap
         $this->addColumn('people_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('people_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('people_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('people_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -657,7 +643,6 @@ class PeopleTableMap extends TableMap
             $criteria->addSelectColumn(PeopleTableMap::COL_PEOPLE_UPDATE);
             $criteria->addSelectColumn(PeopleTableMap::COL_PEOPLE_CREATED);
             $criteria->addSelectColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
-            $criteria->addSelectColumn(PeopleTableMap::COL_PEOPLE_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.people_id');
             $criteria->addSelectColumn($alias . '.people_first_name');
@@ -682,7 +667,6 @@ class PeopleTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.people_update');
             $criteria->addSelectColumn($alias . '.people_created');
             $criteria->addSelectColumn($alias . '.people_updated');
-            $criteria->addSelectColumn($alias . '.people_deleted');
         }
     }
 
@@ -723,7 +707,6 @@ class PeopleTableMap extends TableMap
             $criteria->removeSelectColumn(PeopleTableMap::COL_PEOPLE_UPDATE);
             $criteria->removeSelectColumn(PeopleTableMap::COL_PEOPLE_CREATED);
             $criteria->removeSelectColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
-            $criteria->removeSelectColumn(PeopleTableMap::COL_PEOPLE_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.people_id');
             $criteria->removeSelectColumn($alias . '.people_first_name');
@@ -748,7 +731,6 @@ class PeopleTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.people_update');
             $criteria->removeSelectColumn($alias . '.people_created');
             $criteria->removeSelectColumn($alias . '.people_updated');
-            $criteria->removeSelectColumn($alias . '.people_deleted');
         }
     }
 

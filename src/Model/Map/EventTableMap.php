@@ -58,7 +58,7 @@ class EventTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 21;
+    const NUM_COLUMNS = 20;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class EventTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 21;
+    const NUM_HYDRATE_COLUMNS = 20;
 
     /**
      * the column name for the event_id field
@@ -171,11 +171,6 @@ class EventTableMap extends TableMap
     const COL_EVENT_UPDATED = 'events.event_updated';
 
     /**
-     * the column name for the event_deleted field
-     */
-    const COL_EVENT_DELETED = 'events.event_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -187,11 +182,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_BOOKSHOP_ID, EventTableMap::COL_LIBRARY_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, EventTableMap::COL_EVENT_DELETED, ),
-        self::TYPE_FIELDNAME     => array('event_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', 'event_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_BOOKSHOP_ID, EventTableMap::COL_LIBRARY_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('event_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
     /**
@@ -201,11 +196,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'BookshopId' => 3, 'LibraryId' => 4, 'Url' => 5, 'Title' => 6, 'Subtitle' => 7, 'Desc' => 8, 'Location' => 9, 'IllustrationLegend' => 10, 'Highlighted' => 11, 'Start' => 12, 'End' => 13, 'Date' => 14, 'Status' => 15, 'Insert' => 16, 'Update' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, 'DeletedAt' => 20, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'bookshopId' => 3, 'libraryId' => 4, 'url' => 5, 'title' => 6, 'subtitle' => 7, 'desc' => 8, 'location' => 9, 'illustrationLegend' => 10, 'highlighted' => 11, 'start' => 12, 'end' => 13, 'date' => 14, 'status' => 15, 'insert' => 16, 'update' => 17, 'createdAt' => 18, 'updatedAt' => 19, 'deletedAt' => 20, ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_BOOKSHOP_ID => 3, EventTableMap::COL_LIBRARY_ID => 4, EventTableMap::COL_EVENT_URL => 5, EventTableMap::COL_EVENT_TITLE => 6, EventTableMap::COL_EVENT_SUBTITLE => 7, EventTableMap::COL_EVENT_DESC => 8, EventTableMap::COL_EVENT_LOCATION => 9, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 10, EventTableMap::COL_EVENT_HIGHLIGHTED => 11, EventTableMap::COL_EVENT_START => 12, EventTableMap::COL_EVENT_END => 13, EventTableMap::COL_EVENT_DATE => 14, EventTableMap::COL_EVENT_STATUS => 15, EventTableMap::COL_EVENT_INSERT_ => 16, EventTableMap::COL_EVENT_UPDATE_ => 17, EventTableMap::COL_EVENT_CREATED => 18, EventTableMap::COL_EVENT_UPDATED => 19, EventTableMap::COL_EVENT_DELETED => 20, ),
-        self::TYPE_FIELDNAME     => array('event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'bookshop_id' => 3, 'library_id' => 4, 'event_url' => 5, 'event_title' => 6, 'event_subtitle' => 7, 'event_desc' => 8, 'event_location' => 9, 'event_illustration_legend' => 10, 'event_highlighted' => 11, 'event_start' => 12, 'event_end' => 13, 'event_date' => 14, 'event_status' => 15, 'event_insert_' => 16, 'event_update_' => 17, 'event_created' => 18, 'event_updated' => 19, 'event_deleted' => 20, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'BookshopId' => 3, 'LibraryId' => 4, 'Url' => 5, 'Title' => 6, 'Subtitle' => 7, 'Desc' => 8, 'Location' => 9, 'IllustrationLegend' => 10, 'Highlighted' => 11, 'Start' => 12, 'End' => 13, 'Date' => 14, 'Status' => 15, 'Insert' => 16, 'Update' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'bookshopId' => 3, 'libraryId' => 4, 'url' => 5, 'title' => 6, 'subtitle' => 7, 'desc' => 8, 'location' => 9, 'illustrationLegend' => 10, 'highlighted' => 11, 'start' => 12, 'end' => 13, 'date' => 14, 'status' => 15, 'insert' => 16, 'update' => 17, 'createdAt' => 18, 'updatedAt' => 19, ),
+        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_BOOKSHOP_ID => 3, EventTableMap::COL_LIBRARY_ID => 4, EventTableMap::COL_EVENT_URL => 5, EventTableMap::COL_EVENT_TITLE => 6, EventTableMap::COL_EVENT_SUBTITLE => 7, EventTableMap::COL_EVENT_DESC => 8, EventTableMap::COL_EVENT_LOCATION => 9, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 10, EventTableMap::COL_EVENT_HIGHLIGHTED => 11, EventTableMap::COL_EVENT_START => 12, EventTableMap::COL_EVENT_END => 13, EventTableMap::COL_EVENT_DATE => 14, EventTableMap::COL_EVENT_STATUS => 15, EventTableMap::COL_EVENT_INSERT_ => 16, EventTableMap::COL_EVENT_UPDATE_ => 17, EventTableMap::COL_EVENT_CREATED => 18, EventTableMap::COL_EVENT_UPDATED => 19, ),
+        self::TYPE_FIELDNAME     => array('event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'bookshop_id' => 3, 'library_id' => 4, 'event_url' => 5, 'event_title' => 6, 'event_subtitle' => 7, 'event_desc' => 8, 'event_location' => 9, 'event_illustration_legend' => 10, 'event_highlighted' => 11, 'event_start' => 12, 'event_end' => 13, 'event_date' => 14, 'event_status' => 15, 'event_insert_' => 16, 'event_update_' => 17, 'event_created' => 18, 'event_updated' => 19, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
     );
 
     /**
@@ -374,14 +369,6 @@ class EventTableMap extends TableMap
         'COL_EVENT_UPDATED' => 'EVENT_UPDATED',
         'event_updated' => 'EVENT_UPDATED',
         'events.event_updated' => 'EVENT_UPDATED',
-        'DeletedAt' => 'EVENT_DELETED',
-        'Event.DeletedAt' => 'EVENT_DELETED',
-        'deletedAt' => 'EVENT_DELETED',
-        'event.deletedAt' => 'EVENT_DELETED',
-        'EventTableMap::COL_EVENT_DELETED' => 'EVENT_DELETED',
-        'COL_EVENT_DELETED' => 'EVENT_DELETED',
-        'event_deleted' => 'EVENT_DELETED',
-        'events.event_deleted' => 'EVENT_DELETED',
     ];
 
     /**
@@ -421,7 +408,6 @@ class EventTableMap extends TableMap
         $this->addColumn('event_update_', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('event_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('event_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('event_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -605,7 +591,6 @@ class EventTableMap extends TableMap
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_UPDATE_);
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_CREATED);
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_UPDATED);
-            $criteria->addSelectColumn(EventTableMap::COL_EVENT_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.event_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -627,7 +612,6 @@ class EventTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.event_update_');
             $criteria->addSelectColumn($alias . '.event_created');
             $criteria->addSelectColumn($alias . '.event_updated');
-            $criteria->addSelectColumn($alias . '.event_deleted');
         }
     }
 
@@ -665,7 +649,6 @@ class EventTableMap extends TableMap
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_UPDATE_);
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_CREATED);
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_UPDATED);
-            $criteria->removeSelectColumn(EventTableMap::COL_EVENT_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.event_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -687,7 +670,6 @@ class EventTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.event_update_');
             $criteria->removeSelectColumn($alias . '.event_created');
             $criteria->removeSelectColumn($alias . '.event_updated');
-            $criteria->removeSelectColumn($alias . '.event_deleted');
         }
     }
 

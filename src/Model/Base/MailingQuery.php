@@ -27,7 +27,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailingQuery orderByDate($order = Criteria::ASC) Order by the mailing_date column
  * @method     ChildMailingQuery orderByCreatedAt($order = Criteria::ASC) Order by the mailing_created column
  * @method     ChildMailingQuery orderByUpdatedAt($order = Criteria::ASC) Order by the mailing_updated column
- * @method     ChildMailingQuery orderByDeletedAt($order = Criteria::ASC) Order by the mailing_deleted column
  *
  * @method     ChildMailingQuery groupById() Group by the mailing_id column
  * @method     ChildMailingQuery groupBySiteId() Group by the site_id column
@@ -37,7 +36,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailingQuery groupByDate() Group by the mailing_date column
  * @method     ChildMailingQuery groupByCreatedAt() Group by the mailing_created column
  * @method     ChildMailingQuery groupByUpdatedAt() Group by the mailing_updated column
- * @method     ChildMailingQuery groupByDeletedAt() Group by the mailing_deleted column
  *
  * @method     ChildMailingQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMailingQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,8 +55,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing|null findOneByChecked(boolean $mailing_checked) Return the first ChildMailing filtered by the mailing_checked column
  * @method     ChildMailing|null findOneByDate(string $mailing_date) Return the first ChildMailing filtered by the mailing_date column
  * @method     ChildMailing|null findOneByCreatedAt(string $mailing_created) Return the first ChildMailing filtered by the mailing_created column
- * @method     ChildMailing|null findOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column
- * @method     ChildMailing|null findOneByDeletedAt(string $mailing_deleted) Return the first ChildMailing filtered by the mailing_deleted column *
+ * @method     ChildMailing|null findOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column *
 
  * @method     ChildMailing requirePk($key, ConnectionInterface $con = null) Return the ChildMailing by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOne(ConnectionInterface $con = null) Return the first ChildMailing matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -71,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing requireOneByDate(string $mailing_date) Return the first ChildMailing filtered by the mailing_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOneByCreatedAt(string $mailing_created) Return the first ChildMailing filtered by the mailing_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMailing requireOneByDeletedAt(string $mailing_deleted) Return the first ChildMailing filtered by the mailing_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMailing[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildMailing> find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
@@ -91,8 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
  * @method     ChildMailing[]|ObjectCollection findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
- * @method     ChildMailing[]|ObjectCollection findByDeletedAt(string $mailing_deleted) Return ChildMailing objects filtered by the mailing_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByDeletedAt(string $mailing_deleted) Return ChildMailing objects filtered by the mailing_deleted column
  * @method     ChildMailing[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMailing> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -192,7 +186,7 @@ abstract class MailingQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT mailing_id, site_id, mailing_email, mailing_block, mailing_checked, mailing_date, mailing_created, mailing_updated, mailing_deleted FROM mailing WHERE mailing_id = :p0';
+        $sql = 'SELECT mailing_id, site_id, mailing_email, mailing_block, mailing_checked, mailing_date, mailing_created, mailing_updated FROM mailing WHERE mailing_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -570,49 +564,6 @@ abstract class MailingQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MailingTableMap::COL_MAILING_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the mailing_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE mailing_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE mailing_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE mailing_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(MailingTableMap::COL_MAILING_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(MailingTableMap::COL_MAILING_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_DELETED, $deletedAt, $comparison);
     }
 
     /**

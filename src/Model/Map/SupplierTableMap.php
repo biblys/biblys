@@ -58,7 +58,7 @@ class SupplierTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class SupplierTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the supplier_id field
@@ -126,11 +126,6 @@ class SupplierTableMap extends TableMap
     const COL_SUPPLIER_UPDATED = 'suppliers.supplier_updated';
 
     /**
-     * the column name for the supplier_deleted field
-     */
-    const COL_SUPPLIER_DELETED = 'suppliers.supplier_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -142,11 +137,11 @@ class SupplierTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Gln', 'Remise', 'Notva', 'OnOrder', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'gln', 'remise', 'notva', 'onOrder', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID, SupplierTableMap::COL_SITE_ID, SupplierTableMap::COL_SUPPLIER_NAME, SupplierTableMap::COL_SUPPLIER_GLN, SupplierTableMap::COL_SUPPLIER_REMISE, SupplierTableMap::COL_SUPPLIER_NOTVA, SupplierTableMap::COL_SUPPLIER_ON_ORDER, SupplierTableMap::COL_SUPPLIER_INSERT, SupplierTableMap::COL_SUPPLIER_UPDATE, SupplierTableMap::COL_SUPPLIER_CREATED, SupplierTableMap::COL_SUPPLIER_UPDATED, SupplierTableMap::COL_SUPPLIER_DELETED, ),
-        self::TYPE_FIELDNAME     => array('supplier_id', 'site_id', 'supplier_name', 'supplier_gln', 'supplier_remise', 'supplier_notva', 'supplier_on_order', 'supplier_insert', 'supplier_update', 'supplier_created', 'supplier_updated', 'supplier_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Gln', 'Remise', 'Notva', 'OnOrder', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'gln', 'remise', 'notva', 'onOrder', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID, SupplierTableMap::COL_SITE_ID, SupplierTableMap::COL_SUPPLIER_NAME, SupplierTableMap::COL_SUPPLIER_GLN, SupplierTableMap::COL_SUPPLIER_REMISE, SupplierTableMap::COL_SUPPLIER_NOTVA, SupplierTableMap::COL_SUPPLIER_ON_ORDER, SupplierTableMap::COL_SUPPLIER_INSERT, SupplierTableMap::COL_SUPPLIER_UPDATE, SupplierTableMap::COL_SUPPLIER_CREATED, SupplierTableMap::COL_SUPPLIER_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('supplier_id', 'site_id', 'supplier_name', 'supplier_gln', 'supplier_remise', 'supplier_notva', 'supplier_on_order', 'supplier_insert', 'supplier_update', 'supplier_created', 'supplier_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -156,11 +151,11 @@ class SupplierTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Gln' => 3, 'Remise' => 4, 'Notva' => 5, 'OnOrder' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, 'DeletedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'gln' => 3, 'remise' => 4, 'notva' => 5, 'onOrder' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, 'deletedAt' => 11, ),
-        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID => 0, SupplierTableMap::COL_SITE_ID => 1, SupplierTableMap::COL_SUPPLIER_NAME => 2, SupplierTableMap::COL_SUPPLIER_GLN => 3, SupplierTableMap::COL_SUPPLIER_REMISE => 4, SupplierTableMap::COL_SUPPLIER_NOTVA => 5, SupplierTableMap::COL_SUPPLIER_ON_ORDER => 6, SupplierTableMap::COL_SUPPLIER_INSERT => 7, SupplierTableMap::COL_SUPPLIER_UPDATE => 8, SupplierTableMap::COL_SUPPLIER_CREATED => 9, SupplierTableMap::COL_SUPPLIER_UPDATED => 10, SupplierTableMap::COL_SUPPLIER_DELETED => 11, ),
-        self::TYPE_FIELDNAME     => array('supplier_id' => 0, 'site_id' => 1, 'supplier_name' => 2, 'supplier_gln' => 3, 'supplier_remise' => 4, 'supplier_notva' => 5, 'supplier_on_order' => 6, 'supplier_insert' => 7, 'supplier_update' => 8, 'supplier_created' => 9, 'supplier_updated' => 10, 'supplier_deleted' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Gln' => 3, 'Remise' => 4, 'Notva' => 5, 'OnOrder' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'gln' => 3, 'remise' => 4, 'notva' => 5, 'onOrder' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID => 0, SupplierTableMap::COL_SITE_ID => 1, SupplierTableMap::COL_SUPPLIER_NAME => 2, SupplierTableMap::COL_SUPPLIER_GLN => 3, SupplierTableMap::COL_SUPPLIER_REMISE => 4, SupplierTableMap::COL_SUPPLIER_NOTVA => 5, SupplierTableMap::COL_SUPPLIER_ON_ORDER => 6, SupplierTableMap::COL_SUPPLIER_INSERT => 7, SupplierTableMap::COL_SUPPLIER_UPDATE => 8, SupplierTableMap::COL_SUPPLIER_CREATED => 9, SupplierTableMap::COL_SUPPLIER_UPDATED => 10, ),
+        self::TYPE_FIELDNAME     => array('supplier_id' => 0, 'site_id' => 1, 'supplier_name' => 2, 'supplier_gln' => 3, 'supplier_remise' => 4, 'supplier_notva' => 5, 'supplier_on_order' => 6, 'supplier_insert' => 7, 'supplier_update' => 8, 'supplier_created' => 9, 'supplier_updated' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -257,14 +252,6 @@ class SupplierTableMap extends TableMap
         'COL_SUPPLIER_UPDATED' => 'SUPPLIER_UPDATED',
         'supplier_updated' => 'SUPPLIER_UPDATED',
         'suppliers.supplier_updated' => 'SUPPLIER_UPDATED',
-        'DeletedAt' => 'SUPPLIER_DELETED',
-        'Supplier.DeletedAt' => 'SUPPLIER_DELETED',
-        'deletedAt' => 'SUPPLIER_DELETED',
-        'supplier.deletedAt' => 'SUPPLIER_DELETED',
-        'SupplierTableMap::COL_SUPPLIER_DELETED' => 'SUPPLIER_DELETED',
-        'COL_SUPPLIER_DELETED' => 'SUPPLIER_DELETED',
-        'supplier_deleted' => 'SUPPLIER_DELETED',
-        'suppliers.supplier_deleted' => 'SUPPLIER_DELETED',
     ];
 
     /**
@@ -295,7 +282,6 @@ class SupplierTableMap extends TableMap
         $this->addColumn('supplier_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('supplier_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('supplier_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('supplier_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -470,7 +456,6 @@ class SupplierTableMap extends TableMap
             $criteria->addSelectColumn(SupplierTableMap::COL_SUPPLIER_UPDATE);
             $criteria->addSelectColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
             $criteria->addSelectColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
-            $criteria->addSelectColumn(SupplierTableMap::COL_SUPPLIER_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.supplier_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -483,7 +468,6 @@ class SupplierTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.supplier_update');
             $criteria->addSelectColumn($alias . '.supplier_created');
             $criteria->addSelectColumn($alias . '.supplier_updated');
-            $criteria->addSelectColumn($alias . '.supplier_deleted');
         }
     }
 
@@ -512,7 +496,6 @@ class SupplierTableMap extends TableMap
             $criteria->removeSelectColumn(SupplierTableMap::COL_SUPPLIER_UPDATE);
             $criteria->removeSelectColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
             $criteria->removeSelectColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
-            $criteria->removeSelectColumn(SupplierTableMap::COL_SUPPLIER_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.supplier_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -525,7 +508,6 @@ class SupplierTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.supplier_update');
             $criteria->removeSelectColumn($alias . '.supplier_created');
             $criteria->removeSelectColumn($alias . '.supplier_updated');
-            $criteria->removeSelectColumn($alias . '.supplier_deleted');
         }
     }
 

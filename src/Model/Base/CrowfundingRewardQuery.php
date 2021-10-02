@@ -32,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowfundingRewardQuery orderByBackers($order = Criteria::ASC) Order by the reward_backers column
  * @method     ChildCrowfundingRewardQuery orderByCreatedAt($order = Criteria::ASC) Order by the reward_created column
  * @method     ChildCrowfundingRewardQuery orderByUpdatedAt($order = Criteria::ASC) Order by the reward_updated column
- * @method     ChildCrowfundingRewardQuery orderByDeletedAt($order = Criteria::ASC) Order by the reward_deleted column
  *
  * @method     ChildCrowfundingRewardQuery groupById() Group by the reward_id column
  * @method     ChildCrowfundingRewardQuery groupBySiteId() Group by the site_id column
@@ -47,7 +46,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowfundingRewardQuery groupByBackers() Group by the reward_backers column
  * @method     ChildCrowfundingRewardQuery groupByCreatedAt() Group by the reward_created column
  * @method     ChildCrowfundingRewardQuery groupByUpdatedAt() Group by the reward_updated column
- * @method     ChildCrowfundingRewardQuery groupByDeletedAt() Group by the reward_deleted column
  *
  * @method     ChildCrowfundingRewardQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCrowfundingRewardQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -72,8 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowfundingReward|null findOneByQuantity(int $reward_quantity) Return the first ChildCrowfundingReward filtered by the reward_quantity column
  * @method     ChildCrowfundingReward|null findOneByBackers(int $reward_backers) Return the first ChildCrowfundingReward filtered by the reward_backers column
  * @method     ChildCrowfundingReward|null findOneByCreatedAt(string $reward_created) Return the first ChildCrowfundingReward filtered by the reward_created column
- * @method     ChildCrowfundingReward|null findOneByUpdatedAt(string $reward_updated) Return the first ChildCrowfundingReward filtered by the reward_updated column
- * @method     ChildCrowfundingReward|null findOneByDeletedAt(string $reward_deleted) Return the first ChildCrowfundingReward filtered by the reward_deleted column *
+ * @method     ChildCrowfundingReward|null findOneByUpdatedAt(string $reward_updated) Return the first ChildCrowfundingReward filtered by the reward_updated column *
 
  * @method     ChildCrowfundingReward requirePk($key, ConnectionInterface $con = null) Return the ChildCrowfundingReward by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowfundingReward requireOne(ConnectionInterface $con = null) Return the first ChildCrowfundingReward matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -91,7 +88,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowfundingReward requireOneByBackers(int $reward_backers) Return the first ChildCrowfundingReward filtered by the reward_backers column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowfundingReward requireOneByCreatedAt(string $reward_created) Return the first ChildCrowfundingReward filtered by the reward_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowfundingReward requireOneByUpdatedAt(string $reward_updated) Return the first ChildCrowfundingReward filtered by the reward_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCrowfundingReward requireOneByDeletedAt(string $reward_deleted) Return the first ChildCrowfundingReward filtered by the reward_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCrowfundingReward[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCrowfundingReward objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> find(ConnectionInterface $con = null) Return ChildCrowfundingReward objects based on current ModelCriteria
@@ -121,8 +117,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByCreatedAt(string $reward_created) Return ChildCrowfundingReward objects filtered by the reward_created column
  * @method     ChildCrowfundingReward[]|ObjectCollection findByUpdatedAt(string $reward_updated) Return ChildCrowfundingReward objects filtered by the reward_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByUpdatedAt(string $reward_updated) Return ChildCrowfundingReward objects filtered by the reward_updated column
- * @method     ChildCrowfundingReward[]|ObjectCollection findByDeletedAt(string $reward_deleted) Return ChildCrowfundingReward objects filtered by the reward_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowfundingReward> findByDeletedAt(string $reward_deleted) Return ChildCrowfundingReward objects filtered by the reward_deleted column
  * @method     ChildCrowfundingReward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowfundingReward> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -222,7 +216,7 @@ abstract class CrowfundingRewardQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT reward_id, site_id, campaign_id, reward_content, reward_articles, reward_price, reward_limited, reward_highlighted, reward_image, reward_quantity, reward_backers, reward_created, reward_updated, reward_deleted FROM cf_rewards WHERE reward_id = :p0';
+        $sql = 'SELECT reward_id, site_id, campaign_id, reward_content, reward_articles, reward_price, reward_limited, reward_highlighted, reward_image, reward_quantity, reward_backers, reward_created, reward_updated FROM cf_rewards WHERE reward_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -771,49 +765,6 @@ abstract class CrowfundingRewardQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CrowfundingRewardTableMap::COL_REWARD_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the reward_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE reward_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE reward_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE reward_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCrowfundingRewardQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CrowfundingRewardTableMap::COL_REWARD_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CrowfundingRewardTableMap::COL_REWARD_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CrowfundingRewardTableMap::COL_REWARD_DELETED, $deletedAt, $comparison);
     }
 
     /**

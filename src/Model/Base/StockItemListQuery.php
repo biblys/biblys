@@ -26,7 +26,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemListQuery orderByUrl($order = Criteria::ASC) Order by the list_url column
  * @method     ChildStockItemListQuery orderByCreatedAt($order = Criteria::ASC) Order by the list_created column
  * @method     ChildStockItemListQuery orderByUpdatedAt($order = Criteria::ASC) Order by the list_updated column
- * @method     ChildStockItemListQuery orderByDeletedAt($order = Criteria::ASC) Order by the list_deleted column
  *
  * @method     ChildStockItemListQuery groupById() Group by the list_id column
  * @method     ChildStockItemListQuery groupByUserId() Group by the user_id column
@@ -35,7 +34,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemListQuery groupByUrl() Group by the list_url column
  * @method     ChildStockItemListQuery groupByCreatedAt() Group by the list_created column
  * @method     ChildStockItemListQuery groupByUpdatedAt() Group by the list_updated column
- * @method     ChildStockItemListQuery groupByDeletedAt() Group by the list_deleted column
  *
  * @method     ChildStockItemListQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildStockItemListQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -54,8 +52,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemList|null findOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column
  * @method     ChildStockItemList|null findOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column
  * @method     ChildStockItemList|null findOneByCreatedAt(string $list_created) Return the first ChildStockItemList filtered by the list_created column
- * @method     ChildStockItemList|null findOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column
- * @method     ChildStockItemList|null findOneByDeletedAt(string $list_deleted) Return the first ChildStockItemList filtered by the list_deleted column *
+ * @method     ChildStockItemList|null findOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column *
 
  * @method     ChildStockItemList requirePk($key, ConnectionInterface $con = null) Return the ChildStockItemList by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOne(ConnectionInterface $con = null) Return the first ChildStockItemList matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -67,7 +64,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemList requireOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOneByCreatedAt(string $list_created) Return the first ChildStockItemList filtered by the list_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildStockItemList requireOneByDeletedAt(string $list_deleted) Return the first ChildStockItemList filtered by the list_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStockItemList[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> find(ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
@@ -85,8 +81,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByCreatedAt(string $list_created) Return ChildStockItemList objects filtered by the list_created column
  * @method     ChildStockItemList[]|ObjectCollection findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
- * @method     ChildStockItemList[]|ObjectCollection findByDeletedAt(string $list_deleted) Return ChildStockItemList objects filtered by the list_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildStockItemList> findByDeletedAt(string $list_deleted) Return ChildStockItemList objects filtered by the list_deleted column
  * @method     ChildStockItemList[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStockItemList> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -186,7 +180,7 @@ abstract class StockItemListQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT list_id, user_id, site_id, list_title, list_url, list_created, list_updated, list_deleted FROM lists WHERE list_id = :p0';
+        $sql = 'SELECT list_id, user_id, site_id, list_title, list_url, list_created, list_updated FROM lists WHERE list_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -533,49 +527,6 @@ abstract class StockItemListQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(StockItemListTableMap::COL_LIST_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the list_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE list_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE list_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE list_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildStockItemListQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(StockItemListTableMap::COL_LIST_DELETED, $deletedAt, $comparison);
     }
 
     /**

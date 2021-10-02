@@ -58,7 +58,7 @@ class CrowfundingRewardTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CrowfundingRewardTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the reward_id field
@@ -136,11 +136,6 @@ class CrowfundingRewardTableMap extends TableMap
     const COL_REWARD_UPDATED = 'cf_rewards.reward_updated';
 
     /**
-     * the column name for the reward_deleted field
-     */
-    const COL_REWARD_DELETED = 'cf_rewards.reward_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -152,11 +147,11 @@ class CrowfundingRewardTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'CampaignId', 'Content', 'Articles', 'Price', 'Limited', 'Highlighted', 'Image', 'Quantity', 'Backers', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'campaignId', 'content', 'articles', 'price', 'limited', 'highlighted', 'image', 'quantity', 'backers', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CrowfundingRewardTableMap::COL_REWARD_ID, CrowfundingRewardTableMap::COL_SITE_ID, CrowfundingRewardTableMap::COL_CAMPAIGN_ID, CrowfundingRewardTableMap::COL_REWARD_CONTENT, CrowfundingRewardTableMap::COL_REWARD_ARTICLES, CrowfundingRewardTableMap::COL_REWARD_PRICE, CrowfundingRewardTableMap::COL_REWARD_LIMITED, CrowfundingRewardTableMap::COL_REWARD_HIGHLIGHTED, CrowfundingRewardTableMap::COL_REWARD_IMAGE, CrowfundingRewardTableMap::COL_REWARD_QUANTITY, CrowfundingRewardTableMap::COL_REWARD_BACKERS, CrowfundingRewardTableMap::COL_REWARD_CREATED, CrowfundingRewardTableMap::COL_REWARD_UPDATED, CrowfundingRewardTableMap::COL_REWARD_DELETED, ),
-        self::TYPE_FIELDNAME     => array('reward_id', 'site_id', 'campaign_id', 'reward_content', 'reward_articles', 'reward_price', 'reward_limited', 'reward_highlighted', 'reward_image', 'reward_quantity', 'reward_backers', 'reward_created', 'reward_updated', 'reward_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'CampaignId', 'Content', 'Articles', 'Price', 'Limited', 'Highlighted', 'Image', 'Quantity', 'Backers', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'campaignId', 'content', 'articles', 'price', 'limited', 'highlighted', 'image', 'quantity', 'backers', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CrowfundingRewardTableMap::COL_REWARD_ID, CrowfundingRewardTableMap::COL_SITE_ID, CrowfundingRewardTableMap::COL_CAMPAIGN_ID, CrowfundingRewardTableMap::COL_REWARD_CONTENT, CrowfundingRewardTableMap::COL_REWARD_ARTICLES, CrowfundingRewardTableMap::COL_REWARD_PRICE, CrowfundingRewardTableMap::COL_REWARD_LIMITED, CrowfundingRewardTableMap::COL_REWARD_HIGHLIGHTED, CrowfundingRewardTableMap::COL_REWARD_IMAGE, CrowfundingRewardTableMap::COL_REWARD_QUANTITY, CrowfundingRewardTableMap::COL_REWARD_BACKERS, CrowfundingRewardTableMap::COL_REWARD_CREATED, CrowfundingRewardTableMap::COL_REWARD_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('reward_id', 'site_id', 'campaign_id', 'reward_content', 'reward_articles', 'reward_price', 'reward_limited', 'reward_highlighted', 'reward_image', 'reward_quantity', 'reward_backers', 'reward_created', 'reward_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -166,11 +161,11 @@ class CrowfundingRewardTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'CampaignId' => 2, 'Content' => 3, 'Articles' => 4, 'Price' => 5, 'Limited' => 6, 'Highlighted' => 7, 'Image' => 8, 'Quantity' => 9, 'Backers' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, 'DeletedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'campaignId' => 2, 'content' => 3, 'articles' => 4, 'price' => 5, 'limited' => 6, 'highlighted' => 7, 'image' => 8, 'quantity' => 9, 'backers' => 10, 'createdAt' => 11, 'updatedAt' => 12, 'deletedAt' => 13, ),
-        self::TYPE_COLNAME       => array(CrowfundingRewardTableMap::COL_REWARD_ID => 0, CrowfundingRewardTableMap::COL_SITE_ID => 1, CrowfundingRewardTableMap::COL_CAMPAIGN_ID => 2, CrowfundingRewardTableMap::COL_REWARD_CONTENT => 3, CrowfundingRewardTableMap::COL_REWARD_ARTICLES => 4, CrowfundingRewardTableMap::COL_REWARD_PRICE => 5, CrowfundingRewardTableMap::COL_REWARD_LIMITED => 6, CrowfundingRewardTableMap::COL_REWARD_HIGHLIGHTED => 7, CrowfundingRewardTableMap::COL_REWARD_IMAGE => 8, CrowfundingRewardTableMap::COL_REWARD_QUANTITY => 9, CrowfundingRewardTableMap::COL_REWARD_BACKERS => 10, CrowfundingRewardTableMap::COL_REWARD_CREATED => 11, CrowfundingRewardTableMap::COL_REWARD_UPDATED => 12, CrowfundingRewardTableMap::COL_REWARD_DELETED => 13, ),
-        self::TYPE_FIELDNAME     => array('reward_id' => 0, 'site_id' => 1, 'campaign_id' => 2, 'reward_content' => 3, 'reward_articles' => 4, 'reward_price' => 5, 'reward_limited' => 6, 'reward_highlighted' => 7, 'reward_image' => 8, 'reward_quantity' => 9, 'reward_backers' => 10, 'reward_created' => 11, 'reward_updated' => 12, 'reward_deleted' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'CampaignId' => 2, 'Content' => 3, 'Articles' => 4, 'Price' => 5, 'Limited' => 6, 'Highlighted' => 7, 'Image' => 8, 'Quantity' => 9, 'Backers' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'campaignId' => 2, 'content' => 3, 'articles' => 4, 'price' => 5, 'limited' => 6, 'highlighted' => 7, 'image' => 8, 'quantity' => 9, 'backers' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
+        self::TYPE_COLNAME       => array(CrowfundingRewardTableMap::COL_REWARD_ID => 0, CrowfundingRewardTableMap::COL_SITE_ID => 1, CrowfundingRewardTableMap::COL_CAMPAIGN_ID => 2, CrowfundingRewardTableMap::COL_REWARD_CONTENT => 3, CrowfundingRewardTableMap::COL_REWARD_ARTICLES => 4, CrowfundingRewardTableMap::COL_REWARD_PRICE => 5, CrowfundingRewardTableMap::COL_REWARD_LIMITED => 6, CrowfundingRewardTableMap::COL_REWARD_HIGHLIGHTED => 7, CrowfundingRewardTableMap::COL_REWARD_IMAGE => 8, CrowfundingRewardTableMap::COL_REWARD_QUANTITY => 9, CrowfundingRewardTableMap::COL_REWARD_BACKERS => 10, CrowfundingRewardTableMap::COL_REWARD_CREATED => 11, CrowfundingRewardTableMap::COL_REWARD_UPDATED => 12, ),
+        self::TYPE_FIELDNAME     => array('reward_id' => 0, 'site_id' => 1, 'campaign_id' => 2, 'reward_content' => 3, 'reward_articles' => 4, 'reward_price' => 5, 'reward_limited' => 6, 'reward_highlighted' => 7, 'reward_image' => 8, 'reward_quantity' => 9, 'reward_backers' => 10, 'reward_created' => 11, 'reward_updated' => 12, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -283,14 +278,6 @@ class CrowfundingRewardTableMap extends TableMap
         'COL_REWARD_UPDATED' => 'REWARD_UPDATED',
         'reward_updated' => 'REWARD_UPDATED',
         'cf_rewards.reward_updated' => 'REWARD_UPDATED',
-        'DeletedAt' => 'REWARD_DELETED',
-        'CrowfundingReward.DeletedAt' => 'REWARD_DELETED',
-        'deletedAt' => 'REWARD_DELETED',
-        'crowfundingReward.deletedAt' => 'REWARD_DELETED',
-        'CrowfundingRewardTableMap::COL_REWARD_DELETED' => 'REWARD_DELETED',
-        'COL_REWARD_DELETED' => 'REWARD_DELETED',
-        'reward_deleted' => 'REWARD_DELETED',
-        'cf_rewards.reward_deleted' => 'REWARD_DELETED',
     ];
 
     /**
@@ -323,7 +310,6 @@ class CrowfundingRewardTableMap extends TableMap
         $this->addColumn('reward_backers', 'Backers', 'INTEGER', false, 10, 0);
         $this->addColumn('reward_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('reward_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('reward_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -500,7 +486,6 @@ class CrowfundingRewardTableMap extends TableMap
             $criteria->addSelectColumn(CrowfundingRewardTableMap::COL_REWARD_BACKERS);
             $criteria->addSelectColumn(CrowfundingRewardTableMap::COL_REWARD_CREATED);
             $criteria->addSelectColumn(CrowfundingRewardTableMap::COL_REWARD_UPDATED);
-            $criteria->addSelectColumn(CrowfundingRewardTableMap::COL_REWARD_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.reward_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -515,7 +500,6 @@ class CrowfundingRewardTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.reward_backers');
             $criteria->addSelectColumn($alias . '.reward_created');
             $criteria->addSelectColumn($alias . '.reward_updated');
-            $criteria->addSelectColumn($alias . '.reward_deleted');
         }
     }
 
@@ -546,7 +530,6 @@ class CrowfundingRewardTableMap extends TableMap
             $criteria->removeSelectColumn(CrowfundingRewardTableMap::COL_REWARD_BACKERS);
             $criteria->removeSelectColumn(CrowfundingRewardTableMap::COL_REWARD_CREATED);
             $criteria->removeSelectColumn(CrowfundingRewardTableMap::COL_REWARD_UPDATED);
-            $criteria->removeSelectColumn(CrowfundingRewardTableMap::COL_REWARD_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.reward_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -561,7 +544,6 @@ class CrowfundingRewardTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.reward_backers');
             $criteria->removeSelectColumn($alias . '.reward_created');
             $criteria->removeSelectColumn($alias . '.reward_updated');
-            $criteria->removeSelectColumn($alias . '.reward_deleted');
         }
     }
 

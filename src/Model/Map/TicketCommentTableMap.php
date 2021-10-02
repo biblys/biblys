@@ -58,7 +58,7 @@ class TicketCommentTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class TicketCommentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the ticket_comment_id field
@@ -101,11 +101,6 @@ class TicketCommentTableMap extends TableMap
     const COL_TICKET_COMMENT_UPDATE = 'ticket_comment.ticket_comment_update';
 
     /**
-     * the column name for the ticket_comment_deleted field
-     */
-    const COL_TICKET_COMMENT_DELETED = 'ticket_comment.ticket_comment_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -117,11 +112,11 @@ class TicketCommentTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'TicketId', 'UserId', 'Content', 'CreatedAt', 'Update', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'ticketId', 'userId', 'content', 'createdAt', 'update', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(TicketCommentTableMap::COL_TICKET_COMMENT_ID, TicketCommentTableMap::COL_TICKET_ID, TicketCommentTableMap::COL_USER_ID, TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT, TicketCommentTableMap::COL_TICKET_COMMENT_CREATED, TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE, TicketCommentTableMap::COL_TICKET_COMMENT_DELETED, ),
-        self::TYPE_FIELDNAME     => array('ticket_comment_id', 'ticket_id', 'user_id', 'ticket_comment_content', 'ticket_comment_created', 'ticket_comment_update', 'ticket_comment_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'TicketId', 'UserId', 'Content', 'CreatedAt', 'Update', ),
+        self::TYPE_CAMELNAME     => array('id', 'ticketId', 'userId', 'content', 'createdAt', 'update', ),
+        self::TYPE_COLNAME       => array(TicketCommentTableMap::COL_TICKET_COMMENT_ID, TicketCommentTableMap::COL_TICKET_ID, TicketCommentTableMap::COL_USER_ID, TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT, TicketCommentTableMap::COL_TICKET_COMMENT_CREATED, TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE, ),
+        self::TYPE_FIELDNAME     => array('ticket_comment_id', 'ticket_id', 'user_id', 'ticket_comment_content', 'ticket_comment_created', 'ticket_comment_update', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -131,11 +126,11 @@ class TicketCommentTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'TicketId' => 1, 'UserId' => 2, 'Content' => 3, 'CreatedAt' => 4, 'Update' => 5, 'DeletedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'ticketId' => 1, 'userId' => 2, 'content' => 3, 'createdAt' => 4, 'update' => 5, 'deletedAt' => 6, ),
-        self::TYPE_COLNAME       => array(TicketCommentTableMap::COL_TICKET_COMMENT_ID => 0, TicketCommentTableMap::COL_TICKET_ID => 1, TicketCommentTableMap::COL_USER_ID => 2, TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT => 3, TicketCommentTableMap::COL_TICKET_COMMENT_CREATED => 4, TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE => 5, TicketCommentTableMap::COL_TICKET_COMMENT_DELETED => 6, ),
-        self::TYPE_FIELDNAME     => array('ticket_comment_id' => 0, 'ticket_id' => 1, 'user_id' => 2, 'ticket_comment_content' => 3, 'ticket_comment_created' => 4, 'ticket_comment_update' => 5, 'ticket_comment_deleted' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'TicketId' => 1, 'UserId' => 2, 'Content' => 3, 'CreatedAt' => 4, 'Update' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'ticketId' => 1, 'userId' => 2, 'content' => 3, 'createdAt' => 4, 'update' => 5, ),
+        self::TYPE_COLNAME       => array(TicketCommentTableMap::COL_TICKET_COMMENT_ID => 0, TicketCommentTableMap::COL_TICKET_ID => 1, TicketCommentTableMap::COL_USER_ID => 2, TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT => 3, TicketCommentTableMap::COL_TICKET_COMMENT_CREATED => 4, TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE => 5, ),
+        self::TYPE_FIELDNAME     => array('ticket_comment_id' => 0, 'ticket_id' => 1, 'user_id' => 2, 'ticket_comment_content' => 3, 'ticket_comment_created' => 4, 'ticket_comment_update' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -192,14 +187,6 @@ class TicketCommentTableMap extends TableMap
         'COL_TICKET_COMMENT_UPDATE' => 'TICKET_COMMENT_UPDATE',
         'ticket_comment_update' => 'TICKET_COMMENT_UPDATE',
         'ticket_comment.ticket_comment_update' => 'TICKET_COMMENT_UPDATE',
-        'DeletedAt' => 'TICKET_COMMENT_DELETED',
-        'TicketComment.DeletedAt' => 'TICKET_COMMENT_DELETED',
-        'deletedAt' => 'TICKET_COMMENT_DELETED',
-        'ticketComment.deletedAt' => 'TICKET_COMMENT_DELETED',
-        'TicketCommentTableMap::COL_TICKET_COMMENT_DELETED' => 'TICKET_COMMENT_DELETED',
-        'COL_TICKET_COMMENT_DELETED' => 'TICKET_COMMENT_DELETED',
-        'ticket_comment_deleted' => 'TICKET_COMMENT_DELETED',
-        'ticket_comment.ticket_comment_deleted' => 'TICKET_COMMENT_DELETED',
     ];
 
     /**
@@ -225,7 +212,6 @@ class TicketCommentTableMap extends TableMap
         $this->addColumn('ticket_comment_content', 'Content', 'LONGVARCHAR', false, null, null);
         $this->addColumn('ticket_comment_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ticket_comment_update', 'Update', 'TIMESTAMP', false, null, null);
-        $this->addColumn('ticket_comment_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -395,7 +381,6 @@ class TicketCommentTableMap extends TableMap
             $criteria->addSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT);
             $criteria->addSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_CREATED);
             $criteria->addSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE);
-            $criteria->addSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.ticket_comment_id');
             $criteria->addSelectColumn($alias . '.ticket_id');
@@ -403,7 +388,6 @@ class TicketCommentTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ticket_comment_content');
             $criteria->addSelectColumn($alias . '.ticket_comment_created');
             $criteria->addSelectColumn($alias . '.ticket_comment_update');
-            $criteria->addSelectColumn($alias . '.ticket_comment_deleted');
         }
     }
 
@@ -427,7 +411,6 @@ class TicketCommentTableMap extends TableMap
             $criteria->removeSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_CONTENT);
             $criteria->removeSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_CREATED);
             $criteria->removeSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE);
-            $criteria->removeSelectColumn(TicketCommentTableMap::COL_TICKET_COMMENT_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.ticket_comment_id');
             $criteria->removeSelectColumn($alias . '.ticket_id');
@@ -435,7 +418,6 @@ class TicketCommentTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.ticket_comment_content');
             $criteria->removeSelectColumn($alias . '.ticket_comment_created');
             $criteria->removeSelectColumn($alias . '.ticket_comment_update');
-            $criteria->removeSelectColumn($alias . '.ticket_comment_deleted');
         }
     }
 

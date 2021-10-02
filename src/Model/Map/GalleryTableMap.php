@@ -58,7 +58,7 @@ class GalleryTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class GalleryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the gallery_id field
@@ -111,11 +111,6 @@ class GalleryTableMap extends TableMap
     const COL_GALLERY_UPDATED = 'galleries.gallery_updated';
 
     /**
-     * the column name for the gallery_deleted field
-     */
-    const COL_GALLERY_DELETED = 'galleries.gallery_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -127,11 +122,11 @@ class GalleryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Title', 'MediaDir', 'Insert', 'Update', 'Created', 'Updated', 'Deleted', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'title', 'mediaDir', 'insert', 'update', 'created', 'updated', 'deleted', ),
-        self::TYPE_COLNAME       => array(GalleryTableMap::COL_GALLERY_ID, GalleryTableMap::COL_SITE_ID, GalleryTableMap::COL_GALLERY_TITLE, GalleryTableMap::COL_MEDIA_DIR, GalleryTableMap::COL_GALLERY_INSERT, GalleryTableMap::COL_GALLERY_UPDATE, GalleryTableMap::COL_GALLERY_CREATED, GalleryTableMap::COL_GALLERY_UPDATED, GalleryTableMap::COL_GALLERY_DELETED, ),
-        self::TYPE_FIELDNAME     => array('gallery_id', 'site_id', 'gallery_title', 'media_dir', 'gallery_insert', 'gallery_update', 'gallery_created', 'gallery_updated', 'gallery_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Title', 'MediaDir', 'Insert', 'Update', 'Created', 'Updated', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'title', 'mediaDir', 'insert', 'update', 'created', 'updated', ),
+        self::TYPE_COLNAME       => array(GalleryTableMap::COL_GALLERY_ID, GalleryTableMap::COL_SITE_ID, GalleryTableMap::COL_GALLERY_TITLE, GalleryTableMap::COL_MEDIA_DIR, GalleryTableMap::COL_GALLERY_INSERT, GalleryTableMap::COL_GALLERY_UPDATE, GalleryTableMap::COL_GALLERY_CREATED, GalleryTableMap::COL_GALLERY_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('gallery_id', 'site_id', 'gallery_title', 'media_dir', 'gallery_insert', 'gallery_update', 'gallery_created', 'gallery_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -141,11 +136,11 @@ class GalleryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Title' => 2, 'MediaDir' => 3, 'Insert' => 4, 'Update' => 5, 'Created' => 6, 'Updated' => 7, 'Deleted' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'title' => 2, 'mediaDir' => 3, 'insert' => 4, 'update' => 5, 'created' => 6, 'updated' => 7, 'deleted' => 8, ),
-        self::TYPE_COLNAME       => array(GalleryTableMap::COL_GALLERY_ID => 0, GalleryTableMap::COL_SITE_ID => 1, GalleryTableMap::COL_GALLERY_TITLE => 2, GalleryTableMap::COL_MEDIA_DIR => 3, GalleryTableMap::COL_GALLERY_INSERT => 4, GalleryTableMap::COL_GALLERY_UPDATE => 5, GalleryTableMap::COL_GALLERY_CREATED => 6, GalleryTableMap::COL_GALLERY_UPDATED => 7, GalleryTableMap::COL_GALLERY_DELETED => 8, ),
-        self::TYPE_FIELDNAME     => array('gallery_id' => 0, 'site_id' => 1, 'gallery_title' => 2, 'media_dir' => 3, 'gallery_insert' => 4, 'gallery_update' => 5, 'gallery_created' => 6, 'gallery_updated' => 7, 'gallery_deleted' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Title' => 2, 'MediaDir' => 3, 'Insert' => 4, 'Update' => 5, 'Created' => 6, 'Updated' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'title' => 2, 'mediaDir' => 3, 'insert' => 4, 'update' => 5, 'created' => 6, 'updated' => 7, ),
+        self::TYPE_COLNAME       => array(GalleryTableMap::COL_GALLERY_ID => 0, GalleryTableMap::COL_SITE_ID => 1, GalleryTableMap::COL_GALLERY_TITLE => 2, GalleryTableMap::COL_MEDIA_DIR => 3, GalleryTableMap::COL_GALLERY_INSERT => 4, GalleryTableMap::COL_GALLERY_UPDATE => 5, GalleryTableMap::COL_GALLERY_CREATED => 6, GalleryTableMap::COL_GALLERY_UPDATED => 7, ),
+        self::TYPE_FIELDNAME     => array('gallery_id' => 0, 'site_id' => 1, 'gallery_title' => 2, 'media_dir' => 3, 'gallery_insert' => 4, 'gallery_update' => 5, 'gallery_created' => 6, 'gallery_updated' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -218,14 +213,6 @@ class GalleryTableMap extends TableMap
         'COL_GALLERY_UPDATED' => 'GALLERY_UPDATED',
         'gallery_updated' => 'GALLERY_UPDATED',
         'galleries.gallery_updated' => 'GALLERY_UPDATED',
-        'Deleted' => 'GALLERY_DELETED',
-        'Gallery.Deleted' => 'GALLERY_DELETED',
-        'deleted' => 'GALLERY_DELETED',
-        'gallery.deleted' => 'GALLERY_DELETED',
-        'GalleryTableMap::COL_GALLERY_DELETED' => 'GALLERY_DELETED',
-        'COL_GALLERY_DELETED' => 'GALLERY_DELETED',
-        'gallery_deleted' => 'GALLERY_DELETED',
-        'galleries.gallery_deleted' => 'GALLERY_DELETED',
     ];
 
     /**
@@ -253,7 +240,6 @@ class GalleryTableMap extends TableMap
         $this->addColumn('gallery_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('gallery_created', 'Created', 'TIMESTAMP', false, null, null);
         $this->addColumn('gallery_updated', 'Updated', 'TIMESTAMP', false, null, null);
-        $this->addColumn('gallery_deleted', 'Deleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -425,7 +411,6 @@ class GalleryTableMap extends TableMap
             $criteria->addSelectColumn(GalleryTableMap::COL_GALLERY_UPDATE);
             $criteria->addSelectColumn(GalleryTableMap::COL_GALLERY_CREATED);
             $criteria->addSelectColumn(GalleryTableMap::COL_GALLERY_UPDATED);
-            $criteria->addSelectColumn(GalleryTableMap::COL_GALLERY_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.gallery_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -435,7 +420,6 @@ class GalleryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.gallery_update');
             $criteria->addSelectColumn($alias . '.gallery_created');
             $criteria->addSelectColumn($alias . '.gallery_updated');
-            $criteria->addSelectColumn($alias . '.gallery_deleted');
         }
     }
 
@@ -461,7 +445,6 @@ class GalleryTableMap extends TableMap
             $criteria->removeSelectColumn(GalleryTableMap::COL_GALLERY_UPDATE);
             $criteria->removeSelectColumn(GalleryTableMap::COL_GALLERY_CREATED);
             $criteria->removeSelectColumn(GalleryTableMap::COL_GALLERY_UPDATED);
-            $criteria->removeSelectColumn(GalleryTableMap::COL_GALLERY_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.gallery_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -471,7 +454,6 @@ class GalleryTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.gallery_update');
             $criteria->removeSelectColumn($alias . '.gallery_created');
             $criteria->removeSelectColumn($alias . '.gallery_updated');
-            $criteria->removeSelectColumn($alias . '.gallery_deleted');
         }
     }
 

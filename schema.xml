@@ -11,7 +11,6 @@
     <column name="alert_update" phpName="Update" type="TIMESTAMP"/>
     <column name="alert_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="alert_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="alert_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="alert_created" />
       <parameter name="update_column" value="alert_updated" />
@@ -93,7 +92,6 @@
     <column name="article_update" phpName="Update" type="TIMESTAMP"/>
     <column name="article_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="article_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="article_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <column name="article_done" phpName="Done" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="article_to_check" phpName="ToCheck" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="article_pushed_to_data" phpName="PushedToData" type="TIMESTAMP"/>
@@ -140,7 +138,6 @@
     <column name="award_date" phpName="Date" type="TIMESTAMP"/>
     <column name="award_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="award_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="award_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="award_created" />
       <parameter name="update_column" value="award_updated" />
@@ -173,7 +170,6 @@
     <column name="bookshop_desc" phpName="Desc" type="LONGVARCHAR"/>
     <column name="bookshop_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
     <column name="bookshop_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="bookshop_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="bookshop_created" />
       <parameter name="update_column" value="bookshop_updated" />
@@ -204,7 +200,6 @@
     <column name="cart_update" phpName="Update" type="TIMESTAMP"/>
     <column name="cart_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="cart_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="cart_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="cart_created" />
       <parameter name="update_column" value="cart_updated" />
@@ -225,7 +220,6 @@
     <column name="category_update" phpName="Update" type="TIMESTAMP"/>
     <column name="category_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="category_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="category_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="category_created" />
       <parameter name="update_column" value="category_updated" />
@@ -248,7 +242,6 @@
     <column name="campaign_ends" phpName="Ends" type="DATE"/>
     <column name="campaign_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="campaign_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="campaign_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="campaign_created" />
       <parameter name="update_column" value="campaign_updated" />
@@ -274,7 +267,6 @@
     <column name="reward_backers" phpName="Backers" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
     <column name="reward_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="reward_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="reward_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="reward_created" />
       <parameter name="update_column" value="reward_updated" />
@@ -302,7 +294,6 @@
     <column name="collection_duplicate" phpName="Duplicate" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="collection_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="collection_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="collection_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="collection_created" />
       <parameter name="update_column" value="collection_updated" />
@@ -325,7 +316,6 @@
     <column name="shipping_zone" phpName="ShippingZone" type="VARCHAR" size="8"/>
     <column name="country_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="country_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="country_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="country_created" />
       <parameter name="update_column" value="country_updated" />
@@ -369,7 +359,6 @@
     <column name="cron_job_message" phpName="Message" type="VARCHAR" size="256"/>
     <column name="cron_job_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="cron_job_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="cron_job_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="cron_job_created" />
       <parameter name="update_column" value="cron_job_updated" />
@@ -393,7 +382,6 @@
     <column name="customer_update" phpName="Update" type="TIMESTAMP"/>
     <column name="customer_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="customer_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="customer_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="customer_created" />
       <parameter name="update_column" value="customer_updated" />
@@ -417,7 +405,6 @@
     <column name="cycle_update" phpName="Update" type="TIMESTAMP"/>
     <column name="cycle_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="cycle_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="cycle_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="cycle_created" />
       <parameter name="update_column" value="cycle_updated" />
@@ -441,7 +428,6 @@
     <column name="download_date" phpName="Date" type="TIMESTAMP"/>
     <column name="download_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="download_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="download_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="download_created" />
       <parameter name="update_column" value="download_updated" />
@@ -471,7 +457,6 @@
     <column name="event_update_" phpName="Update" type="TIMESTAMP"/>
     <column name="event_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="event_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="event_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="event_created" />
       <parameter name="update_column" value="event_updated" />
@@ -479,7 +464,6 @@
     <unique name="url">
       <unique-column name="site_id"/>
       <unique-column name="event_url"/>
-      <unique-column name="event_deleted"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
@@ -499,7 +483,6 @@
     <column name="file_inserted" phpName="Inserted" type="TIMESTAMP"/>
     <column name="file_uploaded" phpName="Uploaded" type="TIMESTAMP"/>
     <column name="file_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="file_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <column name="file_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="file_created" />
@@ -524,7 +507,6 @@
     <column name="gallery_update" phpName="Update" type="TIMESTAMP"/>
     <column name="gallery_created" phpName="Created" type="TIMESTAMP"/>
     <column name="gallery_updated" phpName="Updated" type="TIMESTAMP"/>
-    <column name="gallery_deleted" phpName="Deleted" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="gallery_created" />
       <parameter name="update_column" value="gallery_updated" />
@@ -546,7 +528,6 @@
     <column name="image_inserted" phpName="Inserted" type="TIMESTAMP"/>
     <column name="image_uploaded" phpName="Uploaded" type="TIMESTAMP"/>
     <column name="image_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="image_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="image_inserted" />
       <parameter name="update_column" value="image_updated" />
@@ -561,7 +542,6 @@
     <column name="inventory_title" phpName="Title" type="VARCHAR" size="32"/>
     <column name="inventory_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="inventory_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="inventory_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="inventory_created" />
       <parameter name="update_column" value="inventory_updated" />
@@ -578,7 +558,6 @@
     <column name="ii_stock" phpName="Stock" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="ii_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="ii_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="ii_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="ii_created" />
       <parameter name="update_column" value="ii_updated" />
@@ -601,7 +580,6 @@
     <column name="job_date" phpName="Date" type="TIMESTAMP" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
     <column name="job_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="job_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="job_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="job_created" />
       <parameter name="update_column" value="job_updated" />
@@ -619,7 +597,6 @@
     <column name="lang_name_original" phpName="NameOriginal" type="VARCHAR" size="35"/>
     <column name="lang_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="lang_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="lang_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="lang_created" />
       <parameter name="update_column" value="lang_updated" />
@@ -650,7 +627,6 @@
     <column name="library_desc" phpName="Desc" type="LONGVARCHAR"/>
     <column name="library_created" phpName="CreatedAt" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
     <column name="library_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="library_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="library_created" />
       <parameter name="update_column" value="library_updated" />
@@ -687,7 +663,6 @@
     <column name="link_date" phpName="Date" type="TIMESTAMP"/>
     <column name="link_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="link_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="link_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="link_created" />
       <parameter name="update_column" value="link_updated" />
@@ -723,7 +698,6 @@
       <unique-column name="site_id"/>
       <unique-column name="article_id"/>
       <unique-column name="link_do_not_reorder"/>
-      <unique-column name="link_deleted"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -737,7 +711,6 @@
     <column name="list_url" phpName="Url" type="VARCHAR" size="256"/>
     <column name="list_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="list_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="list_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="list_created" />
       <parameter name="update_column" value="list_updated" />
@@ -755,7 +728,6 @@
     <column name="mailing_date" phpName="Date" type="TIMESTAMP"/>
     <column name="mailing_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="mailing_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="mailing_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="mailing_created" />
       <parameter name="update_column" value="mailing_updated" />
@@ -783,7 +755,6 @@
     <column name="media_update" phpName="Update" type="TIMESTAMP"/>
     <column name="media_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="media_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="media_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="media_created" />
       <parameter name="update_column" value="media_updated" />
@@ -800,7 +771,6 @@
     <column name="option_value" phpName="Value" type="VARCHAR" size="2048"/>
     <column name="option_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="option_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="option_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="option_created" />
       <parameter name="update_column" value="option_updated" />
@@ -860,7 +830,6 @@
     <column name="order_update" phpName="Update" type="TIMESTAMP"/>
     <column name="order_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="order_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="order_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="order_created" />
       <parameter name="update_column" value="order_updated" />
@@ -886,7 +855,6 @@
     <column name="page_update" phpName="Update" type="TIMESTAMP"/>
     <column name="page_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="page_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="page_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="page_created" />
       <parameter name="update_column" value="page_updated" />
@@ -906,7 +874,6 @@
     <column name="payment_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="payment_executed" phpName="Executed" type="TIMESTAMP"/>
     <column name="payment_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="payment_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="payment_created" />
       <parameter name="update_column" value="payment_updated" />
@@ -939,7 +906,6 @@
     <column name="people_update" phpName="Update" type="TIMESTAMP"/>
     <column name="people_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="people_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="people_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="people_created" />
       <parameter name="update_column" value="people_updated" />
@@ -989,7 +955,6 @@
     <column name="post_update" phpName="Update" type="TIMESTAMP"/>
     <column name="post_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="post_updated" phpName="UpdatedAt" type="DATE"/>
-    <column name="post_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="post_created" />
       <parameter name="update_column" value="post_updated" />
@@ -1005,7 +970,6 @@
     <column name="price_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="price_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="price_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="price_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="price_created" />
       <parameter name="update_column" value="price_updated" />
@@ -1053,7 +1017,6 @@
     <column name="publisher_update" phpName="Update" type="TIMESTAMP"/>
     <column name="publisher_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="publisher_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="publisher_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="publisher_created" />
       <parameter name="update_column" value="publisher_updated" />
@@ -1080,7 +1043,6 @@
     <column name="rayon_show_upcoming" phpName="ShowUpcoming" type="BOOLEAN" size="1" sqlType="tinyint(1) unsigned" defaultValue="false"/>
     <column name="rayon_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="rayon_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="rayon_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="rayon_created" />
       <parameter name="update_column" value="rayon_updated" />
@@ -1098,7 +1060,6 @@
     <column name="redirection_date" phpName="Date" type="TIMESTAMP"/>
     <column name="redirection_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="redirection_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="redirection_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="redirection_created" />
       <parameter name="update_column" value="redirection_updated" />
@@ -1125,7 +1086,6 @@
     <column name="right_current" phpName="Current" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="right_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="right_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="right_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="right_created" />
       <parameter name="update_column" value="right_updated" />
@@ -1153,7 +1113,6 @@
     <column name="role_date" phpName="Date" type="TIMESTAMP"/>
     <column name="role_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="role_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="role_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="role_created" />
       <parameter name="update_column" value="role_updated" />
@@ -1197,7 +1156,6 @@
     <column name="session_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="session_expires" phpName="ExpiresAt" type="TIMESTAMP"/>
     <column name="session_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="session_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="session_created" />
       <parameter name="update_column" value="session_updated" />
@@ -1225,7 +1183,6 @@
     <column name="shipping_info" phpName="Info" type="VARCHAR" size="512"/>
     <column name="shipping_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="shipping_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="shipping_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="shipping_created" />
       <parameter name="update_column" value="shipping_updated" />
@@ -1245,7 +1202,6 @@
     <column name="signing_location" phpName="Location" type="VARCHAR" size="255"/>
     <column name="signing_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="signing_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="signing_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="signing_created" />
       <parameter name="update_column" value="signing_updated" />
@@ -1304,7 +1260,6 @@
     <column name="site_monitoring" phpName="Monitoring" type="BOOLEAN" size="1" defaultValue="true"/>
     <column name="site_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="site_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="site_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="site_created" />
       <parameter name="update_column" value="site_updated" />
@@ -1355,7 +1310,6 @@
     <column name="stock_dl" phpName="Dl" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="stock_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="stock_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="stock_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="stock_created" />
       <parameter name="update_column" value="stock_updated" />
@@ -1403,7 +1357,6 @@
     <column name="subscription_update" phpName="Update" type="TIMESTAMP"/>
     <column name="subscription_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="subscription_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="subscription_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="subscription_created" />
       <parameter name="update_column" value="subscription_updated" />
@@ -1427,7 +1380,6 @@
     <column name="supplier_update" phpName="Update" type="TIMESTAMP"/>
     <column name="supplier_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="supplier_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="supplier_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="supplier_created" />
       <parameter name="update_column" value="supplier_updated" />
@@ -1447,7 +1399,6 @@
     <column name="tag_update" phpName="Update" type="TIMESTAMP"/>
     <column name="tag_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="tag_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="tag_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="tag_created" />
       <parameter name="update_column" value="tag_updated" />
@@ -1471,7 +1422,6 @@
     <column name="ticket_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <column name="ticket_resolved" phpName="Resolved" type="TIMESTAMP"/>
     <column name="ticket_closed" phpName="Closed" type="TIMESTAMP"/>
-    <column name="ticket_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="ticket_created" />
       <parameter name="update_column" value="ticket_updated" />
@@ -1487,7 +1437,6 @@
     <column name="ticket_comment_content" phpName="Content" type="LONGVARCHAR"/>
     <column name="ticket_comment_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="ticket_comment_update" phpName="Update" type="TIMESTAMP"/>
-    <column name="ticket_comment_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="ticket_comment_created" />
       <parameter name="update_column" value="ticket_comment_update" />
@@ -1533,8 +1482,6 @@
     <column name="user_update" phpName="Update" type="TIMESTAMP"/>
     <column name="user_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="user_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="user_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
-    <column name="user_deleted_why" phpName="DeletedWhy" type="VARCHAR" size="1024"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="user_created" />
       <parameter name="update_column" value="user_updated" />
@@ -1577,7 +1524,6 @@
     <column name="wish_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="wish_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <column name="wish_bought" phpName="Bought" type="TIMESTAMP"/>
-    <column name="wish_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="wish_created" />
       <parameter name="update_column" value="wish_updated" />
@@ -1585,7 +1531,6 @@
     <unique name="user_id">
       <unique-column name="user_id"/>
       <unique-column name="article_id"/>
-      <unique-column name="wish_deleted"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -1599,7 +1544,6 @@
     <column name="wishlist_public" phpName="Public" type="BOOLEAN" size="1"/>
     <column name="wishlist_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="wishlist_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="wishlist_deleted" phpName="DeletedAt" type="TIMESTAMP"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="wishlist_created" />
       <parameter name="update_column" value="wishlist_updated" />

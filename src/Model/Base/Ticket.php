@@ -142,13 +142,6 @@ abstract class Ticket implements ActiveRecordInterface
     protected $ticket_closed;
 
     /**
-     * The value for the ticket_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $ticket_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -553,28 +546,6 @@ abstract class Ticket implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [ticket_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->ticket_deleted;
-        } else {
-            return $this->ticket_deleted instanceof \DateTimeInterface ? $this->ticket_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [ticket_id] column.
      *
      * @param int $v New value
@@ -795,26 +766,6 @@ abstract class Ticket implements ActiveRecordInterface
     } // setClosed()
 
     /**
-     * Sets the value of [ticket_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Ticket The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->ticket_deleted !== null || $dt !== null) {
-            if ($this->ticket_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->ticket_deleted->format("Y-m-d H:i:s.u")) {
-                $this->ticket_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[TicketTableMap::COL_TICKET_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -902,12 +853,6 @@ abstract class Ticket implements ActiveRecordInterface
                 $col = null;
             }
             $this->ticket_closed = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : TicketTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->ticket_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -916,7 +861,7 @@ abstract class Ticket implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = TicketTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = TicketTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Ticket'), 0, $e);
@@ -1163,9 +1108,6 @@ abstract class Ticket implements ActiveRecordInterface
         if ($this->isColumnModified(TicketTableMap::COL_TICKET_CLOSED)) {
             $modifiedColumns[':p' . $index++]  = 'ticket_closed';
         }
-        if ($this->isColumnModified(TicketTableMap::COL_TICKET_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'ticket_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO ticket (%s) VALUES (%s)',
@@ -1209,9 +1151,6 @@ abstract class Ticket implements ActiveRecordInterface
                         break;
                     case 'ticket_closed':
                         $stmt->bindValue($identifier, $this->ticket_closed ? $this->ticket_closed->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'ticket_deleted':
-                        $stmt->bindValue($identifier, $this->ticket_deleted ? $this->ticket_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1308,9 +1247,6 @@ abstract class Ticket implements ActiveRecordInterface
             case 10:
                 return $this->getClosed();
                 break;
-            case 11:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1351,7 +1287,6 @@ abstract class Ticket implements ActiveRecordInterface
             $keys[8] => $this->getUpdatedAt(),
             $keys[9] => $this->getResolved(),
             $keys[10] => $this->getClosed(),
-            $keys[11] => $this->getDeletedAt(),
         );
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1367,10 +1302,6 @@ abstract class Ticket implements ActiveRecordInterface
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1444,9 +1375,6 @@ abstract class Ticket implements ActiveRecordInterface
             case 10:
                 $this->setClosed($value);
                 break;
-            case 11:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1505,9 +1433,6 @@ abstract class Ticket implements ActiveRecordInterface
         }
         if (array_key_exists($keys[10], $arr)) {
             $this->setClosed($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setDeletedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1584,9 +1509,6 @@ abstract class Ticket implements ActiveRecordInterface
         }
         if ($this->isColumnModified(TicketTableMap::COL_TICKET_CLOSED)) {
             $criteria->add(TicketTableMap::COL_TICKET_CLOSED, $this->ticket_closed);
-        }
-        if ($this->isColumnModified(TicketTableMap::COL_TICKET_DELETED)) {
-            $criteria->add(TicketTableMap::COL_TICKET_DELETED, $this->ticket_deleted);
         }
 
         return $criteria;
@@ -1684,7 +1606,6 @@ abstract class Ticket implements ActiveRecordInterface
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setResolved($this->getResolved());
         $copyObj->setClosed($this->getClosed());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1731,7 +1652,6 @@ abstract class Ticket implements ActiveRecordInterface
         $this->ticket_updated = null;
         $this->ticket_resolved = null;
         $this->ticket_closed = null;
-        $this->ticket_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

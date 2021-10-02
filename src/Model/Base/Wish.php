@@ -119,13 +119,6 @@ abstract class Wish implements ActiveRecordInterface
     protected $wish_bought;
 
     /**
-     * The value for the wish_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $wish_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -474,28 +467,6 @@ abstract class Wish implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [wish_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->wish_deleted;
-        } else {
-            return $this->wish_deleted instanceof \DateTimeInterface ? $this->wish_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [wish_id] column.
      *
      * @param int $v New value
@@ -656,26 +627,6 @@ abstract class Wish implements ActiveRecordInterface
     } // setBought()
 
     /**
-     * Sets the value of [wish_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Wish The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->wish_deleted !== null || $dt !== null) {
-            if ($this->wish_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->wish_deleted->format("Y-m-d H:i:s.u")) {
-                $this->wish_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[WishTableMap::COL_WISH_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -743,12 +694,6 @@ abstract class Wish implements ActiveRecordInterface
                 $col = null;
             }
             $this->wish_bought = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : WishTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->wish_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -757,7 +702,7 @@ abstract class Wish implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = WishTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = WishTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Wish'), 0, $e);
@@ -995,9 +940,6 @@ abstract class Wish implements ActiveRecordInterface
         if ($this->isColumnModified(WishTableMap::COL_WISH_BOUGHT)) {
             $modifiedColumns[':p' . $index++]  = 'wish_bought';
         }
-        if ($this->isColumnModified(WishTableMap::COL_WISH_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'wish_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO wishes (%s) VALUES (%s)',
@@ -1032,9 +974,6 @@ abstract class Wish implements ActiveRecordInterface
                         break;
                     case 'wish_bought':
                         $stmt->bindValue($identifier, $this->wish_bought ? $this->wish_bought->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'wish_deleted':
-                        $stmt->bindValue($identifier, $this->wish_deleted ? $this->wish_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1122,9 +1061,6 @@ abstract class Wish implements ActiveRecordInterface
             case 7:
                 return $this->getBought();
                 break;
-            case 8:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1162,7 +1098,6 @@ abstract class Wish implements ActiveRecordInterface
             $keys[5] => $this->getCreatedAt(),
             $keys[6] => $this->getUpdatedAt(),
             $keys[7] => $this->getBought(),
-            $keys[8] => $this->getDeletedAt(),
         );
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
@@ -1174,10 +1109,6 @@ abstract class Wish implements ActiveRecordInterface
 
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[8]] instanceof \DateTimeInterface) {
-            $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1242,9 +1173,6 @@ abstract class Wish implements ActiveRecordInterface
             case 7:
                 $this->setBought($value);
                 break;
-            case 8:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1294,9 +1222,6 @@ abstract class Wish implements ActiveRecordInterface
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setBought($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setDeletedAt($arr[$keys[8]]);
         }
 
         return $this;
@@ -1364,9 +1289,6 @@ abstract class Wish implements ActiveRecordInterface
         }
         if ($this->isColumnModified(WishTableMap::COL_WISH_BOUGHT)) {
             $criteria->add(WishTableMap::COL_WISH_BOUGHT, $this->wish_bought);
-        }
-        if ($this->isColumnModified(WishTableMap::COL_WISH_DELETED)) {
-            $criteria->add(WishTableMap::COL_WISH_DELETED, $this->wish_deleted);
         }
 
         return $criteria;
@@ -1461,7 +1383,6 @@ abstract class Wish implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setBought($this->getBought());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1505,7 +1426,6 @@ abstract class Wish implements ActiveRecordInterface
         $this->wish_created = null;
         $this->wish_updated = null;
         $this->wish_bought = null;
-        $this->wish_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

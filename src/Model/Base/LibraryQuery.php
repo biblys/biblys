@@ -40,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibraryQuery orderByDesc($order = Criteria::ASC) Order by the library_desc column
  * @method     ChildLibraryQuery orderByCreatedAt($order = Criteria::ASC) Order by the library_created column
  * @method     ChildLibraryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the library_updated column
- * @method     ChildLibraryQuery orderByDeletedAt($order = Criteria::ASC) Order by the library_deleted column
  *
  * @method     ChildLibraryQuery groupById() Group by the library_id column
  * @method     ChildLibraryQuery groupByName() Group by the library_name column
@@ -63,7 +62,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibraryQuery groupByDesc() Group by the library_desc column
  * @method     ChildLibraryQuery groupByCreatedAt() Group by the library_created column
  * @method     ChildLibraryQuery groupByUpdatedAt() Group by the library_updated column
- * @method     ChildLibraryQuery groupByDeletedAt() Group by the library_deleted column
  *
  * @method     ChildLibraryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildLibraryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -96,8 +94,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibrary|null findOneByReadings(string $library_readings) Return the first ChildLibrary filtered by the library_readings column
  * @method     ChildLibrary|null findOneByDesc(string $library_desc) Return the first ChildLibrary filtered by the library_desc column
  * @method     ChildLibrary|null findOneByCreatedAt(string $library_created) Return the first ChildLibrary filtered by the library_created column
- * @method     ChildLibrary|null findOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column
- * @method     ChildLibrary|null findOneByDeletedAt(string $library_deleted) Return the first ChildLibrary filtered by the library_deleted column *
+ * @method     ChildLibrary|null findOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column *
 
  * @method     ChildLibrary requirePk($key, ConnectionInterface $con = null) Return the ChildLibrary by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOne(ConnectionInterface $con = null) Return the first ChildLibrary matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -123,7 +120,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibrary requireOneByDesc(string $library_desc) Return the first ChildLibrary filtered by the library_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOneByCreatedAt(string $library_created) Return the first ChildLibrary filtered by the library_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLibrary requireOneByDeletedAt(string $library_deleted) Return the first ChildLibrary filtered by the library_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLibrary[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildLibrary> find(ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
@@ -169,8 +165,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
  * @method     ChildLibrary[]|ObjectCollection findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
- * @method     ChildLibrary[]|ObjectCollection findByDeletedAt(string $library_deleted) Return ChildLibrary objects filtered by the library_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByDeletedAt(string $library_deleted) Return ChildLibrary objects filtered by the library_deleted column
  * @method     ChildLibrary[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLibrary> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -270,7 +264,7 @@ abstract class LibraryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT library_id, library_name, library_name_alphabetic, library_url, library_representative, library_address, library_postal_code, library_city, library_country, library_phone, library_fax, library_website, library_email, library_facebook, library_twitter, library_creation_year, library_specialities, library_readings, library_desc, library_created, library_updated, library_deleted FROM libraries WHERE library_id = :p0';
+        $sql = 'SELECT library_id, library_name, library_name_alphabetic, library_url, library_representative, library_address, library_postal_code, library_city, library_country, library_phone, library_fax, library_website, library_email, library_facebook, library_twitter, library_creation_year, library_specialities, library_readings, library_desc, library_created, library_updated FROM libraries WHERE library_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -935,49 +929,6 @@ abstract class LibraryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the library_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE library_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE library_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE library_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -58,7 +58,7 @@ class PriceTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PriceTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the price_id field
@@ -101,11 +101,6 @@ class PriceTableMap extends TableMap
     const COL_PRICE_UPDATED = 'prices.price_updated';
 
     /**
-     * the column name for the price_deleted field
-     */
-    const COL_PRICE_DELETED = 'prices.price_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -117,11 +112,11 @@ class PriceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'gridId', 'Cat', 'Amount', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'gridId', 'cat', 'amount', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PriceTableMap::COL_PRICE_ID, PriceTableMap::COL_PRICEGRID_ID, PriceTableMap::COL_PRICE_CAT, PriceTableMap::COL_PRICE_AMOUNT, PriceTableMap::COL_PRICE_CREATED, PriceTableMap::COL_PRICE_UPDATED, PriceTableMap::COL_PRICE_DELETED, ),
-        self::TYPE_FIELDNAME     => array('price_id', 'pricegrid_id', 'price_cat', 'price_amount', 'price_created', 'price_updated', 'price_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'gridId', 'Cat', 'Amount', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'gridId', 'cat', 'amount', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PriceTableMap::COL_PRICE_ID, PriceTableMap::COL_PRICEGRID_ID, PriceTableMap::COL_PRICE_CAT, PriceTableMap::COL_PRICE_AMOUNT, PriceTableMap::COL_PRICE_CREATED, PriceTableMap::COL_PRICE_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('price_id', 'pricegrid_id', 'price_cat', 'price_amount', 'price_created', 'price_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -131,11 +126,11 @@ class PriceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'gridId' => 1, 'Cat' => 2, 'Amount' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'DeletedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'gridId' => 1, 'cat' => 2, 'amount' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'deletedAt' => 6, ),
-        self::TYPE_COLNAME       => array(PriceTableMap::COL_PRICE_ID => 0, PriceTableMap::COL_PRICEGRID_ID => 1, PriceTableMap::COL_PRICE_CAT => 2, PriceTableMap::COL_PRICE_AMOUNT => 3, PriceTableMap::COL_PRICE_CREATED => 4, PriceTableMap::COL_PRICE_UPDATED => 5, PriceTableMap::COL_PRICE_DELETED => 6, ),
-        self::TYPE_FIELDNAME     => array('price_id' => 0, 'pricegrid_id' => 1, 'price_cat' => 2, 'price_amount' => 3, 'price_created' => 4, 'price_updated' => 5, 'price_deleted' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'gridId' => 1, 'Cat' => 2, 'Amount' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'gridId' => 1, 'cat' => 2, 'amount' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(PriceTableMap::COL_PRICE_ID => 0, PriceTableMap::COL_PRICEGRID_ID => 1, PriceTableMap::COL_PRICE_CAT => 2, PriceTableMap::COL_PRICE_AMOUNT => 3, PriceTableMap::COL_PRICE_CREATED => 4, PriceTableMap::COL_PRICE_UPDATED => 5, ),
+        self::TYPE_FIELDNAME     => array('price_id' => 0, 'pricegrid_id' => 1, 'price_cat' => 2, 'price_amount' => 3, 'price_created' => 4, 'price_updated' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -191,14 +186,6 @@ class PriceTableMap extends TableMap
         'COL_PRICE_UPDATED' => 'PRICE_UPDATED',
         'price_updated' => 'PRICE_UPDATED',
         'prices.price_updated' => 'PRICE_UPDATED',
-        'DeletedAt' => 'PRICE_DELETED',
-        'Price.DeletedAt' => 'PRICE_DELETED',
-        'deletedAt' => 'PRICE_DELETED',
-        'price.deletedAt' => 'PRICE_DELETED',
-        'PriceTableMap::COL_PRICE_DELETED' => 'PRICE_DELETED',
-        'COL_PRICE_DELETED' => 'PRICE_DELETED',
-        'price_deleted' => 'PRICE_DELETED',
-        'prices.price_deleted' => 'PRICE_DELETED',
     ];
 
     /**
@@ -224,7 +211,6 @@ class PriceTableMap extends TableMap
         $this->addColumn('price_amount', 'Amount', 'INTEGER', false, 10, null);
         $this->addColumn('price_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('price_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('price_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -394,7 +380,6 @@ class PriceTableMap extends TableMap
             $criteria->addSelectColumn(PriceTableMap::COL_PRICE_AMOUNT);
             $criteria->addSelectColumn(PriceTableMap::COL_PRICE_CREATED);
             $criteria->addSelectColumn(PriceTableMap::COL_PRICE_UPDATED);
-            $criteria->addSelectColumn(PriceTableMap::COL_PRICE_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.price_id');
             $criteria->addSelectColumn($alias . '.pricegrid_id');
@@ -402,7 +387,6 @@ class PriceTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.price_amount');
             $criteria->addSelectColumn($alias . '.price_created');
             $criteria->addSelectColumn($alias . '.price_updated');
-            $criteria->addSelectColumn($alias . '.price_deleted');
         }
     }
 
@@ -426,7 +410,6 @@ class PriceTableMap extends TableMap
             $criteria->removeSelectColumn(PriceTableMap::COL_PRICE_AMOUNT);
             $criteria->removeSelectColumn(PriceTableMap::COL_PRICE_CREATED);
             $criteria->removeSelectColumn(PriceTableMap::COL_PRICE_UPDATED);
-            $criteria->removeSelectColumn(PriceTableMap::COL_PRICE_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.price_id');
             $criteria->removeSelectColumn($alias . '.pricegrid_id');
@@ -434,7 +417,6 @@ class PriceTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.price_amount');
             $criteria->removeSelectColumn($alias . '.price_created');
             $criteria->removeSelectColumn($alias . '.price_updated');
-            $criteria->removeSelectColumn($alias . '.price_deleted');
         }
     }
 

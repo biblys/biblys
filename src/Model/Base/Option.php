@@ -112,13 +112,6 @@ abstract class Option implements ActiveRecordInterface
     protected $option_updated;
 
     /**
-     * The value for the option_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $option_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -445,28 +438,6 @@ abstract class Option implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [option_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->option_deleted;
-        } else {
-            return $this->option_deleted instanceof \DateTimeInterface ? $this->option_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [option_id] column.
      *
      * @param int $v New value
@@ -607,26 +578,6 @@ abstract class Option implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [option_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Option The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->option_deleted !== null || $dt !== null) {
-            if ($this->option_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->option_deleted->format("Y-m-d H:i:s.u")) {
-                $this->option_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[OptionTableMap::COL_OPTION_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -688,12 +639,6 @@ abstract class Option implements ActiveRecordInterface
                 $col = null;
             }
             $this->option_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OptionTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->option_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -702,7 +647,7 @@ abstract class Option implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = OptionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = OptionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Option'), 0, $e);
@@ -937,9 +882,6 @@ abstract class Option implements ActiveRecordInterface
         if ($this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'option_updated';
         }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'option_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO option (%s) VALUES (%s)',
@@ -971,9 +913,6 @@ abstract class Option implements ActiveRecordInterface
                         break;
                     case 'option_updated':
                         $stmt->bindValue($identifier, $this->option_updated ? $this->option_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'option_deleted':
-                        $stmt->bindValue($identifier, $this->option_deleted ? $this->option_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1058,9 +997,6 @@ abstract class Option implements ActiveRecordInterface
             case 6:
                 return $this->getUpdatedAt();
                 break;
-            case 7:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1097,7 +1033,6 @@ abstract class Option implements ActiveRecordInterface
             $keys[4] => $this->getValue(),
             $keys[5] => $this->getCreatedAt(),
             $keys[6] => $this->getUpdatedAt(),
-            $keys[7] => $this->getDeletedAt(),
         );
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
@@ -1105,10 +1040,6 @@ abstract class Option implements ActiveRecordInterface
 
         if ($result[$keys[6]] instanceof \DateTimeInterface) {
             $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[7]] instanceof \DateTimeInterface) {
-            $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1170,9 +1101,6 @@ abstract class Option implements ActiveRecordInterface
             case 6:
                 $this->setUpdatedAt($value);
                 break;
-            case 7:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1219,9 +1147,6 @@ abstract class Option implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setUpdatedAt($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setDeletedAt($arr[$keys[7]]);
         }
 
         return $this;
@@ -1286,9 +1211,6 @@ abstract class Option implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OptionTableMap::COL_OPTION_UPDATED)) {
             $criteria->add(OptionTableMap::COL_OPTION_UPDATED, $this->option_updated);
-        }
-        if ($this->isColumnModified(OptionTableMap::COL_OPTION_DELETED)) {
-            $criteria->add(OptionTableMap::COL_OPTION_DELETED, $this->option_deleted);
         }
 
         return $criteria;
@@ -1382,7 +1304,6 @@ abstract class Option implements ActiveRecordInterface
         $copyObj->setValue($this->getValue());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1425,7 +1346,6 @@ abstract class Option implements ActiveRecordInterface
         $this->option_value = null;
         $this->option_created = null;
         $this->option_updated = null;
-        $this->option_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

@@ -58,7 +58,7 @@ class AlertTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class AlertTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the alert_id field
@@ -121,11 +121,6 @@ class AlertTableMap extends TableMap
     const COL_ALERT_UPDATED = 'alerts.alert_updated';
 
     /**
-     * the column name for the alert_deleted field
-     */
-    const COL_ALERT_DELETED = 'alerts.alert_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class AlertTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'ArticleId', 'MaxPrice', 'PubYear', 'Condition', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'articleId', 'maxPrice', 'pubYear', 'condition', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(AlertTableMap::COL_ALERT_ID, AlertTableMap::COL_USER_ID, AlertTableMap::COL_ARTICLE_ID, AlertTableMap::COL_ALERT_MAX_PRICE, AlertTableMap::COL_ALERT_PUB_YEAR, AlertTableMap::COL_ALERT_CONDITION, AlertTableMap::COL_ALERT_INSERT, AlertTableMap::COL_ALERT_UPDATE, AlertTableMap::COL_ALERT_CREATED, AlertTableMap::COL_ALERT_UPDATED, AlertTableMap::COL_ALERT_DELETED, ),
-        self::TYPE_FIELDNAME     => array('alert_id', 'user_id', 'article_id', 'alert_max_price', 'alert_pub_year', 'alert_condition', 'alert_insert', 'alert_update', 'alert_created', 'alert_updated', 'alert_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'ArticleId', 'MaxPrice', 'PubYear', 'Condition', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'articleId', 'maxPrice', 'pubYear', 'condition', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(AlertTableMap::COL_ALERT_ID, AlertTableMap::COL_USER_ID, AlertTableMap::COL_ARTICLE_ID, AlertTableMap::COL_ALERT_MAX_PRICE, AlertTableMap::COL_ALERT_PUB_YEAR, AlertTableMap::COL_ALERT_CONDITION, AlertTableMap::COL_ALERT_INSERT, AlertTableMap::COL_ALERT_UPDATE, AlertTableMap::COL_ALERT_CREATED, AlertTableMap::COL_ALERT_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('alert_id', 'user_id', 'article_id', 'alert_max_price', 'alert_pub_year', 'alert_condition', 'alert_insert', 'alert_update', 'alert_created', 'alert_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class AlertTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'ArticleId' => 2, 'MaxPrice' => 3, 'PubYear' => 4, 'Condition' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'articleId' => 2, 'maxPrice' => 3, 'pubYear' => 4, 'condition' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(AlertTableMap::COL_ALERT_ID => 0, AlertTableMap::COL_USER_ID => 1, AlertTableMap::COL_ARTICLE_ID => 2, AlertTableMap::COL_ALERT_MAX_PRICE => 3, AlertTableMap::COL_ALERT_PUB_YEAR => 4, AlertTableMap::COL_ALERT_CONDITION => 5, AlertTableMap::COL_ALERT_INSERT => 6, AlertTableMap::COL_ALERT_UPDATE => 7, AlertTableMap::COL_ALERT_CREATED => 8, AlertTableMap::COL_ALERT_UPDATED => 9, AlertTableMap::COL_ALERT_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('alert_id' => 0, 'user_id' => 1, 'article_id' => 2, 'alert_max_price' => 3, 'alert_pub_year' => 4, 'alert_condition' => 5, 'alert_insert' => 6, 'alert_update' => 7, 'alert_created' => 8, 'alert_updated' => 9, 'alert_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'ArticleId' => 2, 'MaxPrice' => 3, 'PubYear' => 4, 'Condition' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'articleId' => 2, 'maxPrice' => 3, 'pubYear' => 4, 'condition' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(AlertTableMap::COL_ALERT_ID => 0, AlertTableMap::COL_USER_ID => 1, AlertTableMap::COL_ARTICLE_ID => 2, AlertTableMap::COL_ALERT_MAX_PRICE => 3, AlertTableMap::COL_ALERT_PUB_YEAR => 4, AlertTableMap::COL_ALERT_CONDITION => 5, AlertTableMap::COL_ALERT_INSERT => 6, AlertTableMap::COL_ALERT_UPDATE => 7, AlertTableMap::COL_ALERT_CREATED => 8, AlertTableMap::COL_ALERT_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('alert_id' => 0, 'user_id' => 1, 'article_id' => 2, 'alert_max_price' => 3, 'alert_pub_year' => 4, 'alert_condition' => 5, 'alert_insert' => 6, 'alert_update' => 7, 'alert_created' => 8, 'alert_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class AlertTableMap extends TableMap
         'COL_ALERT_UPDATED' => 'ALERT_UPDATED',
         'alert_updated' => 'ALERT_UPDATED',
         'alerts.alert_updated' => 'ALERT_UPDATED',
-        'DeletedAt' => 'ALERT_DELETED',
-        'Alert.DeletedAt' => 'ALERT_DELETED',
-        'deletedAt' => 'ALERT_DELETED',
-        'alert.deletedAt' => 'ALERT_DELETED',
-        'AlertTableMap::COL_ALERT_DELETED' => 'ALERT_DELETED',
-        'COL_ALERT_DELETED' => 'ALERT_DELETED',
-        'alert_deleted' => 'ALERT_DELETED',
-        'alerts.alert_deleted' => 'ALERT_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class AlertTableMap extends TableMap
         $this->addColumn('alert_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('alert_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('alert_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('alert_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class AlertTableMap extends TableMap
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_UPDATE);
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_CREATED);
             $criteria->addSelectColumn(AlertTableMap::COL_ALERT_UPDATED);
-            $criteria->addSelectColumn(AlertTableMap::COL_ALERT_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.alert_id');
             $criteria->addSelectColumn($alias . '.user_id');
@@ -467,7 +452,6 @@ class AlertTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.alert_update');
             $criteria->addSelectColumn($alias . '.alert_created');
             $criteria->addSelectColumn($alias . '.alert_updated');
-            $criteria->addSelectColumn($alias . '.alert_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class AlertTableMap extends TableMap
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_UPDATE);
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_CREATED);
             $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_UPDATED);
-            $criteria->removeSelectColumn(AlertTableMap::COL_ALERT_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.alert_id');
             $criteria->removeSelectColumn($alias . '.user_id');
@@ -507,7 +490,6 @@ class AlertTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.alert_update');
             $criteria->removeSelectColumn($alias . '.alert_created');
             $criteria->removeSelectColumn($alias . '.alert_updated');
-            $criteria->removeSelectColumn($alias . '.alert_deleted');
         }
     }
 

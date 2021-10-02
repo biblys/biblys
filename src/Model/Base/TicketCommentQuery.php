@@ -25,7 +25,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketCommentQuery orderByContent($order = Criteria::ASC) Order by the ticket_comment_content column
  * @method     ChildTicketCommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the ticket_comment_created column
  * @method     ChildTicketCommentQuery orderByUpdate($order = Criteria::ASC) Order by the ticket_comment_update column
- * @method     ChildTicketCommentQuery orderByDeletedAt($order = Criteria::ASC) Order by the ticket_comment_deleted column
  *
  * @method     ChildTicketCommentQuery groupById() Group by the ticket_comment_id column
  * @method     ChildTicketCommentQuery groupByTicketId() Group by the ticket_id column
@@ -33,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketCommentQuery groupByContent() Group by the ticket_comment_content column
  * @method     ChildTicketCommentQuery groupByCreatedAt() Group by the ticket_comment_created column
  * @method     ChildTicketCommentQuery groupByUpdate() Group by the ticket_comment_update column
- * @method     ChildTicketCommentQuery groupByDeletedAt() Group by the ticket_comment_deleted column
  *
  * @method     ChildTicketCommentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildTicketCommentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,8 +49,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketComment|null findOneByUserId(int $user_id) Return the first ChildTicketComment filtered by the user_id column
  * @method     ChildTicketComment|null findOneByContent(string $ticket_comment_content) Return the first ChildTicketComment filtered by the ticket_comment_content column
  * @method     ChildTicketComment|null findOneByCreatedAt(string $ticket_comment_created) Return the first ChildTicketComment filtered by the ticket_comment_created column
- * @method     ChildTicketComment|null findOneByUpdate(string $ticket_comment_update) Return the first ChildTicketComment filtered by the ticket_comment_update column
- * @method     ChildTicketComment|null findOneByDeletedAt(string $ticket_comment_deleted) Return the first ChildTicketComment filtered by the ticket_comment_deleted column *
+ * @method     ChildTicketComment|null findOneByUpdate(string $ticket_comment_update) Return the first ChildTicketComment filtered by the ticket_comment_update column *
 
  * @method     ChildTicketComment requirePk($key, ConnectionInterface $con = null) Return the ChildTicketComment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicketComment requireOne(ConnectionInterface $con = null) Return the first ChildTicketComment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -63,7 +60,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketComment requireOneByContent(string $ticket_comment_content) Return the first ChildTicketComment filtered by the ticket_comment_content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicketComment requireOneByCreatedAt(string $ticket_comment_created) Return the first ChildTicketComment filtered by the ticket_comment_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicketComment requireOneByUpdate(string $ticket_comment_update) Return the first ChildTicketComment filtered by the ticket_comment_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTicketComment requireOneByDeletedAt(string $ticket_comment_deleted) Return the first ChildTicketComment filtered by the ticket_comment_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTicketComment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> find(ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
@@ -79,8 +75,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByCreatedAt(string $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
  * @method     ChildTicketComment[]|ObjectCollection findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
  * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
- * @method     ChildTicketComment[]|ObjectCollection findByDeletedAt(string $ticket_comment_deleted) Return ChildTicketComment objects filtered by the ticket_comment_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildTicketComment> findByDeletedAt(string $ticket_comment_deleted) Return ChildTicketComment objects filtered by the ticket_comment_deleted column
  * @method     ChildTicketComment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicketComment> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -180,7 +174,7 @@ abstract class TicketCommentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ticket_comment_id, ticket_id, user_id, ticket_comment_content, ticket_comment_created, ticket_comment_update, ticket_comment_deleted FROM ticket_comment WHERE ticket_comment_id = :p0';
+        $sql = 'SELECT ticket_comment_id, ticket_id, user_id, ticket_comment_content, ticket_comment_created, ticket_comment_update FROM ticket_comment WHERE ticket_comment_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -502,49 +496,6 @@ abstract class TicketCommentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TicketCommentTableMap::COL_TICKET_COMMENT_UPDATE, $update, $comparison);
-    }
-
-    /**
-     * Filter the query on the ticket_comment_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE ticket_comment_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE ticket_comment_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE ticket_comment_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildTicketCommentQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(TicketCommentTableMap::COL_TICKET_COMMENT_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(TicketCommentTableMap::COL_TICKET_COMMENT_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(TicketCommentTableMap::COL_TICKET_COMMENT_DELETED, $deletedAt, $comparison);
     }
 
     /**

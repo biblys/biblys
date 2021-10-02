@@ -33,7 +33,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery orderByUpdate($order = Criteria::ASC) Order by the customer_update column
  * @method     ChildCustomerQuery orderByCreatedAt($order = Criteria::ASC) Order by the customer_created column
  * @method     ChildCustomerQuery orderByUpdatedAt($order = Criteria::ASC) Order by the customer_updated column
- * @method     ChildCustomerQuery orderByDeletedAt($order = Criteria::ASC) Order by the customer_deleted column
  *
  * @method     ChildCustomerQuery groupById() Group by the customer_id column
  * @method     ChildCustomerQuery groupBySiteId() Group by the site_id column
@@ -49,7 +48,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery groupByUpdate() Group by the customer_update column
  * @method     ChildCustomerQuery groupByCreatedAt() Group by the customer_created column
  * @method     ChildCustomerQuery groupByUpdatedAt() Group by the customer_updated column
- * @method     ChildCustomerQuery groupByDeletedAt() Group by the customer_deleted column
  *
  * @method     ChildCustomerQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCustomerQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -75,8 +73,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer|null findOneByInsert(string $customer_insert) Return the first ChildCustomer filtered by the customer_insert column
  * @method     ChildCustomer|null findOneByUpdate(string $customer_update) Return the first ChildCustomer filtered by the customer_update column
  * @method     ChildCustomer|null findOneByCreatedAt(string $customer_created) Return the first ChildCustomer filtered by the customer_created column
- * @method     ChildCustomer|null findOneByUpdatedAt(string $customer_updated) Return the first ChildCustomer filtered by the customer_updated column
- * @method     ChildCustomer|null findOneByDeletedAt(string $customer_deleted) Return the first ChildCustomer filtered by the customer_deleted column *
+ * @method     ChildCustomer|null findOneByUpdatedAt(string $customer_updated) Return the first ChildCustomer filtered by the customer_updated column *
 
  * @method     ChildCustomer requirePk($key, ConnectionInterface $con = null) Return the ChildCustomer by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOne(ConnectionInterface $con = null) Return the first ChildCustomer matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -95,7 +92,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer requireOneByUpdate(string $customer_update) Return the first ChildCustomer filtered by the customer_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByCreatedAt(string $customer_created) Return the first ChildCustomer filtered by the customer_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByUpdatedAt(string $customer_updated) Return the first ChildCustomer filtered by the customer_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCustomer requireOneByDeletedAt(string $customer_deleted) Return the first ChildCustomer filtered by the customer_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCustomer[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCustomer> find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
@@ -127,8 +123,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
  * @method     ChildCustomer[]|ObjectCollection findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
- * @method     ChildCustomer[]|ObjectCollection findByDeletedAt(string $customer_deleted) Return ChildCustomer objects filtered by the customer_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByDeletedAt(string $customer_deleted) Return ChildCustomer objects filtered by the customer_deleted column
  * @method     ChildCustomer[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCustomer> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -228,7 +222,7 @@ abstract class CustomerQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT customer_id, site_id, user_id, customer_type, customer_first_name, customer_last_name, customer_email, customer_phone, country_id, customer_privatization, customer_insert, customer_update, customer_created, customer_updated, customer_deleted FROM customers WHERE customer_id = :p0';
+        $sql = 'SELECT customer_id, site_id, user_id, customer_type, customer_first_name, customer_last_name, customer_email, customer_phone, country_id, customer_privatization, customer_insert, customer_update, customer_created, customer_updated FROM customers WHERE customer_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -820,49 +814,6 @@ abstract class CustomerQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the customer_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE customer_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE customer_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE customer_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_DELETED, $deletedAt, $comparison);
     }
 
     /**

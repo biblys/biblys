@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery orderByCreatedAt($order = Criteria::ASC) Order by the payment_created column
  * @method     ChildPaymentQuery orderByExecuted($order = Criteria::ASC) Order by the payment_executed column
  * @method     ChildPaymentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the payment_updated column
- * @method     ChildPaymentQuery orderByDeletedAt($order = Criteria::ASC) Order by the payment_deleted column
  *
  * @method     ChildPaymentQuery groupById() Group by the payment_id column
  * @method     ChildPaymentQuery groupBySiteId() Group by the site_id column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery groupByCreatedAt() Group by the payment_created column
  * @method     ChildPaymentQuery groupByExecuted() Group by the payment_executed column
  * @method     ChildPaymentQuery groupByUpdatedAt() Group by the payment_updated column
- * @method     ChildPaymentQuery groupByDeletedAt() Group by the payment_deleted column
  *
  * @method     ChildPaymentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPaymentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment|null findOneByUrl(string $payment_url) Return the first ChildPayment filtered by the payment_url column
  * @method     ChildPayment|null findOneByCreatedAt(string $payment_created) Return the first ChildPayment filtered by the payment_created column
  * @method     ChildPayment|null findOneByExecuted(string $payment_executed) Return the first ChildPayment filtered by the payment_executed column
- * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column
- * @method     ChildPayment|null findOneByDeletedAt(string $payment_deleted) Return the first ChildPayment filtered by the payment_deleted column *
+ * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column *
 
  * @method     ChildPayment requirePk($key, ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByCreatedAt(string $payment_created) Return the first ChildPayment filtered by the payment_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByExecuted(string $payment_executed) Return the first ChildPayment filtered by the payment_executed column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPayment requireOneByDeletedAt(string $payment_deleted) Return the first ChildPayment filtered by the payment_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPayment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPayment> find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
  * @method     ChildPayment[]|ObjectCollection findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
- * @method     ChildPayment[]|ObjectCollection findByDeletedAt(string $payment_deleted) Return ChildPayment objects filtered by the payment_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByDeletedAt(string $payment_deleted) Return ChildPayment objects filtered by the payment_deleted column
  * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_id, site_id, order_id, payment_amount, payment_mode, payment_provider_id, payment_url, payment_created, payment_executed, payment_updated, payment_deleted FROM payments WHERE payment_id = :p0';
+        $sql = 'SELECT payment_id, site_id, order_id, payment_amount, payment_mode, payment_provider_id, payment_url, payment_created, payment_executed, payment_updated FROM payments WHERE payment_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -660,49 +654,6 @@ abstract class PaymentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the payment_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE payment_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE payment_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE payment_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_DELETED, $deletedAt, $comparison);
     }
 
     /**

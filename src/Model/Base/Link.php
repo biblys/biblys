@@ -231,13 +231,6 @@ abstract class Link implements ActiveRecordInterface
     protected $link_updated;
 
     /**
-     * The value for the link_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $link_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -766,28 +759,6 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [link_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->link_deleted;
-        } else {
-            return $this->link_deleted instanceof \DateTimeInterface ? $this->link_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [link_id] column.
      *
      * @param int $v New value
@@ -1284,26 +1255,6 @@ abstract class Link implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [link_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Link The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->link_deleted !== null || $dt !== null) {
-            if ($this->link_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->link_deleted->format("Y-m-d H:i:s.u")) {
-                $this->link_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[LinkTableMap::COL_LINK_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1419,12 +1370,6 @@ abstract class Link implements ActiveRecordInterface
                 $col = null;
             }
             $this->link_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : LinkTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->link_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1433,7 +1378,7 @@ abstract class Link implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 25; // 25 = LinkTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 24; // 24 = LinkTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Link'), 0, $e);
@@ -1719,9 +1664,6 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_LINK_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'link_updated';
         }
-        if ($this->isColumnModified(LinkTableMap::COL_LINK_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'link_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO links (%s) VALUES (%s)',
@@ -1804,9 +1746,6 @@ abstract class Link implements ActiveRecordInterface
                         break;
                     case 'link_updated':
                         $stmt->bindValue($identifier, $this->link_updated ? $this->link_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'link_deleted':
-                        $stmt->bindValue($identifier, $this->link_deleted ? $this->link_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1942,9 +1881,6 @@ abstract class Link implements ActiveRecordInterface
             case 23:
                 return $this->getUpdatedAt();
                 break;
-            case 24:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1998,7 +1934,6 @@ abstract class Link implements ActiveRecordInterface
             $keys[21] => $this->getDate(),
             $keys[22] => $this->getCreatedAt(),
             $keys[23] => $this->getUpdatedAt(),
-            $keys[24] => $this->getDeletedAt(),
         );
         if ($result[$keys[21]] instanceof \DateTimeInterface) {
             $result[$keys[21]] = $result[$keys[21]]->format('Y-m-d H:i:s.u');
@@ -2010,10 +1945,6 @@ abstract class Link implements ActiveRecordInterface
 
         if ($result[$keys[23]] instanceof \DateTimeInterface) {
             $result[$keys[23]] = $result[$keys[23]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[24]] instanceof \DateTimeInterface) {
-            $result[$keys[24]] = $result[$keys[24]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2126,9 +2057,6 @@ abstract class Link implements ActiveRecordInterface
             case 23:
                 $this->setUpdatedAt($value);
                 break;
-            case 24:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -2226,9 +2154,6 @@ abstract class Link implements ActiveRecordInterface
         }
         if (array_key_exists($keys[23], $arr)) {
             $this->setUpdatedAt($arr[$keys[23]]);
-        }
-        if (array_key_exists($keys[24], $arr)) {
-            $this->setDeletedAt($arr[$keys[24]]);
         }
 
         return $this;
@@ -2345,9 +2270,6 @@ abstract class Link implements ActiveRecordInterface
         if ($this->isColumnModified(LinkTableMap::COL_LINK_UPDATED)) {
             $criteria->add(LinkTableMap::COL_LINK_UPDATED, $this->link_updated);
         }
-        if ($this->isColumnModified(LinkTableMap::COL_LINK_DELETED)) {
-            $criteria->add(LinkTableMap::COL_LINK_DELETED, $this->link_deleted);
-        }
 
         return $criteria;
     }
@@ -2457,7 +2379,6 @@ abstract class Link implements ActiveRecordInterface
         $copyObj->setDate($this->getDate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2517,7 +2438,6 @@ abstract class Link implements ActiveRecordInterface
         $this->link_date = null;
         $this->link_created = null;
         $this->link_updated = null;
-        $this->link_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

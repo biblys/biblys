@@ -58,7 +58,7 @@ class FileTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class FileTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the file_id field
@@ -136,11 +136,6 @@ class FileTableMap extends TableMap
     const COL_FILE_UPDATED = 'files.file_updated';
 
     /**
-     * the column name for the file_deleted field
-     */
-    const COL_FILE_DELETED = 'files.file_deleted';
-
-    /**
      * the column name for the file_created field
      */
     const COL_FILE_CREATED = 'files.file_created';
@@ -157,11 +152,11 @@ class FileTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'UserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'DeletedAt', 'CreatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'articleId', 'userId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'deletedAt', 'createdAt', ),
-        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_DELETED, FileTableMap::COL_FILE_CREATED, ),
-        self::TYPE_FIELDNAME     => array('file_id', 'article_id', 'user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_deleted', 'file_created', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'UserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'CreatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'articleId', 'userId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'createdAt', ),
+        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_CREATED, ),
+        self::TYPE_FIELDNAME     => array('file_id', 'article_id', 'user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_created', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -171,11 +166,11 @@ class FileTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'UserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'DeletedAt' => 13, 'CreatedAt' => 14, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'userId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'deletedAt' => 13, 'createdAt' => 14, ),
-        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_DELETED => 13, FileTableMap::COL_FILE_CREATED => 14, ),
-        self::TYPE_FIELDNAME     => array('file_id' => 0, 'article_id' => 1, 'user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_deleted' => 13, 'file_created' => 14, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'UserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'CreatedAt' => 13, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'userId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'createdAt' => 13, ),
+        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_CREATED => 13, ),
+        self::TYPE_FIELDNAME     => array('file_id' => 0, 'article_id' => 1, 'user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_created' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -288,14 +283,6 @@ class FileTableMap extends TableMap
         'COL_FILE_UPDATED' => 'FILE_UPDATED',
         'file_updated' => 'FILE_UPDATED',
         'files.file_updated' => 'FILE_UPDATED',
-        'DeletedAt' => 'FILE_DELETED',
-        'File.DeletedAt' => 'FILE_DELETED',
-        'deletedAt' => 'FILE_DELETED',
-        'file.deletedAt' => 'FILE_DELETED',
-        'FileTableMap::COL_FILE_DELETED' => 'FILE_DELETED',
-        'COL_FILE_DELETED' => 'FILE_DELETED',
-        'file_deleted' => 'FILE_DELETED',
-        'files.file_deleted' => 'FILE_DELETED',
         'CreatedAt' => 'FILE_CREATED',
         'File.CreatedAt' => 'FILE_CREATED',
         'createdAt' => 'FILE_CREATED',
@@ -336,7 +323,6 @@ class FileTableMap extends TableMap
         $this->addColumn('file_inserted', 'Inserted', 'TIMESTAMP', false, null, null);
         $this->addColumn('file_uploaded', 'Uploaded', 'TIMESTAMP', false, null, null);
         $this->addColumn('file_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('file_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('file_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
@@ -514,7 +500,6 @@ class FileTableMap extends TableMap
             $criteria->addSelectColumn(FileTableMap::COL_FILE_INSERTED);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_UPLOADED);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_UPDATED);
-            $criteria->addSelectColumn(FileTableMap::COL_FILE_DELETED);
             $criteria->addSelectColumn(FileTableMap::COL_FILE_CREATED);
         } else {
             $criteria->addSelectColumn($alias . '.file_id');
@@ -530,7 +515,6 @@ class FileTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.file_inserted');
             $criteria->addSelectColumn($alias . '.file_uploaded');
             $criteria->addSelectColumn($alias . '.file_updated');
-            $criteria->addSelectColumn($alias . '.file_deleted');
             $criteria->addSelectColumn($alias . '.file_created');
         }
     }
@@ -562,7 +546,6 @@ class FileTableMap extends TableMap
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_INSERTED);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_UPLOADED);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_UPDATED);
-            $criteria->removeSelectColumn(FileTableMap::COL_FILE_DELETED);
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_CREATED);
         } else {
             $criteria->removeSelectColumn($alias . '.file_id');
@@ -578,7 +561,6 @@ class FileTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.file_inserted');
             $criteria->removeSelectColumn($alias . '.file_uploaded');
             $criteria->removeSelectColumn($alias . '.file_updated');
-            $criteria->removeSelectColumn($alias . '.file_deleted');
             $criteria->removeSelectColumn($alias . '.file_created');
         }
     }

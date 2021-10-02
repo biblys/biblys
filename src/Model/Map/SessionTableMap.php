@@ -58,7 +58,7 @@ class SessionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class SessionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the session_id field
@@ -101,11 +101,6 @@ class SessionTableMap extends TableMap
     const COL_SESSION_UPDATED = 'session.session_updated';
 
     /**
-     * the column name for the session_deleted field
-     */
-    const COL_SESSION_DELETED = 'session.session_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -117,11 +112,11 @@ class SessionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Token', 'CreatedAt', 'ExpiresAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'token', 'createdAt', 'expiresAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(SessionTableMap::COL_SESSION_ID, SessionTableMap::COL_USER_ID, SessionTableMap::COL_SESSION_TOKEN, SessionTableMap::COL_SESSION_CREATED, SessionTableMap::COL_SESSION_EXPIRES, SessionTableMap::COL_SESSION_UPDATED, SessionTableMap::COL_SESSION_DELETED, ),
-        self::TYPE_FIELDNAME     => array('session_id', 'user_id', 'session_token', 'session_created', 'session_expires', 'session_updated', 'session_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Token', 'CreatedAt', 'ExpiresAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'token', 'createdAt', 'expiresAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(SessionTableMap::COL_SESSION_ID, SessionTableMap::COL_USER_ID, SessionTableMap::COL_SESSION_TOKEN, SessionTableMap::COL_SESSION_CREATED, SessionTableMap::COL_SESSION_EXPIRES, SessionTableMap::COL_SESSION_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('session_id', 'user_id', 'session_token', 'session_created', 'session_expires', 'session_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -131,11 +126,11 @@ class SessionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Token' => 2, 'CreatedAt' => 3, 'ExpiresAt' => 4, 'UpdatedAt' => 5, 'DeletedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'token' => 2, 'createdAt' => 3, 'expiresAt' => 4, 'updatedAt' => 5, 'deletedAt' => 6, ),
-        self::TYPE_COLNAME       => array(SessionTableMap::COL_SESSION_ID => 0, SessionTableMap::COL_USER_ID => 1, SessionTableMap::COL_SESSION_TOKEN => 2, SessionTableMap::COL_SESSION_CREATED => 3, SessionTableMap::COL_SESSION_EXPIRES => 4, SessionTableMap::COL_SESSION_UPDATED => 5, SessionTableMap::COL_SESSION_DELETED => 6, ),
-        self::TYPE_FIELDNAME     => array('session_id' => 0, 'user_id' => 1, 'session_token' => 2, 'session_created' => 3, 'session_expires' => 4, 'session_updated' => 5, 'session_deleted' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Token' => 2, 'CreatedAt' => 3, 'ExpiresAt' => 4, 'UpdatedAt' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'token' => 2, 'createdAt' => 3, 'expiresAt' => 4, 'updatedAt' => 5, ),
+        self::TYPE_COLNAME       => array(SessionTableMap::COL_SESSION_ID => 0, SessionTableMap::COL_USER_ID => 1, SessionTableMap::COL_SESSION_TOKEN => 2, SessionTableMap::COL_SESSION_CREATED => 3, SessionTableMap::COL_SESSION_EXPIRES => 4, SessionTableMap::COL_SESSION_UPDATED => 5, ),
+        self::TYPE_FIELDNAME     => array('session_id' => 0, 'user_id' => 1, 'session_token' => 2, 'session_created' => 3, 'session_expires' => 4, 'session_updated' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -192,14 +187,6 @@ class SessionTableMap extends TableMap
         'COL_SESSION_UPDATED' => 'SESSION_UPDATED',
         'session_updated' => 'SESSION_UPDATED',
         'session.session_updated' => 'SESSION_UPDATED',
-        'DeletedAt' => 'SESSION_DELETED',
-        'Session.DeletedAt' => 'SESSION_DELETED',
-        'deletedAt' => 'SESSION_DELETED',
-        'session.deletedAt' => 'SESSION_DELETED',
-        'SessionTableMap::COL_SESSION_DELETED' => 'SESSION_DELETED',
-        'COL_SESSION_DELETED' => 'SESSION_DELETED',
-        'session_deleted' => 'SESSION_DELETED',
-        'session.session_deleted' => 'SESSION_DELETED',
     ];
 
     /**
@@ -225,7 +212,6 @@ class SessionTableMap extends TableMap
         $this->addColumn('session_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('session_expires', 'ExpiresAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('session_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('session_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -402,7 +388,6 @@ class SessionTableMap extends TableMap
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_CREATED);
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
             $criteria->addSelectColumn(SessionTableMap::COL_SESSION_UPDATED);
-            $criteria->addSelectColumn(SessionTableMap::COL_SESSION_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.session_id');
             $criteria->addSelectColumn($alias . '.user_id');
@@ -410,7 +395,6 @@ class SessionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.session_created');
             $criteria->addSelectColumn($alias . '.session_expires');
             $criteria->addSelectColumn($alias . '.session_updated');
-            $criteria->addSelectColumn($alias . '.session_deleted');
         }
     }
 
@@ -434,7 +418,6 @@ class SessionTableMap extends TableMap
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_CREATED);
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_EXPIRES);
             $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_UPDATED);
-            $criteria->removeSelectColumn(SessionTableMap::COL_SESSION_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.session_id');
             $criteria->removeSelectColumn($alias . '.user_id');
@@ -442,7 +425,6 @@ class SessionTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.session_created');
             $criteria->removeSelectColumn($alias . '.session_expires');
             $criteria->removeSelectColumn($alias . '.session_updated');
-            $criteria->removeSelectColumn($alias . '.session_deleted');
         }
     }
 

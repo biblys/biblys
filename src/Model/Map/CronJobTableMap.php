@@ -58,7 +58,7 @@ class CronJobTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CronJobTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the cron_job_id field
@@ -106,11 +106,6 @@ class CronJobTableMap extends TableMap
     const COL_CRON_JOB_UPDATED = 'cron_jobs.cron_job_updated';
 
     /**
-     * the column name for the cron_job_deleted field
-     */
-    const COL_CRON_JOB_DELETED = 'cron_jobs.cron_job_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -122,11 +117,11 @@ class CronJobTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Task', 'Result', 'Message', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'task', 'result', 'message', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID, CronJobTableMap::COL_SITE_ID, CronJobTableMap::COL_CRON_JOB_TASK, CronJobTableMap::COL_CRON_JOB_RESULT, CronJobTableMap::COL_CRON_JOB_MESSAGE, CronJobTableMap::COL_CRON_JOB_CREATED, CronJobTableMap::COL_CRON_JOB_UPDATED, CronJobTableMap::COL_CRON_JOB_DELETED, ),
-        self::TYPE_FIELDNAME     => array('cron_job_id', 'site_id', 'cron_job_task', 'cron_job_result', 'cron_job_message', 'cron_job_created', 'cron_job_updated', 'cron_job_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Task', 'Result', 'Message', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'task', 'result', 'message', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID, CronJobTableMap::COL_SITE_ID, CronJobTableMap::COL_CRON_JOB_TASK, CronJobTableMap::COL_CRON_JOB_RESULT, CronJobTableMap::COL_CRON_JOB_MESSAGE, CronJobTableMap::COL_CRON_JOB_CREATED, CronJobTableMap::COL_CRON_JOB_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('cron_job_id', 'site_id', 'cron_job_task', 'cron_job_result', 'cron_job_message', 'cron_job_created', 'cron_job_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -136,11 +131,11 @@ class CronJobTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Task' => 2, 'Result' => 3, 'Message' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'DeletedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'task' => 2, 'result' => 3, 'message' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'deletedAt' => 7, ),
-        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID => 0, CronJobTableMap::COL_SITE_ID => 1, CronJobTableMap::COL_CRON_JOB_TASK => 2, CronJobTableMap::COL_CRON_JOB_RESULT => 3, CronJobTableMap::COL_CRON_JOB_MESSAGE => 4, CronJobTableMap::COL_CRON_JOB_CREATED => 5, CronJobTableMap::COL_CRON_JOB_UPDATED => 6, CronJobTableMap::COL_CRON_JOB_DELETED => 7, ),
-        self::TYPE_FIELDNAME     => array('cron_job_id' => 0, 'site_id' => 1, 'cron_job_task' => 2, 'cron_job_result' => 3, 'cron_job_message' => 4, 'cron_job_created' => 5, 'cron_job_updated' => 6, 'cron_job_deleted' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Task' => 2, 'Result' => 3, 'Message' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'task' => 2, 'result' => 3, 'message' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID => 0, CronJobTableMap::COL_SITE_ID => 1, CronJobTableMap::COL_CRON_JOB_TASK => 2, CronJobTableMap::COL_CRON_JOB_RESULT => 3, CronJobTableMap::COL_CRON_JOB_MESSAGE => 4, CronJobTableMap::COL_CRON_JOB_CREATED => 5, CronJobTableMap::COL_CRON_JOB_UPDATED => 6, ),
+        self::TYPE_FIELDNAME     => array('cron_job_id' => 0, 'site_id' => 1, 'cron_job_task' => 2, 'cron_job_result' => 3, 'cron_job_message' => 4, 'cron_job_created' => 5, 'cron_job_updated' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -205,14 +200,6 @@ class CronJobTableMap extends TableMap
         'COL_CRON_JOB_UPDATED' => 'CRON_JOB_UPDATED',
         'cron_job_updated' => 'CRON_JOB_UPDATED',
         'cron_jobs.cron_job_updated' => 'CRON_JOB_UPDATED',
-        'DeletedAt' => 'CRON_JOB_DELETED',
-        'CronJob.DeletedAt' => 'CRON_JOB_DELETED',
-        'deletedAt' => 'CRON_JOB_DELETED',
-        'cronJob.deletedAt' => 'CRON_JOB_DELETED',
-        'CronJobTableMap::COL_CRON_JOB_DELETED' => 'CRON_JOB_DELETED',
-        'COL_CRON_JOB_DELETED' => 'CRON_JOB_DELETED',
-        'cron_job_deleted' => 'CRON_JOB_DELETED',
-        'cron_jobs.cron_job_deleted' => 'CRON_JOB_DELETED',
     ];
 
     /**
@@ -239,7 +226,6 @@ class CronJobTableMap extends TableMap
         $this->addColumn('cron_job_message', 'Message', 'VARCHAR', false, 256, null);
         $this->addColumn('cron_job_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('cron_job_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('cron_job_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -410,7 +396,6 @@ class CronJobTableMap extends TableMap
             $criteria->addSelectColumn(CronJobTableMap::COL_CRON_JOB_MESSAGE);
             $criteria->addSelectColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
             $criteria->addSelectColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
-            $criteria->addSelectColumn(CronJobTableMap::COL_CRON_JOB_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.cron_job_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -419,7 +404,6 @@ class CronJobTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.cron_job_message');
             $criteria->addSelectColumn($alias . '.cron_job_created');
             $criteria->addSelectColumn($alias . '.cron_job_updated');
-            $criteria->addSelectColumn($alias . '.cron_job_deleted');
         }
     }
 
@@ -444,7 +428,6 @@ class CronJobTableMap extends TableMap
             $criteria->removeSelectColumn(CronJobTableMap::COL_CRON_JOB_MESSAGE);
             $criteria->removeSelectColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
             $criteria->removeSelectColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
-            $criteria->removeSelectColumn(CronJobTableMap::COL_CRON_JOB_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.cron_job_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -453,7 +436,6 @@ class CronJobTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.cron_job_message');
             $criteria->removeSelectColumn($alias . '.cron_job_created');
             $criteria->removeSelectColumn($alias . '.cron_job_updated');
-            $criteria->removeSelectColumn($alias . '.cron_job_deleted');
         }
     }
 

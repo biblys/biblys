@@ -58,7 +58,7 @@ class InventoryItemTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class InventoryItemTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the ii_id field
@@ -106,11 +106,6 @@ class InventoryItemTableMap extends TableMap
     const COL_II_UPDATED = 'inventory_item.ii_updated';
 
     /**
-     * the column name for the ii_deleted field
-     */
-    const COL_II_DELETED = 'inventory_item.ii_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -122,11 +117,11 @@ class InventoryItemTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'InventoryId', 'Ean', 'Quantity', 'Stock', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'inventoryId', 'ean', 'quantity', 'stock', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(InventoryItemTableMap::COL_II_ID, InventoryItemTableMap::COL_INVENTORY_ID, InventoryItemTableMap::COL_II_EAN, InventoryItemTableMap::COL_II_QUANTITY, InventoryItemTableMap::COL_II_STOCK, InventoryItemTableMap::COL_II_CREATED, InventoryItemTableMap::COL_II_UPDATED, InventoryItemTableMap::COL_II_DELETED, ),
-        self::TYPE_FIELDNAME     => array('ii_id', 'inventory_id', 'ii_ean', 'ii_quantity', 'ii_stock', 'ii_created', 'ii_updated', 'ii_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'InventoryId', 'Ean', 'Quantity', 'Stock', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'inventoryId', 'ean', 'quantity', 'stock', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(InventoryItemTableMap::COL_II_ID, InventoryItemTableMap::COL_INVENTORY_ID, InventoryItemTableMap::COL_II_EAN, InventoryItemTableMap::COL_II_QUANTITY, InventoryItemTableMap::COL_II_STOCK, InventoryItemTableMap::COL_II_CREATED, InventoryItemTableMap::COL_II_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('ii_id', 'inventory_id', 'ii_ean', 'ii_quantity', 'ii_stock', 'ii_created', 'ii_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -136,11 +131,11 @@ class InventoryItemTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'InventoryId' => 1, 'Ean' => 2, 'Quantity' => 3, 'Stock' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'DeletedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'inventoryId' => 1, 'ean' => 2, 'quantity' => 3, 'stock' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'deletedAt' => 7, ),
-        self::TYPE_COLNAME       => array(InventoryItemTableMap::COL_II_ID => 0, InventoryItemTableMap::COL_INVENTORY_ID => 1, InventoryItemTableMap::COL_II_EAN => 2, InventoryItemTableMap::COL_II_QUANTITY => 3, InventoryItemTableMap::COL_II_STOCK => 4, InventoryItemTableMap::COL_II_CREATED => 5, InventoryItemTableMap::COL_II_UPDATED => 6, InventoryItemTableMap::COL_II_DELETED => 7, ),
-        self::TYPE_FIELDNAME     => array('ii_id' => 0, 'inventory_id' => 1, 'ii_ean' => 2, 'ii_quantity' => 3, 'ii_stock' => 4, 'ii_created' => 5, 'ii_updated' => 6, 'ii_deleted' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'InventoryId' => 1, 'Ean' => 2, 'Quantity' => 3, 'Stock' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'inventoryId' => 1, 'ean' => 2, 'quantity' => 3, 'stock' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(InventoryItemTableMap::COL_II_ID => 0, InventoryItemTableMap::COL_INVENTORY_ID => 1, InventoryItemTableMap::COL_II_EAN => 2, InventoryItemTableMap::COL_II_QUANTITY => 3, InventoryItemTableMap::COL_II_STOCK => 4, InventoryItemTableMap::COL_II_CREATED => 5, InventoryItemTableMap::COL_II_UPDATED => 6, ),
+        self::TYPE_FIELDNAME     => array('ii_id' => 0, 'inventory_id' => 1, 'ii_ean' => 2, 'ii_quantity' => 3, 'ii_stock' => 4, 'ii_created' => 5, 'ii_updated' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -205,14 +200,6 @@ class InventoryItemTableMap extends TableMap
         'COL_II_UPDATED' => 'II_UPDATED',
         'ii_updated' => 'II_UPDATED',
         'inventory_item.ii_updated' => 'II_UPDATED',
-        'DeletedAt' => 'II_DELETED',
-        'InventoryItem.DeletedAt' => 'II_DELETED',
-        'deletedAt' => 'II_DELETED',
-        'inventoryItem.deletedAt' => 'II_DELETED',
-        'InventoryItemTableMap::COL_II_DELETED' => 'II_DELETED',
-        'COL_II_DELETED' => 'II_DELETED',
-        'ii_deleted' => 'II_DELETED',
-        'inventory_item.ii_deleted' => 'II_DELETED',
     ];
 
     /**
@@ -239,7 +226,6 @@ class InventoryItemTableMap extends TableMap
         $this->addColumn('ii_stock', 'Stock', 'INTEGER', false, null, null);
         $this->addColumn('ii_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ii_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('ii_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -410,7 +396,6 @@ class InventoryItemTableMap extends TableMap
             $criteria->addSelectColumn(InventoryItemTableMap::COL_II_STOCK);
             $criteria->addSelectColumn(InventoryItemTableMap::COL_II_CREATED);
             $criteria->addSelectColumn(InventoryItemTableMap::COL_II_UPDATED);
-            $criteria->addSelectColumn(InventoryItemTableMap::COL_II_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.ii_id');
             $criteria->addSelectColumn($alias . '.inventory_id');
@@ -419,7 +404,6 @@ class InventoryItemTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ii_stock');
             $criteria->addSelectColumn($alias . '.ii_created');
             $criteria->addSelectColumn($alias . '.ii_updated');
-            $criteria->addSelectColumn($alias . '.ii_deleted');
         }
     }
 
@@ -444,7 +428,6 @@ class InventoryItemTableMap extends TableMap
             $criteria->removeSelectColumn(InventoryItemTableMap::COL_II_STOCK);
             $criteria->removeSelectColumn(InventoryItemTableMap::COL_II_CREATED);
             $criteria->removeSelectColumn(InventoryItemTableMap::COL_II_UPDATED);
-            $criteria->removeSelectColumn(InventoryItemTableMap::COL_II_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.ii_id');
             $criteria->removeSelectColumn($alias . '.inventory_id');
@@ -453,7 +436,6 @@ class InventoryItemTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.ii_stock');
             $criteria->removeSelectColumn($alias . '.ii_created');
             $criteria->removeSelectColumn($alias . '.ii_updated');
-            $criteria->removeSelectColumn($alias . '.ii_deleted');
         }
     }
 

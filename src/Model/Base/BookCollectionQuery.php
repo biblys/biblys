@@ -37,7 +37,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery orderByDuplicate($order = Criteria::ASC) Order by the collection_duplicate column
  * @method     ChildBookCollectionQuery orderByCreatedAt($order = Criteria::ASC) Order by the collection_created column
  * @method     ChildBookCollectionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the collection_updated column
- * @method     ChildBookCollectionQuery orderByDeletedAt($order = Criteria::ASC) Order by the collection_deleted column
  *
  * @method     ChildBookCollectionQuery groupById() Group by the collection_id column
  * @method     ChildBookCollectionQuery groupBySiteId() Group by the site_id column
@@ -57,7 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollectionQuery groupByDuplicate() Group by the collection_duplicate column
  * @method     ChildBookCollectionQuery groupByCreatedAt() Group by the collection_created column
  * @method     ChildBookCollectionQuery groupByUpdatedAt() Group by the collection_updated column
- * @method     ChildBookCollectionQuery groupByDeletedAt() Group by the collection_deleted column
  *
  * @method     ChildBookCollectionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildBookCollectionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -87,8 +85,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection|null findOneByHits(int $collection_hits) Return the first ChildBookCollection filtered by the collection_hits column
  * @method     ChildBookCollection|null findOneByDuplicate(boolean $collection_duplicate) Return the first ChildBookCollection filtered by the collection_duplicate column
  * @method     ChildBookCollection|null findOneByCreatedAt(string $collection_created) Return the first ChildBookCollection filtered by the collection_created column
- * @method     ChildBookCollection|null findOneByUpdatedAt(string $collection_updated) Return the first ChildBookCollection filtered by the collection_updated column
- * @method     ChildBookCollection|null findOneByDeletedAt(string $collection_deleted) Return the first ChildBookCollection filtered by the collection_deleted column *
+ * @method     ChildBookCollection|null findOneByUpdatedAt(string $collection_updated) Return the first ChildBookCollection filtered by the collection_updated column *
 
  * @method     ChildBookCollection requirePk($key, ConnectionInterface $con = null) Return the ChildBookCollection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOne(ConnectionInterface $con = null) Return the first ChildBookCollection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -111,7 +108,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection requireOneByDuplicate(boolean $collection_duplicate) Return the first ChildBookCollection filtered by the collection_duplicate column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByCreatedAt(string $collection_created) Return the first ChildBookCollection filtered by the collection_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOneByUpdatedAt(string $collection_updated) Return the first ChildBookCollection filtered by the collection_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildBookCollection requireOneByDeletedAt(string $collection_deleted) Return the first ChildBookCollection filtered by the collection_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildBookCollection[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> find(ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
@@ -151,8 +147,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByCreatedAt(string $collection_created) Return ChildBookCollection objects filtered by the collection_created column
  * @method     ChildBookCollection[]|ObjectCollection findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
- * @method     ChildBookCollection[]|ObjectCollection findByDeletedAt(string $collection_deleted) Return ChildBookCollection objects filtered by the collection_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildBookCollection> findByDeletedAt(string $collection_deleted) Return ChildBookCollection objects filtered by the collection_deleted column
  * @method     ChildBookCollection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookCollection> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -252,7 +246,7 @@ abstract class BookCollectionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT collection_id, site_id, publisher_id, pricegrid_id, collection_name, collection_url, collection_publisher, collection_desc, collection_ignorenum, collection_orderby, collection_incorrect_weights, collection_noosfere_id, collection_insert, collection_update, collection_hits, collection_duplicate, collection_created, collection_updated, collection_deleted FROM collections WHERE collection_id = :p0';
+        $sql = 'SELECT collection_id, site_id, publisher_id, pricegrid_id, collection_name, collection_url, collection_publisher, collection_desc, collection_ignorenum, collection_orderby, collection_incorrect_weights, collection_noosfere_id, collection_insert, collection_update, collection_hits, collection_duplicate, collection_created, collection_updated FROM collections WHERE collection_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -964,49 +958,6 @@ abstract class BookCollectionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the collection_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE collection_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE collection_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE collection_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildBookCollectionQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_DELETED, $deletedAt, $comparison);
     }
 
     /**

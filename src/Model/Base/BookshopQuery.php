@@ -42,7 +42,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshopQuery orderByDesc($order = Criteria::ASC) Order by the bookshop_desc column
  * @method     ChildBookshopQuery orderByCreatedAt($order = Criteria::ASC) Order by the bookshop_created column
  * @method     ChildBookshopQuery orderByUpdatedAt($order = Criteria::ASC) Order by the bookshop_updated column
- * @method     ChildBookshopQuery orderByDeletedAt($order = Criteria::ASC) Order by the bookshop_deleted column
  *
  * @method     ChildBookshopQuery groupById() Group by the bookshop_id column
  * @method     ChildBookshopQuery groupByName() Group by the bookshop_name column
@@ -67,7 +66,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshopQuery groupByDesc() Group by the bookshop_desc column
  * @method     ChildBookshopQuery groupByCreatedAt() Group by the bookshop_created column
  * @method     ChildBookshopQuery groupByUpdatedAt() Group by the bookshop_updated column
- * @method     ChildBookshopQuery groupByDeletedAt() Group by the bookshop_deleted column
  *
  * @method     ChildBookshopQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildBookshopQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -102,8 +100,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshop|null findOneByMotto(string $bookshop_motto) Return the first ChildBookshop filtered by the bookshop_motto column
  * @method     ChildBookshop|null findOneByDesc(string $bookshop_desc) Return the first ChildBookshop filtered by the bookshop_desc column
  * @method     ChildBookshop|null findOneByCreatedAt(string $bookshop_created) Return the first ChildBookshop filtered by the bookshop_created column
- * @method     ChildBookshop|null findOneByUpdatedAt(string $bookshop_updated) Return the first ChildBookshop filtered by the bookshop_updated column
- * @method     ChildBookshop|null findOneByDeletedAt(string $bookshop_deleted) Return the first ChildBookshop filtered by the bookshop_deleted column *
+ * @method     ChildBookshop|null findOneByUpdatedAt(string $bookshop_updated) Return the first ChildBookshop filtered by the bookshop_updated column *
 
  * @method     ChildBookshop requirePk($key, ConnectionInterface $con = null) Return the ChildBookshop by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookshop requireOne(ConnectionInterface $con = null) Return the first ChildBookshop matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -131,7 +128,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshop requireOneByDesc(string $bookshop_desc) Return the first ChildBookshop filtered by the bookshop_desc column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookshop requireOneByCreatedAt(string $bookshop_created) Return the first ChildBookshop filtered by the bookshop_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookshop requireOneByUpdatedAt(string $bookshop_updated) Return the first ChildBookshop filtered by the bookshop_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildBookshop requireOneByDeletedAt(string $bookshop_deleted) Return the first ChildBookshop filtered by the bookshop_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildBookshop[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildBookshop> find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
@@ -181,8 +177,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
  * @method     ChildBookshop[]|ObjectCollection findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
- * @method     ChildBookshop[]|ObjectCollection findByDeletedAt(string $bookshop_deleted) Return ChildBookshop objects filtered by the bookshop_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByDeletedAt(string $bookshop_deleted) Return ChildBookshop objects filtered by the bookshop_deleted column
  * @method     ChildBookshop[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookshop> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -282,7 +276,7 @@ abstract class BookshopQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT bookshop_id, bookshop_name, bookshop_name_alphabetic, bookshop_url, bookshop_representative, bookshop_address, bookshop_postal_code, bookshop_city, bookshop_country, bookshop_phone, bookshop_fax, bookshop_website, bookshop_email, bookshop_facebook, bookshop_twitter, bookshop_legal_form, bookshop_creation_year, bookshop_specialities, bookshop_membership, bookshop_motto, bookshop_desc, bookshop_created, bookshop_updated, bookshop_deleted FROM bookshops WHERE bookshop_id = :p0';
+        $sql = 'SELECT bookshop_id, bookshop_name, bookshop_name_alphabetic, bookshop_url, bookshop_representative, bookshop_address, bookshop_postal_code, bookshop_city, bookshop_country, bookshop_phone, bookshop_fax, bookshop_website, bookshop_email, bookshop_facebook, bookshop_twitter, bookshop_legal_form, bookshop_creation_year, bookshop_specialities, bookshop_membership, bookshop_motto, bookshop_desc, bookshop_created, bookshop_updated FROM bookshops WHERE bookshop_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -997,49 +991,6 @@ abstract class BookshopQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the bookshop_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE bookshop_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE bookshop_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE bookshop_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_DELETED, $deletedAt, $comparison);
     }
 
     /**

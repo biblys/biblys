@@ -26,7 +26,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJobQuery orderByMessage($order = Criteria::ASC) Order by the cron_job_message column
  * @method     ChildCronJobQuery orderByCreatedAt($order = Criteria::ASC) Order by the cron_job_created column
  * @method     ChildCronJobQuery orderByUpdatedAt($order = Criteria::ASC) Order by the cron_job_updated column
- * @method     ChildCronJobQuery orderByDeletedAt($order = Criteria::ASC) Order by the cron_job_deleted column
  *
  * @method     ChildCronJobQuery groupById() Group by the cron_job_id column
  * @method     ChildCronJobQuery groupBySiteId() Group by the site_id column
@@ -35,7 +34,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJobQuery groupByMessage() Group by the cron_job_message column
  * @method     ChildCronJobQuery groupByCreatedAt() Group by the cron_job_created column
  * @method     ChildCronJobQuery groupByUpdatedAt() Group by the cron_job_updated column
- * @method     ChildCronJobQuery groupByDeletedAt() Group by the cron_job_deleted column
  *
  * @method     ChildCronJobQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCronJobQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -54,8 +52,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJob|null findOneByResult(string $cron_job_result) Return the first ChildCronJob filtered by the cron_job_result column
  * @method     ChildCronJob|null findOneByMessage(string $cron_job_message) Return the first ChildCronJob filtered by the cron_job_message column
  * @method     ChildCronJob|null findOneByCreatedAt(string $cron_job_created) Return the first ChildCronJob filtered by the cron_job_created column
- * @method     ChildCronJob|null findOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column
- * @method     ChildCronJob|null findOneByDeletedAt(string $cron_job_deleted) Return the first ChildCronJob filtered by the cron_job_deleted column *
+ * @method     ChildCronJob|null findOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column *
 
  * @method     ChildCronJob requirePk($key, ConnectionInterface $con = null) Return the ChildCronJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOne(ConnectionInterface $con = null) Return the first ChildCronJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -67,7 +64,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJob requireOneByMessage(string $cron_job_message) Return the first ChildCronJob filtered by the cron_job_message column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOneByCreatedAt(string $cron_job_created) Return the first ChildCronJob filtered by the cron_job_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCronJob requireOneByDeletedAt(string $cron_job_deleted) Return the first ChildCronJob filtered by the cron_job_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCronJob[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCronJob> find(ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
@@ -85,8 +81,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
  * @method     ChildCronJob[]|ObjectCollection findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
- * @method     ChildCronJob[]|ObjectCollection findByDeletedAt(string $cron_job_deleted) Return ChildCronJob objects filtered by the cron_job_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByDeletedAt(string $cron_job_deleted) Return ChildCronJob objects filtered by the cron_job_deleted column
  * @method     ChildCronJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCronJob> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -186,7 +180,7 @@ abstract class CronJobQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT cron_job_id, site_id, cron_job_task, cron_job_result, cron_job_message, cron_job_created, cron_job_updated, cron_job_deleted FROM cron_jobs WHERE cron_job_id = :p0';
+        $sql = 'SELECT cron_job_id, site_id, cron_job_task, cron_job_result, cron_job_message, cron_job_created, cron_job_updated FROM cron_jobs WHERE cron_job_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -517,49 +511,6 @@ abstract class CronJobQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the cron_job_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE cron_job_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE cron_job_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE cron_job_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_DELETED, $deletedAt, $comparison);
     }
 
     /**

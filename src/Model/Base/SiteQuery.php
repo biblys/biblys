@@ -60,7 +60,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery orderByMonitoring($order = Criteria::ASC) Order by the site_monitoring column
  * @method     ChildSiteQuery orderByCreatedAt($order = Criteria::ASC) Order by the site_created column
  * @method     ChildSiteQuery orderByUpdatedAt($order = Criteria::ASC) Order by the site_updated column
- * @method     ChildSiteQuery orderByDeletedAt($order = Criteria::ASC) Order by the site_deleted column
  *
  * @method     ChildSiteQuery groupById() Group by the site_id column
  * @method     ChildSiteQuery groupByName() Group by the site_name column
@@ -102,7 +101,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery groupByMonitoring() Group by the site_monitoring column
  * @method     ChildSiteQuery groupByCreatedAt() Group by the site_created column
  * @method     ChildSiteQuery groupByUpdatedAt() Group by the site_updated column
- * @method     ChildSiteQuery groupByDeletedAt() Group by the site_deleted column
  *
  * @method     ChildSiteQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildSiteQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -166,8 +164,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneBySitemapUpdated(string $site_sitemap_updated) Return the first ChildSite filtered by the site_sitemap_updated column
  * @method     ChildSite|null findOneByMonitoring(boolean $site_monitoring) Return the first ChildSite filtered by the site_monitoring column
  * @method     ChildSite|null findOneByCreatedAt(string $site_created) Return the first ChildSite filtered by the site_created column
- * @method     ChildSite|null findOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column
- * @method     ChildSite|null findOneByDeletedAt(string $site_deleted) Return the first ChildSite filtered by the site_deleted column *
+ * @method     ChildSite|null findOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column *
 
  * @method     ChildSite requirePk($key, ConnectionInterface $con = null) Return the ChildSite by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOne(ConnectionInterface $con = null) Return the first ChildSite matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -212,7 +209,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByMonitoring(boolean $site_monitoring) Return the first ChildSite filtered by the site_monitoring column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByCreatedAt(string $site_created) Return the first ChildSite filtered by the site_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOneByDeletedAt(string $site_deleted) Return the first ChildSite filtered by the site_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSite[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildSite> find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
@@ -296,8 +292,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSite> findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
  * @method     ChildSite[]|ObjectCollection findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildSite> findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
- * @method     ChildSite[]|ObjectCollection findByDeletedAt(string $site_deleted) Return ChildSite objects filtered by the site_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByDeletedAt(string $site_deleted) Return ChildSite objects filtered by the site_deleted column
  * @method     ChildSite[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSite> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -397,7 +391,7 @@ abstract class SiteQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_alerts, site_wishlist, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated, site_deleted FROM sites WHERE site_id = :p0';
+        $sql = 'SELECT site_id, site_name, site_pass, site_title, site_domain, site_version, site_tag, site_flag, site_contact, site_address, site_tva, site_html_renderer, site_axys, site_noosfere, site_amazon, site_event_id, site_event_date, site_shop, site_vpc, site_shipping_fee, site_alerts, site_wishlist, site_payment_cheque, site_payment_paypal, site_payment_payplug, site_payment_transfer, site_bookshop, site_bookshop_id, site_publisher, site_publisher_stock, publisher_id, site_ebook_bundle, site_fb_page_id, site_fb_page_token, site_analytics_id, site_piwik_id, site_sitemap_updated, site_monitoring, site_created, site_updated FROM sites WHERE site_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1697,49 +1691,6 @@ abstract class SiteQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the site_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE site_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE site_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE site_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(SiteTableMap::COL_SITE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(SiteTableMap::COL_SITE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_DELETED, $deletedAt, $comparison);
     }
 
     /**

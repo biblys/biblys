@@ -58,7 +58,7 @@ class TagTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class TagTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the tag_id field
@@ -121,11 +121,6 @@ class TagTableMap extends TableMap
     const COL_TAG_UPDATED = 'tags.tag_updated';
 
     /**
-     * the column name for the tag_deleted field
-     */
-    const COL_TAG_DELETED = 'tags.tag_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class TagTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Url', 'Description', 'Date', 'Num', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'url', 'description', 'date', 'num', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID, TagTableMap::COL_TAG_NAME, TagTableMap::COL_TAG_URL, TagTableMap::COL_TAG_DESCRIPTION, TagTableMap::COL_TAG_DATE, TagTableMap::COL_TAG_NUM, TagTableMap::COL_TAG_INSERT, TagTableMap::COL_TAG_UPDATE, TagTableMap::COL_TAG_CREATED, TagTableMap::COL_TAG_UPDATED, TagTableMap::COL_TAG_DELETED, ),
-        self::TYPE_FIELDNAME     => array('tag_id', 'tag_name', 'tag_url', 'tag_description', 'tag_date', 'tag_num', 'tag_insert', 'tag_update', 'tag_created', 'tag_updated', 'tag_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Url', 'Description', 'Date', 'Num', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'url', 'description', 'date', 'num', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID, TagTableMap::COL_TAG_NAME, TagTableMap::COL_TAG_URL, TagTableMap::COL_TAG_DESCRIPTION, TagTableMap::COL_TAG_DATE, TagTableMap::COL_TAG_NUM, TagTableMap::COL_TAG_INSERT, TagTableMap::COL_TAG_UPDATE, TagTableMap::COL_TAG_CREATED, TagTableMap::COL_TAG_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('tag_id', 'tag_name', 'tag_url', 'tag_description', 'tag_date', 'tag_num', 'tag_insert', 'tag_update', 'tag_created', 'tag_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class TagTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Url' => 2, 'Description' => 3, 'Date' => 4, 'Num' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'url' => 2, 'description' => 3, 'date' => 4, 'num' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID => 0, TagTableMap::COL_TAG_NAME => 1, TagTableMap::COL_TAG_URL => 2, TagTableMap::COL_TAG_DESCRIPTION => 3, TagTableMap::COL_TAG_DATE => 4, TagTableMap::COL_TAG_NUM => 5, TagTableMap::COL_TAG_INSERT => 6, TagTableMap::COL_TAG_UPDATE => 7, TagTableMap::COL_TAG_CREATED => 8, TagTableMap::COL_TAG_UPDATED => 9, TagTableMap::COL_TAG_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('tag_id' => 0, 'tag_name' => 1, 'tag_url' => 2, 'tag_description' => 3, 'tag_date' => 4, 'tag_num' => 5, 'tag_insert' => 6, 'tag_update' => 7, 'tag_created' => 8, 'tag_updated' => 9, 'tag_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Url' => 2, 'Description' => 3, 'Date' => 4, 'Num' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'url' => 2, 'description' => 3, 'date' => 4, 'num' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID => 0, TagTableMap::COL_TAG_NAME => 1, TagTableMap::COL_TAG_URL => 2, TagTableMap::COL_TAG_DESCRIPTION => 3, TagTableMap::COL_TAG_DATE => 4, TagTableMap::COL_TAG_NUM => 5, TagTableMap::COL_TAG_INSERT => 6, TagTableMap::COL_TAG_UPDATE => 7, TagTableMap::COL_TAG_CREATED => 8, TagTableMap::COL_TAG_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('tag_id' => 0, 'tag_name' => 1, 'tag_url' => 2, 'tag_description' => 3, 'tag_date' => 4, 'tag_num' => 5, 'tag_insert' => 6, 'tag_update' => 7, 'tag_created' => 8, 'tag_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class TagTableMap extends TableMap
         'COL_TAG_UPDATED' => 'TAG_UPDATED',
         'tag_updated' => 'TAG_UPDATED',
         'tags.tag_updated' => 'TAG_UPDATED',
-        'DeletedAt' => 'TAG_DELETED',
-        'Tag.DeletedAt' => 'TAG_DELETED',
-        'deletedAt' => 'TAG_DELETED',
-        'tag.deletedAt' => 'TAG_DELETED',
-        'TagTableMap::COL_TAG_DELETED' => 'TAG_DELETED',
-        'COL_TAG_DELETED' => 'TAG_DELETED',
-        'tag_deleted' => 'TAG_DELETED',
-        'tags.tag_deleted' => 'TAG_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class TagTableMap extends TableMap
         $this->addColumn('tag_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('tag_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class TagTableMap extends TableMap
             $criteria->addSelectColumn(TagTableMap::COL_TAG_UPDATE);
             $criteria->addSelectColumn(TagTableMap::COL_TAG_CREATED);
             $criteria->addSelectColumn(TagTableMap::COL_TAG_UPDATED);
-            $criteria->addSelectColumn(TagTableMap::COL_TAG_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.tag_id');
             $criteria->addSelectColumn($alias . '.tag_name');
@@ -467,7 +452,6 @@ class TagTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.tag_update');
             $criteria->addSelectColumn($alias . '.tag_created');
             $criteria->addSelectColumn($alias . '.tag_updated');
-            $criteria->addSelectColumn($alias . '.tag_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class TagTableMap extends TableMap
             $criteria->removeSelectColumn(TagTableMap::COL_TAG_UPDATE);
             $criteria->removeSelectColumn(TagTableMap::COL_TAG_CREATED);
             $criteria->removeSelectColumn(TagTableMap::COL_TAG_UPDATED);
-            $criteria->removeSelectColumn(TagTableMap::COL_TAG_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.tag_id');
             $criteria->removeSelectColumn($alias . '.tag_name');
@@ -507,7 +490,6 @@ class TagTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.tag_update');
             $criteria->removeSelectColumn($alias . '.tag_created');
             $criteria->removeSelectColumn($alias . '.tag_updated');
-            $criteria->removeSelectColumn($alias . '.tag_deleted');
         }
     }
 

@@ -58,7 +58,7 @@ class PageTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PageTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the page_id field
@@ -121,11 +121,6 @@ class PageTableMap extends TableMap
     const COL_PAGE_UPDATED = 'pages.page_updated';
 
     /**
-     * the column name for the page_deleted field
-     */
-    const COL_PAGE_DELETED = 'pages.page_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class PageTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Url', 'Title', 'Content', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'url', 'title', 'content', 'status', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PageTableMap::COL_PAGE_ID, PageTableMap::COL_SITE_ID, PageTableMap::COL_PAGE_URL, PageTableMap::COL_PAGE_TITLE, PageTableMap::COL_PAGE_CONTENT, PageTableMap::COL_PAGE_STATUS, PageTableMap::COL_PAGE_INSERT, PageTableMap::COL_PAGE_UPDATE, PageTableMap::COL_PAGE_CREATED, PageTableMap::COL_PAGE_UPDATED, PageTableMap::COL_PAGE_DELETED, ),
-        self::TYPE_FIELDNAME     => array('page_id', 'site_id', 'page_url', 'page_title', 'page_content', 'page_status', 'page_insert', 'page_update', 'page_created', 'page_updated', 'page_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Url', 'Title', 'Content', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'url', 'title', 'content', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PageTableMap::COL_PAGE_ID, PageTableMap::COL_SITE_ID, PageTableMap::COL_PAGE_URL, PageTableMap::COL_PAGE_TITLE, PageTableMap::COL_PAGE_CONTENT, PageTableMap::COL_PAGE_STATUS, PageTableMap::COL_PAGE_INSERT, PageTableMap::COL_PAGE_UPDATE, PageTableMap::COL_PAGE_CREATED, PageTableMap::COL_PAGE_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('page_id', 'site_id', 'page_url', 'page_title', 'page_content', 'page_status', 'page_insert', 'page_update', 'page_created', 'page_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class PageTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Url' => 2, 'Title' => 3, 'Content' => 4, 'Status' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'url' => 2, 'title' => 3, 'content' => 4, 'status' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(PageTableMap::COL_PAGE_ID => 0, PageTableMap::COL_SITE_ID => 1, PageTableMap::COL_PAGE_URL => 2, PageTableMap::COL_PAGE_TITLE => 3, PageTableMap::COL_PAGE_CONTENT => 4, PageTableMap::COL_PAGE_STATUS => 5, PageTableMap::COL_PAGE_INSERT => 6, PageTableMap::COL_PAGE_UPDATE => 7, PageTableMap::COL_PAGE_CREATED => 8, PageTableMap::COL_PAGE_UPDATED => 9, PageTableMap::COL_PAGE_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('page_id' => 0, 'site_id' => 1, 'page_url' => 2, 'page_title' => 3, 'page_content' => 4, 'page_status' => 5, 'page_insert' => 6, 'page_update' => 7, 'page_created' => 8, 'page_updated' => 9, 'page_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Url' => 2, 'Title' => 3, 'Content' => 4, 'Status' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'url' => 2, 'title' => 3, 'content' => 4, 'status' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(PageTableMap::COL_PAGE_ID => 0, PageTableMap::COL_SITE_ID => 1, PageTableMap::COL_PAGE_URL => 2, PageTableMap::COL_PAGE_TITLE => 3, PageTableMap::COL_PAGE_CONTENT => 4, PageTableMap::COL_PAGE_STATUS => 5, PageTableMap::COL_PAGE_INSERT => 6, PageTableMap::COL_PAGE_UPDATE => 7, PageTableMap::COL_PAGE_CREATED => 8, PageTableMap::COL_PAGE_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('page_id' => 0, 'site_id' => 1, 'page_url' => 2, 'page_title' => 3, 'page_content' => 4, 'page_status' => 5, 'page_insert' => 6, 'page_update' => 7, 'page_created' => 8, 'page_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class PageTableMap extends TableMap
         'COL_PAGE_UPDATED' => 'PAGE_UPDATED',
         'page_updated' => 'PAGE_UPDATED',
         'pages.page_updated' => 'PAGE_UPDATED',
-        'DeletedAt' => 'PAGE_DELETED',
-        'Page.DeletedAt' => 'PAGE_DELETED',
-        'deletedAt' => 'PAGE_DELETED',
-        'page.deletedAt' => 'PAGE_DELETED',
-        'PageTableMap::COL_PAGE_DELETED' => 'PAGE_DELETED',
-        'COL_PAGE_DELETED' => 'PAGE_DELETED',
-        'page_deleted' => 'PAGE_DELETED',
-        'pages.page_deleted' => 'PAGE_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class PageTableMap extends TableMap
         $this->addColumn('page_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('page_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('page_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('page_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class PageTableMap extends TableMap
             $criteria->addSelectColumn(PageTableMap::COL_PAGE_UPDATE);
             $criteria->addSelectColumn(PageTableMap::COL_PAGE_CREATED);
             $criteria->addSelectColumn(PageTableMap::COL_PAGE_UPDATED);
-            $criteria->addSelectColumn(PageTableMap::COL_PAGE_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.page_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -467,7 +452,6 @@ class PageTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.page_update');
             $criteria->addSelectColumn($alias . '.page_created');
             $criteria->addSelectColumn($alias . '.page_updated');
-            $criteria->addSelectColumn($alias . '.page_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class PageTableMap extends TableMap
             $criteria->removeSelectColumn(PageTableMap::COL_PAGE_UPDATE);
             $criteria->removeSelectColumn(PageTableMap::COL_PAGE_CREATED);
             $criteria->removeSelectColumn(PageTableMap::COL_PAGE_UPDATED);
-            $criteria->removeSelectColumn(PageTableMap::COL_PAGE_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.page_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -507,7 +490,6 @@ class PageTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.page_update');
             $criteria->removeSelectColumn($alias . '.page_created');
             $criteria->removeSelectColumn($alias . '.page_updated');
-            $criteria->removeSelectColumn($alias . '.page_deleted');
         }
     }
 

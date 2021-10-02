@@ -151,13 +151,6 @@ abstract class Role implements ActiveRecordInterface
     protected $role_updated;
 
     /**
-     * The value for the role_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $role_deleted;
-
-    /**
      * @var        ChildArticle
      */
     protected $aArticle;
@@ -566,28 +559,6 @@ abstract class Role implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [role_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->role_deleted;
-        } else {
-            return $this->role_deleted instanceof \DateTimeInterface ? $this->role_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [id] column.
      *
      * @param int $v New value
@@ -844,26 +815,6 @@ abstract class Role implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [role_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Role The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->role_deleted !== null || $dt !== null) {
-            if ($this->role_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->role_deleted->format("Y-m-d H:i:s.u")) {
-                $this->role_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[RoleTableMap::COL_ROLE_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -943,12 +894,6 @@ abstract class Role implements ActiveRecordInterface
                 $col = null;
             }
             $this->role_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : RoleTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->role_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -957,7 +902,7 @@ abstract class Role implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 13; // 13 = RoleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = RoleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Role'), 0, $e);
@@ -1234,9 +1179,6 @@ abstract class Role implements ActiveRecordInterface
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'role_updated';
         }
-        if ($this->isColumnModified(RoleTableMap::COL_ROLE_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'role_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO roles (%s) VALUES (%s)',
@@ -1283,9 +1225,6 @@ abstract class Role implements ActiveRecordInterface
                         break;
                     case 'role_updated':
                         $stmt->bindValue($identifier, $this->role_updated ? $this->role_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'role_deleted':
-                        $stmt->bindValue($identifier, $this->role_deleted ? $this->role_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1385,9 +1324,6 @@ abstract class Role implements ActiveRecordInterface
             case 11:
                 return $this->getUpdatedAt();
                 break;
-            case 12:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1430,7 +1366,6 @@ abstract class Role implements ActiveRecordInterface
             $keys[9] => $this->getDate(),
             $keys[10] => $this->getCreatedAt(),
             $keys[11] => $this->getUpdatedAt(),
-            $keys[12] => $this->getDeletedAt(),
         );
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
@@ -1442,10 +1377,6 @@ abstract class Role implements ActiveRecordInterface
 
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[12]] instanceof \DateTimeInterface) {
-            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1554,9 +1485,6 @@ abstract class Role implements ActiveRecordInterface
             case 11:
                 $this->setUpdatedAt($value);
                 break;
-            case 12:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1618,9 +1546,6 @@ abstract class Role implements ActiveRecordInterface
         }
         if (array_key_exists($keys[11], $arr)) {
             $this->setUpdatedAt($arr[$keys[11]]);
-        }
-        if (array_key_exists($keys[12], $arr)) {
-            $this->setDeletedAt($arr[$keys[12]]);
         }
 
         return $this;
@@ -1700,9 +1625,6 @@ abstract class Role implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RoleTableMap::COL_ROLE_UPDATED)) {
             $criteria->add(RoleTableMap::COL_ROLE_UPDATED, $this->role_updated);
-        }
-        if ($this->isColumnModified(RoleTableMap::COL_ROLE_DELETED)) {
-            $criteria->add(RoleTableMap::COL_ROLE_DELETED, $this->role_deleted);
         }
 
         return $criteria;
@@ -1801,7 +1723,6 @@ abstract class Role implements ActiveRecordInterface
         $copyObj->setDate($this->getDate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1957,7 +1878,6 @@ abstract class Role implements ActiveRecordInterface
         $this->role_date = null;
         $this->role_created = null;
         $this->role_updated = null;
-        $this->role_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

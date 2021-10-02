@@ -39,7 +39,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery orderByUpdate($order = Criteria::ASC) Order by the event_update_ column
  * @method     ChildEventQuery orderByCreatedAt($order = Criteria::ASC) Order by the event_created column
  * @method     ChildEventQuery orderByUpdatedAt($order = Criteria::ASC) Order by the event_updated column
- * @method     ChildEventQuery orderByDeletedAt($order = Criteria::ASC) Order by the event_deleted column
  *
  * @method     ChildEventQuery groupById() Group by the event_id column
  * @method     ChildEventQuery groupBySiteId() Group by the site_id column
@@ -61,7 +60,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery groupByUpdate() Group by the event_update_ column
  * @method     ChildEventQuery groupByCreatedAt() Group by the event_created column
  * @method     ChildEventQuery groupByUpdatedAt() Group by the event_updated column
- * @method     ChildEventQuery groupByDeletedAt() Group by the event_deleted column
  *
  * @method     ChildEventQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEventQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -93,8 +91,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent|null findOneByInsert(string $event_insert_) Return the first ChildEvent filtered by the event_insert_ column
  * @method     ChildEvent|null findOneByUpdate(string $event_update_) Return the first ChildEvent filtered by the event_update_ column
  * @method     ChildEvent|null findOneByCreatedAt(string $event_created) Return the first ChildEvent filtered by the event_created column
- * @method     ChildEvent|null findOneByUpdatedAt(string $event_updated) Return the first ChildEvent filtered by the event_updated column
- * @method     ChildEvent|null findOneByDeletedAt(string $event_deleted) Return the first ChildEvent filtered by the event_deleted column *
+ * @method     ChildEvent|null findOneByUpdatedAt(string $event_updated) Return the first ChildEvent filtered by the event_updated column *
 
  * @method     ChildEvent requirePk($key, ConnectionInterface $con = null) Return the ChildEvent by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -119,7 +116,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent requireOneByUpdate(string $event_update_) Return the first ChildEvent filtered by the event_update_ column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByCreatedAt(string $event_created) Return the first ChildEvent filtered by the event_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByUpdatedAt(string $event_updated) Return the first ChildEvent filtered by the event_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEvent requireOneByDeletedAt(string $event_deleted) Return the first ChildEvent filtered by the event_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvent[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildEvent> find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
@@ -163,8 +159,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
  * @method     ChildEvent[]|ObjectCollection findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
- * @method     ChildEvent[]|ObjectCollection findByDeletedAt(string $event_deleted) Return ChildEvent objects filtered by the event_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDeletedAt(string $event_deleted) Return ChildEvent objects filtered by the event_deleted column
  * @method     ChildEvent[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildEvent> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -264,7 +258,7 @@ abstract class EventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_id, site_id, publisher_id, bookshop_id, library_id, event_url, event_title, event_subtitle, event_desc, event_location, event_illustration_legend, event_highlighted, event_start, event_end, event_date, event_status, event_insert_, event_update_, event_created, event_updated, event_deleted FROM events WHERE event_id = :p0';
+        $sql = 'SELECT event_id, site_id, publisher_id, bookshop_id, library_id, event_url, event_title, event_subtitle, event_desc, event_location, event_illustration_legend, event_highlighted, event_start, event_end, event_date, event_status, event_insert_, event_update_, event_created, event_updated FROM events WHERE event_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1062,49 +1056,6 @@ abstract class EventQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the event_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE event_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE event_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE event_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildEventQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(EventTableMap::COL_EVENT_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(EventTableMap::COL_EVENT_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_DELETED, $deletedAt, $comparison);
     }
 
     /**

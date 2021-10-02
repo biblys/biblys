@@ -162,13 +162,6 @@ abstract class Customer implements ActiveRecordInterface
     protected $customer_updated;
 
     /**
-     * The value for the customer_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $customer_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -614,28 +607,6 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [customer_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->customer_deleted;
-        } else {
-            return $this->customer_deleted instanceof \DateTimeInterface ? $this->customer_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [customer_id] column.
      *
      * @param int $v New value
@@ -916,26 +887,6 @@ abstract class Customer implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [customer_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Customer The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->customer_deleted !== null || $dt !== null) {
-            if ($this->customer_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->customer_deleted->format("Y-m-d H:i:s.u")) {
-                $this->customer_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CustomerTableMap::COL_CUSTOMER_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1031,12 +982,6 @@ abstract class Customer implements ActiveRecordInterface
                 $col = null;
             }
             $this->customer_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : CustomerTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->customer_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1045,7 +990,7 @@ abstract class Customer implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = CustomerTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = CustomerTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Customer'), 0, $e);
@@ -1301,9 +1246,6 @@ abstract class Customer implements ActiveRecordInterface
         if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'customer_updated';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'customer_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO customers (%s) VALUES (%s)',
@@ -1356,9 +1298,6 @@ abstract class Customer implements ActiveRecordInterface
                         break;
                     case 'customer_updated':
                         $stmt->bindValue($identifier, $this->customer_updated ? $this->customer_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'customer_deleted':
-                        $stmt->bindValue($identifier, $this->customer_deleted ? $this->customer_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1464,9 +1403,6 @@ abstract class Customer implements ActiveRecordInterface
             case 13:
                 return $this->getUpdatedAt();
                 break;
-            case 14:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1510,7 +1446,6 @@ abstract class Customer implements ActiveRecordInterface
             $keys[11] => $this->getUpdate(),
             $keys[12] => $this->getCreatedAt(),
             $keys[13] => $this->getUpdatedAt(),
-            $keys[14] => $this->getDeletedAt(),
         );
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d');
@@ -1530,10 +1465,6 @@ abstract class Customer implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1616,9 +1547,6 @@ abstract class Customer implements ActiveRecordInterface
             case 13:
                 $this->setUpdatedAt($value);
                 break;
-            case 14:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1686,9 +1614,6 @@ abstract class Customer implements ActiveRecordInterface
         }
         if (array_key_exists($keys[13], $arr)) {
             $this->setUpdatedAt($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setDeletedAt($arr[$keys[14]]);
         }
 
         return $this;
@@ -1774,9 +1699,6 @@ abstract class Customer implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_UPDATED)) {
             $criteria->add(CustomerTableMap::COL_CUSTOMER_UPDATED, $this->customer_updated);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMER_DELETED)) {
-            $criteria->add(CustomerTableMap::COL_CUSTOMER_DELETED, $this->customer_deleted);
         }
 
         return $criteria;
@@ -1877,7 +1799,6 @@ abstract class Customer implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1927,7 +1848,6 @@ abstract class Customer implements ActiveRecordInterface
         $this->customer_update = null;
         $this->customer_created = null;
         $this->customer_updated = null;
-        $this->customer_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

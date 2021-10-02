@@ -105,13 +105,6 @@ abstract class Price implements ActiveRecordInterface
     protected $price_updated;
 
     /**
-     * The value for the price_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $price_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -428,28 +421,6 @@ abstract class Price implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [price_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->price_deleted;
-        } else {
-            return $this->price_deleted instanceof \DateTimeInterface ? $this->price_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [price_id] column.
      *
      * @param int $v New value
@@ -570,26 +541,6 @@ abstract class Price implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [price_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Price The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->price_deleted !== null || $dt !== null) {
-            if ($this->price_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->price_deleted->format("Y-m-d H:i:s.u")) {
-                $this->price_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[PriceTableMap::COL_PRICE_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -648,12 +599,6 @@ abstract class Price implements ActiveRecordInterface
                 $col = null;
             }
             $this->price_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PriceTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->price_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -662,7 +607,7 @@ abstract class Price implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = PriceTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = PriceTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Price'), 0, $e);
@@ -894,9 +839,6 @@ abstract class Price implements ActiveRecordInterface
         if ($this->isColumnModified(PriceTableMap::COL_PRICE_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'price_updated';
         }
-        if ($this->isColumnModified(PriceTableMap::COL_PRICE_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'price_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO prices (%s) VALUES (%s)',
@@ -925,9 +867,6 @@ abstract class Price implements ActiveRecordInterface
                         break;
                     case 'price_updated':
                         $stmt->bindValue($identifier, $this->price_updated ? $this->price_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'price_deleted':
-                        $stmt->bindValue($identifier, $this->price_deleted ? $this->price_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1009,9 +948,6 @@ abstract class Price implements ActiveRecordInterface
             case 5:
                 return $this->getUpdatedAt();
                 break;
-            case 6:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1047,7 +983,6 @@ abstract class Price implements ActiveRecordInterface
             $keys[3] => $this->getAmount(),
             $keys[4] => $this->getCreatedAt(),
             $keys[5] => $this->getUpdatedAt(),
-            $keys[6] => $this->getDeletedAt(),
         );
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
@@ -1055,10 +990,6 @@ abstract class Price implements ActiveRecordInterface
 
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1117,9 +1048,6 @@ abstract class Price implements ActiveRecordInterface
             case 5:
                 $this->setUpdatedAt($value);
                 break;
-            case 6:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1163,9 +1091,6 @@ abstract class Price implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setUpdatedAt($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setDeletedAt($arr[$keys[6]]);
         }
 
         return $this;
@@ -1227,9 +1152,6 @@ abstract class Price implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PriceTableMap::COL_PRICE_UPDATED)) {
             $criteria->add(PriceTableMap::COL_PRICE_UPDATED, $this->price_updated);
-        }
-        if ($this->isColumnModified(PriceTableMap::COL_PRICE_DELETED)) {
-            $criteria->add(PriceTableMap::COL_PRICE_DELETED, $this->price_deleted);
         }
 
         return $criteria;
@@ -1322,7 +1244,6 @@ abstract class Price implements ActiveRecordInterface
         $copyObj->setAmount($this->getAmount());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1364,7 +1285,6 @@ abstract class Price implements ActiveRecordInterface
         $this->price_amount = null;
         $this->price_created = null;
         $this->price_updated = null;
-        $this->price_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

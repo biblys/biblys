@@ -138,13 +138,6 @@ abstract class Right implements ActiveRecordInterface
     protected $right_updated;
 
     /**
-     * The value for the right_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $right_deleted;
-
-    /**
      * @var        ChildUser
      */
     protected $aUser;
@@ -534,28 +527,6 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [right_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->right_deleted;
-        } else {
-            return $this->right_deleted instanceof \DateTimeInterface ? $this->right_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [right_id] column.
      *
      * @param int $v New value
@@ -772,26 +743,6 @@ abstract class Right implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [right_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Right The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->right_deleted !== null || $dt !== null) {
-            if ($this->right_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->right_deleted->format("Y-m-d H:i:s.u")) {
-                $this->right_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[RightTableMap::COL_RIGHT_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -866,12 +817,6 @@ abstract class Right implements ActiveRecordInterface
                 $col = null;
             }
             $this->right_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : RightTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->right_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -880,7 +825,7 @@ abstract class Right implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = RightTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = RightTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Right'), 0, $e);
@@ -1151,9 +1096,6 @@ abstract class Right implements ActiveRecordInterface
         if ($this->isColumnModified(RightTableMap::COL_RIGHT_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'right_updated';
         }
-        if ($this->isColumnModified(RightTableMap::COL_RIGHT_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'right_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO rights (%s) VALUES (%s)',
@@ -1194,9 +1136,6 @@ abstract class Right implements ActiveRecordInterface
                         break;
                     case 'right_updated':
                         $stmt->bindValue($identifier, $this->right_updated ? $this->right_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'right_deleted':
-                        $stmt->bindValue($identifier, $this->right_deleted ? $this->right_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1290,9 +1229,6 @@ abstract class Right implements ActiveRecordInterface
             case 9:
                 return $this->getUpdatedAt();
                 break;
-            case 10:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1333,7 +1269,6 @@ abstract class Right implements ActiveRecordInterface
             $keys[7] => $this->getCurrent(),
             $keys[8] => $this->getCreatedAt(),
             $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getDeletedAt(),
         );
         if ($result[$keys[8]] instanceof \DateTimeInterface) {
             $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
@@ -1341,10 +1276,6 @@ abstract class Right implements ActiveRecordInterface
 
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1447,9 +1378,6 @@ abstract class Right implements ActiveRecordInterface
             case 9:
                 $this->setUpdatedAt($value);
                 break;
-            case 10:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1505,9 +1433,6 @@ abstract class Right implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setUpdatedAt($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setDeletedAt($arr[$keys[10]]);
         }
 
         return $this;
@@ -1581,9 +1506,6 @@ abstract class Right implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RightTableMap::COL_RIGHT_UPDATED)) {
             $criteria->add(RightTableMap::COL_RIGHT_UPDATED, $this->right_updated);
-        }
-        if ($this->isColumnModified(RightTableMap::COL_RIGHT_DELETED)) {
-            $criteria->add(RightTableMap::COL_RIGHT_DELETED, $this->right_deleted);
         }
 
         return $criteria;
@@ -1680,7 +1602,6 @@ abstract class Right implements ActiveRecordInterface
         $copyObj->setCurrent($this->getCurrent());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1834,7 +1755,6 @@ abstract class Right implements ActiveRecordInterface
         $this->right_current = null;
         $this->right_created = null;
         $this->right_updated = null;
-        $this->right_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

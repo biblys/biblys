@@ -133,13 +133,6 @@ abstract class Tag implements ActiveRecordInterface
     protected $tag_updated;
 
     /**
-     * The value for the tag_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $tag_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -532,28 +525,6 @@ abstract class Tag implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [tag_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->tag_deleted;
-        } else {
-            return $this->tag_deleted instanceof \DateTimeInterface ? $this->tag_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [tag_id] column.
      *
      * @param int $v New value
@@ -754,26 +725,6 @@ abstract class Tag implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [tag_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Tag The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->tag_deleted !== null || $dt !== null) {
-            if ($this->tag_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->tag_deleted->format("Y-m-d H:i:s.u")) {
-                $this->tag_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[TagTableMap::COL_TAG_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -853,12 +804,6 @@ abstract class Tag implements ActiveRecordInterface
                 $col = null;
             }
             $this->tag_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : TagTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->tag_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -867,7 +812,7 @@ abstract class Tag implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = TagTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = TagTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Tag'), 0, $e);
@@ -1111,9 +1056,6 @@ abstract class Tag implements ActiveRecordInterface
         if ($this->isColumnModified(TagTableMap::COL_TAG_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'tag_updated';
         }
-        if ($this->isColumnModified(TagTableMap::COL_TAG_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'tag_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO tags (%s) VALUES (%s)',
@@ -1154,9 +1096,6 @@ abstract class Tag implements ActiveRecordInterface
                         break;
                     case 'tag_updated':
                         $stmt->bindValue($identifier, $this->tag_updated ? $this->tag_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'tag_deleted':
-                        $stmt->bindValue($identifier, $this->tag_deleted ? $this->tag_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1250,9 +1189,6 @@ abstract class Tag implements ActiveRecordInterface
             case 9:
                 return $this->getUpdatedAt();
                 break;
-            case 10:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1292,7 +1228,6 @@ abstract class Tag implements ActiveRecordInterface
             $keys[7] => $this->getUpdate(),
             $keys[8] => $this->getCreatedAt(),
             $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getDeletedAt(),
         );
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
@@ -1312,10 +1247,6 @@ abstract class Tag implements ActiveRecordInterface
 
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1386,9 +1317,6 @@ abstract class Tag implements ActiveRecordInterface
             case 9:
                 $this->setUpdatedAt($value);
                 break;
-            case 10:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1444,9 +1372,6 @@ abstract class Tag implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setUpdatedAt($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setDeletedAt($arr[$keys[10]]);
         }
 
         return $this;
@@ -1520,9 +1445,6 @@ abstract class Tag implements ActiveRecordInterface
         }
         if ($this->isColumnModified(TagTableMap::COL_TAG_UPDATED)) {
             $criteria->add(TagTableMap::COL_TAG_UPDATED, $this->tag_updated);
-        }
-        if ($this->isColumnModified(TagTableMap::COL_TAG_DELETED)) {
-            $criteria->add(TagTableMap::COL_TAG_DELETED, $this->tag_deleted);
         }
 
         return $criteria;
@@ -1619,7 +1541,6 @@ abstract class Tag implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1665,7 +1586,6 @@ abstract class Tag implements ActiveRecordInterface
         $this->tag_update = null;
         $this->tag_created = null;
         $this->tag_updated = null;
-        $this->tag_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

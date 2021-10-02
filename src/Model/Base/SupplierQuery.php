@@ -30,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplierQuery orderByUpdate($order = Criteria::ASC) Order by the supplier_update column
  * @method     ChildSupplierQuery orderByCreatedAt($order = Criteria::ASC) Order by the supplier_created column
  * @method     ChildSupplierQuery orderByUpdatedAt($order = Criteria::ASC) Order by the supplier_updated column
- * @method     ChildSupplierQuery orderByDeletedAt($order = Criteria::ASC) Order by the supplier_deleted column
  *
  * @method     ChildSupplierQuery groupById() Group by the supplier_id column
  * @method     ChildSupplierQuery groupBySiteId() Group by the site_id column
@@ -43,7 +42,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplierQuery groupByUpdate() Group by the supplier_update column
  * @method     ChildSupplierQuery groupByCreatedAt() Group by the supplier_created column
  * @method     ChildSupplierQuery groupByUpdatedAt() Group by the supplier_updated column
- * @method     ChildSupplierQuery groupByDeletedAt() Group by the supplier_deleted column
  *
  * @method     ChildSupplierQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildSupplierQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -66,8 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier|null findOneByInsert(string $supplier_insert) Return the first ChildSupplier filtered by the supplier_insert column
  * @method     ChildSupplier|null findOneByUpdate(string $supplier_update) Return the first ChildSupplier filtered by the supplier_update column
  * @method     ChildSupplier|null findOneByCreatedAt(string $supplier_created) Return the first ChildSupplier filtered by the supplier_created column
- * @method     ChildSupplier|null findOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column
- * @method     ChildSupplier|null findOneByDeletedAt(string $supplier_deleted) Return the first ChildSupplier filtered by the supplier_deleted column *
+ * @method     ChildSupplier|null findOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column *
 
  * @method     ChildSupplier requirePk($key, ConnectionInterface $con = null) Return the ChildSupplier by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOne(ConnectionInterface $con = null) Return the first ChildSupplier matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -83,7 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier requireOneByUpdate(string $supplier_update) Return the first ChildSupplier filtered by the supplier_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOneByCreatedAt(string $supplier_created) Return the first ChildSupplier filtered by the supplier_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSupplier requireOneByDeletedAt(string $supplier_deleted) Return the first ChildSupplier filtered by the supplier_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSupplier[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildSupplier> find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
@@ -109,8 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
  * @method     ChildSupplier[]|ObjectCollection findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
- * @method     ChildSupplier[]|ObjectCollection findByDeletedAt(string $supplier_deleted) Return ChildSupplier objects filtered by the supplier_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByDeletedAt(string $supplier_deleted) Return ChildSupplier objects filtered by the supplier_deleted column
  * @method     ChildSupplier[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSupplier> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -210,7 +204,7 @@ abstract class SupplierQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT supplier_id, site_id, supplier_name, supplier_gln, supplier_remise, supplier_notva, supplier_on_order, supplier_insert, supplier_update, supplier_created, supplier_updated, supplier_deleted FROM suppliers WHERE supplier_id = :p0';
+        $sql = 'SELECT supplier_id, site_id, supplier_name, supplier_gln, supplier_remise, supplier_notva, supplier_on_order, supplier_insert, supplier_update, supplier_created, supplier_updated FROM suppliers WHERE supplier_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -713,49 +707,6 @@ abstract class SupplierQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the supplier_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE supplier_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE supplier_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE supplier_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_DELETED, $deletedAt, $comparison);
     }
 
     /**

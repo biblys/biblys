@@ -58,7 +58,7 @@ class LangTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class LangTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the lang_id field
@@ -111,11 +111,6 @@ class LangTableMap extends TableMap
     const COL_LANG_UPDATED = 'langs.lang_updated';
 
     /**
-     * the column name for the lang_deleted field
-     */
-    const COL_LANG_DELETED = 'langs.lang_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -127,11 +122,11 @@ class LangTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Iso639-1', 'Iso639-2', 'Iso639-3', 'Name', 'NameOriginal', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'iso639-1', 'iso639-2', 'iso639-3', 'name', 'nameOriginal', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID, LangTableMap::COL_ISO639_1, LangTableMap::COL_ISO639_2, LangTableMap::COL_ISO639_3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, LangTableMap::COL_LANG_DELETED, ),
-        self::TYPE_FIELDNAME     => array('lang_id', 'lang_iso_639-1', 'lang_iso_639-2', 'lang_iso_639-3', 'lang_name', 'lang_name_original', 'lang_created', 'lang_updated', 'lang_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'Iso639-1', 'Iso639-2', 'Iso639-3', 'Name', 'NameOriginal', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'iso639-1', 'iso639-2', 'iso639-3', 'name', 'nameOriginal', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID, LangTableMap::COL_ISO639_1, LangTableMap::COL_ISO639_2, LangTableMap::COL_ISO639_3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('lang_id', 'lang_iso_639-1', 'lang_iso_639-2', 'lang_iso_639-3', 'lang_name', 'lang_name_original', 'lang_created', 'lang_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -141,11 +136,11 @@ class LangTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Iso639-1' => 1, 'Iso639-2' => 2, 'Iso639-3' => 3, 'Name' => 4, 'NameOriginal' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'DeletedAt' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'iso639-1' => 1, 'iso639-2' => 2, 'iso639-3' => 3, 'name' => 4, 'nameOriginal' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'deletedAt' => 8, ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_ISO639_1 => 1, LangTableMap::COL_ISO639_2 => 2, LangTableMap::COL_ISO639_3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, LangTableMap::COL_LANG_DELETED => 8, ),
-        self::TYPE_FIELDNAME     => array('lang_id' => 0, 'lang_iso_639-1' => 1, 'lang_iso_639-2' => 2, 'lang_iso_639-3' => 3, 'lang_name' => 4, 'lang_name_original' => 5, 'lang_created' => 6, 'lang_updated' => 7, 'lang_deleted' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Iso639-1' => 1, 'Iso639-2' => 2, 'Iso639-3' => 3, 'Name' => 4, 'NameOriginal' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'iso639-1' => 1, 'iso639-2' => 2, 'iso639-3' => 3, 'name' => 4, 'nameOriginal' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
+        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_ISO639_1 => 1, LangTableMap::COL_ISO639_2 => 2, LangTableMap::COL_ISO639_3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, ),
+        self::TYPE_FIELDNAME     => array('lang_id' => 0, 'lang_iso_639-1' => 1, 'lang_iso_639-2' => 2, 'lang_iso_639-3' => 3, 'lang_name' => 4, 'lang_name_original' => 5, 'lang_created' => 6, 'lang_updated' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -218,14 +213,6 @@ class LangTableMap extends TableMap
         'COL_LANG_UPDATED' => 'LANG_UPDATED',
         'lang_updated' => 'LANG_UPDATED',
         'langs.lang_updated' => 'LANG_UPDATED',
-        'DeletedAt' => 'LANG_DELETED',
-        'Lang.DeletedAt' => 'LANG_DELETED',
-        'deletedAt' => 'LANG_DELETED',
-        'lang.deletedAt' => 'LANG_DELETED',
-        'LangTableMap::COL_LANG_DELETED' => 'LANG_DELETED',
-        'COL_LANG_DELETED' => 'LANG_DELETED',
-        'lang_deleted' => 'LANG_DELETED',
-        'langs.lang_deleted' => 'LANG_DELETED',
     ];
 
     /**
@@ -253,7 +240,6 @@ class LangTableMap extends TableMap
         $this->addColumn('lang_name_original', 'NameOriginal', 'VARCHAR', false, 35, null);
         $this->addColumn('lang_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('lang_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('lang_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -425,7 +411,6 @@ class LangTableMap extends TableMap
             $criteria->addSelectColumn(LangTableMap::COL_LANG_NAME_ORIGINAL);
             $criteria->addSelectColumn(LangTableMap::COL_LANG_CREATED);
             $criteria->addSelectColumn(LangTableMap::COL_LANG_UPDATED);
-            $criteria->addSelectColumn(LangTableMap::COL_LANG_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.lang_id');
             $criteria->addSelectColumn($alias . '.lang_iso_639-1');
@@ -435,7 +420,6 @@ class LangTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.lang_name_original');
             $criteria->addSelectColumn($alias . '.lang_created');
             $criteria->addSelectColumn($alias . '.lang_updated');
-            $criteria->addSelectColumn($alias . '.lang_deleted');
         }
     }
 
@@ -461,7 +445,6 @@ class LangTableMap extends TableMap
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_NAME_ORIGINAL);
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_CREATED);
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_UPDATED);
-            $criteria->removeSelectColumn(LangTableMap::COL_LANG_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.lang_id');
             $criteria->removeSelectColumn($alias . '.lang_iso_639-1');
@@ -471,7 +454,6 @@ class LangTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.lang_name_original');
             $criteria->removeSelectColumn($alias . '.lang_created');
             $criteria->removeSelectColumn($alias . '.lang_updated');
-            $criteria->removeSelectColumn($alias . '.lang_deleted');
         }
     }
 

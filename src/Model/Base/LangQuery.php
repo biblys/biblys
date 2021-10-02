@@ -27,7 +27,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLangQuery orderByNameOriginal($order = Criteria::ASC) Order by the lang_name_original column
  * @method     ChildLangQuery orderByCreatedAt($order = Criteria::ASC) Order by the lang_created column
  * @method     ChildLangQuery orderByUpdatedAt($order = Criteria::ASC) Order by the lang_updated column
- * @method     ChildLangQuery orderByDeletedAt($order = Criteria::ASC) Order by the lang_deleted column
  *
  * @method     ChildLangQuery groupById() Group by the lang_id column
  * @method     ChildLangQuery groupByIso639-1() Group by the lang_iso_639-1 column
@@ -37,7 +36,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLangQuery groupByNameOriginal() Group by the lang_name_original column
  * @method     ChildLangQuery groupByCreatedAt() Group by the lang_created column
  * @method     ChildLangQuery groupByUpdatedAt() Group by the lang_updated column
- * @method     ChildLangQuery groupByDeletedAt() Group by the lang_deleted column
  *
  * @method     ChildLangQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildLangQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,8 +55,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLang|null findOneByName(string $lang_name) Return the first ChildLang filtered by the lang_name column
  * @method     ChildLang|null findOneByNameOriginal(string $lang_name_original) Return the first ChildLang filtered by the lang_name_original column
  * @method     ChildLang|null findOneByCreatedAt(string $lang_created) Return the first ChildLang filtered by the lang_created column
- * @method     ChildLang|null findOneByUpdatedAt(string $lang_updated) Return the first ChildLang filtered by the lang_updated column
- * @method     ChildLang|null findOneByDeletedAt(string $lang_deleted) Return the first ChildLang filtered by the lang_deleted column *
+ * @method     ChildLang|null findOneByUpdatedAt(string $lang_updated) Return the first ChildLang filtered by the lang_updated column *
 
  * @method     ChildLang requirePk($key, ConnectionInterface $con = null) Return the ChildLang by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLang requireOne(ConnectionInterface $con = null) Return the first ChildLang matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -71,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLang requireOneByNameOriginal(string $lang_name_original) Return the first ChildLang filtered by the lang_name_original column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLang requireOneByCreatedAt(string $lang_created) Return the first ChildLang filtered by the lang_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLang requireOneByUpdatedAt(string $lang_updated) Return the first ChildLang filtered by the lang_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLang requireOneByDeletedAt(string $lang_deleted) Return the first ChildLang filtered by the lang_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLang[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildLang> find(ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
@@ -91,8 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildLang> findByCreatedAt(string $lang_created) Return ChildLang objects filtered by the lang_created column
  * @method     ChildLang[]|ObjectCollection findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildLang> findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
- * @method     ChildLang[]|ObjectCollection findByDeletedAt(string $lang_deleted) Return ChildLang objects filtered by the lang_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildLang> findByDeletedAt(string $lang_deleted) Return ChildLang objects filtered by the lang_deleted column
  * @method     ChildLang[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLang> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -192,7 +186,7 @@ abstract class LangQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT lang_id, lang_iso_639-1, lang_iso_639-2, lang_iso_639-3, lang_name, lang_name_original, lang_created, lang_updated, lang_deleted FROM langs WHERE lang_id = :p0';
+        $sql = 'SELECT lang_id, lang_iso_639-1, lang_iso_639-2, lang_iso_639-3, lang_name, lang_name_original, lang_created, lang_updated FROM langs WHERE lang_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -532,49 +526,6 @@ abstract class LangQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(LangTableMap::COL_LANG_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the lang_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE lang_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE lang_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE lang_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildLangQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(LangTableMap::COL_LANG_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(LangTableMap::COL_LANG_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(LangTableMap::COL_LANG_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -43,7 +43,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery orderByDate($order = Criteria::ASC) Order by the link_date column
  * @method     ChildLinkQuery orderByCreatedAt($order = Criteria::ASC) Order by the link_created column
  * @method     ChildLinkQuery orderByUpdatedAt($order = Criteria::ASC) Order by the link_updated column
- * @method     ChildLinkQuery orderByDeletedAt($order = Criteria::ASC) Order by the link_deleted column
  *
  * @method     ChildLinkQuery groupById() Group by the link_id column
  * @method     ChildLinkQuery groupBySiteId() Group by the site_id column
@@ -69,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLinkQuery groupByDate() Group by the link_date column
  * @method     ChildLinkQuery groupByCreatedAt() Group by the link_created column
  * @method     ChildLinkQuery groupByUpdatedAt() Group by the link_updated column
- * @method     ChildLinkQuery groupByDeletedAt() Group by the link_deleted column
  *
  * @method     ChildLinkQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildLinkQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -105,8 +103,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink|null findOneBySponsorUserId(int $link_sponsor_user_id) Return the first ChildLink filtered by the link_sponsor_user_id column
  * @method     ChildLink|null findOneByDate(string $link_date) Return the first ChildLink filtered by the link_date column
  * @method     ChildLink|null findOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column
- * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column
- * @method     ChildLink|null findOneByDeletedAt(string $link_deleted) Return the first ChildLink filtered by the link_deleted column *
+ * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column *
 
  * @method     ChildLink requirePk($key, ConnectionInterface $con = null) Return the ChildLink by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOne(ConnectionInterface $con = null) Return the first ChildLink matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -135,7 +132,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink requireOneByDate(string $link_date) Return the first ChildLink filtered by the link_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLink requireOneByDeletedAt(string $link_deleted) Return the first ChildLink filtered by the link_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLink[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildLink> find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
@@ -187,8 +183,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildLink> findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
  * @method     ChildLink[]|ObjectCollection findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildLink> findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
- * @method     ChildLink[]|ObjectCollection findByDeletedAt(string $link_deleted) Return ChildLink objects filtered by the link_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDeletedAt(string $link_deleted) Return ChildLink objects filtered by the link_deleted column
  * @method     ChildLink[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLink> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -288,7 +282,7 @@ abstract class LinkQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT link_id, site_id, user_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, tag_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_user_id, link_date, link_created, link_updated, link_deleted FROM links WHERE link_id = :p0';
+        $sql = 'SELECT link_id, site_id, user_id, article_id, stock_id, list_id, book_id, people_id, job_id, rayon_id, tag_id, event_id, post_id, collection_id, publisher_id, supplier_id, media_id, bundle_id, link_hide, link_do_not_reorder, link_sponsor_user_id, link_date, link_created, link_updated FROM links WHERE link_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1338,49 +1332,6 @@ abstract class LinkQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(LinkTableMap::COL_LINK_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the link_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE link_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE link_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE link_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(LinkTableMap::COL_LINK_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(LinkTableMap::COL_LINK_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_DELETED, $deletedAt, $comparison);
     }
 
     /**

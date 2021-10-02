@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJobQuery orderByDate($order = Criteria::ASC) Order by the job_date column
  * @method     ChildJobQuery orderByCreatedAt($order = Criteria::ASC) Order by the job_created column
  * @method     ChildJobQuery orderByUpdatedAt($order = Criteria::ASC) Order by the job_updated column
- * @method     ChildJobQuery orderByDeletedAt($order = Criteria::ASC) Order by the job_deleted column
  *
  * @method     ChildJobQuery groupById() Group by the job_id column
  * @method     ChildJobQuery groupByName() Group by the job_name column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJobQuery groupByDate() Group by the job_date column
  * @method     ChildJobQuery groupByCreatedAt() Group by the job_created column
  * @method     ChildJobQuery groupByUpdatedAt() Group by the job_updated column
- * @method     ChildJobQuery groupByDeletedAt() Group by the job_deleted column
  *
  * @method     ChildJobQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildJobQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob|null findOneByOnix(string $job_onix) Return the first ChildJob filtered by the job_onix column
  * @method     ChildJob|null findOneByDate(string $job_date) Return the first ChildJob filtered by the job_date column
  * @method     ChildJob|null findOneByCreatedAt(string $job_created) Return the first ChildJob filtered by the job_created column
- * @method     ChildJob|null findOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column
- * @method     ChildJob|null findOneByDeletedAt(string $job_deleted) Return the first ChildJob filtered by the job_deleted column *
+ * @method     ChildJob|null findOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column *
 
  * @method     ChildJob requirePk($key, ConnectionInterface $con = null) Return the ChildJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOne(ConnectionInterface $con = null) Return the first ChildJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob requireOneByDate(string $job_date) Return the first ChildJob filtered by the job_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOneByCreatedAt(string $job_created) Return the first ChildJob filtered by the job_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildJob requireOneByDeletedAt(string $job_deleted) Return the first ChildJob filtered by the job_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildJob[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildJob> find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildJob> findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
  * @method     ChildJob[]|ObjectCollection findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildJob> findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
- * @method     ChildJob[]|ObjectCollection findByDeletedAt(string $job_deleted) Return ChildJob objects filtered by the job_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByDeletedAt(string $job_deleted) Return ChildJob objects filtered by the job_deleted column
  * @method     ChildJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildJob> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class JobQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT job_id, job_name, job_name_f, job_other_names, job_event, job_order, job_onix, job_date, job_created, job_updated, job_deleted FROM jobs WHERE job_id = :p0';
+        $sql = 'SELECT job_id, job_name, job_name_f, job_other_names, job_event, job_order, job_onix, job_date, job_created, job_updated FROM jobs WHERE job_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -630,49 +624,6 @@ abstract class JobQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(JobTableMap::COL_JOB_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the job_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE job_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE job_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE job_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildJobQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(JobTableMap::COL_JOB_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(JobTableMap::COL_JOB_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(JobTableMap::COL_JOB_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -157,13 +157,6 @@ abstract class File implements ActiveRecordInterface
     protected $file_updated;
 
     /**
-     * The value for the file_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $file_deleted;
-
-    /**
      * The value for the file_created field.
      *
      * @var        DateTime|null
@@ -594,28 +587,6 @@ abstract class File implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [file_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->file_deleted;
-        } else {
-            return $this->file_deleted instanceof \DateTimeInterface ? $this->file_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Get the [optionally formatted] temporal [file_created] column value.
      *
      *
@@ -906,26 +877,6 @@ abstract class File implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [file_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\File The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->file_deleted !== null || $dt !== null) {
-            if ($this->file_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->file_deleted->format("Y-m-d H:i:s.u")) {
-                $this->file_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[FileTableMap::COL_FILE_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Sets the value of [file_created] column to a normalized version of the date/time value specified.
      *
      * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
@@ -1041,13 +992,7 @@ abstract class File implements ActiveRecordInterface
             }
             $this->file_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : FileTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->file_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : FileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : FileTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1060,7 +1005,7 @@ abstract class File implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = FileTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = FileTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\File'), 0, $e);
@@ -1313,9 +1258,6 @@ abstract class File implements ActiveRecordInterface
         if ($this->isColumnModified(FileTableMap::COL_FILE_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'file_updated';
         }
-        if ($this->isColumnModified(FileTableMap::COL_FILE_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'file_deleted';
-        }
         if ($this->isColumnModified(FileTableMap::COL_FILE_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'file_created';
         }
@@ -1368,9 +1310,6 @@ abstract class File implements ActiveRecordInterface
                         break;
                     case 'file_updated':
                         $stmt->bindValue($identifier, $this->file_updated ? $this->file_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'file_deleted':
-                        $stmt->bindValue($identifier, $this->file_deleted ? $this->file_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'file_created':
                         $stmt->bindValue($identifier, $this->file_created ? $this->file_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1477,9 +1416,6 @@ abstract class File implements ActiveRecordInterface
                 return $this->getUpdatedAt();
                 break;
             case 13:
-                return $this->getDeletedAt();
-                break;
-            case 14:
                 return $this->getCreatedAt();
                 break;
             default:
@@ -1524,8 +1460,7 @@ abstract class File implements ActiveRecordInterface
             $keys[10] => $this->getInserted(),
             $keys[11] => $this->getUploaded(),
             $keys[12] => $this->getUpdatedAt(),
-            $keys[13] => $this->getDeletedAt(),
-            $keys[14] => $this->getCreatedAt(),
+            $keys[13] => $this->getCreatedAt(),
         );
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
@@ -1541,10 +1476,6 @@ abstract class File implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1625,9 +1556,6 @@ abstract class File implements ActiveRecordInterface
                 $this->setUpdatedAt($value);
                 break;
             case 13:
-                $this->setDeletedAt($value);
-                break;
-            case 14:
                 $this->setCreatedAt($value);
                 break;
         } // switch()
@@ -1696,10 +1624,7 @@ abstract class File implements ActiveRecordInterface
             $this->setUpdatedAt($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setDeletedAt($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setCreatedAt($arr[$keys[14]]);
+            $this->setCreatedAt($arr[$keys[13]]);
         }
 
         return $this;
@@ -1782,9 +1707,6 @@ abstract class File implements ActiveRecordInterface
         }
         if ($this->isColumnModified(FileTableMap::COL_FILE_UPDATED)) {
             $criteria->add(FileTableMap::COL_FILE_UPDATED, $this->file_updated);
-        }
-        if ($this->isColumnModified(FileTableMap::COL_FILE_DELETED)) {
-            $criteria->add(FileTableMap::COL_FILE_DELETED, $this->file_deleted);
         }
         if ($this->isColumnModified(FileTableMap::COL_FILE_CREATED)) {
             $criteria->add(FileTableMap::COL_FILE_CREATED, $this->file_created);
@@ -1887,7 +1809,6 @@ abstract class File implements ActiveRecordInterface
         $copyObj->setInserted($this->getInserted());
         $copyObj->setUploaded($this->getUploaded());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1937,7 +1858,6 @@ abstract class File implements ActiveRecordInterface
         $this->file_inserted = null;
         $this->file_uploaded = null;
         $this->file_updated = null;
-        $this->file_deleted = null;
         $this->file_created = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

@@ -58,7 +58,7 @@ class PublisherTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 39;
+    const NUM_COLUMNS = 38;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PublisherTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 39;
+    const NUM_HYDRATE_COLUMNS = 38;
 
     /**
      * the column name for the publisher_id field
@@ -261,11 +261,6 @@ class PublisherTableMap extends TableMap
     const COL_PUBLISHER_UPDATED = 'publishers.publisher_updated';
 
     /**
-     * the column name for the publisher_deleted field
-     */
-    const COL_PUBLISHER_DELETED = 'publishers.publisher_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -277,11 +272,11 @@ class PublisherTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'NameAlphabetic', 'Url', 'NoosfereId', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'BuyLink', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Isbn', 'Volumes', 'AverageRun', 'Specialities', 'Diffuseur', 'Distributeur', 'Vpc', 'Paypal', 'ShippingMode', 'ShippingFee', 'Gln', 'Desc', 'DescShort', 'OrderBy', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'nameAlphabetic', 'url', 'noosfereId', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'buyLink', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'isbn', 'volumes', 'averageRun', 'specialities', 'diffuseur', 'distributeur', 'vpc', 'paypal', 'shippingMode', 'shippingFee', 'gln', 'desc', 'descShort', 'orderBy', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PublisherTableMap::COL_PUBLISHER_ID, PublisherTableMap::COL_SITE_ID, PublisherTableMap::COL_PUBLISHER_NAME, PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC, PublisherTableMap::COL_PUBLISHER_URL, PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID, PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE, PublisherTableMap::COL_PUBLISHER_ADDRESS, PublisherTableMap::COL_PUBLISHER_POSTAL_CODE, PublisherTableMap::COL_PUBLISHER_CITY, PublisherTableMap::COL_PUBLISHER_COUNTRY, PublisherTableMap::COL_PUBLISHER_PHONE, PublisherTableMap::COL_PUBLISHER_FAX, PublisherTableMap::COL_PUBLISHER_WEBSITE, PublisherTableMap::COL_PUBLISHER_BUY_LINK, PublisherTableMap::COL_PUBLISHER_EMAIL, PublisherTableMap::COL_PUBLISHER_FACEBOOK, PublisherTableMap::COL_PUBLISHER_TWITTER, PublisherTableMap::COL_PUBLISHER_LEGAL_FORM, PublisherTableMap::COL_PUBLISHER_CREATION_YEAR, PublisherTableMap::COL_PUBLISHER_ISBN, PublisherTableMap::COL_PUBLISHER_VOLUMES, PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN, PublisherTableMap::COL_PUBLISHER_SPECIALITIES, PublisherTableMap::COL_PUBLISHER_DIFFUSEUR, PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR, PublisherTableMap::COL_PUBLISHER_VPC, PublisherTableMap::COL_PUBLISHER_PAYPAL, PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE, PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE, PublisherTableMap::COL_PUBLISHER_GLN, PublisherTableMap::COL_PUBLISHER_DESC, PublisherTableMap::COL_PUBLISHER_DESC_SHORT, PublisherTableMap::COL_PUBLISHER_ORDER_BY, PublisherTableMap::COL_PUBLISHER_INSERT, PublisherTableMap::COL_PUBLISHER_UPDATE, PublisherTableMap::COL_PUBLISHER_CREATED, PublisherTableMap::COL_PUBLISHER_UPDATED, PublisherTableMap::COL_PUBLISHER_DELETED, ),
-        self::TYPE_FIELDNAME     => array('publisher_id', 'site_id', 'publisher_name', 'publisher_name_alphabetic', 'publisher_url', 'publisher_noosfere_id', 'publisher_representative', 'publisher_address', 'publisher_postal_code', 'publisher_city', 'publisher_country', 'publisher_phone', 'publisher_fax', 'publisher_website', 'publisher_buy_link', 'publisher_email', 'publisher_facebook', 'publisher_twitter', 'publisher_legal_form', 'publisher_creation_year', 'publisher_isbn', 'publisher_volumes', 'publisher_average_run', 'publisher_specialities', 'publisher_diffuseur', 'publisher_distributeur', 'publisher_vpc', 'publisher_paypal', 'publisher_shipping_mode', 'publisher_shipping_fee', 'publisher_gln', 'publisher_desc', 'publisher_desc_short', 'publisher_order_by', 'publisher_insert', 'publisher_update', 'publisher_created', 'publisher_updated', 'publisher_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'NameAlphabetic', 'Url', 'NoosfereId', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'BuyLink', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Isbn', 'Volumes', 'AverageRun', 'Specialities', 'Diffuseur', 'Distributeur', 'Vpc', 'Paypal', 'ShippingMode', 'ShippingFee', 'Gln', 'Desc', 'DescShort', 'OrderBy', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'nameAlphabetic', 'url', 'noosfereId', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'buyLink', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'isbn', 'volumes', 'averageRun', 'specialities', 'diffuseur', 'distributeur', 'vpc', 'paypal', 'shippingMode', 'shippingFee', 'gln', 'desc', 'descShort', 'orderBy', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PublisherTableMap::COL_PUBLISHER_ID, PublisherTableMap::COL_SITE_ID, PublisherTableMap::COL_PUBLISHER_NAME, PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC, PublisherTableMap::COL_PUBLISHER_URL, PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID, PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE, PublisherTableMap::COL_PUBLISHER_ADDRESS, PublisherTableMap::COL_PUBLISHER_POSTAL_CODE, PublisherTableMap::COL_PUBLISHER_CITY, PublisherTableMap::COL_PUBLISHER_COUNTRY, PublisherTableMap::COL_PUBLISHER_PHONE, PublisherTableMap::COL_PUBLISHER_FAX, PublisherTableMap::COL_PUBLISHER_WEBSITE, PublisherTableMap::COL_PUBLISHER_BUY_LINK, PublisherTableMap::COL_PUBLISHER_EMAIL, PublisherTableMap::COL_PUBLISHER_FACEBOOK, PublisherTableMap::COL_PUBLISHER_TWITTER, PublisherTableMap::COL_PUBLISHER_LEGAL_FORM, PublisherTableMap::COL_PUBLISHER_CREATION_YEAR, PublisherTableMap::COL_PUBLISHER_ISBN, PublisherTableMap::COL_PUBLISHER_VOLUMES, PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN, PublisherTableMap::COL_PUBLISHER_SPECIALITIES, PublisherTableMap::COL_PUBLISHER_DIFFUSEUR, PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR, PublisherTableMap::COL_PUBLISHER_VPC, PublisherTableMap::COL_PUBLISHER_PAYPAL, PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE, PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE, PublisherTableMap::COL_PUBLISHER_GLN, PublisherTableMap::COL_PUBLISHER_DESC, PublisherTableMap::COL_PUBLISHER_DESC_SHORT, PublisherTableMap::COL_PUBLISHER_ORDER_BY, PublisherTableMap::COL_PUBLISHER_INSERT, PublisherTableMap::COL_PUBLISHER_UPDATE, PublisherTableMap::COL_PUBLISHER_CREATED, PublisherTableMap::COL_PUBLISHER_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('publisher_id', 'site_id', 'publisher_name', 'publisher_name_alphabetic', 'publisher_url', 'publisher_noosfere_id', 'publisher_representative', 'publisher_address', 'publisher_postal_code', 'publisher_city', 'publisher_country', 'publisher_phone', 'publisher_fax', 'publisher_website', 'publisher_buy_link', 'publisher_email', 'publisher_facebook', 'publisher_twitter', 'publisher_legal_form', 'publisher_creation_year', 'publisher_isbn', 'publisher_volumes', 'publisher_average_run', 'publisher_specialities', 'publisher_diffuseur', 'publisher_distributeur', 'publisher_vpc', 'publisher_paypal', 'publisher_shipping_mode', 'publisher_shipping_fee', 'publisher_gln', 'publisher_desc', 'publisher_desc_short', 'publisher_order_by', 'publisher_insert', 'publisher_update', 'publisher_created', 'publisher_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, )
     );
 
     /**
@@ -291,11 +286,11 @@ class PublisherTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'NameAlphabetic' => 3, 'Url' => 4, 'NoosfereId' => 5, 'Representative' => 6, 'Address' => 7, 'PostalCode' => 8, 'City' => 9, 'Country' => 10, 'Phone' => 11, 'Fax' => 12, 'Website' => 13, 'BuyLink' => 14, 'Email' => 15, 'Facebook' => 16, 'Twitter' => 17, 'LegalForm' => 18, 'CreationYear' => 19, 'Isbn' => 20, 'Volumes' => 21, 'AverageRun' => 22, 'Specialities' => 23, 'Diffuseur' => 24, 'Distributeur' => 25, 'Vpc' => 26, 'Paypal' => 27, 'ShippingMode' => 28, 'ShippingFee' => 29, 'Gln' => 30, 'Desc' => 31, 'DescShort' => 32, 'OrderBy' => 33, 'Insert' => 34, 'Update' => 35, 'CreatedAt' => 36, 'UpdatedAt' => 37, 'DeletedAt' => 38, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'nameAlphabetic' => 3, 'url' => 4, 'noosfereId' => 5, 'representative' => 6, 'address' => 7, 'postalCode' => 8, 'city' => 9, 'country' => 10, 'phone' => 11, 'fax' => 12, 'website' => 13, 'buyLink' => 14, 'email' => 15, 'facebook' => 16, 'twitter' => 17, 'legalForm' => 18, 'creationYear' => 19, 'isbn' => 20, 'volumes' => 21, 'averageRun' => 22, 'specialities' => 23, 'diffuseur' => 24, 'distributeur' => 25, 'vpc' => 26, 'paypal' => 27, 'shippingMode' => 28, 'shippingFee' => 29, 'gln' => 30, 'desc' => 31, 'descShort' => 32, 'orderBy' => 33, 'insert' => 34, 'update' => 35, 'createdAt' => 36, 'updatedAt' => 37, 'deletedAt' => 38, ),
-        self::TYPE_COLNAME       => array(PublisherTableMap::COL_PUBLISHER_ID => 0, PublisherTableMap::COL_SITE_ID => 1, PublisherTableMap::COL_PUBLISHER_NAME => 2, PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC => 3, PublisherTableMap::COL_PUBLISHER_URL => 4, PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID => 5, PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE => 6, PublisherTableMap::COL_PUBLISHER_ADDRESS => 7, PublisherTableMap::COL_PUBLISHER_POSTAL_CODE => 8, PublisherTableMap::COL_PUBLISHER_CITY => 9, PublisherTableMap::COL_PUBLISHER_COUNTRY => 10, PublisherTableMap::COL_PUBLISHER_PHONE => 11, PublisherTableMap::COL_PUBLISHER_FAX => 12, PublisherTableMap::COL_PUBLISHER_WEBSITE => 13, PublisherTableMap::COL_PUBLISHER_BUY_LINK => 14, PublisherTableMap::COL_PUBLISHER_EMAIL => 15, PublisherTableMap::COL_PUBLISHER_FACEBOOK => 16, PublisherTableMap::COL_PUBLISHER_TWITTER => 17, PublisherTableMap::COL_PUBLISHER_LEGAL_FORM => 18, PublisherTableMap::COL_PUBLISHER_CREATION_YEAR => 19, PublisherTableMap::COL_PUBLISHER_ISBN => 20, PublisherTableMap::COL_PUBLISHER_VOLUMES => 21, PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN => 22, PublisherTableMap::COL_PUBLISHER_SPECIALITIES => 23, PublisherTableMap::COL_PUBLISHER_DIFFUSEUR => 24, PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR => 25, PublisherTableMap::COL_PUBLISHER_VPC => 26, PublisherTableMap::COL_PUBLISHER_PAYPAL => 27, PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE => 28, PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE => 29, PublisherTableMap::COL_PUBLISHER_GLN => 30, PublisherTableMap::COL_PUBLISHER_DESC => 31, PublisherTableMap::COL_PUBLISHER_DESC_SHORT => 32, PublisherTableMap::COL_PUBLISHER_ORDER_BY => 33, PublisherTableMap::COL_PUBLISHER_INSERT => 34, PublisherTableMap::COL_PUBLISHER_UPDATE => 35, PublisherTableMap::COL_PUBLISHER_CREATED => 36, PublisherTableMap::COL_PUBLISHER_UPDATED => 37, PublisherTableMap::COL_PUBLISHER_DELETED => 38, ),
-        self::TYPE_FIELDNAME     => array('publisher_id' => 0, 'site_id' => 1, 'publisher_name' => 2, 'publisher_name_alphabetic' => 3, 'publisher_url' => 4, 'publisher_noosfere_id' => 5, 'publisher_representative' => 6, 'publisher_address' => 7, 'publisher_postal_code' => 8, 'publisher_city' => 9, 'publisher_country' => 10, 'publisher_phone' => 11, 'publisher_fax' => 12, 'publisher_website' => 13, 'publisher_buy_link' => 14, 'publisher_email' => 15, 'publisher_facebook' => 16, 'publisher_twitter' => 17, 'publisher_legal_form' => 18, 'publisher_creation_year' => 19, 'publisher_isbn' => 20, 'publisher_volumes' => 21, 'publisher_average_run' => 22, 'publisher_specialities' => 23, 'publisher_diffuseur' => 24, 'publisher_distributeur' => 25, 'publisher_vpc' => 26, 'publisher_paypal' => 27, 'publisher_shipping_mode' => 28, 'publisher_shipping_fee' => 29, 'publisher_gln' => 30, 'publisher_desc' => 31, 'publisher_desc_short' => 32, 'publisher_order_by' => 33, 'publisher_insert' => 34, 'publisher_update' => 35, 'publisher_created' => 36, 'publisher_updated' => 37, 'publisher_deleted' => 38, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'NameAlphabetic' => 3, 'Url' => 4, 'NoosfereId' => 5, 'Representative' => 6, 'Address' => 7, 'PostalCode' => 8, 'City' => 9, 'Country' => 10, 'Phone' => 11, 'Fax' => 12, 'Website' => 13, 'BuyLink' => 14, 'Email' => 15, 'Facebook' => 16, 'Twitter' => 17, 'LegalForm' => 18, 'CreationYear' => 19, 'Isbn' => 20, 'Volumes' => 21, 'AverageRun' => 22, 'Specialities' => 23, 'Diffuseur' => 24, 'Distributeur' => 25, 'Vpc' => 26, 'Paypal' => 27, 'ShippingMode' => 28, 'ShippingFee' => 29, 'Gln' => 30, 'Desc' => 31, 'DescShort' => 32, 'OrderBy' => 33, 'Insert' => 34, 'Update' => 35, 'CreatedAt' => 36, 'UpdatedAt' => 37, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'nameAlphabetic' => 3, 'url' => 4, 'noosfereId' => 5, 'representative' => 6, 'address' => 7, 'postalCode' => 8, 'city' => 9, 'country' => 10, 'phone' => 11, 'fax' => 12, 'website' => 13, 'buyLink' => 14, 'email' => 15, 'facebook' => 16, 'twitter' => 17, 'legalForm' => 18, 'creationYear' => 19, 'isbn' => 20, 'volumes' => 21, 'averageRun' => 22, 'specialities' => 23, 'diffuseur' => 24, 'distributeur' => 25, 'vpc' => 26, 'paypal' => 27, 'shippingMode' => 28, 'shippingFee' => 29, 'gln' => 30, 'desc' => 31, 'descShort' => 32, 'orderBy' => 33, 'insert' => 34, 'update' => 35, 'createdAt' => 36, 'updatedAt' => 37, ),
+        self::TYPE_COLNAME       => array(PublisherTableMap::COL_PUBLISHER_ID => 0, PublisherTableMap::COL_SITE_ID => 1, PublisherTableMap::COL_PUBLISHER_NAME => 2, PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC => 3, PublisherTableMap::COL_PUBLISHER_URL => 4, PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID => 5, PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE => 6, PublisherTableMap::COL_PUBLISHER_ADDRESS => 7, PublisherTableMap::COL_PUBLISHER_POSTAL_CODE => 8, PublisherTableMap::COL_PUBLISHER_CITY => 9, PublisherTableMap::COL_PUBLISHER_COUNTRY => 10, PublisherTableMap::COL_PUBLISHER_PHONE => 11, PublisherTableMap::COL_PUBLISHER_FAX => 12, PublisherTableMap::COL_PUBLISHER_WEBSITE => 13, PublisherTableMap::COL_PUBLISHER_BUY_LINK => 14, PublisherTableMap::COL_PUBLISHER_EMAIL => 15, PublisherTableMap::COL_PUBLISHER_FACEBOOK => 16, PublisherTableMap::COL_PUBLISHER_TWITTER => 17, PublisherTableMap::COL_PUBLISHER_LEGAL_FORM => 18, PublisherTableMap::COL_PUBLISHER_CREATION_YEAR => 19, PublisherTableMap::COL_PUBLISHER_ISBN => 20, PublisherTableMap::COL_PUBLISHER_VOLUMES => 21, PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN => 22, PublisherTableMap::COL_PUBLISHER_SPECIALITIES => 23, PublisherTableMap::COL_PUBLISHER_DIFFUSEUR => 24, PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR => 25, PublisherTableMap::COL_PUBLISHER_VPC => 26, PublisherTableMap::COL_PUBLISHER_PAYPAL => 27, PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE => 28, PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE => 29, PublisherTableMap::COL_PUBLISHER_GLN => 30, PublisherTableMap::COL_PUBLISHER_DESC => 31, PublisherTableMap::COL_PUBLISHER_DESC_SHORT => 32, PublisherTableMap::COL_PUBLISHER_ORDER_BY => 33, PublisherTableMap::COL_PUBLISHER_INSERT => 34, PublisherTableMap::COL_PUBLISHER_UPDATE => 35, PublisherTableMap::COL_PUBLISHER_CREATED => 36, PublisherTableMap::COL_PUBLISHER_UPDATED => 37, ),
+        self::TYPE_FIELDNAME     => array('publisher_id' => 0, 'site_id' => 1, 'publisher_name' => 2, 'publisher_name_alphabetic' => 3, 'publisher_url' => 4, 'publisher_noosfere_id' => 5, 'publisher_representative' => 6, 'publisher_address' => 7, 'publisher_postal_code' => 8, 'publisher_city' => 9, 'publisher_country' => 10, 'publisher_phone' => 11, 'publisher_fax' => 12, 'publisher_website' => 13, 'publisher_buy_link' => 14, 'publisher_email' => 15, 'publisher_facebook' => 16, 'publisher_twitter' => 17, 'publisher_legal_form' => 18, 'publisher_creation_year' => 19, 'publisher_isbn' => 20, 'publisher_volumes' => 21, 'publisher_average_run' => 22, 'publisher_specialities' => 23, 'publisher_diffuseur' => 24, 'publisher_distributeur' => 25, 'publisher_vpc' => 26, 'publisher_paypal' => 27, 'publisher_shipping_mode' => 28, 'publisher_shipping_fee' => 29, 'publisher_gln' => 30, 'publisher_desc' => 31, 'publisher_desc_short' => 32, 'publisher_order_by' => 33, 'publisher_insert' => 34, 'publisher_update' => 35, 'publisher_created' => 36, 'publisher_updated' => 37, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, )
     );
 
     /**
@@ -608,14 +603,6 @@ class PublisherTableMap extends TableMap
         'COL_PUBLISHER_UPDATED' => 'PUBLISHER_UPDATED',
         'publisher_updated' => 'PUBLISHER_UPDATED',
         'publishers.publisher_updated' => 'PUBLISHER_UPDATED',
-        'DeletedAt' => 'PUBLISHER_DELETED',
-        'Publisher.DeletedAt' => 'PUBLISHER_DELETED',
-        'deletedAt' => 'PUBLISHER_DELETED',
-        'publisher.deletedAt' => 'PUBLISHER_DELETED',
-        'PublisherTableMap::COL_PUBLISHER_DELETED' => 'PUBLISHER_DELETED',
-        'COL_PUBLISHER_DELETED' => 'PUBLISHER_DELETED',
-        'publisher_deleted' => 'PUBLISHER_DELETED',
-        'publishers.publisher_deleted' => 'PUBLISHER_DELETED',
     ];
 
     /**
@@ -673,7 +660,6 @@ class PublisherTableMap extends TableMap
         $this->addColumn('publisher_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('publisher_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('publisher_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('publisher_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -875,7 +861,6 @@ class PublisherTableMap extends TableMap
             $criteria->addSelectColumn(PublisherTableMap::COL_PUBLISHER_UPDATE);
             $criteria->addSelectColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
             $criteria->addSelectColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
-            $criteria->addSelectColumn(PublisherTableMap::COL_PUBLISHER_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.publisher_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -915,7 +900,6 @@ class PublisherTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.publisher_update');
             $criteria->addSelectColumn($alias . '.publisher_created');
             $criteria->addSelectColumn($alias . '.publisher_updated');
-            $criteria->addSelectColumn($alias . '.publisher_deleted');
         }
     }
 
@@ -971,7 +955,6 @@ class PublisherTableMap extends TableMap
             $criteria->removeSelectColumn(PublisherTableMap::COL_PUBLISHER_UPDATE);
             $criteria->removeSelectColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
             $criteria->removeSelectColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
-            $criteria->removeSelectColumn(PublisherTableMap::COL_PUBLISHER_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.publisher_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -1011,7 +994,6 @@ class PublisherTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.publisher_update');
             $criteria->removeSelectColumn($alias . '.publisher_created');
             $criteria->removeSelectColumn($alias . '.publisher_updated');
-            $criteria->removeSelectColumn($alias . '.publisher_deleted');
         }
     }
 

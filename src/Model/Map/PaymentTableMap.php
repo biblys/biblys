@@ -58,7 +58,7 @@ class PaymentTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PaymentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the payment_id field
@@ -121,11 +121,6 @@ class PaymentTableMap extends TableMap
     const COL_PAYMENT_UPDATED = 'payments.payment_updated';
 
     /**
-     * the column name for the payment_deleted field
-     */
-    const COL_PAYMENT_DELETED = 'payments.payment_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'OrderId', 'Amount', 'Mode', 'ProviderId', 'Url', 'CreatedAt', 'Executed', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'orderId', 'amount', 'mode', 'providerId', 'url', 'createdAt', 'executed', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENT_ID, PaymentTableMap::COL_SITE_ID, PaymentTableMap::COL_ORDER_ID, PaymentTableMap::COL_PAYMENT_AMOUNT, PaymentTableMap::COL_PAYMENT_MODE, PaymentTableMap::COL_PAYMENT_PROVIDER_ID, PaymentTableMap::COL_PAYMENT_URL, PaymentTableMap::COL_PAYMENT_CREATED, PaymentTableMap::COL_PAYMENT_EXECUTED, PaymentTableMap::COL_PAYMENT_UPDATED, PaymentTableMap::COL_PAYMENT_DELETED, ),
-        self::TYPE_FIELDNAME     => array('payment_id', 'site_id', 'order_id', 'payment_amount', 'payment_mode', 'payment_provider_id', 'payment_url', 'payment_created', 'payment_executed', 'payment_updated', 'payment_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'OrderId', 'Amount', 'Mode', 'ProviderId', 'Url', 'CreatedAt', 'Executed', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'orderId', 'amount', 'mode', 'providerId', 'url', 'createdAt', 'executed', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENT_ID, PaymentTableMap::COL_SITE_ID, PaymentTableMap::COL_ORDER_ID, PaymentTableMap::COL_PAYMENT_AMOUNT, PaymentTableMap::COL_PAYMENT_MODE, PaymentTableMap::COL_PAYMENT_PROVIDER_ID, PaymentTableMap::COL_PAYMENT_URL, PaymentTableMap::COL_PAYMENT_CREATED, PaymentTableMap::COL_PAYMENT_EXECUTED, PaymentTableMap::COL_PAYMENT_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('payment_id', 'site_id', 'order_id', 'payment_amount', 'payment_mode', 'payment_provider_id', 'payment_url', 'payment_created', 'payment_executed', 'payment_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'OrderId' => 2, 'Amount' => 3, 'Mode' => 4, 'ProviderId' => 5, 'Url' => 6, 'CreatedAt' => 7, 'Executed' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'orderId' => 2, 'amount' => 3, 'mode' => 4, 'providerId' => 5, 'url' => 6, 'createdAt' => 7, 'executed' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENT_ID => 0, PaymentTableMap::COL_SITE_ID => 1, PaymentTableMap::COL_ORDER_ID => 2, PaymentTableMap::COL_PAYMENT_AMOUNT => 3, PaymentTableMap::COL_PAYMENT_MODE => 4, PaymentTableMap::COL_PAYMENT_PROVIDER_ID => 5, PaymentTableMap::COL_PAYMENT_URL => 6, PaymentTableMap::COL_PAYMENT_CREATED => 7, PaymentTableMap::COL_PAYMENT_EXECUTED => 8, PaymentTableMap::COL_PAYMENT_UPDATED => 9, PaymentTableMap::COL_PAYMENT_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('payment_id' => 0, 'site_id' => 1, 'order_id' => 2, 'payment_amount' => 3, 'payment_mode' => 4, 'payment_provider_id' => 5, 'payment_url' => 6, 'payment_created' => 7, 'payment_executed' => 8, 'payment_updated' => 9, 'payment_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'OrderId' => 2, 'Amount' => 3, 'Mode' => 4, 'ProviderId' => 5, 'Url' => 6, 'CreatedAt' => 7, 'Executed' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'orderId' => 2, 'amount' => 3, 'mode' => 4, 'providerId' => 5, 'url' => 6, 'createdAt' => 7, 'executed' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENT_ID => 0, PaymentTableMap::COL_SITE_ID => 1, PaymentTableMap::COL_ORDER_ID => 2, PaymentTableMap::COL_PAYMENT_AMOUNT => 3, PaymentTableMap::COL_PAYMENT_MODE => 4, PaymentTableMap::COL_PAYMENT_PROVIDER_ID => 5, PaymentTableMap::COL_PAYMENT_URL => 6, PaymentTableMap::COL_PAYMENT_CREATED => 7, PaymentTableMap::COL_PAYMENT_EXECUTED => 8, PaymentTableMap::COL_PAYMENT_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('payment_id' => 0, 'site_id' => 1, 'order_id' => 2, 'payment_amount' => 3, 'payment_mode' => 4, 'payment_provider_id' => 5, 'payment_url' => 6, 'payment_created' => 7, 'payment_executed' => 8, 'payment_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class PaymentTableMap extends TableMap
         'COL_PAYMENT_UPDATED' => 'PAYMENT_UPDATED',
         'payment_updated' => 'PAYMENT_UPDATED',
         'payments.payment_updated' => 'PAYMENT_UPDATED',
-        'DeletedAt' => 'PAYMENT_DELETED',
-        'Payment.DeletedAt' => 'PAYMENT_DELETED',
-        'deletedAt' => 'PAYMENT_DELETED',
-        'payment.deletedAt' => 'PAYMENT_DELETED',
-        'PaymentTableMap::COL_PAYMENT_DELETED' => 'PAYMENT_DELETED',
-        'COL_PAYMENT_DELETED' => 'PAYMENT_DELETED',
-        'payment_deleted' => 'PAYMENT_DELETED',
-        'payments.payment_deleted' => 'PAYMENT_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class PaymentTableMap extends TableMap
         $this->addColumn('payment_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('payment_executed', 'Executed', 'TIMESTAMP', false, null, null);
         $this->addColumn('payment_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('payment_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_CREATED);
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_EXECUTED);
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
-            $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.payment_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -467,7 +452,6 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.payment_created');
             $criteria->addSelectColumn($alias . '.payment_executed');
             $criteria->addSelectColumn($alias . '.payment_updated');
-            $criteria->addSelectColumn($alias . '.payment_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class PaymentTableMap extends TableMap
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_CREATED);
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_EXECUTED);
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
-            $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.payment_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -507,7 +490,6 @@ class PaymentTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.payment_created');
             $criteria->removeSelectColumn($alias . '.payment_executed');
             $criteria->removeSelectColumn($alias . '.payment_updated');
-            $criteria->removeSelectColumn($alias . '.payment_deleted');
         }
     }
 

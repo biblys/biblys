@@ -58,7 +58,7 @@ class OptionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class OptionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the option_id field
@@ -106,11 +106,6 @@ class OptionTableMap extends TableMap
     const COL_OPTION_UPDATED = 'option.option_updated';
 
     /**
-     * the column name for the option_deleted field
-     */
-    const COL_OPTION_DELETED = 'option.option_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -122,11 +117,11 @@ class OptionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Key', 'Value', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'key', 'value', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(OptionTableMap::COL_OPTION_ID, OptionTableMap::COL_SITE_ID, OptionTableMap::COL_USER_ID, OptionTableMap::COL_OPTION_KEY, OptionTableMap::COL_OPTION_VALUE, OptionTableMap::COL_OPTION_CREATED, OptionTableMap::COL_OPTION_UPDATED, OptionTableMap::COL_OPTION_DELETED, ),
-        self::TYPE_FIELDNAME     => array('option_id', 'site_id', 'user_id', 'option_key', 'option_value', 'option_created', 'option_updated', 'option_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Key', 'Value', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'key', 'value', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(OptionTableMap::COL_OPTION_ID, OptionTableMap::COL_SITE_ID, OptionTableMap::COL_USER_ID, OptionTableMap::COL_OPTION_KEY, OptionTableMap::COL_OPTION_VALUE, OptionTableMap::COL_OPTION_CREATED, OptionTableMap::COL_OPTION_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('option_id', 'site_id', 'user_id', 'option_key', 'option_value', 'option_created', 'option_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -136,11 +131,11 @@ class OptionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Key' => 3, 'Value' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'DeletedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'key' => 3, 'value' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'deletedAt' => 7, ),
-        self::TYPE_COLNAME       => array(OptionTableMap::COL_OPTION_ID => 0, OptionTableMap::COL_SITE_ID => 1, OptionTableMap::COL_USER_ID => 2, OptionTableMap::COL_OPTION_KEY => 3, OptionTableMap::COL_OPTION_VALUE => 4, OptionTableMap::COL_OPTION_CREATED => 5, OptionTableMap::COL_OPTION_UPDATED => 6, OptionTableMap::COL_OPTION_DELETED => 7, ),
-        self::TYPE_FIELDNAME     => array('option_id' => 0, 'site_id' => 1, 'user_id' => 2, 'option_key' => 3, 'option_value' => 4, 'option_created' => 5, 'option_updated' => 6, 'option_deleted' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Key' => 3, 'Value' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'key' => 3, 'value' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(OptionTableMap::COL_OPTION_ID => 0, OptionTableMap::COL_SITE_ID => 1, OptionTableMap::COL_USER_ID => 2, OptionTableMap::COL_OPTION_KEY => 3, OptionTableMap::COL_OPTION_VALUE => 4, OptionTableMap::COL_OPTION_CREATED => 5, OptionTableMap::COL_OPTION_UPDATED => 6, ),
+        self::TYPE_FIELDNAME     => array('option_id' => 0, 'site_id' => 1, 'user_id' => 2, 'option_key' => 3, 'option_value' => 4, 'option_created' => 5, 'option_updated' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -205,14 +200,6 @@ class OptionTableMap extends TableMap
         'COL_OPTION_UPDATED' => 'OPTION_UPDATED',
         'option_updated' => 'OPTION_UPDATED',
         'option.option_updated' => 'OPTION_UPDATED',
-        'DeletedAt' => 'OPTION_DELETED',
-        'Option.DeletedAt' => 'OPTION_DELETED',
-        'deletedAt' => 'OPTION_DELETED',
-        'option.deletedAt' => 'OPTION_DELETED',
-        'OptionTableMap::COL_OPTION_DELETED' => 'OPTION_DELETED',
-        'COL_OPTION_DELETED' => 'OPTION_DELETED',
-        'option_deleted' => 'OPTION_DELETED',
-        'option.option_deleted' => 'OPTION_DELETED',
     ];
 
     /**
@@ -239,7 +226,6 @@ class OptionTableMap extends TableMap
         $this->addColumn('option_value', 'Value', 'VARCHAR', false, 2048, null);
         $this->addColumn('option_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('option_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('option_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -410,7 +396,6 @@ class OptionTableMap extends TableMap
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_VALUE);
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_CREATED);
             $criteria->addSelectColumn(OptionTableMap::COL_OPTION_UPDATED);
-            $criteria->addSelectColumn(OptionTableMap::COL_OPTION_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.option_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -419,7 +404,6 @@ class OptionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.option_value');
             $criteria->addSelectColumn($alias . '.option_created');
             $criteria->addSelectColumn($alias . '.option_updated');
-            $criteria->addSelectColumn($alias . '.option_deleted');
         }
     }
 
@@ -444,7 +428,6 @@ class OptionTableMap extends TableMap
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_VALUE);
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_CREATED);
             $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_UPDATED);
-            $criteria->removeSelectColumn(OptionTableMap::COL_OPTION_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.option_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -453,7 +436,6 @@ class OptionTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.option_value');
             $criteria->removeSelectColumn($alias . '.option_created');
             $criteria->removeSelectColumn($alias . '.option_updated');
-            $criteria->removeSelectColumn($alias . '.option_deleted');
         }
     }
 

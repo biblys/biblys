@@ -33,7 +33,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscriptionQuery orderByUpdate($order = Criteria::ASC) Order by the subscription_update column
  * @method     ChildSubscriptionQuery orderByCreatedAt($order = Criteria::ASC) Order by the subscription_created column
  * @method     ChildSubscriptionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the subscription_updated column
- * @method     ChildSubscriptionQuery orderByDeletedAt($order = Criteria::ASC) Order by the subscription_deleted column
  *
  * @method     ChildSubscriptionQuery groupById() Group by the subscription_id column
  * @method     ChildSubscriptionQuery groupBySiteId() Group by the site_id column
@@ -49,7 +48,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscriptionQuery groupByUpdate() Group by the subscription_update column
  * @method     ChildSubscriptionQuery groupByCreatedAt() Group by the subscription_created column
  * @method     ChildSubscriptionQuery groupByUpdatedAt() Group by the subscription_updated column
- * @method     ChildSubscriptionQuery groupByDeletedAt() Group by the subscription_deleted column
  *
  * @method     ChildSubscriptionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildSubscriptionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -75,8 +73,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription|null findOneByInsert(string $subscription_insert) Return the first ChildSubscription filtered by the subscription_insert column
  * @method     ChildSubscription|null findOneByUpdate(string $subscription_update) Return the first ChildSubscription filtered by the subscription_update column
  * @method     ChildSubscription|null findOneByCreatedAt(string $subscription_created) Return the first ChildSubscription filtered by the subscription_created column
- * @method     ChildSubscription|null findOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column
- * @method     ChildSubscription|null findOneByDeletedAt(string $subscription_deleted) Return the first ChildSubscription filtered by the subscription_deleted column *
+ * @method     ChildSubscription|null findOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column *
 
  * @method     ChildSubscription requirePk($key, ConnectionInterface $con = null) Return the ChildSubscription by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOne(ConnectionInterface $con = null) Return the first ChildSubscription matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -95,7 +92,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription requireOneByUpdate(string $subscription_update) Return the first ChildSubscription filtered by the subscription_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByCreatedAt(string $subscription_created) Return the first ChildSubscription filtered by the subscription_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSubscription requireOneByDeletedAt(string $subscription_deleted) Return the first ChildSubscription filtered by the subscription_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSubscription[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildSubscription> find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
@@ -127,8 +123,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
  * @method     ChildSubscription[]|ObjectCollection findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
- * @method     ChildSubscription[]|ObjectCollection findByDeletedAt(string $subscription_deleted) Return ChildSubscription objects filtered by the subscription_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByDeletedAt(string $subscription_deleted) Return ChildSubscription objects filtered by the subscription_deleted column
  * @method     ChildSubscription[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSubscription> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -228,7 +222,7 @@ abstract class SubscriptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT subscription_id, site_id, user_id, publisher_id, bookshop_id, library_id, subscription_type, subscription_email, subscription_ends, subscription_option, subscription_insert, subscription_update, subscription_created, subscription_updated, subscription_deleted FROM subscriptions WHERE subscription_id = :p0';
+        $sql = 'SELECT subscription_id, site_id, user_id, publisher_id, bookshop_id, library_id, subscription_type, subscription_email, subscription_ends, subscription_option, subscription_insert, subscription_update, subscription_created, subscription_updated FROM subscriptions WHERE subscription_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -852,49 +846,6 @@ abstract class SubscriptionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the subscription_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE subscription_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE subscription_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE subscription_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_DELETED, $deletedAt, $comparison);
     }
 
     /**

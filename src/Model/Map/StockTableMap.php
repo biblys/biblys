@@ -58,7 +58,7 @@ class StockTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 42;
+    const NUM_COLUMNS = 41;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class StockTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 42;
+    const NUM_HYDRATE_COLUMNS = 41;
 
     /**
      * the column name for the stock_id field
@@ -276,11 +276,6 @@ class StockTableMap extends TableMap
     const COL_STOCK_UPDATED = 'stock.stock_updated';
 
     /**
-     * the column name for the stock_deleted field
-     */
-    const COL_STOCK_DELETED = 'stock.stock_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -292,11 +287,11 @@ class StockTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'UserId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'userId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_USER_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, StockTableMap::COL_STOCK_DELETED, ),
-        self::TYPE_FIELDNAME     => array('stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'user_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', 'stock_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'UserId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'userId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_USER_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'user_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, )
     );
 
     /**
@@ -306,11 +301,11 @@ class StockTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'UserId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, 'DeletedAt' => 41, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'userId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, 'deletedAt' => 41, ),
-        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_USER_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, StockTableMap::COL_STOCK_DELETED => 41, ),
-        self::TYPE_FIELDNAME     => array('stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'user_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, 'stock_deleted' => 41, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'UserId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'userId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, ),
+        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_USER_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, ),
+        self::TYPE_FIELDNAME     => array('stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'user_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, )
     );
 
     /**
@@ -647,14 +642,6 @@ class StockTableMap extends TableMap
         'COL_STOCK_UPDATED' => 'STOCK_UPDATED',
         'stock_updated' => 'STOCK_UPDATED',
         'stock.stock_updated' => 'STOCK_UPDATED',
-        'DeletedAt' => 'STOCK_DELETED',
-        'Stock.DeletedAt' => 'STOCK_DELETED',
-        'deletedAt' => 'STOCK_DELETED',
-        'stock.deletedAt' => 'STOCK_DELETED',
-        'StockTableMap::COL_STOCK_DELETED' => 'STOCK_DELETED',
-        'COL_STOCK_DELETED' => 'STOCK_DELETED',
-        'stock_deleted' => 'STOCK_DELETED',
-        'stock.stock_deleted' => 'STOCK_DELETED',
     ];
 
     /**
@@ -715,7 +702,6 @@ class StockTableMap extends TableMap
         $this->addColumn('stock_dl', 'Dl', 'BOOLEAN', false, 1, false);
         $this->addColumn('stock_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('stock_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('stock_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -920,7 +906,6 @@ class StockTableMap extends TableMap
             $criteria->addSelectColumn(StockTableMap::COL_STOCK_DL);
             $criteria->addSelectColumn(StockTableMap::COL_STOCK_CREATED);
             $criteria->addSelectColumn(StockTableMap::COL_STOCK_UPDATED);
-            $criteria->addSelectColumn(StockTableMap::COL_STOCK_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.stock_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -963,7 +948,6 @@ class StockTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.stock_dl');
             $criteria->addSelectColumn($alias . '.stock_created');
             $criteria->addSelectColumn($alias . '.stock_updated');
-            $criteria->addSelectColumn($alias . '.stock_deleted');
         }
     }
 
@@ -1022,7 +1006,6 @@ class StockTableMap extends TableMap
             $criteria->removeSelectColumn(StockTableMap::COL_STOCK_DL);
             $criteria->removeSelectColumn(StockTableMap::COL_STOCK_CREATED);
             $criteria->removeSelectColumn(StockTableMap::COL_STOCK_UPDATED);
-            $criteria->removeSelectColumn(StockTableMap::COL_STOCK_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.stock_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -1065,7 +1048,6 @@ class StockTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.stock_dl');
             $criteria->removeSelectColumn($alias . '.stock_created');
             $criteria->removeSelectColumn($alias . '.stock_updated');
-            $criteria->removeSelectColumn($alias . '.stock_deleted');
         }
     }
 

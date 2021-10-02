@@ -32,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery orderByInserted($order = Criteria::ASC) Order by the file_inserted column
  * @method     ChildFileQuery orderByUploaded($order = Criteria::ASC) Order by the file_uploaded column
  * @method     ChildFileQuery orderByUpdatedAt($order = Criteria::ASC) Order by the file_updated column
- * @method     ChildFileQuery orderByDeletedAt($order = Criteria::ASC) Order by the file_deleted column
  * @method     ChildFileQuery orderByCreatedAt($order = Criteria::ASC) Order by the file_created column
  *
  * @method     ChildFileQuery groupById() Group by the file_id column
@@ -48,7 +47,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery groupByInserted() Group by the file_inserted column
  * @method     ChildFileQuery groupByUploaded() Group by the file_uploaded column
  * @method     ChildFileQuery groupByUpdatedAt() Group by the file_updated column
- * @method     ChildFileQuery groupByDeletedAt() Group by the file_deleted column
  * @method     ChildFileQuery groupByCreatedAt() Group by the file_created column
  *
  * @method     ChildFileQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -75,7 +73,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile|null findOneByInserted(string $file_inserted) Return the first ChildFile filtered by the file_inserted column
  * @method     ChildFile|null findOneByUploaded(string $file_uploaded) Return the first ChildFile filtered by the file_uploaded column
  * @method     ChildFile|null findOneByUpdatedAt(string $file_updated) Return the first ChildFile filtered by the file_updated column
- * @method     ChildFile|null findOneByDeletedAt(string $file_deleted) Return the first ChildFile filtered by the file_deleted column
  * @method     ChildFile|null findOneByCreatedAt(string $file_created) Return the first ChildFile filtered by the file_created column *
 
  * @method     ChildFile requirePk($key, ConnectionInterface $con = null) Return the ChildFile by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,7 +91,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile requireOneByInserted(string $file_inserted) Return the first ChildFile filtered by the file_inserted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByUploaded(string $file_uploaded) Return the first ChildFile filtered by the file_uploaded column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByUpdatedAt(string $file_updated) Return the first ChildFile filtered by the file_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildFile requireOneByDeletedAt(string $file_deleted) Return the first ChildFile filtered by the file_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByCreatedAt(string $file_created) Return the first ChildFile filtered by the file_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildFile[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
@@ -125,8 +121,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
  * @method     ChildFile[]|ObjectCollection findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
- * @method     ChildFile[]|ObjectCollection findByDeletedAt(string $file_deleted) Return ChildFile objects filtered by the file_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByDeletedAt(string $file_deleted) Return ChildFile objects filtered by the file_deleted column
  * @method     ChildFile[]|ObjectCollection findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
  * @psalm-method ObjectCollection&\Traversable<ChildFile> findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
  * @method     ChildFile[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -228,7 +222,7 @@ abstract class FileQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT file_id, article_id, user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_deleted, file_created FROM files WHERE file_id = :p0';
+        $sql = 'SELECT file_id, article_id, user_id, file_title, file_type, file_access, file_version, file_hash, file_size, file_ean, file_inserted, file_uploaded, file_updated, file_created FROM files WHERE file_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -777,49 +771,6 @@ abstract class FileQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FileTableMap::COL_FILE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the file_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE file_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE file_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE file_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildFileQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(FileTableMap::COL_FILE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(FileTableMap::COL_FILE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(FileTableMap::COL_FILE_DELETED, $deletedAt, $comparison);
     }
 
     /**

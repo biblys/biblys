@@ -58,7 +58,7 @@ class ImageTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class ImageTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the image_id field
@@ -131,11 +131,6 @@ class ImageTableMap extends TableMap
     const COL_IMAGE_UPDATED = 'images.image_updated';
 
     /**
-     * the column name for the image_deleted field
-     */
-    const COL_IMAGE_DELETED = 'images.image_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -147,11 +142,11 @@ class ImageTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'BookshopId', 'EventId', 'LibraryId', 'Nature', 'Legend', 'Type', 'Size', 'Inserted', 'Uploaded', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'bookshopId', 'eventId', 'libraryId', 'nature', 'legend', 'type', 'size', 'inserted', 'uploaded', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(ImageTableMap::COL_IMAGE_ID, ImageTableMap::COL_SITE_ID, ImageTableMap::COL_BOOKSHOP_ID, ImageTableMap::COL_EVENT_ID, ImageTableMap::COL_LIBRARY_ID, ImageTableMap::COL_IMAGE_NATURE, ImageTableMap::COL_IMAGE_LEGEND, ImageTableMap::COL_IMAGE_TYPE, ImageTableMap::COL_IMAGE_SIZE, ImageTableMap::COL_IMAGE_INSERTED, ImageTableMap::COL_IMAGE_UPLOADED, ImageTableMap::COL_IMAGE_UPDATED, ImageTableMap::COL_IMAGE_DELETED, ),
-        self::TYPE_FIELDNAME     => array('image_id', 'site_id', 'bookshop_id', 'event_id', 'library_id', 'image_nature', 'image_legend', 'image_type', 'image_size', 'image_inserted', 'image_uploaded', 'image_updated', 'image_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'BookshopId', 'EventId', 'LibraryId', 'Nature', 'Legend', 'Type', 'Size', 'Inserted', 'Uploaded', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'bookshopId', 'eventId', 'libraryId', 'nature', 'legend', 'type', 'size', 'inserted', 'uploaded', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(ImageTableMap::COL_IMAGE_ID, ImageTableMap::COL_SITE_ID, ImageTableMap::COL_BOOKSHOP_ID, ImageTableMap::COL_EVENT_ID, ImageTableMap::COL_LIBRARY_ID, ImageTableMap::COL_IMAGE_NATURE, ImageTableMap::COL_IMAGE_LEGEND, ImageTableMap::COL_IMAGE_TYPE, ImageTableMap::COL_IMAGE_SIZE, ImageTableMap::COL_IMAGE_INSERTED, ImageTableMap::COL_IMAGE_UPLOADED, ImageTableMap::COL_IMAGE_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('image_id', 'site_id', 'bookshop_id', 'event_id', 'library_id', 'image_nature', 'image_legend', 'image_type', 'image_size', 'image_inserted', 'image_uploaded', 'image_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -161,11 +156,11 @@ class ImageTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'BookshopId' => 2, 'EventId' => 3, 'LibraryId' => 4, 'Nature' => 5, 'Legend' => 6, 'Type' => 7, 'Size' => 8, 'Inserted' => 9, 'Uploaded' => 10, 'UpdatedAt' => 11, 'DeletedAt' => 12, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'bookshopId' => 2, 'eventId' => 3, 'libraryId' => 4, 'nature' => 5, 'legend' => 6, 'type' => 7, 'size' => 8, 'inserted' => 9, 'uploaded' => 10, 'updatedAt' => 11, 'deletedAt' => 12, ),
-        self::TYPE_COLNAME       => array(ImageTableMap::COL_IMAGE_ID => 0, ImageTableMap::COL_SITE_ID => 1, ImageTableMap::COL_BOOKSHOP_ID => 2, ImageTableMap::COL_EVENT_ID => 3, ImageTableMap::COL_LIBRARY_ID => 4, ImageTableMap::COL_IMAGE_NATURE => 5, ImageTableMap::COL_IMAGE_LEGEND => 6, ImageTableMap::COL_IMAGE_TYPE => 7, ImageTableMap::COL_IMAGE_SIZE => 8, ImageTableMap::COL_IMAGE_INSERTED => 9, ImageTableMap::COL_IMAGE_UPLOADED => 10, ImageTableMap::COL_IMAGE_UPDATED => 11, ImageTableMap::COL_IMAGE_DELETED => 12, ),
-        self::TYPE_FIELDNAME     => array('image_id' => 0, 'site_id' => 1, 'bookshop_id' => 2, 'event_id' => 3, 'library_id' => 4, 'image_nature' => 5, 'image_legend' => 6, 'image_type' => 7, 'image_size' => 8, 'image_inserted' => 9, 'image_uploaded' => 10, 'image_updated' => 11, 'image_deleted' => 12, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'BookshopId' => 2, 'EventId' => 3, 'LibraryId' => 4, 'Nature' => 5, 'Legend' => 6, 'Type' => 7, 'Size' => 8, 'Inserted' => 9, 'Uploaded' => 10, 'UpdatedAt' => 11, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'bookshopId' => 2, 'eventId' => 3, 'libraryId' => 4, 'nature' => 5, 'legend' => 6, 'type' => 7, 'size' => 8, 'inserted' => 9, 'uploaded' => 10, 'updatedAt' => 11, ),
+        self::TYPE_COLNAME       => array(ImageTableMap::COL_IMAGE_ID => 0, ImageTableMap::COL_SITE_ID => 1, ImageTableMap::COL_BOOKSHOP_ID => 2, ImageTableMap::COL_EVENT_ID => 3, ImageTableMap::COL_LIBRARY_ID => 4, ImageTableMap::COL_IMAGE_NATURE => 5, ImageTableMap::COL_IMAGE_LEGEND => 6, ImageTableMap::COL_IMAGE_TYPE => 7, ImageTableMap::COL_IMAGE_SIZE => 8, ImageTableMap::COL_IMAGE_INSERTED => 9, ImageTableMap::COL_IMAGE_UPLOADED => 10, ImageTableMap::COL_IMAGE_UPDATED => 11, ),
+        self::TYPE_FIELDNAME     => array('image_id' => 0, 'site_id' => 1, 'bookshop_id' => 2, 'event_id' => 3, 'library_id' => 4, 'image_nature' => 5, 'image_legend' => 6, 'image_type' => 7, 'image_size' => 8, 'image_inserted' => 9, 'image_uploaded' => 10, 'image_updated' => 11, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -270,14 +265,6 @@ class ImageTableMap extends TableMap
         'COL_IMAGE_UPDATED' => 'IMAGE_UPDATED',
         'image_updated' => 'IMAGE_UPDATED',
         'images.image_updated' => 'IMAGE_UPDATED',
-        'DeletedAt' => 'IMAGE_DELETED',
-        'Image.DeletedAt' => 'IMAGE_DELETED',
-        'deletedAt' => 'IMAGE_DELETED',
-        'image.deletedAt' => 'IMAGE_DELETED',
-        'ImageTableMap::COL_IMAGE_DELETED' => 'IMAGE_DELETED',
-        'COL_IMAGE_DELETED' => 'IMAGE_DELETED',
-        'image_deleted' => 'IMAGE_DELETED',
-        'images.image_deleted' => 'IMAGE_DELETED',
     ];
 
     /**
@@ -309,7 +296,6 @@ class ImageTableMap extends TableMap
         $this->addColumn('image_inserted', 'Inserted', 'TIMESTAMP', false, null, null);
         $this->addColumn('image_uploaded', 'Uploaded', 'TIMESTAMP', false, null, null);
         $this->addColumn('image_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('image_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -485,7 +471,6 @@ class ImageTableMap extends TableMap
             $criteria->addSelectColumn(ImageTableMap::COL_IMAGE_INSERTED);
             $criteria->addSelectColumn(ImageTableMap::COL_IMAGE_UPLOADED);
             $criteria->addSelectColumn(ImageTableMap::COL_IMAGE_UPDATED);
-            $criteria->addSelectColumn(ImageTableMap::COL_IMAGE_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.image_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -499,7 +484,6 @@ class ImageTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.image_inserted');
             $criteria->addSelectColumn($alias . '.image_uploaded');
             $criteria->addSelectColumn($alias . '.image_updated');
-            $criteria->addSelectColumn($alias . '.image_deleted');
         }
     }
 
@@ -529,7 +513,6 @@ class ImageTableMap extends TableMap
             $criteria->removeSelectColumn(ImageTableMap::COL_IMAGE_INSERTED);
             $criteria->removeSelectColumn(ImageTableMap::COL_IMAGE_UPLOADED);
             $criteria->removeSelectColumn(ImageTableMap::COL_IMAGE_UPDATED);
-            $criteria->removeSelectColumn(ImageTableMap::COL_IMAGE_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.image_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -543,7 +526,6 @@ class ImageTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.image_inserted');
             $criteria->removeSelectColumn($alias . '.image_uploaded');
             $criteria->removeSelectColumn($alias . '.image_updated');
-            $criteria->removeSelectColumn($alias . '.image_deleted');
         }
     }
 

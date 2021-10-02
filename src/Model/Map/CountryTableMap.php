@@ -58,7 +58,7 @@ class CountryTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CountryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the country_id field
@@ -106,11 +106,6 @@ class CountryTableMap extends TableMap
     const COL_COUNTRY_UPDATED = 'countries.country_updated';
 
     /**
-     * the column name for the country_deleted field
-     */
-    const COL_COUNTRY_DELETED = 'countries.country_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -122,11 +117,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Code', 'Name', 'NameEn', 'ShippingZone', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'code', 'name', 'nameEn', 'shippingZone', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_COUNTRY_ID, CountryTableMap::COL_COUNTRY_CODE, CountryTableMap::COL_COUNTRY_NAME, CountryTableMap::COL_COUNTRY_NAME_EN, CountryTableMap::COL_SHIPPING_ZONE, CountryTableMap::COL_COUNTRY_CREATED, CountryTableMap::COL_COUNTRY_UPDATED, CountryTableMap::COL_COUNTRY_DELETED, ),
-        self::TYPE_FIELDNAME     => array('country_id', 'country_code', 'country_name', 'country_name_en', 'shipping_zone', 'country_created', 'country_updated', 'country_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'Code', 'Name', 'NameEn', 'ShippingZone', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'code', 'name', 'nameEn', 'shippingZone', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CountryTableMap::COL_COUNTRY_ID, CountryTableMap::COL_COUNTRY_CODE, CountryTableMap::COL_COUNTRY_NAME, CountryTableMap::COL_COUNTRY_NAME_EN, CountryTableMap::COL_SHIPPING_ZONE, CountryTableMap::COL_COUNTRY_CREATED, CountryTableMap::COL_COUNTRY_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('country_id', 'country_code', 'country_name', 'country_name_en', 'shipping_zone', 'country_created', 'country_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -136,11 +131,11 @@ class CountryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Code' => 1, 'Name' => 2, 'NameEn' => 3, 'ShippingZone' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'DeletedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'code' => 1, 'name' => 2, 'nameEn' => 3, 'shippingZone' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'deletedAt' => 7, ),
-        self::TYPE_COLNAME       => array(CountryTableMap::COL_COUNTRY_ID => 0, CountryTableMap::COL_COUNTRY_CODE => 1, CountryTableMap::COL_COUNTRY_NAME => 2, CountryTableMap::COL_COUNTRY_NAME_EN => 3, CountryTableMap::COL_SHIPPING_ZONE => 4, CountryTableMap::COL_COUNTRY_CREATED => 5, CountryTableMap::COL_COUNTRY_UPDATED => 6, CountryTableMap::COL_COUNTRY_DELETED => 7, ),
-        self::TYPE_FIELDNAME     => array('country_id' => 0, 'country_code' => 1, 'country_name' => 2, 'country_name_en' => 3, 'shipping_zone' => 4, 'country_created' => 5, 'country_updated' => 6, 'country_deleted' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Code' => 1, 'Name' => 2, 'NameEn' => 3, 'ShippingZone' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'code' => 1, 'name' => 2, 'nameEn' => 3, 'shippingZone' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(CountryTableMap::COL_COUNTRY_ID => 0, CountryTableMap::COL_COUNTRY_CODE => 1, CountryTableMap::COL_COUNTRY_NAME => 2, CountryTableMap::COL_COUNTRY_NAME_EN => 3, CountryTableMap::COL_SHIPPING_ZONE => 4, CountryTableMap::COL_COUNTRY_CREATED => 5, CountryTableMap::COL_COUNTRY_UPDATED => 6, ),
+        self::TYPE_FIELDNAME     => array('country_id' => 0, 'country_code' => 1, 'country_name' => 2, 'country_name_en' => 3, 'shipping_zone' => 4, 'country_created' => 5, 'country_updated' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -205,14 +200,6 @@ class CountryTableMap extends TableMap
         'COL_COUNTRY_UPDATED' => 'COUNTRY_UPDATED',
         'country_updated' => 'COUNTRY_UPDATED',
         'countries.country_updated' => 'COUNTRY_UPDATED',
-        'DeletedAt' => 'COUNTRY_DELETED',
-        'Country.DeletedAt' => 'COUNTRY_DELETED',
-        'deletedAt' => 'COUNTRY_DELETED',
-        'country.deletedAt' => 'COUNTRY_DELETED',
-        'CountryTableMap::COL_COUNTRY_DELETED' => 'COUNTRY_DELETED',
-        'COL_COUNTRY_DELETED' => 'COUNTRY_DELETED',
-        'country_deleted' => 'COUNTRY_DELETED',
-        'countries.country_deleted' => 'COUNTRY_DELETED',
     ];
 
     /**
@@ -239,7 +226,6 @@ class CountryTableMap extends TableMap
         $this->addColumn('shipping_zone', 'ShippingZone', 'VARCHAR', false, 8, null);
         $this->addColumn('country_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('country_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('country_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -410,7 +396,6 @@ class CountryTableMap extends TableMap
             $criteria->addSelectColumn(CountryTableMap::COL_SHIPPING_ZONE);
             $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_CREATED);
             $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_UPDATED);
-            $criteria->addSelectColumn(CountryTableMap::COL_COUNTRY_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.country_id');
             $criteria->addSelectColumn($alias . '.country_code');
@@ -419,7 +404,6 @@ class CountryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.shipping_zone');
             $criteria->addSelectColumn($alias . '.country_created');
             $criteria->addSelectColumn($alias . '.country_updated');
-            $criteria->addSelectColumn($alias . '.country_deleted');
         }
     }
 
@@ -444,7 +428,6 @@ class CountryTableMap extends TableMap
             $criteria->removeSelectColumn(CountryTableMap::COL_SHIPPING_ZONE);
             $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_CREATED);
             $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_UPDATED);
-            $criteria->removeSelectColumn(CountryTableMap::COL_COUNTRY_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.country_id');
             $criteria->removeSelectColumn($alias . '.country_code');
@@ -453,7 +436,6 @@ class CountryTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.shipping_zone');
             $criteria->removeSelectColumn($alias . '.country_created');
             $criteria->removeSelectColumn($alias . '.country_updated');
-            $criteria->removeSelectColumn($alias . '.country_deleted');
         }
     }
 

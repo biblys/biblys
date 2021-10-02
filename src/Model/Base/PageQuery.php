@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPageQuery orderByUpdate($order = Criteria::ASC) Order by the page_update column
  * @method     ChildPageQuery orderByCreatedAt($order = Criteria::ASC) Order by the page_created column
  * @method     ChildPageQuery orderByUpdatedAt($order = Criteria::ASC) Order by the page_updated column
- * @method     ChildPageQuery orderByDeletedAt($order = Criteria::ASC) Order by the page_deleted column
  *
  * @method     ChildPageQuery groupById() Group by the page_id column
  * @method     ChildPageQuery groupBySiteId() Group by the site_id column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPageQuery groupByUpdate() Group by the page_update column
  * @method     ChildPageQuery groupByCreatedAt() Group by the page_created column
  * @method     ChildPageQuery groupByUpdatedAt() Group by the page_updated column
- * @method     ChildPageQuery groupByDeletedAt() Group by the page_deleted column
  *
  * @method     ChildPageQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPageQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPage|null findOneByInsert(string $page_insert) Return the first ChildPage filtered by the page_insert column
  * @method     ChildPage|null findOneByUpdate(string $page_update) Return the first ChildPage filtered by the page_update column
  * @method     ChildPage|null findOneByCreatedAt(string $page_created) Return the first ChildPage filtered by the page_created column
- * @method     ChildPage|null findOneByUpdatedAt(string $page_updated) Return the first ChildPage filtered by the page_updated column
- * @method     ChildPage|null findOneByDeletedAt(string $page_deleted) Return the first ChildPage filtered by the page_deleted column *
+ * @method     ChildPage|null findOneByUpdatedAt(string $page_updated) Return the first ChildPage filtered by the page_updated column *
 
  * @method     ChildPage requirePk($key, ConnectionInterface $con = null) Return the ChildPage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPage requireOne(ConnectionInterface $con = null) Return the first ChildPage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPage requireOneByUpdate(string $page_update) Return the first ChildPage filtered by the page_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPage requireOneByCreatedAt(string $page_created) Return the first ChildPage filtered by the page_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPage requireOneByUpdatedAt(string $page_updated) Return the first ChildPage filtered by the page_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPage requireOneByDeletedAt(string $page_deleted) Return the first ChildPage filtered by the page_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPage> find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPage> findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
  * @method     ChildPage[]|ObjectCollection findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
- * @method     ChildPage[]|ObjectCollection findByDeletedAt(string $page_deleted) Return ChildPage objects filtered by the page_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByDeletedAt(string $page_deleted) Return ChildPage objects filtered by the page_deleted column
  * @method     ChildPage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class PageQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT page_id, site_id, page_url, page_title, page_content, page_status, page_insert, page_update, page_created, page_updated, page_deleted FROM pages WHERE page_id = :p0';
+        $sql = 'SELECT page_id, site_id, page_url, page_title, page_content, page_status, page_insert, page_update, page_created, page_updated FROM pages WHERE page_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -648,49 +642,6 @@ abstract class PageQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the page_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE page_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE page_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE page_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPageQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PageTableMap::COL_PAGE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PageTableMap::COL_PAGE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_DELETED, $deletedAt, $comparison);
     }
 
     /**

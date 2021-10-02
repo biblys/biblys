@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTagQuery orderByUpdate($order = Criteria::ASC) Order by the tag_update column
  * @method     ChildTagQuery orderByCreatedAt($order = Criteria::ASC) Order by the tag_created column
  * @method     ChildTagQuery orderByUpdatedAt($order = Criteria::ASC) Order by the tag_updated column
- * @method     ChildTagQuery orderByDeletedAt($order = Criteria::ASC) Order by the tag_deleted column
  *
  * @method     ChildTagQuery groupById() Group by the tag_id column
  * @method     ChildTagQuery groupByName() Group by the tag_name column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTagQuery groupByUpdate() Group by the tag_update column
  * @method     ChildTagQuery groupByCreatedAt() Group by the tag_created column
  * @method     ChildTagQuery groupByUpdatedAt() Group by the tag_updated column
- * @method     ChildTagQuery groupByDeletedAt() Group by the tag_deleted column
  *
  * @method     ChildTagQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildTagQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTag|null findOneByInsert(string $tag_insert) Return the first ChildTag filtered by the tag_insert column
  * @method     ChildTag|null findOneByUpdate(string $tag_update) Return the first ChildTag filtered by the tag_update column
  * @method     ChildTag|null findOneByCreatedAt(string $tag_created) Return the first ChildTag filtered by the tag_created column
- * @method     ChildTag|null findOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column
- * @method     ChildTag|null findOneByDeletedAt(string $tag_deleted) Return the first ChildTag filtered by the tag_deleted column *
+ * @method     ChildTag|null findOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column *
 
  * @method     ChildTag requirePk($key, ConnectionInterface $con = null) Return the ChildTag by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOne(ConnectionInterface $con = null) Return the first ChildTag matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTag requireOneByUpdate(string $tag_update) Return the first ChildTag filtered by the tag_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByCreatedAt(string $tag_created) Return the first ChildTag filtered by the tag_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTag requireOneByDeletedAt(string $tag_deleted) Return the first ChildTag filtered by the tag_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTag[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildTag> find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildTag> findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
  * @method     ChildTag[]|ObjectCollection findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildTag> findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
- * @method     ChildTag[]|ObjectCollection findByDeletedAt(string $tag_deleted) Return ChildTag objects filtered by the tag_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByDeletedAt(string $tag_deleted) Return ChildTag objects filtered by the tag_deleted column
  * @method     ChildTag[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTag> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class TagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT tag_id, tag_name, tag_url, tag_description, tag_date, tag_num, tag_insert, tag_update, tag_created, tag_updated, tag_deleted FROM tags WHERE tag_id = :p0';
+        $sql = 'SELECT tag_id, tag_name, tag_url, tag_description, tag_date, tag_num, tag_insert, tag_update, tag_created, tag_updated FROM tags WHERE tag_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -664,49 +658,6 @@ abstract class TagQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the tag_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE tag_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE tag_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE tag_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildTagQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(TagTableMap::COL_TAG_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(TagTableMap::COL_TAG_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(TagTableMap::COL_TAG_DELETED, $deletedAt, $comparison);
     }
 
     /**

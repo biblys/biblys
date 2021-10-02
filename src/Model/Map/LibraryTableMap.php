@@ -58,7 +58,7 @@ class LibraryTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 22;
+    const NUM_COLUMNS = 21;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class LibraryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 22;
+    const NUM_HYDRATE_COLUMNS = 21;
 
     /**
      * the column name for the library_id field
@@ -176,11 +176,6 @@ class LibraryTableMap extends TableMap
     const COL_LIBRARY_UPDATED = 'libraries.library_updated';
 
     /**
-     * the column name for the library_deleted field
-     */
-    const COL_LIBRARY_DELETED = 'libraries.library_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -192,11 +187,11 @@ class LibraryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'CreationYear', 'Specialities', 'Readings', 'Desc', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'creationYear', 'specialities', 'readings', 'desc', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(LibraryTableMap::COL_LIBRARY_ID, LibraryTableMap::COL_LIBRARY_NAME, LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC, LibraryTableMap::COL_LIBRARY_URL, LibraryTableMap::COL_LIBRARY_REPRESENTATIVE, LibraryTableMap::COL_LIBRARY_ADDRESS, LibraryTableMap::COL_LIBRARY_POSTAL_CODE, LibraryTableMap::COL_LIBRARY_CITY, LibraryTableMap::COL_LIBRARY_COUNTRY, LibraryTableMap::COL_LIBRARY_PHONE, LibraryTableMap::COL_LIBRARY_FAX, LibraryTableMap::COL_LIBRARY_WEBSITE, LibraryTableMap::COL_LIBRARY_EMAIL, LibraryTableMap::COL_LIBRARY_FACEBOOK, LibraryTableMap::COL_LIBRARY_TWITTER, LibraryTableMap::COL_LIBRARY_CREATION_YEAR, LibraryTableMap::COL_LIBRARY_SPECIALITIES, LibraryTableMap::COL_LIBRARY_READINGS, LibraryTableMap::COL_LIBRARY_DESC, LibraryTableMap::COL_LIBRARY_CREATED, LibraryTableMap::COL_LIBRARY_UPDATED, LibraryTableMap::COL_LIBRARY_DELETED, ),
-        self::TYPE_FIELDNAME     => array('library_id', 'library_name', 'library_name_alphabetic', 'library_url', 'library_representative', 'library_address', 'library_postal_code', 'library_city', 'library_country', 'library_phone', 'library_fax', 'library_website', 'library_email', 'library_facebook', 'library_twitter', 'library_creation_year', 'library_specialities', 'library_readings', 'library_desc', 'library_created', 'library_updated', 'library_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'CreationYear', 'Specialities', 'Readings', 'Desc', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'creationYear', 'specialities', 'readings', 'desc', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(LibraryTableMap::COL_LIBRARY_ID, LibraryTableMap::COL_LIBRARY_NAME, LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC, LibraryTableMap::COL_LIBRARY_URL, LibraryTableMap::COL_LIBRARY_REPRESENTATIVE, LibraryTableMap::COL_LIBRARY_ADDRESS, LibraryTableMap::COL_LIBRARY_POSTAL_CODE, LibraryTableMap::COL_LIBRARY_CITY, LibraryTableMap::COL_LIBRARY_COUNTRY, LibraryTableMap::COL_LIBRARY_PHONE, LibraryTableMap::COL_LIBRARY_FAX, LibraryTableMap::COL_LIBRARY_WEBSITE, LibraryTableMap::COL_LIBRARY_EMAIL, LibraryTableMap::COL_LIBRARY_FACEBOOK, LibraryTableMap::COL_LIBRARY_TWITTER, LibraryTableMap::COL_LIBRARY_CREATION_YEAR, LibraryTableMap::COL_LIBRARY_SPECIALITIES, LibraryTableMap::COL_LIBRARY_READINGS, LibraryTableMap::COL_LIBRARY_DESC, LibraryTableMap::COL_LIBRARY_CREATED, LibraryTableMap::COL_LIBRARY_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('library_id', 'library_name', 'library_name_alphabetic', 'library_url', 'library_representative', 'library_address', 'library_postal_code', 'library_city', 'library_country', 'library_phone', 'library_fax', 'library_website', 'library_email', 'library_facebook', 'library_twitter', 'library_creation_year', 'library_specialities', 'library_readings', 'library_desc', 'library_created', 'library_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -206,11 +201,11 @@ class LibraryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'CreationYear' => 15, 'Specialities' => 16, 'Readings' => 17, 'Desc' => 18, 'CreatedAt' => 19, 'UpdatedAt' => 20, 'DeletedAt' => 21, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'creationYear' => 15, 'specialities' => 16, 'readings' => 17, 'desc' => 18, 'createdAt' => 19, 'updatedAt' => 20, 'deletedAt' => 21, ),
-        self::TYPE_COLNAME       => array(LibraryTableMap::COL_LIBRARY_ID => 0, LibraryTableMap::COL_LIBRARY_NAME => 1, LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC => 2, LibraryTableMap::COL_LIBRARY_URL => 3, LibraryTableMap::COL_LIBRARY_REPRESENTATIVE => 4, LibraryTableMap::COL_LIBRARY_ADDRESS => 5, LibraryTableMap::COL_LIBRARY_POSTAL_CODE => 6, LibraryTableMap::COL_LIBRARY_CITY => 7, LibraryTableMap::COL_LIBRARY_COUNTRY => 8, LibraryTableMap::COL_LIBRARY_PHONE => 9, LibraryTableMap::COL_LIBRARY_FAX => 10, LibraryTableMap::COL_LIBRARY_WEBSITE => 11, LibraryTableMap::COL_LIBRARY_EMAIL => 12, LibraryTableMap::COL_LIBRARY_FACEBOOK => 13, LibraryTableMap::COL_LIBRARY_TWITTER => 14, LibraryTableMap::COL_LIBRARY_CREATION_YEAR => 15, LibraryTableMap::COL_LIBRARY_SPECIALITIES => 16, LibraryTableMap::COL_LIBRARY_READINGS => 17, LibraryTableMap::COL_LIBRARY_DESC => 18, LibraryTableMap::COL_LIBRARY_CREATED => 19, LibraryTableMap::COL_LIBRARY_UPDATED => 20, LibraryTableMap::COL_LIBRARY_DELETED => 21, ),
-        self::TYPE_FIELDNAME     => array('library_id' => 0, 'library_name' => 1, 'library_name_alphabetic' => 2, 'library_url' => 3, 'library_representative' => 4, 'library_address' => 5, 'library_postal_code' => 6, 'library_city' => 7, 'library_country' => 8, 'library_phone' => 9, 'library_fax' => 10, 'library_website' => 11, 'library_email' => 12, 'library_facebook' => 13, 'library_twitter' => 14, 'library_creation_year' => 15, 'library_specialities' => 16, 'library_readings' => 17, 'library_desc' => 18, 'library_created' => 19, 'library_updated' => 20, 'library_deleted' => 21, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'CreationYear' => 15, 'Specialities' => 16, 'Readings' => 17, 'Desc' => 18, 'CreatedAt' => 19, 'UpdatedAt' => 20, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'creationYear' => 15, 'specialities' => 16, 'readings' => 17, 'desc' => 18, 'createdAt' => 19, 'updatedAt' => 20, ),
+        self::TYPE_COLNAME       => array(LibraryTableMap::COL_LIBRARY_ID => 0, LibraryTableMap::COL_LIBRARY_NAME => 1, LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC => 2, LibraryTableMap::COL_LIBRARY_URL => 3, LibraryTableMap::COL_LIBRARY_REPRESENTATIVE => 4, LibraryTableMap::COL_LIBRARY_ADDRESS => 5, LibraryTableMap::COL_LIBRARY_POSTAL_CODE => 6, LibraryTableMap::COL_LIBRARY_CITY => 7, LibraryTableMap::COL_LIBRARY_COUNTRY => 8, LibraryTableMap::COL_LIBRARY_PHONE => 9, LibraryTableMap::COL_LIBRARY_FAX => 10, LibraryTableMap::COL_LIBRARY_WEBSITE => 11, LibraryTableMap::COL_LIBRARY_EMAIL => 12, LibraryTableMap::COL_LIBRARY_FACEBOOK => 13, LibraryTableMap::COL_LIBRARY_TWITTER => 14, LibraryTableMap::COL_LIBRARY_CREATION_YEAR => 15, LibraryTableMap::COL_LIBRARY_SPECIALITIES => 16, LibraryTableMap::COL_LIBRARY_READINGS => 17, LibraryTableMap::COL_LIBRARY_DESC => 18, LibraryTableMap::COL_LIBRARY_CREATED => 19, LibraryTableMap::COL_LIBRARY_UPDATED => 20, ),
+        self::TYPE_FIELDNAME     => array('library_id' => 0, 'library_name' => 1, 'library_name_alphabetic' => 2, 'library_url' => 3, 'library_representative' => 4, 'library_address' => 5, 'library_postal_code' => 6, 'library_city' => 7, 'library_country' => 8, 'library_phone' => 9, 'library_fax' => 10, 'library_website' => 11, 'library_email' => 12, 'library_facebook' => 13, 'library_twitter' => 14, 'library_creation_year' => 15, 'library_specialities' => 16, 'library_readings' => 17, 'library_desc' => 18, 'library_created' => 19, 'library_updated' => 20, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -387,14 +382,6 @@ class LibraryTableMap extends TableMap
         'COL_LIBRARY_UPDATED' => 'LIBRARY_UPDATED',
         'library_updated' => 'LIBRARY_UPDATED',
         'libraries.library_updated' => 'LIBRARY_UPDATED',
-        'DeletedAt' => 'LIBRARY_DELETED',
-        'Library.DeletedAt' => 'LIBRARY_DELETED',
-        'deletedAt' => 'LIBRARY_DELETED',
-        'library.deletedAt' => 'LIBRARY_DELETED',
-        'LibraryTableMap::COL_LIBRARY_DELETED' => 'LIBRARY_DELETED',
-        'COL_LIBRARY_DELETED' => 'LIBRARY_DELETED',
-        'library_deleted' => 'LIBRARY_DELETED',
-        'libraries.library_deleted' => 'LIBRARY_DELETED',
     ];
 
     /**
@@ -435,7 +422,6 @@ class LibraryTableMap extends TableMap
         $this->addColumn('library_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('library_created', 'CreatedAt', 'TIMESTAMP', false, null, 'CURRENT_TIMESTAMP');
         $this->addColumn('library_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('library_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -620,7 +606,6 @@ class LibraryTableMap extends TableMap
             $criteria->addSelectColumn(LibraryTableMap::COL_LIBRARY_DESC);
             $criteria->addSelectColumn(LibraryTableMap::COL_LIBRARY_CREATED);
             $criteria->addSelectColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
-            $criteria->addSelectColumn(LibraryTableMap::COL_LIBRARY_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.library_id');
             $criteria->addSelectColumn($alias . '.library_name');
@@ -643,7 +628,6 @@ class LibraryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.library_desc');
             $criteria->addSelectColumn($alias . '.library_created');
             $criteria->addSelectColumn($alias . '.library_updated');
-            $criteria->addSelectColumn($alias . '.library_deleted');
         }
     }
 
@@ -682,7 +666,6 @@ class LibraryTableMap extends TableMap
             $criteria->removeSelectColumn(LibraryTableMap::COL_LIBRARY_DESC);
             $criteria->removeSelectColumn(LibraryTableMap::COL_LIBRARY_CREATED);
             $criteria->removeSelectColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
-            $criteria->removeSelectColumn(LibraryTableMap::COL_LIBRARY_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.library_id');
             $criteria->removeSelectColumn($alias . '.library_name');
@@ -705,7 +688,6 @@ class LibraryTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.library_desc');
             $criteria->removeSelectColumn($alias . '.library_created');
             $criteria->removeSelectColumn($alias . '.library_updated');
-            $criteria->removeSelectColumn($alias . '.library_deleted');
         }
     }
 

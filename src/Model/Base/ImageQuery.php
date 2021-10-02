@@ -31,7 +31,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImageQuery orderByInserted($order = Criteria::ASC) Order by the image_inserted column
  * @method     ChildImageQuery orderByUploaded($order = Criteria::ASC) Order by the image_uploaded column
  * @method     ChildImageQuery orderByUpdatedAt($order = Criteria::ASC) Order by the image_updated column
- * @method     ChildImageQuery orderByDeletedAt($order = Criteria::ASC) Order by the image_deleted column
  *
  * @method     ChildImageQuery groupById() Group by the image_id column
  * @method     ChildImageQuery groupBySiteId() Group by the site_id column
@@ -45,7 +44,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImageQuery groupByInserted() Group by the image_inserted column
  * @method     ChildImageQuery groupByUploaded() Group by the image_uploaded column
  * @method     ChildImageQuery groupByUpdatedAt() Group by the image_updated column
- * @method     ChildImageQuery groupByDeletedAt() Group by the image_deleted column
  *
  * @method     ChildImageQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildImageQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -69,8 +67,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage|null findOneBySize(string $image_size) Return the first ChildImage filtered by the image_size column
  * @method     ChildImage|null findOneByInserted(string $image_inserted) Return the first ChildImage filtered by the image_inserted column
  * @method     ChildImage|null findOneByUploaded(string $image_uploaded) Return the first ChildImage filtered by the image_uploaded column
- * @method     ChildImage|null findOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column
- * @method     ChildImage|null findOneByDeletedAt(string $image_deleted) Return the first ChildImage filtered by the image_deleted column *
+ * @method     ChildImage|null findOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column *
 
  * @method     ChildImage requirePk($key, ConnectionInterface $con = null) Return the ChildImage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOne(ConnectionInterface $con = null) Return the first ChildImage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -87,7 +84,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage requireOneByInserted(string $image_inserted) Return the first ChildImage filtered by the image_inserted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOneByUploaded(string $image_uploaded) Return the first ChildImage filtered by the image_uploaded column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildImage requireOneByDeletedAt(string $image_deleted) Return the first ChildImage filtered by the image_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildImage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildImage> find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
@@ -115,8 +111,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
  * @method     ChildImage[]|ObjectCollection findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
- * @method     ChildImage[]|ObjectCollection findByDeletedAt(string $image_deleted) Return ChildImage objects filtered by the image_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByDeletedAt(string $image_deleted) Return ChildImage objects filtered by the image_deleted column
  * @method     ChildImage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildImage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -216,7 +210,7 @@ abstract class ImageQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT image_id, site_id, bookshop_id, event_id, library_id, image_nature, image_legend, image_type, image_size, image_inserted, image_uploaded, image_updated, image_deleted FROM images WHERE image_id = :p0';
+        $sql = 'SELECT image_id, site_id, bookshop_id, event_id, library_id, image_nature, image_legend, image_type, image_size, image_inserted, image_uploaded, image_updated FROM images WHERE image_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -754,49 +748,6 @@ abstract class ImageQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the image_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE image_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE image_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE image_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildImageQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(ImageTableMap::COL_IMAGE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(ImageTableMap::COL_IMAGE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_DELETED, $deletedAt, $comparison);
     }
 
     /**

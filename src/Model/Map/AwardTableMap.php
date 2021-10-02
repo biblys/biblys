@@ -58,7 +58,7 @@ class AwardTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class AwardTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the award_id field
@@ -121,11 +121,6 @@ class AwardTableMap extends TableMap
     const COL_AWARD_UPDATED = 'awards.award_updated';
 
     /**
-     * the column name for the award_deleted field
-     */
-    const COL_AWARD_DELETED = 'awards.award_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class AwardTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'BookId', 'Name', 'Year', 'Category', 'Note', 'Date', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'articleId', 'bookId', 'name', 'year', 'category', 'note', 'date', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(AwardTableMap::COL_AWARD_ID, AwardTableMap::COL_ARTICLE_ID, AwardTableMap::COL_BOOK_ID, AwardTableMap::COL_AWARD_NAME, AwardTableMap::COL_AWARD_YEAR, AwardTableMap::COL_AWARD_CATEGORY, AwardTableMap::COL_AWARD_NOTE, AwardTableMap::COL_AWARD_DATE, AwardTableMap::COL_AWARD_CREATED, AwardTableMap::COL_AWARD_UPDATED, AwardTableMap::COL_AWARD_DELETED, ),
-        self::TYPE_FIELDNAME     => array('award_id', 'article_id', 'book_id', 'award_name', 'award_year', 'award_category', 'award_note', 'award_date', 'award_created', 'award_updated', 'award_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'BookId', 'Name', 'Year', 'Category', 'Note', 'Date', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'articleId', 'bookId', 'name', 'year', 'category', 'note', 'date', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(AwardTableMap::COL_AWARD_ID, AwardTableMap::COL_ARTICLE_ID, AwardTableMap::COL_BOOK_ID, AwardTableMap::COL_AWARD_NAME, AwardTableMap::COL_AWARD_YEAR, AwardTableMap::COL_AWARD_CATEGORY, AwardTableMap::COL_AWARD_NOTE, AwardTableMap::COL_AWARD_DATE, AwardTableMap::COL_AWARD_CREATED, AwardTableMap::COL_AWARD_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('award_id', 'article_id', 'book_id', 'award_name', 'award_year', 'award_category', 'award_note', 'award_date', 'award_created', 'award_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class AwardTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'Name' => 3, 'Year' => 4, 'Category' => 5, 'Note' => 6, 'Date' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'bookId' => 2, 'name' => 3, 'year' => 4, 'category' => 5, 'note' => 6, 'date' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(AwardTableMap::COL_AWARD_ID => 0, AwardTableMap::COL_ARTICLE_ID => 1, AwardTableMap::COL_BOOK_ID => 2, AwardTableMap::COL_AWARD_NAME => 3, AwardTableMap::COL_AWARD_YEAR => 4, AwardTableMap::COL_AWARD_CATEGORY => 5, AwardTableMap::COL_AWARD_NOTE => 6, AwardTableMap::COL_AWARD_DATE => 7, AwardTableMap::COL_AWARD_CREATED => 8, AwardTableMap::COL_AWARD_UPDATED => 9, AwardTableMap::COL_AWARD_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('award_id' => 0, 'article_id' => 1, 'book_id' => 2, 'award_name' => 3, 'award_year' => 4, 'award_category' => 5, 'award_note' => 6, 'award_date' => 7, 'award_created' => 8, 'award_updated' => 9, 'award_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'Name' => 3, 'Year' => 4, 'Category' => 5, 'Note' => 6, 'Date' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'bookId' => 2, 'name' => 3, 'year' => 4, 'category' => 5, 'note' => 6, 'date' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(AwardTableMap::COL_AWARD_ID => 0, AwardTableMap::COL_ARTICLE_ID => 1, AwardTableMap::COL_BOOK_ID => 2, AwardTableMap::COL_AWARD_NAME => 3, AwardTableMap::COL_AWARD_YEAR => 4, AwardTableMap::COL_AWARD_CATEGORY => 5, AwardTableMap::COL_AWARD_NOTE => 6, AwardTableMap::COL_AWARD_DATE => 7, AwardTableMap::COL_AWARD_CREATED => 8, AwardTableMap::COL_AWARD_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('award_id' => 0, 'article_id' => 1, 'book_id' => 2, 'award_name' => 3, 'award_year' => 4, 'award_category' => 5, 'award_note' => 6, 'award_date' => 7, 'award_created' => 8, 'award_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class AwardTableMap extends TableMap
         'COL_AWARD_UPDATED' => 'AWARD_UPDATED',
         'award_updated' => 'AWARD_UPDATED',
         'awards.award_updated' => 'AWARD_UPDATED',
-        'DeletedAt' => 'AWARD_DELETED',
-        'Award.DeletedAt' => 'AWARD_DELETED',
-        'deletedAt' => 'AWARD_DELETED',
-        'award.deletedAt' => 'AWARD_DELETED',
-        'AwardTableMap::COL_AWARD_DELETED' => 'AWARD_DELETED',
-        'COL_AWARD_DELETED' => 'AWARD_DELETED',
-        'award_deleted' => 'AWARD_DELETED',
-        'awards.award_deleted' => 'AWARD_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class AwardTableMap extends TableMap
         $this->addColumn('award_date', 'Date', 'TIMESTAMP', false, null, null);
         $this->addColumn('award_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('award_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('award_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class AwardTableMap extends TableMap
             $criteria->addSelectColumn(AwardTableMap::COL_AWARD_DATE);
             $criteria->addSelectColumn(AwardTableMap::COL_AWARD_CREATED);
             $criteria->addSelectColumn(AwardTableMap::COL_AWARD_UPDATED);
-            $criteria->addSelectColumn(AwardTableMap::COL_AWARD_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.award_id');
             $criteria->addSelectColumn($alias . '.article_id');
@@ -467,7 +452,6 @@ class AwardTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.award_date');
             $criteria->addSelectColumn($alias . '.award_created');
             $criteria->addSelectColumn($alias . '.award_updated');
-            $criteria->addSelectColumn($alias . '.award_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class AwardTableMap extends TableMap
             $criteria->removeSelectColumn(AwardTableMap::COL_AWARD_DATE);
             $criteria->removeSelectColumn(AwardTableMap::COL_AWARD_CREATED);
             $criteria->removeSelectColumn(AwardTableMap::COL_AWARD_UPDATED);
-            $criteria->removeSelectColumn(AwardTableMap::COL_AWARD_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.award_id');
             $criteria->removeSelectColumn($alias . '.article_id');
@@ -507,7 +490,6 @@ class AwardTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.award_date');
             $criteria->removeSelectColumn($alias . '.award_created');
             $criteria->removeSelectColumn($alias . '.award_updated');
-            $criteria->removeSelectColumn($alias . '.award_deleted');
         }
     }
 

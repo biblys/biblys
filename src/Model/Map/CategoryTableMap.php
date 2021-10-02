@@ -58,7 +58,7 @@ class CategoryTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CategoryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the category_id field
@@ -126,11 +126,6 @@ class CategoryTableMap extends TableMap
     const COL_CATEGORY_UPDATED = 'categories.category_updated';
 
     /**
-     * the column name for the category_deleted field
-     */
-    const COL_CATEGORY_DELETED = 'categories.category_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -142,11 +137,11 @@ class CategoryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'Hidden', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'hidden', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID, CategoryTableMap::COL_SITE_ID, CategoryTableMap::COL_CATEGORY_NAME, CategoryTableMap::COL_CATEGORY_URL, CategoryTableMap::COL_CATEGORY_DESC, CategoryTableMap::COL_CATEGORY_ORDER, CategoryTableMap::COL_CATEGORY_HIDDEN, CategoryTableMap::COL_CATEGORY_INSERT, CategoryTableMap::COL_CATEGORY_UPDATE, CategoryTableMap::COL_CATEGORY_CREATED, CategoryTableMap::COL_CATEGORY_UPDATED, CategoryTableMap::COL_CATEGORY_DELETED, ),
-        self::TYPE_FIELDNAME     => array('category_id', 'site_id', 'category_name', 'category_url', 'category_desc', 'category_order', 'category_hidden', 'category_insert', 'category_update', 'category_created', 'category_updated', 'category_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'Hidden', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'hidden', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID, CategoryTableMap::COL_SITE_ID, CategoryTableMap::COL_CATEGORY_NAME, CategoryTableMap::COL_CATEGORY_URL, CategoryTableMap::COL_CATEGORY_DESC, CategoryTableMap::COL_CATEGORY_ORDER, CategoryTableMap::COL_CATEGORY_HIDDEN, CategoryTableMap::COL_CATEGORY_INSERT, CategoryTableMap::COL_CATEGORY_UPDATE, CategoryTableMap::COL_CATEGORY_CREATED, CategoryTableMap::COL_CATEGORY_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('category_id', 'site_id', 'category_name', 'category_url', 'category_desc', 'category_order', 'category_hidden', 'category_insert', 'category_update', 'category_created', 'category_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -156,11 +151,11 @@ class CategoryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'Hidden' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, 'DeletedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'hidden' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, 'deletedAt' => 11, ),
-        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID => 0, CategoryTableMap::COL_SITE_ID => 1, CategoryTableMap::COL_CATEGORY_NAME => 2, CategoryTableMap::COL_CATEGORY_URL => 3, CategoryTableMap::COL_CATEGORY_DESC => 4, CategoryTableMap::COL_CATEGORY_ORDER => 5, CategoryTableMap::COL_CATEGORY_HIDDEN => 6, CategoryTableMap::COL_CATEGORY_INSERT => 7, CategoryTableMap::COL_CATEGORY_UPDATE => 8, CategoryTableMap::COL_CATEGORY_CREATED => 9, CategoryTableMap::COL_CATEGORY_UPDATED => 10, CategoryTableMap::COL_CATEGORY_DELETED => 11, ),
-        self::TYPE_FIELDNAME     => array('category_id' => 0, 'site_id' => 1, 'category_name' => 2, 'category_url' => 3, 'category_desc' => 4, 'category_order' => 5, 'category_hidden' => 6, 'category_insert' => 7, 'category_update' => 8, 'category_created' => 9, 'category_updated' => 10, 'category_deleted' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'Hidden' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'hidden' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID => 0, CategoryTableMap::COL_SITE_ID => 1, CategoryTableMap::COL_CATEGORY_NAME => 2, CategoryTableMap::COL_CATEGORY_URL => 3, CategoryTableMap::COL_CATEGORY_DESC => 4, CategoryTableMap::COL_CATEGORY_ORDER => 5, CategoryTableMap::COL_CATEGORY_HIDDEN => 6, CategoryTableMap::COL_CATEGORY_INSERT => 7, CategoryTableMap::COL_CATEGORY_UPDATE => 8, CategoryTableMap::COL_CATEGORY_CREATED => 9, CategoryTableMap::COL_CATEGORY_UPDATED => 10, ),
+        self::TYPE_FIELDNAME     => array('category_id' => 0, 'site_id' => 1, 'category_name' => 2, 'category_url' => 3, 'category_desc' => 4, 'category_order' => 5, 'category_hidden' => 6, 'category_insert' => 7, 'category_update' => 8, 'category_created' => 9, 'category_updated' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -257,14 +252,6 @@ class CategoryTableMap extends TableMap
         'COL_CATEGORY_UPDATED' => 'CATEGORY_UPDATED',
         'category_updated' => 'CATEGORY_UPDATED',
         'categories.category_updated' => 'CATEGORY_UPDATED',
-        'DeletedAt' => 'CATEGORY_DELETED',
-        'Category.DeletedAt' => 'CATEGORY_DELETED',
-        'deletedAt' => 'CATEGORY_DELETED',
-        'category.deletedAt' => 'CATEGORY_DELETED',
-        'CategoryTableMap::COL_CATEGORY_DELETED' => 'CATEGORY_DELETED',
-        'COL_CATEGORY_DELETED' => 'CATEGORY_DELETED',
-        'category_deleted' => 'CATEGORY_DELETED',
-        'categories.category_deleted' => 'CATEGORY_DELETED',
     ];
 
     /**
@@ -295,7 +282,6 @@ class CategoryTableMap extends TableMap
         $this->addColumn('category_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('category_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('category_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('category_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -470,7 +456,6 @@ class CategoryTableMap extends TableMap
             $criteria->addSelectColumn(CategoryTableMap::COL_CATEGORY_UPDATE);
             $criteria->addSelectColumn(CategoryTableMap::COL_CATEGORY_CREATED);
             $criteria->addSelectColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
-            $criteria->addSelectColumn(CategoryTableMap::COL_CATEGORY_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.category_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -483,7 +468,6 @@ class CategoryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.category_update');
             $criteria->addSelectColumn($alias . '.category_created');
             $criteria->addSelectColumn($alias . '.category_updated');
-            $criteria->addSelectColumn($alias . '.category_deleted');
         }
     }
 
@@ -512,7 +496,6 @@ class CategoryTableMap extends TableMap
             $criteria->removeSelectColumn(CategoryTableMap::COL_CATEGORY_UPDATE);
             $criteria->removeSelectColumn(CategoryTableMap::COL_CATEGORY_CREATED);
             $criteria->removeSelectColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
-            $criteria->removeSelectColumn(CategoryTableMap::COL_CATEGORY_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.category_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -525,7 +508,6 @@ class CategoryTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.category_update');
             $criteria->removeSelectColumn($alias . '.category_created');
             $criteria->removeSelectColumn($alias . '.category_updated');
-            $criteria->removeSelectColumn($alias . '.category_deleted');
         }
     }
 

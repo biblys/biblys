@@ -58,7 +58,7 @@ class TicketTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class TicketTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the ticket_id field
@@ -126,11 +126,6 @@ class TicketTableMap extends TableMap
     const COL_TICKET_CLOSED = 'ticket.ticket_closed';
 
     /**
-     * the column name for the ticket_deleted field
-     */
-    const COL_TICKET_DELETED = 'ticket.ticket_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -142,11 +137,11 @@ class TicketTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'Type', 'Title', 'Content', 'Priority', 'CreatedAt', 'UpdatedAt', 'Resolved', 'Closed', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'type', 'title', 'content', 'priority', 'createdAt', 'updatedAt', 'resolved', 'closed', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(TicketTableMap::COL_TICKET_ID, TicketTableMap::COL_USER_ID, TicketTableMap::COL_SITE_ID, TicketTableMap::COL_TICKET_TYPE, TicketTableMap::COL_TICKET_TITLE, TicketTableMap::COL_TICKET_CONTENT, TicketTableMap::COL_TICKET_PRIORITY, TicketTableMap::COL_TICKET_CREATED, TicketTableMap::COL_TICKET_UPDATED, TicketTableMap::COL_TICKET_RESOLVED, TicketTableMap::COL_TICKET_CLOSED, TicketTableMap::COL_TICKET_DELETED, ),
-        self::TYPE_FIELDNAME     => array('ticket_id', 'user_id', 'site_id', 'ticket_type', 'ticket_title', 'ticket_content', 'ticket_priority', 'ticket_created', 'ticket_updated', 'ticket_resolved', 'ticket_closed', 'ticket_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'Type', 'Title', 'Content', 'Priority', 'CreatedAt', 'UpdatedAt', 'Resolved', 'Closed', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'type', 'title', 'content', 'priority', 'createdAt', 'updatedAt', 'resolved', 'closed', ),
+        self::TYPE_COLNAME       => array(TicketTableMap::COL_TICKET_ID, TicketTableMap::COL_USER_ID, TicketTableMap::COL_SITE_ID, TicketTableMap::COL_TICKET_TYPE, TicketTableMap::COL_TICKET_TITLE, TicketTableMap::COL_TICKET_CONTENT, TicketTableMap::COL_TICKET_PRIORITY, TicketTableMap::COL_TICKET_CREATED, TicketTableMap::COL_TICKET_UPDATED, TicketTableMap::COL_TICKET_RESOLVED, TicketTableMap::COL_TICKET_CLOSED, ),
+        self::TYPE_FIELDNAME     => array('ticket_id', 'user_id', 'site_id', 'ticket_type', 'ticket_title', 'ticket_content', 'ticket_priority', 'ticket_created', 'ticket_updated', 'ticket_resolved', 'ticket_closed', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -156,11 +151,11 @@ class TicketTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'Type' => 3, 'Title' => 4, 'Content' => 5, 'Priority' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'Resolved' => 9, 'Closed' => 10, 'DeletedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'type' => 3, 'title' => 4, 'content' => 5, 'priority' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'resolved' => 9, 'closed' => 10, 'deletedAt' => 11, ),
-        self::TYPE_COLNAME       => array(TicketTableMap::COL_TICKET_ID => 0, TicketTableMap::COL_USER_ID => 1, TicketTableMap::COL_SITE_ID => 2, TicketTableMap::COL_TICKET_TYPE => 3, TicketTableMap::COL_TICKET_TITLE => 4, TicketTableMap::COL_TICKET_CONTENT => 5, TicketTableMap::COL_TICKET_PRIORITY => 6, TicketTableMap::COL_TICKET_CREATED => 7, TicketTableMap::COL_TICKET_UPDATED => 8, TicketTableMap::COL_TICKET_RESOLVED => 9, TicketTableMap::COL_TICKET_CLOSED => 10, TicketTableMap::COL_TICKET_DELETED => 11, ),
-        self::TYPE_FIELDNAME     => array('ticket_id' => 0, 'user_id' => 1, 'site_id' => 2, 'ticket_type' => 3, 'ticket_title' => 4, 'ticket_content' => 5, 'ticket_priority' => 6, 'ticket_created' => 7, 'ticket_updated' => 8, 'ticket_resolved' => 9, 'ticket_closed' => 10, 'ticket_deleted' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'Type' => 3, 'Title' => 4, 'Content' => 5, 'Priority' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'Resolved' => 9, 'Closed' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'type' => 3, 'title' => 4, 'content' => 5, 'priority' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'resolved' => 9, 'closed' => 10, ),
+        self::TYPE_COLNAME       => array(TicketTableMap::COL_TICKET_ID => 0, TicketTableMap::COL_USER_ID => 1, TicketTableMap::COL_SITE_ID => 2, TicketTableMap::COL_TICKET_TYPE => 3, TicketTableMap::COL_TICKET_TITLE => 4, TicketTableMap::COL_TICKET_CONTENT => 5, TicketTableMap::COL_TICKET_PRIORITY => 6, TicketTableMap::COL_TICKET_CREATED => 7, TicketTableMap::COL_TICKET_UPDATED => 8, TicketTableMap::COL_TICKET_RESOLVED => 9, TicketTableMap::COL_TICKET_CLOSED => 10, ),
+        self::TYPE_FIELDNAME     => array('ticket_id' => 0, 'user_id' => 1, 'site_id' => 2, 'ticket_type' => 3, 'ticket_title' => 4, 'ticket_content' => 5, 'ticket_priority' => 6, 'ticket_created' => 7, 'ticket_updated' => 8, 'ticket_resolved' => 9, 'ticket_closed' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -257,14 +252,6 @@ class TicketTableMap extends TableMap
         'COL_TICKET_CLOSED' => 'TICKET_CLOSED',
         'ticket_closed' => 'TICKET_CLOSED',
         'ticket.ticket_closed' => 'TICKET_CLOSED',
-        'DeletedAt' => 'TICKET_DELETED',
-        'Ticket.DeletedAt' => 'TICKET_DELETED',
-        'deletedAt' => 'TICKET_DELETED',
-        'ticket.deletedAt' => 'TICKET_DELETED',
-        'TicketTableMap::COL_TICKET_DELETED' => 'TICKET_DELETED',
-        'COL_TICKET_DELETED' => 'TICKET_DELETED',
-        'ticket_deleted' => 'TICKET_DELETED',
-        'ticket.ticket_deleted' => 'TICKET_DELETED',
     ];
 
     /**
@@ -295,7 +282,6 @@ class TicketTableMap extends TableMap
         $this->addColumn('ticket_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ticket_resolved', 'Resolved', 'TIMESTAMP', false, null, null);
         $this->addColumn('ticket_closed', 'Closed', 'TIMESTAMP', false, null, null);
-        $this->addColumn('ticket_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -470,7 +456,6 @@ class TicketTableMap extends TableMap
             $criteria->addSelectColumn(TicketTableMap::COL_TICKET_UPDATED);
             $criteria->addSelectColumn(TicketTableMap::COL_TICKET_RESOLVED);
             $criteria->addSelectColumn(TicketTableMap::COL_TICKET_CLOSED);
-            $criteria->addSelectColumn(TicketTableMap::COL_TICKET_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.ticket_id');
             $criteria->addSelectColumn($alias . '.user_id');
@@ -483,7 +468,6 @@ class TicketTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ticket_updated');
             $criteria->addSelectColumn($alias . '.ticket_resolved');
             $criteria->addSelectColumn($alias . '.ticket_closed');
-            $criteria->addSelectColumn($alias . '.ticket_deleted');
         }
     }
 
@@ -512,7 +496,6 @@ class TicketTableMap extends TableMap
             $criteria->removeSelectColumn(TicketTableMap::COL_TICKET_UPDATED);
             $criteria->removeSelectColumn(TicketTableMap::COL_TICKET_RESOLVED);
             $criteria->removeSelectColumn(TicketTableMap::COL_TICKET_CLOSED);
-            $criteria->removeSelectColumn(TicketTableMap::COL_TICKET_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.ticket_id');
             $criteria->removeSelectColumn($alias . '.user_id');
@@ -525,7 +508,6 @@ class TicketTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.ticket_updated');
             $criteria->removeSelectColumn($alias . '.ticket_resolved');
             $criteria->removeSelectColumn($alias . '.ticket_closed');
-            $criteria->removeSelectColumn($alias . '.ticket_deleted');
         }
     }
 

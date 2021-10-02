@@ -204,13 +204,6 @@ abstract class Event implements ActiveRecordInterface
     protected $event_updated;
 
     /**
-     * The value for the event_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $event_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -759,28 +752,6 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [event_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->event_deleted;
-        } else {
-            return $this->event_deleted instanceof \DateTimeInterface ? $this->event_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [event_id] column.
      *
      * @param int $v New value
@@ -1197,26 +1168,6 @@ abstract class Event implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [event_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Event The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->event_deleted !== null || $dt !== null) {
-            if ($this->event_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->event_deleted->format("Y-m-d H:i:s.u")) {
-                $this->event_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EventTableMap::COL_EVENT_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1332,12 +1283,6 @@ abstract class Event implements ActiveRecordInterface
                 $col = null;
             }
             $this->event_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : EventTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->event_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1346,7 +1291,7 @@ abstract class Event implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 21; // 21 = EventTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 20; // 20 = EventTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Event'), 0, $e);
@@ -1620,9 +1565,6 @@ abstract class Event implements ActiveRecordInterface
         if ($this->isColumnModified(EventTableMap::COL_EVENT_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'event_updated';
         }
-        if ($this->isColumnModified(EventTableMap::COL_EVENT_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'event_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO events (%s) VALUES (%s)',
@@ -1693,9 +1635,6 @@ abstract class Event implements ActiveRecordInterface
                         break;
                     case 'event_updated':
                         $stmt->bindValue($identifier, $this->event_updated ? $this->event_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'event_deleted':
-                        $stmt->bindValue($identifier, $this->event_deleted ? $this->event_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1819,9 +1758,6 @@ abstract class Event implements ActiveRecordInterface
             case 19:
                 return $this->getUpdatedAt();
                 break;
-            case 20:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1871,7 +1807,6 @@ abstract class Event implements ActiveRecordInterface
             $keys[17] => $this->getUpdate(),
             $keys[18] => $this->getCreatedAt(),
             $keys[19] => $this->getUpdatedAt(),
-            $keys[20] => $this->getDeletedAt(),
         );
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
             $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
@@ -1899,10 +1834,6 @@ abstract class Event implements ActiveRecordInterface
 
         if ($result[$keys[19]] instanceof \DateTimeInterface) {
             $result[$keys[19]] = $result[$keys[19]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[20]] instanceof \DateTimeInterface) {
-            $result[$keys[20]] = $result[$keys[20]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2003,9 +1934,6 @@ abstract class Event implements ActiveRecordInterface
             case 19:
                 $this->setUpdatedAt($value);
                 break;
-            case 20:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -2091,9 +2019,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if (array_key_exists($keys[19], $arr)) {
             $this->setUpdatedAt($arr[$keys[19]]);
-        }
-        if (array_key_exists($keys[20], $arr)) {
-            $this->setDeletedAt($arr[$keys[20]]);
         }
 
         return $this;
@@ -2197,9 +2122,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EventTableMap::COL_EVENT_UPDATED)) {
             $criteria->add(EventTableMap::COL_EVENT_UPDATED, $this->event_updated);
-        }
-        if ($this->isColumnModified(EventTableMap::COL_EVENT_DELETED)) {
-            $criteria->add(EventTableMap::COL_EVENT_DELETED, $this->event_deleted);
         }
 
         return $criteria;
@@ -2306,7 +2228,6 @@ abstract class Event implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2362,7 +2283,6 @@ abstract class Event implements ActiveRecordInterface
         $this->event_update_ = null;
         $this->event_created = null;
         $this->event_updated = null;
-        $this->event_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

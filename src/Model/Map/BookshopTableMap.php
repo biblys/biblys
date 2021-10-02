@@ -58,7 +58,7 @@ class BookshopTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 24;
+    const NUM_COLUMNS = 23;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class BookshopTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 24;
+    const NUM_HYDRATE_COLUMNS = 23;
 
     /**
      * the column name for the bookshop_id field
@@ -186,11 +186,6 @@ class BookshopTableMap extends TableMap
     const COL_BOOKSHOP_UPDATED = 'bookshops.bookshop_updated';
 
     /**
-     * the column name for the bookshop_deleted field
-     */
-    const COL_BOOKSHOP_DELETED = 'bookshops.bookshop_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -202,11 +197,11 @@ class BookshopTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Specialities', 'Membership', 'Motto', 'Desc', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'specialities', 'membership', 'motto', 'desc', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID, BookshopTableMap::COL_BOOKSHOP_NAME, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, BookshopTableMap::COL_BOOKSHOP_URL, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, BookshopTableMap::COL_BOOKSHOP_ADDRESS, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, BookshopTableMap::COL_BOOKSHOP_CITY, BookshopTableMap::COL_BOOKSHOP_COUNTRY, BookshopTableMap::COL_BOOKSHOP_PHONE, BookshopTableMap::COL_BOOKSHOP_FAX, BookshopTableMap::COL_BOOKSHOP_WEBSITE, BookshopTableMap::COL_BOOKSHOP_EMAIL, BookshopTableMap::COL_BOOKSHOP_FACEBOOK, BookshopTableMap::COL_BOOKSHOP_TWITTER, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, BookshopTableMap::COL_BOOKSHOP_MOTTO, BookshopTableMap::COL_BOOKSHOP_DESC, BookshopTableMap::COL_BOOKSHOP_CREATED, BookshopTableMap::COL_BOOKSHOP_UPDATED, BookshopTableMap::COL_BOOKSHOP_DELETED, ),
-        self::TYPE_FIELDNAME     => array('bookshop_id', 'bookshop_name', 'bookshop_name_alphabetic', 'bookshop_url', 'bookshop_representative', 'bookshop_address', 'bookshop_postal_code', 'bookshop_city', 'bookshop_country', 'bookshop_phone', 'bookshop_fax', 'bookshop_website', 'bookshop_email', 'bookshop_facebook', 'bookshop_twitter', 'bookshop_legal_form', 'bookshop_creation_year', 'bookshop_specialities', 'bookshop_membership', 'bookshop_motto', 'bookshop_desc', 'bookshop_created', 'bookshop_updated', 'bookshop_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Specialities', 'Membership', 'Motto', 'Desc', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'specialities', 'membership', 'motto', 'desc', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID, BookshopTableMap::COL_BOOKSHOP_NAME, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, BookshopTableMap::COL_BOOKSHOP_URL, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, BookshopTableMap::COL_BOOKSHOP_ADDRESS, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, BookshopTableMap::COL_BOOKSHOP_CITY, BookshopTableMap::COL_BOOKSHOP_COUNTRY, BookshopTableMap::COL_BOOKSHOP_PHONE, BookshopTableMap::COL_BOOKSHOP_FAX, BookshopTableMap::COL_BOOKSHOP_WEBSITE, BookshopTableMap::COL_BOOKSHOP_EMAIL, BookshopTableMap::COL_BOOKSHOP_FACEBOOK, BookshopTableMap::COL_BOOKSHOP_TWITTER, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, BookshopTableMap::COL_BOOKSHOP_MOTTO, BookshopTableMap::COL_BOOKSHOP_DESC, BookshopTableMap::COL_BOOKSHOP_CREATED, BookshopTableMap::COL_BOOKSHOP_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('bookshop_id', 'bookshop_name', 'bookshop_name_alphabetic', 'bookshop_url', 'bookshop_representative', 'bookshop_address', 'bookshop_postal_code', 'bookshop_city', 'bookshop_country', 'bookshop_phone', 'bookshop_fax', 'bookshop_website', 'bookshop_email', 'bookshop_facebook', 'bookshop_twitter', 'bookshop_legal_form', 'bookshop_creation_year', 'bookshop_specialities', 'bookshop_membership', 'bookshop_motto', 'bookshop_desc', 'bookshop_created', 'bookshop_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -216,11 +211,11 @@ class BookshopTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'LegalForm' => 15, 'CreationYear' => 16, 'Specialities' => 17, 'Membership' => 18, 'Motto' => 19, 'Desc' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, 'DeletedAt' => 23, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'legalForm' => 15, 'creationYear' => 16, 'specialities' => 17, 'membership' => 18, 'motto' => 19, 'desc' => 20, 'createdAt' => 21, 'updatedAt' => 22, 'deletedAt' => 23, ),
-        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID => 0, BookshopTableMap::COL_BOOKSHOP_NAME => 1, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC => 2, BookshopTableMap::COL_BOOKSHOP_URL => 3, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE => 4, BookshopTableMap::COL_BOOKSHOP_ADDRESS => 5, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE => 6, BookshopTableMap::COL_BOOKSHOP_CITY => 7, BookshopTableMap::COL_BOOKSHOP_COUNTRY => 8, BookshopTableMap::COL_BOOKSHOP_PHONE => 9, BookshopTableMap::COL_BOOKSHOP_FAX => 10, BookshopTableMap::COL_BOOKSHOP_WEBSITE => 11, BookshopTableMap::COL_BOOKSHOP_EMAIL => 12, BookshopTableMap::COL_BOOKSHOP_FACEBOOK => 13, BookshopTableMap::COL_BOOKSHOP_TWITTER => 14, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM => 15, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR => 16, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES => 17, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP => 18, BookshopTableMap::COL_BOOKSHOP_MOTTO => 19, BookshopTableMap::COL_BOOKSHOP_DESC => 20, BookshopTableMap::COL_BOOKSHOP_CREATED => 21, BookshopTableMap::COL_BOOKSHOP_UPDATED => 22, BookshopTableMap::COL_BOOKSHOP_DELETED => 23, ),
-        self::TYPE_FIELDNAME     => array('bookshop_id' => 0, 'bookshop_name' => 1, 'bookshop_name_alphabetic' => 2, 'bookshop_url' => 3, 'bookshop_representative' => 4, 'bookshop_address' => 5, 'bookshop_postal_code' => 6, 'bookshop_city' => 7, 'bookshop_country' => 8, 'bookshop_phone' => 9, 'bookshop_fax' => 10, 'bookshop_website' => 11, 'bookshop_email' => 12, 'bookshop_facebook' => 13, 'bookshop_twitter' => 14, 'bookshop_legal_form' => 15, 'bookshop_creation_year' => 16, 'bookshop_specialities' => 17, 'bookshop_membership' => 18, 'bookshop_motto' => 19, 'bookshop_desc' => 20, 'bookshop_created' => 21, 'bookshop_updated' => 22, 'bookshop_deleted' => 23, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'LegalForm' => 15, 'CreationYear' => 16, 'Specialities' => 17, 'Membership' => 18, 'Motto' => 19, 'Desc' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'legalForm' => 15, 'creationYear' => 16, 'specialities' => 17, 'membership' => 18, 'motto' => 19, 'desc' => 20, 'createdAt' => 21, 'updatedAt' => 22, ),
+        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID => 0, BookshopTableMap::COL_BOOKSHOP_NAME => 1, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC => 2, BookshopTableMap::COL_BOOKSHOP_URL => 3, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE => 4, BookshopTableMap::COL_BOOKSHOP_ADDRESS => 5, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE => 6, BookshopTableMap::COL_BOOKSHOP_CITY => 7, BookshopTableMap::COL_BOOKSHOP_COUNTRY => 8, BookshopTableMap::COL_BOOKSHOP_PHONE => 9, BookshopTableMap::COL_BOOKSHOP_FAX => 10, BookshopTableMap::COL_BOOKSHOP_WEBSITE => 11, BookshopTableMap::COL_BOOKSHOP_EMAIL => 12, BookshopTableMap::COL_BOOKSHOP_FACEBOOK => 13, BookshopTableMap::COL_BOOKSHOP_TWITTER => 14, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM => 15, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR => 16, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES => 17, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP => 18, BookshopTableMap::COL_BOOKSHOP_MOTTO => 19, BookshopTableMap::COL_BOOKSHOP_DESC => 20, BookshopTableMap::COL_BOOKSHOP_CREATED => 21, BookshopTableMap::COL_BOOKSHOP_UPDATED => 22, ),
+        self::TYPE_FIELDNAME     => array('bookshop_id' => 0, 'bookshop_name' => 1, 'bookshop_name_alphabetic' => 2, 'bookshop_url' => 3, 'bookshop_representative' => 4, 'bookshop_address' => 5, 'bookshop_postal_code' => 6, 'bookshop_city' => 7, 'bookshop_country' => 8, 'bookshop_phone' => 9, 'bookshop_fax' => 10, 'bookshop_website' => 11, 'bookshop_email' => 12, 'bookshop_facebook' => 13, 'bookshop_twitter' => 14, 'bookshop_legal_form' => 15, 'bookshop_creation_year' => 16, 'bookshop_specialities' => 17, 'bookshop_membership' => 18, 'bookshop_motto' => 19, 'bookshop_desc' => 20, 'bookshop_created' => 21, 'bookshop_updated' => 22, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -413,14 +408,6 @@ class BookshopTableMap extends TableMap
         'COL_BOOKSHOP_UPDATED' => 'BOOKSHOP_UPDATED',
         'bookshop_updated' => 'BOOKSHOP_UPDATED',
         'bookshops.bookshop_updated' => 'BOOKSHOP_UPDATED',
-        'DeletedAt' => 'BOOKSHOP_DELETED',
-        'Bookshop.DeletedAt' => 'BOOKSHOP_DELETED',
-        'deletedAt' => 'BOOKSHOP_DELETED',
-        'bookshop.deletedAt' => 'BOOKSHOP_DELETED',
-        'BookshopTableMap::COL_BOOKSHOP_DELETED' => 'BOOKSHOP_DELETED',
-        'COL_BOOKSHOP_DELETED' => 'BOOKSHOP_DELETED',
-        'bookshop_deleted' => 'BOOKSHOP_DELETED',
-        'bookshops.bookshop_deleted' => 'BOOKSHOP_DELETED',
     ];
 
     /**
@@ -463,7 +450,6 @@ class BookshopTableMap extends TableMap
         $this->addColumn('bookshop_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('bookshop_created', 'CreatedAt', 'TIMESTAMP', false, null, 'CURRENT_TIMESTAMP');
         $this->addColumn('bookshop_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('bookshop_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -650,7 +636,6 @@ class BookshopTableMap extends TableMap
             $criteria->addSelectColumn(BookshopTableMap::COL_BOOKSHOP_DESC);
             $criteria->addSelectColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
             $criteria->addSelectColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
-            $criteria->addSelectColumn(BookshopTableMap::COL_BOOKSHOP_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.bookshop_id');
             $criteria->addSelectColumn($alias . '.bookshop_name');
@@ -675,7 +660,6 @@ class BookshopTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.bookshop_desc');
             $criteria->addSelectColumn($alias . '.bookshop_created');
             $criteria->addSelectColumn($alias . '.bookshop_updated');
-            $criteria->addSelectColumn($alias . '.bookshop_deleted');
         }
     }
 
@@ -716,7 +700,6 @@ class BookshopTableMap extends TableMap
             $criteria->removeSelectColumn(BookshopTableMap::COL_BOOKSHOP_DESC);
             $criteria->removeSelectColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
             $criteria->removeSelectColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
-            $criteria->removeSelectColumn(BookshopTableMap::COL_BOOKSHOP_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.bookshop_id');
             $criteria->removeSelectColumn($alias . '.bookshop_name');
@@ -741,7 +724,6 @@ class BookshopTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.bookshop_desc');
             $criteria->removeSelectColumn($alias . '.bookshop_created');
             $criteria->removeSelectColumn($alias . '.bookshop_updated');
-            $criteria->removeSelectColumn($alias . '.bookshop_deleted');
         }
     }
 

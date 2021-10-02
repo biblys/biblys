@@ -69,7 +69,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByUpdate($order = Criteria::ASC) Order by the order_update column
  * @method     ChildOrderQuery orderByCreatedAt($order = Criteria::ASC) Order by the order_created column
  * @method     ChildOrderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the order_updated column
- * @method     ChildOrderQuery orderByDeletedAt($order = Criteria::ASC) Order by the order_deleted column
  *
  * @method     ChildOrderQuery groupById() Group by the order_id column
  * @method     ChildOrderQuery groupByUrl() Group by the order_url column
@@ -121,7 +120,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByUpdate() Group by the order_update column
  * @method     ChildOrderQuery groupByCreatedAt() Group by the order_created column
  * @method     ChildOrderQuery groupByUpdatedAt() Group by the order_updated column
- * @method     ChildOrderQuery groupByDeletedAt() Group by the order_deleted column
  *
  * @method     ChildOrderQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildOrderQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -183,8 +181,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByCancelDate(string $order_cancel_date) Return the first ChildOrder filtered by the order_cancel_date column
  * @method     ChildOrder|null findOneByUpdate(string $order_update) Return the first ChildOrder filtered by the order_update column
  * @method     ChildOrder|null findOneByCreatedAt(string $order_created) Return the first ChildOrder filtered by the order_created column
- * @method     ChildOrder|null findOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column
- * @method     ChildOrder|null findOneByDeletedAt(string $order_deleted) Return the first ChildOrder filtered by the order_deleted column *
+ * @method     ChildOrder|null findOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column *
 
  * @method     ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -239,7 +236,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByUpdate(string $order_update) Return the first ChildOrder filtered by the order_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByCreatedAt(string $order_created) Return the first ChildOrder filtered by the order_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByDeletedAt(string $order_deleted) Return the first ChildOrder filtered by the order_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
@@ -343,8 +339,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
  * @method     ChildOrder[]|ObjectCollection findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
- * @method     ChildOrder[]|ObjectCollection findByDeletedAt(string $order_deleted) Return ChildOrder objects filtered by the order_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByDeletedAt(string $order_deleted) Return ChildOrder objects filtered by the order_deleted column
  * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildOrder> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -444,7 +438,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as-a-gift, order_gift-recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_utm_source, order_utm_campaign, order_utm_medium, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated, order_deleted FROM orders WHERE order_id = :p0';
+        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as-a-gift, order_gift-recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_utm_source, order_utm_campaign, order_utm_medium, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -2248,49 +2242,6 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the order_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE order_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE order_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE order_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_ORDER_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_ORDER_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_DELETED, $deletedAt, $comparison);
     }
 
     /**

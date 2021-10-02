@@ -156,13 +156,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
     protected $reward_updated;
 
     /**
-     * The value for the reward_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $reward_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -583,28 +576,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [reward_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->reward_deleted;
-        } else {
-            return $this->reward_deleted instanceof \DateTimeInterface ? $this->reward_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [reward_id] column.
      *
      * @param int $v New value
@@ -881,26 +852,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [reward_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\CrowfundingReward The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->reward_deleted !== null || $dt !== null) {
-            if ($this->reward_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->reward_deleted->format("Y-m-d H:i:s.u")) {
-                $this->reward_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CrowfundingRewardTableMap::COL_REWARD_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -988,12 +939,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
                 $col = null;
             }
             $this->reward_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CrowfundingRewardTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->reward_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1002,7 +947,7 @@ abstract class CrowfundingReward implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 14; // 14 = CrowfundingRewardTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = CrowfundingRewardTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\CrowfundingReward'), 0, $e);
@@ -1255,9 +1200,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
         if ($this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'reward_updated';
         }
-        if ($this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'reward_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO cf_rewards (%s) VALUES (%s)',
@@ -1307,9 +1249,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
                         break;
                     case 'reward_updated':
                         $stmt->bindValue($identifier, $this->reward_updated ? $this->reward_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'reward_deleted':
-                        $stmt->bindValue($identifier, $this->reward_deleted ? $this->reward_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1412,9 +1351,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
             case 12:
                 return $this->getUpdatedAt();
                 break;
-            case 13:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1457,7 +1393,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
             $keys[10] => $this->getBackers(),
             $keys[11] => $this->getCreatedAt(),
             $keys[12] => $this->getUpdatedAt(),
-            $keys[13] => $this->getDeletedAt(),
         );
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
             $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
@@ -1465,10 +1400,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
 
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
             $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[13]] instanceof \DateTimeInterface) {
-            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1548,9 +1479,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
             case 12:
                 $this->setUpdatedAt($value);
                 break;
-            case 13:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1615,9 +1543,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
         }
         if (array_key_exists($keys[12], $arr)) {
             $this->setUpdatedAt($arr[$keys[12]]);
-        }
-        if (array_key_exists($keys[13], $arr)) {
-            $this->setDeletedAt($arr[$keys[13]]);
         }
 
         return $this;
@@ -1700,9 +1625,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_UPDATED)) {
             $criteria->add(CrowfundingRewardTableMap::COL_REWARD_UPDATED, $this->reward_updated);
-        }
-        if ($this->isColumnModified(CrowfundingRewardTableMap::COL_REWARD_DELETED)) {
-            $criteria->add(CrowfundingRewardTableMap::COL_REWARD_DELETED, $this->reward_deleted);
         }
 
         return $criteria;
@@ -1802,7 +1724,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
         $copyObj->setBackers($this->getBackers());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1851,7 +1772,6 @@ abstract class CrowfundingReward implements ActiveRecordInterface
         $this->reward_backers = null;
         $this->reward_created = null;
         $this->reward_updated = null;
-        $this->reward_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

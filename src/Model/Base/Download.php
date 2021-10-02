@@ -140,13 +140,6 @@ abstract class Download implements ActiveRecordInterface
     protected $download_updated;
 
     /**
-     * The value for the download_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $download_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -525,28 +518,6 @@ abstract class Download implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [download_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->download_deleted;
-        } else {
-            return $this->download_deleted instanceof \DateTimeInterface ? $this->download_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [download_id] column.
      *
      * @param string $v New value
@@ -767,26 +738,6 @@ abstract class Download implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [download_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Download The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->download_deleted !== null || $dt !== null) {
-            if ($this->download_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->download_deleted->format("Y-m-d H:i:s.u")) {
-                $this->download_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[DownloadTableMap::COL_DOWNLOAD_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -863,12 +814,6 @@ abstract class Download implements ActiveRecordInterface
                 $col = null;
             }
             $this->download_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : DownloadTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->download_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -877,7 +822,7 @@ abstract class Download implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = DownloadTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = DownloadTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Download'), 0, $e);
@@ -1124,9 +1069,6 @@ abstract class Download implements ActiveRecordInterface
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'download_updated';
         }
-        if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'download_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO downloads (%s) VALUES (%s)',
@@ -1170,9 +1112,6 @@ abstract class Download implements ActiveRecordInterface
                         break;
                     case 'download_updated':
                         $stmt->bindValue($identifier, $this->download_updated ? $this->download_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'download_deleted':
-                        $stmt->bindValue($identifier, $this->download_deleted ? $this->download_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1269,9 +1208,6 @@ abstract class Download implements ActiveRecordInterface
             case 10:
                 return $this->getUpdatedAt();
                 break;
-            case 11:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1312,7 +1248,6 @@ abstract class Download implements ActiveRecordInterface
             $keys[8] => $this->getDate(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getUpdatedAt(),
-            $keys[11] => $this->getDeletedAt(),
         );
         if ($result[$keys[8]] instanceof \DateTimeInterface) {
             $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
@@ -1324,10 +1259,6 @@ abstract class Download implements ActiveRecordInterface
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1401,9 +1332,6 @@ abstract class Download implements ActiveRecordInterface
             case 10:
                 $this->setUpdatedAt($value);
                 break;
-            case 11:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1462,9 +1390,6 @@ abstract class Download implements ActiveRecordInterface
         }
         if (array_key_exists($keys[10], $arr)) {
             $this->setUpdatedAt($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setDeletedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1541,9 +1466,6 @@ abstract class Download implements ActiveRecordInterface
         }
         if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_UPDATED)) {
             $criteria->add(DownloadTableMap::COL_DOWNLOAD_UPDATED, $this->download_updated);
-        }
-        if ($this->isColumnModified(DownloadTableMap::COL_DOWNLOAD_DELETED)) {
-            $criteria->add(DownloadTableMap::COL_DOWNLOAD_DELETED, $this->download_deleted);
         }
 
         return $criteria;
@@ -1641,7 +1563,6 @@ abstract class Download implements ActiveRecordInterface
         $copyObj->setDate($this->getDate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1688,7 +1609,6 @@ abstract class Download implements ActiveRecordInterface
         $this->download_date = null;
         $this->download_created = null;
         $this->download_updated = null;
-        $this->download_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

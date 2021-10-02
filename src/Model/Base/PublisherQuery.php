@@ -57,7 +57,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisherQuery orderByUpdate($order = Criteria::ASC) Order by the publisher_update column
  * @method     ChildPublisherQuery orderByCreatedAt($order = Criteria::ASC) Order by the publisher_created column
  * @method     ChildPublisherQuery orderByUpdatedAt($order = Criteria::ASC) Order by the publisher_updated column
- * @method     ChildPublisherQuery orderByDeletedAt($order = Criteria::ASC) Order by the publisher_deleted column
  *
  * @method     ChildPublisherQuery groupById() Group by the publisher_id column
  * @method     ChildPublisherQuery groupBySiteId() Group by the site_id column
@@ -97,7 +96,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisherQuery groupByUpdate() Group by the publisher_update column
  * @method     ChildPublisherQuery groupByCreatedAt() Group by the publisher_created column
  * @method     ChildPublisherQuery groupByUpdatedAt() Group by the publisher_updated column
- * @method     ChildPublisherQuery groupByDeletedAt() Group by the publisher_deleted column
  *
  * @method     ChildPublisherQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPublisherQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -147,8 +145,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisher|null findOneByInsert(string $publisher_insert) Return the first ChildPublisher filtered by the publisher_insert column
  * @method     ChildPublisher|null findOneByUpdate(string $publisher_update) Return the first ChildPublisher filtered by the publisher_update column
  * @method     ChildPublisher|null findOneByCreatedAt(string $publisher_created) Return the first ChildPublisher filtered by the publisher_created column
- * @method     ChildPublisher|null findOneByUpdatedAt(string $publisher_updated) Return the first ChildPublisher filtered by the publisher_updated column
- * @method     ChildPublisher|null findOneByDeletedAt(string $publisher_deleted) Return the first ChildPublisher filtered by the publisher_deleted column *
+ * @method     ChildPublisher|null findOneByUpdatedAt(string $publisher_updated) Return the first ChildPublisher filtered by the publisher_updated column *
 
  * @method     ChildPublisher requirePk($key, ConnectionInterface $con = null) Return the ChildPublisher by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPublisher requireOne(ConnectionInterface $con = null) Return the first ChildPublisher matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -191,7 +188,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisher requireOneByUpdate(string $publisher_update) Return the first ChildPublisher filtered by the publisher_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPublisher requireOneByCreatedAt(string $publisher_created) Return the first ChildPublisher filtered by the publisher_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPublisher requireOneByUpdatedAt(string $publisher_updated) Return the first ChildPublisher filtered by the publisher_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPublisher requireOneByDeletedAt(string $publisher_deleted) Return the first ChildPublisher filtered by the publisher_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPublisher[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPublisher> find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
@@ -271,8 +267,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
  * @method     ChildPublisher[]|ObjectCollection findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
- * @method     ChildPublisher[]|ObjectCollection findByDeletedAt(string $publisher_deleted) Return ChildPublisher objects filtered by the publisher_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDeletedAt(string $publisher_deleted) Return ChildPublisher objects filtered by the publisher_deleted column
  * @method     ChildPublisher[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPublisher> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -372,7 +366,7 @@ abstract class PublisherQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT publisher_id, site_id, publisher_name, publisher_name_alphabetic, publisher_url, publisher_noosfere_id, publisher_representative, publisher_address, publisher_postal_code, publisher_city, publisher_country, publisher_phone, publisher_fax, publisher_website, publisher_buy_link, publisher_email, publisher_facebook, publisher_twitter, publisher_legal_form, publisher_creation_year, publisher_isbn, publisher_volumes, publisher_average_run, publisher_specialities, publisher_diffuseur, publisher_distributeur, publisher_vpc, publisher_paypal, publisher_shipping_mode, publisher_shipping_fee, publisher_gln, publisher_desc, publisher_desc_short, publisher_order_by, publisher_insert, publisher_update, publisher_created, publisher_updated, publisher_deleted FROM publishers WHERE publisher_id = :p0';
+        $sql = 'SELECT publisher_id, site_id, publisher_name, publisher_name_alphabetic, publisher_url, publisher_noosfere_id, publisher_representative, publisher_address, publisher_postal_code, publisher_city, publisher_country, publisher_phone, publisher_fax, publisher_website, publisher_buy_link, publisher_email, publisher_facebook, publisher_twitter, publisher_legal_form, publisher_creation_year, publisher_isbn, publisher_volumes, publisher_average_run, publisher_specialities, publisher_diffuseur, publisher_distributeur, publisher_vpc, publisher_paypal, publisher_shipping_mode, publisher_shipping_fee, publisher_gln, publisher_desc, publisher_desc_short, publisher_order_by, publisher_insert, publisher_update, publisher_created, publisher_updated FROM publishers WHERE publisher_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1596,49 +1590,6 @@ abstract class PublisherQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the publisher_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE publisher_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE publisher_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE publisher_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DELETED, $deletedAt, $comparison);
     }
 
     /**

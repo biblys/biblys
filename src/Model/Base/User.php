@@ -333,20 +333,6 @@ abstract class User implements ActiveRecordInterface
     protected $user_updated;
 
     /**
-     * The value for the user_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $user_deleted;
-
-    /**
-     * The value for the user_deleted_why field.
-     *
-     * @var        string|null
-     */
-    protected $user_deleted_why;
-
-    /**
      * @var        ObjectCollection|ChildRight[] Collection to store aggregation of ChildRight objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildRight> Collection to store aggregation of ChildRight objects.
      */
@@ -1099,38 +1085,6 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [user_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->user_deleted;
-        } else {
-            return $this->user_deleted instanceof \DateTimeInterface ? $this->user_deleted->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [user_deleted_why] column value.
-     *
-     * @return string|null
-     */
-    public function getDeletedWhy()
-    {
-        return $this->user_deleted_why;
-    }
-
-    /**
      * Set the value of [id] column.
      *
      * @param int $v New value
@@ -1875,46 +1829,6 @@ abstract class User implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [user_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\User The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->user_deleted !== null || $dt !== null) {
-            if ($this->user_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->user_deleted->format("Y-m-d H:i:s.u")) {
-                $this->user_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[UserTableMap::COL_USER_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
-     * Set the value of [user_deleted_why] column.
-     *
-     * @param string|null $v New value
-     * @return $this|\Model\User The current object (for fluent API support)
-     */
-    public function setDeletedWhy($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->user_deleted_why !== $v) {
-            $this->user_deleted_why = $v;
-            $this->modifiedColumns[UserTableMap::COL_USER_DELETED_WHY] = true;
-        }
-
-        return $this;
-    } // setDeletedWhy()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -2079,15 +1993,6 @@ abstract class User implements ActiveRecordInterface
                 $col = null;
             }
             $this->user_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : UserTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->user_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : UserTableMap::translateFieldName('DeletedWhy', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_deleted_why = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -2096,7 +2001,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 38; // 38 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 36; // 36 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\User'), 0, $e);
@@ -2458,12 +2363,6 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_USER_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'user_updated';
         }
-        if ($this->isColumnModified(UserTableMap::COL_USER_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'user_deleted';
-        }
-        if ($this->isColumnModified(UserTableMap::COL_USER_DELETED_WHY)) {
-            $modifiedColumns[':p' . $index++]  = 'user_deleted_why';
-        }
 
         $sql = sprintf(
             'INSERT INTO users (%s) VALUES (%s)',
@@ -2582,12 +2481,6 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'user_updated':
                         $stmt->bindValue($identifier, $this->user_updated ? $this->user_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'user_deleted':
-                        $stmt->bindValue($identifier, $this->user_deleted ? $this->user_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'user_deleted_why':
-                        $stmt->bindValue($identifier, $this->user_deleted_why, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -2759,12 +2652,6 @@ abstract class User implements ActiveRecordInterface
             case 35:
                 return $this->getUpdatedAt();
                 break;
-            case 36:
-                return $this->getDeletedAt();
-                break;
-            case 37:
-                return $this->getDeletedWhy();
-                break;
             default:
                 return null;
                 break;
@@ -2831,8 +2718,6 @@ abstract class User implements ActiveRecordInterface
             $keys[33] => $this->getUpdate(),
             $keys[34] => $this->getCreatedAt(),
             $keys[35] => $this->getUpdatedAt(),
-            $keys[36] => $this->getDeletedAt(),
-            $keys[37] => $this->getDeletedWhy(),
         );
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
@@ -2856,10 +2741,6 @@ abstract class User implements ActiveRecordInterface
 
         if ($result[$keys[35]] instanceof \DateTimeInterface) {
             $result[$keys[35]] = $result[$keys[35]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[36]] instanceof \DateTimeInterface) {
-            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -3040,12 +2921,6 @@ abstract class User implements ActiveRecordInterface
             case 35:
                 $this->setUpdatedAt($value);
                 break;
-            case 36:
-                $this->setDeletedAt($value);
-                break;
-            case 37:
-                $this->setDeletedWhy($value);
-                break;
         } // switch()
 
         return $this;
@@ -3179,12 +3054,6 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[35], $arr)) {
             $this->setUpdatedAt($arr[$keys[35]]);
-        }
-        if (array_key_exists($keys[36], $arr)) {
-            $this->setDeletedAt($arr[$keys[36]]);
-        }
-        if (array_key_exists($keys[37], $arr)) {
-            $this->setDeletedWhy($arr[$keys[37]]);
         }
 
         return $this;
@@ -3337,12 +3206,6 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_USER_UPDATED)) {
             $criteria->add(UserTableMap::COL_USER_UPDATED, $this->user_updated);
         }
-        if ($this->isColumnModified(UserTableMap::COL_USER_DELETED)) {
-            $criteria->add(UserTableMap::COL_USER_DELETED, $this->user_deleted);
-        }
-        if ($this->isColumnModified(UserTableMap::COL_USER_DELETED_WHY)) {
-            $criteria->add(UserTableMap::COL_USER_DELETED_WHY, $this->user_deleted_why);
-        }
 
         return $criteria;
     }
@@ -3464,8 +3327,6 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
-        $copyObj->setDeletedWhy($this->getDeletedWhy());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -4074,8 +3935,6 @@ abstract class User implements ActiveRecordInterface
         $this->user_update = null;
         $this->user_created = null;
         $this->user_updated = null;
-        $this->user_deleted = null;
-        $this->user_deleted_why = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

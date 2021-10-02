@@ -25,7 +25,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPriceQuery orderByAmount($order = Criteria::ASC) Order by the price_amount column
  * @method     ChildPriceQuery orderByCreatedAt($order = Criteria::ASC) Order by the price_created column
  * @method     ChildPriceQuery orderByUpdatedAt($order = Criteria::ASC) Order by the price_updated column
- * @method     ChildPriceQuery orderByDeletedAt($order = Criteria::ASC) Order by the price_deleted column
  *
  * @method     ChildPriceQuery groupById() Group by the price_id column
  * @method     ChildPriceQuery groupBygridId() Group by the pricegrid_id column
@@ -33,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPriceQuery groupByAmount() Group by the price_amount column
  * @method     ChildPriceQuery groupByCreatedAt() Group by the price_created column
  * @method     ChildPriceQuery groupByUpdatedAt() Group by the price_updated column
- * @method     ChildPriceQuery groupByDeletedAt() Group by the price_deleted column
  *
  * @method     ChildPriceQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPriceQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,8 +49,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPrice|null findOneByCat(string $price_cat) Return the first ChildPrice filtered by the price_cat column
  * @method     ChildPrice|null findOneByAmount(int $price_amount) Return the first ChildPrice filtered by the price_amount column
  * @method     ChildPrice|null findOneByCreatedAt(string $price_created) Return the first ChildPrice filtered by the price_created column
- * @method     ChildPrice|null findOneByUpdatedAt(string $price_updated) Return the first ChildPrice filtered by the price_updated column
- * @method     ChildPrice|null findOneByDeletedAt(string $price_deleted) Return the first ChildPrice filtered by the price_deleted column *
+ * @method     ChildPrice|null findOneByUpdatedAt(string $price_updated) Return the first ChildPrice filtered by the price_updated column *
 
  * @method     ChildPrice requirePk($key, ConnectionInterface $con = null) Return the ChildPrice by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPrice requireOne(ConnectionInterface $con = null) Return the first ChildPrice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -63,7 +60,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPrice requireOneByAmount(int $price_amount) Return the first ChildPrice filtered by the price_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPrice requireOneByCreatedAt(string $price_created) Return the first ChildPrice filtered by the price_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPrice requireOneByUpdatedAt(string $price_updated) Return the first ChildPrice filtered by the price_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPrice requireOneByDeletedAt(string $price_deleted) Return the first ChildPrice filtered by the price_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPrice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPrice> find(ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
@@ -79,8 +75,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByCreatedAt(string $price_created) Return ChildPrice objects filtered by the price_created column
  * @method     ChildPrice[]|ObjectCollection findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
- * @method     ChildPrice[]|ObjectCollection findByDeletedAt(string $price_deleted) Return ChildPrice objects filtered by the price_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPrice> findByDeletedAt(string $price_deleted) Return ChildPrice objects filtered by the price_deleted column
  * @method     ChildPrice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPrice> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -180,7 +174,7 @@ abstract class PriceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT price_id, pricegrid_id, price_cat, price_amount, price_created, price_updated, price_deleted FROM prices WHERE price_id = :p0';
+        $sql = 'SELECT price_id, pricegrid_id, price_cat, price_amount, price_created, price_updated FROM prices WHERE price_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -502,49 +496,6 @@ abstract class PriceQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PriceTableMap::COL_PRICE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the price_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE price_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE price_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE price_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPriceQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PriceTableMap::COL_PRICE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PriceTableMap::COL_PRICE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PriceTableMap::COL_PRICE_DELETED, $deletedAt, $comparison);
     }
 
     /**

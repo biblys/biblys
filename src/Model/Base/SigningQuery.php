@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigningQuery orderByLocation($order = Criteria::ASC) Order by the signing_location column
  * @method     ChildSigningQuery orderByCreatedAt($order = Criteria::ASC) Order by the signing_created column
  * @method     ChildSigningQuery orderByUpdatedAt($order = Criteria::ASC) Order by the signing_updated column
- * @method     ChildSigningQuery orderByDeletedAt($order = Criteria::ASC) Order by the signing_deleted column
  *
  * @method     ChildSigningQuery groupById() Group by the signing_id column
  * @method     ChildSigningQuery groupBySiteId() Group by the site_id column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigningQuery groupByLocation() Group by the signing_location column
  * @method     ChildSigningQuery groupByCreatedAt() Group by the signing_created column
  * @method     ChildSigningQuery groupByUpdatedAt() Group by the signing_updated column
- * @method     ChildSigningQuery groupByDeletedAt() Group by the signing_deleted column
  *
  * @method     ChildSigningQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildSigningQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigning|null findOneByEnds(string $signing_ends) Return the first ChildSigning filtered by the signing_ends column
  * @method     ChildSigning|null findOneByLocation(string $signing_location) Return the first ChildSigning filtered by the signing_location column
  * @method     ChildSigning|null findOneByCreatedAt(string $signing_created) Return the first ChildSigning filtered by the signing_created column
- * @method     ChildSigning|null findOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column
- * @method     ChildSigning|null findOneByDeletedAt(string $signing_deleted) Return the first ChildSigning filtered by the signing_deleted column *
+ * @method     ChildSigning|null findOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column *
 
  * @method     ChildSigning requirePk($key, ConnectionInterface $con = null) Return the ChildSigning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOne(ConnectionInterface $con = null) Return the first ChildSigning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigning requireOneByLocation(string $signing_location) Return the first ChildSigning filtered by the signing_location column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOneByCreatedAt(string $signing_created) Return the first ChildSigning filtered by the signing_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSigning requireOneByDeletedAt(string $signing_deleted) Return the first ChildSigning filtered by the signing_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSigning[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildSigning> find(ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
  * @method     ChildSigning[]|ObjectCollection findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
- * @method     ChildSigning[]|ObjectCollection findByDeletedAt(string $signing_deleted) Return ChildSigning objects filtered by the signing_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByDeletedAt(string $signing_deleted) Return ChildSigning objects filtered by the signing_deleted column
  * @method     ChildSigning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSigning> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class SigningQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT signing_id, site_id, publisher_id, people_id, signing_date, signing_starts, signing_ends, signing_location, signing_created, signing_updated, signing_deleted FROM signings WHERE signing_id = :p0';
+        $sql = 'SELECT signing_id, site_id, publisher_id, people_id, signing_date, signing_starts, signing_ends, signing_location, signing_created, signing_updated FROM signings WHERE signing_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -696,49 +690,6 @@ abstract class SigningQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SigningTableMap::COL_SIGNING_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the signing_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE signing_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE signing_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE signing_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(SigningTableMap::COL_SIGNING_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(SigningTableMap::COL_SIGNING_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_DELETED, $deletedAt, $comparison);
     }
 
     /**

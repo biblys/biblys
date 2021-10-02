@@ -26,7 +26,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSessionQuery orderByCreatedAt($order = Criteria::ASC) Order by the session_created column
  * @method     ChildSessionQuery orderByExpiresAt($order = Criteria::ASC) Order by the session_expires column
  * @method     ChildSessionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the session_updated column
- * @method     ChildSessionQuery orderByDeletedAt($order = Criteria::ASC) Order by the session_deleted column
  *
  * @method     ChildSessionQuery groupById() Group by the session_id column
  * @method     ChildSessionQuery groupByUserId() Group by the user_id column
@@ -34,7 +33,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSessionQuery groupByCreatedAt() Group by the session_created column
  * @method     ChildSessionQuery groupByExpiresAt() Group by the session_expires column
  * @method     ChildSessionQuery groupByUpdatedAt() Group by the session_updated column
- * @method     ChildSessionQuery groupByDeletedAt() Group by the session_deleted column
  *
  * @method     ChildSessionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildSessionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -64,8 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSession|null findOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column
  * @method     ChildSession|null findOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column
  * @method     ChildSession|null findOneByExpiresAt(string $session_expires) Return the first ChildSession filtered by the session_expires column
- * @method     ChildSession|null findOneByUpdatedAt(string $session_updated) Return the first ChildSession filtered by the session_updated column
- * @method     ChildSession|null findOneByDeletedAt(string $session_deleted) Return the first ChildSession filtered by the session_deleted column *
+ * @method     ChildSession|null findOneByUpdatedAt(string $session_updated) Return the first ChildSession filtered by the session_updated column *
 
  * @method     ChildSession requirePk($key, ConnectionInterface $con = null) Return the ChildSession by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOne(ConnectionInterface $con = null) Return the first ChildSession matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -76,7 +73,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSession requireOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByExpiresAt(string $session_expires) Return the first ChildSession filtered by the session_expires column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByUpdatedAt(string $session_updated) Return the first ChildSession filtered by the session_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSession requireOneByDeletedAt(string $session_deleted) Return the first ChildSession filtered by the session_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSession[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildSession> find(ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
@@ -92,8 +88,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSession> findByExpiresAt(string $session_expires) Return ChildSession objects filtered by the session_expires column
  * @method     ChildSession[]|ObjectCollection findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildSession> findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
- * @method     ChildSession[]|ObjectCollection findByDeletedAt(string $session_deleted) Return ChildSession objects filtered by the session_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildSession> findByDeletedAt(string $session_deleted) Return ChildSession objects filtered by the session_deleted column
  * @method     ChildSession[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSession> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -193,7 +187,7 @@ abstract class SessionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT session_id, user_id, session_token, session_created, session_expires, session_updated, session_deleted FROM session WHERE session_id = :p0';
+        $sql = 'SELECT session_id, user_id, session_token, session_created, session_expires, session_updated FROM session WHERE session_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -519,49 +513,6 @@ abstract class SessionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SessionTableMap::COL_SESSION_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the session_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE session_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE session_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE session_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildSessionQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(SessionTableMap::COL_SESSION_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(SessionTableMap::COL_SESSION_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(SessionTableMap::COL_SESSION_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -58,7 +58,7 @@ class WishTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class WishTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the wish_id field
@@ -111,11 +111,6 @@ class WishTableMap extends TableMap
     const COL_WISH_BOUGHT = 'wishes.wish_bought';
 
     /**
-     * the column name for the wish_deleted field
-     */
-    const COL_WISH_DELETED = 'wishes.wish_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -127,11 +122,11 @@ class WishTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'WishlistId', 'UserId', 'SiteId', 'ArticleId', 'CreatedAt', 'UpdatedAt', 'Bought', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'wishlistId', 'userId', 'siteId', 'articleId', 'createdAt', 'updatedAt', 'bought', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(WishTableMap::COL_WISH_ID, WishTableMap::COL_WISHLIST_ID, WishTableMap::COL_USER_ID, WishTableMap::COL_SITE_ID, WishTableMap::COL_ARTICLE_ID, WishTableMap::COL_WISH_CREATED, WishTableMap::COL_WISH_UPDATED, WishTableMap::COL_WISH_BOUGHT, WishTableMap::COL_WISH_DELETED, ),
-        self::TYPE_FIELDNAME     => array('wish_id', 'wishlist_id', 'user_id', 'site_id', 'article_id', 'wish_created', 'wish_updated', 'wish_bought', 'wish_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'WishlistId', 'UserId', 'SiteId', 'ArticleId', 'CreatedAt', 'UpdatedAt', 'Bought', ),
+        self::TYPE_CAMELNAME     => array('id', 'wishlistId', 'userId', 'siteId', 'articleId', 'createdAt', 'updatedAt', 'bought', ),
+        self::TYPE_COLNAME       => array(WishTableMap::COL_WISH_ID, WishTableMap::COL_WISHLIST_ID, WishTableMap::COL_USER_ID, WishTableMap::COL_SITE_ID, WishTableMap::COL_ARTICLE_ID, WishTableMap::COL_WISH_CREATED, WishTableMap::COL_WISH_UPDATED, WishTableMap::COL_WISH_BOUGHT, ),
+        self::TYPE_FIELDNAME     => array('wish_id', 'wishlist_id', 'user_id', 'site_id', 'article_id', 'wish_created', 'wish_updated', 'wish_bought', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -141,11 +136,11 @@ class WishTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'WishlistId' => 1, 'UserId' => 2, 'SiteId' => 3, 'ArticleId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'Bought' => 7, 'DeletedAt' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'wishlistId' => 1, 'userId' => 2, 'siteId' => 3, 'articleId' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'bought' => 7, 'deletedAt' => 8, ),
-        self::TYPE_COLNAME       => array(WishTableMap::COL_WISH_ID => 0, WishTableMap::COL_WISHLIST_ID => 1, WishTableMap::COL_USER_ID => 2, WishTableMap::COL_SITE_ID => 3, WishTableMap::COL_ARTICLE_ID => 4, WishTableMap::COL_WISH_CREATED => 5, WishTableMap::COL_WISH_UPDATED => 6, WishTableMap::COL_WISH_BOUGHT => 7, WishTableMap::COL_WISH_DELETED => 8, ),
-        self::TYPE_FIELDNAME     => array('wish_id' => 0, 'wishlist_id' => 1, 'user_id' => 2, 'site_id' => 3, 'article_id' => 4, 'wish_created' => 5, 'wish_updated' => 6, 'wish_bought' => 7, 'wish_deleted' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'WishlistId' => 1, 'UserId' => 2, 'SiteId' => 3, 'ArticleId' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'Bought' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'wishlistId' => 1, 'userId' => 2, 'siteId' => 3, 'articleId' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'bought' => 7, ),
+        self::TYPE_COLNAME       => array(WishTableMap::COL_WISH_ID => 0, WishTableMap::COL_WISHLIST_ID => 1, WishTableMap::COL_USER_ID => 2, WishTableMap::COL_SITE_ID => 3, WishTableMap::COL_ARTICLE_ID => 4, WishTableMap::COL_WISH_CREATED => 5, WishTableMap::COL_WISH_UPDATED => 6, WishTableMap::COL_WISH_BOUGHT => 7, ),
+        self::TYPE_FIELDNAME     => array('wish_id' => 0, 'wishlist_id' => 1, 'user_id' => 2, 'site_id' => 3, 'article_id' => 4, 'wish_created' => 5, 'wish_updated' => 6, 'wish_bought' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -218,14 +213,6 @@ class WishTableMap extends TableMap
         'COL_WISH_BOUGHT' => 'WISH_BOUGHT',
         'wish_bought' => 'WISH_BOUGHT',
         'wishes.wish_bought' => 'WISH_BOUGHT',
-        'DeletedAt' => 'WISH_DELETED',
-        'Wish.DeletedAt' => 'WISH_DELETED',
-        'deletedAt' => 'WISH_DELETED',
-        'wish.deletedAt' => 'WISH_DELETED',
-        'WishTableMap::COL_WISH_DELETED' => 'WISH_DELETED',
-        'COL_WISH_DELETED' => 'WISH_DELETED',
-        'wish_deleted' => 'WISH_DELETED',
-        'wishes.wish_deleted' => 'WISH_DELETED',
     ];
 
     /**
@@ -253,7 +240,6 @@ class WishTableMap extends TableMap
         $this->addColumn('wish_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('wish_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('wish_bought', 'Bought', 'TIMESTAMP', false, null, null);
-        $this->addColumn('wish_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -425,7 +411,6 @@ class WishTableMap extends TableMap
             $criteria->addSelectColumn(WishTableMap::COL_WISH_CREATED);
             $criteria->addSelectColumn(WishTableMap::COL_WISH_UPDATED);
             $criteria->addSelectColumn(WishTableMap::COL_WISH_BOUGHT);
-            $criteria->addSelectColumn(WishTableMap::COL_WISH_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.wish_id');
             $criteria->addSelectColumn($alias . '.wishlist_id');
@@ -435,7 +420,6 @@ class WishTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.wish_created');
             $criteria->addSelectColumn($alias . '.wish_updated');
             $criteria->addSelectColumn($alias . '.wish_bought');
-            $criteria->addSelectColumn($alias . '.wish_deleted');
         }
     }
 
@@ -461,7 +445,6 @@ class WishTableMap extends TableMap
             $criteria->removeSelectColumn(WishTableMap::COL_WISH_CREATED);
             $criteria->removeSelectColumn(WishTableMap::COL_WISH_UPDATED);
             $criteria->removeSelectColumn(WishTableMap::COL_WISH_BOUGHT);
-            $criteria->removeSelectColumn(WishTableMap::COL_WISH_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.wish_id');
             $criteria->removeSelectColumn($alias . '.wishlist_id');
@@ -471,7 +454,6 @@ class WishTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.wish_created');
             $criteria->removeSelectColumn($alias . '.wish_updated');
             $criteria->removeSelectColumn($alias . '.wish_bought');
-            $criteria->removeSelectColumn($alias . '.wish_deleted');
         }
     }
 

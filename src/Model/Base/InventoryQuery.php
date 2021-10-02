@@ -24,14 +24,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventoryQuery orderByTitle($order = Criteria::ASC) Order by the inventory_title column
  * @method     ChildInventoryQuery orderByCreatedAt($order = Criteria::ASC) Order by the inventory_created column
  * @method     ChildInventoryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the inventory_updated column
- * @method     ChildInventoryQuery orderByDeletedAt($order = Criteria::ASC) Order by the inventory_deleted column
  *
  * @method     ChildInventoryQuery groupById() Group by the inventory_id column
  * @method     ChildInventoryQuery groupBySiteId() Group by the site_id column
  * @method     ChildInventoryQuery groupByTitle() Group by the inventory_title column
  * @method     ChildInventoryQuery groupByCreatedAt() Group by the inventory_created column
  * @method     ChildInventoryQuery groupByUpdatedAt() Group by the inventory_updated column
- * @method     ChildInventoryQuery groupByDeletedAt() Group by the inventory_deleted column
  *
  * @method     ChildInventoryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildInventoryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -48,8 +46,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventory|null findOneBySiteId(int $site_id) Return the first ChildInventory filtered by the site_id column
  * @method     ChildInventory|null findOneByTitle(string $inventory_title) Return the first ChildInventory filtered by the inventory_title column
  * @method     ChildInventory|null findOneByCreatedAt(string $inventory_created) Return the first ChildInventory filtered by the inventory_created column
- * @method     ChildInventory|null findOneByUpdatedAt(string $inventory_updated) Return the first ChildInventory filtered by the inventory_updated column
- * @method     ChildInventory|null findOneByDeletedAt(string $inventory_deleted) Return the first ChildInventory filtered by the inventory_deleted column *
+ * @method     ChildInventory|null findOneByUpdatedAt(string $inventory_updated) Return the first ChildInventory filtered by the inventory_updated column *
 
  * @method     ChildInventory requirePk($key, ConnectionInterface $con = null) Return the ChildInventory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventory requireOne(ConnectionInterface $con = null) Return the first ChildInventory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -59,7 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventory requireOneByTitle(string $inventory_title) Return the first ChildInventory filtered by the inventory_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventory requireOneByCreatedAt(string $inventory_created) Return the first ChildInventory filtered by the inventory_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventory requireOneByUpdatedAt(string $inventory_updated) Return the first ChildInventory filtered by the inventory_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInventory requireOneByDeletedAt(string $inventory_deleted) Return the first ChildInventory filtered by the inventory_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInventory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildInventory> find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
@@ -73,8 +69,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
  * @method     ChildInventory[]|ObjectCollection findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
- * @method     ChildInventory[]|ObjectCollection findByDeletedAt(string $inventory_deleted) Return ChildInventory objects filtered by the inventory_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByDeletedAt(string $inventory_deleted) Return ChildInventory objects filtered by the inventory_deleted column
  * @method     ChildInventory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildInventory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -174,7 +168,7 @@ abstract class InventoryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT inventory_id, site_id, inventory_title, inventory_created, inventory_updated, inventory_deleted FROM inventory WHERE inventory_id = :p0';
+        $sql = 'SELECT inventory_id, site_id, inventory_title, inventory_created, inventory_updated FROM inventory WHERE inventory_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -455,49 +449,6 @@ abstract class InventoryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the inventory_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE inventory_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE inventory_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE inventory_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_DELETED, $deletedAt, $comparison);
     }
 
     /**

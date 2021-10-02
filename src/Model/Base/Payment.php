@@ -133,13 +133,6 @@ abstract class Payment implements ActiveRecordInterface
     protected $payment_updated;
 
     /**
-     * The value for the payment_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $payment_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -508,28 +501,6 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [payment_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->payment_deleted;
-        } else {
-            return $this->payment_deleted instanceof \DateTimeInterface ? $this->payment_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [payment_id] column.
      *
      * @param int $v New value
@@ -730,26 +701,6 @@ abstract class Payment implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [payment_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Payment The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->payment_deleted !== null || $dt !== null) {
-            if ($this->payment_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->payment_deleted->format("Y-m-d H:i:s.u")) {
-                $this->payment_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[PaymentTableMap::COL_PAYMENT_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -823,12 +774,6 @@ abstract class Payment implements ActiveRecordInterface
                 $col = null;
             }
             $this->payment_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PaymentTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->payment_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -837,7 +782,7 @@ abstract class Payment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Payment'), 0, $e);
@@ -1081,9 +1026,6 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'payment_updated';
         }
-        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO payments (%s) VALUES (%s)',
@@ -1124,9 +1066,6 @@ abstract class Payment implements ActiveRecordInterface
                         break;
                     case 'payment_updated':
                         $stmt->bindValue($identifier, $this->payment_updated ? $this->payment_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'payment_deleted':
-                        $stmt->bindValue($identifier, $this->payment_deleted ? $this->payment_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1220,9 +1159,6 @@ abstract class Payment implements ActiveRecordInterface
             case 9:
                 return $this->getUpdatedAt();
                 break;
-            case 10:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1262,7 +1198,6 @@ abstract class Payment implements ActiveRecordInterface
             $keys[7] => $this->getCreatedAt(),
             $keys[8] => $this->getExecuted(),
             $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getDeletedAt(),
         );
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1274,10 +1209,6 @@ abstract class Payment implements ActiveRecordInterface
 
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1348,9 +1279,6 @@ abstract class Payment implements ActiveRecordInterface
             case 9:
                 $this->setUpdatedAt($value);
                 break;
-            case 10:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1406,9 +1334,6 @@ abstract class Payment implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setUpdatedAt($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setDeletedAt($arr[$keys[10]]);
         }
 
         return $this;
@@ -1482,9 +1407,6 @@ abstract class Payment implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
             $criteria->add(PaymentTableMap::COL_PAYMENT_UPDATED, $this->payment_updated);
-        }
-        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_DELETED)) {
-            $criteria->add(PaymentTableMap::COL_PAYMENT_DELETED, $this->payment_deleted);
         }
 
         return $criteria;
@@ -1581,7 +1503,6 @@ abstract class Payment implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setExecuted($this->getExecuted());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1627,7 +1548,6 @@ abstract class Payment implements ActiveRecordInterface
         $this->payment_created = null;
         $this->payment_executed = null;
         $this->payment_updated = null;
-        $this->payment_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

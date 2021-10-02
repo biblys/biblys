@@ -161,13 +161,6 @@ abstract class Media implements ActiveRecordInterface
     protected $media_updated;
 
     /**
-     * The value for the media_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $media_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -588,28 +581,6 @@ abstract class Media implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [media_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->media_deleted;
-        } else {
-            return $this->media_deleted instanceof \DateTimeInterface ? $this->media_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [media_id] column.
      *
      * @param int $v New value
@@ -890,26 +861,6 @@ abstract class Media implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [media_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Media The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->media_deleted !== null || $dt !== null) {
-            if ($this->media_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->media_deleted->format("Y-m-d H:i:s.u")) {
-                $this->media_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[MediaTableMap::COL_MEDIA_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -998,12 +949,6 @@ abstract class Media implements ActiveRecordInterface
                 $col = null;
             }
             $this->media_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : MediaTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->media_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1012,7 +957,7 @@ abstract class Media implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 15; // 15 = MediaTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = MediaTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Media'), 0, $e);
@@ -1268,9 +1213,6 @@ abstract class Media implements ActiveRecordInterface
         if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'media_updated';
         }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'media_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO medias (%s) VALUES (%s)',
@@ -1323,9 +1265,6 @@ abstract class Media implements ActiveRecordInterface
                         break;
                     case 'media_updated':
                         $stmt->bindValue($identifier, $this->media_updated ? $this->media_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'media_deleted':
-                        $stmt->bindValue($identifier, $this->media_deleted ? $this->media_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1431,9 +1370,6 @@ abstract class Media implements ActiveRecordInterface
             case 13:
                 return $this->getUpdatedAt();
                 break;
-            case 14:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1477,7 +1413,6 @@ abstract class Media implements ActiveRecordInterface
             $keys[11] => $this->getUpdate(),
             $keys[12] => $this->getCreatedAt(),
             $keys[13] => $this->getUpdatedAt(),
-            $keys[14] => $this->getDeletedAt(),
         );
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
@@ -1493,10 +1428,6 @@ abstract class Media implements ActiveRecordInterface
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
             $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[14]] instanceof \DateTimeInterface) {
-            $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1579,9 +1510,6 @@ abstract class Media implements ActiveRecordInterface
             case 13:
                 $this->setUpdatedAt($value);
                 break;
-            case 14:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1649,9 +1577,6 @@ abstract class Media implements ActiveRecordInterface
         }
         if (array_key_exists($keys[13], $arr)) {
             $this->setUpdatedAt($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setDeletedAt($arr[$keys[14]]);
         }
 
         return $this;
@@ -1737,9 +1662,6 @@ abstract class Media implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MediaTableMap::COL_MEDIA_UPDATED)) {
             $criteria->add(MediaTableMap::COL_MEDIA_UPDATED, $this->media_updated);
-        }
-        if ($this->isColumnModified(MediaTableMap::COL_MEDIA_DELETED)) {
-            $criteria->add(MediaTableMap::COL_MEDIA_DELETED, $this->media_deleted);
         }
 
         return $criteria;
@@ -1840,7 +1762,6 @@ abstract class Media implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1890,7 +1811,6 @@ abstract class Media implements ActiveRecordInterface
         $this->media_update = null;
         $this->media_created = null;
         $this->media_updated = null;
-        $this->media_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

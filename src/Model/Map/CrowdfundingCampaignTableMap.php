@@ -58,7 +58,7 @@ class CrowdfundingCampaignTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CrowdfundingCampaignTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the campaign_id field
@@ -136,11 +136,6 @@ class CrowdfundingCampaignTableMap extends TableMap
     const COL_CAMPAIGN_UPDATED = 'cf_campaigns.campaign_updated';
 
     /**
-     * the column name for the campaign_deleted field
-     */
-    const COL_CAMPAIGN_DELETED = 'cf_campaigns.campaign_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -152,11 +147,11 @@ class CrowdfundingCampaignTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Title', 'Url', 'Description', 'Image', 'Goal', 'Pledged', 'Backers', 'Starts', 'Ends', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'title', 'url', 'description', 'image', 'goal', 'pledged', 'backers', 'starts', 'ends', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, CrowdfundingCampaignTableMap::COL_SITE_ID, CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE, CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION, CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE, CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL, CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED, CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED, ),
-        self::TYPE_FIELDNAME     => array('campaign_id', 'site_id', 'campaign_title', 'campaign_url', 'campaign_description', 'campaign_image', 'campaign_goal', 'campaign_pledged', 'campaign_backers', 'campaign_starts', 'campaign_ends', 'campaign_created', 'campaign_updated', 'campaign_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Title', 'Url', 'Description', 'Image', 'Goal', 'Pledged', 'Backers', 'Starts', 'Ends', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'title', 'url', 'description', 'image', 'goal', 'pledged', 'backers', 'starts', 'ends', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, CrowdfundingCampaignTableMap::COL_SITE_ID, CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE, CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION, CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE, CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL, CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED, CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS, CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('campaign_id', 'site_id', 'campaign_title', 'campaign_url', 'campaign_description', 'campaign_image', 'campaign_goal', 'campaign_pledged', 'campaign_backers', 'campaign_starts', 'campaign_ends', 'campaign_created', 'campaign_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -166,11 +161,11 @@ class CrowdfundingCampaignTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Title' => 2, 'Url' => 3, 'Description' => 4, 'Image' => 5, 'Goal' => 6, 'Pledged' => 7, 'Backers' => 8, 'Starts' => 9, 'Ends' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, 'DeletedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'title' => 2, 'url' => 3, 'description' => 4, 'image' => 5, 'goal' => 6, 'pledged' => 7, 'backers' => 8, 'starts' => 9, 'ends' => 10, 'createdAt' => 11, 'updatedAt' => 12, 'deletedAt' => 13, ),
-        self::TYPE_COLNAME       => array(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID => 0, CrowdfundingCampaignTableMap::COL_SITE_ID => 1, CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE => 2, CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL => 3, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION => 4, CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE => 5, CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL => 6, CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED => 7, CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS => 8, CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS => 9, CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS => 10, CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED => 11, CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED => 12, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED => 13, ),
-        self::TYPE_FIELDNAME     => array('campaign_id' => 0, 'site_id' => 1, 'campaign_title' => 2, 'campaign_url' => 3, 'campaign_description' => 4, 'campaign_image' => 5, 'campaign_goal' => 6, 'campaign_pledged' => 7, 'campaign_backers' => 8, 'campaign_starts' => 9, 'campaign_ends' => 10, 'campaign_created' => 11, 'campaign_updated' => 12, 'campaign_deleted' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Title' => 2, 'Url' => 3, 'Description' => 4, 'Image' => 5, 'Goal' => 6, 'Pledged' => 7, 'Backers' => 8, 'Starts' => 9, 'Ends' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'title' => 2, 'url' => 3, 'description' => 4, 'image' => 5, 'goal' => 6, 'pledged' => 7, 'backers' => 8, 'starts' => 9, 'ends' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
+        self::TYPE_COLNAME       => array(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID => 0, CrowdfundingCampaignTableMap::COL_SITE_ID => 1, CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE => 2, CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL => 3, CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION => 4, CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE => 5, CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL => 6, CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED => 7, CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS => 8, CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS => 9, CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS => 10, CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED => 11, CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED => 12, ),
+        self::TYPE_FIELDNAME     => array('campaign_id' => 0, 'site_id' => 1, 'campaign_title' => 2, 'campaign_url' => 3, 'campaign_description' => 4, 'campaign_image' => 5, 'campaign_goal' => 6, 'campaign_pledged' => 7, 'campaign_backers' => 8, 'campaign_starts' => 9, 'campaign_ends' => 10, 'campaign_created' => 11, 'campaign_updated' => 12, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -283,14 +278,6 @@ class CrowdfundingCampaignTableMap extends TableMap
         'COL_CAMPAIGN_UPDATED' => 'CAMPAIGN_UPDATED',
         'campaign_updated' => 'CAMPAIGN_UPDATED',
         'cf_campaigns.campaign_updated' => 'CAMPAIGN_UPDATED',
-        'DeletedAt' => 'CAMPAIGN_DELETED',
-        'CrowdfundingCampaign.DeletedAt' => 'CAMPAIGN_DELETED',
-        'deletedAt' => 'CAMPAIGN_DELETED',
-        'crowdfundingCampaign.deletedAt' => 'CAMPAIGN_DELETED',
-        'CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED' => 'CAMPAIGN_DELETED',
-        'COL_CAMPAIGN_DELETED' => 'CAMPAIGN_DELETED',
-        'campaign_deleted' => 'CAMPAIGN_DELETED',
-        'cf_campaigns.campaign_deleted' => 'CAMPAIGN_DELETED',
     ];
 
     /**
@@ -323,7 +310,6 @@ class CrowdfundingCampaignTableMap extends TableMap
         $this->addColumn('campaign_ends', 'Ends', 'DATE', false, null, null);
         $this->addColumn('campaign_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('campaign_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('campaign_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -500,7 +486,6 @@ class CrowdfundingCampaignTableMap extends TableMap
             $criteria->addSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS);
             $criteria->addSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
             $criteria->addSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
-            $criteria->addSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.campaign_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -515,7 +500,6 @@ class CrowdfundingCampaignTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.campaign_ends');
             $criteria->addSelectColumn($alias . '.campaign_created');
             $criteria->addSelectColumn($alias . '.campaign_updated');
-            $criteria->addSelectColumn($alias . '.campaign_deleted');
         }
     }
 
@@ -546,7 +530,6 @@ class CrowdfundingCampaignTableMap extends TableMap
             $criteria->removeSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS);
             $criteria->removeSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
             $criteria->removeSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
-            $criteria->removeSelectColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.campaign_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -561,7 +544,6 @@ class CrowdfundingCampaignTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.campaign_ends');
             $criteria->removeSelectColumn($alias . '.campaign_created');
             $criteria->removeSelectColumn($alias . '.campaign_updated');
-            $criteria->removeSelectColumn($alias . '.campaign_deleted');
         }
     }
 

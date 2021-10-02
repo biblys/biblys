@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycleQuery orderByUpdate($order = Criteria::ASC) Order by the cycle_update column
  * @method     ChildCycleQuery orderByCreatedAt($order = Criteria::ASC) Order by the cycle_created column
  * @method     ChildCycleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the cycle_updated column
- * @method     ChildCycleQuery orderByDeletedAt($order = Criteria::ASC) Order by the cycle_deleted column
  *
  * @method     ChildCycleQuery groupById() Group by the cycle_id column
  * @method     ChildCycleQuery groupByName() Group by the cycle_name column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycleQuery groupByUpdate() Group by the cycle_update column
  * @method     ChildCycleQuery groupByCreatedAt() Group by the cycle_created column
  * @method     ChildCycleQuery groupByUpdatedAt() Group by the cycle_updated column
- * @method     ChildCycleQuery groupByDeletedAt() Group by the cycle_deleted column
  *
  * @method     ChildCycleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCycleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycle|null findOneByInsert(string $cycle_insert) Return the first ChildCycle filtered by the cycle_insert column
  * @method     ChildCycle|null findOneByUpdate(string $cycle_update) Return the first ChildCycle filtered by the cycle_update column
  * @method     ChildCycle|null findOneByCreatedAt(string $cycle_created) Return the first ChildCycle filtered by the cycle_created column
- * @method     ChildCycle|null findOneByUpdatedAt(string $cycle_updated) Return the first ChildCycle filtered by the cycle_updated column
- * @method     ChildCycle|null findOneByDeletedAt(string $cycle_deleted) Return the first ChildCycle filtered by the cycle_deleted column *
+ * @method     ChildCycle|null findOneByUpdatedAt(string $cycle_updated) Return the first ChildCycle filtered by the cycle_updated column *
 
  * @method     ChildCycle requirePk($key, ConnectionInterface $con = null) Return the ChildCycle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCycle requireOne(ConnectionInterface $con = null) Return the first ChildCycle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycle requireOneByUpdate(string $cycle_update) Return the first ChildCycle filtered by the cycle_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCycle requireOneByCreatedAt(string $cycle_created) Return the first ChildCycle filtered by the cycle_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCycle requireOneByUpdatedAt(string $cycle_updated) Return the first ChildCycle filtered by the cycle_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCycle requireOneByDeletedAt(string $cycle_deleted) Return the first ChildCycle filtered by the cycle_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCycle[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCycle> find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
  * @method     ChildCycle[]|ObjectCollection findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
- * @method     ChildCycle[]|ObjectCollection findByDeletedAt(string $cycle_deleted) Return ChildCycle objects filtered by the cycle_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByDeletedAt(string $cycle_deleted) Return ChildCycle objects filtered by the cycle_deleted column
  * @method     ChildCycle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCycle> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class CycleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT cycle_id, cycle_name, cycle_url, cycle_desc, cycle_hits, cycle_noosfere_id, cycle_insert, cycle_update, cycle_created, cycle_updated, cycle_deleted FROM cycles WHERE cycle_id = :p0';
+        $sql = 'SELECT cycle_id, cycle_name, cycle_url, cycle_desc, cycle_hits, cycle_noosfere_id, cycle_insert, cycle_update, cycle_created, cycle_updated FROM cycles WHERE cycle_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -662,49 +656,6 @@ abstract class CycleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the cycle_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE cycle_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE cycle_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE cycle_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CycleTableMap::COL_CYCLE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CycleTableMap::COL_CYCLE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_DELETED, $deletedAt, $comparison);
     }
 
     /**

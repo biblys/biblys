@@ -37,7 +37,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery orderByUpdate($order = Criteria::ASC) Order by the cart_update column
  * @method     ChildCartQuery orderByCreatedAt($order = Criteria::ASC) Order by the cart_created column
  * @method     ChildCartQuery orderByUpdatedAt($order = Criteria::ASC) Order by the cart_updated column
- * @method     ChildCartQuery orderByDeletedAt($order = Criteria::ASC) Order by the cart_deleted column
  *
  * @method     ChildCartQuery groupById() Group by the cart_id column
  * @method     ChildCartQuery groupByUid() Group by the cart_uid column
@@ -57,7 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery groupByUpdate() Group by the cart_update column
  * @method     ChildCartQuery groupByCreatedAt() Group by the cart_created column
  * @method     ChildCartQuery groupByUpdatedAt() Group by the cart_updated column
- * @method     ChildCartQuery groupByDeletedAt() Group by the cart_deleted column
  *
  * @method     ChildCartQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCartQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -87,8 +85,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart|null findOneByInsert(string $cart_insert) Return the first ChildCart filtered by the cart_insert column
  * @method     ChildCart|null findOneByUpdate(string $cart_update) Return the first ChildCart filtered by the cart_update column
  * @method     ChildCart|null findOneByCreatedAt(string $cart_created) Return the first ChildCart filtered by the cart_created column
- * @method     ChildCart|null findOneByUpdatedAt(string $cart_updated) Return the first ChildCart filtered by the cart_updated column
- * @method     ChildCart|null findOneByDeletedAt(string $cart_deleted) Return the first ChildCart filtered by the cart_deleted column *
+ * @method     ChildCart|null findOneByUpdatedAt(string $cart_updated) Return the first ChildCart filtered by the cart_updated column *
 
  * @method     ChildCart requirePk($key, ConnectionInterface $con = null) Return the ChildCart by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOne(ConnectionInterface $con = null) Return the first ChildCart matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -111,7 +108,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart requireOneByUpdate(string $cart_update) Return the first ChildCart filtered by the cart_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByCreatedAt(string $cart_created) Return the first ChildCart filtered by the cart_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByUpdatedAt(string $cart_updated) Return the first ChildCart filtered by the cart_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCart requireOneByDeletedAt(string $cart_deleted) Return the first ChildCart filtered by the cart_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCart[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCart> find(ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
@@ -151,8 +147,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCart> findByCreatedAt(string $cart_created) Return ChildCart objects filtered by the cart_created column
  * @method     ChildCart[]|ObjectCollection findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCart> findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
- * @method     ChildCart[]|ObjectCollection findByDeletedAt(string $cart_deleted) Return ChildCart objects filtered by the cart_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCart> findByDeletedAt(string $cart_deleted) Return ChildCart objects filtered by the cart_deleted column
  * @method     ChildCart[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCart> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -252,7 +246,7 @@ abstract class CartQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT cart_id, cart_uid, site_id, user_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as-a-gift, cart_gift-recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated, cart_deleted FROM carts WHERE cart_id = :p0';
+        $sql = 'SELECT cart_id, cart_uid, site_id, user_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as-a-gift, cart_gift-recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated FROM carts WHERE cart_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1008,49 +1002,6 @@ abstract class CartQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CartTableMap::COL_CART_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the cart_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE cart_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE cart_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE cart_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCartQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CartTableMap::COL_CART_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CartTableMap::COL_CART_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CartTableMap::COL_CART_DELETED, $deletedAt, $comparison);
     }
 
     /**

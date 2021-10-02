@@ -58,7 +58,7 @@ class RightTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class RightTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the right_id field
@@ -121,11 +121,6 @@ class RightTableMap extends TableMap
     const COL_RIGHT_UPDATED = 'rights.right_updated';
 
     /**
-     * the column name for the right_deleted field
-     */
-    const COL_RIGHT_DELETED = 'rights.right_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class RightTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Uid', 'UserId', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Current', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'uid', 'userId', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'current', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_BOOKSHOP_ID, RightTableMap::COL_LIBRARY_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, RightTableMap::COL_RIGHT_DELETED, ),
-        self::TYPE_FIELDNAME     => array('right_id', 'right_uid', 'user_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'right_current', 'right_created', 'right_updated', 'right_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'Uid', 'UserId', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Current', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'uid', 'userId', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'current', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_BOOKSHOP_ID, RightTableMap::COL_LIBRARY_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('right_id', 'right_uid', 'user_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'right_current', 'right_created', 'right_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class RightTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Uid' => 1, 'UserId' => 2, 'SiteId' => 3, 'PublisherId' => 4, 'BookshopId' => 5, 'LibraryId' => 6, 'Current' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'uid' => 1, 'userId' => 2, 'siteId' => 3, 'publisherId' => 4, 'bookshopId' => 5, 'libraryId' => 6, 'current' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_USER_ID => 2, RightTableMap::COL_SITE_ID => 3, RightTableMap::COL_PUBLISHER_ID => 4, RightTableMap::COL_BOOKSHOP_ID => 5, RightTableMap::COL_LIBRARY_ID => 6, RightTableMap::COL_RIGHT_CURRENT => 7, RightTableMap::COL_RIGHT_CREATED => 8, RightTableMap::COL_RIGHT_UPDATED => 9, RightTableMap::COL_RIGHT_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('right_id' => 0, 'right_uid' => 1, 'user_id' => 2, 'site_id' => 3, 'publisher_id' => 4, 'bookshop_id' => 5, 'library_id' => 6, 'right_current' => 7, 'right_created' => 8, 'right_updated' => 9, 'right_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Uid' => 1, 'UserId' => 2, 'SiteId' => 3, 'PublisherId' => 4, 'BookshopId' => 5, 'LibraryId' => 6, 'Current' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'uid' => 1, 'userId' => 2, 'siteId' => 3, 'publisherId' => 4, 'bookshopId' => 5, 'libraryId' => 6, 'current' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_USER_ID => 2, RightTableMap::COL_SITE_ID => 3, RightTableMap::COL_PUBLISHER_ID => 4, RightTableMap::COL_BOOKSHOP_ID => 5, RightTableMap::COL_LIBRARY_ID => 6, RightTableMap::COL_RIGHT_CURRENT => 7, RightTableMap::COL_RIGHT_CREATED => 8, RightTableMap::COL_RIGHT_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('right_id' => 0, 'right_uid' => 1, 'user_id' => 2, 'site_id' => 3, 'publisher_id' => 4, 'bookshop_id' => 5, 'library_id' => 6, 'right_current' => 7, 'right_created' => 8, 'right_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class RightTableMap extends TableMap
         'COL_RIGHT_UPDATED' => 'RIGHT_UPDATED',
         'right_updated' => 'RIGHT_UPDATED',
         'rights.right_updated' => 'RIGHT_UPDATED',
-        'DeletedAt' => 'RIGHT_DELETED',
-        'Right.DeletedAt' => 'RIGHT_DELETED',
-        'deletedAt' => 'RIGHT_DELETED',
-        'right.deletedAt' => 'RIGHT_DELETED',
-        'RightTableMap::COL_RIGHT_DELETED' => 'RIGHT_DELETED',
-        'COL_RIGHT_DELETED' => 'RIGHT_DELETED',
-        'right_deleted' => 'RIGHT_DELETED',
-        'rights.right_deleted' => 'RIGHT_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class RightTableMap extends TableMap
         $this->addColumn('right_current', 'Current', 'BOOLEAN', false, 1, false);
         $this->addColumn('right_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('right_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('right_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -469,7 +455,6 @@ class RightTableMap extends TableMap
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_CURRENT);
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_CREATED);
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_UPDATED);
-            $criteria->addSelectColumn(RightTableMap::COL_RIGHT_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.right_id');
             $criteria->addSelectColumn($alias . '.right_uid');
@@ -481,7 +466,6 @@ class RightTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.right_current');
             $criteria->addSelectColumn($alias . '.right_created');
             $criteria->addSelectColumn($alias . '.right_updated');
-            $criteria->addSelectColumn($alias . '.right_deleted');
         }
     }
 
@@ -509,7 +493,6 @@ class RightTableMap extends TableMap
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_CURRENT);
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_CREATED);
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_UPDATED);
-            $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.right_id');
             $criteria->removeSelectColumn($alias . '.right_uid');
@@ -521,7 +504,6 @@ class RightTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.right_current');
             $criteria->removeSelectColumn($alias . '.right_created');
             $criteria->removeSelectColumn($alias . '.right_updated');
-            $criteria->removeSelectColumn($alias . '.right_deleted');
         }
     }
 

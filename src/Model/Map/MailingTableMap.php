@@ -58,7 +58,7 @@ class MailingTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class MailingTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the mailing_id field
@@ -111,11 +111,6 @@ class MailingTableMap extends TableMap
     const COL_MAILING_UPDATED = 'mailing.mailing_updated';
 
     /**
-     * the column name for the mailing_deleted field
-     */
-    const COL_MAILING_DELETED = 'mailing.mailing_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -127,11 +122,11 @@ class MailingTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Email', 'Block', 'Checked', 'Date', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'email', 'block', 'checked', 'date', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(MailingTableMap::COL_MAILING_ID, MailingTableMap::COL_SITE_ID, MailingTableMap::COL_MAILING_EMAIL, MailingTableMap::COL_MAILING_BLOCK, MailingTableMap::COL_MAILING_CHECKED, MailingTableMap::COL_MAILING_DATE, MailingTableMap::COL_MAILING_CREATED, MailingTableMap::COL_MAILING_UPDATED, MailingTableMap::COL_MAILING_DELETED, ),
-        self::TYPE_FIELDNAME     => array('mailing_id', 'site_id', 'mailing_email', 'mailing_block', 'mailing_checked', 'mailing_date', 'mailing_created', 'mailing_updated', 'mailing_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Email', 'Block', 'Checked', 'Date', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'email', 'block', 'checked', 'date', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(MailingTableMap::COL_MAILING_ID, MailingTableMap::COL_SITE_ID, MailingTableMap::COL_MAILING_EMAIL, MailingTableMap::COL_MAILING_BLOCK, MailingTableMap::COL_MAILING_CHECKED, MailingTableMap::COL_MAILING_DATE, MailingTableMap::COL_MAILING_CREATED, MailingTableMap::COL_MAILING_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('mailing_id', 'site_id', 'mailing_email', 'mailing_block', 'mailing_checked', 'mailing_date', 'mailing_created', 'mailing_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -141,11 +136,11 @@ class MailingTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Block' => 3, 'Checked' => 4, 'Date' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'DeletedAt' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'email' => 2, 'block' => 3, 'checked' => 4, 'date' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'deletedAt' => 8, ),
-        self::TYPE_COLNAME       => array(MailingTableMap::COL_MAILING_ID => 0, MailingTableMap::COL_SITE_ID => 1, MailingTableMap::COL_MAILING_EMAIL => 2, MailingTableMap::COL_MAILING_BLOCK => 3, MailingTableMap::COL_MAILING_CHECKED => 4, MailingTableMap::COL_MAILING_DATE => 5, MailingTableMap::COL_MAILING_CREATED => 6, MailingTableMap::COL_MAILING_UPDATED => 7, MailingTableMap::COL_MAILING_DELETED => 8, ),
-        self::TYPE_FIELDNAME     => array('mailing_id' => 0, 'site_id' => 1, 'mailing_email' => 2, 'mailing_block' => 3, 'mailing_checked' => 4, 'mailing_date' => 5, 'mailing_created' => 6, 'mailing_updated' => 7, 'mailing_deleted' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Block' => 3, 'Checked' => 4, 'Date' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'email' => 2, 'block' => 3, 'checked' => 4, 'date' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
+        self::TYPE_COLNAME       => array(MailingTableMap::COL_MAILING_ID => 0, MailingTableMap::COL_SITE_ID => 1, MailingTableMap::COL_MAILING_EMAIL => 2, MailingTableMap::COL_MAILING_BLOCK => 3, MailingTableMap::COL_MAILING_CHECKED => 4, MailingTableMap::COL_MAILING_DATE => 5, MailingTableMap::COL_MAILING_CREATED => 6, MailingTableMap::COL_MAILING_UPDATED => 7, ),
+        self::TYPE_FIELDNAME     => array('mailing_id' => 0, 'site_id' => 1, 'mailing_email' => 2, 'mailing_block' => 3, 'mailing_checked' => 4, 'mailing_date' => 5, 'mailing_created' => 6, 'mailing_updated' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -218,14 +213,6 @@ class MailingTableMap extends TableMap
         'COL_MAILING_UPDATED' => 'MAILING_UPDATED',
         'mailing_updated' => 'MAILING_UPDATED',
         'mailing.mailing_updated' => 'MAILING_UPDATED',
-        'DeletedAt' => 'MAILING_DELETED',
-        'Mailing.DeletedAt' => 'MAILING_DELETED',
-        'deletedAt' => 'MAILING_DELETED',
-        'mailing.deletedAt' => 'MAILING_DELETED',
-        'MailingTableMap::COL_MAILING_DELETED' => 'MAILING_DELETED',
-        'COL_MAILING_DELETED' => 'MAILING_DELETED',
-        'mailing_deleted' => 'MAILING_DELETED',
-        'mailing.mailing_deleted' => 'MAILING_DELETED',
     ];
 
     /**
@@ -253,7 +240,6 @@ class MailingTableMap extends TableMap
         $this->addColumn('mailing_date', 'Date', 'TIMESTAMP', false, null, null);
         $this->addColumn('mailing_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('mailing_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('mailing_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -425,7 +411,6 @@ class MailingTableMap extends TableMap
             $criteria->addSelectColumn(MailingTableMap::COL_MAILING_DATE);
             $criteria->addSelectColumn(MailingTableMap::COL_MAILING_CREATED);
             $criteria->addSelectColumn(MailingTableMap::COL_MAILING_UPDATED);
-            $criteria->addSelectColumn(MailingTableMap::COL_MAILING_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.mailing_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -435,7 +420,6 @@ class MailingTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.mailing_date');
             $criteria->addSelectColumn($alias . '.mailing_created');
             $criteria->addSelectColumn($alias . '.mailing_updated');
-            $criteria->addSelectColumn($alias . '.mailing_deleted');
         }
     }
 
@@ -461,7 +445,6 @@ class MailingTableMap extends TableMap
             $criteria->removeSelectColumn(MailingTableMap::COL_MAILING_DATE);
             $criteria->removeSelectColumn(MailingTableMap::COL_MAILING_CREATED);
             $criteria->removeSelectColumn(MailingTableMap::COL_MAILING_UPDATED);
-            $criteria->removeSelectColumn(MailingTableMap::COL_MAILING_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.mailing_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -471,7 +454,6 @@ class MailingTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.mailing_date');
             $criteria->removeSelectColumn($alias . '.mailing_created');
             $criteria->removeSelectColumn($alias . '.mailing_updated');
-            $criteria->removeSelectColumn($alias . '.mailing_deleted');
         }
     }
 

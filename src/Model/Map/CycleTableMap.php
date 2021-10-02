@@ -58,7 +58,7 @@ class CycleTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CycleTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the cycle_id field
@@ -121,11 +121,6 @@ class CycleTableMap extends TableMap
     const COL_CYCLE_UPDATED = 'cycles.cycle_updated';
 
     /**
-     * the column name for the cycle_deleted field
-     */
-    const COL_CYCLE_DELETED = 'cycles.cycle_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class CycleTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Url', 'Desc', 'Hits', 'NoosfereId', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'url', 'desc', 'hits', 'noosfereId', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CycleTableMap::COL_CYCLE_ID, CycleTableMap::COL_CYCLE_NAME, CycleTableMap::COL_CYCLE_URL, CycleTableMap::COL_CYCLE_DESC, CycleTableMap::COL_CYCLE_HITS, CycleTableMap::COL_CYCLE_NOOSFERE_ID, CycleTableMap::COL_CYCLE_INSERT, CycleTableMap::COL_CYCLE_UPDATE, CycleTableMap::COL_CYCLE_CREATED, CycleTableMap::COL_CYCLE_UPDATED, CycleTableMap::COL_CYCLE_DELETED, ),
-        self::TYPE_FIELDNAME     => array('cycle_id', 'cycle_name', 'cycle_url', 'cycle_desc', 'cycle_hits', 'cycle_noosfere_id', 'cycle_insert', 'cycle_update', 'cycle_created', 'cycle_updated', 'cycle_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'Url', 'Desc', 'Hits', 'NoosfereId', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'url', 'desc', 'hits', 'noosfereId', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CycleTableMap::COL_CYCLE_ID, CycleTableMap::COL_CYCLE_NAME, CycleTableMap::COL_CYCLE_URL, CycleTableMap::COL_CYCLE_DESC, CycleTableMap::COL_CYCLE_HITS, CycleTableMap::COL_CYCLE_NOOSFERE_ID, CycleTableMap::COL_CYCLE_INSERT, CycleTableMap::COL_CYCLE_UPDATE, CycleTableMap::COL_CYCLE_CREATED, CycleTableMap::COL_CYCLE_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('cycle_id', 'cycle_name', 'cycle_url', 'cycle_desc', 'cycle_hits', 'cycle_noosfere_id', 'cycle_insert', 'cycle_update', 'cycle_created', 'cycle_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class CycleTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Url' => 2, 'Desc' => 3, 'Hits' => 4, 'NoosfereId' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'url' => 2, 'desc' => 3, 'hits' => 4, 'noosfereId' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(CycleTableMap::COL_CYCLE_ID => 0, CycleTableMap::COL_CYCLE_NAME => 1, CycleTableMap::COL_CYCLE_URL => 2, CycleTableMap::COL_CYCLE_DESC => 3, CycleTableMap::COL_CYCLE_HITS => 4, CycleTableMap::COL_CYCLE_NOOSFERE_ID => 5, CycleTableMap::COL_CYCLE_INSERT => 6, CycleTableMap::COL_CYCLE_UPDATE => 7, CycleTableMap::COL_CYCLE_CREATED => 8, CycleTableMap::COL_CYCLE_UPDATED => 9, CycleTableMap::COL_CYCLE_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('cycle_id' => 0, 'cycle_name' => 1, 'cycle_url' => 2, 'cycle_desc' => 3, 'cycle_hits' => 4, 'cycle_noosfere_id' => 5, 'cycle_insert' => 6, 'cycle_update' => 7, 'cycle_created' => 8, 'cycle_updated' => 9, 'cycle_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Url' => 2, 'Desc' => 3, 'Hits' => 4, 'NoosfereId' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'url' => 2, 'desc' => 3, 'hits' => 4, 'noosfereId' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(CycleTableMap::COL_CYCLE_ID => 0, CycleTableMap::COL_CYCLE_NAME => 1, CycleTableMap::COL_CYCLE_URL => 2, CycleTableMap::COL_CYCLE_DESC => 3, CycleTableMap::COL_CYCLE_HITS => 4, CycleTableMap::COL_CYCLE_NOOSFERE_ID => 5, CycleTableMap::COL_CYCLE_INSERT => 6, CycleTableMap::COL_CYCLE_UPDATE => 7, CycleTableMap::COL_CYCLE_CREATED => 8, CycleTableMap::COL_CYCLE_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('cycle_id' => 0, 'cycle_name' => 1, 'cycle_url' => 2, 'cycle_desc' => 3, 'cycle_hits' => 4, 'cycle_noosfere_id' => 5, 'cycle_insert' => 6, 'cycle_update' => 7, 'cycle_created' => 8, 'cycle_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class CycleTableMap extends TableMap
         'COL_CYCLE_UPDATED' => 'CYCLE_UPDATED',
         'cycle_updated' => 'CYCLE_UPDATED',
         'cycles.cycle_updated' => 'CYCLE_UPDATED',
-        'DeletedAt' => 'CYCLE_DELETED',
-        'Cycle.DeletedAt' => 'CYCLE_DELETED',
-        'deletedAt' => 'CYCLE_DELETED',
-        'cycle.deletedAt' => 'CYCLE_DELETED',
-        'CycleTableMap::COL_CYCLE_DELETED' => 'CYCLE_DELETED',
-        'COL_CYCLE_DELETED' => 'CYCLE_DELETED',
-        'cycle_deleted' => 'CYCLE_DELETED',
-        'cycles.cycle_deleted' => 'CYCLE_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class CycleTableMap extends TableMap
         $this->addColumn('cycle_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('cycle_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('cycle_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('cycle_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class CycleTableMap extends TableMap
             $criteria->addSelectColumn(CycleTableMap::COL_CYCLE_UPDATE);
             $criteria->addSelectColumn(CycleTableMap::COL_CYCLE_CREATED);
             $criteria->addSelectColumn(CycleTableMap::COL_CYCLE_UPDATED);
-            $criteria->addSelectColumn(CycleTableMap::COL_CYCLE_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.cycle_id');
             $criteria->addSelectColumn($alias . '.cycle_name');
@@ -467,7 +452,6 @@ class CycleTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.cycle_update');
             $criteria->addSelectColumn($alias . '.cycle_created');
             $criteria->addSelectColumn($alias . '.cycle_updated');
-            $criteria->addSelectColumn($alias . '.cycle_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class CycleTableMap extends TableMap
             $criteria->removeSelectColumn(CycleTableMap::COL_CYCLE_UPDATE);
             $criteria->removeSelectColumn(CycleTableMap::COL_CYCLE_CREATED);
             $criteria->removeSelectColumn(CycleTableMap::COL_CYCLE_UPDATED);
-            $criteria->removeSelectColumn(CycleTableMap::COL_CYCLE_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.cycle_id');
             $criteria->removeSelectColumn($alias . '.cycle_name');
@@ -507,7 +490,6 @@ class CycleTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.cycle_update');
             $criteria->removeSelectColumn($alias . '.cycle_created');
             $criteria->removeSelectColumn($alias . '.cycle_updated');
-            $criteria->removeSelectColumn($alias . '.cycle_deleted');
         }
     }
 

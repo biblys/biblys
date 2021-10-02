@@ -58,7 +58,7 @@ class JobTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class JobTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the job_id field
@@ -121,11 +121,6 @@ class JobTableMap extends TableMap
     const COL_JOB_UPDATED = 'jobs.job_updated';
 
     /**
-     * the column name for the job_deleted field
-     */
-    const COL_JOB_DELETED = 'jobs.job_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,11 +132,11 @@ class JobTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameF', 'OtherNames', 'Event', 'Order', 'Onix', 'Date', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'nameF', 'otherNames', 'event', 'order', 'onix', 'date', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(JobTableMap::COL_JOB_ID, JobTableMap::COL_JOB_NAME, JobTableMap::COL_JOB_NAME_F, JobTableMap::COL_JOB_OTHER_NAMES, JobTableMap::COL_JOB_EVENT, JobTableMap::COL_JOB_ORDER, JobTableMap::COL_JOB_ONIX, JobTableMap::COL_JOB_DATE, JobTableMap::COL_JOB_CREATED, JobTableMap::COL_JOB_UPDATED, JobTableMap::COL_JOB_DELETED, ),
-        self::TYPE_FIELDNAME     => array('job_id', 'job_name', 'job_name_f', 'job_other_names', 'job_event', 'job_order', 'job_onix', 'job_date', 'job_created', 'job_updated', 'job_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameF', 'OtherNames', 'Event', 'Order', 'Onix', 'Date', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'name', 'nameF', 'otherNames', 'event', 'order', 'onix', 'date', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(JobTableMap::COL_JOB_ID, JobTableMap::COL_JOB_NAME, JobTableMap::COL_JOB_NAME_F, JobTableMap::COL_JOB_OTHER_NAMES, JobTableMap::COL_JOB_EVENT, JobTableMap::COL_JOB_ORDER, JobTableMap::COL_JOB_ONIX, JobTableMap::COL_JOB_DATE, JobTableMap::COL_JOB_CREATED, JobTableMap::COL_JOB_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('job_id', 'job_name', 'job_name_f', 'job_other_names', 'job_event', 'job_order', 'job_onix', 'job_date', 'job_created', 'job_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -151,11 +146,11 @@ class JobTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameF' => 2, 'OtherNames' => 3, 'Event' => 4, 'Order' => 5, 'Onix' => 6, 'Date' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'DeletedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameF' => 2, 'otherNames' => 3, 'event' => 4, 'order' => 5, 'onix' => 6, 'date' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'deletedAt' => 10, ),
-        self::TYPE_COLNAME       => array(JobTableMap::COL_JOB_ID => 0, JobTableMap::COL_JOB_NAME => 1, JobTableMap::COL_JOB_NAME_F => 2, JobTableMap::COL_JOB_OTHER_NAMES => 3, JobTableMap::COL_JOB_EVENT => 4, JobTableMap::COL_JOB_ORDER => 5, JobTableMap::COL_JOB_ONIX => 6, JobTableMap::COL_JOB_DATE => 7, JobTableMap::COL_JOB_CREATED => 8, JobTableMap::COL_JOB_UPDATED => 9, JobTableMap::COL_JOB_DELETED => 10, ),
-        self::TYPE_FIELDNAME     => array('job_id' => 0, 'job_name' => 1, 'job_name_f' => 2, 'job_other_names' => 3, 'job_event' => 4, 'job_order' => 5, 'job_onix' => 6, 'job_date' => 7, 'job_created' => 8, 'job_updated' => 9, 'job_deleted' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameF' => 2, 'OtherNames' => 3, 'Event' => 4, 'Order' => 5, 'Onix' => 6, 'Date' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameF' => 2, 'otherNames' => 3, 'event' => 4, 'order' => 5, 'onix' => 6, 'date' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
+        self::TYPE_COLNAME       => array(JobTableMap::COL_JOB_ID => 0, JobTableMap::COL_JOB_NAME => 1, JobTableMap::COL_JOB_NAME_F => 2, JobTableMap::COL_JOB_OTHER_NAMES => 3, JobTableMap::COL_JOB_EVENT => 4, JobTableMap::COL_JOB_ORDER => 5, JobTableMap::COL_JOB_ONIX => 6, JobTableMap::COL_JOB_DATE => 7, JobTableMap::COL_JOB_CREATED => 8, JobTableMap::COL_JOB_UPDATED => 9, ),
+        self::TYPE_FIELDNAME     => array('job_id' => 0, 'job_name' => 1, 'job_name_f' => 2, 'job_other_names' => 3, 'job_event' => 4, 'job_order' => 5, 'job_onix' => 6, 'job_date' => 7, 'job_created' => 8, 'job_updated' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -244,14 +239,6 @@ class JobTableMap extends TableMap
         'COL_JOB_UPDATED' => 'JOB_UPDATED',
         'job_updated' => 'JOB_UPDATED',
         'jobs.job_updated' => 'JOB_UPDATED',
-        'DeletedAt' => 'JOB_DELETED',
-        'Job.DeletedAt' => 'JOB_DELETED',
-        'deletedAt' => 'JOB_DELETED',
-        'job.deletedAt' => 'JOB_DELETED',
-        'JobTableMap::COL_JOB_DELETED' => 'JOB_DELETED',
-        'COL_JOB_DELETED' => 'JOB_DELETED',
-        'job_deleted' => 'JOB_DELETED',
-        'jobs.job_deleted' => 'JOB_DELETED',
     ];
 
     /**
@@ -281,7 +268,6 @@ class JobTableMap extends TableMap
         $this->addColumn('job_date', 'Date', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
         $this->addColumn('job_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('job_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('job_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -455,7 +441,6 @@ class JobTableMap extends TableMap
             $criteria->addSelectColumn(JobTableMap::COL_JOB_DATE);
             $criteria->addSelectColumn(JobTableMap::COL_JOB_CREATED);
             $criteria->addSelectColumn(JobTableMap::COL_JOB_UPDATED);
-            $criteria->addSelectColumn(JobTableMap::COL_JOB_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.job_id');
             $criteria->addSelectColumn($alias . '.job_name');
@@ -467,7 +452,6 @@ class JobTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.job_date');
             $criteria->addSelectColumn($alias . '.job_created');
             $criteria->addSelectColumn($alias . '.job_updated');
-            $criteria->addSelectColumn($alias . '.job_deleted');
         }
     }
 
@@ -495,7 +479,6 @@ class JobTableMap extends TableMap
             $criteria->removeSelectColumn(JobTableMap::COL_JOB_DATE);
             $criteria->removeSelectColumn(JobTableMap::COL_JOB_CREATED);
             $criteria->removeSelectColumn(JobTableMap::COL_JOB_UPDATED);
-            $criteria->removeSelectColumn(JobTableMap::COL_JOB_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.job_id');
             $criteria->removeSelectColumn($alias . '.job_name');
@@ -507,7 +490,6 @@ class JobTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.job_date');
             $criteria->removeSelectColumn($alias . '.job_created');
             $criteria->removeSelectColumn($alias . '.job_updated');
-            $criteria->removeSelectColumn($alias . '.job_deleted');
         }
     }
 

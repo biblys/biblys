@@ -32,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaignQuery orderByEnds($order = Criteria::ASC) Order by the campaign_ends column
  * @method     ChildCrowdfundingCampaignQuery orderByCreatedAt($order = Criteria::ASC) Order by the campaign_created column
  * @method     ChildCrowdfundingCampaignQuery orderByUpdatedAt($order = Criteria::ASC) Order by the campaign_updated column
- * @method     ChildCrowdfundingCampaignQuery orderByDeletedAt($order = Criteria::ASC) Order by the campaign_deleted column
  *
  * @method     ChildCrowdfundingCampaignQuery groupById() Group by the campaign_id column
  * @method     ChildCrowdfundingCampaignQuery groupBySiteId() Group by the site_id column
@@ -47,7 +46,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaignQuery groupByEnds() Group by the campaign_ends column
  * @method     ChildCrowdfundingCampaignQuery groupByCreatedAt() Group by the campaign_created column
  * @method     ChildCrowdfundingCampaignQuery groupByUpdatedAt() Group by the campaign_updated column
- * @method     ChildCrowdfundingCampaignQuery groupByDeletedAt() Group by the campaign_deleted column
  *
  * @method     ChildCrowdfundingCampaignQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCrowdfundingCampaignQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -72,8 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaign|null findOneByStarts(string $campaign_starts) Return the first ChildCrowdfundingCampaign filtered by the campaign_starts column
  * @method     ChildCrowdfundingCampaign|null findOneByEnds(string $campaign_ends) Return the first ChildCrowdfundingCampaign filtered by the campaign_ends column
  * @method     ChildCrowdfundingCampaign|null findOneByCreatedAt(string $campaign_created) Return the first ChildCrowdfundingCampaign filtered by the campaign_created column
- * @method     ChildCrowdfundingCampaign|null findOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column
- * @method     ChildCrowdfundingCampaign|null findOneByDeletedAt(string $campaign_deleted) Return the first ChildCrowdfundingCampaign filtered by the campaign_deleted column *
+ * @method     ChildCrowdfundingCampaign|null findOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column *
 
  * @method     ChildCrowdfundingCampaign requirePk($key, ConnectionInterface $con = null) Return the ChildCrowdfundingCampaign by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOne(ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -91,7 +88,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaign requireOneByEnds(string $campaign_ends) Return the first ChildCrowdfundingCampaign filtered by the campaign_ends column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOneByCreatedAt(string $campaign_created) Return the first ChildCrowdfundingCampaign filtered by the campaign_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCrowdfundingCampaign requireOneByDeletedAt(string $campaign_deleted) Return the first ChildCrowdfundingCampaign filtered by the campaign_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCrowdfundingCampaign[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> find(ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
@@ -121,8 +117,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
  * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByDeletedAt(string $campaign_deleted) Return ChildCrowdfundingCampaign objects filtered by the campaign_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByDeletedAt(string $campaign_deleted) Return ChildCrowdfundingCampaign objects filtered by the campaign_deleted column
  * @method     ChildCrowdfundingCampaign[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowdfundingCampaign> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -222,7 +216,7 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT campaign_id, site_id, campaign_title, campaign_url, campaign_description, campaign_image, campaign_goal, campaign_pledged, campaign_backers, campaign_starts, campaign_ends, campaign_created, campaign_updated, campaign_deleted FROM cf_campaigns WHERE campaign_id = :p0';
+        $sql = 'SELECT campaign_id, site_id, campaign_title, campaign_url, campaign_description, campaign_image, campaign_goal, campaign_pledged, campaign_backers, campaign_starts, campaign_ends, campaign_created, campaign_updated FROM cf_campaigns WHERE campaign_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -787,49 +781,6 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the campaign_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE campaign_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE campaign_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE campaign_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DELETED, $deletedAt, $comparison);
     }
 
     /**

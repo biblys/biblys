@@ -33,7 +33,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaQuery orderByUpdate($order = Criteria::ASC) Order by the media_update column
  * @method     ChildMediaQuery orderByCreatedAt($order = Criteria::ASC) Order by the media_created column
  * @method     ChildMediaQuery orderByUpdatedAt($order = Criteria::ASC) Order by the media_updated column
- * @method     ChildMediaQuery orderByDeletedAt($order = Criteria::ASC) Order by the media_deleted column
  *
  * @method     ChildMediaQuery groupById() Group by the media_id column
  * @method     ChildMediaQuery groupBySiteId() Group by the site_id column
@@ -49,7 +48,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaQuery groupByUpdate() Group by the media_update column
  * @method     ChildMediaQuery groupByCreatedAt() Group by the media_created column
  * @method     ChildMediaQuery groupByUpdatedAt() Group by the media_updated column
- * @method     ChildMediaQuery groupByDeletedAt() Group by the media_deleted column
  *
  * @method     ChildMediaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMediaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -75,8 +73,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia|null findOneByInsert(string $media_insert) Return the first ChildMedia filtered by the media_insert column
  * @method     ChildMedia|null findOneByUpdate(string $media_update) Return the first ChildMedia filtered by the media_update column
  * @method     ChildMedia|null findOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column
- * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column
- * @method     ChildMedia|null findOneByDeletedAt(string $media_deleted) Return the first ChildMedia filtered by the media_deleted column *
+ * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column *
 
  * @method     ChildMedia requirePk($key, ConnectionInterface $con = null) Return the ChildMedia by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOne(ConnectionInterface $con = null) Return the first ChildMedia matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -95,7 +92,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia requireOneByUpdate(string $media_update) Return the first ChildMedia filtered by the media_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOneByDeletedAt(string $media_deleted) Return the first ChildMedia filtered by the media_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMedia[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildMedia> find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
@@ -127,8 +123,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
  * @method     ChildMedia[]|ObjectCollection findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
- * @method     ChildMedia[]|ObjectCollection findByDeletedAt(string $media_deleted) Return ChildMedia objects filtered by the media_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDeletedAt(string $media_deleted) Return ChildMedia objects filtered by the media_deleted column
  * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -228,7 +222,7 @@ abstract class MediaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT media_id, site_id, category_id, media_dir, media_file, media_ext, media_title, media_desc, media_link, media_headline, media_insert, media_update, media_created, media_updated, media_deleted FROM medias WHERE media_id = :p0';
+        $sql = 'SELECT media_id, site_id, category_id, media_dir, media_file, media_ext, media_title, media_desc, media_link, media_headline, media_insert, media_update, media_created, media_updated FROM medias WHERE media_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -786,49 +780,6 @@ abstract class MediaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the media_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE media_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE media_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE media_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(MediaTableMap::COL_MEDIA_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_DELETED, $deletedAt, $comparison);
     }
 
     /**

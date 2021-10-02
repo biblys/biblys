@@ -112,13 +112,6 @@ abstract class Country implements ActiveRecordInterface
     protected $country_updated;
 
     /**
-     * The value for the country_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $country_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -445,28 +438,6 @@ abstract class Country implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [country_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->country_deleted;
-        } else {
-            return $this->country_deleted instanceof \DateTimeInterface ? $this->country_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [country_id] column.
      *
      * @param int $v New value
@@ -607,26 +578,6 @@ abstract class Country implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [country_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Country The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->country_deleted !== null || $dt !== null) {
-            if ($this->country_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->country_deleted->format("Y-m-d H:i:s.u")) {
-                $this->country_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CountryTableMap::COL_COUNTRY_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -688,12 +639,6 @@ abstract class Country implements ActiveRecordInterface
                 $col = null;
             }
             $this->country_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CountryTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->country_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -702,7 +647,7 @@ abstract class Country implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = CountryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = CountryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Country'), 0, $e);
@@ -937,9 +882,6 @@ abstract class Country implements ActiveRecordInterface
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'country_updated';
         }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'country_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO countries (%s) VALUES (%s)',
@@ -971,9 +913,6 @@ abstract class Country implements ActiveRecordInterface
                         break;
                     case 'country_updated':
                         $stmt->bindValue($identifier, $this->country_updated ? $this->country_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'country_deleted':
-                        $stmt->bindValue($identifier, $this->country_deleted ? $this->country_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1058,9 +997,6 @@ abstract class Country implements ActiveRecordInterface
             case 6:
                 return $this->getUpdatedAt();
                 break;
-            case 7:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1097,7 +1033,6 @@ abstract class Country implements ActiveRecordInterface
             $keys[4] => $this->getShippingZone(),
             $keys[5] => $this->getCreatedAt(),
             $keys[6] => $this->getUpdatedAt(),
-            $keys[7] => $this->getDeletedAt(),
         );
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
@@ -1105,10 +1040,6 @@ abstract class Country implements ActiveRecordInterface
 
         if ($result[$keys[6]] instanceof \DateTimeInterface) {
             $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[7]] instanceof \DateTimeInterface) {
-            $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1170,9 +1101,6 @@ abstract class Country implements ActiveRecordInterface
             case 6:
                 $this->setUpdatedAt($value);
                 break;
-            case 7:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1219,9 +1147,6 @@ abstract class Country implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setUpdatedAt($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setDeletedAt($arr[$keys[7]]);
         }
 
         return $this;
@@ -1286,9 +1211,6 @@ abstract class Country implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_UPDATED)) {
             $criteria->add(CountryTableMap::COL_COUNTRY_UPDATED, $this->country_updated);
-        }
-        if ($this->isColumnModified(CountryTableMap::COL_COUNTRY_DELETED)) {
-            $criteria->add(CountryTableMap::COL_COUNTRY_DELETED, $this->country_deleted);
         }
 
         return $criteria;
@@ -1382,7 +1304,6 @@ abstract class Country implements ActiveRecordInterface
         $copyObj->setShippingZone($this->getShippingZone());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1425,7 +1346,6 @@ abstract class Country implements ActiveRecordInterface
         $this->shipping_zone = null;
         $this->country_created = null;
         $this->country_updated = null;
-        $this->country_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

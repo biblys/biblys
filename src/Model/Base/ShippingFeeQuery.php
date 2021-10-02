@@ -34,7 +34,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery orderByInfo($order = Criteria::ASC) Order by the shipping_info column
  * @method     ChildShippingFeeQuery orderByCreatedAt($order = Criteria::ASC) Order by the shipping_created column
  * @method     ChildShippingFeeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the shipping_updated column
- * @method     ChildShippingFeeQuery orderByDeletedAt($order = Criteria::ASC) Order by the shipping_deleted column
  *
  * @method     ChildShippingFeeQuery groupById() Group by the shipping_id column
  * @method     ChildShippingFeeQuery groupBySiteId() Group by the site_id column
@@ -51,7 +50,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery groupByInfo() Group by the shipping_info column
  * @method     ChildShippingFeeQuery groupByCreatedAt() Group by the shipping_created column
  * @method     ChildShippingFeeQuery groupByUpdatedAt() Group by the shipping_updated column
- * @method     ChildShippingFeeQuery groupByDeletedAt() Group by the shipping_deleted column
  *
  * @method     ChildShippingFeeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildShippingFeeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -78,8 +76,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee|null findOneByFee(int $shipping_fee) Return the first ChildShippingFee filtered by the shipping_fee column
  * @method     ChildShippingFee|null findOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column
  * @method     ChildShippingFee|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column
- * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column
- * @method     ChildShippingFee|null findOneByDeletedAt(string $shipping_deleted) Return the first ChildShippingFee filtered by the shipping_deleted column *
+ * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column *
 
  * @method     ChildShippingFee requirePk($key, ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOne(ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -99,7 +96,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee requireOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOneByDeletedAt(string $shipping_deleted) Return the first ChildShippingFee filtered by the shipping_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildShippingFee[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> find(ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
@@ -133,8 +129,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
  * @method     ChildShippingFee[]|ObjectCollection findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @method     ChildShippingFee[]|ObjectCollection findByDeletedAt(string $shipping_deleted) Return ChildShippingFee objects filtered by the shipping_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByDeletedAt(string $shipping_deleted) Return ChildShippingFee objects filtered by the shipping_deleted column
  * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -234,7 +228,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated, shipping_deleted FROM shipping WHERE shipping_id = :p0';
+        $sql = 'SELECT shipping_id, site_id, article_id, shipping_mode, shipping_type, shipping_zone, shipping_min_weight, shipping_max_weight, shipping_max_articles, shipping_min_amount, shipping_max_amount, shipping_fee, shipping_info, shipping_created, shipping_updated FROM shipping WHERE shipping_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -877,49 +871,6 @@ abstract class ShippingFeeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the shipping_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE shipping_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE shipping_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE shipping_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -32,7 +32,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery orderByDate($order = Criteria::ASC) Order by the role_date column
  * @method     ChildRoleQuery orderByCreatedAt($order = Criteria::ASC) Order by the role_created column
  * @method     ChildRoleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the role_updated column
- * @method     ChildRoleQuery orderByDeletedAt($order = Criteria::ASC) Order by the role_deleted column
  *
  * @method     ChildRoleQuery groupById() Group by the id column
  * @method     ChildRoleQuery groupByArticleId() Group by the article_id column
@@ -46,7 +45,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoleQuery groupByDate() Group by the role_date column
  * @method     ChildRoleQuery groupByCreatedAt() Group by the role_created column
  * @method     ChildRoleQuery groupByUpdatedAt() Group by the role_updated column
- * @method     ChildRoleQuery groupByDeletedAt() Group by the role_deleted column
  *
  * @method     ChildRoleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRoleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -92,8 +90,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole|null findOneByPresence(string $role_presence) Return the first ChildRole filtered by the role_presence column
  * @method     ChildRole|null findOneByDate(string $role_date) Return the first ChildRole filtered by the role_date column
  * @method     ChildRole|null findOneByCreatedAt(string $role_created) Return the first ChildRole filtered by the role_created column
- * @method     ChildRole|null findOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column
- * @method     ChildRole|null findOneByDeletedAt(string $role_deleted) Return the first ChildRole filtered by the role_deleted column *
+ * @method     ChildRole|null findOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column *
 
  * @method     ChildRole requirePk($key, ConnectionInterface $con = null) Return the ChildRole by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOne(ConnectionInterface $con = null) Return the first ChildRole matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -110,7 +107,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole requireOneByDate(string $role_date) Return the first ChildRole filtered by the role_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByCreatedAt(string $role_created) Return the first ChildRole filtered by the role_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRole requireOneByDeletedAt(string $role_deleted) Return the first ChildRole filtered by the role_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRole[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildRole> find(ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
@@ -138,8 +134,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildRole> findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
  * @method     ChildRole[]|ObjectCollection findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildRole> findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
- * @method     ChildRole[]|ObjectCollection findByDeletedAt(string $role_deleted) Return ChildRole objects filtered by the role_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByDeletedAt(string $role_deleted) Return ChildRole objects filtered by the role_deleted column
  * @method     ChildRole[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRole> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -239,7 +233,7 @@ abstract class RoleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, article_id, book_id, event_id, people_id, job_id, user_id, role_hide, role_presence, role_date, role_created, role_updated, role_deleted FROM roles WHERE id = :p0';
+        $sql = 'SELECT id, article_id, book_id, event_id, people_id, job_id, user_id, role_hide, role_presence, role_date, role_created, role_updated FROM roles WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -799,49 +793,6 @@ abstract class RoleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RoleTableMap::COL_ROLE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the role_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE role_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE role_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE role_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(RoleTableMap::COL_ROLE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(RoleTableMap::COL_ROLE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_DELETED, $deletedAt, $comparison);
     }
 
     /**

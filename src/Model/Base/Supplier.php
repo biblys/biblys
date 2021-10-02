@@ -141,13 +141,6 @@ abstract class Supplier implements ActiveRecordInterface
     protected $supplier_updated;
 
     /**
-     * The value for the supplier_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $supplier_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -571,28 +564,6 @@ abstract class Supplier implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [supplier_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->supplier_deleted;
-        } else {
-            return $this->supplier_deleted instanceof \DateTimeInterface ? $this->supplier_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [supplier_id] column.
      *
      * @param int $v New value
@@ -829,26 +800,6 @@ abstract class Supplier implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [supplier_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Supplier The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->supplier_deleted !== null || $dt !== null) {
-            if ($this->supplier_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->supplier_deleted->format("Y-m-d H:i:s.u")) {
-                $this->supplier_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[SupplierTableMap::COL_SUPPLIER_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -932,12 +883,6 @@ abstract class Supplier implements ActiveRecordInterface
                 $col = null;
             }
             $this->supplier_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : SupplierTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->supplier_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -946,7 +891,7 @@ abstract class Supplier implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = SupplierTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = SupplierTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Supplier'), 0, $e);
@@ -1193,9 +1138,6 @@ abstract class Supplier implements ActiveRecordInterface
         if ($this->isColumnModified(SupplierTableMap::COL_SUPPLIER_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'supplier_updated';
         }
-        if ($this->isColumnModified(SupplierTableMap::COL_SUPPLIER_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'supplier_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO suppliers (%s) VALUES (%s)',
@@ -1239,9 +1181,6 @@ abstract class Supplier implements ActiveRecordInterface
                         break;
                     case 'supplier_updated':
                         $stmt->bindValue($identifier, $this->supplier_updated ? $this->supplier_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'supplier_deleted':
-                        $stmt->bindValue($identifier, $this->supplier_deleted ? $this->supplier_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1338,9 +1277,6 @@ abstract class Supplier implements ActiveRecordInterface
             case 10:
                 return $this->getUpdatedAt();
                 break;
-            case 11:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1381,7 +1317,6 @@ abstract class Supplier implements ActiveRecordInterface
             $keys[8] => $this->getUpdate(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getUpdatedAt(),
-            $keys[11] => $this->getDeletedAt(),
         );
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1397,10 +1332,6 @@ abstract class Supplier implements ActiveRecordInterface
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1474,9 +1405,6 @@ abstract class Supplier implements ActiveRecordInterface
             case 10:
                 $this->setUpdatedAt($value);
                 break;
-            case 11:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1535,9 +1463,6 @@ abstract class Supplier implements ActiveRecordInterface
         }
         if (array_key_exists($keys[10], $arr)) {
             $this->setUpdatedAt($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setDeletedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1614,9 +1539,6 @@ abstract class Supplier implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SupplierTableMap::COL_SUPPLIER_UPDATED)) {
             $criteria->add(SupplierTableMap::COL_SUPPLIER_UPDATED, $this->supplier_updated);
-        }
-        if ($this->isColumnModified(SupplierTableMap::COL_SUPPLIER_DELETED)) {
-            $criteria->add(SupplierTableMap::COL_SUPPLIER_DELETED, $this->supplier_deleted);
         }
 
         return $criteria;
@@ -1714,7 +1636,6 @@ abstract class Supplier implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1761,7 +1682,6 @@ abstract class Supplier implements ActiveRecordInterface
         $this->supplier_update = null;
         $this->supplier_created = null;
         $this->supplier_updated = null;
-        $this->supplier_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

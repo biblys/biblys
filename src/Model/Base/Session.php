@@ -107,13 +107,6 @@ abstract class Session implements ActiveRecordInterface
     protected $session_updated;
 
     /**
-     * The value for the session_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $session_deleted;
-
-    /**
      * @var        ChildUser
      */
     protected $aUser;
@@ -447,28 +440,6 @@ abstract class Session implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [session_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->session_deleted;
-        } else {
-            return $this->session_deleted instanceof \DateTimeInterface ? $this->session_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [session_id] column.
      *
      * @param int $v New value
@@ -593,26 +564,6 @@ abstract class Session implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [session_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Session The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->session_deleted !== null || $dt !== null) {
-            if ($this->session_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->session_deleted->format("Y-m-d H:i:s.u")) {
-                $this->session_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[SessionTableMap::COL_SESSION_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -674,12 +625,6 @@ abstract class Session implements ActiveRecordInterface
                 $col = null;
             }
             $this->session_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SessionTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->session_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -688,7 +633,7 @@ abstract class Session implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = SessionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = SessionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Session'), 0, $e);
@@ -936,9 +881,6 @@ abstract class Session implements ActiveRecordInterface
         if ($this->isColumnModified(SessionTableMap::COL_SESSION_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'session_updated';
         }
-        if ($this->isColumnModified(SessionTableMap::COL_SESSION_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'session_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO session (%s) VALUES (%s)',
@@ -967,9 +909,6 @@ abstract class Session implements ActiveRecordInterface
                         break;
                     case 'session_updated':
                         $stmt->bindValue($identifier, $this->session_updated ? $this->session_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'session_deleted':
-                        $stmt->bindValue($identifier, $this->session_deleted ? $this->session_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1051,9 +990,6 @@ abstract class Session implements ActiveRecordInterface
             case 5:
                 return $this->getUpdatedAt();
                 break;
-            case 6:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1090,7 +1026,6 @@ abstract class Session implements ActiveRecordInterface
             $keys[3] => $this->getCreatedAt(),
             $keys[4] => $this->getExpiresAt(),
             $keys[5] => $this->getUpdatedAt(),
-            $keys[6] => $this->getDeletedAt(),
         );
         if ($result[$keys[3]] instanceof \DateTimeInterface) {
             $result[$keys[3]] = $result[$keys[3]]->format('Y-m-d H:i:s.u');
@@ -1102,10 +1037,6 @@ abstract class Session implements ActiveRecordInterface
 
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1181,9 +1112,6 @@ abstract class Session implements ActiveRecordInterface
             case 5:
                 $this->setUpdatedAt($value);
                 break;
-            case 6:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1227,9 +1155,6 @@ abstract class Session implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setUpdatedAt($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setDeletedAt($arr[$keys[6]]);
         }
 
         return $this;
@@ -1291,9 +1216,6 @@ abstract class Session implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SessionTableMap::COL_SESSION_UPDATED)) {
             $criteria->add(SessionTableMap::COL_SESSION_UPDATED, $this->session_updated);
-        }
-        if ($this->isColumnModified(SessionTableMap::COL_SESSION_DELETED)) {
-            $criteria->add(SessionTableMap::COL_SESSION_DELETED, $this->session_deleted);
         }
 
         return $criteria;
@@ -1386,7 +1308,6 @@ abstract class Session implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setExpiresAt($this->getExpiresAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1482,7 +1403,6 @@ abstract class Session implements ActiveRecordInterface
         $this->session_created = null;
         $this->session_expires = null;
         $this->session_updated = null;
-        $this->session_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

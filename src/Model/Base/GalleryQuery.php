@@ -27,7 +27,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGalleryQuery orderByUpdate($order = Criteria::ASC) Order by the gallery_update column
  * @method     ChildGalleryQuery orderByCreated($order = Criteria::ASC) Order by the gallery_created column
  * @method     ChildGalleryQuery orderByUpdated($order = Criteria::ASC) Order by the gallery_updated column
- * @method     ChildGalleryQuery orderByDeleted($order = Criteria::ASC) Order by the gallery_deleted column
  *
  * @method     ChildGalleryQuery groupById() Group by the gallery_id column
  * @method     ChildGalleryQuery groupBySiteId() Group by the site_id column
@@ -37,7 +36,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGalleryQuery groupByUpdate() Group by the gallery_update column
  * @method     ChildGalleryQuery groupByCreated() Group by the gallery_created column
  * @method     ChildGalleryQuery groupByUpdated() Group by the gallery_updated column
- * @method     ChildGalleryQuery groupByDeleted() Group by the gallery_deleted column
  *
  * @method     ChildGalleryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGalleryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,8 +55,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGallery|null findOneByInsert(string $gallery_insert) Return the first ChildGallery filtered by the gallery_insert column
  * @method     ChildGallery|null findOneByUpdate(string $gallery_update) Return the first ChildGallery filtered by the gallery_update column
  * @method     ChildGallery|null findOneByCreated(string $gallery_created) Return the first ChildGallery filtered by the gallery_created column
- * @method     ChildGallery|null findOneByUpdated(string $gallery_updated) Return the first ChildGallery filtered by the gallery_updated column
- * @method     ChildGallery|null findOneByDeleted(string $gallery_deleted) Return the first ChildGallery filtered by the gallery_deleted column *
+ * @method     ChildGallery|null findOneByUpdated(string $gallery_updated) Return the first ChildGallery filtered by the gallery_updated column *
 
  * @method     ChildGallery requirePk($key, ConnectionInterface $con = null) Return the ChildGallery by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGallery requireOne(ConnectionInterface $con = null) Return the first ChildGallery matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -71,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGallery requireOneByUpdate(string $gallery_update) Return the first ChildGallery filtered by the gallery_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGallery requireOneByCreated(string $gallery_created) Return the first ChildGallery filtered by the gallery_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGallery requireOneByUpdated(string $gallery_updated) Return the first ChildGallery filtered by the gallery_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGallery requireOneByDeleted(string $gallery_deleted) Return the first ChildGallery filtered by the gallery_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGallery[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildGallery> find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
@@ -91,8 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
  * @method     ChildGallery[]|ObjectCollection findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
- * @method     ChildGallery[]|ObjectCollection findByDeleted(string $gallery_deleted) Return ChildGallery objects filtered by the gallery_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByDeleted(string $gallery_deleted) Return ChildGallery objects filtered by the gallery_deleted column
  * @method     ChildGallery[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildGallery> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -192,7 +186,7 @@ abstract class GalleryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT gallery_id, site_id, gallery_title, media_dir, gallery_insert, gallery_update, gallery_created, gallery_updated, gallery_deleted FROM galleries WHERE gallery_id = :p0';
+        $sql = 'SELECT gallery_id, site_id, gallery_title, media_dir, gallery_insert, gallery_update, gallery_created, gallery_updated FROM galleries WHERE gallery_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -584,49 +578,6 @@ abstract class GalleryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, $updated, $comparison);
-    }
-
-    /**
-     * Filter the query on the gallery_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeleted('2011-03-14'); // WHERE gallery_deleted = '2011-03-14'
-     * $query->filterByDeleted('now'); // WHERE gallery_deleted = '2011-03-14'
-     * $query->filterByDeleted(array('max' => 'yesterday')); // WHERE gallery_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deleted The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
-     */
-    public function filterByDeleted($deleted = null, $comparison = null)
-    {
-        if (is_array($deleted)) {
-            $useMinMax = false;
-            if (isset($deleted['min'])) {
-                $this->addUsingAlias(GalleryTableMap::COL_GALLERY_DELETED, $deleted['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deleted['max'])) {
-                $this->addUsingAlias(GalleryTableMap::COL_GALLERY_DELETED, $deleted['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_DELETED, $deleted, $comparison);
     }
 
     /**

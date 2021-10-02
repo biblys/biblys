@@ -133,13 +133,6 @@ abstract class Signing implements ActiveRecordInterface
     protected $signing_updated;
 
     /**
-     * The value for the signing_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $signing_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -532,28 +525,6 @@ abstract class Signing implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [signing_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->signing_deleted;
-        } else {
-            return $this->signing_deleted instanceof \DateTimeInterface ? $this->signing_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [signing_id] column.
      *
      * @param int $v New value
@@ -754,26 +725,6 @@ abstract class Signing implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [signing_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Signing The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->signing_deleted !== null || $dt !== null) {
-            if ($this->signing_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->signing_deleted->format("Y-m-d H:i:s.u")) {
-                $this->signing_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[SigningTableMap::COL_SIGNING_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -847,12 +798,6 @@ abstract class Signing implements ActiveRecordInterface
                 $col = null;
             }
             $this->signing_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : SigningTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->signing_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -861,7 +806,7 @@ abstract class Signing implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = SigningTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = SigningTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Signing'), 0, $e);
@@ -1105,9 +1050,6 @@ abstract class Signing implements ActiveRecordInterface
         if ($this->isColumnModified(SigningTableMap::COL_SIGNING_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'signing_updated';
         }
-        if ($this->isColumnModified(SigningTableMap::COL_SIGNING_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'signing_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO signings (%s) VALUES (%s)',
@@ -1148,9 +1090,6 @@ abstract class Signing implements ActiveRecordInterface
                         break;
                     case 'signing_updated':
                         $stmt->bindValue($identifier, $this->signing_updated ? $this->signing_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'signing_deleted':
-                        $stmt->bindValue($identifier, $this->signing_deleted ? $this->signing_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1244,9 +1183,6 @@ abstract class Signing implements ActiveRecordInterface
             case 9:
                 return $this->getUpdatedAt();
                 break;
-            case 10:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1286,7 +1222,6 @@ abstract class Signing implements ActiveRecordInterface
             $keys[7] => $this->getLocation(),
             $keys[8] => $this->getCreatedAt(),
             $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getDeletedAt(),
         );
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d');
@@ -1306,10 +1241,6 @@ abstract class Signing implements ActiveRecordInterface
 
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1380,9 +1311,6 @@ abstract class Signing implements ActiveRecordInterface
             case 9:
                 $this->setUpdatedAt($value);
                 break;
-            case 10:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1438,9 +1366,6 @@ abstract class Signing implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setUpdatedAt($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setDeletedAt($arr[$keys[10]]);
         }
 
         return $this;
@@ -1514,9 +1439,6 @@ abstract class Signing implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SigningTableMap::COL_SIGNING_UPDATED)) {
             $criteria->add(SigningTableMap::COL_SIGNING_UPDATED, $this->signing_updated);
-        }
-        if ($this->isColumnModified(SigningTableMap::COL_SIGNING_DELETED)) {
-            $criteria->add(SigningTableMap::COL_SIGNING_DELETED, $this->signing_deleted);
         }
 
         return $criteria;
@@ -1613,7 +1535,6 @@ abstract class Signing implements ActiveRecordInterface
         $copyObj->setLocation($this->getLocation());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1659,7 +1580,6 @@ abstract class Signing implements ActiveRecordInterface
         $this->signing_location = null;
         $this->signing_created = null;
         $this->signing_updated = null;
-        $this->signing_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

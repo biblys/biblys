@@ -58,7 +58,7 @@ class PostTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 23;
+    const NUM_COLUMNS = 22;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class PostTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 23;
+    const NUM_HYDRATE_COLUMNS = 22;
 
     /**
      * the column name for the post_id field
@@ -181,11 +181,6 @@ class PostTableMap extends TableMap
     const COL_POST_UPDATED = 'posts.post_updated';
 
     /**
-     * the column name for the post_deleted field
-     */
-    const COL_POST_DELETED = 'posts.post_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -197,11 +192,11 @@ class PostTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, PostTableMap::COL_POST_DELETED, ),
-        self::TYPE_FIELDNAME     => array('post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', 'post_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
     );
 
     /**
@@ -211,11 +206,11 @@ class PostTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationLegend' => 8, 'Selected' => 9, 'Link' => 10, 'Status' => 11, 'Keywords' => 12, 'Links' => 13, 'KeywordsGenerated' => 14, 'FbId' => 15, 'Date' => 16, 'Hits' => 17, 'Insert' => 18, 'Update' => 19, 'CreatedAt' => 20, 'UpdatedAt' => 21, 'DeletedAt' => 22, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationLegend' => 8, 'selected' => 9, 'link' => 10, 'status' => 11, 'keywords' => 12, 'links' => 13, 'keywordsGenerated' => 14, 'fbId' => 15, 'date' => 16, 'hits' => 17, 'insert' => 18, 'update' => 19, 'createdAt' => 20, 'updatedAt' => 21, 'deletedAt' => 22, ),
-        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 8, PostTableMap::COL_POST_SELECTED => 9, PostTableMap::COL_POST_LINK => 10, PostTableMap::COL_POST_STATUS => 11, PostTableMap::COL_POST_KEYWORDS => 12, PostTableMap::COL_POST_LINKS => 13, PostTableMap::COL_POST_KEYWORDS_GENERATED => 14, PostTableMap::COL_POST_FB_ID => 15, PostTableMap::COL_POST_DATE => 16, PostTableMap::COL_POST_HITS => 17, PostTableMap::COL_POST_INSERT => 18, PostTableMap::COL_POST_UPDATE => 19, PostTableMap::COL_POST_CREATED => 20, PostTableMap::COL_POST_UPDATED => 21, PostTableMap::COL_POST_DELETED => 22, ),
-        self::TYPE_FIELDNAME     => array('post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_legend' => 8, 'post_selected' => 9, 'post_link' => 10, 'post_status' => 11, 'post_keywords' => 12, 'post_links' => 13, 'post_keywords_generated' => 14, 'post_fb_id' => 15, 'post_date' => 16, 'post_hits' => 17, 'post_insert' => 18, 'post_update' => 19, 'post_created' => 20, 'post_updated' => 21, 'post_deleted' => 22, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationLegend' => 8, 'Selected' => 9, 'Link' => 10, 'Status' => 11, 'Keywords' => 12, 'Links' => 13, 'KeywordsGenerated' => 14, 'FbId' => 15, 'Date' => 16, 'Hits' => 17, 'Insert' => 18, 'Update' => 19, 'CreatedAt' => 20, 'UpdatedAt' => 21, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationLegend' => 8, 'selected' => 9, 'link' => 10, 'status' => 11, 'keywords' => 12, 'links' => 13, 'keywordsGenerated' => 14, 'fbId' => 15, 'date' => 16, 'hits' => 17, 'insert' => 18, 'update' => 19, 'createdAt' => 20, 'updatedAt' => 21, ),
+        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 8, PostTableMap::COL_POST_SELECTED => 9, PostTableMap::COL_POST_LINK => 10, PostTableMap::COL_POST_STATUS => 11, PostTableMap::COL_POST_KEYWORDS => 12, PostTableMap::COL_POST_LINKS => 13, PostTableMap::COL_POST_KEYWORDS_GENERATED => 14, PostTableMap::COL_POST_FB_ID => 15, PostTableMap::COL_POST_DATE => 16, PostTableMap::COL_POST_HITS => 17, PostTableMap::COL_POST_INSERT => 18, PostTableMap::COL_POST_UPDATE => 19, PostTableMap::COL_POST_CREATED => 20, PostTableMap::COL_POST_UPDATED => 21, ),
+        self::TYPE_FIELDNAME     => array('post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_legend' => 8, 'post_selected' => 9, 'post_link' => 10, 'post_status' => 11, 'post_keywords' => 12, 'post_links' => 13, 'post_keywords_generated' => 14, 'post_fb_id' => 15, 'post_date' => 16, 'post_hits' => 17, 'post_insert' => 18, 'post_update' => 19, 'post_created' => 20, 'post_updated' => 21, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
     );
 
     /**
@@ -400,14 +395,6 @@ class PostTableMap extends TableMap
         'COL_POST_UPDATED' => 'POST_UPDATED',
         'post_updated' => 'POST_UPDATED',
         'posts.post_updated' => 'POST_UPDATED',
-        'DeletedAt' => 'POST_DELETED',
-        'Post.DeletedAt' => 'POST_DELETED',
-        'deletedAt' => 'POST_DELETED',
-        'post.deletedAt' => 'POST_DELETED',
-        'PostTableMap::COL_POST_DELETED' => 'POST_DELETED',
-        'COL_POST_DELETED' => 'POST_DELETED',
-        'post_deleted' => 'POST_DELETED',
-        'posts.post_deleted' => 'POST_DELETED',
     ];
 
     /**
@@ -449,7 +436,6 @@ class PostTableMap extends TableMap
         $this->addColumn('post_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_updated', 'UpdatedAt', 'DATE', false, null, null);
-        $this->addColumn('post_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -635,7 +621,6 @@ class PostTableMap extends TableMap
             $criteria->addSelectColumn(PostTableMap::COL_POST_UPDATE);
             $criteria->addSelectColumn(PostTableMap::COL_POST_CREATED);
             $criteria->addSelectColumn(PostTableMap::COL_POST_UPDATED);
-            $criteria->addSelectColumn(PostTableMap::COL_POST_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.post_id');
             $criteria->addSelectColumn($alias . '.user_id');
@@ -659,7 +644,6 @@ class PostTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.post_update');
             $criteria->addSelectColumn($alias . '.post_created');
             $criteria->addSelectColumn($alias . '.post_updated');
-            $criteria->addSelectColumn($alias . '.post_deleted');
         }
     }
 
@@ -699,7 +683,6 @@ class PostTableMap extends TableMap
             $criteria->removeSelectColumn(PostTableMap::COL_POST_UPDATE);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_CREATED);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_UPDATED);
-            $criteria->removeSelectColumn(PostTableMap::COL_POST_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.post_id');
             $criteria->removeSelectColumn($alias . '.user_id');
@@ -723,7 +706,6 @@ class PostTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.post_update');
             $criteria->removeSelectColumn($alias . '.post_created');
             $criteria->removeSelectColumn($alias . '.post_updated');
-            $criteria->removeSelectColumn($alias . '.post_deleted');
         }
     }
 

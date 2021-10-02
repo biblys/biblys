@@ -225,13 +225,6 @@ abstract class Bookshop implements ActiveRecordInterface
     protected $bookshop_updated;
 
     /**
-     * The value for the bookshop_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $bookshop_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -730,28 +723,6 @@ abstract class Bookshop implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [bookshop_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->bookshop_deleted;
-        } else {
-            return $this->bookshop_deleted instanceof \DateTimeInterface ? $this->bookshop_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [bookshop_id] column.
      *
      * @param int $v New value
@@ -1212,26 +1183,6 @@ abstract class Bookshop implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [bookshop_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Bookshop The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->bookshop_deleted !== null || $dt !== null) {
-            if ($this->bookshop_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->bookshop_deleted->format("Y-m-d H:i:s.u")) {
-                $this->bookshop_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[BookshopTableMap::COL_BOOKSHOP_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1341,12 +1292,6 @@ abstract class Bookshop implements ActiveRecordInterface
                 $col = null;
             }
             $this->bookshop_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : BookshopTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->bookshop_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1355,7 +1300,7 @@ abstract class Bookshop implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 24; // 24 = BookshopTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 23; // 23 = BookshopTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Bookshop'), 0, $e);
@@ -1638,9 +1583,6 @@ abstract class Bookshop implements ActiveRecordInterface
         if ($this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'bookshop_updated';
         }
-        if ($this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'bookshop_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO bookshops (%s) VALUES (%s)',
@@ -1720,9 +1662,6 @@ abstract class Bookshop implements ActiveRecordInterface
                         break;
                     case 'bookshop_updated':
                         $stmt->bindValue($identifier, $this->bookshop_updated ? $this->bookshop_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'bookshop_deleted':
-                        $stmt->bindValue($identifier, $this->bookshop_deleted ? $this->bookshop_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1855,9 +1794,6 @@ abstract class Bookshop implements ActiveRecordInterface
             case 22:
                 return $this->getUpdatedAt();
                 break;
-            case 23:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1910,7 +1846,6 @@ abstract class Bookshop implements ActiveRecordInterface
             $keys[20] => $this->getDesc(),
             $keys[21] => $this->getCreatedAt(),
             $keys[22] => $this->getUpdatedAt(),
-            $keys[23] => $this->getDeletedAt(),
         );
         if ($result[$keys[21]] instanceof \DateTimeInterface) {
             $result[$keys[21]] = $result[$keys[21]]->format('Y-m-d H:i:s.u');
@@ -1918,10 +1853,6 @@ abstract class Bookshop implements ActiveRecordInterface
 
         if ($result[$keys[22]] instanceof \DateTimeInterface) {
             $result[$keys[22]] = $result[$keys[22]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[23]] instanceof \DateTimeInterface) {
-            $result[$keys[23]] = $result[$keys[23]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2031,9 +1962,6 @@ abstract class Bookshop implements ActiveRecordInterface
             case 22:
                 $this->setUpdatedAt($value);
                 break;
-            case 23:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -2128,9 +2056,6 @@ abstract class Bookshop implements ActiveRecordInterface
         }
         if (array_key_exists($keys[22], $arr)) {
             $this->setUpdatedAt($arr[$keys[22]]);
-        }
-        if (array_key_exists($keys[23], $arr)) {
-            $this->setDeletedAt($arr[$keys[23]]);
         }
 
         return $this;
@@ -2244,9 +2169,6 @@ abstract class Bookshop implements ActiveRecordInterface
         if ($this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_UPDATED)) {
             $criteria->add(BookshopTableMap::COL_BOOKSHOP_UPDATED, $this->bookshop_updated);
         }
-        if ($this->isColumnModified(BookshopTableMap::COL_BOOKSHOP_DELETED)) {
-            $criteria->add(BookshopTableMap::COL_BOOKSHOP_DELETED, $this->bookshop_deleted);
-        }
 
         return $criteria;
     }
@@ -2355,7 +2277,6 @@ abstract class Bookshop implements ActiveRecordInterface
         $copyObj->setDesc($this->getDesc());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2414,7 +2335,6 @@ abstract class Bookshop implements ActiveRecordInterface
         $this->bookshop_desc = null;
         $this->bookshop_created = null;
         $this->bookshop_updated = null;
-        $this->bookshop_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

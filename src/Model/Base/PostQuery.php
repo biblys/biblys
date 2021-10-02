@@ -41,7 +41,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery orderByUpdate($order = Criteria::ASC) Order by the post_update column
  * @method     ChildPostQuery orderByCreatedAt($order = Criteria::ASC) Order by the post_created column
  * @method     ChildPostQuery orderByUpdatedAt($order = Criteria::ASC) Order by the post_updated column
- * @method     ChildPostQuery orderByDeletedAt($order = Criteria::ASC) Order by the post_deleted column
  *
  * @method     ChildPostQuery groupById() Group by the post_id column
  * @method     ChildPostQuery groupByUserId() Group by the user_id column
@@ -65,7 +64,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery groupByUpdate() Group by the post_update column
  * @method     ChildPostQuery groupByCreatedAt() Group by the post_created column
  * @method     ChildPostQuery groupByUpdatedAt() Group by the post_updated column
- * @method     ChildPostQuery groupByDeletedAt() Group by the post_deleted column
  *
  * @method     ChildPostQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPostQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -99,8 +97,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost|null findOneByInsert(string $post_insert) Return the first ChildPost filtered by the post_insert column
  * @method     ChildPost|null findOneByUpdate(string $post_update) Return the first ChildPost filtered by the post_update column
  * @method     ChildPost|null findOneByCreatedAt(string $post_created) Return the first ChildPost filtered by the post_created column
- * @method     ChildPost|null findOneByUpdatedAt(string $post_updated) Return the first ChildPost filtered by the post_updated column
- * @method     ChildPost|null findOneByDeletedAt(string $post_deleted) Return the first ChildPost filtered by the post_deleted column *
+ * @method     ChildPost|null findOneByUpdatedAt(string $post_updated) Return the first ChildPost filtered by the post_updated column *
 
  * @method     ChildPost requirePk($key, ConnectionInterface $con = null) Return the ChildPost by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOne(ConnectionInterface $con = null) Return the first ChildPost matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -127,7 +124,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOneByUpdate(string $post_update) Return the first ChildPost filtered by the post_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByCreatedAt(string $post_created) Return the first ChildPost filtered by the post_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByUpdatedAt(string $post_updated) Return the first ChildPost filtered by the post_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPost requireOneByDeletedAt(string $post_deleted) Return the first ChildPost filtered by the post_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPost[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPost> find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
@@ -175,8 +171,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPost> findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
  * @method     ChildPost[]|ObjectCollection findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
- * @method     ChildPost[]|ObjectCollection findByDeletedAt(string $post_deleted) Return ChildPost objects filtered by the post_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByDeletedAt(string $post_deleted) Return ChildPost objects filtered by the post_deleted column
  * @method     ChildPost[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPost> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -276,7 +270,7 @@ abstract class PostQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT post_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated, post_deleted FROM posts WHERE post_id = :p0';
+        $sql = 'SELECT post_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1138,49 +1132,6 @@ abstract class PostQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PostTableMap::COL_POST_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the post_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE post_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE post_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE post_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPostQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PostTableMap::COL_POST_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PostTableMap::COL_POST_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PostTableMap::COL_POST_DELETED, $deletedAt, $comparison);
     }
 
     /**

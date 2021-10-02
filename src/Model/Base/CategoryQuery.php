@@ -30,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryQuery orderByUpdate($order = Criteria::ASC) Order by the category_update column
  * @method     ChildCategoryQuery orderByCreatedAt($order = Criteria::ASC) Order by the category_created column
  * @method     ChildCategoryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the category_updated column
- * @method     ChildCategoryQuery orderByDeletedAt($order = Criteria::ASC) Order by the category_deleted column
  *
  * @method     ChildCategoryQuery groupById() Group by the category_id column
  * @method     ChildCategoryQuery groupBySiteId() Group by the site_id column
@@ -43,7 +42,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryQuery groupByUpdate() Group by the category_update column
  * @method     ChildCategoryQuery groupByCreatedAt() Group by the category_created column
  * @method     ChildCategoryQuery groupByUpdatedAt() Group by the category_updated column
- * @method     ChildCategoryQuery groupByDeletedAt() Group by the category_deleted column
  *
  * @method     ChildCategoryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCategoryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -66,8 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory|null findOneByInsert(string $category_insert) Return the first ChildCategory filtered by the category_insert column
  * @method     ChildCategory|null findOneByUpdate(string $category_update) Return the first ChildCategory filtered by the category_update column
  * @method     ChildCategory|null findOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column
- * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column
- * @method     ChildCategory|null findOneByDeletedAt(string $category_deleted) Return the first ChildCategory filtered by the category_deleted column *
+ * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column *
 
  * @method     ChildCategory requirePk($key, ConnectionInterface $con = null) Return the ChildCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOne(ConnectionInterface $con = null) Return the first ChildCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -83,7 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory requireOneByUpdate(string $category_update) Return the first ChildCategory filtered by the category_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOneByDeletedAt(string $category_deleted) Return the first ChildCategory filtered by the category_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCategory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCategory> find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
@@ -109,8 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
  * @method     ChildCategory[]|ObjectCollection findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
- * @method     ChildCategory[]|ObjectCollection findByDeletedAt(string $category_deleted) Return ChildCategory objects filtered by the category_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByDeletedAt(string $category_deleted) Return ChildCategory objects filtered by the category_deleted column
  * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -210,7 +204,7 @@ abstract class CategoryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT category_id, site_id, category_name, category_url, category_desc, category_order, category_hidden, category_insert, category_update, category_created, category_updated, category_deleted FROM categories WHERE category_id = :p0';
+        $sql = 'SELECT category_id, site_id, category_name, category_url, category_desc, category_order, category_hidden, category_insert, category_update, category_created, category_updated FROM categories WHERE category_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -695,49 +689,6 @@ abstract class CategoryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the category_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE category_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE category_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE category_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DELETED, $deletedAt, $comparison);
     }
 
     /**

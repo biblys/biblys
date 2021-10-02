@@ -43,7 +43,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeopleQuery orderByUpdate($order = Criteria::ASC) Order by the people_update column
  * @method     ChildPeopleQuery orderByCreatedAt($order = Criteria::ASC) Order by the people_created column
  * @method     ChildPeopleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the people_updated column
- * @method     ChildPeopleQuery orderByDeletedAt($order = Criteria::ASC) Order by the people_deleted column
  *
  * @method     ChildPeopleQuery groupById() Group by the people_id column
  * @method     ChildPeopleQuery groupByFirstName() Group by the people_first_name column
@@ -68,7 +67,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeopleQuery groupByUpdate() Group by the people_update column
  * @method     ChildPeopleQuery groupByCreatedAt() Group by the people_created column
  * @method     ChildPeopleQuery groupByUpdatedAt() Group by the people_updated column
- * @method     ChildPeopleQuery groupByDeletedAt() Group by the people_deleted column
  *
  * @method     ChildPeopleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPeopleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -115,8 +113,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeople|null findOneByInsert(string $people_insert) Return the first ChildPeople filtered by the people_insert column
  * @method     ChildPeople|null findOneByUpdate(string $people_update) Return the first ChildPeople filtered by the people_update column
  * @method     ChildPeople|null findOneByCreatedAt(string $people_created) Return the first ChildPeople filtered by the people_created column
- * @method     ChildPeople|null findOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column
- * @method     ChildPeople|null findOneByDeletedAt(string $people_deleted) Return the first ChildPeople filtered by the people_deleted column *
+ * @method     ChildPeople|null findOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column *
 
  * @method     ChildPeople requirePk($key, ConnectionInterface $con = null) Return the ChildPeople by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOne(ConnectionInterface $con = null) Return the first ChildPeople matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -144,7 +141,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeople requireOneByUpdate(string $people_update) Return the first ChildPeople filtered by the people_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOneByCreatedAt(string $people_created) Return the first ChildPeople filtered by the people_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPeople requireOneByDeletedAt(string $people_deleted) Return the first ChildPeople filtered by the people_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPeople[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildPeople> find(ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
@@ -194,8 +190,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
  * @method     ChildPeople[]|ObjectCollection findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
- * @method     ChildPeople[]|ObjectCollection findByDeletedAt(string $people_deleted) Return ChildPeople objects filtered by the people_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByDeletedAt(string $people_deleted) Return ChildPeople objects filtered by the people_deleted column
  * @method     ChildPeople[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPeople> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -295,7 +289,7 @@ abstract class PeopleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT people_id, people_first_name, people_last_name, people_name, people_alpha, people_url_old, people_url, people_pseudo, people_noosfere_id, people_birth, people_death, people_gender, people_nation, people_bio, people_site, people_facebook, people_twitter, people_hits, people_date, people_insert, people_update, people_created, people_updated, people_deleted FROM people WHERE people_id = :p0';
+        $sql = 'SELECT people_id, people_first_name, people_last_name, people_name, people_alpha, people_url_old, people_url, people_pseudo, people_noosfere_id, people_birth, people_death, people_gender, people_nation, people_bio, people_site, people_facebook, people_twitter, people_hits, people_date, people_insert, people_update, people_created, people_updated FROM people WHERE people_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1144,49 +1138,6 @@ abstract class PeopleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the people_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE people_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE people_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE people_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DELETED, $deletedAt, $comparison);
     }
 
     /**

@@ -30,7 +30,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownloadQuery orderByDate($order = Criteria::ASC) Order by the download_date column
  * @method     ChildDownloadQuery orderByCreatedAt($order = Criteria::ASC) Order by the download_created column
  * @method     ChildDownloadQuery orderByUpdatedAt($order = Criteria::ASC) Order by the download_updated column
- * @method     ChildDownloadQuery orderByDeletedAt($order = Criteria::ASC) Order by the download_deleted column
  *
  * @method     ChildDownloadQuery groupById() Group by the download_id column
  * @method     ChildDownloadQuery groupByFileId() Group by the file_id column
@@ -43,7 +42,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownloadQuery groupByDate() Group by the download_date column
  * @method     ChildDownloadQuery groupByCreatedAt() Group by the download_created column
  * @method     ChildDownloadQuery groupByUpdatedAt() Group by the download_updated column
- * @method     ChildDownloadQuery groupByDeletedAt() Group by the download_deleted column
  *
  * @method     ChildDownloadQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildDownloadQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -66,8 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload|null findOneByIp(string $download_ip) Return the first ChildDownload filtered by the download_ip column
  * @method     ChildDownload|null findOneByDate(string $download_date) Return the first ChildDownload filtered by the download_date column
  * @method     ChildDownload|null findOneByCreatedAt(string $download_created) Return the first ChildDownload filtered by the download_created column
- * @method     ChildDownload|null findOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column
- * @method     ChildDownload|null findOneByDeletedAt(string $download_deleted) Return the first ChildDownload filtered by the download_deleted column *
+ * @method     ChildDownload|null findOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column *
 
  * @method     ChildDownload requirePk($key, ConnectionInterface $con = null) Return the ChildDownload by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOne(ConnectionInterface $con = null) Return the first ChildDownload matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -83,7 +80,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload requireOneByDate(string $download_date) Return the first ChildDownload filtered by the download_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByCreatedAt(string $download_created) Return the first ChildDownload filtered by the download_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDownload requireOneByDeletedAt(string $download_deleted) Return the first ChildDownload filtered by the download_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildDownload[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildDownload> find(ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
@@ -109,8 +105,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
  * @method     ChildDownload[]|ObjectCollection findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
- * @method     ChildDownload[]|ObjectCollection findByDeletedAt(string $download_deleted) Return ChildDownload objects filtered by the download_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByDeletedAt(string $download_deleted) Return ChildDownload objects filtered by the download_deleted column
  * @method     ChildDownload[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildDownload> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -210,7 +204,7 @@ abstract class DownloadQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT download_id, file_id, article_id, book_id, user_id, download_filetype, download_version, download_ip, download_date, download_created, download_updated, download_deleted FROM downloads WHERE download_id = :p0';
+        $sql = 'SELECT download_id, file_id, article_id, book_id, user_id, download_filetype, download_version, download_ip, download_date, download_created, download_updated FROM downloads WHERE download_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -707,49 +701,6 @@ abstract class DownloadQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the download_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE download_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE download_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE download_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_DELETED, $deletedAt, $comparison);
     }
 
     /**

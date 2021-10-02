@@ -58,7 +58,7 @@ class StockItemListTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class StockItemListTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the list_id field
@@ -106,11 +106,6 @@ class StockItemListTableMap extends TableMap
     const COL_LIST_UPDATED = 'lists.list_updated';
 
     /**
-     * the column name for the list_deleted field
-     */
-    const COL_LIST_DELETED = 'lists.list_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -122,11 +117,11 @@ class StockItemListTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'Title', 'Url', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'title', 'url', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(StockItemListTableMap::COL_LIST_ID, StockItemListTableMap::COL_USER_ID, StockItemListTableMap::COL_SITE_ID, StockItemListTableMap::COL_LIST_TITLE, StockItemListTableMap::COL_LIST_URL, StockItemListTableMap::COL_LIST_CREATED, StockItemListTableMap::COL_LIST_UPDATED, StockItemListTableMap::COL_LIST_DELETED, ),
-        self::TYPE_FIELDNAME     => array('list_id', 'user_id', 'site_id', 'list_title', 'list_url', 'list_created', 'list_updated', 'list_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'Title', 'Url', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'title', 'url', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(StockItemListTableMap::COL_LIST_ID, StockItemListTableMap::COL_USER_ID, StockItemListTableMap::COL_SITE_ID, StockItemListTableMap::COL_LIST_TITLE, StockItemListTableMap::COL_LIST_URL, StockItemListTableMap::COL_LIST_CREATED, StockItemListTableMap::COL_LIST_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('list_id', 'user_id', 'site_id', 'list_title', 'list_url', 'list_created', 'list_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -136,11 +131,11 @@ class StockItemListTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'Title' => 3, 'Url' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'DeletedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'title' => 3, 'url' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'deletedAt' => 7, ),
-        self::TYPE_COLNAME       => array(StockItemListTableMap::COL_LIST_ID => 0, StockItemListTableMap::COL_USER_ID => 1, StockItemListTableMap::COL_SITE_ID => 2, StockItemListTableMap::COL_LIST_TITLE => 3, StockItemListTableMap::COL_LIST_URL => 4, StockItemListTableMap::COL_LIST_CREATED => 5, StockItemListTableMap::COL_LIST_UPDATED => 6, StockItemListTableMap::COL_LIST_DELETED => 7, ),
-        self::TYPE_FIELDNAME     => array('list_id' => 0, 'user_id' => 1, 'site_id' => 2, 'list_title' => 3, 'list_url' => 4, 'list_created' => 5, 'list_updated' => 6, 'list_deleted' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'Title' => 3, 'Url' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'title' => 3, 'url' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
+        self::TYPE_COLNAME       => array(StockItemListTableMap::COL_LIST_ID => 0, StockItemListTableMap::COL_USER_ID => 1, StockItemListTableMap::COL_SITE_ID => 2, StockItemListTableMap::COL_LIST_TITLE => 3, StockItemListTableMap::COL_LIST_URL => 4, StockItemListTableMap::COL_LIST_CREATED => 5, StockItemListTableMap::COL_LIST_UPDATED => 6, ),
+        self::TYPE_FIELDNAME     => array('list_id' => 0, 'user_id' => 1, 'site_id' => 2, 'list_title' => 3, 'list_url' => 4, 'list_created' => 5, 'list_updated' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -205,14 +200,6 @@ class StockItemListTableMap extends TableMap
         'COL_LIST_UPDATED' => 'LIST_UPDATED',
         'list_updated' => 'LIST_UPDATED',
         'lists.list_updated' => 'LIST_UPDATED',
-        'DeletedAt' => 'LIST_DELETED',
-        'StockItemList.DeletedAt' => 'LIST_DELETED',
-        'deletedAt' => 'LIST_DELETED',
-        'stockItemList.deletedAt' => 'LIST_DELETED',
-        'StockItemListTableMap::COL_LIST_DELETED' => 'LIST_DELETED',
-        'COL_LIST_DELETED' => 'LIST_DELETED',
-        'list_deleted' => 'LIST_DELETED',
-        'lists.list_deleted' => 'LIST_DELETED',
     ];
 
     /**
@@ -239,7 +226,6 @@ class StockItemListTableMap extends TableMap
         $this->addColumn('list_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('list_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('list_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('list_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -410,7 +396,6 @@ class StockItemListTableMap extends TableMap
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_URL);
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_CREATED);
             $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_UPDATED);
-            $criteria->addSelectColumn(StockItemListTableMap::COL_LIST_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.list_id');
             $criteria->addSelectColumn($alias . '.user_id');
@@ -419,7 +404,6 @@ class StockItemListTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.list_url');
             $criteria->addSelectColumn($alias . '.list_created');
             $criteria->addSelectColumn($alias . '.list_updated');
-            $criteria->addSelectColumn($alias . '.list_deleted');
         }
     }
 
@@ -444,7 +428,6 @@ class StockItemListTableMap extends TableMap
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_URL);
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_CREATED);
             $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_UPDATED);
-            $criteria->removeSelectColumn(StockItemListTableMap::COL_LIST_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.list_id');
             $criteria->removeSelectColumn($alias . '.user_id');
@@ -453,7 +436,6 @@ class StockItemListTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.list_url');
             $criteria->removeSelectColumn($alias . '.list_created');
             $criteria->removeSelectColumn($alias . '.list_updated');
-            $criteria->removeSelectColumn($alias . '.list_deleted');
         }
     }
 

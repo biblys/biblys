@@ -58,7 +58,7 @@ class BookCollectionTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 19;
+    const NUM_COLUMNS = 18;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class BookCollectionTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 19;
+    const NUM_HYDRATE_COLUMNS = 18;
 
     /**
      * the column name for the collection_id field
@@ -161,11 +161,6 @@ class BookCollectionTableMap extends TableMap
     const COL_COLLECTION_UPDATED = 'collections.collection_updated';
 
     /**
-     * the column name for the collection_deleted field
-     */
-    const COL_COLLECTION_DELETED = 'collections.collection_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -177,11 +172,11 @@ class BookCollectionTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'Publisher', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisher', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID, BookCollectionTableMap::COL_SITE_ID, BookCollectionTableMap::COL_PUBLISHER_ID, BookCollectionTableMap::COL_PRICEGRID_ID, BookCollectionTableMap::COL_COLLECTION_NAME, BookCollectionTableMap::COL_COLLECTION_URL, BookCollectionTableMap::COL_COLLECTION_PUBLISHER, BookCollectionTableMap::COL_COLLECTION_DESC, BookCollectionTableMap::COL_COLLECTION_IGNORENUM, BookCollectionTableMap::COL_COLLECTION_ORDERBY, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID, BookCollectionTableMap::COL_COLLECTION_INSERT, BookCollectionTableMap::COL_COLLECTION_UPDATE, BookCollectionTableMap::COL_COLLECTION_HITS, BookCollectionTableMap::COL_COLLECTION_DUPLICATE, BookCollectionTableMap::COL_COLLECTION_CREATED, BookCollectionTableMap::COL_COLLECTION_UPDATED, BookCollectionTableMap::COL_COLLECTION_DELETED, ),
-        self::TYPE_FIELDNAME     => array('collection_id', 'site_id', 'publisher_id', 'pricegrid_id', 'collection_name', 'collection_url', 'collection_publisher', 'collection_desc', 'collection_ignorenum', 'collection_orderby', 'collection_incorrect_weights', 'collection_noosfere_id', 'collection_insert', 'collection_update', 'collection_hits', 'collection_duplicate', 'collection_created', 'collection_updated', 'collection_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'Publisher', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisher', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID, BookCollectionTableMap::COL_SITE_ID, BookCollectionTableMap::COL_PUBLISHER_ID, BookCollectionTableMap::COL_PRICEGRID_ID, BookCollectionTableMap::COL_COLLECTION_NAME, BookCollectionTableMap::COL_COLLECTION_URL, BookCollectionTableMap::COL_COLLECTION_PUBLISHER, BookCollectionTableMap::COL_COLLECTION_DESC, BookCollectionTableMap::COL_COLLECTION_IGNORENUM, BookCollectionTableMap::COL_COLLECTION_ORDERBY, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID, BookCollectionTableMap::COL_COLLECTION_INSERT, BookCollectionTableMap::COL_COLLECTION_UPDATE, BookCollectionTableMap::COL_COLLECTION_HITS, BookCollectionTableMap::COL_COLLECTION_DUPLICATE, BookCollectionTableMap::COL_COLLECTION_CREATED, BookCollectionTableMap::COL_COLLECTION_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('collection_id', 'site_id', 'publisher_id', 'pricegrid_id', 'collection_name', 'collection_url', 'collection_publisher', 'collection_desc', 'collection_ignorenum', 'collection_orderby', 'collection_incorrect_weights', 'collection_noosfere_id', 'collection_insert', 'collection_update', 'collection_hits', 'collection_duplicate', 'collection_created', 'collection_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -191,11 +186,11 @@ class BookCollectionTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'Publisher' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, 'DeletedAt' => 18, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisher' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, 'deletedAt' => 18, ),
-        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID => 0, BookCollectionTableMap::COL_SITE_ID => 1, BookCollectionTableMap::COL_PUBLISHER_ID => 2, BookCollectionTableMap::COL_PRICEGRID_ID => 3, BookCollectionTableMap::COL_COLLECTION_NAME => 4, BookCollectionTableMap::COL_COLLECTION_URL => 5, BookCollectionTableMap::COL_COLLECTION_PUBLISHER => 6, BookCollectionTableMap::COL_COLLECTION_DESC => 7, BookCollectionTableMap::COL_COLLECTION_IGNORENUM => 8, BookCollectionTableMap::COL_COLLECTION_ORDERBY => 9, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS => 10, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID => 11, BookCollectionTableMap::COL_COLLECTION_INSERT => 12, BookCollectionTableMap::COL_COLLECTION_UPDATE => 13, BookCollectionTableMap::COL_COLLECTION_HITS => 14, BookCollectionTableMap::COL_COLLECTION_DUPLICATE => 15, BookCollectionTableMap::COL_COLLECTION_CREATED => 16, BookCollectionTableMap::COL_COLLECTION_UPDATED => 17, BookCollectionTableMap::COL_COLLECTION_DELETED => 18, ),
-        self::TYPE_FIELDNAME     => array('collection_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'pricegrid_id' => 3, 'collection_name' => 4, 'collection_url' => 5, 'collection_publisher' => 6, 'collection_desc' => 7, 'collection_ignorenum' => 8, 'collection_orderby' => 9, 'collection_incorrect_weights' => 10, 'collection_noosfere_id' => 11, 'collection_insert' => 12, 'collection_update' => 13, 'collection_hits' => 14, 'collection_duplicate' => 15, 'collection_created' => 16, 'collection_updated' => 17, 'collection_deleted' => 18, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'Publisher' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisher' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, ),
+        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID => 0, BookCollectionTableMap::COL_SITE_ID => 1, BookCollectionTableMap::COL_PUBLISHER_ID => 2, BookCollectionTableMap::COL_PRICEGRID_ID => 3, BookCollectionTableMap::COL_COLLECTION_NAME => 4, BookCollectionTableMap::COL_COLLECTION_URL => 5, BookCollectionTableMap::COL_COLLECTION_PUBLISHER => 6, BookCollectionTableMap::COL_COLLECTION_DESC => 7, BookCollectionTableMap::COL_COLLECTION_IGNORENUM => 8, BookCollectionTableMap::COL_COLLECTION_ORDERBY => 9, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS => 10, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID => 11, BookCollectionTableMap::COL_COLLECTION_INSERT => 12, BookCollectionTableMap::COL_COLLECTION_UPDATE => 13, BookCollectionTableMap::COL_COLLECTION_HITS => 14, BookCollectionTableMap::COL_COLLECTION_DUPLICATE => 15, BookCollectionTableMap::COL_COLLECTION_CREATED => 16, BookCollectionTableMap::COL_COLLECTION_UPDATED => 17, ),
+        self::TYPE_FIELDNAME     => array('collection_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'pricegrid_id' => 3, 'collection_name' => 4, 'collection_url' => 5, 'collection_publisher' => 6, 'collection_desc' => 7, 'collection_ignorenum' => 8, 'collection_orderby' => 9, 'collection_incorrect_weights' => 10, 'collection_noosfere_id' => 11, 'collection_insert' => 12, 'collection_update' => 13, 'collection_hits' => 14, 'collection_duplicate' => 15, 'collection_created' => 16, 'collection_updated' => 17, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -348,14 +343,6 @@ class BookCollectionTableMap extends TableMap
         'COL_COLLECTION_UPDATED' => 'COLLECTION_UPDATED',
         'collection_updated' => 'COLLECTION_UPDATED',
         'collections.collection_updated' => 'COLLECTION_UPDATED',
-        'DeletedAt' => 'COLLECTION_DELETED',
-        'BookCollection.DeletedAt' => 'COLLECTION_DELETED',
-        'deletedAt' => 'COLLECTION_DELETED',
-        'bookCollection.deletedAt' => 'COLLECTION_DELETED',
-        'BookCollectionTableMap::COL_COLLECTION_DELETED' => 'COLLECTION_DELETED',
-        'COL_COLLECTION_DELETED' => 'COLLECTION_DELETED',
-        'collection_deleted' => 'COLLECTION_DELETED',
-        'collections.collection_deleted' => 'COLLECTION_DELETED',
     ];
 
     /**
@@ -393,7 +380,6 @@ class BookCollectionTableMap extends TableMap
         $this->addColumn('collection_duplicate', 'Duplicate', 'BOOLEAN', false, 1, false);
         $this->addColumn('collection_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('collection_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('collection_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -575,7 +561,6 @@ class BookCollectionTableMap extends TableMap
             $criteria->addSelectColumn(BookCollectionTableMap::COL_COLLECTION_DUPLICATE);
             $criteria->addSelectColumn(BookCollectionTableMap::COL_COLLECTION_CREATED);
             $criteria->addSelectColumn(BookCollectionTableMap::COL_COLLECTION_UPDATED);
-            $criteria->addSelectColumn(BookCollectionTableMap::COL_COLLECTION_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.collection_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -595,7 +580,6 @@ class BookCollectionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.collection_duplicate');
             $criteria->addSelectColumn($alias . '.collection_created');
             $criteria->addSelectColumn($alias . '.collection_updated');
-            $criteria->addSelectColumn($alias . '.collection_deleted');
         }
     }
 
@@ -631,7 +615,6 @@ class BookCollectionTableMap extends TableMap
             $criteria->removeSelectColumn(BookCollectionTableMap::COL_COLLECTION_DUPLICATE);
             $criteria->removeSelectColumn(BookCollectionTableMap::COL_COLLECTION_CREATED);
             $criteria->removeSelectColumn(BookCollectionTableMap::COL_COLLECTION_UPDATED);
-            $criteria->removeSelectColumn(BookCollectionTableMap::COL_COLLECTION_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.collection_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -651,7 +634,6 @@ class BookCollectionTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.collection_duplicate');
             $criteria->removeSelectColumn($alias . '.collection_created');
             $criteria->removeSelectColumn($alias . '.collection_updated');
-            $criteria->removeSelectColumn($alias . '.collection_deleted');
         }
     }
 

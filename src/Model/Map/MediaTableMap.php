@@ -58,7 +58,7 @@ class MediaTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class MediaTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the media_id field
@@ -141,11 +141,6 @@ class MediaTableMap extends TableMap
     const COL_MEDIA_UPDATED = 'medias.media_updated';
 
     /**
-     * the column name for the media_deleted field
-     */
-    const COL_MEDIA_DELETED = 'medias.media_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -157,11 +152,11 @@ class MediaTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID, MediaTableMap::COL_SITE_ID, MediaTableMap::COL_CATEGORY_ID, MediaTableMap::COL_MEDIA_DIR, MediaTableMap::COL_MEDIA_FILE, MediaTableMap::COL_MEDIA_EXT, MediaTableMap::COL_MEDIA_TITLE, MediaTableMap::COL_MEDIA_DESC, MediaTableMap::COL_MEDIA_LINK, MediaTableMap::COL_MEDIA_HEADLINE, MediaTableMap::COL_MEDIA_INSERT, MediaTableMap::COL_MEDIA_UPDATE, MediaTableMap::COL_MEDIA_CREATED, MediaTableMap::COL_MEDIA_UPDATED, MediaTableMap::COL_MEDIA_DELETED, ),
-        self::TYPE_FIELDNAME     => array('media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', 'media_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID, MediaTableMap::COL_SITE_ID, MediaTableMap::COL_CATEGORY_ID, MediaTableMap::COL_MEDIA_DIR, MediaTableMap::COL_MEDIA_FILE, MediaTableMap::COL_MEDIA_EXT, MediaTableMap::COL_MEDIA_TITLE, MediaTableMap::COL_MEDIA_DESC, MediaTableMap::COL_MEDIA_LINK, MediaTableMap::COL_MEDIA_HEADLINE, MediaTableMap::COL_MEDIA_INSERT, MediaTableMap::COL_MEDIA_UPDATE, MediaTableMap::COL_MEDIA_CREATED, MediaTableMap::COL_MEDIA_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -171,11 +166,11 @@ class MediaTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'Title' => 6, 'Desc' => 7, 'Link' => 8, 'Headline' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'DeletedAt' => 14, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'title' => 6, 'desc' => 7, 'link' => 8, 'headline' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'deletedAt' => 14, ),
-        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID => 0, MediaTableMap::COL_SITE_ID => 1, MediaTableMap::COL_CATEGORY_ID => 2, MediaTableMap::COL_MEDIA_DIR => 3, MediaTableMap::COL_MEDIA_FILE => 4, MediaTableMap::COL_MEDIA_EXT => 5, MediaTableMap::COL_MEDIA_TITLE => 6, MediaTableMap::COL_MEDIA_DESC => 7, MediaTableMap::COL_MEDIA_LINK => 8, MediaTableMap::COL_MEDIA_HEADLINE => 9, MediaTableMap::COL_MEDIA_INSERT => 10, MediaTableMap::COL_MEDIA_UPDATE => 11, MediaTableMap::COL_MEDIA_CREATED => 12, MediaTableMap::COL_MEDIA_UPDATED => 13, MediaTableMap::COL_MEDIA_DELETED => 14, ),
-        self::TYPE_FIELDNAME     => array('media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_title' => 6, 'media_desc' => 7, 'media_link' => 8, 'media_headline' => 9, 'media_insert' => 10, 'media_update' => 11, 'media_created' => 12, 'media_updated' => 13, 'media_deleted' => 14, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'Title' => 6, 'Desc' => 7, 'Link' => 8, 'Headline' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'title' => 6, 'desc' => 7, 'link' => 8, 'headline' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
+        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID => 0, MediaTableMap::COL_SITE_ID => 1, MediaTableMap::COL_CATEGORY_ID => 2, MediaTableMap::COL_MEDIA_DIR => 3, MediaTableMap::COL_MEDIA_FILE => 4, MediaTableMap::COL_MEDIA_EXT => 5, MediaTableMap::COL_MEDIA_TITLE => 6, MediaTableMap::COL_MEDIA_DESC => 7, MediaTableMap::COL_MEDIA_LINK => 8, MediaTableMap::COL_MEDIA_HEADLINE => 9, MediaTableMap::COL_MEDIA_INSERT => 10, MediaTableMap::COL_MEDIA_UPDATE => 11, MediaTableMap::COL_MEDIA_CREATED => 12, MediaTableMap::COL_MEDIA_UPDATED => 13, ),
+        self::TYPE_FIELDNAME     => array('media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_title' => 6, 'media_desc' => 7, 'media_link' => 8, 'media_headline' => 9, 'media_insert' => 10, 'media_update' => 11, 'media_created' => 12, 'media_updated' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -296,14 +291,6 @@ class MediaTableMap extends TableMap
         'COL_MEDIA_UPDATED' => 'MEDIA_UPDATED',
         'media_updated' => 'MEDIA_UPDATED',
         'medias.media_updated' => 'MEDIA_UPDATED',
-        'DeletedAt' => 'MEDIA_DELETED',
-        'Media.DeletedAt' => 'MEDIA_DELETED',
-        'deletedAt' => 'MEDIA_DELETED',
-        'media.deletedAt' => 'MEDIA_DELETED',
-        'MediaTableMap::COL_MEDIA_DELETED' => 'MEDIA_DELETED',
-        'COL_MEDIA_DELETED' => 'MEDIA_DELETED',
-        'media_deleted' => 'MEDIA_DELETED',
-        'medias.media_deleted' => 'MEDIA_DELETED',
     ];
 
     /**
@@ -337,7 +324,6 @@ class MediaTableMap extends TableMap
         $this->addColumn('media_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('media_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('media_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('media_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -515,7 +501,6 @@ class MediaTableMap extends TableMap
             $criteria->addSelectColumn(MediaTableMap::COL_MEDIA_UPDATE);
             $criteria->addSelectColumn(MediaTableMap::COL_MEDIA_CREATED);
             $criteria->addSelectColumn(MediaTableMap::COL_MEDIA_UPDATED);
-            $criteria->addSelectColumn(MediaTableMap::COL_MEDIA_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.media_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -531,7 +516,6 @@ class MediaTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.media_update');
             $criteria->addSelectColumn($alias . '.media_created');
             $criteria->addSelectColumn($alias . '.media_updated');
-            $criteria->addSelectColumn($alias . '.media_deleted');
         }
     }
 
@@ -563,7 +547,6 @@ class MediaTableMap extends TableMap
             $criteria->removeSelectColumn(MediaTableMap::COL_MEDIA_UPDATE);
             $criteria->removeSelectColumn(MediaTableMap::COL_MEDIA_CREATED);
             $criteria->removeSelectColumn(MediaTableMap::COL_MEDIA_UPDATED);
-            $criteria->removeSelectColumn(MediaTableMap::COL_MEDIA_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.media_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -579,7 +562,6 @@ class MediaTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.media_update');
             $criteria->removeSelectColumn($alias . '.media_created');
             $criteria->removeSelectColumn($alias . '.media_updated');
-            $criteria->removeSelectColumn($alias . '.media_deleted');
         }
     }
 

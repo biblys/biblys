@@ -29,7 +29,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery orderByUpdate($order = Criteria::ASC) Order by the alert_update column
  * @method     ChildAlertQuery orderByCreatedAt($order = Criteria::ASC) Order by the alert_created column
  * @method     ChildAlertQuery orderByUpdatedAt($order = Criteria::ASC) Order by the alert_updated column
- * @method     ChildAlertQuery orderByDeletedAt($order = Criteria::ASC) Order by the alert_deleted column
  *
  * @method     ChildAlertQuery groupById() Group by the alert_id column
  * @method     ChildAlertQuery groupByUserId() Group by the user_id column
@@ -41,7 +40,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery groupByUpdate() Group by the alert_update column
  * @method     ChildAlertQuery groupByCreatedAt() Group by the alert_created column
  * @method     ChildAlertQuery groupByUpdatedAt() Group by the alert_updated column
- * @method     ChildAlertQuery groupByDeletedAt() Group by the alert_deleted column
  *
  * @method     ChildAlertQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildAlertQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,8 +61,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert|null findOneByInsert(string $alert_insert) Return the first ChildAlert filtered by the alert_insert column
  * @method     ChildAlert|null findOneByUpdate(string $alert_update) Return the first ChildAlert filtered by the alert_update column
  * @method     ChildAlert|null findOneByCreatedAt(string $alert_created) Return the first ChildAlert filtered by the alert_created column
- * @method     ChildAlert|null findOneByUpdatedAt(string $alert_updated) Return the first ChildAlert filtered by the alert_updated column
- * @method     ChildAlert|null findOneByDeletedAt(string $alert_deleted) Return the first ChildAlert filtered by the alert_deleted column *
+ * @method     ChildAlert|null findOneByUpdatedAt(string $alert_updated) Return the first ChildAlert filtered by the alert_updated column *
 
  * @method     ChildAlert requirePk($key, ConnectionInterface $con = null) Return the ChildAlert by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOne(ConnectionInterface $con = null) Return the first ChildAlert matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -79,7 +76,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert requireOneByUpdate(string $alert_update) Return the first ChildAlert filtered by the alert_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByCreatedAt(string $alert_created) Return the first ChildAlert filtered by the alert_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByUpdatedAt(string $alert_updated) Return the first ChildAlert filtered by the alert_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlert requireOneByDeletedAt(string $alert_deleted) Return the first ChildAlert filtered by the alert_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlert[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildAlert> find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
@@ -103,8 +99,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
  * @method     ChildAlert[]|ObjectCollection findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
- * @method     ChildAlert[]|ObjectCollection findByDeletedAt(string $alert_deleted) Return ChildAlert objects filtered by the alert_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByDeletedAt(string $alert_deleted) Return ChildAlert objects filtered by the alert_deleted column
  * @method     ChildAlert[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAlert> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -204,7 +198,7 @@ abstract class AlertQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT alert_id, user_id, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated, alert_deleted FROM alerts WHERE alert_id = :p0';
+        $sql = 'SELECT alert_id, user_id, article_id, alert_max_price, alert_pub_year, alert_condition, alert_insert, alert_update, alert_created, alert_updated FROM alerts WHERE alert_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -694,49 +688,6 @@ abstract class AlertQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the alert_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE alert_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE alert_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE alert_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(AlertTableMap::COL_ALERT_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(AlertTableMap::COL_ALERT_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_DELETED, $deletedAt, $comparison);
     }
 
     /**

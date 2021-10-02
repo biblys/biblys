@@ -141,13 +141,6 @@ abstract class Category implements ActiveRecordInterface
     protected $category_updated;
 
     /**
-     * The value for the category_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $category_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -561,28 +554,6 @@ abstract class Category implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [category_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->category_deleted;
-        } else {
-            return $this->category_deleted instanceof \DateTimeInterface ? $this->category_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [category_id] column.
      *
      * @param int $v New value
@@ -811,26 +782,6 @@ abstract class Category implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [category_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Category The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->category_deleted !== null || $dt !== null) {
-            if ($this->category_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->category_deleted->format("Y-m-d H:i:s.u")) {
-                $this->category_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[CategoryTableMap::COL_CATEGORY_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -914,12 +865,6 @@ abstract class Category implements ActiveRecordInterface
                 $col = null;
             }
             $this->category_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CategoryTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->category_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -928,7 +873,7 @@ abstract class Category implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = CategoryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = CategoryTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Category'), 0, $e);
@@ -1175,9 +1120,6 @@ abstract class Category implements ActiveRecordInterface
         if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'category_updated';
         }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'category_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO categories (%s) VALUES (%s)',
@@ -1221,9 +1163,6 @@ abstract class Category implements ActiveRecordInterface
                         break;
                     case 'category_updated':
                         $stmt->bindValue($identifier, $this->category_updated ? $this->category_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'category_deleted':
-                        $stmt->bindValue($identifier, $this->category_deleted ? $this->category_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1320,9 +1259,6 @@ abstract class Category implements ActiveRecordInterface
             case 10:
                 return $this->getUpdatedAt();
                 break;
-            case 11:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1363,7 +1299,6 @@ abstract class Category implements ActiveRecordInterface
             $keys[8] => $this->getUpdate(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getUpdatedAt(),
-            $keys[11] => $this->getDeletedAt(),
         );
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1379,10 +1314,6 @@ abstract class Category implements ActiveRecordInterface
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1456,9 +1387,6 @@ abstract class Category implements ActiveRecordInterface
             case 10:
                 $this->setUpdatedAt($value);
                 break;
-            case 11:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -1517,9 +1445,6 @@ abstract class Category implements ActiveRecordInterface
         }
         if (array_key_exists($keys[10], $arr)) {
             $this->setUpdatedAt($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setDeletedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1596,9 +1521,6 @@ abstract class Category implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_UPDATED)) {
             $criteria->add(CategoryTableMap::COL_CATEGORY_UPDATED, $this->category_updated);
-        }
-        if ($this->isColumnModified(CategoryTableMap::COL_CATEGORY_DELETED)) {
-            $criteria->add(CategoryTableMap::COL_CATEGORY_DELETED, $this->category_deleted);
         }
 
         return $criteria;
@@ -1696,7 +1618,6 @@ abstract class Category implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1743,7 +1664,6 @@ abstract class Category implements ActiveRecordInterface
         $this->category_update = null;
         $this->category_created = null;
         $this->category_updated = null;
-        $this->category_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

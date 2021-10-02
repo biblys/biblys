@@ -58,7 +58,7 @@ class CustomerTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class CustomerTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 15;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the customer_id field
@@ -141,11 +141,6 @@ class CustomerTableMap extends TableMap
     const COL_CUSTOMER_UPDATED = 'customers.customer_updated';
 
     /**
-     * the column name for the customer_deleted field
-     */
-    const COL_CUSTOMER_DELETED = 'customers.customer_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -157,11 +152,11 @@ class CustomerTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_USER_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, CustomerTableMap::COL_CUSTOMER_DELETED, ),
-        self::TYPE_FIELDNAME     => array('customer_id', 'site_id', 'user_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', 'customer_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_USER_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('customer_id', 'site_id', 'user_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -171,11 +166,11 @@ class CustomerTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Type' => 3, 'FirstName' => 4, 'LastName' => 5, 'Email' => 6, 'Phone' => 7, 'CountryId' => 8, 'Privatization' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'DeletedAt' => 14, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'type' => 3, 'firstName' => 4, 'lastName' => 5, 'email' => 6, 'phone' => 7, 'countryId' => 8, 'privatization' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'deletedAt' => 14, ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_USER_ID => 2, CustomerTableMap::COL_CUSTOMER_TYPE => 3, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 4, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 5, CustomerTableMap::COL_CUSTOMER_EMAIL => 6, CustomerTableMap::COL_CUSTOMER_PHONE => 7, CustomerTableMap::COL_COUNTRY_ID => 8, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 9, CustomerTableMap::COL_CUSTOMER_INSERT => 10, CustomerTableMap::COL_CUSTOMER_UPDATE => 11, CustomerTableMap::COL_CUSTOMER_CREATED => 12, CustomerTableMap::COL_CUSTOMER_UPDATED => 13, CustomerTableMap::COL_CUSTOMER_DELETED => 14, ),
-        self::TYPE_FIELDNAME     => array('customer_id' => 0, 'site_id' => 1, 'user_id' => 2, 'customer_type' => 3, 'customer_first_name' => 4, 'customer_last_name' => 5, 'customer_email' => 6, 'customer_phone' => 7, 'country_id' => 8, 'customer_privatization' => 9, 'customer_insert' => 10, 'customer_update' => 11, 'customer_created' => 12, 'customer_updated' => 13, 'customer_deleted' => 14, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Type' => 3, 'FirstName' => 4, 'LastName' => 5, 'Email' => 6, 'Phone' => 7, 'CountryId' => 8, 'Privatization' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'type' => 3, 'firstName' => 4, 'lastName' => 5, 'email' => 6, 'phone' => 7, 'countryId' => 8, 'privatization' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_USER_ID => 2, CustomerTableMap::COL_CUSTOMER_TYPE => 3, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 4, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 5, CustomerTableMap::COL_CUSTOMER_EMAIL => 6, CustomerTableMap::COL_CUSTOMER_PHONE => 7, CustomerTableMap::COL_COUNTRY_ID => 8, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 9, CustomerTableMap::COL_CUSTOMER_INSERT => 10, CustomerTableMap::COL_CUSTOMER_UPDATE => 11, CustomerTableMap::COL_CUSTOMER_CREATED => 12, CustomerTableMap::COL_CUSTOMER_UPDATED => 13, ),
+        self::TYPE_FIELDNAME     => array('customer_id' => 0, 'site_id' => 1, 'user_id' => 2, 'customer_type' => 3, 'customer_first_name' => 4, 'customer_last_name' => 5, 'customer_email' => 6, 'customer_phone' => 7, 'country_id' => 8, 'customer_privatization' => 9, 'customer_insert' => 10, 'customer_update' => 11, 'customer_created' => 12, 'customer_updated' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -296,14 +291,6 @@ class CustomerTableMap extends TableMap
         'COL_CUSTOMER_UPDATED' => 'CUSTOMER_UPDATED',
         'customer_updated' => 'CUSTOMER_UPDATED',
         'customers.customer_updated' => 'CUSTOMER_UPDATED',
-        'DeletedAt' => 'CUSTOMER_DELETED',
-        'Customer.DeletedAt' => 'CUSTOMER_DELETED',
-        'deletedAt' => 'CUSTOMER_DELETED',
-        'customer.deletedAt' => 'CUSTOMER_DELETED',
-        'CustomerTableMap::COL_CUSTOMER_DELETED' => 'CUSTOMER_DELETED',
-        'COL_CUSTOMER_DELETED' => 'CUSTOMER_DELETED',
-        'customer_deleted' => 'CUSTOMER_DELETED',
-        'customers.customer_deleted' => 'CUSTOMER_DELETED',
     ];
 
     /**
@@ -337,7 +324,6 @@ class CustomerTableMap extends TableMap
         $this->addColumn('customer_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('customer_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('customer_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('customer_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -515,7 +501,6 @@ class CustomerTableMap extends TableMap
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_UPDATE);
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
-            $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.customer_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -531,7 +516,6 @@ class CustomerTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.customer_update');
             $criteria->addSelectColumn($alias . '.customer_created');
             $criteria->addSelectColumn($alias . '.customer_updated');
-            $criteria->addSelectColumn($alias . '.customer_deleted');
         }
     }
 
@@ -563,7 +547,6 @@ class CustomerTableMap extends TableMap
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_UPDATE);
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
-            $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.customer_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -579,7 +562,6 @@ class CustomerTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.customer_update');
             $criteria->removeSelectColumn($alias . '.customer_created');
             $criteria->removeSelectColumn($alias . '.customer_updated');
-            $criteria->removeSelectColumn($alias . '.customer_deleted');
         }
     }
 

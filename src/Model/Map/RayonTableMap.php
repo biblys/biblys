@@ -58,7 +58,7 @@ class RayonTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class RayonTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the rayon_id field
@@ -126,11 +126,6 @@ class RayonTableMap extends TableMap
     const COL_RAYON_UPDATED = 'rayons.rayon_updated';
 
     /**
-     * the column name for the rayon_deleted field
-     */
-    const COL_RAYON_DELETED = 'rayons.rayon_deleted';
-
-    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -142,11 +137,11 @@ class RayonTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'SortBy', 'SortOrder', 'ShowUpcoming', 'CreatedAt', 'UpdatedAt', 'DeletedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'sortBy', 'sortOrder', 'showUpcoming', 'createdAt', 'updatedAt', 'deletedAt', ),
-        self::TYPE_COLNAME       => array(RayonTableMap::COL_RAYON_ID, RayonTableMap::COL_SITE_ID, RayonTableMap::COL_RAYON_NAME, RayonTableMap::COL_RAYON_URL, RayonTableMap::COL_RAYON_DESC, RayonTableMap::COL_RAYON_ORDER, RayonTableMap::COL_RAYON_SORT_BY, RayonTableMap::COL_RAYON_SORT_ORDER, RayonTableMap::COL_RAYON_SHOW_UPCOMING, RayonTableMap::COL_RAYON_CREATED, RayonTableMap::COL_RAYON_UPDATED, RayonTableMap::COL_RAYON_DELETED, ),
-        self::TYPE_FIELDNAME     => array('rayon_id', 'site_id', 'rayon_name', 'rayon_url', 'rayon_desc', 'rayon_order', 'rayon_sort_by', 'rayon_sort_order', 'rayon_show_upcoming', 'rayon_created', 'rayon_updated', 'rayon_deleted', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'SortBy', 'SortOrder', 'ShowUpcoming', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'sortBy', 'sortOrder', 'showUpcoming', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(RayonTableMap::COL_RAYON_ID, RayonTableMap::COL_SITE_ID, RayonTableMap::COL_RAYON_NAME, RayonTableMap::COL_RAYON_URL, RayonTableMap::COL_RAYON_DESC, RayonTableMap::COL_RAYON_ORDER, RayonTableMap::COL_RAYON_SORT_BY, RayonTableMap::COL_RAYON_SORT_ORDER, RayonTableMap::COL_RAYON_SHOW_UPCOMING, RayonTableMap::COL_RAYON_CREATED, RayonTableMap::COL_RAYON_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('rayon_id', 'site_id', 'rayon_name', 'rayon_url', 'rayon_desc', 'rayon_order', 'rayon_sort_by', 'rayon_sort_order', 'rayon_show_upcoming', 'rayon_created', 'rayon_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -156,11 +151,11 @@ class RayonTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'SortBy' => 6, 'SortOrder' => 7, 'ShowUpcoming' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, 'DeletedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'sortBy' => 6, 'sortOrder' => 7, 'showUpcoming' => 8, 'createdAt' => 9, 'updatedAt' => 10, 'deletedAt' => 11, ),
-        self::TYPE_COLNAME       => array(RayonTableMap::COL_RAYON_ID => 0, RayonTableMap::COL_SITE_ID => 1, RayonTableMap::COL_RAYON_NAME => 2, RayonTableMap::COL_RAYON_URL => 3, RayonTableMap::COL_RAYON_DESC => 4, RayonTableMap::COL_RAYON_ORDER => 5, RayonTableMap::COL_RAYON_SORT_BY => 6, RayonTableMap::COL_RAYON_SORT_ORDER => 7, RayonTableMap::COL_RAYON_SHOW_UPCOMING => 8, RayonTableMap::COL_RAYON_CREATED => 9, RayonTableMap::COL_RAYON_UPDATED => 10, RayonTableMap::COL_RAYON_DELETED => 11, ),
-        self::TYPE_FIELDNAME     => array('rayon_id' => 0, 'site_id' => 1, 'rayon_name' => 2, 'rayon_url' => 3, 'rayon_desc' => 4, 'rayon_order' => 5, 'rayon_sort_by' => 6, 'rayon_sort_order' => 7, 'rayon_show_upcoming' => 8, 'rayon_created' => 9, 'rayon_updated' => 10, 'rayon_deleted' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'SortBy' => 6, 'SortOrder' => 7, 'ShowUpcoming' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'sortBy' => 6, 'sortOrder' => 7, 'showUpcoming' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
+        self::TYPE_COLNAME       => array(RayonTableMap::COL_RAYON_ID => 0, RayonTableMap::COL_SITE_ID => 1, RayonTableMap::COL_RAYON_NAME => 2, RayonTableMap::COL_RAYON_URL => 3, RayonTableMap::COL_RAYON_DESC => 4, RayonTableMap::COL_RAYON_ORDER => 5, RayonTableMap::COL_RAYON_SORT_BY => 6, RayonTableMap::COL_RAYON_SORT_ORDER => 7, RayonTableMap::COL_RAYON_SHOW_UPCOMING => 8, RayonTableMap::COL_RAYON_CREATED => 9, RayonTableMap::COL_RAYON_UPDATED => 10, ),
+        self::TYPE_FIELDNAME     => array('rayon_id' => 0, 'site_id' => 1, 'rayon_name' => 2, 'rayon_url' => 3, 'rayon_desc' => 4, 'rayon_order' => 5, 'rayon_sort_by' => 6, 'rayon_sort_order' => 7, 'rayon_show_upcoming' => 8, 'rayon_created' => 9, 'rayon_updated' => 10, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -257,14 +252,6 @@ class RayonTableMap extends TableMap
         'COL_RAYON_UPDATED' => 'RAYON_UPDATED',
         'rayon_updated' => 'RAYON_UPDATED',
         'rayons.rayon_updated' => 'RAYON_UPDATED',
-        'DeletedAt' => 'RAYON_DELETED',
-        'Rayon.DeletedAt' => 'RAYON_DELETED',
-        'deletedAt' => 'RAYON_DELETED',
-        'rayon.deletedAt' => 'RAYON_DELETED',
-        'RayonTableMap::COL_RAYON_DELETED' => 'RAYON_DELETED',
-        'COL_RAYON_DELETED' => 'RAYON_DELETED',
-        'rayon_deleted' => 'RAYON_DELETED',
-        'rayons.rayon_deleted' => 'RAYON_DELETED',
     ];
 
     /**
@@ -295,7 +282,6 @@ class RayonTableMap extends TableMap
         $this->addColumn('rayon_show_upcoming', 'ShowUpcoming', 'BOOLEAN', false, 1, false);
         $this->addColumn('rayon_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('rayon_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('rayon_deleted', 'DeletedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -470,7 +456,6 @@ class RayonTableMap extends TableMap
             $criteria->addSelectColumn(RayonTableMap::COL_RAYON_SHOW_UPCOMING);
             $criteria->addSelectColumn(RayonTableMap::COL_RAYON_CREATED);
             $criteria->addSelectColumn(RayonTableMap::COL_RAYON_UPDATED);
-            $criteria->addSelectColumn(RayonTableMap::COL_RAYON_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.rayon_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -483,7 +468,6 @@ class RayonTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.rayon_show_upcoming');
             $criteria->addSelectColumn($alias . '.rayon_created');
             $criteria->addSelectColumn($alias . '.rayon_updated');
-            $criteria->addSelectColumn($alias . '.rayon_deleted');
         }
     }
 
@@ -512,7 +496,6 @@ class RayonTableMap extends TableMap
             $criteria->removeSelectColumn(RayonTableMap::COL_RAYON_SHOW_UPCOMING);
             $criteria->removeSelectColumn(RayonTableMap::COL_RAYON_CREATED);
             $criteria->removeSelectColumn(RayonTableMap::COL_RAYON_UPDATED);
-            $criteria->removeSelectColumn(RayonTableMap::COL_RAYON_DELETED);
         } else {
             $criteria->removeSelectColumn($alias . '.rayon_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -525,7 +508,6 @@ class RayonTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.rayon_show_upcoming');
             $criteria->removeSelectColumn($alias . '.rayon_created');
             $criteria->removeSelectColumn($alias . '.rayon_updated');
-            $criteria->removeSelectColumn($alias . '.rayon_deleted');
         }
     }
 

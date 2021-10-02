@@ -60,7 +60,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery orderByDl($order = Criteria::ASC) Order by the stock_dl column
  * @method     ChildStockQuery orderByCreatedAt($order = Criteria::ASC) Order by the stock_created column
  * @method     ChildStockQuery orderByUpdatedAt($order = Criteria::ASC) Order by the stock_updated column
- * @method     ChildStockQuery orderByDeletedAt($order = Criteria::ASC) Order by the stock_deleted column
  *
  * @method     ChildStockQuery groupById() Group by the stock_id column
  * @method     ChildStockQuery groupBySiteId() Group by the site_id column
@@ -103,7 +102,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockQuery groupByDl() Group by the stock_dl column
  * @method     ChildStockQuery groupByCreatedAt() Group by the stock_created column
  * @method     ChildStockQuery groupByUpdatedAt() Group by the stock_updated column
- * @method     ChildStockQuery groupByDeletedAt() Group by the stock_deleted column
  *
  * @method     ChildStockQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildStockQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -156,8 +154,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock|null findOneByUpdate(string $stock_update) Return the first ChildStock filtered by the stock_update column
  * @method     ChildStock|null findOneByDl(boolean $stock_dl) Return the first ChildStock filtered by the stock_dl column
  * @method     ChildStock|null findOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column
- * @method     ChildStock|null findOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column
- * @method     ChildStock|null findOneByDeletedAt(string $stock_deleted) Return the first ChildStock filtered by the stock_deleted column *
+ * @method     ChildStock|null findOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column *
 
  * @method     ChildStock requirePk($key, ConnectionInterface $con = null) Return the ChildStock by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOne(ConnectionInterface $con = null) Return the first ChildStock matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -203,7 +200,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByDl(boolean $stock_dl) Return the first ChildStock filtered by the stock_dl column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildStock requireOneByDeletedAt(string $stock_deleted) Return the first ChildStock filtered by the stock_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStock[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildStock> find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
@@ -289,8 +285,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
  * @method     ChildStock[]|ObjectCollection findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
- * @method     ChildStock[]|ObjectCollection findByDeletedAt(string $stock_deleted) Return ChildStock objects filtered by the stock_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDeletedAt(string $stock_deleted) Return ChildStock objects filtered by the stock_deleted column
  * @method     ChildStock[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStock> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -390,7 +384,7 @@ abstract class StockQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, user_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated, stock_deleted FROM stock WHERE stock_id = :p0';
+        $sql = 'SELECT stock_id, site_id, article_id, campaign_id, reward_id, user_id, customer_id, wish_id, cart_id, order_id, coupon_id, stock_shop, stock_invoice, stock_depot, stock_stockage, stock_condition, stock_condition_details, stock_purchase_price, stock_selling_price, stock_selling_price2, stock_selling_price_saved, stock_selling_price_ht, stock_selling_price_tva, stock_tva_rate, stock_weight, stock_pub_year, stock_allow_predownload, stock_photo_version, stock_purchase_date, stock_onsale_date, stock_cart_date, stock_selling_date, stock_return_date, stock_lost_date, stock_media_ok, stock_file_updated, stock_insert, stock_update, stock_dl, stock_created, stock_updated FROM stock WHERE stock_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -2045,49 +2039,6 @@ abstract class StockQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the stock_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE stock_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE stock_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE stock_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildStockQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(StockTableMap::COL_STOCK_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(StockTableMap::COL_STOCK_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_DELETED, $deletedAt, $comparison);
     }
 
     /**

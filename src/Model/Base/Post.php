@@ -217,13 +217,6 @@ abstract class Post implements ActiveRecordInterface
     protected $post_updated;
 
     /**
-     * The value for the post_deleted field.
-     *
-     * @var        DateTime|null
-     */
-    protected $post_deleted;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -768,28 +761,6 @@ abstract class Post implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [post_deleted] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getDeletedAt($format = null)
-    {
-        if ($format === null) {
-            return $this->post_deleted;
-        } else {
-            return $this->post_deleted instanceof \DateTimeInterface ? $this->post_deleted->format($format) : null;
-        }
-    }
-
-    /**
      * Set the value of [post_id] column.
      *
      * @param int $v New value
@@ -1246,26 +1217,6 @@ abstract class Post implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [post_deleted] column to a normalized version of the date/time value specified.
-     *
-     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Model\Post The current object (for fluent API support)
-     */
-    public function setDeletedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->post_deleted !== null || $dt !== null) {
-            if ($this->post_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->post_deleted->format("Y-m-d H:i:s.u")) {
-                $this->post_deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[PostTableMap::COL_POST_DELETED] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setDeletedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1384,12 +1335,6 @@ abstract class Post implements ActiveRecordInterface
                 $col = null;
             }
             $this->post_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : PostTableMap::translateFieldName('DeletedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->post_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1398,7 +1343,7 @@ abstract class Post implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 23; // 23 = PostTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 22; // 22 = PostTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Post'), 0, $e);
@@ -1678,9 +1623,6 @@ abstract class Post implements ActiveRecordInterface
         if ($this->isColumnModified(PostTableMap::COL_POST_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'post_updated';
         }
-        if ($this->isColumnModified(PostTableMap::COL_POST_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'post_deleted';
-        }
 
         $sql = sprintf(
             'INSERT INTO posts (%s) VALUES (%s)',
@@ -1757,9 +1699,6 @@ abstract class Post implements ActiveRecordInterface
                         break;
                     case 'post_updated':
                         $stmt->bindValue($identifier, $this->post_updated ? $this->post_updated->format("Y-m-d") : null, PDO::PARAM_STR);
-                        break;
-                    case 'post_deleted':
-                        $stmt->bindValue($identifier, $this->post_deleted ? $this->post_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1889,9 +1828,6 @@ abstract class Post implements ActiveRecordInterface
             case 21:
                 return $this->getUpdatedAt();
                 break;
-            case 22:
-                return $this->getDeletedAt();
-                break;
             default:
                 return null;
                 break;
@@ -1943,7 +1879,6 @@ abstract class Post implements ActiveRecordInterface
             $keys[19] => $this->getUpdate(),
             $keys[20] => $this->getCreatedAt(),
             $keys[21] => $this->getUpdatedAt(),
-            $keys[22] => $this->getDeletedAt(),
         );
         if ($result[$keys[14]] instanceof \DateTimeInterface) {
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
@@ -1967,10 +1902,6 @@ abstract class Post implements ActiveRecordInterface
 
         if ($result[$keys[21]] instanceof \DateTimeInterface) {
             $result[$keys[21]] = $result[$keys[21]]->format('Y-m-d');
-        }
-
-        if ($result[$keys[22]] instanceof \DateTimeInterface) {
-            $result[$keys[22]] = $result[$keys[22]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2077,9 +2008,6 @@ abstract class Post implements ActiveRecordInterface
             case 21:
                 $this->setUpdatedAt($value);
                 break;
-            case 22:
-                $this->setDeletedAt($value);
-                break;
         } // switch()
 
         return $this;
@@ -2171,9 +2099,6 @@ abstract class Post implements ActiveRecordInterface
         }
         if (array_key_exists($keys[21], $arr)) {
             $this->setUpdatedAt($arr[$keys[21]]);
-        }
-        if (array_key_exists($keys[22], $arr)) {
-            $this->setDeletedAt($arr[$keys[22]]);
         }
 
         return $this;
@@ -2284,9 +2209,6 @@ abstract class Post implements ActiveRecordInterface
         if ($this->isColumnModified(PostTableMap::COL_POST_UPDATED)) {
             $criteria->add(PostTableMap::COL_POST_UPDATED, $this->post_updated);
         }
-        if ($this->isColumnModified(PostTableMap::COL_POST_DELETED)) {
-            $criteria->add(PostTableMap::COL_POST_DELETED, $this->post_deleted);
-        }
 
         return $criteria;
     }
@@ -2394,7 +2316,6 @@ abstract class Post implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setDeletedAt($this->getDeletedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -2452,7 +2373,6 @@ abstract class Post implements ActiveRecordInterface
         $this->post_update = null;
         $this->post_created = null;
         $this->post_updated = null;
-        $this->post_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

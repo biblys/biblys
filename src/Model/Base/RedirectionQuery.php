@@ -27,7 +27,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirectionQuery orderByDate($order = Criteria::ASC) Order by the redirection_date column
  * @method     ChildRedirectionQuery orderByCreatedAt($order = Criteria::ASC) Order by the redirection_created column
  * @method     ChildRedirectionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the redirection_updated column
- * @method     ChildRedirectionQuery orderByDeletedAt($order = Criteria::ASC) Order by the redirection_deleted column
  *
  * @method     ChildRedirectionQuery groupById() Group by the redirection_id column
  * @method     ChildRedirectionQuery groupBySiteId() Group by the site_id column
@@ -37,7 +36,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirectionQuery groupByDate() Group by the redirection_date column
  * @method     ChildRedirectionQuery groupByCreatedAt() Group by the redirection_created column
  * @method     ChildRedirectionQuery groupByUpdatedAt() Group by the redirection_updated column
- * @method     ChildRedirectionQuery groupByDeletedAt() Group by the redirection_deleted column
  *
  * @method     ChildRedirectionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildRedirectionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,8 +55,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection|null findOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column
  * @method     ChildRedirection|null findOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column
  * @method     ChildRedirection|null findOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column
- * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column
- * @method     ChildRedirection|null findOneByDeletedAt(string $redirection_deleted) Return the first ChildRedirection filtered by the redirection_deleted column *
+ * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column *
 
  * @method     ChildRedirection requirePk($key, ConnectionInterface $con = null) Return the ChildRedirection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOne(ConnectionInterface $con = null) Return the first ChildRedirection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -71,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection requireOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRedirection requireOneByDeletedAt(string $redirection_deleted) Return the first ChildRedirection filtered by the redirection_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRedirection[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildRedirection> find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
@@ -91,8 +87,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
  * @method     ChildRedirection[]|ObjectCollection findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
- * @method     ChildRedirection[]|ObjectCollection findByDeletedAt(string $redirection_deleted) Return ChildRedirection objects filtered by the redirection_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByDeletedAt(string $redirection_deleted) Return ChildRedirection objects filtered by the redirection_deleted column
  * @method     ChildRedirection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRedirection> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -192,7 +186,7 @@ abstract class RedirectionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT redirection_id, site_id, redirection_old, redirection_new, redirection_hits, redirection_date, redirection_created, redirection_updated, redirection_deleted FROM redirections WHERE redirection_id = :p0';
+        $sql = 'SELECT redirection_id, site_id, redirection_old, redirection_new, redirection_hits, redirection_date, redirection_created, redirection_updated FROM redirections WHERE redirection_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -582,49 +576,6 @@ abstract class RedirectionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the redirection_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE redirection_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE redirection_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE redirection_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DELETED, $deletedAt, $comparison);
     }
 
     /**

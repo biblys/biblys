@@ -26,7 +26,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountryQuery orderByShippingZone($order = Criteria::ASC) Order by the shipping_zone column
  * @method     ChildCountryQuery orderByCreatedAt($order = Criteria::ASC) Order by the country_created column
  * @method     ChildCountryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the country_updated column
- * @method     ChildCountryQuery orderByDeletedAt($order = Criteria::ASC) Order by the country_deleted column
  *
  * @method     ChildCountryQuery groupById() Group by the country_id column
  * @method     ChildCountryQuery groupByCode() Group by the country_code column
@@ -35,7 +34,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountryQuery groupByShippingZone() Group by the shipping_zone column
  * @method     ChildCountryQuery groupByCreatedAt() Group by the country_created column
  * @method     ChildCountryQuery groupByUpdatedAt() Group by the country_updated column
- * @method     ChildCountryQuery groupByDeletedAt() Group by the country_deleted column
  *
  * @method     ChildCountryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCountryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -54,8 +52,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry|null findOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column
  * @method     ChildCountry|null findOneByShippingZone(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column
  * @method     ChildCountry|null findOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column
- * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column
- * @method     ChildCountry|null findOneByDeletedAt(string $country_deleted) Return the first ChildCountry filtered by the country_deleted column *
+ * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column *
 
  * @method     ChildCountry requirePk($key, ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOne(ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -67,7 +64,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry requireOneByShippingZone(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOneByDeletedAt(string $country_deleted) Return the first ChildCountry filtered by the country_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCountry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildCountry> find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
@@ -85,8 +81,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
  * @method     ChildCountry[]|ObjectCollection findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
  * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
- * @method     ChildCountry[]|ObjectCollection findByDeletedAt(string $country_deleted) Return ChildCountry objects filtered by the country_deleted column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByDeletedAt(string $country_deleted) Return ChildCountry objects filtered by the country_deleted column
  * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -186,7 +180,7 @@ abstract class CountryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT country_id, country_code, country_name, country_name_en, shipping_zone, country_created, country_updated, country_deleted FROM countries WHERE country_id = :p0';
+        $sql = 'SELECT country_id, country_code, country_name, country_name_en, shipping_zone, country_created, country_updated FROM countries WHERE country_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -501,49 +495,6 @@ abstract class CountryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the country_deleted column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDeletedAt('2011-03-14'); // WHERE country_deleted = '2011-03-14'
-     * $query->filterByDeletedAt('now'); // WHERE country_deleted = '2011-03-14'
-     * $query->filterByDeletedAt(array('max' => 'yesterday')); // WHERE country_deleted > '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $deletedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
-     */
-    public function filterByDeletedAt($deletedAt = null, $comparison = null)
-    {
-        if (is_array($deletedAt)) {
-            $useMinMax = false;
-            if (isset($deletedAt['min'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_DELETED, $deletedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($deletedAt['max'])) {
-                $this->addUsingAlias(CountryTableMap::COL_COUNTRY_DELETED, $deletedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_DELETED, $deletedAt, $comparison);
     }
 
     /**
