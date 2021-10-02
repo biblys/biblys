@@ -10,21 +10,17 @@ use Collection;
 use CollectionManager;
 use Exception;
 use Model\Role;
-use Model\User;
 use People;
 use PeopleManager;
-use Propel\Runtime\Exception\PropelException;
 use Publisher;
 use PublisherManager;
 use Rayon;
 use RayonManager;
 use Stock;
 use StockManager;
-use Symfony\Component\HttpFoundation\Request;
 
 class EntityFactory
 {
-
     /**
      * @param array $attributes
      * @param People[]|null $authors
@@ -174,38 +170,4 @@ class EntityFactory
             "reward_articles"=> "[".$article->get("id")."]",
         ]);
     }
-
-    /**
-     * @throws PropelException
-     */
-    public static function createAuthRequest(
-        string $content = "",
-        User $user = null,
-        string $authMethod = "cookie"): Request
-    {
-        $session = ModelFactory::createUserSession($user);
-        $request = Request::create("", "", [], [], [], [], $content);
-
-        if ($authMethod === "cookie") {
-            $request->cookies->set("user_uid", $session->getToken());
-        }
-
-        if ($authMethod === "header") {
-            $request->headers->set("AuthToken", $session->getToken());
-        }
-
-        return $request;
-    }
-
-    /**
-     * @param string $content
-     * @return Request
-     * @throws PropelException
-     */
-    public static function createAuthRequestForAdminUser(string $content = ""): Request
-    {
-        $adminUser = ModelFactory::createAdminUser();
-        return EntityFactory::createAuthRequest($content, $adminUser);
-    }
-
 }

@@ -4,6 +4,7 @@ namespace Framework;
 
 use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
+use Biblys\Test\RequestFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
@@ -41,7 +42,7 @@ class ControllerTest extends TestCase
 
         // given
         $controller = new Controller();
-        $request = EntityFactory::createAuthRequest();
+        $request = RequestFactory::createAuthRequest();
 
         // when
         Helpers::callPrivateMethod($controller, "authUser", [$request]);
@@ -76,7 +77,7 @@ class ControllerTest extends TestCase
 
         // given
         $controller = new Controller();
-        $request = EntityFactory::createAuthRequest();
+        $request = RequestFactory::createAuthRequest();
 
         // when
         Helpers::callPrivateMethod($controller, "authAdmin", [$request]);
@@ -93,7 +94,7 @@ class ControllerTest extends TestCase
 
         // given
         $controller = new Controller();
-        $request = EntityFactory::createAuthRequestForAdminUser();
+        $request = RequestFactory::createAuthRequestForAdminUser();
 
         // when
         Helpers::callPrivateMethod($controller, "authAdmin", [$request]);

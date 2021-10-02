@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Test\EntityFactory;
+use Biblys\Test\RequestFactory;
 use Exception;
 use Framework\Exception\AuthException;
 use Model\Role;
@@ -28,7 +29,7 @@ class ContributionControllerTest extends TestCase
         $contribution->setPeopleId($person->get("id"));
         $contribution->setJobId(1);
         $contribution->save();
-        $request = EntityFactory::createAuthRequestForAdminUser();
+        $request = RequestFactory::createAuthRequestForAdminUser();
         $controller = new ContributionController();
 
         // when
@@ -83,7 +84,7 @@ class ContributionControllerTest extends TestCase
             "people_id" => $person->get("id"),
             "job_id" => 14,
         ]);
-        $request = EntityFactory::createAuthRequestForAdminUser($content);
+        $request = RequestFactory::createAuthRequestForAdminUser($content);
         $controller = new ContributionController();
 
         // when
@@ -144,7 +145,7 @@ class ContributionControllerTest extends TestCase
         // given
         $article = EntityFactory::createArticle();
         $content = '{"job_id":"2"}';
-        $request = EntityFactory::createAuthRequestForAdminUser($content);
+        $request = RequestFactory::createAuthRequestForAdminUser($content);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setJobId(1);
@@ -182,7 +183,7 @@ class ContributionControllerTest extends TestCase
     {
         // given
         $article = EntityFactory::createArticle();
-        $request = EntityFactory::createAuthRequestForAdminUser();
+        $request = RequestFactory::createAuthRequestForAdminUser();
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
         $contribution->setJobId(1);

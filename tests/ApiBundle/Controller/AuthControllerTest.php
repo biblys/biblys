@@ -5,6 +5,7 @@ namespace ApiBundle\Controller;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Biblys\Test\RequestFactory;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
@@ -148,7 +149,7 @@ class AuthControllerTest extends TestCase
             "email" => "me@biblys.fr",
             "username" => "Me",
         ]);
-        $request = EntityFactory::createAuthRequest("", $user, $method = "header");
+        $request = RequestFactory::createAuthRequest("", $user, $method = "header");
         $currentUserService = CurrentUser::buildFromRequest($request);
 
         // when

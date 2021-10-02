@@ -4,6 +4,7 @@ namespace Biblys\Service;
 
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Biblys\Test\RequestFactory;
 use DateTime;
 use Framework\Exception\AuthException;
 use Model\SiteQuery;
@@ -24,7 +25,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser();
-        $request = EntityFactory::createAuthRequest("", $user, "cookie");
+        $request = RequestFactory::createAuthRequest("", $user, "cookie");
 
         // when
         $currentUser = CurrentUser::buildFromRequest($request);
@@ -45,7 +46,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser();
-        $request = EntityFactory::createAuthRequest("", $user, "header");
+        $request = RequestFactory::createAuthRequest("", $user, "header");
 
         // when
         $currentUser = CurrentUser::buildFromRequest($request);
