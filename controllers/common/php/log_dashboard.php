@@ -1,6 +1,8 @@
 <?php
 
 use Biblys\Service\Browser;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
     trigger_error('Accès non autorisé pour ' . $_V->get('user_email'));
@@ -28,7 +30,7 @@ $right = $_V->getCurrentRight();
 if (isset($_GET['right_id'])) {
     $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => $_V->get('id')));
     $_V->setCurrentRight($new_right);
-    redirect('/pages/log_dashboard');
+    return new RedirectResponse('/pages/log_dashboard');
 }
 
 // Show user rights option
@@ -144,7 +146,7 @@ foreach ($items as $k => $v) {
 }
 
 
-$_ECHO .= '
+$content = '
         ' . $rights_select . '
     <h1><i class="fa fa-dashboard"></i> ' . $_PAGE_TITLE_HTML . '</h1>
 
@@ -154,6 +156,8 @@ $_ECHO .= '
       ' . $sections . '
     </div>
   ';
+
+return new Response($content);
 
 
 

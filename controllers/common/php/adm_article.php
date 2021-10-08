@@ -350,7 +350,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     );
 
     $import = $request->query->get('import', null);
-    redirect('/pages/'.$_PAGE.'?import='.$import);
+    return new RedirectResponse('/pages/'.$_PAGE.'?import='.$import);
 }
 
 // Types
