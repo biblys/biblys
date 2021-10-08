@@ -2,16 +2,9 @@
 
 namespace Biblys\Test;
 
-use Biblys\Service\Config;
-use Model\Article;
-use Model\People;
 use Model\Publisher;
 use Model\Right;
-use Model\Role;
 use Model\Session;
-use Model\ShippingFee;
-use Model\Site;
-use Model\SiteQuery;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -69,11 +62,27 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createPublisher(): Publisher
+    public static function createPublisher($attributes = []): Publisher
     {
         $publisher = new Publisher();
+        $publisher->setName($attributes["name"] ?? "Les Éditions Paronymie");
         $publisher->save();
 
         return $publisher;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createUserSession(User $user = null): Session
+    {
+        if (!$user) {
+            $user = Factory::createUser();
+        }
+
+        $session = Session::buildForUser($user);
+        $session->save();
+
+        return $session;
     }
 }

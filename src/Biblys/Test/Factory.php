@@ -195,14 +195,7 @@ class Factory
      */
     public static function createUserSession(User $user = null): Session
     {
-        if (!$user) {
-            $user = Factory::createUser();
-        }
-
-        $session = Session::buildForUser($user);
-        $session->save();
-
-        return $session;
+        return ModelFactory::createUserSession($user);
     }
 
     /**

@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Framework\Exception\AuthException;
+use Model\Publisher;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -373,7 +374,7 @@ class Controller
      */
     protected static function authAdmin(Request $request): CurrentUser
     {
-        // TODO: distinguish between unauthentified (401) and unautorized (403)
+        // TODO: distinguish between unauthentified (401) and unauthorized (403)
         $currentUser = self::authUser($request);
         $currentSite = CurrentSite::buildFromConfig(new Config());
         if (!$currentUser->isAdminForSite($currentSite->getSite())) {
@@ -381,5 +382,30 @@ class Controller
         }
 
         return $currentUser;
+    }
+
+    /**
+     * @param Request $request
+     * @return CurrentUser
+     * @throws AuthException
+     * @throws PropelException
+     */
+    protected static function authPublisher(Request $request, Publisher $publisher): CurrentUser
+    {
+        // TODO: distinguish between unauthentified (401) and unauthorized (403)
+        $currentUser = self::authUser($request);
+
+        if ($currentUser->hasRightForPublisher($publisher)) {
+            return $currentUser;
+        }
+
+        $currentSite = CurrentSite::buildFromConfig(new Config());
+        if ($currentUser->isAdminForSite($currentSite->getSite())) {
+            return $currentUser;
+        }
+
+        throw new AuthException(
+            sprintf("Vous n'avez pas l'autorisation de modifier l'éditeur %s", $publisher->getName())
+        );
     }
 }
