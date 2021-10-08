@@ -6,6 +6,7 @@ use Biblys\Service\Validator\Validator;
 use Exception;
 use Model\Base\User as BaseUser;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'users' table.
@@ -26,6 +27,23 @@ class User extends BaseUser
             ->findOne();
 
         if($adminRight) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasRightForPublisher(Publisher $publisher): bool
+    {
+        $publisherRight = RightQuery::create()
+            ->filterByUser($this)
+            ->filterByPublisherId($publisher->getId())
+            ->findOne();
+
+        if ($publisherRight) {
             return true;
         }
 
