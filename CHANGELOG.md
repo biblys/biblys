@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.55.2 (DEV)
+
+Corrections
+
+- Un bug empêchait les utilisateurs avec les droits de gestion pour un éditeur
+  de gérer les contributions associé à cet éditeur. C'est corrigé.
+
 ### 2.55.1 (9 octobre 2021)
 
 Corrections
@@ -9,10 +16,10 @@ Corrections
   contributeur supprimé était peu claire. Maintenant, c'est mieux.
 - La page Rayons de l'administration ne s'affichait plus du tout. C'est 
   corrigé.
-- L'erreur affichée lorsqu'une collection était créé avec un nom déjà utilisé
+- L'erreur affichée lorsqu'une collection était créée avec un nom déjà utilisé
   était sybilline. Elle est désormais plus bavarde.
 
-### 2.55.0 (1er octobre 2021)
+## 2.55.0 (1er octobre 2021)
 
 Améliorations
 

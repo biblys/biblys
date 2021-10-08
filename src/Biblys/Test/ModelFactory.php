@@ -2,9 +2,12 @@
 
 namespace Biblys\Test;
 
+use Biblys\Service\Config;
 use Model\Publisher;
 use Model\Right;
 use Model\Session;
+use Model\Site;
+use Model\SiteQuery;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -84,5 +87,26 @@ class ModelFactory
         $session->save();
 
         return $session;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createAdminUser(Site $site = null): User
+    {
+        $user = new User();
+        $user->save();
+
+        $config = new Config();
+        if ($site === null) {
+            $site = SiteQuery::create()->findOneById($config->get("site"));
+        }
+
+        $right = new Right();
+        $right->setUser($user);
+        $right->setSite($site);
+        $right->save();
+
+        return $user;
     }
 }

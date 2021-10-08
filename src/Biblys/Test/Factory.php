@@ -237,20 +237,7 @@ class Factory
      */
     public static function createAdminUser(Site $site = null): User
     {
-        $user = new User();
-        $user->save();
-
-        $config = new Config();
-        if ($site === null) {
-            $site = SiteQuery::create()->findOneById($config->get("site"));
-        }
-
-        $right = new Right();
-        $right->setUser($user);
-        $right->setSite($site);
-        $right->save();
-
-        return $user;
+        return ModelFactory::createAdminUser($site);
     }
 
     /**
