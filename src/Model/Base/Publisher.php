@@ -7,12 +7,16 @@ use \Exception;
 use \PDO;
 use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
+use Model\Right as ChildRight;
+use Model\RightQuery as ChildRightQuery;
 use Model\Map\PublisherTableMap;
+use Model\Map\RightTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -333,12 +337,26 @@ abstract class Publisher implements ActiveRecordInterface
     protected $publisher_updated;
 
     /**
+     * @var        ObjectCollection|ChildRight[] Collection to store aggregation of ChildRight objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildRight> Collection to store aggregation of ChildRight objects.
+     */
+    protected $collRights;
+    protected $collRightsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildRight[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildRight>
+     */
+    protected $rightsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2027,6 +2045,8 @@ abstract class Publisher implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collRights = null;
+
         } // if (deep)
     }
 
@@ -2152,6 +2172,24 @@ abstract class Publisher implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->rightsScheduledForDeletion !== null) {
+                if (!$this->rightsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->rightsScheduledForDeletion as $right) {
+                        // need to save related object because we set the relation to null
+                        $right->save($con);
+                    }
+                    $this->rightsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRights !== null) {
+                foreach ($this->collRights as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -2612,10 +2650,11 @@ abstract class Publisher implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['Publisher'][$this->hashCode()])) {
@@ -2684,6 +2723,23 @@ abstract class Publisher implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collRights) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'rights';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rightss';
+                        break;
+                    default:
+                        $key = 'Rights';
+                }
+
+                $result[$key] = $this->collRights->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -3251,6 +3307,20 @@ abstract class Publisher implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getRights() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRight($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -3277,6 +3347,310 @@ abstract class Publisher implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Right' === $relationName) {
+            $this->initRights();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collRights collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addRights()
+     */
+    public function clearRights()
+    {
+        $this->collRights = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collRights collection loaded partially.
+     */
+    public function resetPartialRights($v = true)
+    {
+        $this->collRightsPartial = $v;
+    }
+
+    /**
+     * Initializes the collRights collection.
+     *
+     * By default this just sets the collRights collection to an empty array (like clearcollRights());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRights($overrideExisting = true)
+    {
+        if (null !== $this->collRights && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = RightTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collRights = new $collectionClassName;
+        $this->collRights->setModel('\Model\Right');
+    }
+
+    /**
+     * Gets an array of ChildRight objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPublisher is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildRight[] List of ChildRight objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRight> List of ChildRight objects
+     * @throws PropelException
+     */
+    public function getRights(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collRightsPartial && !$this->isNew();
+        if (null === $this->collRights || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collRights) {
+                    $this->initRights();
+                } else {
+                    $collectionClassName = RightTableMap::getTableMap()->getCollectionClassName();
+
+                    $collRights = new $collectionClassName;
+                    $collRights->setModel('\Model\Right');
+
+                    return $collRights;
+                }
+            } else {
+                $collRights = ChildRightQuery::create(null, $criteria)
+                    ->filterByPublisher($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collRightsPartial && count($collRights)) {
+                        $this->initRights(false);
+
+                        foreach ($collRights as $obj) {
+                            if (false == $this->collRights->contains($obj)) {
+                                $this->collRights->append($obj);
+                            }
+                        }
+
+                        $this->collRightsPartial = true;
+                    }
+
+                    return $collRights;
+                }
+
+                if ($partial && $this->collRights) {
+                    foreach ($this->collRights as $obj) {
+                        if ($obj->isNew()) {
+                            $collRights[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRights = $collRights;
+                $this->collRightsPartial = false;
+            }
+        }
+
+        return $this->collRights;
+    }
+
+    /**
+     * Sets a collection of ChildRight objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $rights A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPublisher The current object (for fluent API support)
+     */
+    public function setRights(Collection $rights, ConnectionInterface $con = null)
+    {
+        /** @var ChildRight[] $rightsToDelete */
+        $rightsToDelete = $this->getRights(new Criteria(), $con)->diff($rights);
+
+
+        $this->rightsScheduledForDeletion = $rightsToDelete;
+
+        foreach ($rightsToDelete as $rightRemoved) {
+            $rightRemoved->setPublisher(null);
+        }
+
+        $this->collRights = null;
+        foreach ($rights as $right) {
+            $this->addRight($right);
+        }
+
+        $this->collRights = $rights;
+        $this->collRightsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Right objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Right objects.
+     * @throws PropelException
+     */
+    public function countRights(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collRightsPartial && !$this->isNew();
+        if (null === $this->collRights || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRights) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRights());
+            }
+
+            $query = ChildRightQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPublisher($this)
+                ->count($con);
+        }
+
+        return count($this->collRights);
+    }
+
+    /**
+     * Method called to associate a ChildRight object to this object
+     * through the ChildRight foreign key attribute.
+     *
+     * @param  ChildRight $l ChildRight
+     * @return $this|\Model\Publisher The current object (for fluent API support)
+     */
+    public function addRight(ChildRight $l)
+    {
+        if ($this->collRights === null) {
+            $this->initRights();
+            $this->collRightsPartial = true;
+        }
+
+        if (!$this->collRights->contains($l)) {
+            $this->doAddRight($l);
+
+            if ($this->rightsScheduledForDeletion and $this->rightsScheduledForDeletion->contains($l)) {
+                $this->rightsScheduledForDeletion->remove($this->rightsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildRight $right The ChildRight object to add.
+     */
+    protected function doAddRight(ChildRight $right)
+    {
+        $this->collRights[]= $right;
+        $right->setPublisher($this);
+    }
+
+    /**
+     * @param  ChildRight $right The ChildRight object to remove.
+     * @return $this|ChildPublisher The current object (for fluent API support)
+     */
+    public function removeRight(ChildRight $right)
+    {
+        if ($this->getRights()->contains($right)) {
+            $pos = $this->collRights->search($right);
+            $this->collRights->remove($pos);
+            if (null === $this->rightsScheduledForDeletion) {
+                $this->rightsScheduledForDeletion = clone $this->collRights;
+                $this->rightsScheduledForDeletion->clear();
+            }
+            $this->rightsScheduledForDeletion[]= $right;
+            $right->setPublisher(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Publisher is new, it will return
+     * an empty collection; or if this Publisher has previously
+     * been saved, it will retrieve related Rights from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Publisher.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRight[] List of ChildRight objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
+     */
+    public function getRightsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRightQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getRights($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Publisher is new, it will return
+     * an empty collection; or if this Publisher has previously
+     * been saved, it will retrieve related Rights from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Publisher.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildRight[] List of ChildRight objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildRight}> List of ChildRight objects
+     */
+    public function getRightsJoinSite(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildRightQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getRights($query, $con);
     }
 
     /**
@@ -3343,8 +3717,14 @@ abstract class Publisher implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collRights) {
+                foreach ($this->collRights as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collRights = null;
     }
 
     /**

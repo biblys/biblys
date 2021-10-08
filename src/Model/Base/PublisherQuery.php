@@ -10,6 +10,7 @@ use Model\Map\PublisherTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -104,6 +105,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisherQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildPublisherQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPublisherQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildPublisherQuery leftJoinRight($relationAlias = null) Adds a LEFT JOIN clause to the query using the Right relation
+ * @method     ChildPublisherQuery rightJoinRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Right relation
+ * @method     ChildPublisherQuery innerJoinRight($relationAlias = null) Adds a INNER JOIN clause to the query using the Right relation
+ *
+ * @method     ChildPublisherQuery joinWithRight($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Right relation
+ *
+ * @method     ChildPublisherQuery leftJoinWithRight() Adds a LEFT JOIN clause and with to the query using the Right relation
+ * @method     ChildPublisherQuery rightJoinWithRight() Adds a RIGHT JOIN clause and with to the query using the Right relation
+ * @method     ChildPublisherQuery innerJoinWithRight() Adds a INNER JOIN clause and with to the query using the Right relation
+ *
+ * @method     \Model\RightQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPublisher|null findOne(ConnectionInterface $con = null) Return the first ChildPublisher matching the query
  * @method     ChildPublisher findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPublisher matching the query, or a new ChildPublisher object populated from the query conditions when no match is found
@@ -1592,6 +1605,134 @@ abstract class PublisherQuery extends ModelCriteria
         return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, $updatedAt, $comparison);
     }
 
+    /**
+     * Filter the query by a related \Model\Right object
+     *
+     * @param \Model\Right|ObjectCollection $right the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPublisherQuery The current query, for fluid interface
+     */
+    public function filterByRight($right, $comparison = null)
+    {
+        if ($right instanceof \Model\Right) {
+            return $this
+                ->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $right->getPublisherId(), $comparison);
+        } elseif ($right instanceof ObjectCollection) {
+            return $this
+                ->useRightQuery()
+                ->filterByPrimaryKeys($right->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRight() only accepts arguments of type \Model\Right or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Right relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     */
+    public function joinRight($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Right');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Right');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Right relation Right object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\RightQuery A secondary query class using the current class as primary query
+     */
+    public function useRightQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinRight($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Right', '\Model\RightQuery');
+    }
+
+    /**
+     * Use the Right relation Right object
+     *
+     * @param callable(\Model\RightQuery):\Model\RightQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withRightQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useRightQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Right table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\RightQuery The inner query object of the EXISTS statement
+     */
+    public function useRightExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Right table for a NOT EXISTS query.
+     *
+     * @see useRightExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RightQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useRightNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Right', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

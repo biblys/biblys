@@ -1096,6 +1096,9 @@
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
+    <foreign-key foreignTable="publishers" skipSql="true">
+      <reference local="publisher_id" foreign="publisher_id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

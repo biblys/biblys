@@ -262,7 +262,7 @@ class RightTableMap extends TableMap
         $this->addColumn('right_uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, 10, null);
         $this->addColumn('bookshop_id', 'BookshopId', 'INTEGER', false, 10, null);
         $this->addColumn('library_id', 'LibraryId', 'INTEGER', false, 10, null);
         $this->addColumn('right_current', 'Current', 'BOOLEAN', false, 1, false);
@@ -287,6 +287,13 @@ class RightTableMap extends TableMap
   array (
     0 => ':site_id',
     1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Publisher', '\\Model\\Publisher', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':publisher_id',
+    1 => ':publisher_id',
   ),
 ), null, null, null, false);
     } // buildRelations()

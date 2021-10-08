@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Publisher as ChildPublisher;
+use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Site as ChildSite;
@@ -146,6 +148,11 @@ abstract class Right implements ActiveRecordInterface
      * @var        ChildSite
      */
     protected $aSite;
+
+    /**
+     * @var        ChildPublisher
+     */
+    protected $aPublisher;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -631,6 +638,10 @@ abstract class Right implements ActiveRecordInterface
             $this->modifiedColumns[RightTableMap::COL_PUBLISHER_ID] = true;
         }
 
+        if ($this->aPublisher !== null && $this->aPublisher->getId() !== $v) {
+            $this->aPublisher = null;
+        }
+
         return $this;
     } // setPublisherId()
 
@@ -853,6 +864,9 @@ abstract class Right implements ActiveRecordInterface
         if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
             $this->aSite = null;
         }
+        if ($this->aPublisher !== null && $this->publisher_id !== $this->aPublisher->getId()) {
+            $this->aPublisher = null;
+        }
     } // ensureConsistency
 
     /**
@@ -894,6 +908,7 @@ abstract class Right implements ActiveRecordInterface
 
             $this->aUser = null;
             $this->aSite = null;
+            $this->aPublisher = null;
         } // if (deep)
     }
 
@@ -1027,6 +1042,13 @@ abstract class Right implements ActiveRecordInterface
                     $affectedRows += $this->aSite->save($con);
                 }
                 $this->setSite($this->aSite);
+            }
+
+            if ($this->aPublisher !== null) {
+                if ($this->aPublisher->isModified() || $this->aPublisher->isNew()) {
+                    $affectedRows += $this->aPublisher->save($con);
+                }
+                $this->setPublisher($this->aPublisher);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -1313,6 +1335,21 @@ abstract class Right implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aPublisher) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'publisher';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'publishers';
+                        break;
+                    default:
+                        $key = 'Publisher';
+                }
+
+                $result[$key] = $this->aPublisher->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1733,6 +1770,57 @@ abstract class Right implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildPublisher object.
+     *
+     * @param  ChildPublisher|null $v
+     * @return $this|\Model\Right The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPublisher(ChildPublisher $v = null)
+    {
+        if ($v === null) {
+            $this->setPublisherId(NULL);
+        } else {
+            $this->setPublisherId($v->getId());
+        }
+
+        $this->aPublisher = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPublisher object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRight($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPublisher object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPublisher|null The associated ChildPublisher object.
+     * @throws PropelException
+     */
+    public function getPublisher(ConnectionInterface $con = null)
+    {
+        if ($this->aPublisher === null && ($this->publisher_id != 0)) {
+            $this->aPublisher = ChildPublisherQuery::create()->findPk($this->publisher_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPublisher->addRights($this);
+             */
+        }
+
+        return $this->aPublisher;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1744,6 +1832,9 @@ abstract class Right implements ActiveRecordInterface
         }
         if (null !== $this->aSite) {
             $this->aSite->removeRight($this);
+        }
+        if (null !== $this->aPublisher) {
+            $this->aPublisher->removeRight($this);
         }
         $this->right_id = null;
         $this->right_uid = null;
@@ -1778,6 +1869,7 @@ abstract class Right implements ActiveRecordInterface
 
         $this->aUser = null;
         $this->aSite = null;
+        $this->aPublisher = null;
     }
 
     /**
