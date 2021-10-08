@@ -130,6 +130,27 @@ class RayonTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testCountArticles()
+    {
+        // given
+        $rayon = Factory::createRayon(["rayon_name" => "Combien ?"]);
+        $article = Factory::createArticle();
+        $rayon->addArticle($article);
+
+        // when
+        $count = $rayon->countArticles();
+
+        // then
+        $this->assertEquals(
+            1,
+            $count,
+            "should count articles in rayon"
+        );
+    }
+
+    /**
      * Test deleting a rayon
      * @depends testGet
      */

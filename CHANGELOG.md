@@ -7,6 +7,8 @@ Corrections
 
 - L'erreur affichée lorsqu'on tentait d'afficher un article associé à un 
   contributeur supprimé était peu claire. Maintenant, c'est mieux.
+- La page Rayons de l'administration ne s'affichait plus du tout. C'est 
+  corrigé.
 
 ### 2.55.0 (1er octobre 2021)
 
