@@ -81,6 +81,52 @@ class ContributorTest extends TestCase
         );
     }
 
+    public function testCallingUnknownMethod()
+    {
+        // given
+        $entityPeople = Factory::createPeople();
+        $contributor = new Contributor(
+            PeopleQuery::create()->findPk($entityPeople->get("id")),
+            Job::getById(5),
+            1
+        );
+
+        // then
+        $this->expectException("InvalidArgumentException");
+        $this->expectExceptionMessage("Cannot call unknown method unknownMethod on Contributor");
+
+        // when
+        $contributor->unknownMethod();
+    }
+
+    /**
+     * @throws UnknownJobException
+     * @throws Exception
+     */
+    public function testGetFromPeople()
+    {
+        // given
+        $entityPeople = Factory::createPeople([
+            "people_first_name" => "Monsieur",
+            "people_last_name" => "Poulpe",
+        ]);
+        $contributor = new Contributor(
+            PeopleQuery::create()->findPk($entityPeople->get("id")),
+            Job::getById(5),
+            1
+        );
+
+        // when
+        $firstName = $contributor->getFirstName();
+
+        // then
+        $this->assertEquals(
+            "Monsieur",
+            $firstName,
+            "should return the correct property"
+        );
+    }
+
     /**
      * @throws UnknownJobException
      * @throws Exception
@@ -99,12 +145,68 @@ class ContributorTest extends TestCase
         );
 
         // when
-        $url = $contributor->get("url");
+        $firstName = $contributor->get("first_name");
 
         // then
         $this->assertEquals(
-            "monsieur-poulpe",
-            $url,
+            "Monsieur",
+            $firstName,
+            "should return the correct property"
+        );
+    }
+
+    /**
+     * @throws UnknownJobException
+     * @throws Exception
+     */
+    public function testLegacyGetProperty()
+    {
+        // given
+        $entityPeople = Factory::createPeople([
+            "people_first_name" => "Monsieur",
+            "people_last_name" => "Poulpe",
+        ]);
+        $contributor = new Contributor(
+            PeopleQuery::create()->findPk($entityPeople->get("id")),
+            Job::getById(5),
+            1
+        );
+
+        // when
+        $firstName = $contributor->first_name();
+
+        // then
+        $this->assertEquals(
+            "Monsieur",
+            $firstName,
+            "should return the correct property"
+        );
+    }
+
+    /**
+     * @throws UnknownJobException
+     * @throws Exception
+     */
+    public function testLegacyGetJobName()
+    {
+        // given
+        $entityPeople = Factory::createPeople([
+            "people_first_name" => "Margotte",
+            "people_last_name" => "Saint-James",
+        ]);
+        $contributor = new Contributor(
+            PeopleQuery::create()->findPk($entityPeople->get("id")),
+            Job::getById(1),
+            1
+        );
+
+        // when
+        $firstName = $contributor->job_name();
+
+        // then
+        $this->assertEquals(
+            "Autrice",
+            $firstName,
             "should return the correct property"
         );
     }

@@ -48,6 +48,7 @@ class Contributor
 
     public function __call($name, $arguments)
     {
+        // contributor.job_name
         if ($name === "job_name") {
             trigger_deprecation(
                 "biblys",
@@ -57,22 +58,45 @@ class Contributor
             return $this->getRole();
         }
 
-        if ($name === "get") {
-            $methodName = "get".ucfirst($arguments[0]);
-            if (method_exists($this->_people, $methodName)) {
-                return $this->_people->$methodName();
-            }
-        }
-
+        // contributor.getFirstName()
         if (method_exists($this->_people, $name)) {
             return $this->_people->$name();
         }
 
-        $methodName = "get".ucfirst($name);
+        // contributor.get("first_name")
+        if ($name === "get") {
+            $property = $arguments[0];
+            $methodName = self::_getCamelCaseMethodName($property);
+            if (method_exists($this->_people, $methodName)) {
+                trigger_deprecation(
+                    "biblys",
+                    "2.55.0",
+                    sprintf(
+                        "Contributor.get(\"%s\") is deprecated. Use Contributor.%s instead.",
+                        $property,
+                        $methodName,
+                    )
+                );
+                return $this->_people->$methodName();
+            }
+        }
+
+        // contributor.first_name
+        // Legit use in templates, NOT deprecated
+        $methodName = self::_getCamelCaseMethodName($name);
         if (method_exists($this->_people, $methodName)) {
             return $this->_people->$methodName();
         }
 
-        throw new InvalidArgumentException("Cannot find method for key $key");
+        throw new InvalidArgumentException("Cannot call unknown method $name on Contributor");
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    private static function _getCamelCaseMethodName($name): string
+    {
+        return "get" . str_replace("_", "", ucwords($name, "_"));
     }
 }
