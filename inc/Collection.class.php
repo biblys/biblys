@@ -1,6 +1,8 @@
 <?php
 
-    class Collection extends Entity
+use Biblys\Exception\EntityAlreadyExistsException;
+
+class Collection extends Entity
     {
         protected $prefix = 'collection';
 
@@ -146,14 +148,22 @@
             }
 
             // Check that there is not another publisher with that name
-            $otherName = $this->get(
+            $otherCollectionWithTheSameName = $this->get(
                 [
                     'collection_url' => $collection->get('url'),
                     'collection_id' => '!= '.$collection->get('id'),
                 ]
             );
-            if ($otherName) {
-                throw new Exception('Il existe déjà une collection avec le nom '.$collection->get('name').' chez cet éditeur.');
+            if ($otherCollectionWithTheSameName) {
+                throw new EntityAlreadyExistsException(
+                    sprintf(
+                        "Il existe déjà une collection avec le nom « %s » (n° %s) chez l'éditeur %s (slug: %s).",
+                        $otherCollectionWithTheSameName->get("name"),
+                        $otherCollectionWithTheSameName->get("id"),
+                        $publisher->get("name"),
+                        $otherCollectionWithTheSameName->get("url"),
+                    )
+                );
             }
 
             // Check that there is not another publisher with that noosfere_id

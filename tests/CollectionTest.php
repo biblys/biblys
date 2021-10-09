@@ -114,17 +114,31 @@ class CollectionTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test that two collection cannot have the same name
+     * @throws Exception
      */
     public function testDuplicateNameCheck()
     {
-        $this->expectException("Exception");
-        $this->expectExceptionMessage("Il existe déjà une collection avec le nom Ma collection de timbres chez cet éditeur.");
-
+        // given
         $cm = new CollectionManager();
+        $publisher = Factory::createPublisher();
+        $collection = $cm->create([
+            'publisher_id' => $publisher->get('id'),
+            'collection_name' => 'Une collection en double'
+        ]);
 
+        // then
+        $this->expectException("\Biblys\Exception\EntityAlreadyExistsException");
+        $this->expectExceptionMessage(
+            sprintf(
+                "Il existe déjà une collection avec le nom « Une collection en double » (n° %s) chez l'éditeur PARONYMIE (slug: paronymie-une-collection-en-double).",
+                $collection->get("id"),
+            )
+        );
+
+        // when
         $cm->create([
-            'publisher_id' => CollectionTest::$publisher->get('id'),
-            'collection_name' => 'Ma collection de timbres'
+            'publisher_id' => $publisher->get('id'),
+            'collection_name' => 'Une collection en double'
         ]);
     }
 

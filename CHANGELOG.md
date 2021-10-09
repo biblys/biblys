@@ -9,6 +9,8 @@ Corrections
   contributeur supprimé était peu claire. Maintenant, c'est mieux.
 - La page Rayons de l'administration ne s'affichait plus du tout. C'est 
   corrigé.
+- L'erreur affichée lorsqu'une collection était créé avec un nom déjà utilisé
+  était sybilline. Elle est désormais plus bavarde.
 
 ### 2.55.0 (1er octobre 2021)
 
