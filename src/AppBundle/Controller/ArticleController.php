@@ -572,9 +572,10 @@ class ArticleController extends Controller
     {
         $am = new \ArticleManager();
 
-        $publisherStock = (int) $request->request->get("article_publisher_stock");
-        if (!is_int($publisherStock)) {
-            throw new BadRequestHttpException("article_publisher_stock $publisherStock is not an integer.");
+        $requestBody = $request->getContent();
+        $publisherStock = (int) $requestBody;
+        if (!is_int($publisherStock) || $requestBody === "NaN") {
+            throw new BadRequestHttpException("article_publisher_stock $requestBody is not an integer.");
         }
 
         $article = $am->getById($articleId);
