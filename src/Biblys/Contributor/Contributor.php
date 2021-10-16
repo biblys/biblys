@@ -72,7 +72,7 @@ class Contributor
                     "biblys",
                     "2.55.0",
                     sprintf(
-                        "Contributor.get(\"%s\") is deprecated. Use Contributor.%s instead.",
+                        "Contributor.get(\"%s\") is deprecated. Use Contributor.%s() instead.",
                         $property,
                         $methodName,
                     )
