@@ -43,7 +43,7 @@ foreach ($events as $e)
 
     $table .= '<tr>'
                 . '<td class="right"><img src="/common/img/square_'.($e->get('event_status') ? 'green' : 'red').'.png"></td>'
-                . '<td><a href="/evenement/'.$e->get('url').'">'.$e->get('title').'</a></td>'
+                . '<td><a href="/evenements/'.$e->get('url').'">'.$e->get('title').'</a></td>'
                 . '<td>'.$author.'</td>'
                 . '<td class="nowrap">'._date($e->get('start'), 'd/m/Y H:i').'</td>'
                 . '<td class="nowrap">'

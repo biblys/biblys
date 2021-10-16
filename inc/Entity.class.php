@@ -601,7 +601,7 @@ class EntityManager
 
             // Create redirection if needed
             if ($create_redirection && $this->prefix == 'event') {
-                $this->db->exec("REPLACE INTO `redirections`(`redirection_old`, `redirection_new`, `redirection_date`) VALUES('/evenement/" . $o->get('url') . "', '/evenement/" . $entity->get('url') . "', NOW())");
+                $this->db->exec("REPLACE INTO `redirections`(`redirection_old`, `redirection_new`, `redirection_date`) VALUES('/evenements/" . $o->get('url') . "', '/evenements/" . $entity->get('url') . "', NOW())");
             }
         }
 
