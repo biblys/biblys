@@ -210,4 +210,32 @@ class ContributorTest extends TestCase
             "should return the correct property"
         );
     }
+
+    /**
+     * @throws UnknownJobException
+     * @throws Exception
+     */
+    public function testLegacyGetJobNameWithArgument()
+    {
+        // given
+        $entityPeople = Factory::createPeople([
+            "people_first_name" => "Margotte",
+            "people_last_name" => "Saint-James",
+        ]);
+        $contributor = new Contributor(
+            PeopleQuery::create()->findPk($entityPeople->get("id")),
+            Job::getById(1),
+            1
+        );
+
+        // when
+        $firstName = $contributor->get("job_name");
+
+        // then
+        $this->assertEquals(
+            "Autrice",
+            $firstName,
+            "should return the correct property"
+        );
+    }
 }

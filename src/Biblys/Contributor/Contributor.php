@@ -48,8 +48,13 @@ class Contributor
 
     public function __call($name, $arguments)
     {
+        $property = null;
+        if (isset($arguments[0])) {
+            $property = $arguments[0];
+        }
+
         // contributor.job_name
-        if ($name === "job_name") {
+        if ($name === "job_name" || $name === "get" && $property === "job_name") {
             trigger_deprecation(
                 "biblys",
                 "2.55.0",
@@ -65,7 +70,6 @@ class Contributor
 
         // contributor.get("first_name")
         if ($name === "get") {
-            $property = $arguments[0];
             $methodName = self::_getCamelCaseMethodName($property);
             if (method_exists($this->_people, $methodName)) {
                 trigger_deprecation(
