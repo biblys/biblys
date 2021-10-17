@@ -1,12 +1,14 @@
 
 # Historique des modifications
 
-### 2.55.2 (DEV)
+### 2.55.2 (17 octobre 2021)
 
 Corrections
 
 - Un bug empêchait les utilisateurs avec les droits de gestion pour un éditeur
   de gérer les contributions associé à cet éditeur. C'est corrigé.
+- Les liens vers les pages évènements déclenchaient une erreur 404. Ce n'est
+  plus le cas.s
 
 ### 2.55.1 (9 octobre 2021)
 
