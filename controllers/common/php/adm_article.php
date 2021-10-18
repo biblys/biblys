@@ -209,9 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Redirection
         if (isset($redirect_to_stock)) {
-            redirect('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
+            return new RedirectResponse('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
         } elseif (isset($redirect_to_new)) {
-            redirect('/pages/adm_article');
+            return new RedirectResponse('/pages/adm_article');
         } else {
             $articleUrl = $urlgenerator->generate('article_show', [
                 'slug' => $article->get('url'),
@@ -350,7 +350,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     );
 
     $import = $request->query->get('import', null);
-    redirect('/pages/'.$_PAGE.'?import='.$import);
+    return new RedirectResponse('/pages/'.$_PAGE.'?import='.$import);
 }
 
 // Types
