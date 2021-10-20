@@ -90,6 +90,44 @@ class UserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testHasPublisherRight()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser($publisher);
+
+        // when
+        $hasPublisherRight = $user->hasPublisherRight();
+
+        // then
+        $this->assertTrue(
+            $hasPublisherRight,
+            "should return true if user has right for any publisher"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRightForNonPublisherUser()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createUser();
+
+        // when
+        $hasPublisherRight = $user->hasPublisherRight();
+
+        // then
+        $this->assertFalse(
+            $hasPublisherRight,
+            "should return false if user has no publisher right"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testHasRightForPublisherWithRightForAnotherPublisher()
     {
         // given

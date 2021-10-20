@@ -96,4 +96,13 @@ class CurrentUser
 
         return false;
     }
+
+    public function hasPublisherRight(): bool
+    {
+        if ($this->user) {
+            return $this->user->hasPublisherRight();
+        }
+
+        return false;
+    }
 }

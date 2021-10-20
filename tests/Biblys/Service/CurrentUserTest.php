@@ -15,7 +15,6 @@ require_once __DIR__."/../../setUp.php";
 
 class CurrentUserTest extends TestCase
 {
-
     /**
      * @throws AuthException
      * @throws PropelException
@@ -267,6 +266,46 @@ class CurrentUserTest extends TestCase
         $this->assertFalse(
             $hasRightForPublisher,
             "it returns false for user without publisher rights"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRight()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = ModelFactory::createPublisherUser($publisher);
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightforPublisher = $currentUser->hasPublisherRight();
+
+        // then
+        $this->assertTrue(
+            $hasRightforPublisher,
+            "it returns true for user with rights for at least one publisher"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasPublisherRightWithNonPublisher()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $user = Factory::createUser();
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $hasRightForPublisher = $currentUser->hasPublisherRight();
+
+        // then
+        $this->assertFalse(
+            $hasRightForPublisher,
+            "it returns false for user with no publisher rights"
         );
     }
 }

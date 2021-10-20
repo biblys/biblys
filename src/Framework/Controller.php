@@ -357,9 +357,10 @@ class Controller
      */
     protected static function authUser(Request $request): CurrentUser
     {
-        // TODO: distinguish between unauthentified (401) and unautorized (403)
         $currentUser = CurrentUser::buildFromRequest($request);
+
         if (!$currentUser->isAuthentified()) {
+            // TODO: throw unauthentified exception (401)
             throw new AuthException("Identification requise.");
         }
 
@@ -374,10 +375,11 @@ class Controller
      */
     protected static function authAdmin(Request $request): CurrentUser
     {
-        // TODO: distinguish between unauthentified (401) and unauthorized (403)
         $currentUser = self::authUser($request);
         $currentSite = CurrentSite::buildFromConfig(new Config());
+
         if (!$currentUser->isAdminForSite($currentSite->getSite())) {
+            // TODO: throw unauthorized exception (403)
             throw new AuthException("Accès réservé aux administrateurs.");
         }
 
@@ -390,20 +392,29 @@ class Controller
      * @throws AuthException
      * @throws PropelException
      */
-    protected static function authPublisher(Request $request, Publisher $publisher): CurrentUser
+    protected static function authPublisher(Request $request, ?Publisher $publisher): CurrentUser
     {
-        // TODO: distinguish between unauthentified (401) and unauthorized (403)
         $currentUser = self::authUser($request);
-
-        if ($currentUser->hasRightForPublisher($publisher)) {
-            return $currentUser;
-        }
 
         $currentSite = CurrentSite::buildFromConfig(new Config());
         if ($currentUser->isAdminForSite($currentSite->getSite())) {
             return $currentUser;
         }
 
+        if ($publisher === null) {
+            if ($currentUser->hasPublisherRight()) {
+                return $currentUser;
+            }
+
+            // TODO: throw unauthorized exception (403)
+            throw new AuthException("Vous n'avez pas l'autorisation de modifier un éditeur.");
+        }
+
+        if ($currentUser->hasRightForPublisher($publisher)) {
+            return $currentUser;
+        }
+
+        // TODO: throw unauthorized exception (403)
         throw new AuthException(
             sprintf("Vous n'avez pas l'autorisation de modifier l'éditeur %s", $publisher->getName())
         );

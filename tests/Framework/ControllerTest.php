@@ -176,4 +176,41 @@ class ControllerTest extends TestCase
         // when
         Helpers::callPrivateMethod($controller, "authPublisher", [$request, $publisher]);
     }
+
+    /**
+     * @throws ReflectionException
+     * @throws PropelException
+     */
+    public function testAuthPublisherWhenPublisherIsNull()
+    {
+        // then
+        $this->expectNotToPerformAssertions();
+
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $controller = new Controller();
+        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
+
+        // when
+        Helpers::callPrivateMethod($controller, "authPublisher", [$request, null]);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws PropelException
+     */
+    public function testAuthPublisherWhenPublisherIsNullForUserWithNoPublisherRight()
+    {
+        // then
+        $this->expectException("Framework\Exception\AuthException");
+        $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur");
+
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $controller = new Controller();
+        $request = RequestFactory::createAuthRequest();
+
+        // when
+        Helpers::callPrivateMethod($controller, "authPublisher", [$request, null]);
+    }
 }
