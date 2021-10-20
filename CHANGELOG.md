@@ -1,6 +1,16 @@
 
 # Historique des modifications
 
+### 2.55.3 (DEV)
+
+Corrections
+
+- L'ajout d'un contributeur à un article pouvait parfois échouer sans message 
+  d'erreur. Ça n'arrivera plus.
+- L'ajout d'un rayon à un article pouvait parfois provoquer l'apparition du
+  message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
+  C'est corrigé.
+
 ### 2.55.2 (17 octobre 2021)
 
 Corrections
@@ -8,7 +18,7 @@ Corrections
 - Un bug empêchait les utilisateurs avec les droits de gestion pour un éditeur
   de gérer les contributions associé à cet éditeur. C'est corrigé.
 - Les liens vers les pages évènements déclenchaient une erreur 404. Ce n'est
-  plus le cas.s
+  plus le cas.
 
 ### 2.55.1 (9 octobre 2021)
 
