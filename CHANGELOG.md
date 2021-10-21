@@ -10,6 +10,8 @@ Corrections
 - L'ajout d'un rayon à un article pouvait parfois provoquer l'apparition du
   message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
   C'est corrigé.
+- Sur Safari, le rôle choisi pour un contributeur ne s'affichait pas
+  correctement lors de l'édition d'un article. C'est maintenant le cas.
 
 ### 2.55.2 (17 octobre 2021)
 
