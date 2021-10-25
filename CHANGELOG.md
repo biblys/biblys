@@ -1,6 +1,13 @@
 
 # Historique des modifications
 
+### 2.55.4 (DEV)
+
+Corrections
+
+- La création d'un contributeur déjà existant échouait sans afficher d'erreur.
+  C'est corrigé.
+
 ### 2.55.3 (22 octobre 2021)
 
 Corrections

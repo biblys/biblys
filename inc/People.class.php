@@ -1,6 +1,8 @@
 <?php
 
-    class People extends Entity
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+
+class People extends Entity
     {
         protected $prefix = 'people';
 
@@ -145,9 +147,13 @@
                 throw new Exception('Le contributeur doit avoir une url.');
             }
 
-            $other = $this->get(['people_url' => $people->get('url'), 'people_id' => '!= '.$people->get('id')]);
-            if ($other) {
-                throw new Exception('Il existe déjà un contributeur avec le nom '.$people->get('name').'.');
+            $otherPeopleWithTheSameName = $this->get([
+                'people_url' => $people->get('url'),
+                'people_id' => '!= '.$people->get('id')
+            ]);
+            if ($otherPeopleWithTheSameName) {
+                $peopleName = $people->getName();
+                throw new ConflictHttpException("Il existe déjà un contributeur avec le nom $peopleName.");
             }
 
             return true;

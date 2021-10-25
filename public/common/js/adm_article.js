@@ -383,7 +383,6 @@ $(document).ready(function () {
       },
       success: function (data) {
         $('#submitPeopleForm').removeClass('loading');
-        console.log(data);
         if (data.error) {
           _alert(data.error);
         } else {
@@ -395,8 +394,7 @@ $(document).ready(function () {
         }
       },
       error: function(jqXHR) {
-        var error = jqXHR.responseJSON.error;
-        window._alert(error);
+        window._alert(`Erreur: ${jqXHR.responseJSON.error}`);
       },
     });
   }).removeClass('e');
