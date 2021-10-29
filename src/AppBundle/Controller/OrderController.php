@@ -4,9 +4,12 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Log;
 use Framework\Controller;
+use Payplug\Exception\PayplugException;
+use Payplug\Exception\UnknownAPIResourceException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class OrderController extends Controller
@@ -241,9 +244,12 @@ class OrderController extends Controller
             Log::payplug("INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
 
             return new Response('');
-        } catch (\Payplug\Exception\PayplugException $exception) {
-            Log::payplug("ERROR", 'Exception: ' . $exception->getMessage());
-            throw new \Exception('Exception: '.$exception->getMessage());
+        } catch (UnknownAPIResourceException $exception) {
+            Log::payplug("ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        } catch (PayplugException $exception) {
+            Log::payplug("ERROR", 'PayplugException: ' . $exception->getMessage());
+            throw $exception;
         }
     }
 
