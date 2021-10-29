@@ -7,6 +7,8 @@ Corrections
 
 - La création d'un contributeur déjà existant échouait sans afficher d'erreur.
   C'est corrigé.
+- La raison pour laquelle une page 404 était affichée n'était plus visible par
+  les administrateurs. C'est maintenant le cas.
 
 ### 2.55.3 (22 octobre 2021)
 
