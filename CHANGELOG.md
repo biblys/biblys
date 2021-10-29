@@ -9,6 +9,8 @@ Corrections
   C'est corrigé.
 - La raison pour laquelle une page 404 était affichée n'était plus visible par
   les administrateurs. C'est maintenant le cas.
+- L'import noosfere pouvait échouer lorsque les contributeurs étaient associés
+  à certains rôles inconnus de Biblys. Maintenant, ça marche.
 
 ### 2.55.3 (22 octobre 2021)
 
