@@ -1,5 +1,11 @@
-
 # Historique des modifications
+
+## 2.56.0 (DEV)
+
+Améliorations
+
+- Des liens vers les pages Facebook et comptes Twitter apparaissaient désormais
+  sur les pages contributeurs lorsque leurs adresses sont précisées.
 
 ### 2.55.3 (22 octobre 2021)
 
