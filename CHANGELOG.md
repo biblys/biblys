@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.56.0 (DEV)
+## 2.56.0 (5 novembre 2021)
 
 Améliorations
 
