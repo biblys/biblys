@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.56.1 (DEV)
+
+Corrections
+
+- L'accès en tant qu'éditeur à la page de gestion des billets ne fonctionnait
+  plus. C'est rétabli.
+
 ## 2.56.0 (5 novembre 2021)
 
 Améliorations

@@ -1,5 +1,3 @@
 <?php
 
-	include("adm_posts.php");
-
-?>
+return require_once "adm_posts.php";
