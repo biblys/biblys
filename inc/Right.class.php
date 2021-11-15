@@ -44,7 +44,7 @@ class RightManager extends EntityManager
     
     public function create(array $defaults = array())
     {
-        $defaults = array('right_uid' => md5(uniqid('', true)));
+        $defaults['right_uid'] = md5(uniqid('', true));
 
         return parent::create($defaults);
     }

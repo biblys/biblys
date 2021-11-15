@@ -181,9 +181,8 @@ class Visitor extends User
 
     /**
      * Allow the visitor to choose from his different rights
-     * @param type $uid
      */
-    public function setCurrentRight($right)
+    public function setCurrentRight(Right $right): bool
     {
         $rm = new RightManager();
 
@@ -197,7 +196,7 @@ class Visitor extends User
         }
 
         // Set current right
-        if ($right->get('user_id') == $this->get('id')) {
+        if ($right->get('user_id') === $this->get('id')) {
             $right->set('right_current', 1);
             $rm->update($right);
             return true;
@@ -206,7 +205,7 @@ class Visitor extends User
         return false;
     }
 
-    public function getCurrentRight()
+    public function getCurrentRight(): Right
     {
         global $_SITE;
 
@@ -220,22 +219,18 @@ class Visitor extends User
             }
         }
 
-        // If no right & user is admin, set admin right
-        if ($right = $rm->get(array('user_id' => $this->get('id'), 'site_id' => $_SITE['site_id']))) {
-            if ($this->setCurrentRight($right)) {
-                return $right;
-            }
+        // If no right & user is admin, return admin right
+        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => $_SITE['site_id']])) {
+            return $right;
         }
 
         // Else if other right available, set that one
-        if ($right = $rm->get(array('user_id' => $this->get('id')))) {
-            if ($this->setCurrentRight($right)) {
-                return $right;
-            }
+        if ($right = $rm->get(['user_id' => $this->get('id')])) {
+            return $right;
         }
 
         // If no right at all, return empty right
-        return new Right(array());
+        return new Right([]);
     }
 
     /**
