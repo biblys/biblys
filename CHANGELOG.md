@@ -6,6 +6,8 @@ Corrections
 
 - L'accès en tant qu'éditeur à la page de gestion des billets ne fonctionnait
   plus. C'est rétabli.
+- Il était possible d'ajouter au panier un livre en cours de réimpression. Ce
+  n'est plus le cas.
 
 ## 2.56.0 (5 novembre 2021)
 

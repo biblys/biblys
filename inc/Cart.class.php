@@ -489,6 +489,13 @@ class CartManager extends EntityManager
                 );
             }
 
+            if ($article->isToBeReprinted()) {
+                $title = $article->get("title");
+                throw new CartException(
+                    "L'article $title n'a pas pu être ajouté au panier car il est en cours de réimpression."
+                );
+            }
+
             // Create a new copy
             $this->db->beginTransaction();
             $s = $sm->create(array('site_id' => $this->site['site_id']));
