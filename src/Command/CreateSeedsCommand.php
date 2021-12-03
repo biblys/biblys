@@ -5,6 +5,7 @@ namespace Command;
 use Model\Country;
 use Model\Publisher;
 use Model\Right;
+use Model\ShippingFee;
 use Model\Site;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
@@ -33,6 +34,7 @@ class CreateSeedsCommand extends Command
         $site->setTitle("Librairie Ys");
         $site->setDomain("www.librys.fr");
         $site->setContact("contact@librys.fr");
+        $site->save();
         $output->writeln(["Inserted site: Librairie Ys"]);
 
         // Admin
@@ -74,6 +76,16 @@ class CreateSeedsCommand extends Command
         $country->setName("France");
         $country->save();
         $output->writeln(["Inserted country: France"]);
+
+        // Site
+        $shippingFee = new ShippingFee();
+        $shippingFee->setSiteId($site->getId());
+        $shippingFee->setMode("Offerts");
+        $shippingFee->setType("normal");
+        $shippingFee->setZone("ALL");
+        $shippingFee->setFee(1);
+        $shippingFee->save();
+        $output->writeln(["Inserted shipping fee: Offerts"]);
 
         $output->writeln(["Seeds generated!"]);
         return 0;
