@@ -321,7 +321,7 @@ class CartManager extends EntityManager
     /**
      * Obtenir le contenu d'un panier
      */
-    public function getStock(Cart $cart, $stock_id = 'all')
+    public function getStock(Cart $cart, $stock_id = 'all'): array
     {
         $sm = new StockManager();
         $stock = $sm->getAll(array('cart_id' => $cart->get('id')));

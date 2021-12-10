@@ -7,6 +7,7 @@ use ArticleManager;
 use Biblys\Test\EntityFactory;
 use CartManager;
 use EntityManager;
+use Exception;
 use Model\ShippingFeeQuery;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,9 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class OrderDeliveryTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testValidatingAnOrder()
     {
         global $_SQL, $_V;
