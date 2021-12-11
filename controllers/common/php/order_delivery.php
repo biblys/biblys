@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Axys\Client;
+use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Egulias\EmailValidator\EmailValidator;
@@ -10,8 +11,6 @@ use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-class OrderDetailsValidationException extends Exception {}
 
 $config = new Config();
 $axys = new Client($config->get("axys"));
