@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.56.2 (19 décembre 2021)
+
+Corrections
+
+- Une commande pouvait être enregistrée avec des frais de port à 0 € si le 
+  client double-cliquait sur le bouton de validation. C'est corrigé.
+
+
 ### 2.56.1 (19 novembre 2021)
 
 Corrections
