@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Model\Base\RayonQuery as BaseRayonQuery;
+use Model\Base\ArticleCategoryQuery as BaseArticleCategoryQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'rayons' table.
@@ -13,7 +13,7 @@ use Model\Base\RayonQuery as BaseRayonQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class RayonQuery extends BaseRayonQuery
+class ArticleCategoryQuery extends BaseArticleCategoryQuery
 {
 
 }

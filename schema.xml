@@ -1031,7 +1031,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="rayons" idMethod="native" phpName="Rayon">
+  <table name="rayons" idMethod="native" phpName="ArticleCategory">
     <column name="rayon_id" phpName="Id" type="BIGINT" size="4" sqlType="bigint(4) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="TINYINT" size="3" sqlType="tinyint(3) unsigned"/>
     <column name="rayon_name" phpName="Name" type="LONGVARCHAR"/>

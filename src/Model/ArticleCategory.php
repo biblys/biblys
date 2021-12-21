@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Model\Base\Rayon as BaseRayon;
+use Model\Base\ArticleCategory as BaseArticleCategory;
 
 /**
  * Skeleton subclass for representing a row from the 'rayons' table.
@@ -13,7 +13,7 @@ use Model\Base\Rayon as BaseRayon;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class Rayon extends BaseRayon
+class ArticleCategory extends BaseArticleCategory
 {
 
 }
