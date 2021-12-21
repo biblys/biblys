@@ -1047,6 +1047,10 @@
       <parameter name="create_column" value="rayon_created" />
       <parameter name="update_column" value="rayon_updated" />
     </behavior>
+    <behavior name="sluggable">
+      <parameter name="slug_column" value="rayon_url" />
+      <parameter name="slug_pattern" value="{Name}" />
+    </behavior>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>

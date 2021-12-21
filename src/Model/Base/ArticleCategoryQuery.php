@@ -800,4 +800,31 @@ abstract class ArticleCategoryQuery extends ModelCriteria
         return $this->addAscendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_CREATED);
     }
 
+    // sluggable behavior
+
+    /**
+     * Filter the query on the slug column
+     *
+     * @param     string $slug The value to use as filter.
+     *
+     * @return    $this|ChildArticleCategoryQuery The current query, for fluid interface
+     */
+    public function filterBySlug($slug)
+    {
+        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_URL, $slug, Criteria::EQUAL);
+    }
+
+    /**
+     * Find one object based on its slug
+     *
+     * @param     string $slug The value to use as filter.
+     * @param     ConnectionInterface $con The optional connection object
+     *
+     * @return    ChildArticleCategory the result, formatted by the current formatter
+     */
+    public function findOneBySlug($slug, $con = null)
+    {
+        return $this->filterBySlug($slug)->findOne($con);
+    }
+
 } // ArticleCategoryQuery

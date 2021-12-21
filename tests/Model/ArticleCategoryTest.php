@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use Biblys\Test\Factory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -20,13 +19,33 @@ class ArticleCategoryTest extends TestCase
         $user->setName("Science Fiction");
 
         // when
-        $saved = $user->save();
+        $user->save();
 
         // then
         $this->assertEquals(
             1,
             $user->getSiteId(),
             "it should have added current site id"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAddingSlugOnSave()
+    {
+        // given
+        $user = new ArticleCategory();
+        $user->setName("Fruits & légumes");
+
+        // when
+        $user->save();
+
+        // then
+        $this->assertEquals(
+            "fruits-legumes",
+            $user->getSlug(),
+            "it should have added slug"
         );
     }
 }

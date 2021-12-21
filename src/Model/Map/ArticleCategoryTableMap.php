@@ -274,7 +274,7 @@ class ArticleCategoryTableMap extends TableMap
         $this->addPrimaryKey('rayon_id', 'Id', 'BIGINT', true, 4, null);
         $this->addColumn('site_id', 'SiteId', 'TINYINT', false, 3, null);
         $this->addColumn('rayon_name', 'Name', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('rayon_url', 'Url', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('rayon_url', 'Url', 'VARCHAR', false, 256, null);
         $this->addColumn('rayon_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('rayon_order', 'Order', 'TINYINT', false, 2, null);
         $this->addColumn('rayon_sort_by', 'SortBy', 'VARCHAR', false, 64, 'id');
@@ -301,6 +301,7 @@ class ArticleCategoryTableMap extends TableMap
     {
         return array(
             'timestampable' => ['create_column' => 'rayon_created', 'update_column' => 'rayon_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'sluggable' => ['slug_column' => 'rayon_url', 'slug_pattern' => '{Name}', 'replace_pattern' => '/\\W+/', 'replacement' => '-', 'separator' => '-', 'permanent' => 'false', 'scope_column' => '', 'unique_constraint' => 'true'],
         );
     } // getBehaviors()
 
