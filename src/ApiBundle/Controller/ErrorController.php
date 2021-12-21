@@ -12,6 +12,7 @@ class ErrorController extends Controller
     {
         return new JsonResponse([
             "error" => [
+                "exception" => get_class($exception),
                 "message" => $exception->getMessage(),
                 "file" => $exception->getFile(),
                 "line" => $exception->getLine(),

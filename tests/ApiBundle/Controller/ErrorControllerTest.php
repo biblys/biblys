@@ -54,5 +54,9 @@ class ErrorControllerTest extends TestCase
             $json->error->message,
             "it should display error message"
         );
+        $this->assertEquals(
+            "Exception",
+            $json->error->exception,
+        );
     }
 }
