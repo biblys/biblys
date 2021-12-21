@@ -102,6 +102,10 @@
       <parameter name="create_column" value="article_created" />
       <parameter name="update_column" value="article_updated" />
     </behavior>
+    <behavior name="sluggable">
+      <parameter name="slug_column" value="article_url" />
+      <parameter name="slug_pattern" value="{Authors}/{Title}" />
+    </behavior>
     <index name="publisher_id">
       <index-column name="publisher_id"/>
     </index>

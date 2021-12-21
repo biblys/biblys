@@ -3878,6 +3878,13 @@ abstract class Article implements ActiveRecordInterface
         return $con->transaction(function () use ($con) {
             $ret = $this->preSave($con);
             $isInsert = $this->isNew();
+            // sluggable behavior
+
+            if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_URL) && $this->getUrl()) {
+                $this->setUrl($this->makeSlugUnique($this->getUrl()));
+            } else {
+                $this->setUrl($this->createSlug());
+            }
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
@@ -6346,6 +6353,170 @@ abstract class Article implements ActiveRecordInterface
         $this->modifiedColumns[ArticleTableMap::COL_ARTICLE_UPDATED] = true;
 
         return $this;
+    }
+
+    // sluggable behavior
+
+    /**
+     * Wrap the setter for slug value
+     *
+     * @param   string
+     * @return  $this|Article
+     */
+    public function setSlug($v)
+    {
+        return $this->setUrl($v);
+    }
+
+    /**
+     * Wrap the getter for slug value
+     *
+     * @return  string
+     */
+    public function getSlug()
+    {
+        return $this->getUrl();
+    }
+
+    /**
+     * Create a unique slug based on the object
+     *
+     * @return string The object slug
+     */
+    protected function createSlug()
+    {
+        $slug = $this->createRawSlug();
+        $slug = $this->limitSlugSize($slug);
+        $slug = $this->makeSlugUnique($slug);
+
+        return $slug;
+    }
+
+    /**
+     * Create the slug from the appropriate columns
+     *
+     * @return string
+     */
+    protected function createRawSlug()
+    {
+        return '' . $this->cleanupSlugPart($this->getAuthors()) . '/' . $this->cleanupSlugPart($this->getTitle()) . '';
+    }
+
+    /**
+     * Cleanup a string to make a slug of it
+     * Removes special characters, replaces blanks with a separator, and trim it
+     *
+     * @param     string $slug        the text to slugify
+     * @param     string $replacement the separator used by slug
+     * @return    string               the slugified text
+     */
+    protected static function cleanupSlugPart($slug, $replacement = '-')
+    {
+        // set locale explicitly
+        $localeOrigin = setlocale(LC_CTYPE, 0);
+        setlocale(LC_CTYPE, 'C.UTF-8');
+
+        // transliterate
+        if (function_exists('iconv')) {
+            $slug = iconv('utf-8', 'us-ascii//TRANSLIT', $slug);
+        }
+
+        // lowercase
+        if (function_exists('mb_strtolower')) {
+            $slug = mb_strtolower($slug);
+        } else {
+            $slug = strtolower($slug);
+        }
+
+        // remove accents resulting from OSX's iconv
+        $slug = str_replace(array('\'', '`', '^'), '', $slug);
+
+        // replace non letter or digits with separator
+        $slug = preg_replace('/\W+/', $replacement, $slug);
+
+        // trim
+        $slug = trim($slug, $replacement);
+
+        setlocale(LC_CTYPE, $localeOrigin);
+
+        if (empty($slug)) {
+            return 'n-a';
+        }
+
+        return $slug;
+    }
+
+
+    /**
+     * Make sure the slug is short enough to accommodate the column size
+     *
+     * @param    string $slug            the slug to check
+     *
+     * @return string                        the truncated slug
+     */
+    protected static function limitSlugSize($slug, $incrementReservedSpace = 3)
+    {
+        // check length, as suffix could put it over maximum
+        if (strlen($slug) > (256 - $incrementReservedSpace)) {
+            $slug = substr($slug, 0, 256 - $incrementReservedSpace);
+        }
+
+        return $slug;
+    }
+
+
+    /**
+     * Get the slug, ensuring its uniqueness
+     *
+     * @param    string $slug            the slug to check
+     * @param    string $separator       the separator used by slug
+     * @param    int    $alreadyExists   false for the first try, true for the second, and take the high count + 1
+     * @return   string                   the unique slug
+     */
+    protected function makeSlugUnique($slug, $separator = '-', $alreadyExists = false)
+    {
+        if (!$alreadyExists) {
+            $slug2 = $slug;
+        } else {
+            $slug2 = $slug . $separator;
+        }
+
+        $adapter = \Propel\Runtime\Propel::getServiceContainer()->getAdapter('default');
+        $col = 'q.Url';
+        $compare = $alreadyExists ? $adapter->compareRegex($col, '?') : sprintf('%s = ?', $col);
+
+        $query = \Model\ArticleQuery::create('q')
+            ->where($compare, $alreadyExists ? '^' . $slug2 . '[0-9]+$' : $slug2)
+            ->prune($this)
+        ;
+
+        if (!$alreadyExists) {
+            $count = $query->count();
+            if ($count > 0) {
+                return $this->makeSlugUnique($slug, $separator, true);
+            }
+
+            return $slug2;
+        }
+
+        $adapter = \Propel\Runtime\Propel::getServiceContainer()->getAdapter('default');
+        // Already exists
+        $object = $query
+            ->addDescendingOrderByColumn($adapter->strLength('article_url'))
+            ->addDescendingOrderByColumn('article_url')
+        ->findOne();
+
+        // First duplicate slug
+        if (null == $object) {
+            return $slug2 . '1';
+        }
+
+        $slugNum = substr($object->getUrl(), strlen($slug) + 1);
+        if (0 == $slugNum[0]) {
+            $slugNum[0] = 1;
+        }
+
+        return $slug2 . ($slugNum + 1);
     }
 
     /**

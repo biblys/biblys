@@ -1246,6 +1246,7 @@ class ArticleTableMap extends TableMap
     {
         return array(
             'timestampable' => ['create_column' => 'article_created', 'update_column' => 'article_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'sluggable' => ['slug_column' => 'article_url', 'slug_pattern' => '{Authors}/{Title}', 'replace_pattern' => '/\\W+/', 'replacement' => '-', 'separator' => '-', 'permanent' => 'false', 'scope_column' => '', 'unique_constraint' => 'true'],
         );
     } // getBehaviors()
 
