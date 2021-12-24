@@ -1,5 +1,10 @@
 # Historique des modifications
 
+### 2.56.3 (24 décembre 2021)
+
+Correction : l'information selon laquelle une commande avait été validée avec
+le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabli.
+
 ### 2.56.2 (19 décembre 2021)
 
 Corrections
