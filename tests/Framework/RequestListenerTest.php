@@ -25,7 +25,7 @@ class RequestListenerTest extends TestCase
         ];
         $request = Request::createFromGlobals();
         $container = include __DIR__."/../../src/container.php";
-        $routes = require __DIR__ . "/../../src/routes.php";
+        $routes = require __DIR__ . "/../../src/AppBundle/routes.php";
         $container->setParameter("routes", $routes);
 
         // when
@@ -55,7 +55,7 @@ class RequestListenerTest extends TestCase
         ];
         $request = Request::createFromGlobals();
         $container = include __DIR__."/../../src/container.php";
-        $routes = require __DIR__ . "/../../src/routes.php";
+        $routes = require __DIR__ . "/../../src/AppBundle/routes.php";
         $container->setParameter("routes", $routes);
 
         // when
