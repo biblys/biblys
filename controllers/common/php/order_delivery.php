@@ -65,6 +65,7 @@ $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId, $_V->ge
 $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $request->query->get('shipping_id'));
 $shippingMode = $shipping ? $shipping->get("mode") : "";
 $shippingFee = $shipping ? $shipping->get("fee") : 0;
+$shippingType = $shipping ? $shipping->get("type") : null;
 
 // Add shipping to order total amount
 $total = $totalPrice;
@@ -145,7 +146,7 @@ if ($request->getMethod() === "POST") {
             ->set('country', $country);
 
         if ($shipping) {
-            $order->set('order_shipping_mode', $shippingMode)
+            $order->set('order_shipping_mode', $shippingType)
                 ->set('order_shipping', $shippingFee);
         }
 
@@ -226,7 +227,7 @@ if ($request->getMethod() === "POST") {
             $mail['subject'] .= ' (mise à jour)';
         }
 
-        if ($shippingMode == "magasin") {
+        if ($shippingType == "magasin") {
             $mail['address_type'] = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
         } else {
             $mail['address_type'] = '<p><strong>Adresse d\'expédition :</strong></p>';

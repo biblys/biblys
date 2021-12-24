@@ -5,6 +5,7 @@ namespace Legacy;
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use CartManager;
 use EntityManager;
 use Exception;
@@ -37,7 +38,7 @@ class OrderDeliveryTest extends TestCase
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
         $shm = new ShippingManager();
-        $shipping = $shm->create([]);
+        $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
         $site = new Site(["site_contact" => "merchant@biblys.fr"]);
         $_POST = ["order_email" => "customer@biblys.fr"];
         $_SITE = $site;
@@ -47,7 +48,7 @@ class OrderDeliveryTest extends TestCase
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->query->set("page", "order_delivery");
         $request->query->set("country_id", 1);
-        $request->query->set("shipping_id", $shipping->get("id"));
+        $request->query->set("shipping_id", $shipping->getId());
         $request->request->set("order_firstname", "Barnabé");
         $request->request->set("order_lastname", "Famagouste");
         $request->request->set("order_address1", "123 rue des Peupliers");
@@ -56,15 +57,6 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "customer@biblys.fr");
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
-
-        $_POST["order_firstname"] = "Barnabé";
-        $_POST["order_lastname"] = "Famagouste";
-        $_POST["order_address1"] = "123 rue des Peupliers";
-        $_POST["order_postalcode"] = "69009";
-        $_POST["order_city"] = "Lyon";
-        $_POST["order_email"] = "customer@biblys.fr";
-        $_POST["country_id"] = 1;
-        $_POST["cgv_checkbox"] = 1;
 
         // when
         $legacyController = new LegacyController();
@@ -83,9 +75,11 @@ class OrderDeliveryTest extends TestCase
             $response->headers->get("Location"),
             "it should redirect to the correct url"
         );
-
-        // cleanup
-        $shm->delete($shipping);
+        $this->assertEquals(
+            "suivi",
+            $order->get("shipping_mode"),
+            "it should set order's shipping mode"
+        );
     }
 
 
