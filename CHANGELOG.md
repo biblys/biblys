@@ -1,11 +1,11 @@
 # Historique des modifications
 
-### 2.57.0 (DEV)
+### 2.57.0 (7 janvier 2021)
 
 Améliorations
 
 - La page "frais de port" de l'administration sont désormais triés par type, 
-  zone et montants pour permettre une lecture plus facile.
+  zone et montant pour permettre une lecture plus facile.
 - Cette mise à jour apporte également un certain nombre de modifications 
   purement techniques visant à améliorer la stabilité et la maintenabilité de 
   Biblys, tout en préparant la refonte prochaine du panier.
@@ -17,11 +17,8 @@ le mode d'expédition "retrait en magasin" était mal enregitrée. C'est rétabl
 
 ### 2.56.2 (19 décembre 2021)
 
-Corrections
-
-- Une commande pouvait être enregistrée avec des frais de port à 0 € si le 
-  client double-cliquait sur le bouton de validation. C'est corrigé.
-
+Correction: Une commande pouvait être enregistrée avec des frais de port à 0 €
+si le client double-cliquait sur le bouton de validation. C'est corrigé.
 
 ### 2.56.1 (19 novembre 2021)
 
