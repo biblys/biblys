@@ -695,6 +695,13 @@ class SiteTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Options', false);
         $this->addRelation('Right', '\\Model\\Right', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -779,6 +779,12 @@
       <parameter name="create_column" value="option_created" />
       <parameter name="update_column" value="option_updated" />
     </behavior>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

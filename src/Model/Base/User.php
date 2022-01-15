@@ -5,12 +5,15 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Option as ChildOption;
+use Model\OptionQuery as ChildOptionQuery;
 use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Session as ChildSession;
 use Model\SessionQuery as ChildSessionQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
+use Model\Map\OptionTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SessionTableMap;
 use Model\Map\UserTableMap;
@@ -333,6 +336,13 @@ abstract class User implements ActiveRecordInterface
     protected $user_updated;
 
     /**
+     * @var        ObjectCollection|ChildOption[] Collection to store aggregation of ChildOption objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildOption> Collection to store aggregation of ChildOption objects.
+     */
+    protected $collOptions;
+    protected $collOptionsPartial;
+
+    /**
      * @var        ObjectCollection|ChildRight[] Collection to store aggregation of ChildRight objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildRight> Collection to store aggregation of ChildRight objects.
      */
@@ -370,6 +380,13 @@ abstract class User implements ActiveRecordInterface
      * @var     ConstraintViolationList
      */
     protected $validationFailures;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildOption[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildOption>
+     */
+    protected $optionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2062,6 +2079,8 @@ abstract class User implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collOptions = null;
+
             $this->collRights = null;
 
             $this->collSessions = null;
@@ -2191,6 +2210,24 @@ abstract class User implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->optionsScheduledForDeletion !== null) {
+                if (!$this->optionsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->optionsScheduledForDeletion as $option) {
+                        // need to save related object because we set the relation to null
+                        $option->save($con);
+                    }
+                    $this->optionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOptions !== null) {
+                foreach ($this->collOptions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->rightsScheduledForDeletion !== null) {
@@ -2749,6 +2786,21 @@ abstract class User implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collOptions) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'options';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'options';
+                        break;
+                    default:
+                        $key = 'Options';
+                }
+
+                $result[$key] = $this->collOptions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collRights) {
 
                 switch ($keyType) {
@@ -3333,6 +3385,12 @@ abstract class User implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getOptions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOption($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRights() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRight($relObj->copy($deepCopy));
@@ -3386,6 +3444,10 @@ abstract class User implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Option' === $relationName) {
+            $this->initOptions();
+            return;
+        }
         if ('Right' === $relationName) {
             $this->initRights();
             return;
@@ -3394,6 +3456,267 @@ abstract class User implements ActiveRecordInterface
             $this->initSessions();
             return;
         }
+    }
+
+    /**
+     * Clears out the collOptions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addOptions()
+     */
+    public function clearOptions()
+    {
+        $this->collOptions = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collOptions collection loaded partially.
+     */
+    public function resetPartialOptions($v = true)
+    {
+        $this->collOptionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collOptions collection.
+     *
+     * By default this just sets the collOptions collection to an empty array (like clearcollOptions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOptions($overrideExisting = true)
+    {
+        if (null !== $this->collOptions && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = OptionTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collOptions = new $collectionClassName;
+        $this->collOptions->setModel('\Model\Option');
+    }
+
+    /**
+     * Gets an array of ChildOption objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildOption[] List of ChildOption objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOption> List of ChildOption objects
+     * @throws PropelException
+     */
+    public function getOptions(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOptionsPartial && !$this->isNew();
+        if (null === $this->collOptions || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collOptions) {
+                    $this->initOptions();
+                } else {
+                    $collectionClassName = OptionTableMap::getTableMap()->getCollectionClassName();
+
+                    $collOptions = new $collectionClassName;
+                    $collOptions->setModel('\Model\Option');
+
+                    return $collOptions;
+                }
+            } else {
+                $collOptions = ChildOptionQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collOptionsPartial && count($collOptions)) {
+                        $this->initOptions(false);
+
+                        foreach ($collOptions as $obj) {
+                            if (false == $this->collOptions->contains($obj)) {
+                                $this->collOptions->append($obj);
+                            }
+                        }
+
+                        $this->collOptionsPartial = true;
+                    }
+
+                    return $collOptions;
+                }
+
+                if ($partial && $this->collOptions) {
+                    foreach ($this->collOptions as $obj) {
+                        if ($obj->isNew()) {
+                            $collOptions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOptions = $collOptions;
+                $this->collOptionsPartial = false;
+            }
+        }
+
+        return $this->collOptions;
+    }
+
+    /**
+     * Sets a collection of ChildOption objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $options A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function setOptions(Collection $options, ConnectionInterface $con = null)
+    {
+        /** @var ChildOption[] $optionsToDelete */
+        $optionsToDelete = $this->getOptions(new Criteria(), $con)->diff($options);
+
+
+        $this->optionsScheduledForDeletion = $optionsToDelete;
+
+        foreach ($optionsToDelete as $optionRemoved) {
+            $optionRemoved->setUser(null);
+        }
+
+        $this->collOptions = null;
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
+
+        $this->collOptions = $options;
+        $this->collOptionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Option objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Option objects.
+     * @throws PropelException
+     */
+    public function countOptions(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOptionsPartial && !$this->isNew();
+        if (null === $this->collOptions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOptions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOptions());
+            }
+
+            $query = ChildOptionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collOptions);
+    }
+
+    /**
+     * Method called to associate a ChildOption object to this object
+     * through the ChildOption foreign key attribute.
+     *
+     * @param  ChildOption $l ChildOption
+     * @return $this|\Model\User The current object (for fluent API support)
+     */
+    public function addOption(ChildOption $l)
+    {
+        if ($this->collOptions === null) {
+            $this->initOptions();
+            $this->collOptionsPartial = true;
+        }
+
+        if (!$this->collOptions->contains($l)) {
+            $this->doAddOption($l);
+
+            if ($this->optionsScheduledForDeletion and $this->optionsScheduledForDeletion->contains($l)) {
+                $this->optionsScheduledForDeletion->remove($this->optionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildOption $option The ChildOption object to add.
+     */
+    protected function doAddOption(ChildOption $option)
+    {
+        $this->collOptions[]= $option;
+        $option->setUser($this);
+    }
+
+    /**
+     * @param  ChildOption $option The ChildOption object to remove.
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function removeOption(ChildOption $option)
+    {
+        if ($this->getOptions()->contains($option)) {
+            $pos = $this->collOptions->search($option);
+            $this->collOptions->remove($pos);
+            if (null === $this->optionsScheduledForDeletion) {
+                $this->optionsScheduledForDeletion = clone $this->collOptions;
+                $this->optionsScheduledForDeletion->clear();
+            }
+            $this->optionsScheduledForDeletion[]= $option;
+            $option->setUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related Options from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildOption[] List of ChildOption objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOption}> List of ChildOption objects
+     */
+    public function getOptionsJoinSite(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildOptionQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getOptions($query, $con);
     }
 
     /**
@@ -3980,6 +4303,11 @@ abstract class User implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collOptions) {
+                foreach ($this->collOptions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRights) {
                 foreach ($this->collRights as $o) {
                     $o->clearAllReferences($deep);
@@ -3992,6 +4320,7 @@ abstract class User implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collOptions = null;
         $this->collRights = null;
         $this->collSessions = null;
     }
@@ -4062,6 +4391,15 @@ abstract class User implements ActiveRecordInterface
                 $failureMap->addAll($retval);
             }
 
+            if (null !== $this->collOptions) {
+                foreach ($this->collOptions as $referrerFK) {
+                    if (method_exists($referrerFK, 'validate')) {
+                        if (!$referrerFK->validate($validator)) {
+                            $failureMap->addAll($referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+            }
             if (null !== $this->collRights) {
                 foreach ($this->collRights as $referrerFK) {
                     if (method_exists($referrerFK, 'validate')) {

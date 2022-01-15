@@ -220,8 +220,8 @@ class OptionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('option_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, null, null);
         $this->addColumn('option_key', 'Key', 'VARCHAR', false, 32, null);
         $this->addColumn('option_value', 'Value', 'VARCHAR', false, 2048, null);
         $this->addColumn('option_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -233,6 +233,20 @@ class OptionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**
