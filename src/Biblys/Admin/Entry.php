@@ -39,8 +39,9 @@ class Entry
         }
 
         if (isset($options['path'])) {
-            global $urlgenerator;
-            $this->setUrl($urlgenerator->generate($options['path']));
+            $container = require(__DIR__."/../../container.php");
+            $urlGenerator = $container->get("url_generator");
+            $this->setUrl($urlGenerator->generate($options['path']));
         }
 
         if (isset($options['class'])) {

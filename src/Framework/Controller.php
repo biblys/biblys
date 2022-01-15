@@ -104,9 +104,9 @@ class Controller
 
         // return relative url for a route
         $functions[] = new \Twig\TwigFunction('path', function ($route, $vars = []) {
-            global $urlgenerator;
-
-            return $urlgenerator->generate($route, $vars);
+            $container = require(__DIR__."/../container.php");
+            $urlGenerator = $container->get("url_generator");
+            return $urlGenerator->generate($route, $vars);
         });
 
         // return absolute url for a route

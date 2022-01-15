@@ -6,4 +6,4 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
 // Get routes from src/routes.yml
 $locator = new FileLocator([__DIR__]);
 $loader = new YamlFileLoader($locator);
-return $loader->load('routes.yml');
+return $loader->load(__DIR__."/routes.yml");
