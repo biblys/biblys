@@ -5,9 +5,13 @@ namespace AppBundle\Controller;
 use Biblys\Admin\Entry;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Biblys\Service\Updater\UpdaterException;
+use DateTime;
 use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
 use InvalidArgumentException;
+use Propel\Runtime\Exception\PropelException;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -198,17 +202,22 @@ class MainController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthException
+     * @throws UpdaterException
+     * @throws PropelException
+     */
     public function adminAction(Request $request, Config $config): Response
     {
-        global $_V, $site;
+        global $site;
 
-        $this->auth('admin');
+        $currentUser = self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
 
         // Display alert if Biblys has been updated since last visit
         $update_alert = false;
-        if ($_V->getOpt('last_version_known') != BIBLYS_VERSION) {
-            $_V->setOpt('last_version_known', BIBLYS_VERSION);
+        if ($currentUser->getOption("last_version_known") != BIBLYS_VERSION) {
+            $currentUser->setOption("last_version_known", BIBLYS_VERSION);
             $update_alert = true;
         }
 
@@ -217,9 +226,23 @@ class MainController extends Controller
             $smtpAlert = true;
         }
 
-        $shortcuts = json_decode($_V->getOpt('shortcuts'));
+        $shortcuts = json_decode($currentUser->getOption("shortcuts"));
         if ($shortcuts === null) {
             $shortcuts = [];
+        }
+
+        $cloudExpired = false;
+        $renewLink = "https://www.biblys.fr/contact/";
+        $cloudConfig = $config->get("cloud");
+        if ($cloudConfig && isset($cloudConfig['expires'])) {
+            $cloudExpirationDate = new DateTime($cloudConfig['expires']);
+            $now = new DateTime();
+            if ($now > $cloudExpirationDate) {
+                $cloudExpired = true;
+            }
+            if (isset($cloudConfig["renew_link"])) {
+                $renewLink = $cloudConfig["renew_link"];
+            }
         }
 
         return $this->render('AppBundle:Main:admin.html.twig', [
@@ -237,6 +260,9 @@ class MainController extends Controller
             'biblys' => Entry::findByCategory('biblys'),
             'custom' => Entry::findByCategory('custom'),
             'site_title' => $site->get('title'),
+            'cloud_expired' => $cloudExpired,
+            'cloud_expiration_date' => $cloudConfig["expires"],
+            'cloud_renew_link' => $renewLink,
         ]);
     }
 
