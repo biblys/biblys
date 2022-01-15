@@ -6,6 +6,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Framework\Exception\AuthException;
+use Model\Option;
 use Model\SiteQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -308,6 +309,51 @@ class CurrentUserTest extends TestCase
         $this->assertFalse(
             $hasRightForPublisher,
             "it returns false for user with no publisher rights"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOption()
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $option = new Option();
+        $option->setUser($user);
+        $option->setKey("days_since_last_login");
+        $option->setValue("31");
+        $option->save();
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $currentUser->getOption("days_since_last_login", "31");
+
+        // then
+        $this->assertEquals(
+            "31",
+            $currentUser->getOption("days_since_last_login"),
+            "it returns the value of the option"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testSetOption()
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $currentUser = new CurrentUser($user);
+
+        // when
+        $currentUser->setOption("days_since_last_login", "64");
+
+        // then
+        $this->assertEquals(
+            "64",
+            $currentUser->getOption("days_since_last_login"),
+            "it sets the value of the option"
         );
     }
 }

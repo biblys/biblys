@@ -6,8 +6,9 @@ namespace Biblys\Service;
 
 use DateTime;
 use Framework\Exception\AuthException;
+use Model\Option;
+use Model\OptionQuery;
 use Model\Publisher;
-use Model\RightQuery;
 use Model\SessionQuery;
 use Model\Site;
 use Model\User;
@@ -88,6 +89,9 @@ class CurrentUser
         return $this->user;
     }
 
+    /**
+     * @throws PropelException
+     */
     public function hasRightForPublisher(Publisher $publisher): bool
     {
         if ($this->user) {
@@ -97,6 +101,9 @@ class CurrentUser
         return false;
     }
 
+    /**
+     * @throws PropelException
+     */
     public function hasPublisherRight(): bool
     {
         if ($this->user) {
@@ -104,5 +111,46 @@ class CurrentUser
         }
 
         return false;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getOption(string $key): ?string
+    {
+        if (!$this->user) {
+            return null;
+        }
+
+        $option = OptionQuery::create()
+            ->filterByUser($this->user)
+            ->filterByKey($key)
+            ->findOne();
+
+        if (!$option) {
+            return null;
+        }
+
+        return $option->getValue();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function setOption(string $key, string $value)
+    {
+        $option = OptionQuery::create()
+            ->filterByUser($this->user)
+            ->filterByKey($key)
+            ->findOne();
+
+        if (!$option) {
+            $option = new Option();
+            $option->setUser($this->user);
+            $option->setKey($key);
+        }
+
+        $option->setValue($value);
+        $option->save();
     }
 }
