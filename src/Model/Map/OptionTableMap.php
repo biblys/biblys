@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'option' table.
+ * This class defines the structure of the 'options' table.
  *
  *
  *
@@ -43,7 +43,7 @@ class OptionTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'option';
+    const TABLE_NAME = 'options';
 
     /**
      * The related Propel class for this table
@@ -73,37 +73,37 @@ class OptionTableMap extends TableMap
     /**
      * the column name for the option_id field
      */
-    const COL_OPTION_ID = 'option.option_id';
+    const COL_OPTION_ID = 'options.option_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'option.site_id';
+    const COL_SITE_ID = 'options.site_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'option.user_id';
+    const COL_USER_ID = 'options.user_id';
 
     /**
      * the column name for the option_key field
      */
-    const COL_OPTION_KEY = 'option.option_key';
+    const COL_OPTION_KEY = 'options.option_key';
 
     /**
      * the column name for the option_value field
      */
-    const COL_OPTION_VALUE = 'option.option_value';
+    const COL_OPTION_VALUE = 'options.option_value';
 
     /**
      * the column name for the option_created field
      */
-    const COL_OPTION_CREATED = 'option.option_created';
+    const COL_OPTION_CREATED = 'options.option_created';
 
     /**
      * the column name for the option_updated field
      */
-    const COL_OPTION_UPDATED = 'option.option_updated';
+    const COL_OPTION_UPDATED = 'options.option_updated';
 
     /**
      * The default string format for model objects of the related table
@@ -151,7 +151,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_OPTION_ID' => 'OPTION_ID',
         'COL_OPTION_ID' => 'OPTION_ID',
         'option_id' => 'OPTION_ID',
-        'option.option_id' => 'OPTION_ID',
+        'options.option_id' => 'OPTION_ID',
         'SiteId' => 'SITE_ID',
         'Option.SiteId' => 'SITE_ID',
         'siteId' => 'SITE_ID',
@@ -159,7 +159,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_SITE_ID' => 'SITE_ID',
         'COL_SITE_ID' => 'SITE_ID',
         'site_id' => 'SITE_ID',
-        'option.site_id' => 'SITE_ID',
+        'options.site_id' => 'SITE_ID',
         'UserId' => 'USER_ID',
         'Option.UserId' => 'USER_ID',
         'userId' => 'USER_ID',
@@ -167,7 +167,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_USER_ID' => 'USER_ID',
         'COL_USER_ID' => 'USER_ID',
         'user_id' => 'USER_ID',
-        'option.user_id' => 'USER_ID',
+        'options.user_id' => 'USER_ID',
         'Key' => 'OPTION_KEY',
         'Option.Key' => 'OPTION_KEY',
         'key' => 'OPTION_KEY',
@@ -175,7 +175,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_OPTION_KEY' => 'OPTION_KEY',
         'COL_OPTION_KEY' => 'OPTION_KEY',
         'option_key' => 'OPTION_KEY',
-        'option.option_key' => 'OPTION_KEY',
+        'options.option_key' => 'OPTION_KEY',
         'Value' => 'OPTION_VALUE',
         'Option.Value' => 'OPTION_VALUE',
         'value' => 'OPTION_VALUE',
@@ -183,7 +183,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_OPTION_VALUE' => 'OPTION_VALUE',
         'COL_OPTION_VALUE' => 'OPTION_VALUE',
         'option_value' => 'OPTION_VALUE',
-        'option.option_value' => 'OPTION_VALUE',
+        'options.option_value' => 'OPTION_VALUE',
         'CreatedAt' => 'OPTION_CREATED',
         'Option.CreatedAt' => 'OPTION_CREATED',
         'createdAt' => 'OPTION_CREATED',
@@ -191,7 +191,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_OPTION_CREATED' => 'OPTION_CREATED',
         'COL_OPTION_CREATED' => 'OPTION_CREATED',
         'option_created' => 'OPTION_CREATED',
-        'option.option_created' => 'OPTION_CREATED',
+        'options.option_created' => 'OPTION_CREATED',
         'UpdatedAt' => 'OPTION_UPDATED',
         'Option.UpdatedAt' => 'OPTION_UPDATED',
         'updatedAt' => 'OPTION_UPDATED',
@@ -199,7 +199,7 @@ class OptionTableMap extends TableMap
         'OptionTableMap::COL_OPTION_UPDATED' => 'OPTION_UPDATED',
         'COL_OPTION_UPDATED' => 'OPTION_UPDATED',
         'option_updated' => 'OPTION_UPDATED',
-        'option.option_updated' => 'OPTION_UPDATED',
+        'options.option_updated' => 'OPTION_UPDATED',
     ];
 
     /**
@@ -212,7 +212,7 @@ class OptionTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('option');
+        $this->setName('options');
         $this->setPhpName('Option');
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\Model\\Option');
@@ -507,7 +507,7 @@ class OptionTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the option table.
+     * Deletes all rows from the options table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).

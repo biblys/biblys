@@ -11,7 +11,7 @@ class Option extends Entity
 class OptionManager extends EntityManager
 {
     protected $prefix = 'option',
-			  $table = 'option',
+			  $table = 'options',
 			  $object = 'Option';
 
     public function __construct()

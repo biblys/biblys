@@ -3160,7 +3160,7 @@ abstract class Site implements ActiveRecordInterface
                         $key = 'options';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'options';
+                        $key = 'optionss';
                         break;
                     default:
                         $key = 'Options';

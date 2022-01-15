@@ -26,7 +26,7 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'option' table.
+ * Base class that represents a row from the 'options' table.
  *
  *
  *
@@ -933,7 +933,7 @@ abstract class Option implements ActiveRecordInterface
         }
 
         $sql = sprintf(
-            'INSERT INTO option (%s) VALUES (%s)',
+            'INSERT INTO options (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );

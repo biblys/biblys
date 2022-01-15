@@ -16,7 +16,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'option' table.
+ * Base class that represents a query for the 'options' table.
  *
  *
  *
@@ -203,7 +203,7 @@ abstract class OptionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT option_id, site_id, user_id, option_key, option_value, option_created, option_updated FROM option WHERE option_id = :p0';
+        $sql = 'SELECT option_id, site_id, user_id, option_key, option_value, option_created, option_updated FROM options WHERE option_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -837,7 +837,7 @@ abstract class OptionQuery extends ModelCriteria
     }
 
     /**
-     * Deletes all rows from the option table.
+     * Deletes all rows from the options table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
