@@ -1,5 +1,10 @@
 # Historique des modifications
 
+## 2.57.2 (16 janvier 2021)
+
+Correction : un utilisateur pouvait accéder à la page d'édition d'un billet de
+blog sans être identifié. C'est corrigé.
+
 ## 2.57.1 (16 janvier 2021)
 
 Correction : l'accès à la page de rédaction d'un billet de blog en tant
