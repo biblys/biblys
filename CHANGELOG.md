@@ -1,5 +1,10 @@
 # Historique des modifications
 
+## 2.57.1 (16 janvier 2021)
+
+Correction : l'accès à la page de rédaction d'un billet de blog en tant
+qu'éditeur provoquait une erreur. C'est corrigé.
+
 ### 2.57.0 (7 janvier 2021)
 
 Améliorations
