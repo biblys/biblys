@@ -388,6 +388,7 @@ class Controller
 
     /**
      * @param Request $request
+     * @param Publisher|null $publisher
      * @return CurrentUser
      * @throws AuthException
      * @throws PropelException

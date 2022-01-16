@@ -44,12 +44,17 @@ class RequestFactory
     }
 
     /**
-     * @param string $content
+     * @param Publisher|null $publisher
+     * @param string|null $content
      * @return Request
      * @throws PropelException
      */
-    public static function createAuthRequestForPublisherUser(Publisher $publisher, string $content = ""): Request
+    public static function createAuthRequestForPublisherUser(Publisher $publisher = null, string $content = ""): Request
     {
+        if ($publisher === null) {
+            $publisher = ModelFactory::createPublisher();
+        }
+
         $publisherUser = ModelFactory::createPublisherUser($publisher);
         return RequestFactory::createAuthRequest($content, $publisherUser);
     }

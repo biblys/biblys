@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 
 use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
 use PageManager;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +16,10 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class LegacyController extends Controller
 {
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
     public function defaultAction(Request $request, Session $session = null): Response
     {
         global $site, $config,
@@ -28,10 +34,13 @@ class LegacyController extends Controller
 
         $_PAGE_TYPE = substr($_PAGE, 0, 4);
         if ($_PAGE_TYPE == 'adm_') {
-            $this->auth('admin');
+            self::authAdmin($request);
+        }
+        if ($_PAGE_TYPE == 'pub_') {
+            self::authPublisher($request, null);
         }
         if ($_PAGE_TYPE == 'log_') {
-            $this->auth();
+            self::authUser($request);
         }
 
         // Get correct controller for called url
