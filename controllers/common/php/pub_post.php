@@ -1,5 +1,5 @@
 <?php
 
-	include("adm_post.php");
+$rank = "pub_";
 
-?>
+return include("post_edit.php");
