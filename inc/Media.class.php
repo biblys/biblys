@@ -323,7 +323,7 @@ class Media
             $version;
 
         $cloud = $config->get("cloud");
-        if ($cloud && $cloud["cdn"]) {
+        if ($cloud && isset($cloud["cdn"])) {
             
             $cdnOptions = null;
             if ($options) {
