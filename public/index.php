@@ -129,6 +129,8 @@ $container->register("listener.error", ErrorListener::class)
     ->setArguments(["AppBundle\Controller\ErrorController::exception"]);
 $container->getDefinition("dispatcher")
     ->addMethodCall("addSubscriber", [new Reference("listener.error")]);
+$container->register("url_generator", UrlGenerator::class)
+    ->setArguments(["%routes%", new Reference("context")]);
 
 $framework = $container->get("framework");
 $request = Request::createFromGlobals();

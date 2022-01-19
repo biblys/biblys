@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 
@@ -55,9 +54,5 @@ $container->register("framework", HttpKernel::class)
 $container->register("config", Config::class);
 $container->register("updater", Updater::class)
     ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
-
-$routes = require(__DIR__."/AppBundle/routes.php");
-$container->register("url_generator", UrlGenerator::class)
-    ->setArguments([$routes, new Reference("context")]);
 
 return $container;
