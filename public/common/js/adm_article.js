@@ -813,7 +813,7 @@ function _loadContributions() {
     return response.json();
   }).then(function (data) {
     if (data.error) {
-      return _alert(data.error);
+      return _alert(data.error.message);
     }
     data.contributors.forEach(_addContributorLine);
   });
