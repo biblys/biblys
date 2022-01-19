@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Log;
 use Framework\Controller;
+use OrderManager;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +21,7 @@ class OrderController extends Controller
 
         // JSON Raw data
         if ($request->isXmlHttpRequest()) {
-            $om = $this->entityManager('Order');
+            $om = new OrderManager();
 
             $where = ['order_type' => 'web', 'order_cancel_date' => 'NULL'];
 
@@ -82,7 +83,7 @@ class OrderController extends Controller
         }
 
         // Index view
-        $this->setPageTitle('Commandes web');
+        $request->attributes->set("page_title", "Commandes web");
 
         return $this->render('AppBundle:Order:index.html.twig');
     }
