@@ -44,11 +44,13 @@ class Controller
      * Check current user's rank.
      *
      * @param string $rank minimal rank required
-     * @param int    $id   publisher id required
+     * @param int|null $id publisher id required
      *
      * @return bool true if user's rank match requirement
+     * @throws AuthException
+     * @deprecated Controller->auth is deprecated, use Controller::auth… functions instead.
      */
-    public function auth($rank = 'user', $id = null)
+    public function auth(string $rank = 'user', int $id = null): bool
     {
         if ($rank == 'root' && !$this->user->isRoot()) {
             throw new AuthException('Accès réservé aux super-administrateurs.');
