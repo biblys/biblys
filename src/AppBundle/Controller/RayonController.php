@@ -250,7 +250,9 @@ class RayonController extends Controller
         }
 
         $am = new ArticleManager();
-        $articles = $am->getAllFromRayon($rayon, ['fields' => 'article_id, article_title, article_authors, article_publisher'], false);
+        $articles = $am->getAllFromRayon($rayon, [
+            'fields' => 'article_id, article_title, article_authors, article_publisher, publisher_id'
+        ], false);
 
         return $this->render('AppBundle:Rayon:articles.html.twig', [
             'rayon' => $rayon,
