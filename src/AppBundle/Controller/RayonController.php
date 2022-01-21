@@ -2,10 +2,15 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
 use Biblys\Isbn\Isbn as Isbn;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
+use RayonManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
@@ -230,19 +235,21 @@ class RayonController extends Controller
 
     /**
      * Display all articles in a Rayon.
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function rayonArticlesAction($id)
+    public function rayonArticlesAction(Request $request, $id): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $rayon = $rm->get(['rayon_id' => $id]);
         if (!$rayon) {
             throw new NotFoundException("Rayon $id not found.");
         }
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $articles = $am->getAllFromRayon($rayon, ['fields' => 'article_id, article_title, article_authors, article_publisher'], false);
 
         return $this->render('AppBundle:Rayon:articles.html.twig', [
