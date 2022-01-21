@@ -968,4 +968,26 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             "should be true when there is an editing user"
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetAllFromRayon()
+    {
+        // given
+        $article = EntityFactory::createArticle();
+        $rayon = EntityFactory::createRayon(["rayon_name" => "getAllFromRayon"]);
+        $rayon->addArticle($article);
+        $am = new ArticleManager();
+
+        // when
+        $articles = $am->getAllFromRayon($rayon);
+
+        // then
+        $this->assertEquals(
+            $article->get('id'),
+            $articles[0]->get('id'),
+            "it should return all articles from a rayon"
+        );
+    }
 }
