@@ -9,6 +9,7 @@ use Biblys\Service\CurrentUser;
 use Framework\Exception\AuthException;
 use Model\Publisher;
 use Propel\Runtime\Exception\PropelException;
+use ReflectionClass;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
@@ -16,13 +17,19 @@ use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
-use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
-use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Error_Runtime;
+use Twig\Error_Syntax;
+use Twig\Extension\DebugExtension;
 use Twig\RuntimeLoader\FactoryRuntimeLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 use Visitor;
 
 class Controller
@@ -88,11 +95,14 @@ class Controller
      * Returns a Response with a rendered template.
      *
      * @param string $template template file path
-     * @param array  $vars     template variables
+     * @param array $vars template variables
      *
      * @return Response a Response object containing the rendered template
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function render($template, array $vars = [])
+    public function render(string $template, array $vars = []): Response
     {
         global $site, $urlgenerator, $request, $config, $axys;
 
@@ -101,21 +111,21 @@ class Controller
         $functions = [];
 
         // return relative url for a route
-        $functions[] = new \Twig\TwigFunction('path', function ($route, $vars = []) {
+        $functions[] = new TwigFunction('path', function ($route, $vars = []) {
             global $container;
             $urlGenerator = $container->get("url_generator");
             return $urlGenerator->generate($route, $vars);
         });
 
         // return absolute url for a route
-        $functions[] = new \Twig\TwigFunction('url', function ($route, $vars = []) {
+        $functions[] = new TwigFunction('url', function ($route, $vars = []) {
             global $urlgenerator, $site;
 
             return 'http://'.$site->get('domain').$urlgenerator->generate($route, $vars);
         });
 
         // returns share buttons for url
-        $functions[] = new \Twig\TwigFunction('share_buttons', function ($url, $message = '', $options = []) {
+        $functions[] = new TwigFunction('share_buttons', function ($url, $message = '', $options = []) {
             return share_buttons($url, $message, $options);
         });
 
@@ -124,7 +134,7 @@ class Controller
         $filters = [];
 
         // authors
-        $filters[] = new \Twig\TwigFilter('authors', function ($authors) {
+        $filters[] = new TwigFilter('authors', function ($authors) {
             $authors = explode(',', $authors);
             $count = count($authors);
 
@@ -139,17 +149,17 @@ class Controller
             return $authors[0];
         });
 
-        $filters[] = new \Twig\TwigFilter('currency', function ($amount, $cents = false) {
+        $filters[] = new TwigFilter('currency', function ($amount, $cents = false) {
             return currency($amount, $cents);
         });
 
         // date
-        $filters[] = new \Twig\TwigFilter('date', function ($date, $format = 'd/m/Y') {
+        $filters[] = new TwigFilter('date', function ($date, $format = 'd/m/Y') {
             return _date($date, $format);
         });
 
         // price
-        $filters[] = new \Twig\TwigFilter('price', function ($price, $currency = null, $decimals = 2) {
+        $filters[] = new TwigFilter('price', function ($price, $currency = null, $decimals = 2) {
             if ($currency == 'EUR') {
                 return number_format(round($price / 100, 6), $decimals, ',', '&#8239;').'&nbsp;&euro;';
             }
@@ -158,7 +168,7 @@ class Controller
         });
 
         // pluralize
-        $filters[] = new \Twig\TwigFilter('pluralize', function ($text, $number) {
+        $filters[] = new TwigFilter('pluralize', function ($text, $number) {
             if ($number == 1 || $number == 0) {
                 return $text;
             }
@@ -167,19 +177,19 @@ class Controller
         });
 
         // truncate
-        $filters[] = new \Twig\TwigFilter('truncate', function ($text, $length, $ellipsis = '…') {
+        $filters[] = new TwigFilter('truncate', function ($text, $length, $ellipsis = '…') {
             return truncate(strip_tags($text), $length, $ellipsis);
         });
 
         // isbn
-        $filters[] = new \Twig\TwigFilter('isbn', function ($ean) {
+        $filters[] = new TwigFilter('isbn', function ($ean) {
             return Isbn::convertToIsbn13($ean);
         });
 
         // Forms
         $defaultFormTheme = 'AppBundle:Main:_form_bootstrap_layout.html.twig';
         $vendorDir = realpath(__DIR__.'/../vendor');
-        $appVariableReflection = new \ReflectionClass('\Symfony\Bridge\Twig\AppVariable');
+        $appVariableReflection = new ReflectionClass('\Symfony\Bridge\Twig\AppVariable');
         $vendorTwigBridgeDir = dirname($appVariableReflection->getFileName());
         $viewsDir = realpath(__DIR__.'/../views');
 
@@ -188,10 +198,10 @@ class Controller
 
         // Load Twig
         if ($site->get('environment') == 'dev') {
-            $twig = new \Twig\Environment($loader, ['strict_variables' => true]);
+            $twig = new Environment($loader, ['strict_variables' => true]);
         } else {
-            $twig = new \Twig\Environment($loader, ['strict_variables' => true, 'debug' => true]);
-            $twig->addExtension(new \Twig\Extension\DebugExtension());
+            $twig = new Environment($loader, ['strict_variables' => true, 'debug' => true]);
+            $twig->addExtension(new DebugExtension());
         }
 
         // CRSF
@@ -236,10 +246,10 @@ class Controller
         // Render template
         try {
             $rendered = $template->render($vars);
-        } catch (\Twig\Error_Syntax $e) {
+        } catch (Error_Syntax $e) {
             $error = nl2br(htmlspecialchars($e->getMessage()));
             trigger_error($error);
-        } catch (\Twig\Error_Runtime $e) {
+        } catch (Error_Runtime $e) {
             $error = nl2br(htmlspecialchars($e->getMessage()));
             trigger_error($error);
         }
