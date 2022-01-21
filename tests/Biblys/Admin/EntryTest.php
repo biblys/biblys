@@ -29,6 +29,13 @@ class EntryTest extends TestCase
         $this->assertEquals('/pages/articles', $entry->getUrl());
     }
 
+    public function testSetPath()
+    {
+        $entry = new Entry('Rayons', ['path' => 'admin_rayons']);
+
+        $this->assertEquals('admin_rayons', $entry->getPath());
+    }
+
     public function testSetTarget()
     {
         $entry = new Entry('Nouvel article', ['target' => '_blank']);

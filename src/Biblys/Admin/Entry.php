@@ -9,6 +9,7 @@ use OrderManager;
 class Entry
 {
     private $_name;
+    private $_path = null;
     private $_url;
     private $_target;
     private $_icon;
@@ -39,9 +40,7 @@ class Entry
         }
 
         if (isset($options['path'])) {
-            global $container;
-            $urlGenerator = $container->get("url_generator");
-            $this->setUrl($urlGenerator->generate($options['path']));
+            $this->setPath($options['path']);
         }
 
         if (isset($options['class'])) {
@@ -71,6 +70,16 @@ class Entry
     public function getName()
     {
         return $this->_name;
+    }
+
+    private function setPath(string $path)
+    {
+        $this->_path = $path;
+    }
+
+    public function getPath(): string
+    {
+        return $this->_path;
     }
 
     public function setUrl($url)
