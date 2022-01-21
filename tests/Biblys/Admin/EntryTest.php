@@ -7,6 +7,7 @@
 namespace Biblys\Admin;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -86,5 +87,20 @@ class EntryTest extends TestCase
         $entry = new Entry('Commandes', ['subscription' => 'orders']);
 
         $this->assertEquals('orders', $entry->getSubscription());
+    }
+
+    public function testGenerateUrls() {
+        // given
+        $entryWithPath = new Entry('Rayons', ['path' => 'rayon_index']);
+        $entryWithUrl = new Entry('Rayons', ['url' => '/rayons']);
+        $generator = $this->createMock(UrlGenerator::class);
+        $generator->method('generate')->willReturn('/admin/rayons');
+
+        // when
+        $entries = Entry::generateUrlsForEntries([$entryWithPath, $entryWithUrl], $generator);
+
+        // then
+        $this->assertEquals('/admin/rayons', $entries[0]->getUrl());
+        $this->assertEquals('/rayons', $entries[1]->getUrl());
     }
 }

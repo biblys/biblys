@@ -5,6 +5,7 @@ namespace Biblys\Admin;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use OrderManager;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class Entry
 {
@@ -77,7 +78,7 @@ class Entry
         $this->_path = $path;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->_path;
     }
@@ -308,5 +309,21 @@ class Entry
         return array_filter($entries, function ($entry) use ($category) {
             return $entry->getCategory() == $category;
         });
+    }
+
+    /**
+     * @param Entry[] $entries
+     * @param UrlGenerator $generator
+     * @return Entry[]
+     */
+    public static function generateUrlsForEntries(array $entries, UrlGenerator $generator): array
+    {
+        return array_map(function (Entry $entry) use($generator) {
+            $url = $generator->generate($entry->getPath());
+            if ($entry->getPath()) {
+                $entry->setUrl($url);
+            }
+            return $entry;
+        }, $entries);
     }
 }
