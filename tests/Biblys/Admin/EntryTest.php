@@ -1,13 +1,16 @@
 <?php
 /**
-* @backupGlobals disabled
-* @backupStaticAttributes disabled
-*/
-use Biblys\Admin\Entry;
+ * @backupGlobals disabled
+ * @backupStaticAttributes disabled
+ */
 
-require_once 'setUp.php';
+namespace Biblys\Admin;
 
-class AdminEntryTest extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+require_once __DIR__."/../../setUp.php";
+
+class EntryTest extends TestCase
 {
     /**
      * Test creating an entry.
@@ -23,37 +26,37 @@ class AdminEntryTest extends PHPUnit\Framework\TestCase
     {
         $entry = new Entry('Nouvel article', ['url' => '/pages/articles']);
 
-        $this->assertEquals($entry->getUrl(), '/pages/articles');
+        $this->assertEquals('/pages/articles', $entry->getUrl());
     }
 
     public function testSetTarget()
     {
         $entry = new Entry('Nouvel article', ['target' => '_blank']);
 
-        $this->assertEquals($entry->getTarget(), '_blank');
+        $this->assertEquals('_blank', $entry->getTarget());
     }
 
     public function testSetTargetDefault()
     {
         $entry = new Entry('Nouvel article', []);
 
-        $this->assertEquals($entry->getTarget(), '_self');
+        $this->assertEquals('_self', $entry->getTarget());
     }
 
     public function testSetCategory()
     {
         $entry = new Entry('Nouvel article', ['category' => 'Articles']);
 
-        $this->assertEquals($entry->getCategory(), 'Articles');
+        $this->assertEquals('Articles', $entry->getCategory());
     }
 
     public function testSetIcon()
     {
         $entry = new Entry('Nouvel article');
-        $this->assertEquals($entry->getIcon(), 'cog');
+        $this->assertEquals('cog', $entry->getIcon());
 
         $entry = new Entry('Nouvel article', ['icon' => 'user']);
-        $this->assertEquals($entry->getIcon(), 'user');
+        $this->assertEquals('user', $entry->getIcon());
     }
 
     public function testSetClass()
@@ -61,20 +64,20 @@ class AdminEntryTest extends PHPUnit\Framework\TestCase
         $entry = new Entry('Nouvel article', ['class' => 'stockQuickAdd']);
 
         $this->assertTrue($entry->hasClass());
-        $this->assertEquals($entry->getClass(), 'stockQuickAdd');
+        $this->assertEquals('stockQuickAdd', $entry->getClass());
     }
 
     public function testgSetTaskCount()
     {
         $entry = new Entry('Nouvel article', ['taskCount' => 5]);
 
-        $this->assertEquals($entry->getTaskCount(), 5);
+        $this->assertEquals(5, $entry->getTaskCount());
     }
 
     public function testSetSubscription()
     {
         $entry = new Entry('Commandes', ['subscription' => 'orders']);
 
-        $this->assertEquals($entry->getSubscription(), 'orders');
+        $this->assertEquals('orders', $entry->getSubscription());
     }
 }
