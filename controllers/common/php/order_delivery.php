@@ -308,6 +308,7 @@ if ($request->getMethod() === "POST") {
         ';
 
         // Send email to customer from site
+        /** @var Mailer $mailer */
         $mailer->send($order->get('email'), $mail['subject'], $mail['content']);
 
         // Send email to seller & log from customer

@@ -9,8 +9,10 @@ use Biblys\Test\ModelFactory;
 use CartManager;
 use EntityManager;
 use Exception;
+use Framework\Exception\AuthException;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use ShippingManager;
 use Site;
 use StockManager;
@@ -148,6 +150,70 @@ class OrderDeliveryTest extends TestCase
 
         // cleanup
         $shm->delete($shipping);
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSendingOrderConfirmationMail()
+    {
+        global $_SQL, $_V;
+
+        // given
+        $cart = $_V->getCart("create");
+        $article = EntityFactory::createArticle(["article_title" => "Le livre commandé"]);
+        $sm = new StockManager();
+        $sm->create(["article_id" => $article->get("id")]);
+        $cm = new CartManager();
+        $cm->addArticle($cart, $article);
+        $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
+        $_POST = ["order_email" => "customer@biblys.fr"];
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->query->set("page", "order_delivery");
+        $request->query->set("country_id", 1);
+        $request->query->set("shipping_id", $shipping->getId());
+        $request->request->set("order_firstname", "Barnabé");
+        $request->request->set("order_lastname", "Famagouste");
+        $request->request->set("order_address1", "123 rue des Peupliers");
+        $request->request->set("order_postalcode", "69009");
+        $request->request->set("order_city", "Lyon");
+        $request->request->set("order_email", "customer@biblys.fr");
+        $request->request->set("country_id", 1);
+        $request->request->set("cgv_checkbox", 1);
+        $session = new Session();
+
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->exactly(2))
+            ->method("send")
+            ->withConsecutive(
+                [
+                    "customer@biblys.fr",
+                    $this->stringContains("YS | Commande n° "),
+                    $this->stringContains("Livre commandé")
+                ],
+                [
+                    "contact@biblys.fr",
+                    $this->stringContains("YS | Commande n° "),
+                    $this->stringContains("Livre commandé")
+                ]
+            )
+            ->willReturn(true);
+
+        // when
+        $legacyController = new LegacyController();
+        $response = $legacyController->defaultAction($request, $session, $mailer);
+
+        // then
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\RedirectResponse",
+            $response,
+            "it should redirect after order validation"
+        );
     }
 
     public function tearDown(): void

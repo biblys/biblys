@@ -28,6 +28,7 @@ function createFixtures(): void
     $site->setTva(1);
     $site->setTitle("Librairie Ys");
     $site->setContact("contact@biblys.fr");
+    $site->setTag("YS");
     $site->save();
 
     $country = new \Model\Country();
