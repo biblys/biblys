@@ -8,6 +8,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
@@ -61,10 +62,11 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
+        $updater = new Updater('', '3.0', $config);
         $this->_mockContainerWithUrlGenerator();
 
         // when
-        $response = $controller->adminAction($request, $config);
+        $response = $controller->adminAction($request, $config, $updater);
 
         // then
         $this->assertEquals(
@@ -92,9 +94,10 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("cloud", ["expires" => "2018-01-01"]);
         $this->_mockContainerWithUrlGenerator();
+        $updater = new Updater('', '3.0', $config);
 
         // when
-        $response = $controller->adminAction($request, $config);
+        $response = $controller->adminAction($request, $config, $updater);
 
         // then
         $this->assertEquals(
@@ -108,6 +111,40 @@ class MainControllerTest extends TestCase
             "it should display the warning"
         );
     }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws UpdaterException
+     */
+    public function testAdminWithUpdates()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("cloud", ["expires" => "2018-01-01"]);
+        $this->_mockContainerWithUrlGenerator();
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(true);
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            'Mise à jour
+                          <span class="icon-badge">1</span>',
+            $response->getContent(),
+            "it should return HTTP 200"
+        );
+    }
+
 
     /**
      * @return void

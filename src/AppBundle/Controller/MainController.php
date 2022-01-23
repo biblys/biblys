@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Admin\Entry;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use DateTime;
 use Exception;
@@ -209,7 +210,7 @@ class MainController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function adminAction(Request $request, Config $config): Response
+    public function adminAction(Request $request, Config $config, Updater $updater): Response
     {
         global $site, $container;
 
@@ -247,18 +248,21 @@ class MainController extends Controller
             }
         }
 
-        // Biblys update available
-//        $updates = 0;
-//        $updater = $container->get("updater");
-//        $diff = time() - $site->getOpt('updates_last_checked');
-//        if ($diff > 60 * 60 * 24) {
-//            $updater->downloadUpdates();
-//            $site->setOpt('updates_last_checked', time());
-//        }
-//        if ($updater->isUpdateAvailable()) {
-//            $updates = 1;
-//        }
         $urlGenerator = $container->get("url_generator");
+        $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
+        $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site) {
+            if ($entry->getName() === "Mise à jour") {
+                $diff = time() - $site->getOpt('updates_last_checked');
+                if ($diff > 60 * 60 * 24) {
+                    $updater->downloadUpdates();
+                    $site->setOpt('updates_last_checked', time());
+                }
+                if ($updater->isUpdateAvailable()) {
+                    $entry->setTaskCount(1);
+                }
+            }
+            return $entry;
+        }, $biblysEntries);
 
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
@@ -272,7 +276,7 @@ class MainController extends Controller
             'content' => Entry::generateUrlsForEntries(Entry::findByCategory('content'), $urlGenerator),
             'stats' => Entry::generateUrlsForEntries(Entry::findByCategory('stats'), $urlGenerator),
             'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
-            'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
+            'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
             'cloud_expired' => $cloudExpired,
