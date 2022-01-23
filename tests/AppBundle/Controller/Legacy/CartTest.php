@@ -4,11 +4,15 @@ namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
+use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use CartManager;
 use CollectionManager;
+use Exception;
+use Framework\Exception\AuthException;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use PublisherManager;
 use ShippingManager;
 use Site;
@@ -21,6 +25,11 @@ require_once __DIR__ . "/../../../setUp.php";
 
 class CartTest extends TestCase
 {
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testCartDisplay()
     {
         global $_V, $site;
@@ -44,10 +53,11 @@ class CartTest extends TestCase
         ]);
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
+        $mailer = new Mailer();
 
         // when
         $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request, $session);
+        $response = $legacyController->defaultAction($request, $session, $mailer);
 
         // then
         $om = new OrderManager();

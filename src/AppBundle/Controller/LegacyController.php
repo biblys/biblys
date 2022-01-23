@@ -3,6 +3,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -20,7 +21,7 @@ class LegacyController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function defaultAction(Request $request, Session $session = null): Response
+    public function defaultAction(Request $request, Session $session, Mailer $mailer): Response
     {
         global $site, $config,
                $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,

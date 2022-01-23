@@ -3,20 +3,19 @@
 namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
-use ArticleManager;
+use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
 use EntityManager;
 use Exception;
-use Model\ShippingFeeQuery;
 use OrderManager;
 use PHPUnit\Framework\TestCase;
 use ShippingManager;
 use Site;
 use StockManager;
 use Symfony\Component\HttpFoundation\Request;
-use Visitor;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -57,10 +56,12 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("order_email", "customer@biblys.fr");
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
 
         // when
-        $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request);
+        $response = $legacyController->defaultAction($request, $session, $mailer);
 
         // then
         $om = new OrderManager();
@@ -125,9 +126,12 @@ class OrderDeliveryTest extends TestCase
         $_POST["country_id"] = 1;
         $_POST["cgv_checkbox"] = 1;
 
-        // when
+        $session = new Session();
+        $mailer = new Mailer();
         $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request);
+
+        // when
+        $response = $legacyController->defaultAction($request, $session, $mailer);
 
         // then
         $this->assertInstanceOf(

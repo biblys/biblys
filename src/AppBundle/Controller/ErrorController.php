@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Axys\Client;
 use Biblys\Service\Log;
+use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 // TODO: use twig template for exceptions
@@ -60,9 +62,11 @@ class ErrorController extends Controller
         // will throw a resourceNotFoundException that will be catched below.
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\NotFoundHttpException")) {
             $legacyController = new LegacyController();
+            $session = new Session();
+            $mailer = new Mailer();
             try {
                 global $originalRequest;
-                $response = $legacyController->defaultAction($originalRequest);
+                $response = $legacyController->defaultAction($originalRequest, $session, $mailer);
                 $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
                 return $response;
             } catch (Exception $exception) {

@@ -25,7 +25,6 @@ $com = new CountryManager();
 $om = new OrderManager();
 $sm = new StockManager();
 $um = new UserManager();
-$mailer = new Mailer();
 $shm = new ShippingManager();
 
 $content = "";

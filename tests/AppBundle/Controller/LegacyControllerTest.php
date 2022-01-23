@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Mailer;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 require_once(__DIR__."/../../setUp.php");
 
@@ -19,12 +21,14 @@ class LegacyControllerTest extends TestCase
     public function testDefaultAction()
     {
         // given
-        $controller = new LegacyController();
         $request = new Request();
         $request->query->set("page", "bientot");
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
 
         // when
-        $response = $controller->defaultAction($request);
+        $response = $legacyController->defaultAction($request, $session, $mailer);
 
         // then
         $this->assertEquals(
@@ -45,12 +49,14 @@ class LegacyControllerTest extends TestCase
         $this->expectExceptionMessage("Identification requise");
 
         // given
-        $controller = new LegacyController();
         $request = new Request();
         $request->query->set("page", "log_page");
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
 
         // when
-        $controller->defaultAction($request);
+        $legacyController->defaultAction($request, $session, $mailer);
     }
 
     /**
@@ -64,12 +70,14 @@ class LegacyControllerTest extends TestCase
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur.");
 
         // given
-        $controller = new LegacyController();
         $request = RequestFactory::createAuthRequest();
         $request->query->set("page", "pub_page");
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
 
         // when
-        $controller->defaultAction($request);
+        $legacyController->defaultAction($request, $session, $mailer);
     }
 
     /**
@@ -83,11 +91,13 @@ class LegacyControllerTest extends TestCase
         $this->expectExceptionMessage("Accès réservé aux administrateurs.");
 
         // given
-        $controller = new LegacyController();
         $request = RequestFactory::createAuthRequestForPublisherUser();
         $request->query->set("page", "adm_page");
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
 
         // when
-        $controller->defaultAction($request);
+        $legacyController->defaultAction($request, $session, $mailer);
     }
 }
