@@ -10,6 +10,7 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use InvalidArgumentException;
 use Propel\Runtime\Exception\PropelException;
 use ReCaptcha\ReCaptcha as ReCaptcha;
@@ -206,10 +207,11 @@ class MainController extends Controller
      * @throws AuthException
      * @throws UpdaterException
      * @throws PropelException
+     * @throws Exception
      */
     public function adminAction(Request $request, Config $config): Response
     {
-        global $site;
+        global $site, $container;
 
         $currentUser = self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
@@ -245,20 +247,33 @@ class MainController extends Controller
             }
         }
 
+        // Biblys update available
+//        $updates = 0;
+//        $updater = $container->get("updater");
+//        $diff = time() - $site->getOpt('updates_last_checked');
+//        if ($diff > 60 * 60 * 24) {
+//            $updater->downloadUpdates();
+//            $site->setOpt('updates_last_checked', time());
+//        }
+//        if ($updater->isUpdateAvailable()) {
+//            $updates = 1;
+//        }
+        $urlGenerator = $container->get("url_generator");
+
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
             'update_alert' => $update_alert,
             'smtpAlert' => $smtpAlert,
             'shortcuts' => $shortcuts,
-            'articles' => Entry::findByCategory('articles'),
-            'stock' => Entry::findByCategory('stock'),
-            'sales' => Entry::findByCategory('sales'),
-            'ebooks' => Entry::findByCategory('ebooks'),
-            'content' => Entry::findByCategory('content'),
-            'stats' => Entry::findByCategory('stats'),
-            'site' => Entry::findByCategory('site'),
-            'biblys' => Entry::findByCategory('biblys'),
-            'custom' => Entry::findByCategory('custom'),
+            'articles' => Entry::generateUrlsForEntries(Entry::findByCategory('articles'), $urlGenerator),
+            'stock' => Entry::generateUrlsForEntries(Entry::findByCategory('stock'), $urlGenerator),
+            'sales' => Entry::generateUrlsForEntries(Entry::findByCategory('sales'), $urlGenerator),
+            'ebooks' => Entry::generateUrlsForEntries(Entry::findByCategory('ebooks'), $urlGenerator),
+            'content' => Entry::generateUrlsForEntries(Entry::findByCategory('content'), $urlGenerator),
+            'stats' => Entry::generateUrlsForEntries(Entry::findByCategory('stats'), $urlGenerator),
+            'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
+            'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
+            'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
             'cloud_expired' => $cloudExpired,
             'cloud_expiration_date' => $cloudConfig["expires"],

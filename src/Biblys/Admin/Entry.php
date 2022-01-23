@@ -2,8 +2,8 @@
 
 namespace Biblys\Admin;
 
-use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
+use Exception;
 use OrderManager;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -11,7 +11,7 @@ class Entry
 {
     private $_name;
     private $_path = null;
-    private $_url;
+    private $_url = null;
     private $_target;
     private $_icon;
     private $_class;
@@ -88,8 +88,17 @@ class Entry
         $this->_url = $url;
     }
 
-    public function getUrl()
+    /**
+     * @throws Exception
+     */
+    public function getUrl(): string
     {
+        if ($this->_url === null) {
+            throw new Exception(sprintf("Entry %s with path %s has no url",
+                $this->getName(),
+                $this->getPath()
+            ));
+        }
         return $this->_url;
     }
 
@@ -169,19 +178,7 @@ class Entry
      */
     public static function findAll(): array
     {
-        global $site, $config, $container;
-
-        // Biblys update available
-        $updates = 0;
-        $updater = $container->get("updater");
-        $diff = time() - $site->getOpt('updates_last_checked');
-        if ($diff > 60 * 60 * 24) {
-            $updater->downloadUpdates();
-            $site->setOpt('updates_last_checked', time());
-        }
-        if ($updater->isUpdateAvailable()) {
-            $updates = 1;
-        }
+        global $config;
 
         // Orders to be shipped
         $om = new OrderManager();
@@ -254,7 +251,7 @@ class Entry
 
         $entries[] = new Entry('Support Biblys', ['category' => 'biblys', 'path' => 'ticket_index', 'icon' => 'medkit']);
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://www.biblys.fr/pages/doc_index', 'icon' => 'book']);
-        $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download', 'taskCount' => $updates]);
+        $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download']);
         $entries[] = new Entry('Composants', ['category' => 'biblys', 'path' => 'maintenance_composer', 'icon' => 'puzzle-piece']);
         $entries[] = new Entry('Migration BDD', ['category' => 'biblys', 'path' => 'maintenance_migrate', 'icon' => 'database']);
 
@@ -319,8 +316,8 @@ class Entry
     public static function generateUrlsForEntries(array $entries, UrlGenerator $generator): array
     {
         return array_map(function (Entry $entry) use($generator) {
-            $url = $generator->generate($entry->getPath());
-            if ($entry->getPath()) {
+            if ($entry->getPath() !== null) {
+                $url = $generator->generate($entry->getPath());
                 $entry->setUrl($url);
             }
             return $entry;

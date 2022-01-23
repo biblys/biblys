@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 require_once __DIR__."/../../../tests/setUp.php";
@@ -113,7 +114,8 @@ class MainControllerTest extends TestCase
      */
     public function _mockContainerWithUrlGenerator(): void
     {
-        $urlgenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlgenerator = $this->createMock(UrlGenerator::class);
+        $urlgenerator->method("generate")->willReturn("/some/url");
         $GLOBALS["container"] = $this->createMock(ContainerInterface::class);
         $GLOBALS["container"]->method("get")->willReturn($urlgenerator);
     }
