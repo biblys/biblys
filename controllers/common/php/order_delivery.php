@@ -164,7 +164,7 @@ if ($request->getMethod() === "POST") {
 
         // Update order info from form
         foreach ($_POST as $key => $val) {
-            if ($key === "cgv_checkbox") {
+            if ($key === "cgv_checkbox" || $key === "newsletter") {
                 continue;
             }
 
