@@ -432,14 +432,12 @@ if ($site->getOpt('newsletter') == 1) {
             <p class="checkbox order-delivery-form__checkbox">
                 <label class="after">
                     <input type="checkbox" name="newsletter" value="1" ' . $checked . ' >
-                    Je souhaite recevoir la newsletter pour être tenu·e
-                    au courant de l\'actualité du site.<br>
+                    Je souhaite recevoir la newsletter <small>(facultatif)</small><br>
                     <small>
-                        En cochant cette case, j\'accepte de recevoir par
-                        courriel la newsletter de ' . $site->get('title') . '. Je
-                        comprends que je peux me désabonner de ces
-                        communications en cliquant sur le lien de
-                        désabonnement inséré à la fin de ces courriels.
+                        En cochant cette case,  vous acceptez de recevoir par
+                        courriel notre newsletter. Vous comprenez que vous pouvez
+                        vous désabonner de ces communications en cliquant sur le
+                        lien de désabonnement inséré à la fin de ces courriels.
                     </small>
                 </label>
             </p>
@@ -452,17 +450,22 @@ $cgv_page = $site->getOpt('cgv_page');
 $cgv_checkbox = '<input type="hidden" name="cgv_checkbox" value=1>';
 if ($cgv_page) {
     $pm = new PageManager();
-    $page = $pm->getById($cgv_page);
-    if ($page) {
+    $termsPage = $pm->getById($cgv_page);
+    if ($termsPage) {
         $cgv_checkbox = '
             <p class="checkbox order-delivery-form__checkbox">
                 <label class="after">
                     <input type="checkbox" name="cgv_checkbox" value=1 required>
-                    En cochant cette case, je reconnais avoir pris
-                    connaissance des
-                    <a href="/pages/' . $page->get('url') . '">
-                        Conditions Générales de Vente.
-                    </a>
+                    J\'accepte les 
+                    <a href="/pages/'.$termsPage->get('url').'">Conditions Générales de Vente</a>
+                    <small class="required-field-indicator">(obligatoire)</small><br />
+                    <small>
+                        En cochant cette case, vous reconnaissez avoir pris connaissance de nos
+                        <a href="/pages/'.$termsPage->get('url').'">
+                            Conditions Générales de Vente
+                        </a>
+                        et vous déclarez les accepter sans réserve.
+                    </small>
                 </label>
             </p>
         ';
