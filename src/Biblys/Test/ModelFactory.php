@@ -117,8 +117,13 @@ class ModelFactory
     public static function createShippingFee(array $attributes = []): ShippingFee
     {
         $shippingFee = new ShippingFee();
-        $shippingFee->setSiteId(1);
+        $shippingFee->setSiteId($attributes["site_id"] ?? 1);
+        $shippingFee->setZone($attributes["zone"] ?? "ALL");
         $shippingFee->setType($attributes["type"] ?? "normal");
+        $shippingFee->setMode($attributes["mode"] ?? "Colissimo");
+        $shippingFee->setFee($attributes["fee"] ?? 560);
+        $shippingFee->setMaxWeight($attributes["max_weight"] ?? 1000);
+        $shippingFee->setMaxAmount($attributes["max_amount"] ?? 1000);
         $shippingFee->save();
 
         return $shippingFee;

@@ -11,7 +11,13 @@
         protected $table = 'shipping';
         protected $object = 'shipping';
 
-        public function getFees(Country $country, int $weight, int $amount)
+        /**
+         * @param Country $country
+         * @param int $weight
+         * @param int $amount
+         * @return Shipping[]
+         */
+        public function getFees(Country $country, int $weight, int $amount): array
         {
             global $site;
 
@@ -29,10 +35,9 @@
             $zone = $country->get('shipping_zone');
             $fees = $this->getAll($where, ['order' => 'shipping_fee']);
 
-
             // For each types in ['normal', 'suivi', 'magasin']
             $types = array_map(
-                function ($type) use ($fees, $zone, $weight, $amount) {
+                function ($type) use ($fees, $zone, $weight, $amount, $site) {
                     foreach ($fees as $fee) {
                         // Keeps only fees for current type
                         if ($fee->get('type') !== $type) {
@@ -50,7 +55,7 @@
                         }
 
                         // Keep only site-specific or global fees
-                        if ($fee->get('site_id') !== '0' && $fee->get('site_id') !== $this->site['site_id']) {
+                        if ($fee->get('site_id') !== '0' && $fee->get('site_id') !== $site['site_id']) {
                             continue;
                         }
 

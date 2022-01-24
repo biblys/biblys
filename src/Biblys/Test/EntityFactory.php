@@ -4,13 +4,19 @@ namespace Biblys\Test;
 
 use Article;
 use ArticleManager;
+use Cart;
+use CartManager;
 use CFReward;
 use CFRewardManager;
 use Collection;
 use CollectionManager;
+use Country;
+use CountryManager;
 use Exception;
 use Model\ArticleQuery;
 use Model\PeopleQuery;
+use Order;
+use OrderManager;
 use People;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
@@ -18,6 +24,10 @@ use Publisher;
 use PublisherManager;
 use Rayon;
 use RayonManager;
+use Shipping;
+use ShippingManager;
+use Site;
+use SiteManager;
 use Stock;
 use StockManager;
 
@@ -34,6 +44,8 @@ class EntityFactory
         array $authors = null
     ): Article
     {
+        $am = new ArticleManager();
+
         if (!isset($attributes["article_title"])) {
             $attributes["article_title"] = "L'Animalie";
         }
@@ -44,15 +56,16 @@ class EntityFactory
         }
 
         if (!isset($attributes["publisher_id"])) {
-            $collection = self::createPublisher();
-            $attributes["publisher_id"] = $collection->get("publisher_id");
+            $publisher = self::createPublisher();
+            $attributes["publisher_id"] = $publisher->get("publisher_id");
         }
 
         if (!isset($attributes["type_id"])) {
             $attributes["type_id"] = 1;
         }
 
-        $am = new ArticleManager();
+        $attributes["article_number"] = $attributes["article_number"] ?? "19";
+
         $article = $am->create($attributes);
 
         if ($authors === null) {
@@ -63,6 +76,41 @@ class EntityFactory
         }
 
         return $article;
+    }
+
+
+    public static function createCart(): Cart
+    {
+        $cm = new CartManager();
+        return $cm->create();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createCountry(): Country
+    {
+        $cm = new CountryManager();
+        return $cm->create([
+            "country_name" => "France",
+            "country_code" => "FR",
+            "shipping_zone" => "ALL",
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createOrder(): Order
+    {
+        $om = new OrderManager();
+        $order = $om->create([
+            "order_email" => "customer@example.net",
+            "order_firstname" => "Alec"
+        ]);
+        $country = self::createCountry();
+        $order->set("country_id", $country->get("id"));
+        return $order;
     }
 
     /**
@@ -88,6 +136,29 @@ class EntityFactory
     }
 
     /**
+     * @throws Exception
+     */
+    public static function createShipping($attributes = []): Shipping
+    {
+        $shipping = ModelFactory::createShippingFee($attributes);
+        $sm = new ShippingManager();
+        return $sm->getById($shipping->getId());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createSite(): Site
+    {
+        $sm = new SiteManager();
+        return $sm->create([
+            "site_name" => "Librairie Ys",
+            "site_tag" => "YS",
+            "site_contact" => "contact@librys.fr",
+        ]);
+    }
+
+    /**
      * @param array $attributes
      * @return Stock
      * @throws Exception
@@ -98,6 +169,11 @@ class EntityFactory
             $article = self::createArticle();
             $attributes["article_id"] = $article->get("id");
         }
+
+        $attributes["stock_conditon"] = "Neuf";
+        $attributes["stock_stockage"] = "Paris";
+        $attributes["pub_year"] = "2019";
+        $attributes["stock_selling_price"] = $attributes["stock_selling_price"] ?? "1899";
 
         $sm = new StockManager();
         return $sm->create($attributes);

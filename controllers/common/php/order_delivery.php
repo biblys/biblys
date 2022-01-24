@@ -99,8 +99,6 @@ if ($request->getMethod() === "POST") {
             }
         }
 
-        $mail = array();
-
         /* GET ORDER */
 
         // If there is an ongoing order, get it
@@ -177,144 +175,12 @@ if ($request->getMethod() === "POST") {
         $customer->set('country_id', $countryId);
         $cm->update($customer);
 
-        // Cart stock
-        $campaign = false;
-        $mail['articles'] = array();
-        $stock = $sm->getAll(array('cart_id' => $cart->get('id')));
-        foreach ($stock as $s) {
-
-            // Prepare article list for mail
-            $location = null;
-            $condition = null;
-            $pub_year = null;
-            if ($s->has('stockage')) {
-                $location = "<br />Emplacement : " . $s->get('stockage');
-            }
-            if ($s->has('condition')) {
-                $condition = $s->get('condition') . ' | ';
-            }
-            if ($s->has('pub_year')) {
-                $pub_year = ', ' . $s->get('pub_year');
-            }
-
-            $a = $s->get('article');
-
-            $mail['articles'][] = '
-                <p>
-                    <a href="http://' . $_SERVER['HTTP_HOST'] . '/' . $a->get('url') . '">' . $a->get('title') . '</a> (' . $a->get('article_collection') . numero($a->get('number')) . ')<br>
-                    de ' . authors($a->get('authors')) . '<br>
-                    ' . $a->get('article_publisher') . $pub_year . '<br>
-                    ' . $condition . currency($s->get('selling_price') / 100) . '
-                    ' . $location . '
-                </p>
-            ';
-        }
-
         // Hydrate order from cart
         $om->hydrateFromCart($order, $cart);
 
-        // Send emails
-        if (!empty($shippingFee)) {
-            $mail['shipping'] = "Frais de port : " . currency($shippingFee / 100) . " (" . $shippingMode . ")<br>";
-        } else {
-            $mail['shipping'] = 'Frais de port offerts<br>';
-        }
-
         /** @var Site $_SITE */
-        $mail['subject'] = $_SITE["site_tag"] . ' | Commande n° ' . $order->get('id');
-        if ($isUpdatingAnExistingOrder) {
-            $mail['subject'] .= ' (mise à jour)';
-        }
-
-        if ($shippingType == "magasin") {
-            $mail['address_type'] = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
-        } else {
-            $mail['address_type'] = '<p><strong>Adresse d\'expédition :</strong></p>';
-        }
-
-        $order_ebooks = null;
-        if ($order->containsDownloadable()) {
-            $order_ebooks = '
-                <p>
-                    Après paiement de votre commande, vous pourrez télécharger les articles numériques de votre commande depuis
-                    <a href="http://' . $_SERVER['HTTP_HOST'] . '/pages/log_myebooks">
-                        votre bibliothèque numérique
-                    </a>.
-                </p>
-            ';
-        }
-
-        $mail['content'] = '
-            <html lang="fr">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>' . $mail['subject'] . '</title>
-                    <style>
-                        p {
-                            margin-bottom: 5px;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <p>Bonjour ' . $order->get('firstname') . ',</p>
-        ';
-
-        if ($isUpdatingAnExistingOrder) {
-            $mail['content'] .= '<p>votre commande a été mise à jour.</p>';
-        } else {
-            $mail['content'] .= '<p>votre nouvelle commande a bien été enregistrée.</p>';
-        }
-
-        $mail['comment'] = '';
-        if ($order->has('comment')) {
-            $mail['comment'] = '<p><strong>Commentaire du client :</strong></p><p>' . nl2br($order->get('comment')) . '</p>';
-        }
-
-        $mail['content'] .= '
-                    <p><strong><a href="http://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url') . '">Commande n&deg; ' . $order->get('order_id') . '</a></strong></p>
-
-                    <p><strong>' . $numberOfCopiesInCart . ' article' . s($numberOfCopiesInCart) . '</strong></p>
-
-                    ' . implode($mail['articles']) . '
-
-                    <p>
-                        ------------------------------<br />
-                        ' . $mail['shipping'] . '
-                        Total : ' . currency($total / 100) . '
-                    </p>
-
-                    ' . $order_ebooks . '
-
-                    ' . $mail['address_type'] . '
-
-                    <p>
-                        ' . $order->get('title') . ' ' . $order->get('firstname') . ' ' . $order->get('lastname') . '<br />
-                        ' . $order->get('address1') . '<br />
-                        ' . ($order->has('address2') ? $order->get('address2') . '<br>' : null) . '
-                        ' . $order->get('postalcode') . ' ' . $order->get('city') . '<br />
-                        ' . $order->get('country')->get('name') . '
-                    </p>
-
-                    ' . $mail['comment'] . '
-
-                    <p>
-                        Si ce n\'est pas déjà fait, vous pouvez payer votre commande à l\'adresse ci-dessous :<br />
-                        http://' . $_SERVER['HTTP_HOST'] . '/order/' . $order->get('url') . '
-                    </p>
-
-                    <p>Merci pour votre commande !</p>
-                </body>
-            </html>
-        ';
-
-        // Send email to customer from site
         /** @var Mailer $mailer */
-        $mailer->send($order->get('email'), $mail['subject'], $mail['content']);
-
-        // Send email to seller & log from customer
-        $from = [$_SITE['site_contact'] => trim($order->get('firstname') . ' ' . $order->get('lastname'))];
-        $reply_to = $order->get('email');
-        $mailer->send($_SITE['site_contact'], $mail['subject'], $mail['content'], $from, ['reply-to' => $reply_to]);
+        OrderDeliveryHelpers::sendOrderConfirmationMail($order, $shipping, $mailer, $_SITE, $isUpdatingAnExistingOrder);
 
         // Delete alerts for purchased articles
         $order->deleteRelatedAlerts();

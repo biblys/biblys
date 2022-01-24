@@ -671,9 +671,9 @@ class OrderManager extends EntityManager
     /**
      * Create order
      * @param array $defaults
-     * @return type
+     * @return Order
      */
-    public function create(array $defaults = array())
+    public function create(array $defaults = array()): Order
     {
         if (!isset($defaults['site_id'])) {
             $defaults['site_id'] = $this->site['site_id'];
