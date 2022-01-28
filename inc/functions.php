@@ -417,104 +417,98 @@ function cache($etag)
     }
 }
 
-function _date($x, $m = 'd-m-Y')
+/**
+ * @throws Exception
+ */
+function _date($dateToFormat, $format = 'd-m-Y')
 {
-    if ('0000-00-00 00:00:00' == $x || '0000-00-00' == $x || empty($x)) {
+    if ('0000-00-00 00:00:00' == $dateToFormat || '0000-00-00' == $dateToFormat || empty($dateToFormat)) {
         return false;
     }
 
-    if ($x instanceof \DateTime) {
-        $x = $x->format('Y-m-d H:i:s');
+    if ($dateToFormat instanceof \DateTime) {
+        $dateToFormat = $dateToFormat->format("Y-m-d H:i:s");
     }
 
-    $x = explode(' ', $x);
-    if (empty($x[1])) {
-        $x[1] = '00:00:00';
+    list($dateString, $timeString) = explode(' ', $dateToFormat);
+    if (empty($timeString)) {
+        $timeString = "00:00:00";
     }
 
-    $d = explode('-', $x[0]);
-    $h = explode(':', $x[1]);
+    list($year, $month, $day) = explode("-", $dateString);
+    list($hours, $minutes, $seconds) = explode(":", $timeString);
 
-    if (!isset($h[2])) {
-        $h[2] = 0;
-    }
-    if (!isset($d[2])) {
-        $d[2] = 0;
-    }
-
-    $t = mktime($h[0], $h[1], $h[2], $d[1], $d[2], $d[0]);
-    $N = date('N', $t);
-    $W = date('W', $t);
+    $timestamp = mktime((int) $hours, (int) $minutes, (int) $seconds, (int) $month, (int) $day, (int) $year);
+    $dayOfWeek = date("N", $timestamp);
+    $weekNumber = date("W", $timestamp);
 
     // Traduction mois
-    if ('01' == $d[1]) {
-        $mois = 'janvier';
-    } elseif ('02' == $d[1]) {
-        $mois = 'février';
-    } elseif ('03' == $d[1]) {
-        $mois = 'mars';
-    } elseif ('04' == $d[1]) {
-        $mois = 'avril';
-    } elseif ('05' == $d[1]) {
-        $mois = 'mai';
-    } elseif ('06' == $d[1]) {
-        $mois = 'juin';
-    } elseif ('07' == $d[1]) {
-        $mois = 'juillet';
-    } elseif ('08' == $d[1]) {
-        $mois = 'août';
-    } elseif ('09' == $d[1]) {
-        $mois = 'septembre';
-    } elseif ('10' == $d[1]) {
-        $mois = 'octobre';
-    } elseif ('11' == $d[1]) {
-        $mois = 'novembre';
-    } elseif ('12' == $d[1]) {
-        $mois = 'décembre';
+    if ('01' == $month) {
+        $localizedMonth = 'janvier';
+    } elseif ('02' == $month) {
+        $localizedMonth = 'février';
+    } elseif ('03' == $month) {
+        $localizedMonth = 'mars';
+    } elseif ('04' == $month) {
+        $localizedMonth = 'avril';
+    } elseif ('05' == $month) {
+        $localizedMonth = 'mai';
+    } elseif ('06' == $month) {
+        $localizedMonth = 'juin';
+    } elseif ('07' == $month) {
+        $localizedMonth = 'juillet';
+    } elseif ('08' == $month) {
+        $localizedMonth = 'août';
+    } elseif ('09' == $month) {
+        $localizedMonth = 'septembre';
+    } elseif ('10' == $month) {
+        $localizedMonth = 'octobre';
+    } elseif ('11' == $month) {
+        $localizedMonth = 'novembre';
+    } elseif ('12' == $month) {
+        $localizedMonth = 'décembre';
     } else {
-        $mois = '?';
+        throw new Exception("Cannot format date with unknown month: $month");
     }
 
     // Traduction jour de la semaine
-    if (1 == $N) {
-        $jour = 'lundi';
-    } elseif (2 == $N) {
-        $jour = 'mardi';
-    } elseif (3 == $N) {
-        $jour = 'mercredi';
-    } elseif (4 == $N) {
-        $jour = 'jeudi';
-    } elseif (5 == $N) {
-        $jour = 'vendredi';
-    } elseif (6 == $N) {
-        $jour = 'samedi';
-    } elseif (7 == $N) {
-        $jour = 'dimanche';
-    }
-
-    if ('DATE_W3C' == $m) {
-        //return $d[2]."-"
+    if (1 == $dayOfWeek) {
+        $localizedDay = 'lundi';
+    } elseif (2 == $dayOfWeek) {
+        $localizedDay = 'mardi';
+    } elseif (3 == $dayOfWeek) {
+        $localizedDay = 'mercredi';
+    } elseif (4 == $dayOfWeek) {
+        $localizedDay = 'jeudi';
+    } elseif (5 == $dayOfWeek) {
+        $localizedDay = 'vendredi';
+    } elseif (6 == $dayOfWeek) {
+        $localizedDay = 'samedi';
+    } elseif (7 == $dayOfWeek) {
+        $localizedDay = 'dimanche';
     } else {
-        $trans = [ // Pour le Samedi 5 septembre 2010 à 07h34m05
-            'D' => date('D', $t), // Sat
-            'd' => $d[2], // 05
-            'j' => date('j', $t), // 5
-            'l' => $jour, // samedi
-            'L' => ucwords($jour), // Samedi
-            'M' => date('M', $t), // Sep
-            'm' => $d[1], // 09
-            'f' => $mois, // septembre
-            'F' => ucwords($mois), // Septembre
-            'Y' => $d[0], // 2010
-            'H' => $h[0], // 07
-            'G' => date('G', $t), // 7
-            'i' => $h[1], // 34
-            's' => $h[2],  // 05
-            'W' => $W, // numero de la semaine dans l'annee
-        ];
+        throw new Exception("Cannot format date with day of week: $dayOfWeek");
     }
 
-    return strtr($m, $trans);
+    $trans = [ // Pour le Samedi 5 septembre 2010 à 07h34m05
+        'D' => date('D', $timestamp), // Sat
+        'd' => $day, // 05
+        'j' => date('j', $timestamp), // 5
+        'l' => $localizedDay, // samedi
+        'L' => ucwords($localizedDay), // Samedi
+        'M' => date('M', $timestamp), // Sep
+        'm' => $month, // 09
+        'f' => $localizedMonth, // septembre
+        'F' => ucwords($localizedMonth), // Septembre
+        'Y' => $year, // 2010
+        'H' => $hours, // 07
+        'G' => date('G', $timestamp), // 7
+        'i' => $minutes, // 34
+        's' => $seconds,  // 05
+        'W' => $weekNumber, // numero de la semaine dans l'annee
+    ];
+
+    return strtr($format, $trans);
 }
 
 function userE()
