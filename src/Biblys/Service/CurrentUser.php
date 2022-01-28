@@ -118,6 +118,11 @@ class CurrentUser
      */
     public function getOption(string $key): ?string
     {
+        $config = new Config();
+        if ($config->get("options_table_name") !== "options") {
+            return null;
+        }
+
         if (!$this->user) {
             return null;
         }
@@ -139,6 +144,11 @@ class CurrentUser
      */
     public function setOption(string $key, string $value)
     {
+        $config = new Config();
+        if ($config->get("options_table_name") !== "options") {
+            return;
+        }
+
         $option = OptionQuery::create()
             ->filterByUser($this->user)
             ->filterByKey($key)
