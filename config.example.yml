@@ -12,6 +12,12 @@ site: 1
 logs:
     sql: false
 
+# cloud:
+#   cdn: false
+#   expires: "2019-04-28"
+#   renew_link: https://www.biblys.fr/invoice/1234
+#   domains: librys.fr, librairieys.fr
+
 # users_table_name: Users
 # options_table_name: options
 
@@ -48,9 +54,6 @@ logs:
 # media_path: /public/media
 # media_url: /media
 # downloadable_path: ../dlfiles/
-
-# cloud:
-#   cdn: false
 
 # paypal:
 #   client_id: paypal_id

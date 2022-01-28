@@ -17,7 +17,6 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 require_once __DIR__."/../../../tests/setUp.php";
 
@@ -92,7 +91,7 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
-        $config->set("cloud", ["expires" => "2018-01-01"]);
+        $config->set("cloud", ["expires" => "2019-04-28"]);
         $this->_mockContainerWithUrlGenerator();
         $updater = new Updater('', '3.0', $config);
 
@@ -106,7 +105,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Votre abonnement Biblys Cloud a expiré le 01/01/2018",
+            "Votre abonnement Biblys Cloud a expiré le 28 avril 2019.",
             $response->getContent(),
             "it should display the warning"
         );
@@ -155,5 +154,45 @@ class MainControllerTest extends TestCase
         $urlgenerator->method("generate")->willReturn("/some/url");
         $GLOBALS["container"] = $this->createMock(ContainerInterface::class);
         $GLOBALS["container"]->method("get")->willReturn($urlgenerator);
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function testAdminCloud() {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("cloud", [
+            "expires" => "1999-12-31",
+            "domains" => ["librys.fr", "librairieys.fr"],
+        ]);
+
+        // when
+        $response = $controller->adminCloud($request, $config);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Abonnement Biblys Cloud",
+            $response->getContent(),
+            "it should display the title"
+        );
+        $this->assertStringContainsString(
+            "Date d'expiration : 31 décembre 1999",
+            $response->getContent(),
+            "it should display expiration date"
+        );
+        $this->assertStringContainsString(
+            "Domaines inclus : librys.fr, librairieys.fr",
+            $response->getContent(),
+            "it should display expiration date"
+        );
     }
 }

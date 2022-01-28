@@ -51,6 +51,10 @@ main_admin_notifications:
   path: /admin/notifications
   controller: AppBundle\Controller\MainController::adminNotificationsAction
 
+main_admin_cloud:
+  path: /admin/cloud
+  controller: AppBundle\Controller\MainController::adminCloud
+
 # Article
 
 article_show:

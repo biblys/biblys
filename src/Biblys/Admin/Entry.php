@@ -250,6 +250,10 @@ class Entry
         $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
 
         $entries[] = new Entry('Support Biblys', ['category' => 'biblys', 'path' => 'ticket_index', 'icon' => 'medkit']);
+        $cloudConfig = $config->get("cloud");
+        if ($cloudConfig) {
+            $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
+        }
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://www.biblys.fr/pages/doc_index', 'icon' => 'book']);
         $entries[] = new Entry('Mise à jour', ['category' => 'biblys', 'path' => 'maintenance_update', 'icon' => 'cloud-download']);
         $entries[] = new Entry('Composants', ['category' => 'biblys', 'path' => 'maintenance_composer', 'icon' => 'puzzle-piece']);

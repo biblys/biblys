@@ -1,15 +1,7 @@
 <h1>Administration Biblys</h1>
 
-{% if cloud_expiration_date and cloud_expired %}
-  <p class="alert alert-danger text-center">
-    <span class="fa fa-exclamation-circle"></span>
-    Votre abonnement Biblys Cloud a expiré le {{ cloud_expiration_date|date('d/m/Y') }}.
-    {% if cloud_renew_link %}
-      <a href="{{ cloud_renew_link }}" target="_blank" class="btn btn-success">
-        Renouveller
-      </a>
-    {% endif %}
-  </p>
+{% if cloud_subscription_expires_soon or cloud_subscription_has_expired %}
+  {% include "AppBundle:Main:_cloudBanner.html.twig" %}
 {% endif %}
 
 {% if update_alert %}
@@ -218,13 +210,6 @@
   {% endif %}
 
 </div>
-
-{% if cloud_expiration_date and not cloud_expired %}
-  <p class="alert alert-success text-center">
-    <span class="fa fa-check-circle"></span>
-    Votre abonnement Biblys Cloud expire le {{ cloud_expiration_date|date('d/m/Y') }}.
-  </p>
-{% endif %}
 
 <p class="text-center">
   <a href="{{ path('maintenance_changelog_index') }}">Biblys v{{ version }}</a>

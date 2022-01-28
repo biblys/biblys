@@ -1,0 +1,25 @@
+<div class="alert
+        {% if cloud_subscription_has_expired %}
+            alert-danger
+        {% elseif cloud_subscription_expires_soon %}
+            alert-warning
+        {% else %}
+            alert-success
+        {% endif%}
+    text-center">
+    <span class="fa
+        {% if cloud_subscription_has_expired %}
+            fa-exclamation-circle
+        {% elseif cloud_subscription_expires_soon %}
+            fa-info-circle
+        {% else %}
+            fa-check-circle
+        {% endif%}
+    "></span>
+    {% if cloud_subscription_has_expired %}
+        Votre abonnement Biblys Cloud a expiré le {{ cloud_expiration_date|date("j f Y") }}.
+    {% else %}
+        Votre abonnement Biblys Cloud expire le {{ cloud_expiration_date|date("j f Y") }}.
+    {% endif %}
+    <a href="{{ renew_link }}" class="btn btn-primary">Renouveler</a>
+</div>

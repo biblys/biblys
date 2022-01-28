@@ -11,7 +11,6 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use InvalidArgumentException;
 use Propel\Runtime\Exception\PropelException;
 use ReCaptcha\ReCaptcha as ReCaptcha;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ContactPageException extends Exception {}
 
@@ -99,7 +98,7 @@ class MainController extends Controller
                 $rayonId = $matches[1];
                 $rayon = $rm->getById($rayonId);
                 if (!$rayon) {
-                    throw new NotFoundException("Rayon $rayonId not found.");
+                    throw new ResourceNotFoundException("Rayon $rayonId not found.");
                 }
 
                 $controller = new RayonController();
@@ -234,19 +233,7 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $cloudExpired = false;
-        $renewLink = "https://www.biblys.fr/contact/";
         $cloudConfig = $config->get("cloud");
-        if ($cloudConfig && isset($cloudConfig['expires'])) {
-            $cloudExpirationDate = new DateTime($cloudConfig['expires']);
-            $now = new DateTime();
-            if ($now > $cloudExpirationDate) {
-                $cloudExpired = true;
-            }
-            if (isset($cloudConfig["renew_link"])) {
-                $renewLink = $cloudConfig["renew_link"];
-            }
-        }
 
         $urlGenerator = $container->get("url_generator");
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
@@ -279,9 +266,10 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            'cloud_expired' => $cloudExpired,
-            'cloud_expiration_date' => $cloudConfig["expires"],
-            'cloud_renew_link' => $renewLink,
+            "renew_link" => $urlGenerator->generate("main_admin_cloud"),
+            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudConfig),
+            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudConfig),
+            "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
         ]);
     }
 
@@ -363,5 +351,76 @@ class MainController extends Controller
         }
 
         return new JsonResponse($notifications);
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function adminCloud(Request $request, Config $config): Response
+    {
+        self::authAdmin($request);
+        $cloudConfig = $config->get("cloud");
+
+        $request->attributes->set("page_title", "Abonnement Biblys Cloud");
+
+        if (!$cloudConfig) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $this->render("AppBundle:Main:adminCloud.html.twig", [
+            "domains" => $cloudConfig["domains"] ?? [],
+            "renew_link" => $cloudConfig["renew_link"] ?? "https://www.biblys.fr/contact/",
+            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudConfig),
+            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudConfig),
+            "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
+        ]);
+    }
+
+    /**
+     * @param $cloudConfig
+     * @return bool
+     * @throws Exception
+     */
+    private static function _hasCloudSubscriptionExpired($cloudConfig): bool
+    {
+        if (!$cloudConfig || !isset($cloudConfig["expires"])) {
+            return false;
+        }
+
+        $expirationDate = new DateTime($cloudConfig["expires"]);
+        $now = new DateTime();
+        if ($expirationDate > $now) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array|false $cloudConfig
+     * @return bool
+     * @throws Exception
+     */
+    private static function _isCloudSubscriptionExpiringSoon($cloudConfig): bool
+    {
+        if (!$cloudConfig || !isset($cloudConfig["expires"])) {
+            return false;
+        }
+
+        if (self::_hasCloudSubscriptionExpired($cloudConfig)) {
+            return false;
+        }
+
+        $cloudExpirationDate = new DateTime($cloudConfig["expires"]);
+        $now = new DateTime();
+        $diff = $now->diff($cloudExpirationDate)->format("%d");
+
+        if ($diff > 7) {
+            return false;
+        }
+
+        return true;
     }
 }
