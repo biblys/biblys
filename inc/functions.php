@@ -430,6 +430,16 @@ function _date($dateToFormat, $format = 'd-m-Y')
         $dateToFormat = $dateToFormat->format("Y-m-d H:i:s");
     }
 
+    $stringMatchesDateWithoutTime = preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}\$/", $dateToFormat);
+    if ($stringMatchesDateWithoutTime) {
+        $dateToFormat .= ' 00:00:00';
+    }
+
+    $stringMatchesDateTime = preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\$/", $dateToFormat);
+    if (!$stringMatchesDateTime) {
+        throw new Exception("Cannot format date in unknown format: $dateToFormat");
+    }
+
     list($dateString, $timeString) = explode(' ', $dateToFormat);
     if (empty($timeString)) {
         $timeString = "00:00:00";

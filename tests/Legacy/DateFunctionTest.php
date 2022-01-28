@@ -44,4 +44,20 @@ class DateFunctionTest extends TestCase
             $formattedDate
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testDateFunctionWithInvalidFormat()
+    {
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Cannot format date in unknown format: 1987");
+
+        // given
+        $mysqlDate = 2019-04-28;
+
+        // when
+        _date($mysqlDate, "j f Y à H:i");
+    }
 }
