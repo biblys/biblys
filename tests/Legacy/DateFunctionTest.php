@@ -30,7 +30,7 @@ class DateFunctionTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDateFunctionWithDayIncludingZero()
+    public function testDateFunctionWithoutTime()
     {
         // given
         $mysqlDate = "2019-04-28";
