@@ -8,6 +8,7 @@ db:
 site: 1
 
 users_table_name: users
+options_table_name: option
 
 https: true
 
