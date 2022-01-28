@@ -1,5 +1,10 @@
 # Historique des modifications
 
+### 2.57.4 (28 janvier 2021)
+
+Cette mise à jour purement technique ajoute une option de configuration 
+nécessaire pour préparer une migration de la base de données.
+
 ### 2.57.3 (21 janvier 2021)
 
 Correction : une erreur empêchait l'afffichage de la page de gestion d'un rayon
