@@ -2,8 +2,8 @@
 
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var Page $page */
-$_PAGE_TITLE = $page->get("title");
+/** @var \Model\Page $page */
+$_PAGE_TITLE = $page->getTitle();
 $errorText = null;
 $content = null;
 
@@ -11,9 +11,9 @@ $content = null;
 if ($_V->isAdmin()) {
   $content .= '
     <div class="admin">
-      <p>Page n&deg; '.$page->get('id').'</p>
-      <p><a href="/pages/adm_page?id='.$page->get('id').'">modifier</a></p>
-      <p><a href="/pages/adm_page?del='.$page->get('id').'" data-confirm="Voulez-vous vraiment SUPPRIMER la page '.$page->get('title').' ?">supprimer</a></p>
+      <p>Page n&deg; '.$page->getId().'</p>
+      <p><a href="/pages/adm_page?id='.$page->getId().'">modifier</a></p>
+      <p><a href="/pages/adm_page?del='.$page->getId().'" data-confirm="Voulez-vous vraiment SUPPRIMER la page '.$page->getTitle().' ?">supprimer</a></p>
     </div>
   ';
 }
@@ -21,19 +21,19 @@ if ($_V->isAdmin()) {
 if (!isset($_OPENGRAPH)) {
     /** @var Site $site */
     $_OPENGRAPH = '
-    <meta property="og:title" content="'.$page->get('title').'">
+    <meta property="og:title" content="'.$page->getTitle().'">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://'.$site->get('domain').'/pages/'.$page->get('url').'">
-    <meta property="og:description" content="'.truncate(strip_tags($page->get('content')), 500, '...', true).'">
+    <meta property="og:url" content="https://'.$site->get('domain').'/pages/'.$page->getUrl().'">
+    <meta property="og:description" content="'.truncate(strip_tags($page->getContent()), 500, '...', true).'">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:site_name" content="'.$site->get('title').'">
   ';
 
   // If page has content, check validity
-  if ($page->has('content')) {
+  if ($page->getContent()) {
     $html = new DOMDocument();
     libxml_use_internal_errors(true);
-    $html->loadHTML($page->get('content'));
+    $html->loadHTML($page->getContent());
 
     $errors = libxml_get_errors();
     if ($errors && $_V->isAdmin()) {
@@ -50,13 +50,12 @@ if (!isset($_OPENGRAPH)) {
   }
 }
 
-if ($page->has('updated')) {
-    $updated = $page->get('updated');
-} else {
-    $updated = $page->get('update');
+$updated = null;
+if ($page->getUpdatedAt() !== null) {
+    $updated = $page->getUpdatedAt();
 }
 
-if ($page->get('status') == 0) {
+if ($page->getStatus() == 0) {
     $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>
@@ -75,9 +74,9 @@ if ($errorText) {
 }
 
 $content .= '
-  <article id="'.$page->get('url').'" class="page">
-    <h1 class="page-title">'.$page->get('title').'</h1>
-    '.$page->get('content').'
+  <article id="'.$page->getUrl().'" class="page">
+    <h1 class="page-title">'.$page->getTitle().'</h1>
+    '.$page->getContent().'
     <footer class="page-footer">
       Page mise &agrave; jour le <time datetime="'._date($updated, 'Y-m-dTH:i:sZ').'">'._date($updated, 'j f Y').'</time>
     </footer>
