@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Admin\Entry;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -12,19 +13,33 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use InvalidArgumentException;
+use Model\OptionQuery;
+use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class ContactPageException extends Exception {}
 
 class MainController extends Controller
 {
-    public function homeAction(Request $request)
+    /**
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function homeAction(Request $request, Session $session, Mailer $mailer, Config $config): Response
     {
         global $site;
 
@@ -47,8 +62,15 @@ class MainController extends Controller
         $this->setOpengraphTags($opengraph);
         $this->setTwitterCardsTags($twitterCards);
 
+        $currentSiteService = CurrentSite::buildFromConfig($config);
+        $currentSite = $currentSiteService->getSite();
+        $homeOption = OptionQuery::create()
+            ->filterBySite($currentSite)
+            ->filterByKey("home")
+            ->findOne();
+        $behavior = $homeOption->getValue();
+
         // If a home page behavior is defined
-        $behavior = $site->getOpt('home');
         if ($behavior) {
             // Custom Twig template
             if ($behavior == 'custom') {
@@ -110,24 +132,26 @@ class MainController extends Controller
 
             // Display a static page from db
             } elseif (preg_match('/page:(\\d+)/', $behavior, $matches)) {
-                $page_id = $matches[1];
+                $pageId = $matches[1];
 
-                $pm = new \PageManager();
-                $page = $pm->getById($page_id);
+                $page = PageQuery::create()
+                    ->filterBySiteId($currentSite->getId())
+                    ->filterById($pageId)
+                    ->findOne();
 
                 if (!$page) {
-                    throw new Exception('Unable to find page '.$page_id);
+                    throw new Exception('Unable to find page '.$pageId);
                 }
 
-                $request->attributes->set('page', $page->get('url'));
+                $request->attributes->set('page', $page->getUrl());
 
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request);
+                return $legacyController->defaultAction($request, $session, $mailer, $config);
 
             // Old controller
             } elseif ($behavior == 'old_controller') {
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request);
+                return $legacyController->defaultAction($request, $session, $mailer, $config);
             }
         }
 

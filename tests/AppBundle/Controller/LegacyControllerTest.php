@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
@@ -26,9 +27,10 @@ class LegacyControllerTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
 
         // then
         $this->assertEquals(
@@ -54,9 +56,10 @@ class LegacyControllerTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer);
+        $legacyController->defaultAction($request, $session, $mailer, $config);
     }
 
     /**
@@ -75,9 +78,10 @@ class LegacyControllerTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer);
+        $legacyController->defaultAction($request, $session, $mailer, $config);
     }
 
     /**
@@ -96,8 +100,9 @@ class LegacyControllerTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer);
+        $legacyController->defaultAction($request, $session, $mailer, $config);
     }
 }

@@ -3,6 +3,7 @@
 namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -61,9 +62,10 @@ class OrderDeliveryTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
 
         // then
         $om = new OrderManager();
@@ -131,9 +133,10 @@ class OrderDeliveryTest extends TestCase
         $session = new Session();
         $mailer = new Mailer();
         $legacyController = new LegacyController();
+        $config = new Config();
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
 
         // then
         $this->assertInstanceOf(
@@ -186,6 +189,7 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("country_id", 1);
         $request->request->set("cgv_checkbox", 1);
         $session = new Session();
+        $config = new Config();
 
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(2))
@@ -206,7 +210,7 @@ class OrderDeliveryTest extends TestCase
 
         // when
         $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request, $session, $mailer);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
 
         // then
         $this->assertInstanceOf(

@@ -3,10 +3,13 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Model\PageQuery;
 use PageManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,15 +24,11 @@ class LegacyController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function defaultAction(Request $request, Session $session, Mailer $mailer): Response
+    public function defaultAction(Request $request, Session $session, Mailer $mailer, Config $config): Response
     {
-        global $site, $config,
+        global $site,
                $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,
                $_JS_CALLS, $_CSS_CALLS, $urlgenerator;
-
-        if ($session === null) {
-            global $session;
-        }
 
         $_PAGE = $request->get('page', 'home');
 
@@ -63,12 +62,18 @@ class LegacyController extends Controller
         else {
             $pm = new PageManager();
 
-            $page_request = ['page_url' => $_PAGE];
-            if (!$_V->isAdmin()) {
-                $page_request['page_status'] = 1;
-            }
-            $page = $pm->get($page_request);
+            $currentSiteService = CurrentSite::buildFromConfig($config);
+            $currentSite = $currentSiteService->getSite();
 
+            $pageQuery = PageQuery::create()
+                ->filterBySiteId($currentSite->getId())
+                ->filterByUrl($_PAGE);
+
+            if (!$_V->isAdmin()) {
+                $pageQuery->filterByStatus(1);
+            }
+
+            $page = $pageQuery->findOne();
             if ($page) {
                 $_INCLUDE = get_controller_path('_page');
             } else {

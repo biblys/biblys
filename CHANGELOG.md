@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.58.1 (DEV)
+
+Corrections
+
+- Certaines configurations de page d'accueil pouvait déclencher une erreur à 
+  cause d'une dépendance manquante. C'est corrigé.
+
 ## 2.58.0 (28 janvier 2021)
 
 Améliorations

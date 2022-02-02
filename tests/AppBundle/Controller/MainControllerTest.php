@@ -8,20 +8,58 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\Mailer;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
+use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Exception;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__."/../../../tests/setUp.php";
 
 class MainControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testHomeAsStaticPage()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $site = EntityFactory::createSite();
+        $page = ModelFactory::createPage(["page_title" => "Home", "site_id" => $site->get("id")]);
+        $site->setOpt("home", "page:{$page->getId()}");
+        $config = new Config();
+        $config->set("site", $site->get("site_id"));
+        $mailer = new Mailer();
+        $session = new Session();
+
+        // when
+        $response = $controller->homeAction($request, $session, $mailer, $config);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Home",
+            $response->getContent(),
+            "it should display the home page title message"
+        );
+    }
+
     public function testContact()
     {
         // given

@@ -48,6 +48,8 @@ class ModelFactory
         $page = new Page();
         $page->setTitle($attributes["page_title"] ?? "Conditions Générales de Vente");
         $page->setUrl($attributes["page_url"] ?? "cgv");
+        $page->setSiteId($attributes["site_id"] ?? 1);
+        $page->setStatus($attributes["status"] ?? 1);
         $page->save();
 
         return $page;

@@ -4,6 +4,7 @@ namespace Legacy;
 
 use AppBundle\Controller\LegacyController;
 use ArticleManager;
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use CartManager;
@@ -54,10 +55,11 @@ class CartTest extends TestCase
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
         $mailer = new Mailer();
+        $config = new Config();
 
         // when
         $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request, $session, $mailer);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
 
         // then
         $om = new OrderManager();
