@@ -6,6 +6,7 @@ use Framework\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class SiteController extends Controller
 {
@@ -20,10 +21,9 @@ class SiteController extends Controller
         $this->site = $this->sm->getById($_SITE['site_id']);
         $this->user = $_V;
         $this->url = $urlgenerator;
-        $this->session = $session;
     }
 
-    public function optionsAction(Request $request)
+    public function optionsAction(Request $request, Session $session)
     {
         global $site;
 
@@ -37,7 +37,7 @@ class SiteController extends Controller
             $new_val = $request->request->get('new_value');
             if (!empty($new_key) && !empty($new_val)) {
                 $this->site->setOpt($new_key, $new_val);
-                $this->session->getFlashbag()->add('success', "L'option &laquo;&nbsp;".$new_key."&nbsp;&raquo; a été ajoutée.");
+                $session->getFlashbag()->add('success', "L'option &laquo;&nbsp;".$new_key."&nbsp;&raquo; a été ajoutée.");
             }
 
             // Update existing options

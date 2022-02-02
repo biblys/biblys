@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
@@ -63,10 +64,8 @@ class StockController extends Controller
      * Adding a stock item to cart
      * /stock/{stock_id}/add-to-cart
      */
-    public function addToCartAction(Request $request, $stock_id)
+    public function addToCartAction(Request $request, Session $session, $stock_id)
     {
-        global $session;
-
         $this->auth('admin'); // to be implemented: non-admin users adding stock
                               // items to their own carts
 
@@ -109,9 +108,7 @@ class StockController extends Controller
      * Canceling return for a copy
      * GET /stock/{stockId}/cancel-return
     */
-    public function cancelReturnAction($stockId) {
-        global $session;
-
+    public function cancelReturnAction(Session $session, $stockId) {
         $this->auth('admin');
 
         $sm = $this->entityManager('Stock');

@@ -23,10 +23,6 @@ $config = new Config();
 $dbConfig = $config->get("db");
 Biblys\Database\Connection::initPropel($dbConfig);
 
-// Create session
-$session = new Session();
-$session->start();
-
 // Identification utilisateur
 /** @var $_V */
 if ($_V->isLogged()) {

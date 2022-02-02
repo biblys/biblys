@@ -3,6 +3,7 @@
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\ConfigValueResolver;
+use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
 use Framework\ArgumentResolver\CurrentUserValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
@@ -32,6 +33,7 @@ $argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
 $argumentResolvers[] = new ConfigValueResolver();
 $argumentResolvers[] = new CurrentUserValueResolver();
 $argumentResolvers[] = new MailerValueResolver();
+$argumentResolvers[] = new SessionValueResolver();
 $argumentResolvers[] = new UpdaterValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
     ->setArguments([null, $argumentResolvers]);

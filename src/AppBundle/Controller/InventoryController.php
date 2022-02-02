@@ -22,7 +22,6 @@ class InventoryController
         // $this->site = $this->sm->getById($_SITE['site_id']);
         $this->user = $_V;
         $this->url = $urlgenerator;
-        // $this->session = $session;
     }
 
     public function indexAction()
