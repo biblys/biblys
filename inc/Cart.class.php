@@ -292,29 +292,25 @@ class CartManager extends EntityManager
 
     /**
      * Vider le panier et remettre les exemplaires en vente
-     * @param object $cart Le panier à mettre à jour
-     * @return object Le panier mis à jour
+     * @param Cart $cart Le panier à vider
+     * @return bool Le panier mis à jour
+     * @throws Exception
      */
-    public function vacuum(Cart $cart)
+    public function vacuum(Cart $cart): bool
     {
-
         $copies = $this->getStock($cart);
         foreach ($copies as $copy) {
             $this->removeStock($cart, $copy);
         }
 
-        //            $cart->set('user_id', ''); // Web carts needs to keep user_id
         $cart->set('customer_id', '');
         $cart->set('cart_title', '');
         $cart->set('cart_date', '');
         $cart->set('cart_count', '');
         $cart->set('cart_amount', '');
 
-        try {
-            $this->update($cart);
-        } catch (Exception $e) {
-            trigger_error($e->getMessage());
-        }
+        $this->update($cart);
+
         return true;
     }
 
