@@ -1,19 +1,48 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 $_PAGE_TITLE = 'Ventes par article en stock';
+
+$content = null;
 
 // FILTRES
 
 // Raccourci 30 derniers jours
 $dates = null;
-$days = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".$_SITE["site_id"]."' AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
+/** @var PDO $_SQL */
+/** @var Site $_SITE */
+$days = $_SQL->query("
+    SELECT 
+           DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') AS `date`, 
+           `order_payment_date` 
+    FROM `orders` 
+    WHERE 
+          `orders`.`site_id` = '".$_SITE["site_id"]."' 
+          AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) 
+          AND `order_cancel_date` IS null 
+    GROUP BY `date`, `order_payment_date`  
+    ORDER BY `date` DESC
+");
 while ($o = $days->fetch()) {
     $dates .= '<option value="?d='.$o["date"].'">'._date($o["date"],"l j F").'</option>';
 }
 
+$year = date("Y");
+
 // Raccourci mois
 $months = null;
-$mois = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, DATE_FORMAT(`order_payment_date`, '%Y') as `year`, `order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".$_SITE["site_id"]."' AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
+$mois = $_SQL->query("
+    SELECT 
+           DATE_FORMAT(`order_payment_date`, '%Y-%m') AS `date`, 
+           DATE_FORMAT(`order_payment_date`, '%Y') AS `year`, 
+           `order_payment_date` 
+    FROM `orders` 
+    WHERE `orders`.`site_id` = '".$_SITE["site_id"]."' 
+        AND `order_cancel_date` IS null 
+    GROUP BY `date`, `year`, `order_payment_date`  
+    ORDER BY `date` DESC");
 while ($m = $mois->fetch()) {
     if (!empty($m["date"])) $months .= '<option value="?m='.$m["date"].'">'._date($m["date"],"F Y").'</option>';
     if (!empty($m['year']) && $m['year'] != '0000') $year = $m['year'];
@@ -90,6 +119,7 @@ $params['site_id'] = $_SITE["site_id"];
 $stock->execute($params) or error($stock->errorInfo());
 
 // Types
+/** @var Request $request */
 $type_options = Biblys\Article\Type::getOptions($request->query->get('type_id'));
 
 $tbody = null;
@@ -114,7 +144,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
 }
 $stock->closeCursor();
 
-$_ECHO .= '
+$content = '
         <a href="/pages/adm_orders_shop">Revenir à l\'interface actuelle</a>
         <h1><span class="fa fa-book"></span> '.$_PAGE_TITLE.'</h1>
 
@@ -192,4 +222,4 @@ $_ECHO .= '
         </table>
     ';
 
-?>
+return new Response($content);
