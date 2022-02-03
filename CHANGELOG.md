@@ -6,6 +6,8 @@ Corrections
 
 - Certaines configurations de page d'accueil pouvait déclencher une erreur à 
   cause d'une dépendance manquante. C'est corrigé.
+- Le formattage d'une date pouvait déclencher une erreur sous certaines 
+  conditions. Les pendules ont été remises à l'heure.
 
 ## 2.58.0 (28 janvier 2021)
 

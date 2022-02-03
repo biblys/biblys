@@ -48,6 +48,24 @@ class DateFunctionTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testDateFunctionWithoutDay()
+    {
+        // given
+        $mysqlDate = "2019-04";
+
+        // when
+        $formattedDate = _date($mysqlDate, "f Y");
+
+        // then
+        $this->assertEquals(
+            "avril 2019",
+            $formattedDate
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testDateFunctionWithInvalidFormat()
     {
         // then

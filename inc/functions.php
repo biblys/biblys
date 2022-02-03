@@ -426,8 +426,13 @@ function _date($dateToFormat, $format = 'd-m-Y')
         return false;
     }
 
-    if ($dateToFormat instanceof \DateTime) {
+    if ($dateToFormat instanceof DateTime) {
         $dateToFormat = $dateToFormat->format("Y-m-d H:i:s");
+    }
+
+    $stringMatchesDateWithoutDay = preg_match("/^[0-9]{4}-[0-9]{2}\$/", $dateToFormat);
+    if ($stringMatchesDateWithoutDay) {
+        $dateToFormat .= '-01 00:00:00';
     }
 
     $stringMatchesDateWithoutTime = preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}\$/", $dateToFormat);
