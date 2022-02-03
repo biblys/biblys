@@ -1,6 +1,9 @@
 <?php
 
-use AppBundle\Controller\ErrorController;
+namespace AppBundle\Controller;
+
+use Biblys\Axys\Client;
+use Exception;
 use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
 use PHPUnit\Framework\TestCase;
@@ -8,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -80,7 +84,7 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AuthException("Unauthorized");
-        $axys = new Biblys\Axys\Client();
+        $axys = new Client();
 
         // when
         $response = $controller->exception($request, $exception, $axys);
@@ -186,5 +190,30 @@ class ErrorControllerTest extends TestCase
             "it should response with HTTP status 500"
         );
         $this->assertStringContainsString("An error occurred", $response->getContent());
+    }
+
+    public function testFallbackToLegacyController()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $request->query->set("page", "bientot");
+        $exception = new NotFoundHttpException();
+        $GLOBALS["originalRequest"] = $request;
+
+        // when
+        $response = $controller->exception($request, $exception);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should response with HTTP status 200"
+        );
+        $this->assertEquals(
+            "true",
+            $response->headers->get("SHOULD_RESET_STATUS_CODE_TO_200"),
+            "it should include header SHOULD_RESET_STATUS_CODE_TO_200"
+        );
     }
 }
