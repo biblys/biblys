@@ -1,8 +1,11 @@
 <?php
 
 use Biblys\Service\Config;
+use Biblys\Service\Mailer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 $sm = new StockManager();
 $am = new ArticleManager();
@@ -16,6 +19,7 @@ $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
 
 $content = null;
 
+/** @var Session $session */
 foreach ($session->getFlashBag()->get('success', []) as $message) {
     $content .= "<p class='alert alert-success'>$message</p>";
 }
@@ -26,6 +30,7 @@ foreach ($session->getFlashBag()->get('info', []) as $message) {
 $div_admin = null;
 
 // Exemplaire retourne
+/** @var Request $request */
 $returnedStockId = $request->query->get('return');
 if ($returnedStockId) {
     $stock = $sm->getById($returnedStockId);
@@ -51,7 +56,8 @@ if ($lostCopyId) {
 if (isset($_GET['sold'])) {
     // All copies sold in shop are associated to a fake customer that needs
     // to be created and specified via the `fake_shop_customer` site option.
-    // This allow to create only one order for shop sales per day.
+    // This allows to create only one order for shop sales per day.
+    /** @var Site $site */
     $fakeCustomerId = $site->getOpt('fake_shop_customer');
     if (!$fakeCustomerId) {
         throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
@@ -242,71 +248,15 @@ if ($request->getMethod() === 'POST') {
         $session->getFlashBag()->add('info', "Le poids de l'article <strong>" . $article->get('title') . '</strong> a été mis à <strong>' . $article->get('weight') . 'g</strong>.');
     }
 
-    $config = new Config();
-    $usersTableName = $config->get("users_table_name");
-
-    // Envoi des alertes s'il y a lieu
-    if ($mode == 'insert' && $_POST['stock_condition'] != 'Neuf' && BIBLYS_VERSION > 2) {
-        $alerts = $_SQL->prepare(
-            "SELECT
-                `Email` AS `user_email`,
-                `user_id`,
-                `alert_max_price`,
-                `alert_condition`,
-                `alert_pub_year`,
-                `article_title`,
-                `article_url`,
-                `article_authors`,
-                `article_collection`,
-                `article_number`,
-                `article_publisher`
-            FROM `alerts`
-            JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
-            JOIN `articles` USING(`article_id`)
-            WHERE `article_id` = :article_id"
-        );
-        $alerts->bindValue('article_id', $_POST['article_id'], PDO::PARAM_INT);
-        $alerts->execute() or error($alerts->errorInfo());
-
-        $alerts_send = 0;
-        while ($al = $alerts->fetch(PDO::FETCH_ASSOC)) {
-            $headers = 'From: ' . $_SITE['site_title'] . ' <' . $_SITE['site_contact'] . '>' . "\r\n";
-            $subject = $_SITE['site_tag'] . ' | Alerte : ' . $al['article_title'] . ' est disponible !';
-            $message = '
-                <p>Bonjour,</p>
-                <p>Vous avez créé une alerte Biblys pour le livre&nbsp;:</p>
-                <p>
-                    <a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">' . $al['article_title'] . '</a><br />
-                    de ' . authors($al['article_authors']) . '<br />
-                    coll. ' . $al['article_collection'] . numero($al['article_number']) . ' (' . $al['article_publisher'] . ')
-                </p>
-                <p>Un exemplaire de ce livre vient d\'être mis en vente chez <a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">' . $_SITE['site_title'] . '</a>&nbsp;!</p>
-                <p>
-                    Édition de ' . $_POST['stock_pub_year'] . '<br />
-                    État : ' . $_POST['stock_condition'] . '<br />
-                    Prix : ' . price($_POST['stock_selling_price'], 'EUR') . '
-                </p>
-            ';
-
-            if ($site->getOpt('alerts_custom_message')) {
-                $message .= '<p><strong>' . $site->getOpt('alerts_custom_message') . '</strong></p>';
-            }
-
-            $message .= '
-                <p>Pour en savoir plus ou acheter ce livre, rendez-vous sur :<br /><a href="http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '">http://' . $_SITE['site_domain'] . '/' . $al['article_url'] . '</a></p>
-                <p>Attention !<br />Une alerte pouvant être créée par plusieurs personnes sur le même livre, le premier arrivé est le premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne perdez pas de temps !</p>
-                <p><a href="http://www.biblys.fr/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
-                <p>À très bientôt dans les librairies Biblys !</p>
-            ';
-
-            $user = $um->getById($al['user_id']);
-            $um->mail($user, $subject, $message, $headers);
-
-            ++$alerts_send;
-        }
-
-        if ($alerts_send) {
-            $session->getFlashBag()->add('info', '<strong>' . $alerts_send . ' alerte' . s($alerts_send) . '</strong> ' . s($alerts_send, 'a', 'ont') . ' été envoyée' . s($alerts_send) . '.');
+    $copyCondition = $request->request->get("stock_condition");
+    if (_shouldAlertsBeSent($mode, $copyCondition)) {
+        /** @var PDO $_SQL */
+        /** @var Mailer $mailer */
+        $copyYear = $request->request->get("stock_pub_year");
+        $copyPrice = $request->request->get("stock_selling_price");
+        $sentAlerts = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $site);
+        if ($sentAlerts) {
+            $session->getFlashBag()->add('info', '<strong>'.$sentAlerts.' alerte'.s($sentAlerts).'</strong> '.s($sentAlerts, 'a', 'ont').' été envoyée'.s($sentAlerts).'.');
         }
     }
 
@@ -424,6 +374,7 @@ if ($addParam) {
 $article = $stock->getArticle();
 if ($article) {
     $a = $article;
+    /** @var \Symfony\Component\Routing\Generator\UrlGenerator $urlgenerator */
     $articleUrl = $urlgenerator->generate(
         'article_show',
         ['slug' => $article->get('url')]
@@ -586,7 +537,7 @@ if ($article) {
     // TVA d'après article
     $tva = null;
     $s['stock_tva'] = 0;
-    if (!$su['supplier_notva'] && !$_SITE['default_notva']) {
+    if (!$su['supplier_notva'] && !$site['default_notva']) {
         $s['stock_tva'] = $article->getTaxRate();
         $tva = '
             <label for="stock_tva" class="disabled">TVA :</label>
@@ -651,8 +602,8 @@ if ($article) {
     }
 
     // Rabais sur le prix neuf
-    if (!empty($_SITE['Rabais']) and !empty($a['article_price'])) {
-        $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * $_SITE['Rabais']);
+    if (!empty($site['Rabais']) and !empty($a['article_price'])) {
+        $s['stock_selling_price'] = $a['article_price'] - ($a['article_price'] / 100 * $site['Rabais']);
     }
 
     $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $s['stock_invoice'] . '" />';
@@ -705,7 +656,7 @@ if ($article) {
         ';
     }
 
-    $stock_shop = '<input type="hidden" name="stock_shop" value="' . $_SITE['site_id'] . '" />';
+    $stock_shop = '<input type="hidden" name="stock_shop" value="' . $site['site_id'] . '" />';
 
     // Add article to rayons
     $rayons = $rm->getAll();
@@ -806,7 +757,7 @@ if ($article) {
                 ' . $photo_field . '
 
                 <label for="stock_pub_year">D&eacute;p&ocirc;t l&eacute;gal :</label>
-                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlenght="4" min="1900" max="' . (date('Y') + 1) . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
+                <input type="number" id="stock_pub_year" name="stock_pub_year" maxlength="4" min="1900" max="' . (date('Y') + 1) . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
                 </span>
                 <br /><br />
 
@@ -975,3 +926,76 @@ $content .= '
 ';
 
 return new Response($content);
+
+function _shouldAlertsBeSent(string $mode, string $copyCondition): bool
+{
+    return $mode === "insert" && $copyCondition !== "Neuf";
+}
+
+function _sendAlertsForArticle(
+    Article $article,
+    string $copyYear,
+    string $copyPrice,
+    string $copyCondition,
+    Mailer  $mailer,
+    Site    $currentSite
+): int
+{
+    $am = new AlertManager();
+    $um = new UserManager();
+
+    $alerts = $am->getAll(["article_id" => $article->get("id")]);
+
+    $sentAlerts = 0;
+    foreach ($alerts as $alert) {
+        $subject = "Alerte : {$article->get("title")} est disponible !";
+
+        $customMessage = null;
+        if ($currentSite->getOpt("alerts_custom_message")) {
+            $customMessage = '<p><strong>'.$currentSite->getOpt('alerts_custom_message').'</strong></p>';
+        }
+
+        $articleUrl = "https://{$currentSite->get("domain")}/a/{$article->get("url")}";
+
+        $message = '
+            <p>Bonjour,</p>
+            <p>Vous avez créé une alerte Biblys pour le livre&nbsp;:</p>
+            <p>
+                <a href="'.$articleUrl.'">'.$article->get("title").'</a><br />
+                de '.authors($article->get("authors")).'<br />
+                coll. '.$article->get("collection")->get("name").numero($article->get("number")).' ('.$article->get("publisher")->get("name").')
+            </p>
+            <p>
+                Un exemplaire de ce livre vient d\'être mis en vente chez 
+                <a href="https://'.$currentSite->get("domain").'/a/'.$article->get("url").'">'.$currentSite['site_title'].'</a>&nbsp;!
+            </p>
+            <p>
+                Édition de '.$copyYear.'<br />
+                État : '.$copyCondition.'<br />
+                Prix : '.currency($copyPrice / 100, ).'
+            </p>
+            
+            '.$customMessage.'
+            
+            <p>
+                Pour en savoir plus ou acheter ce livre, rendez-vous sur :<br />
+                <a href="'.$articleUrl.'">'.$articleUrl.'</a>
+            </p>
+            <p>
+                Attention !<br />
+                Une alerte pouvant être créée par plusieurs personnes sur le même livre, le premier arrivé est le 
+                premier servi. Il se peut donc que le livre ne soit déjà plus disponible lors de votre visite. Ne 
+                perdez pas de temps !
+            </p>
+            <p><a href="https://www.biblys.fr/pages/log_myalerts">Modifier ou annuler mes alertes</a></p>
+            <p>À très bientôt dans les librairies Biblys !</p>
+        ';
+
+        $user = $um->getById($alert->get("user_id"));
+        $mailer->send($user->get("email"), $subject, $message);
+        $sentAlerts++;
+    }
+
+    return $sentAlerts;
+}
+
