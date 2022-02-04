@@ -3,6 +3,7 @@
 use Biblys\Axys\Client;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -193,7 +194,10 @@ if ($request->getMethod() === "POST") {
         );
 
         // Delete alerts for purchased articles
-        $order->deleteRelatedAlerts();
+        /** @var CurrentSite $currentSite */
+        if ($currentSite->hasOptionEnabled("alerts")) {
+            $order->deleteRelatedAlerts();
+        }
 
         $_SQL->commit();
 
