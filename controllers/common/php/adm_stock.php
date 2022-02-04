@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -249,7 +250,7 @@ if ($request->getMethod() === 'POST') {
     }
 
     $copyCondition = $request->request->get("stock_condition");
-    if (_shouldAlertsBeSent($mode, $copyCondition)) {
+    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSite)) {
         /** @var PDO $_SQL */
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
@@ -936,9 +937,9 @@ $content .= '
 
 return new Response($content);
 
-function _shouldAlertsBeSent(string $mode, string $copyCondition): bool
+function _shouldAlertsBeSent(string $mode, string $copyCondition, CurrentSite $currentSite): bool
 {
-    return $mode === "insert" && $copyCondition !== "Neuf";
+    return $currentSite->hasOptionEnabled("alerts") && $mode === "insert" && $copyCondition !== "Neuf";
 }
 
 function _sendAlertsForArticle(
