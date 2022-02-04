@@ -1,8 +1,14 @@
-<?php
+<?php /** @noinspection HtmlUnknownTarget */
 
+
+use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+
+/** @var Request $request */
+/** @var Site $site */
 
 $om = new OrderManager();
 $sm = new StockManager();
@@ -27,6 +33,7 @@ if (!$order) {
 
 // Is Paypal available ?
 $paypal = false;
+/** @var Config $config */
 $paypal_config = $config->get("paypal");
 if ($paypal_config) {
     $paypal = true;
@@ -50,15 +57,16 @@ $o = $order;
 
 if ($request->getMethod() === "POST") {
 
-    $payment_mode = $request->request->get("payment");
+    $payment_mode = $request->request->get("paymeént");
 
     // Update order's payment mode
+    /** @var PDO $_SQL */
     $update = $_SQL->prepare("UPDATE `orders` SET `order_payment_mode` = :mode WHERE `order_id` = :id LIMIT 1");
     $update->execute(["mode" => $payment_mode, "id" => $order->get("id")]);
 
     if ($payment_mode == "paypal" && $paypal)  {
 
-        $url = $order->createPaypalPaymentLink($paypal_config["client_id"], $paypal_config["client_secret"]);
+        $url = $order->createPaypalPaymentLink();
         return new RedirectResponse($url);
 
     } elseif ($payment_mode == 'payplug' && $payplug) {
@@ -83,7 +91,7 @@ if ($request->getMethod() === "POST") {
         $content .= '
             <script src="https://js.stripe.com/v3/"></script>
             <script>
-                var stripe = Stripe("'.$stripeConfig["public_key"].'");
+                const stripe = Stripe("'.$stripeConfig["public_key"].'");
                 stripe.redirectToCheckout({
                     sessionId: "'.$payment->get("provider_id").'"
                   }).then(function (result) {
@@ -96,6 +104,7 @@ if ($request->getMethod() === "POST") {
 
     } elseif($payment_mode == "transfer") {
 
+        /** @var Site $site */
         $content .= '
             <p class="noprint">Pour r&eacute;gler votre commande par virement&nbsp;:</p>
             <ol class="noprint">
@@ -207,7 +216,7 @@ else // CHOIX DU MODE DE PAIMENT
             $payment_options .= '
                 <h4 class="radio"><label for="payment_payplug" class="radio"><input type="radio" name="payment" id="payment_payplug" value="payplug"> Paiement en ligne (carte bancaire)</label></h4>
                 <p>Paiement par carte bancaire via le serveur sécurisé SSL de notre partenaire PayPlug.</p>
-                <img src="/common/img/payplug_cards.png" border="0" alt="PayPlug" height=50>
+                <img src="/common/img/payplug_cards.png" alt="PayPlug" height=50>
             ';
         }
 
@@ -216,7 +225,7 @@ else // CHOIX DU MODE DE PAIMENT
             $payment_options .= '
                 <h4 class="radio"><label for="payment_paypal" class="pointer radio"><input type="radio" name="payment" id="payment_paypal" value="paypal"> Paiement en ligne (Paypal)</label></h4>
                 <p>Payez en ligne par carte bancaire via le serveur sécurisé SSL de notre partenaire Paypal.</p>
-                <img src="/common/img/paypal_cards.png" border="0" alt="PayPal Acceptance Mark" height="50">
+                <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark" height="50">
             ';
         }
 
@@ -237,7 +246,7 @@ else // CHOIX DU MODE DE PAIMENT
             $payment_options .= '
                 <h4 class="radio"><label for="payment_payplug" class="radio"><input type="radio" name="payment" id="payment_payplug" value="payplug"> Carte bancaire</label></h4>
                 <p>Paiement par carte bancaire via le serveur s&eacute;curis&eacute; SSL de notre partenaire PayPlug. Pour une exp&eacute;dition rapide, pr&eacute;f&eacute;rez le paiement par carte bancaire.</p>
-                <img src="/common/img/payplug_cards.png" border="0" alt="PayPlug" height=50>
+                <img src="/common/img/payplug_cards.png" alt="PayPlug" height=50>
                 <br><br>
             ';
         }
@@ -247,7 +256,7 @@ else // CHOIX DU MODE DE PAIMENT
             $payment_options .= '
                 <h4 class="radio"><label for="payment_paypal" class="radio"><input type="radio" name="payment" id="payment_paypal" value="paypal"> Paypal</label></h4>
                 <p>Paiement par carte bancaire via le serveur s&eacute;curis&eacute; SSL de notre partenaire Paypal. Pour une exp&eacute;dition rapide, pr&eacute;f&eacute;rez le paiement par carte bancaire.</p>
-                <img src="/common/img/paypal_cards.png" border="0" alt="PayPal Acceptance Mark">
+                <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark">
                 <br><br>
             ';
 
@@ -259,7 +268,7 @@ else // CHOIX DU MODE DE PAIMENT
                 <h4 class="radio"><label for="payment_stripe" class="radio"><input type="radio" name="payment" id="payment_stripe" value="stripe"> Carte bancaire</label></h4>
                 <p>Paiement par carte bancaire via le serveur sécurisé de notre partenaire Stripe. Pour une expédition rapide, préférez le paiement par carte bancaire.</p>
                 <a href="https://www.stripe.com/" target="_blank" rel="nooreferrer noopener">
-                    <img src="/assets/images/powered-by-stripe.png" border="0" alt="PayPlug" height=41>
+                    <img src="/assets/images/powered-by-stripe.png" alt="PayPlug" height=41>
                 </a>
                 <br><br>
             ';
