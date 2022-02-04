@@ -4,6 +4,7 @@ namespace Biblys\Legacy;
 
 use Biblys\Axys\Client as AxysClient;
 use Biblys\Service\Config;
+use Exception;
 use Biblys\Service\CurrentSite;
 use Site;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -25,6 +26,7 @@ class LayoutBuilder
      * @param Config $config
      * @param Response $response
      * @return Response
+     * @throws Exception
      */
     public static function wrapResponseInThemeLayout($site, array $cssCalls, array $jsCalls, Visitor $currentVisitor, UrlGenerator $urlgenerator, Request $request, Config $config, Response $response): Response
     {
@@ -64,16 +66,11 @@ class LayoutBuilder
 ';
 
         // Get custom or default layout template
-        $layout = BIBLYS_PATH . '/src/AppBundle/Resources/views/layout.html';
-        $custom_layout = BIBLYS_PATH . '/app/Resources/views/layout.html';
-        $old_wrap_layout = SITE_PATH . '/html/_wrap.html'; // Retro-compatibility
-
-        if (file_exists($custom_layout)) {
-            $layout = $custom_layout;
-        } elseif (file_exists($old_wrap_layout)) {
-            $layout = $old_wrap_layout;
+        $customLayout = BIBLYS_PATH . '/app/Resources/views/layout.html';
+        if (!file_exists($customLayout)) {
+            throw new Exception("Missing layout template: $customLayout");
         }
-        $content = file_get_contents($layout);
+        $content = file_get_contents($customLayout);
 
         $php_wrap = get_controller_path('_wrap');
         if ($php_wrap) {
