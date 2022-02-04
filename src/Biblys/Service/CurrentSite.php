@@ -2,8 +2,11 @@
 
 namespace Biblys\Service;
 
+use Model\Option;
+use Model\OptionQuery;
 use Model\Site;
 use Model\SiteQuery;
+use Propel\Runtime\Exception\PropelException;
 
 class CurrentSite
 {
@@ -33,5 +36,42 @@ class CurrentSite
         $site = SiteQuery::create()->findPk($siteId);
 
         return new CurrentSite($site);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getOption(string $key): ?string
+    {
+        $option = OptionQuery::create()
+            ->filterBySite($this->site)
+            ->filterByKey($key)
+            ->findOne();
+
+        if (!$option) {
+            return null;
+        }
+
+        return $option->getValue();
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function setOption(string $key, string $value)
+    {
+        $option = OptionQuery::create()
+            ->filterBySite($this->site)
+            ->filterByKey($key)
+            ->findOne();
+
+        if (!$option) {
+            $option = new Option();
+            $option->setSite($this->site);
+            $option->setKey($key);
+        }
+
+        $option->setValue($value);
+        $option->save();
     }
 }
