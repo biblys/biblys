@@ -1,5 +1,13 @@
 # Historique des modifications
 
+
+### 2.58.3 (DEV)
+
+Corrections
+
+- Plusieurs dates identiques pouvaient apparaître dans les raccourcis de la page
+  "Ventes par article". C'est corrigé.
+
 ### 2.58.2 (4 février 2021)
 
 <<<<<<< HEAD
