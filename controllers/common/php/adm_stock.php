@@ -760,8 +760,8 @@ if ($article) {
                 <input type="text" name="stock_id" id="stock_id" value="' . $_GET['id'] . '" class="mini" readonly />
                 <br />
 
-                <label for="article_id" class="required">Article n&deg; </label>
-                <input type="text" name="article_id" id="article_id" value="' . $a['article_id'] . '" class="mini required" required />
+                <label for="article_id" class="required">Article n° </label>
+                <input type="number" name="article_id" id="article_id" value="' . $a['article_id'] . '" class="mini required" required />
                 ' . $rayon_select . '
                 <br />
                 <br />
@@ -771,7 +771,15 @@ if ($article) {
                 ' . $invoice . ' <input type="checkbox" name="stock_depot" id="stock_depot" value=1' . (isset($s['stock_depot']) && $s['stock_depot'] ? ' checked' : null) . '> <label for="stock_depot" class="after">D&eacute;p&ocirc;t</label>
                 <br />
                 <label for="stock_stockage">Emplacement :</label>
-                <input type="text" name="stock_stockage" id="stock_stockage" value="' . $s['stock_stockage'] . '" class="short" required />
+                <input 
+                    type="text" 
+                    name="stock_stockage" 
+                    id="stock_stockage" 
+                    value="'.$s["stock_stockage"].'" 
+                    class="short"
+                    maxlength="16" 
+                    required 
+                />
                 <br /><br />
 
                 <label for="stock_condition" class="required">&Eacute;tat :</label>
