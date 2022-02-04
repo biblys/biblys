@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 $om = new OrderManager();
 $sm = new StockManager();
 
-$_PAGE_TITLE = 'Commande &raquo; Paiement';
+$_PAGE_TITLE = 'Commande » Paiement';
 
 $content = '<h2 class="noprint">'.$_PAGE_TITLE.'</h2>';
 
@@ -57,7 +57,7 @@ $o = $order;
 
 if ($request->getMethod() === "POST") {
 
-    $payment_mode = $request->request->get("paymeént");
+    $payment_mode = $request->request->get("payment");
 
     // Update order's payment mode
     /** @var PDO $_SQL */
@@ -106,7 +106,7 @@ if ($request->getMethod() === "POST") {
 
         /** @var Site $site */
         $content .= '
-            <p class="noprint">Pour r&eacute;gler votre commande par virement&nbsp;:</p>
+            <p class="noprint">Pour régler votre commande par virement&nbsp;:</p>
             <ol class="noprint">
                 <li>
                     Effectuez un virement SEPA d\'un montant de 
@@ -115,7 +115,7 @@ if ($request->getMethod() === "POST") {
                     '.$site->getOpt('payment_iban').'.</strong>
                 </li>
                 <li>
-                    Pr&eacute;cisez <strong>votre num&eacute;ro de 
+                    Précisez <strong>votre numéro de 
                     commande</strong> ('.$order->get('id').') dans le motif 
                     du virement.
                 </li>
@@ -138,11 +138,12 @@ if ($request->getMethod() === "POST") {
             }
 
             $content .= '
-                <p class="noprint">Pour r&eacute;gler votre commande par ch&egrave;que&nbsp;:</p>
+                <p class="noprint">Pour régler votre commande par chèque&nbsp;:</p>
                 <ol class="noprint">
-                    <li>&Eacute;tablissez un ch&egrave;que d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> &agrave; l\'ordre de <strong>'.$site->getNameForCheckPayment().'</strong>.</li>
-                    <li>Inscrivez au dos du ch&egrave;que <strong>votre nom</strong> et <strong>votre num&eacute;ro de commande</strong> ('.$order->get('id').') ou imprimez cette page et joignez-l&agrave; &agrave votre envoi.</li>
-                    <li>Envoyez votre ch&egrave;que &agrave; l\'adresse :</li>
+                    <li>Établissez un chèque d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> à l\'ordre de <strong>'.$site->getNameForCheckPayment().'</strong>.</li>
+                    <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> ('.$order->get('id').') ou imprimez cette page et joignez-là 
+                     votre envoi.</li>
+                    <li>Envoyez votre chèque à l\'adresse :</li>
                 </ol>
                 <p class="noprint center">
                     '.$site->get('title').'<br />
@@ -150,10 +151,10 @@ if ($request->getMethod() === "POST") {
                 </p>
                 <br />
                 <p class="noprint">
-                    <a href="/payment/'.$order->get('url').'" class="btn btn-default">&laquo; Choisir un autre mode de paiement</a>
+                    <a href="/payment/'.$order->get('url').'" class="btn btn-default">» Choisir un autre mode de paiement</a>
                 </p>
 
-                <h2>Bon de commande '.$site->get('tag').' n&deg; '.$order->get('id').'</h2>
+                <h2>Bon de commande '.$site->get('tag').' n°; '.$order->get('id').'</h2>
 
                 <p>
                     '.$order->get('firstname').' '.$order->get('lastname').'<br />
@@ -175,6 +176,18 @@ else // CHOIX DU MODE DE PAIMENT
 {
     $payment_options = NULL;
 
+    // Disable Stripe if < 50
+    if (($stripe) && $order->getTotal() < 50) {
+        $payment_options = '
+            <p class="alert alert-warning">
+                <span class="fa fa-warning"></span>&nbsp;
+                Les commandes dont le montant total est inférieur à 0,50 €<br>
+                ne peuvent être réglés par carte bancaire.
+            </p>
+        ';
+        $stripe = false;
+    }
+
     // Disable Payplug / Paypal if amount is < 100
     if (($payplug || $paypal) && $order->getTotal() < 100) {
         $payment_options = '
@@ -188,34 +201,52 @@ else // CHOIX DU MODE DE PAIMENT
         $paypal = false;
     }
 
-    // Disable Stripe if < 50
-    if (($stripe) && $order->getTotal() < 50) {
-        $payment_options = '
-            <p class="alert alert-warning">
-                <span class="fa fa-warning"></span>&nbsp;
-                Les commandes dont le montant total est inférieur à 0,50 €<br>
-                ne peuvent être réglés par carte bancaire.
-            </p>
-        ';
-        $stripe = false;
-    }
-
     // Withdrawal
     if ($order->get('shipping_mode') == "magasin") {
 
         // Check
         if ($site->getOpt('payment_check')) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_cheque" class="pointer radio"><input type="radio" name="payment" id="payment_cheque" value="cheque" checked> Paiement en magasin (chèque ou espèce)</label></h4>
-                <p>Payez directement en magasin, au moment du retrait de votre commande, par chèque à l\'ordre de '.$site->getNameForCheckPayment().' ou en espèces.</p>
+                <h4 class="radio">
+                    <label for="payment_cheque" class="radio">
+                        <input type="radio" name="payment" id="payment_cheque" value="cheque" checked> 
+                        Paiement en magasin (chèque ou espèce)
+                    </label>
+                </h4>
+                <p>
+                    Payez directement en magasin, au moment du retrait de votre commande, par chèque à l\'ordre de 
+                    '.$site->getNameForCheckPayment().' ou en espèces.
+                </p>
+            ';
+        }
+
+        // Stripe
+        if ($stripe) {
+            $payment_options .= '
+                <h4 class="radio">
+                    <label for="payment_stripe" class="radio">
+                        <input type="radio" name="payment" id="payment_stripe" value="stripe"> 
+                        Paiement en ligne (carte bancaire)
+                    </label>
+                </h4>
+                <p>
+                    Paiement par carte bancaire via le serveur sécurisé SSL de notre partenaire Stripe.
+                </p>
             ';
         }
 
         // Payplug
         if ($payplug) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_payplug" class="radio"><input type="radio" name="payment" id="payment_payplug" value="payplug"> Paiement en ligne (carte bancaire)</label></h4>
-                <p>Paiement par carte bancaire via le serveur sécurisé SSL de notre partenaire PayPlug.</p>
+                <h4 class="radio">
+                    <label for="payment_payplug" class="radio">
+                        <input type="radio" name="payment" id="payment_payplug" value="payplug"> 
+                        Paiement en ligne (carte bancaire)
+                    </label>
+                </h4>
+                <p>
+                    Paiement par carte bancaire via le serveur sécurisé SSL de notre partenaire PayPlug.
+                </p>
                 <img src="/common/img/payplug_cards.png" alt="PayPlug" height=50>
             ';
         }
@@ -223,50 +254,33 @@ else // CHOIX DU MODE DE PAIMENT
         // Paypal
         if ($paypal) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_paypal" class="pointer radio"><input type="radio" name="payment" id="payment_paypal" value="paypal"> Paiement en ligne (Paypal)</label></h4>
-                <p>Payez en ligne par carte bancaire via le serveur sécurisé SSL de notre partenaire Paypal.</p>
+                <h4 class="radio">
+                    <label for="payment_paypal" class="radio">
+                        <input type="radio" name="payment" id="payment_paypal" value="paypal"> 
+                        Paiement en ligne (PayPal)
+                    </label>
+                </h4>
+                <p>
+                    Payez en ligne par carte bancaire via le serveur sécurisé SSL de notre partenaire PayPal.
+                </p>
                 <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark" height="50">
             ';
         }
-
-        // Stripe
-        if ($stripe) {
-            $payment_options .= '
-                <h4 class="radio"><label for="payment_stripe" class="radio"><input type="radio" name="payment" id="payment_stripe" value="stripe"> Paiement en ligne (carte bancaire)</label></h4>
-                <p>Paiement par carte bancaire via le serveur sécurisé SSL de notre partenaire Stripe.</p>
-            ';
-        }
     }
-
-    // Shipping
-    else {
-
-        // Payplug
-        if ($payplug) {
-            $payment_options .= '
-                <h4 class="radio"><label for="payment_payplug" class="radio"><input type="radio" name="payment" id="payment_payplug" value="payplug"> Carte bancaire</label></h4>
-                <p>Paiement par carte bancaire via le serveur s&eacute;curis&eacute; SSL de notre partenaire PayPlug. Pour une exp&eacute;dition rapide, pr&eacute;f&eacute;rez le paiement par carte bancaire.</p>
-                <img src="/common/img/payplug_cards.png" alt="PayPlug" height=50>
-                <br><br>
-            ';
-        }
-
-        // Paypal
-        if ($paypal) {
-            $payment_options .= '
-                <h4 class="radio"><label for="payment_paypal" class="radio"><input type="radio" name="payment" id="payment_paypal" value="paypal"> Paypal</label></h4>
-                <p>Paiement par carte bancaire via le serveur s&eacute;curis&eacute; SSL de notre partenaire Paypal. Pour une exp&eacute;dition rapide, pr&eacute;f&eacute;rez le paiement par carte bancaire.</p>
-                <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark">
-                <br><br>
-            ';
-
-        }
-
+    else
+    {
         // Stripe
         if ($stripe) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_stripe" class="radio"><input type="radio" name="payment" id="payment_stripe" value="stripe"> Carte bancaire</label></h4>
-                <p>Paiement par carte bancaire via le serveur sécurisé de notre partenaire Stripe. Pour une expédition rapide, préférez le paiement par carte bancaire.</p>
+                <h4 class="radio">
+                    <label for="payment_stripe" class="radio">
+                        <input type="radio" name="payment" id="payment_stripe" value="stripe"> Carte bancaire
+                    </label>
+                </h4>
+                <p>
+                    Paiement par carte bancaire via le serveur sécurisé de notre partenaire Stripe.<br /> 
+                    Pour une expédition rapide, préférez le paiement par carte bancaire.
+                </p>
                 <a href="https://www.stripe.com/" target="_blank" rel="nooreferrer noopener">
                     <img src="/assets/images/powered-by-stripe.png" alt="PayPlug" height=41>
                 </a>
@@ -274,25 +288,72 @@ else // CHOIX DU MODE DE PAIMENT
             ';
         }
 
+        // Payplug
+        if ($payplug) {
+            $payment_options .= '
+                <h4 class="radio">
+                    <label for="payment_payplug" class="radio">
+                        <input type="radio" name="payment" id="payment_payplug" value="payplug"> Carte bancaire
+                    </label>
+                </h4>
+                <p>
+                    Paiement par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.<br /> 
+                    Pour une expédition rapide, préférez le paiement par carte bancaire.
+                </p>
+                <img src="/common/img/payplug_cards.png" alt="PayPlug" height=50>
+                <br><br>
+            ';
+        }
+
+        // Paypal
+        if ($paypal) {
+            $payment_options .= '
+                <h4 class="radio">
+                    <label for="payment_paypal" class="radio">
+                        <input type="radio" name="payment" id="payment_paypal" value="paypal"> PayPal
+                    </label>
+                </h4>
+                <p>
+                    Paiement par compte PayPal via le serveur sécurisé de notre partenaire PayPal.<br /> 
+                    Pour une expédition rapide, préférez le paiement par carte bancaire.
+                </p>
+                <img src="/common/img/paypal_cards.png" alt="PayPal Acceptance Mark">
+                <br><br>
+            ';
+
+        }
+
         if ($site->getOpt('payment_iban')) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_transfer" class="radio"><input type="radio" name="payment" id="payment_transfer" value="transfer"> Virement</label></h4>
-                <p>Effectuer un virement vers notre compte. Votre commande sera expédiée après apparition du virement sur notre relevé de compte.</p>
+                <h4 class="radio">
+                    <label for="payment_transfer" class="radio">
+                        <input type="radio" name="payment" id="payment_transfer" value="transfer"> Virement
+                    </label>
+                </h4>
+                <p>
+                    Effectuer un virement vers notre compte. Votre commande sera expédiée après apparition du virement sur notre relevé de compte.
+                </p>
                 <br>
             ';
         }
 
         if ($site->getOpt('payment_check')) {
             $payment_options .= '
-                <h4 class="radio"><label for="payment_cheque" class="radio"><input type="radio" name="payment" id="payment_cheque" value="cheque"> Ch&egrave;que</label></h4>
-                <p>Exp&eacute;diez un ch&egrave;que &agrave; l\'ordre de '.$site->getNameForCheckPayment().'. Votre commande sera exp&eacute;di&eacute;e apr&egrave;s r&eacute;c&eacute;ption du ch&egrave;que.</p>
+                <h4 class="radio">
+                    <label for="payment_cheque" class="radio">
+                        <input type="radio" name="payment" id="payment_cheque" value="cheque"> Chèque
+                    </label>
+                </h4>
+                <p>
+                    Expédiez un chèque à l\'ordre de '.$site->getNameForCheckPayment().'. Votre commande 
+                    sera expédiée après encaissement du chèque.
+                </p>
             ';
         }
     }
 
     $content .= '
-
-        <p class="alert alert-info">Veuillez choisir le mode de paiement pour la commande n&deg; '.$order->get('id').'.<br>Montant &agrave; r&eacute;gler : '.currency($order->get('amount_tobepaid') / 100).'</p>
+        <p class="alert alert-info">Veuillez choisir le mode de paiement pour la commande n°; '.$order->get('id').'.<br>Montant à régler : '.currency($order->get('amount_tobepaid') / 100).'</p>
 
         <form method="post">
             <fieldset>
