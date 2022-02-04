@@ -1,5 +1,14 @@
 # Historique des modifications
 
+### 2.58.2 (4 février 2021)
+
+- Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas
+  correctement. C'est mieux.
+- L'affichage de la page d'accueil pouvait déclencher une erreur si aucune 
+  option n'était configuré. Ce n'est plus le cas.
+- L'enregistrement d'une commande sans frais de port pouvait déclencher une 
+  erreur. Ça fonctionne à présent.
+
 ### 2.58.1 (4 février 2021)
 
 Corrections
@@ -8,8 +17,6 @@ Corrections
   cause d'une dépendance manquante. C'est corrigé.
 - Le formattage d'une date pouvait déclencher une erreur sous certaines 
   conditions. Les pendules ont été remises à l'heure.
-- Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas 
-  correctement. C'est mieux.
 
 ## 2.58.0 (28 janvier 2021)
 
