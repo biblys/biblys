@@ -3,6 +3,7 @@
 use AppBundle\Controller\ErrorController;
 use Biblys\Axys\Client as AxysClient;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Framework\Exception\ServiceUnavailableException;
 use Framework\Framework;
 use Symfony\Component\DependencyInjection\Reference;
@@ -219,12 +220,14 @@ if ($php_wrap) {
     include $php_wrap;
 }
 
+$currentSite = CurrentSite::buildFromConfig($config);
+
 // Add custom entries to Axys menu
 $menuAxys = null;
 if ($site->get('wishlist')) {
     $menuAxys .= '<li><a href="/pages/log_mywishes" rel="nofollow">mes envies</a></li>';
 }
-if ($site->get('alerts')) {
+if ($currentSite->hasOptionEnabled("alerts")) {
     $menuAxys .= '<li><a href="/pages/log_myalerts" rel="nofollow">mes alertes</a></li>';
 }
 if ($site->get('vpc')) {
