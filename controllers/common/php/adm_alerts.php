@@ -1,8 +1,7 @@
 <?php
 
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Response;
-
-
 
 $_PAGE_TITLE = 'Livres les plus recherchés';
 
@@ -27,8 +26,22 @@ while($a = $alerts->fetch()) {
     ';
 }
 
+$disabledAlertsWarning = null;
+/** @var CurrentSite $currentSite */
+if (!$currentSite->hasOptionEnabled("alerts")) {
+    $disabledAlertsWarning = '
+        <div class="alert alert-warning">
+            <span class="fa fa-exclamation-triangle"></span>
+            <strong>Les envois d\'alertes ne sont pas activés.</strong><br />
+            Aucun e-mail ne sera envoyé d\'alerte ne sera envoyé lors de l\'ajout d\'exemplaires au stock.
+        </div>
+    ';
+}
+
 $content = '
     <h1><span class="fa fa-bell"></span> '.$_PAGE_TITLE.'</h1>
+
+    '.$disabledAlertsWarning.'
 
     <table class="admin-table">
         <thead>
