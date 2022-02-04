@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 $om = new OrderManager();
@@ -7,9 +9,7 @@ $sm = new StockManager();
 
 $_PAGE_TITLE = 'Commande &raquo; Paiement';
 
-$_ECHO .= '
-    <h2 class="noprint">'.$_PAGE_TITLE.'</h2>
-';
+$content = '<h2 class="noprint">'.$_PAGE_TITLE.'</h2>';
 
 $numerique = 0;
 $paypal = null;
@@ -59,16 +59,16 @@ if ($request->getMethod() === "POST") {
     if ($payment_mode == "paypal" && $paypal)  {
 
         $url = $order->createPaypalPaymentLink($paypal_config["client_id"], $paypal_config["client_secret"]);
-        redirect($url);
+        return new RedirectResponse($url);
 
     } elseif ($payment_mode == 'payplug' && $payplug) {
 
         try {
             $payment = $order->createPayplugPayment();
-            redirect($payment->get("url"));
+            return new RedirectResponse($payment->get("url"));
         } catch(Payplug\Exception\BadRequestException $exception) {
             $error = $exception->getErrorObject();
-            $_ECHO = '
+            $content = '
                 <p class="alert alert-danger">
                     Une erreur est survenue lors de la création du paiement via PayPlug :<br />
                     <strong>Message : '.$error['message'].'</strong>
@@ -80,7 +80,7 @@ if ($request->getMethod() === "POST") {
     } elseif ($payment_mode == 'stripe' && $stripe) {
 
         $payment = $order->createStripePayment();
-        $_ECHO .= '
+        $content .= '
             <script src="https://js.stripe.com/v3/"></script>
             <script>
                 var stripe = Stripe("'.$stripeConfig["public_key"].'");
@@ -96,7 +96,7 @@ if ($request->getMethod() === "POST") {
 
     } elseif($payment_mode == "transfer") {
 
-        $_ECHO .= '
+        $content .= '
             <p class="noprint">Pour r&eacute;gler votre commande par virement&nbsp;:</p>
             <ol class="noprint">
                 <li>
@@ -116,7 +116,7 @@ if ($request->getMethod() === "POST") {
     } elseif($payment_mode == "cheque") {
 
         if($order->get('shipping_mode') == "magasin") {
-            $_ECHO .= '
+            $content .= '
                 <p>Vous avez choisi de payer votre commande en magasin.</p>
                 <p>Pour payer par chèque, merci d\'établir un chèque à l\'ordre de <strong>'.$site->getNameForCheckPayment().'.</strong></p>
                 <br />
@@ -128,7 +128,7 @@ if ($request->getMethod() === "POST") {
                 $shipping_fee = '<tr><td></td><td class="right">Frais de port :</td><td class="right">'.currency($order->get('shipping') / 100).'</td></tr>';
             }
 
-            $_ECHO .= '
+            $content .= '
                 <p class="noprint">Pour r&eacute;gler votre commande par ch&egrave;que&nbsp;:</p>
                 <ol class="noprint">
                     <li>&Eacute;tablissez un ch&egrave;que d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> &agrave; l\'ordre de <strong>'.$site->getNameForCheckPayment().'</strong>.</li>
@@ -156,7 +156,7 @@ if ($request->getMethod() === "POST") {
             ';
         }
     } else {
-        $_ECHO .= '
+        $content .= '
             <p class="alert alert-danger">Vous devez choisir un moyen de paiement.</p>
             <a class="btn btn-primary" href="javascript:history.back()">retour</a>
         ';
@@ -281,7 +281,7 @@ else // CHOIX DU MODE DE PAIMENT
         }
     }
 
-    $_ECHO .= '
+    $content .= '
 
         <p class="alert alert-info">Veuillez choisir le mode de paiement pour la commande n&deg; '.$order->get('id').'.<br>Montant &agrave; r&eacute;gler : '.currency($order->get('amount_tobepaid') / 100).'</p>
 
@@ -294,5 +294,6 @@ else // CHOIX DU MODE DE PAIMENT
             </fieldset>
         </form>
     ';
-
 }
+
+return new Response($content);
