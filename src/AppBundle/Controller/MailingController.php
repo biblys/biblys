@@ -2,23 +2,35 @@
 
 namespace AppBundle\Controller;
 
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use MailingManager;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-use \ReCaptcha\ReCaptcha as ReCaptcha;
+use ReCaptcha\ReCaptcha as ReCaptcha;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 
 class MailingController extends Controller
 {
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function subscribeAction(Request $request)
     {
         global $config;
 
-        $mm = $this->entityManager("Mailing");
+        $mm = new MailingManager();
         $subscribers = $mm->countSubscribers();
 
-        $this->setPageTitle("Inscription à la newsletter");
+        $request->attributes->set("page_title", "Inscription à la newsletter");
 
         // ReCaptcha
         $recaptcha = false;
@@ -41,12 +53,12 @@ class MailingController extends Controller
                     $check = $recaptcha->verify($answer, $request->getClientIp());
 
                     if (!$check->isSuccess()) {
-                        throw new \Exception("Vous n'avez pas correctement complété le test anti-spam.");
+                        throw new Exception("Vous n'avez pas correctement complété le test anti-spam.");
                     }
                 }
 
                 $result = $mm->addSubscriber($email, true);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
@@ -67,19 +79,22 @@ class MailingController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function unsubscribeAction(Request $request)
     {
-        $mm = $this->entityManager("Mailing");
-
-        $this->setPageTitle("Désinscription de la newsletter");
-
+        $mm = new MailingManager();
+        $request->attributes->set("page_title", "Désinscription de la newsletter");
         $error = null;
 
         if ($request->getMethod() == "POST") {
             $email = $request->request->get('email', false);
             try {
                 $result = $mm->removeSubscriber($email);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
@@ -88,7 +103,7 @@ class MailingController extends Controller
             }
         }
 
-        $email = $request->query->get('email', null);
+        $email = $request->query->get('email');
         $success = $request->query->get('success', false);
         return $this->render('AppBundle:Mailing:unsubscribe.html.twig', [
             'email' => $email,
@@ -97,12 +112,19 @@ class MailingController extends Controller
         ]);
     }
 
-    public function contactsAction()
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function contactsAction(Request $request): Response
     {
-        $this->auth("admin");
-        $this->setPageTitle("Liste de contacts");
+        self::authAdmin($request);
+        $request->attributes->set("page_title", "Liste de contacts");
 
-        $mm = $this->entityManager("Mailing");
+        $mm = new MailingManager();
         $emails = $mm->getAll([],[
             "order" => "mailing_created",
             "sort" => "desc"
