@@ -3,9 +3,10 @@
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\ConfigValueResolver;
+use Framework\ArgumentResolver\CurrentSiteValueResolver;
+use Framework\ArgumentResolver\CurrentUserValueResolver;
 use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
-use Framework\ArgumentResolver\CurrentUserValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\RequestListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,6 +32,7 @@ $container->register("controller_resolver", ControllerResolver::class);
 
 $argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
 $argumentResolvers[] = new ConfigValueResolver();
+$argumentResolvers[] = new CurrentSiteValueResolver();
 $argumentResolvers[] = new CurrentUserValueResolver();
 $argumentResolvers[] = new MailerValueResolver();
 $argumentResolvers[] = new SessionValueResolver();

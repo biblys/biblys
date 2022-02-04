@@ -39,7 +39,13 @@ class MainController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function homeAction(Request $request, Session $session, Mailer $mailer, Config $config): Response
+    public function homeAction(
+        Request $request,
+        Session $session,
+        Mailer $mailer,
+        Config $config,
+        CurrentSite $currentSite
+    ): Response
     {
         global $site;
 
@@ -62,10 +68,8 @@ class MainController extends Controller
         $this->setOpengraphTags($opengraph);
         $this->setTwitterCardsTags($twitterCards);
 
-        $currentSiteService = CurrentSite::buildFromConfig($config);
-        $currentSite = $currentSiteService->getSite();
         $homeOption = OptionQuery::create()
-            ->filterBySite($currentSite)
+            ->filterBySite($currentSite->getSite())
             ->filterByKey("home")
             ->findOne();
 
@@ -123,8 +127,6 @@ class MainController extends Controller
                     throw new ResourceNotFoundException("Rayon $rayonId not found.");
                 }
 
-                $controller = new RayonController();
-
                 return $this->render('AppBundle:Main:home-rayon.html.twig', [
                     'rayon' => $rayon,
                     'articles' => $rayon->getArticles(),
@@ -135,7 +137,7 @@ class MainController extends Controller
                 $pageId = $matches[1];
 
                 $page = PageQuery::create()
-                    ->filterBySiteId($currentSite->getId())
+                    ->filterBySiteId($currentSite->getSite()->getId())
                     ->filterById($pageId)
                     ->findOne();
 
@@ -146,12 +148,12 @@ class MainController extends Controller
                 $request->attributes->set('page', $page->getUrl());
 
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request, $session, $mailer, $config);
+                return $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
 
             // Old controller
             } elseif ($behavior == 'old_controller') {
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request, $session, $mailer, $config);
+                return $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
             }
         }
 

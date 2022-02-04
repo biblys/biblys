@@ -24,7 +24,13 @@ class LegacyController extends Controller
      * @throws AuthException
      * @throws PropelException
      */
-    public function defaultAction(Request $request, Session $session, Mailer $mailer, Config $config): Response
+    public function defaultAction(
+        Request $request,
+        Session $session,
+        Mailer $mailer,
+        Config $config,
+        CurrentSite $currentSite
+    ): Response
     {
         global $site,
                $_SITE, $_LOG, $_V, $_ECHO, $_SQL, $_PAGE_TITLE,

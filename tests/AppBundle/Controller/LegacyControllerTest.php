@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
@@ -28,9 +29,10 @@ class LegacyControllerTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $this->assertEquals(
@@ -57,9 +59,10 @@ class LegacyControllerTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config);
+        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
     }
 
     /**
@@ -79,9 +82,10 @@ class LegacyControllerTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config);
+        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
     }
 
     /**
@@ -101,8 +105,9 @@ class LegacyControllerTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config);
+        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
     }
 }

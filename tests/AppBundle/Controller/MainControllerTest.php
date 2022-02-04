@@ -8,6 +8,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -48,9 +49,10 @@ class MainControllerTest extends TestCase
         $config->set("site", $site->get("site_id"));
         $mailer = new Mailer();
         $session = new Session();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $response = $controller->homeAction($request, $session, $mailer, $config);
+        $response = $controller->homeAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $this->assertEquals(
@@ -81,9 +83,10 @@ class MainControllerTest extends TestCase
         $config->set("site", $site->get("site_id"));
         $mailer = new Mailer();
         $session = new Session();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $response = $controller->homeAction($request, $session, $mailer, $config);
+        $response = $controller->homeAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $this->assertEquals(

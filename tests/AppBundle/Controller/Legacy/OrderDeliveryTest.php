@@ -1,9 +1,10 @@
 <?php
 
-namespace Legacy;
+namespace AppBundle\Controller\Legacy;
 
 use AppBundle\Controller\LegacyController;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -63,9 +64,10 @@ class OrderDeliveryTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $om = new OrderManager();
@@ -196,9 +198,10 @@ class OrderDeliveryTest extends TestCase
         $mailer = new Mailer();
         $legacyController = new LegacyController();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $this->assertInstanceOf(
@@ -252,6 +255,8 @@ class OrderDeliveryTest extends TestCase
         $request->request->set("cgv_checkbox", 1);
         $session = new Session();
         $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $legacyController = new LegacyController();
 
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(2))
@@ -271,8 +276,7 @@ class OrderDeliveryTest extends TestCase
             ->willReturn(true);
 
         // when
-        $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config);
+        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
 
         // then
         $this->assertInstanceOf(

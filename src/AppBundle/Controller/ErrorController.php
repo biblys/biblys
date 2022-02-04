@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Axys\Client;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use Exception;
@@ -66,9 +67,10 @@ class ErrorController extends Controller
             $session = new Session();
             $mailer = new Mailer();
             $config = new Config();
+            $currentSite = CurrentSite::buildFromConfig($config);
             try {
                 global $originalRequest;
-                $response = $legacyController->defaultAction($originalRequest, $session, $mailer, $config);
+                $response = $legacyController->defaultAction($originalRequest, $session, $mailer, $config, $currentSite);
                 $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
                 return $response;
             } catch (Exception $exception) {
