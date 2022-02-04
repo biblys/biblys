@@ -1,5 +1,13 @@
 <?php
 
+use Biblys\Service\CurrentSite;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+/** @var CurrentSite $currentSite */
+if (!$currentSite->hasOptionEnabled("alerts")) {
+    throw new ResourceNotFoundException("Alerts are not enabled for this site");
+}
+
 $am = new AlertManager();
 
 $r = array();
