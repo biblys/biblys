@@ -8,6 +8,8 @@ Corrections
   cause d'une dépendance manquante. C'est corrigé.
 - Le formattage d'une date pouvait déclencher une erreur sous certaines 
   conditions. Les pendules ont été remises à l'heure.
+- Le sélecteur de pays de la page de confirmation de commande ne s'affichait pas 
+  correctement. C'est mieux.
 
 ## 2.58.0 (28 janvier 2021)
 

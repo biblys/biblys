@@ -145,7 +145,7 @@ class OrderDeliveryHelpers
             }, $countries);
 
             $countryInput = '
-            <select name="country_id">
+            <select id="country_id" name="country_id" class="order-delivery-form__select">
                 <option></option>
                 <option value="67">France</option>
                 '.implode($countriesOptions).'
