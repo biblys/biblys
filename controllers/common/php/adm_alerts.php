@@ -1,7 +1,12 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Response;
+
+
+
 $_PAGE_TITLE = 'Livres les plus recherchés';
 
+/** @var PDO $_SQL */
 $alerts = $_SQL->query("SELECT COUNT(`alert_id`) AS `num`, `article_title`, `article_url`, `article_authors`, `article_collection`, `article_number`, `article_publisher`
     FROM `alerts`
     JOIN `articles` USING(`article_id`)
@@ -22,8 +27,7 @@ while($a = $alerts->fetch()) {
     ';
 }
 
-$_ECHO .= '
-
+$content = '
     <h1><span class="fa fa-bell"></span> '.$_PAGE_TITLE.'</h1>
 
     <table class="admin-table">
@@ -38,7 +42,6 @@ $_ECHO .= '
             '.$table.'
         </tbody>
     </table>
-
 ';
 
-?>
+return new Response($content);
