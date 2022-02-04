@@ -74,4 +74,12 @@ class CurrentSite
         $option->setValue($value);
         $option->save();
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function hasOptionEnabled(string $optionKey): bool
+    {
+        return $this->getOption($optionKey) === "1";
+    }
 }

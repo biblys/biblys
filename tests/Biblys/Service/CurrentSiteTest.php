@@ -77,4 +77,43 @@ class CurrentSiteTest extends TestCase
             "it sets the value of the option"
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasOptionEnabled()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("alerts_active", "1");
+
+        // when
+        $hasOptionEnabled = $currentSite->hasOptionEnabled("alerts_active");
+
+        // then
+        $this->assertTrue(
+            $hasOptionEnabled,
+            "it returns true if the option is enabled"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testHasOptionEnabledWhenNotEnabled()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $hasOptionEnabled = $currentSite->hasOptionEnabled("alerts_active");
+
+        // then
+        $this->assertFalse(
+            $hasOptionEnabled,
+            "it returns false when option is undefined"
+        );
+    }
 }
