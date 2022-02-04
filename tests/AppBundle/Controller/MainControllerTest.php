@@ -22,11 +22,49 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 require_once __DIR__."/../../../tests/setUp.php";
 
 class MainControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testHomeWithDefaultTemplate()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $site = EntityFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->get("site_id"));
+        $mailer = new Mailer();
+        $session = new Session();
+
+        // when
+        $response = $controller->homeAction($request, $session, $mailer, $config);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Bienvenue sur votre nouveau site Biblys !",
+            $response->getContent(),
+            "it should display the home page title message"
+        );
+    }
+
     /**
      * @throws PropelException
      * @throws Exception

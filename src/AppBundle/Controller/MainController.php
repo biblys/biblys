@@ -68,10 +68,10 @@ class MainController extends Controller
             ->filterBySite($currentSite)
             ->filterByKey("home")
             ->findOne();
-        $behavior = $homeOption->getValue();
 
         // If a home page behavior is defined
-        if ($behavior) {
+        if ($homeOption) {
+            $behavior = $homeOption->getValue();
             // Custom Twig template
             if ($behavior == 'custom') {
                 return $this->render('AppBundle:Main:home.html.twig');
