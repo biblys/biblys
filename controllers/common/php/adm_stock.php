@@ -503,6 +503,14 @@ if ($article) {
         $alerts_num = count($alerts);
 
         if ($alerts_num > 0) {
+            $disabledAlertsWarning = null;
+            /** @var CurrentSite $currentSite */
+            if (!$currentSite->hasOptionEnabled("alerts")) {
+                $disabledAlertsWarning = '
+                    <span class="fa fa-exclamation-triangle" title="Les envois d\'alertes sont désactivés."></span>
+                ';
+            }
+
             $content .= '
                 <table class="unfold admin-table">
                     <thead>
@@ -510,6 +518,7 @@ if ($article) {
                             <th colspan="9">
                                 <span class="fa fa-chevron-down"></span>
                                 ' . $alerts_num . ' alerte' . s($alerts_num) . '
+                                '. $disabledAlertsWarning . '
                             </th>
                         </tr>
                     </thead>
