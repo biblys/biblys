@@ -2,8 +2,15 @@
 
 namespace Framework;
 
-class TemplateLoader implements \Twig\Loader\LoaderInterface
+use Exception;
+use Twig\Error\LoaderError;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
+
+class TemplateLoader implements LoaderInterface
 {
+    private $site;
+
     public function __construct($site)
     {
         $this->site = $site;
@@ -14,14 +21,15 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
      *
      * @param string $name The template logical name
      *
-     * @throws \Twig\Error\LoaderError When $name is not found
+     * @throws LoaderError When $name is not found
+     * @throws Exception
      */
-    public function getSourceContext(string $name): \Twig\Source
+    public function getSourceContext(string $name): Source
     {
         $path = $this->findTemplate($name);
         $code = file_get_contents($path);
 
-        return new \Twig\Source($code, $name, $path);
+        return new Source($code, $name, $path);
     }
 
     /**
@@ -30,6 +38,8 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
      * @param string $name string The name of the template to load
      *
      * @return string The cache key
+     * @throws Exception
+     * @throws Exception
      */
     public function getCacheKey(string $name): string
     {
@@ -39,8 +49,10 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
     /**
      * Returns true if the template is still fresh.
      *
-     * @param string    $name The template name
-     * @param timestamp $time The last modification time of the cached template
+     * @param string $name The template name
+     * @param int $time The last modification time of the cached template
+     * @return bool
+     * @throws Exception
      */
     public function isFresh(string $name, int $time): bool
     {
@@ -54,11 +66,14 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
      *
      * @return bool If the template source code is handled by this loader or not
      */
-    public function exists($name)
+    public function exists(string $name): bool
     {
         return true;
     }
 
+    /**
+     * @throws Exception
+     */
     /**
      * @throws Exception
      */
@@ -82,27 +97,59 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
                 return $common_file;
             }
 
-            throw new \Exception("Cannot find a legacy template named $name.");
+            throw new Exception("Cannot find a legacy template named $name.");
+        }
+
+        // Twig layout templates
+        if ($path[0] === "layout") {
+            return self::_getLayoutFilePath($path[1], $name);
         }
 
         // Custom file
-        $custom_file = BIBLYS_PATH.'/app/Resources/'.$path[0].'/views/'.$path[1].'/'.$path[2];
-        if (file_exists($custom_file)) {
-            return $custom_file;
-        }
-
-        // Old custom file location
-        $old_custom_file = SITE_PATH . '/templates/' . $path[1] . '/' . $path[2];
-        if (file_exists($old_custom_file)) {
-            return $old_custom_file;
+        $customFile = BIBLYS_PATH.'/app/Resources/'.$path[0].'/views/'.$path[1].'/'.$path[2];
+        if (file_exists($customFile)) {
+            return $customFile;
         }
 
         // Default file
-        $default_file = BIBLYS_PATH.'/src/'.$path[0].'/Resources/views/'.$path[1].'/'.$path[2];
-        if (file_exists($default_file)) {
-            return $default_file;
+        $defaultFile = BIBLYS_PATH.'/src/'.$path[0].'/Resources/views/'.$path[1].'/'.$path[2];
+        if (file_exists($defaultFile)) {
+            return $defaultFile;
         }
 
-        throw new \Exception("Cannot find a template named $name.");
+        // Old custom file location (deprecated)
+        $oldCustomFile = SITE_PATH . '/templates/' . $path[1] . '/' . $path[2];
+        if (file_exists($oldCustomFile)) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.57.0",
+                "Using the /templates/ folder is deprecated. Please move template at $customFile"
+            );
+            return $oldCustomFile;
+        }
+
+        throw new Exception("Cannot find a template named $name at $customFile or $defaultFile.");
+    }
+
+    /**
+     * @param $layoutFileName
+     * @param $name
+     * @return string
+     * @throws Exception
+     */
+    private static function _getLayoutFilePath($layoutFileName, $name): string
+    {
+        $customLayoutFilePath = __DIR__ . "/../../app/layout/".$layoutFileName;
+        $defaultLayoutFilePath = __DIR__."/../AppBundle/Resources/layout/".$layoutFileName;
+
+        if (file_exists($customLayoutFilePath)) {
+            return $customLayoutFilePath;
+        }
+
+        if (file_exists($defaultLayoutFilePath)) {
+            return $defaultLayoutFilePath;
+        }
+
+        throw new Exception("Cannot find a layout template named $name at custom path ($customLayoutFilePath) or default path ($defaultLayoutFilePath).");
     }
 }
