@@ -264,14 +264,14 @@ class MainController extends Controller
 
         $urlGenerator = $container->get("url_generator");
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
-        $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site) {
+        $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site, $config) {
             if ($entry->getName() === "Mise à jour") {
                 $diff = time() - $site->getOpt('updates_last_checked');
                 if ($diff > 60 * 60 * 24) {
-                    $updater->downloadUpdates();
+                    $updater->downloadUpdates($config);
                     $site->setOpt('updates_last_checked', time());
                 }
-                if ($updater->isUpdateAvailable()) {
+                if ($updater->isUpdateAvailable($config)) {
                     $entry->setTaskCount(1);
                 }
             }

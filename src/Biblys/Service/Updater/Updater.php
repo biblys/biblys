@@ -34,9 +34,9 @@ class Updater
      * @return bool true if repository was successfuly reached
      * @throws UpdaterException
      */
-    public function downloadUpdates(): bool
+    public function downloadUpdates(Config $config): bool
     {
-        if ($this->config->get("environment") === "dev") {
+        if ($config->get("environment") === "dev" || $config->get("environment") === "test") {
             return false;
         }
 
@@ -137,8 +137,12 @@ class Updater
      * Checks if latest update is higher than current version
      * @return bool
      */
-    public function isUpdateAvailable(): bool
+    public function isUpdateAvailable(Config $config): bool
     {
+        if ($config->get("environment") === "dev" || $config->get("environment") === "test") {
+            return false;
+        }
+
         $latest = $this->getLatestRelease();
         return version_compare($latest->version, $this->current_version, ">");
     }
