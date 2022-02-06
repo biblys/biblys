@@ -73,10 +73,6 @@ class Config
             return "Users";
         }
 
-        if ($key === "options_table_name") {
-            return "options";
-        }
-
         if ($key === "media_path") {
             return "/public/media";
         }

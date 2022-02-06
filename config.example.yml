@@ -19,7 +19,6 @@ logs:
 #   domains: librys.fr, librairieys.fr
 
 # users_table_name: Users
-# options_table_name: options
 
 # axys:
 #   protocol: https

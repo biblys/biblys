@@ -317,11 +317,6 @@ class CurrentUserTest extends TestCase
      */
     public function testGetOption()
     {
-        $config = new Config();
-        if ($config->get("options_table_name") !== "options") {
-            $this->markTestSkipped("Skipped when options_table_name is not \"options\"");
-        }
-
         // given
         $user = ModelFactory::createUser();
         $option = new Option();
@@ -347,11 +342,6 @@ class CurrentUserTest extends TestCase
      */
     public function testSetOption()
     {
-        $config = new Config();
-        if ($config->get("options_table_name") !== "options") {
-            $this->markTestSkipped("Skipped when options_table_name is not \"options\"");
-        }
-
         // given
         $user = ModelFactory::createUser();
         $currentUser = new CurrentUser($user);

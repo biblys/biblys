@@ -13,13 +13,5 @@ class OptionManager extends EntityManager
     protected $prefix = 'option',
 			  $table = 'options',
 			  $object = 'Option';
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $config = new Config();
-        $this->table = $config->get("options_table_name");
-    }
 }
 
