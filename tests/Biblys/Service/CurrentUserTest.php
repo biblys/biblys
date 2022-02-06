@@ -24,7 +24,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser();
-        $request = RequestFactory::createAuthRequest("", $user, "cookie");
+        $request = RequestFactory::createAuthRequest("", $user);
 
         // when
         $currentUser = CurrentUser::buildFromRequest($request);
@@ -129,7 +129,6 @@ class CurrentUserTest extends TestCase
 
         // given
         $session = ModelFactory::createUserSession();
-        $session->setUser(null);
         $session->setUserId(12345);
         $request = new Request();
         $request->headers->set("AuthToken", $session->getToken());
@@ -148,7 +147,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
 
         // when
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // then
         $this->assertTrue(
@@ -163,7 +162,7 @@ class CurrentUserTest extends TestCase
         $user = null;
 
         // when
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // then
         $this->assertFalse(
@@ -183,7 +182,7 @@ class CurrentUserTest extends TestCase
         $admin = ModelFactory::createAdminUser();
 
         // when
-        $currentUser = new CurrentUser($admin);
+        $currentUser = new CurrentUser($admin, "token");
 
         // then
         $this->assertTrue(
@@ -203,7 +202,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
 
         // when
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // then
         $this->assertFalse(
@@ -220,7 +219,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $user = ModelFactory::createPublisherUser($publisher);
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $hasRightforPublisher = $currentUser->hasRightForPublisher($publisher);
@@ -240,7 +239,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $user = ModelFactory::createUser();
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $hasRightForPublisher = $currentUser->hasRightForPublisher($publisher);
@@ -261,7 +260,7 @@ class CurrentUserTest extends TestCase
         $userPublisher = ModelFactory::createPublisher();
         $otherPublisher = ModelFactory::createPublisher();
         $user = ModelFactory::createPublisherUser($userPublisher);
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $hasRightForPublisher = $currentUser->hasRightForPublisher($otherPublisher);
@@ -281,7 +280,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $user = ModelFactory::createPublisherUser($publisher);
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $hasRightforPublisher = $currentUser->hasPublisherRight();
@@ -300,7 +299,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser();
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $hasRightForPublisher = $currentUser->hasPublisherRight();
@@ -324,10 +323,10 @@ class CurrentUserTest extends TestCase
         $option->setKey("days_since_last_login");
         $option->setValue("31");
         $option->save();
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
-        $currentUser->getOption("days_since_last_login", "31");
+        $currentUser->getOption("days_since_last_login");
 
         // then
         $this->assertEquals(
@@ -344,7 +343,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser();
-        $currentUser = new CurrentUser($user);
+        $currentUser = new CurrentUser($user, "token");
 
         // when
         $currentUser->setOption("days_since_last_login", "64");
@@ -354,6 +353,26 @@ class CurrentUserTest extends TestCase
             "64",
             $currentUser->getOption("days_since_last_login"),
             "it sets the value of the option"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetUserToken() {
+        // given
+        $request = RequestFactory::createAuthRequest();
+        $currentUser = CurrentUser::buildFromRequest($request);
+        $requestToken = $request->cookies->get("user_uid");
+
+        // when
+        $userToken = $currentUser->getToken();
+
+        // then
+        $this->assertEquals(
+            $requestToken,
+            $userToken,
+            "it returns the user uid"
         );
     }
 }

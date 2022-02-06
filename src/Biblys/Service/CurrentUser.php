@@ -22,9 +22,16 @@ class CurrentUser
      */
     private $user;
 
-    public function __construct(?User $user)
+    /**
+     * @var string|null;
+     */
+    private $token;
+
+
+    public function __construct(?User $user, ?string $token)
     {
         $this->user = $user;
+        $this->token = $token;
     }
 
     /**
@@ -39,24 +46,24 @@ class CurrentUser
         $token = $cookieToken ?: $headerToken;
 
         if ($token === null) {
-            return new CurrentUser(null);
+            return new CurrentUser(null, null);
         }
 
         $session = SessionQuery::create()->filterByToken($token)->findOne();
         if (!$session) {
-            return new CurrentUser(null);
+            return new CurrentUser(null, $token);
         }
 
         if (($session->getExpiresAt() < new DateTime())) {
-            return new CurrentUser(null);
+            return new CurrentUser(null, $token);
         }
 
         $user = $session->getUser();
         if (!$user) {
-            return new CurrentUser(null);
+            return new CurrentUser(null, $token);
         }
 
-        return new CurrentUser($user);
+        return new CurrentUser($user, $token);
     }
 
     public function isAuthentified(): bool
@@ -152,5 +159,10 @@ class CurrentUser
 
         $option->setValue($value);
         $option->save();
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
     }
 }
