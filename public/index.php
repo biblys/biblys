@@ -3,6 +3,7 @@
 use AppBundle\Controller\ErrorController;
 use Biblys\Legacy\LayoutBuilder;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Framework\Exception\ServiceUnavailableException;
 use Framework\Framework;
 use Framework\RouteLoader;
@@ -88,7 +89,9 @@ if ($request->isSecure() && $config->get('hsts') === true) {
     $response->headers->set('Strict-Transport-Security', 'max-age=15768000');
 }
 
-if (!$response instanceof JsonResponse) {
+$currentSite = CurrentSite::buildFromConfig($config);
+
+if (!$response instanceof JsonResponse && $currentSite->hasOptionEnabled("use_legacy_layout_builder")) {
     $response = LayoutBuilder::wrapResponseInThemeLayout($site, $_CSS_CALLS, $_JS_CALLS, $_V, $urlgenerator, $request, $config, $response);
 }
 
