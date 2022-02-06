@@ -1,33 +1,41 @@
-<h1>Recherche</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if error %}
-  <p class="alert alert-warning">
-    {{ error }}
-  </p>
-{% else %}
+{% block title %}
+  Recherche
+{% endblock %}
 
-  {% if not query %}
-    <form class="search-form">
-      <div class="form-group">
-        <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
-      </div>
-      <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
-      </div>
-    </form>
-  {% else %}
-    <p>
-      {% if count == 0 %}
-        Aucun résultat
-      {% elseif count == 1 %}
-        1 résultat
-      {% else %}
-        {{ count }} résultats
-      {% endif %}
-      pour &laquo; {{ query }} &raquo;
+{% block main %}
+  <h1>Recherche</h1>
+
+  {% if error %}
+    <p class="alert alert-warning">
+      {{ error }}
     </p>
+  {% else %}
 
-    {% include 'AppBundle:Article:_list.html.twig' %}
+    {% if not query %}
+      <form class="search-form">
+        <div class="form-group">
+          <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
+        </div>
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
+        </div>
+      </form>
+    {% else %}
+      <p>
+        {% if count == 0 %}
+          Aucun résultat
+        {% elseif count == 1 %}
+          1 résultat
+        {% else %}
+          {{ count }} résultats
+        {% endif %}
+        pour &laquo; {{ query }} &raquo;
+      </p>
+
+      {% include 'AppBundle:Article:_list.html.twig' %}
+    {% endif %}
+
   {% endif %}
-
-{% endif %}
+{% endblock %}

@@ -1,39 +1,47 @@
-<h1>
-  <span class="fa fa-clock-o"></span>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
   Journal de la tâche planifée {{ slug }}
-</h1>
+{% endblock %}
 
-<p class="text-center">
-  <button type="button" data-task="{{ slug }}"
-    data-cron-key="{{ cronKey }}"
-    class="cron-execute-task btn btn-primary">
-    Executer la tâche maintenant
-  </button>
-</p>
+{% block main %}
+  <h1>
+    <span class="fa fa-clock-o"></span>
+    Journal de la tâche planifée {{ slug }}
+  </h1>
 
-<table class="table jobs-table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Tâche</th>
-      <th>Message</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for job in jobs %}
+  <p class="text-center">
+    <button type="button" data-task="{{ slug }}"
+      data-cron-key="{{ cronKey }}"
+      class="cron-execute-task btn btn-primary">
+      Executer la tâche maintenant
+    </button>
+  </p>
+
+  <table class="table jobs-table">
+    <thead>
       <tr>
-        <td>
-          {% if job.result == "success" %}
-            <span class="fa fa-check-circle green"></span>
-          {% else %}
-            <span class="fa fa-exclamation-triangle red"></span>
-          {% endif %}
-        </td>
-        <td>{{ job.task }}</td>
-        <td>{{ job.message }}</td>
-        <td>{{ job.created|date('Y-m-d H:i:s') }}</td>
+        <th></th>
+        <th>Tâche</th>
+        <th>Message</th>
+        <th>Date</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+        <tr>
+          <td>
+            {% if job.result == "success" %}
+              <span class="fa fa-check-circle green"></span>
+            {% else %}
+              <span class="fa fa-exclamation-triangle red"></span>
+            {% endif %}
+          </td>
+          <td>{{ job.task }}</td>
+          <td>{{ job.message }}</td>
+          <td>{{ job.created|date('Y-m-d H:i:s') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,3 +1,11 @@
-<h1>Créer une contrepartie</h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:CFReward:_form.html.twig' %}
+{% block title %}
+  Créer une contrepartie
+{% endblock %}
+
+{% block main %}
+  <h1>Créer une contrepartie</h1>
+
+  {% include 'AppBundle:CFReward:_form.html.twig' %}
+{% endblock %}

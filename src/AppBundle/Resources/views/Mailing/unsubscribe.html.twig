@@ -1,15 +1,23 @@
-<h2>Désinscription de la newsletter</h2>
+{% extends "layout:base.html.twig" %}
 
-{% if success %}
-    <p class="alert alert-success">L'adresse a bien été désinscrite de la newsletter.</p>
-{% elseif error %}
-    <p class="alert alert-danger">{{ error }}</p>
-{% endif %}
+{% block title %}
+  Liste de contacts
+{% endblock %}
 
-<p>Pour vous désabonner, entrez simplement ci-dessous votre adresse e-mail.</p>
-<form method="post" action="{{ path('mailing_unsubscribe') }}">
-	<fieldset>
-		<input class="long" type="email" placeholder="Votre adresse e-mail" name="email" id="email" value="{{ email }}" required>
-		<button class="btn btn-primary btn-sm">Se désabonner</button>
-    </fieldset>
-</form>
+{% block main %}
+  <h2>Désinscription de la newsletter</h2>
+
+  {% if success %}
+      <p class="alert alert-success">L'adresse a bien été désinscrite de la newsletter.</p>
+  {% elseif error %}
+      <p class="alert alert-danger">{{ error }}</p>
+  {% endif %}
+
+  <p>Pour vous désabonner, entrez simplement ci-dessous votre adresse e-mail.</p>
+  <form method="post" action="{{ path('mailing_unsubscribe') }}">
+    <fieldset>
+      <input class="long" type="email" placeholder="Votre adresse e-mail" name="email" id="email" value="{{ email }}" required>
+      <button class="btn btn-primary btn-sm">Se désabonner</button>
+      </fieldset>
+  </form>
+{% endblock %}

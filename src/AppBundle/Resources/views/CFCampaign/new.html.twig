@@ -1,3 +1,11 @@
-<h1>Créer une nouvelle campagne de financement</h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:CFCampaign:_form.html.twig' %}
+{% block title %}
+    Créer une campagne de financement
+{% endblock %}
+
+{% block main %}
+    <h1>Créer une campagne de financement</h1>
+
+    {% include 'AppBundle:CFCampaign:_form.html.twig' %}
+{%  endblock %}

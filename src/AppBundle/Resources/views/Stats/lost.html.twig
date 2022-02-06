@@ -1,24 +1,32 @@
-<h1>
-  <span class="fa fa-compass"></span>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
   Exemplaires perdus
-</h1>
+{% endblock %}
 
-<form class="form-inline">
-  <div>
-    <label for="year">Année :</label>
-    <select id="year" name="year" class="goto">
-      <option value="all">Cumul</option>
-      {% for year_option in years %}
-        <option value={{ path('stats_lost', { year: year_option }) }}{% if year == year_option %} selected{% endif %}>
-          {{ year_option }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-</form>
+{% block main %}
 
-<table class="table">
-  <thead>
+  <h1>
+    <span class="fa fa-compass"></span>
+    Exemplaires perdus
+  </h1>
+
+  <form class="form-inline">
+    <div>
+      <label for="year">Année :</label>
+      <select id="year" name="year" class="goto">
+        <option value="all">Cumul</option>
+        {% for year_option in years %}
+          <option value={{ path('stats_lost', { year: year_option }) }}{% if year == year_option %} selected{% endif %}>
+            {{ year_option }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+
+  <table class="table">
+    <thead>
     <tr>
       <th>Ref.</th>
       <th>Titre</th>
@@ -27,8 +35,8 @@
       <th title="Prix de vente TTC">PdV&nbsp;TTC</th>
       <th>Perdu le</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for copy in copies %}
       <tr>
         <td>
@@ -61,8 +69,8 @@
         </td>
       </tr>
     {% endfor %}
-  </tbody>
-  <tfoot>
+    </tbody>
+    <tfoot>
     <tr>
       <th colspan="2" class="text-right">
         {{ total.count }} exemplaires
@@ -72,5 +80,7 @@
       <th class="text-right">{{ total.selling_ttc|price('EUR')|raw }}</th>
       <th></th>
     </tr>
-  </tfoot>
-</table>
+    </tfoot>
+  </table>
+
+{% endblock %}

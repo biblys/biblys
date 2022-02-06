@@ -1,9 +1,17 @@
-<h1 class="events-title">Évènements</h1>
+{% extends "layout:base.html.twig" %}
 
-<div class="events">
+{% block title %}
+  Évènements
+{% endblock %}
+
+{% block main %}
+  <h1 class="events-title">Évènements</h1>
+
+  <div class="events">
     {% for event in events %}
-        {% include 'AppBundle:Event:show.html.twig' %}
+      {% include 'AppBundle:Event:_event.html.twig' %}
     {% endfor %}
-</div>
+  </div>
 
-{% include 'AppBundle:Event:_pagination.html.twig' %}
+  {% include 'AppBundle:Event:_pagination.html.twig' %}
+{% endblock %}

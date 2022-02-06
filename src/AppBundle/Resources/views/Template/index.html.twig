@@ -1,15 +1,25 @@
-<h1>
-  <span class="fa fa-code"></span> Éditeur de thème
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<table class="table">
-  <thead>
+{% block title %}
+  Éditeur de thème
+{% endblock %}
+
+{% block main %}
+  <h1>
+    <span class="fa fa-code"></span>
+    Éditeur de thème
+  </h1>
+
+  <table class="table">
+    <thead>
     <tr>
-      <td>Modèle</th>
-      <td>Type</th>
+      <td>Modèle
+      </th>
+      <td>Type
+      </th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for template in templates %}
       <tr>
         <td>
@@ -23,17 +33,19 @@
             <span class="fa fa-edit"></span> Éditer
           </a>
           <a class="btn btn-sm btn-danger" title="Supprimer"
-            {% if template.customFileExists() %}
-              href="{{ path('template_delete', { slug: template.slug }) }}"
-              data-confirm="Voulez-vous vraiment SUPPRIMER votre modèle personnalisé pour {{ template.name }} et revenir au modèle par défaut ?"
-            {% else %}
-              disabled
-            {% endif %}
+              {% if template.customFileExists() %}
+                href="{{ path('template_delete', { slug: template.slug }) }}"
+                data-confirm="Voulez-vous vraiment SUPPRIMER votre modèle personnalisé pour {{ template.name }} et revenir au modèle par défaut ?"
+              {% else %}
+                disabled
+              {% endif %}
           >
             <span class="fa fa-trash-o"></span>
           </a>
         </td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+
+{% endblock %}

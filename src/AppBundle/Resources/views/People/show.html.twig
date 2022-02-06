@@ -1,27 +1,37 @@
-<h1>{{ people.name }}</h1>
+{% extends "layout:base.html.twig" %}
 
-<div>
+{% block title %}
+  {{ people.name }}
+{% endblock %}
+
+{% block main %}
+
+  <h1>{{ people.name }}</h1>
+
+  <div>
     {% if people.has('facebook') %}
-        <a href="{{ people.facebook }}" target="_blank" rel="noopener noreferer">
-            <span class="fa fa-facebook-square fa-lg" alt="Page Facebook de {{ people.name }}" />
-        </a>
+      <a href="{{ people.facebook }}" target="_blank" rel="noopener noreferer">
+        <span class="fa fa-facebook-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
+      </a>
     {% endif %}
     {% if people.has('twitter') %}
-        <a href="https://twitter.com/{{ people.twitter }}" target="_blank" rel="noopener noreferer">
-            <span class="fa fa-twitter-square fa-lg" alt="Page Facebook de {{ people.name }}" />
-        </a>
+      <a href="https://twitter.com/{{ people.twitter }}" target="_blank" rel="noopener noreferer">
+        <span class="fa fa-twitter-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
+      </a>
     {% endif %}
-</div>
+  </div>
 
-{% if people.has('bio') %}
+  {% if people.has('bio') %}
     {{ people.bio|raw }}
-{% endif %}
+  {% endif %}
 
-{% include 'AppBundle:Article:_list.html.twig' %}
+  {% include 'AppBundle:Article:_list.html.twig' %}
 
-{% if app.user.isAdmin() %}
+  {% if app.user.isAdmin() %}
     <div class="admin">
-        <p>Contributeur n° {{ people.id }}</p>
-        <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>
+      <p>Contributeur n° {{ people.id }}</p>
+      <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>
     </div>
-{% endif %}
+  {% endif %}
+
+{% endblock %}

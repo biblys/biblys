@@ -1,25 +1,33 @@
-<h1>Une erreur est survenue.</h1>
+{% extends "layout:base.html.twig" %}
 
-<p class="alert alert-danger">
-    <strong>{{ exceptionClass }}</strong><br />
+{% block title %}
+  Erreur 500 : une erreur est survenue
+{% endblock %}
+
+{% block main %}
+  <h1>Une erreur est survenue.</h1>
+
+  <p class="alert alert-danger">
+    <strong>{{ exceptionClass }}</strong><br/>
     {{ exception.message }}
-</p>
+  </p>
 
-Détails:
+  Détails:
 
-<ul>
+  <ul>
     <li>
-        in
-        <strong>{{ exception.file }}:{{ exception.line }}</strong>
+      in
+      <strong>{{ exception.file }}:{{ exception.line }}</strong>
     </li>
     {% for trace in exception.trace %}
-        <li>
-            in
-            {% if trace.file is defined %}
-                <strong>{{ trace.file }}:{{ trace.line }}</strong>
-            {% elseif trace.function is defined %}
-                <strong>{{ trace.class }}{{ trace.type }}{{ trace.function }}</strong>
-            {% endif %}
-        </li>
+      <li>
+        in
+        {% if trace.file is defined %}
+          <strong>{{ trace.file }}:{{ trace.line }}</strong>
+        {% elseif trace.function is defined %}
+          <strong>{{ trace.class }}{{ trace.type }}{{ trace.function }}</strong>
+        {% endif %}
+      </li>
     {% endfor %}
-</ul>
+  </ul>
+{% endblock %}

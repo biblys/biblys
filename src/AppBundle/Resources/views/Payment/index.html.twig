@@ -1,71 +1,79 @@
-<h1>Paiements</h1>
+{% extends "layout:base.html.twig" %}
 
-<form class="fieldset form-horizontal">
-  <fieldset>
-    <legend>Filtres</legend>
-    <div class="form-group">
-      <label for="payment_mode" class="col-sm-2 control-label">Mode</label>
-      <div class="col-sm-10">
-        <select name="mode" id="payment_mode" class="form-control">
-          <option value="">Tous</option>
-          {% for mode in modes %}
-            <option value="{{ mode }}"{{ selectedMode is same as(mode) ? " selected" }}>{{ mode }}</option>
-          {% endfor %}
-        </select>
+{% block title %}
+  Paiments
+{% endblock %}
+
+{% block main %}
+  <h1>Paiements</h1>
+
+  <form class="fieldset form-horizontal">
+    <fieldset>
+      <legend>Filtres</legend>
+      <div class="form-group">
+        <label for="payment_mode" class="col-sm-2 control-label">Mode</label>
+        <div class="col-sm-10">
+          <select name="mode" id="payment_mode" class="form-control">
+            <option value="">Tous</option>
+            {% for mode in modes %}
+              <option value="{{ mode }}"{{ selectedMode is same as(mode) ? " selected" }}>{{ mode }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="start-date" class="col-sm-2 control-label">Entre le</label>
-      <div class="col-sm-10">
-        <input type="date" name="start_date" id="start-date" class="form-control" value="{{ startDate }}">
+      <div class="form-group">
+        <label for="start-date" class="col-sm-2 control-label">Entre le</label>
+        <div class="col-sm-10">
+          <input type="date" name="start_date" id="start-date" class="form-control" value="{{ startDate }}">
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="end-date" class="col-sm-2 control-label">Et le</label>
-      <div class="col-sm-10">
-        <input type="date" name="end_date" id="end-date" class="form-control" value="{{ endDate }}">
+      <div class="form-group">
+        <label for="end-date" class="col-sm-2 control-label">Et le</label>
+        <div class="col-sm-10">
+          <input type="date" name="end_date" id="end-date" class="form-control" value="{{ endDate }}">
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-default">Filtrer</button>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Filtrer</button>
+        </div>
       </div>
-    </div>
-  </fieldset>
-</form>
+    </fieldset>
+  </form>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Commande n°</th>
-      <th>Mode</th>
-      <th>Montant</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for payment in payments %}
-    <tr>
-      <td>{{ payment.executed|date('d/m/Y') }}</td>
-      <td>
-        <a href="{{ path('orders_show', { 'id': payment.orderId }) }}">
-          {{ payment.orderId }}
-        </a>
-      </td>
-      <td>{{ payment.mode }}</td>
-      <td class="text-right">{{ payment.amount|currency(true)|raw }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-  <tfoot>
-    <tr>
-      <th colspan="3" class="text-right">Total</th>
-      <th class="text-right">{{ total|currency(true)|raw }}</th>
-    </tr>
-  </tfoot>
-</table>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Commande n°</th>
+        <th>Mode</th>
+        <th>Montant</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for payment in payments %}
+      <tr>
+        <td>{{ payment.executed|date('d/m/Y') }}</td>
+        <td>
+          <a href="{{ path('orders_show', { 'id': payment.orderId }) }}">
+            {{ payment.orderId }}
+          </a>
+        </td>
+        <td>{{ payment.mode }}</td>
+        <td class="text-right">{{ payment.amount|currency(true)|raw }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3" class="text-right">Total</th>
+        <th class="text-right">{{ total|currency(true)|raw }}</th>
+      </tr>
+    </tfoot>
+  </table>
 
-{% include 'AppBundle:Payment:_pagination.html.twig' %}
+  {% include 'AppBundle:Payment:_pagination.html.twig' %}
+{% endblock %}

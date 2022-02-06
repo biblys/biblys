@@ -3,6 +3,8 @@
     <title>{% block title %}{% endblock %} | {{ app.site.title }}</title>
   </head>
   <body>
+    <h1>{{ app.site.title }}</h1>
+
     {% block main %}{% endblock %}
 
     {{ app.axysMenu|raw }}

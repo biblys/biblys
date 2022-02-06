@@ -1,14 +1,24 @@
-<h1>Abonnement Biblys Cloud</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if subscription %}
-  {% if domains %}
-    <p>Domaines inclus : {{ domains|join(", ") }}</p>
+{% block title %}
+  Abonnement Biblys Cloud
+{% endblock %}
+
+{% block main %}
+  <h1>Abonnement Biblys Cloud</h1>
+
+  {% if subscription %}
+    {% if domains %}
+      <p>Domaines inclus : {{ domains|join(", ") }}</p>
+    {% endif %}
+
+    <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-primary">
+      <span class="fa fa-cloud"></span>
+      Gérer mon abonnement
+    </a>
+
+  {% else %}
+    <p>Aucun abonnement Biblys Cloud en cours.</p>
   {% endif %}
-{% else %}
-  <p>Aucun abonnement Biblys Cloud en cours.</p>
-{% endif %}
+{% endblock %}
 
-<a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-primary">
-  <span class="fa fa-cloud"></span>
-  Gérer mon abonnement
-</a>

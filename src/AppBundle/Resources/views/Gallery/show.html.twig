@@ -1,20 +1,10 @@
-<h1>
-    <a href="{{ path('gallery_show', {'slug': gallery.media_dir }) }}">
-        {{ gallery.title }}
-    </a>
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<div class="biblys-carousel swiper-container">
-    <div class="swiper-wrapper">
-        {% for media in gallery.medias %}
-            <div class="swiper-slide">
-                <a href="{{ media.url }}" class="carousel-slide-link">
-                    <img data-src="{{ media.url }}" class="carousel-image swiper-lazy">
-                    <div class="swiper-lazy-preloader"></div>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-</div>
+{% block title %}
+  {{ gallery.title }}
+{% endblock %}
+
+{% block main %}
+  <h1>{{ gallery.title }}</h1>
+  {% include 'AppBundle:Gallery:_gallery.html.twig' %}
+{% endblock %}

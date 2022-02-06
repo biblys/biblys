@@ -1,5 +1,13 @@
-<p class="alert alert-success">
-	L'éditeur
-	<strong>{{ name }}</strong>
-	a bien été supprimé.
-</p>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Éditeur {{ name }} supprimé
+{% endblock %}
+
+{% block main %}
+
+  <p class="alert alert-success">
+    L'éditeur <strong>{{ name }}</strong> a bien été supprimé.
+  </p>
+
+{% endblock %}

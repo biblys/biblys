@@ -1,29 +1,37 @@
-<h1>Liste de contacts</h1>
+{% extends "layout:base.html.twig" %}
 
-<h2>{{ subscribed|length }} abonnés</h2>
+{% block title %}
+  Liste de contacts
+{% endblock %}
 
-<form action="/pages/export_to_csv" method="post" class="fieldset">
-  <fieldset class="center">
-    <input type="hidden" name="filename" value="contacts">
-    <input type="hidden" name="data" value="{{ export }}">
-    <button type="submit" class="btn btn-primary"><i class="fa fa-download"></i> Télécharger au format CSV</button>
-  </fieldset>
-</form>
+{% block main %}
+  <h1>Liste de contacts</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>E-mail</th>
-      <th>Depuis le</th>
-    </tr>
-  </thead>
+  <h2>{{ subscribed|length }} abonnés</h2>
 
-  <tbody>
-    {% for email in subscribed %}
+  <form action="/pages/export_to_csv" method="post" class="fieldset">
+    <fieldset class="center">
+      <input type="hidden" name="filename" value="contacts">
+      <input type="hidden" name="data" value="{{ export }}">
+      <button type="submit" class="btn btn-primary"><i class="fa fa-download"></i> Télécharger au format CSV</button>
+    </fieldset>
+  </form>
+
+  <table class="table">
+    <thead>
       <tr>
-        <td> {{ email.has('email') ? email.email }} </td>
-        <td> {{ email.has('created') ? email.created|date }} </td>
+        <th>E-mail</th>
+        <th>Depuis le</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      {% for email in subscribed %}
+        <tr>
+          <td> {{ email.has('email') ? email.email }} </td>
+          <td> {{ email.has('created') ? email.created|date }} </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

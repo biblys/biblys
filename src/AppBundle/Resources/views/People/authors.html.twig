@@ -1,11 +1,21 @@
-<h1>Auteurs</h1>
+{% extends "layout:base.html.twig" %}
 
-<ul>
-  {% for author in authors %}
-    <li>
-      <a href="{{ path('people_show', { slug: author.url }) }}">
-        {{ author.name }}
-      </a>
-    </li>
-  {% endfor %}
-</ul>
+{% block title %}
+  Auteurs
+{% endblock %}
+
+{% block main %}
+
+  <h1>Auteurs</h1>
+
+  <ul>
+    {% for author in authors %}
+      <li>
+        <a href="{{ path('people_show', { slug: author.url }) }}">
+          {{ author.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

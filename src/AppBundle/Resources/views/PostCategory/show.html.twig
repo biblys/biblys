@@ -1,21 +1,11 @@
-<h1>{{ category.name }}</h1>
+{% extends "layout:base.html.twig" %}
 
-{% for post in posts %}
+{% block title %}
+  {{ category.name }} | Blog
+{% endblock %}
 
-  {% include 'AppBundle:Post:show.html.twig' %}
-
-{% endfor %}
-
-<p class="text-center">
-  {% if prev_page > -1 %}
-    <a href="?p={{ prev_page }}" class="btn btn-default btn-sm">
-      <span class="fa fa-chevron-circle-left"></span>
-    </a> &nbsp;
-  {% endif %}
-  Page {{ current_page }} sur {{ total_pages }}
-  {% if next_page %}
-    &nbsp; <a href="?p={{ next_page }}" class="btn btn-default btn-sm">
-      <span class="fa fa-chevron-circle-right"></span>
-    </a>
-  {% endif %}
-</p>
+{% block main %}
+  <h1 class="posts-title">{{ category.name }}</h1>
+  {% include 'AppBundle:Post:_postList.html.twig' %}
+  {% include 'AppBundle:Post:_pagination.html.twig' %}
+{% endblock %}

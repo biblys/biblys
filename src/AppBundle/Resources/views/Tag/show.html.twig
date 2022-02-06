@@ -1,14 +1,24 @@
-<h1>{{ tag.name }}</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if tag.has('description') %}
+{% block title %}
+  {{ tag.name }}
+{% endblock %}
+
+{% block main %}
+
+  <h1>{{ tag.name }}</h1>
+
+  {% if tag.has('description') %}
     {{ tag.description|raw }}
-{% endif %}
+  {% endif %}
 
-{% include 'AppBundle:Article:_list.html.twig' %}
+  {% include 'AppBundle:Article:_list.html.twig' %}
 
-{% if app.user.isAdmin() %}
+  {% if app.user.isAdmin() %}
     <div class="admin">
-        <p>Mot-clé n° {{ tag.id }}</p>
-        <p><a href="{{ path('tag_edit', { id: tag.id }) }}">modifier</a></p>
+      <p>Mot-clé n° {{ tag.id }}</p>
+      <p><a href="{{ path('tag_edit', { id: tag.id }) }}">modifier</a></p>
     </div>
-{% endif %}
+  {% endif %}
+
+{% endblock %}

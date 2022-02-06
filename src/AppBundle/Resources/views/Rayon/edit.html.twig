@@ -1,27 +1,43 @@
-<h1>Modifier le rayon <a href="{{ path("rayon_show", { url: rayon.url }) }}">{{ rayon.name }}</a></h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:Rayon:_form.html.twig' %}
+{% block title %}
+  Modifier le rayon {{ rayon.name }}
+{% endblock %}
 
-<p>
-    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
-</p>
-<form id="viewdetails" class="collapse fieldset">
+{% block main %}
+
+  <h1>
+    Modifier le rayon
+    <a href="{{ path("rayon_show", { url: rayon.url }) }}">
+      {{ rayon.name }}
+    </a>
+  </h1>
+
+  {% include 'AppBundle:Rayon:_form.html.twig' %}
+
+  <p>
+    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires
+      &raquo;</a>
+  </p>
+  <form id="viewdetails" class="collapse fieldset">
     <fieldset>
-        <p>
-            <label class="after">Identifiant :</label>
-            <input value="{{ rayon.id }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Slug :</label>
-            <input value="{{ rayon.url }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de création :</label>
-            <input value="{{ rayon.has('created') ? rayon.created }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de modification :</label>
-            <input value="{{ rayon.has('updated') ? rayon.updated }}" class="form-control" readonly>
-        </p>
+      <p>
+        <label class="after">Identifiant :</label>
+        <input value="{{ rayon.id }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Slug :</label>
+        <input value="{{ rayon.url }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de création :</label>
+        <input value="{{ rayon.has('created') ? rayon.created }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de modification :</label>
+        <input value="{{ rayon.has('updated') ? rayon.updated }}" class="form-control" readonly>
+      </p>
     </fieldset>
-</form>
+  </form>
+
+{% endblock %}

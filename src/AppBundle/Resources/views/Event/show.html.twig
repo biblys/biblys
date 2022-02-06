@@ -1,48 +1,21 @@
-<article id="event_{{ event.id }}" class="event">
-    <header class="event-header">
-        <h1 class="event-title">
-            <a href="{{ event.url }}">
-                {{ event.title }}
-            </a>
-        </h1>
-        <p class="event-date">Le
-            <time datetime="{{ event.start }}">
-                {{ event.start|date('j f Y à H\hi') }}
-            </time>
-        </p>
-    </header>
+{% extends "layout:base.html.twig" %}
 
-    {% if event.hasIllustration() %}
-        <div class="event-illustration">
-            <img src="{{ event.illustration.url }}" class="event-illustration-image" {% if event.has('illustration_legend') %} alt="{{ event.illustration_legend }}" {% endif %}>
-        </div>
-    {% endif %}
+{% block title %}
+  {{ event.title }}
+{% endblock %}
 
-    {% if event.has('desc') %}
-        <div class="event-content">
-            {{ event.desc|raw }}
-        </div>
-    {% endif %}
+{% block main %}
+  {% include 'AppBundle:Event:_event.html.twig' %}
 
-    {% if event.articles %}
-        <div class="linked-articles">
-            {% for article in event.articles %}
-                <a href="/{{ article.url }}">
-                    <img src="{{ article.getCover('url')|raw }}" alt="{{ article.title }}" class="linked-article">
-                </a>
-            {% endfor %}
-        </div>
-    {% endif %}
-</article>
-
-{% if app.user.isAdmin and events is not defined %}
+  {% if app.user.isAdmin and events is not defined %}
     <div class="admin">
-        <p>Evènement n°
-            {{ event.id }}</p>
-        <p>
-            <a href="/pages/event_edit?id={{ event.id }}">
-                modifier
-            </a>
-        </p>
+      <p>Evènement n°
+        {{ event.id }}</p>
+      <p>
+        <a href="/pages/event_edit?id={{ event.id }}">
+          modifier
+        </a>
+      </p>
     </div>
-{% endif %}
+  {% endif %}
+{% endblock %}

@@ -1,44 +1,32 @@
-<article id="post_{{ post.id }}" class="post">
-    <header class="post-header">
-        <h1 class="post-title">
-            <a href="{{ path('post_show', {'slug':post.url}) }}">{{ post.title }}</a>
-        </h1>
-        <p class="post-infos">Publié le
-            <time datetime="{{ post.date }}">{{ post.date|date('j f Y') }}</time>
-        </p>
-    </header>
+{% extends "layout:base.html.twig" %}
 
-    {% if post.hasIllustration() %}
-        <div class="post-illustration">
-            <img src="{{ post.illustration.url }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
-        </div>
-    {% endif %}
+{% block title %}
+    {{ post.title }} | Blog
+{% endblock %}
 
-    {% if post.has('content') %}
-        <div class="post-content">
-            {{ post.content|raw }}
-        </div>
-    {% endif %}
+{% block main %}
+    <article id="post_{{ post.id }}" class="post">
+        <header class="post-header">
+            <h1 class="post-title">
+                <a href="{{ path('post_show', {'slug':post.url}) }}">{{ post.title }}</a>
+            </h1>
+            <p class="post-infos">Publié le
+                <time datetime="{{ post.date }}">{{ post.date|date('j f Y') }}</time>
+            </p>
+        </header>
 
-    {% if post.articles %}
-        <div class="linked-articles">
-            {% for article in post.articles %}
-                <a href="/{{ article.url }}">
-                    <img src="{{ article.getCover('url')|raw }}" alt="{{ article.title }}" class="linked-article">
+        {% include "AppBundle:Post:_post.html.twig" %}
+    </article>
+
+    {% if app.user.isAdmin %}
+        <div class="admin">
+            <p>Billet n°
+                {{ post.id }}</p>
+            <p>
+                <a href="/pages/adm_post?id={{ post.id }}">
+                    modifier
                 </a>
-            {% endfor %}
+            </p>
         </div>
     {% endif %}
-</article>
-
-{% if app.user.isAdmin and posts is not defined %}
-    <div class="admin">
-        <p>Billet n°
-            {{ post.id }}</p>
-        <p>
-            <a href="/pages/adm_post?id={{ post.id }}">
-                modifier
-            </a>
-        </p>
-    </div>
-{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+<div class="biblys-carousel swiper-container">
+  <div class="swiper-wrapper">
+    {% for media in gallery.medias %}
+      <div class="swiper-slide">
+        <a href="{{ media.url }}" class="carousel-slide-link">
+          <img data-src="{{ media.url }}" class="carousel-image swiper-lazy">
+          <div class="swiper-lazy-preloader"></div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>

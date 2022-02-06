@@ -1,31 +1,47 @@
-<h1>Modifier l'éditeur <a href="{{ path("tag_show", { slug: tag.url }) }}">{{ tag.name }}</a></h1>
+{% extends "layout:base.html.twig" %}
 
-{% if error %}
-  <p class="alert alert-danger">{{ error }}</p>
-{% endif %}
+{% block title %}
+  Modifier l'éditeur {{ tag.name }}
+{% endblock %}
 
-{% include 'AppBundle:Publisher:_form.html.twig' %}
+{% block main %}
 
-<p>
-    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
-</p>
-<form id="viewdetails" class="collapse fieldset">
+  <h1>
+    Modifier l'éditeur
+    <a href="{{ path("tag_show", { slug: tag.url }) }}">
+      {{ tag.name }}
+    </a>
+  </h1>
+
+  {% if error %}
+    <p class="alert alert-danger">{{ error }}</p>
+  {% endif %}
+
+  {% include 'AppBundle:Publisher:_form.html.twig' %}
+
+  <p>
+    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires
+      &raquo;</a>
+  </p>
+  <form id="viewdetails" class="collapse fieldset">
     <fieldset>
-        <p>
-            <label class="after">Identifiant :</label>
-            <input value="{{ tag.id }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Slug :</label>
-            <input value="{{ tag.url }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de création :</label>
-            <input value="{{ tag.has('created') ? tag.created }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de modification :</label>
-            <input value="{{ tag.has('updated') ? tag.updated }}" class="form-control" readonly>
-        </p>
+      <p>
+        <label class="after">Identifiant :</label>
+        <input value="{{ tag.id }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Slug :</label>
+        <input value="{{ tag.url }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de création :</label>
+        <input value="{{ tag.has('created') ? tag.created }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de modification :</label>
+        <input value="{{ tag.has('updated') ? tag.updated }}" class="form-control" readonly>
+      </p>
     </fieldset>
-</form>
+  </form>
+
+{% endblock %}

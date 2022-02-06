@@ -1,37 +1,44 @@
-<h1>
-  <span class="fa fa-list-alt"></span>
-  Catalogue</h1>
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<a class="btn btn-primary" href="{{ path("api_articles_export") }}">
-  <span class="fa fa-cloud-download"></span>
-  Télécharger (au format CSV)
-</a>
+{% block title %}
+  Catalogue
+{% endblock %}
 
-<table id="catalog" class="table">
-  <thead>
+{% block main %}
+  <h1>
+    <span class="fa fa-list-alt"></span>
+    Catalogue
+  </h1>
+
+  <a class="btn btn-primary" href="{{ path("api_articles_export") }}">
+    <span class="fa fa-cloud-download"></span>
+    Télécharger (au format CSV)
+  </a>
+
+  <table id="catalog" class="table">
+    <thead>
     <tr>
       <th>EAN</th>
-      <th>
-        Titre<br/>
+      <th>Titre<br/>
         <small>Auteur·trice·s</small>
       </th>
-      <th>
-        Collection<br/>
+      <th>Collection<br/>
         <small>Éditeur</small>
       </th>
       <th>Prix</th>
       <th>Stock</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for article in articles %}
       <tr>
-        <td>{{ article.ean }}</td>
+        <td>
+          {{ article.ean }}
+        </td>
         <td>
           <a href="/a/{{ article.url }}">
             {{ article.title }}
-          </a><br />
+          </a><br/>
           <small>{{ article.authors|authors }}</small>
         </td>
         <td>
@@ -44,5 +51,6 @@
         </td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+{% endblock %}

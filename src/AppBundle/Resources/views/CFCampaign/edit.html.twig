@@ -1,27 +1,39 @@
-<h1>Modifier la campagne <a href="{{ path("cf_campaign_show", { slug: campaign.url }) }}">{{ campaign.title }}</a></h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:CFCampaign:_form.html.twig' %}
+{% block title %}
+    Modifier la campagne {{ campaign.title }}
+{% endblock %}
 
-<p>
-    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
-</p>
-<form id="viewdetails" class="collapse fieldset">
-    <fieldset>
-        <p>
-            <label class="after">Identifiant :</label>
-            <input value="{{ campaign.id }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Slug :</label>
-            <input value="{{ campaign.url }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de création :</label>
-            <input value="{{ campaign.has('created') ? campaign.created }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de modification :</label>
-            <input value="{{ campaign.has('updated') ? campaign.updated }}" class="form-control" readonly>
-        </p>
-    </fieldset>
-</form>
+{% block main %}
+
+    <h1>
+        Modifier la campagne
+        <a href="{{ path("cf_campaign_show", { slug: campaign.url }) }}">{{ campaign.title }}</a>
+    </h1>
+
+    {% include 'AppBundle:CFCampaign:_form.html.twig' %}
+
+    <p>
+        <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
+    </p>
+    <form id="viewdetails" class="collapse fieldset">
+        <fieldset>
+            <p>
+                <label class="after">Identifiant :</label>
+                <input value="{{ campaign.id }}" class="form-control" readonly>
+            </p>
+            <p>
+                <label class="after">Slug :</label>
+                <input value="{{ campaign.url }}" class="form-control" readonly>
+            </p>
+            <p>
+                <label class="after">Date de création :</label>
+                <input value="{{ campaign.has('created') ? campaign.created }}" class="form-control" readonly>
+            </p>
+            <p>
+                <label class="after">Date de modification :</label>
+                <input value="{{ campaign.has('updated') ? campaign.updated }}" class="form-control" readonly>
+            </p>
+        </fieldset>
+    </form>
+{% endblock %}

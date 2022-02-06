@@ -1,9 +1,11 @@
-<h1 class="posts-title">Actualités</h1>
+{% extends "layout:base.html.twig" %}
 
-<div class="posts">
-	{% for post in posts %}
-		{% include 'AppBundle:Post:show.html.twig' %}
-	{% endfor %}
-</div>
+{% block title %}
+  Blog
+{% endblock %}
 
-{% include 'AppBundle:Post:_pagination.html.twig' %}
+{% block main %}
+  <h1 class="posts-title">Actualités</h1>
+  {% include 'AppBundle:Post:_postList.html.twig' %}
+  {% include 'AppBundle:Post:_pagination.html.twig' %}
+{% endblock %}

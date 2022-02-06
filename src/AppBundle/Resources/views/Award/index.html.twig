@@ -1,22 +1,32 @@
-<h1>Récompenses littéraires</h1>
+{% extends "layout:base.html.twig" %}
 
-<ul>
-  {% for award in awards %}
-    <li>
-      {{ award.name }}
-      {% if award.has('year') %}
-        {{ award.year }}
-      {% endif %}
-      {% if award.has('category') %}
-        catégorie &laquo;&nbsp;{{ award.category }}&nbsp;&raquo;
-      {% endif %}
-      pour
-      <a href="{{ path('article_show', { slug: award.article.url }) }}">
-        {{ award.article.title }}
-      </a>
-      {% if award.has('note') %}
-        ({{ award.note }})
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
+{% block title %}
+    Récompenses littéraires
+{% endblock %}
+
+{% block main %}
+
+    <h1>Récompenses littéraires</h1>
+
+    <ul>
+      {% for award in awards %}
+        <li>
+          {{ award.name }}
+          {% if award.has('year') %}
+            {{ award.year }}
+          {% endif %}
+          {% if award.has('category') %}
+            catégorie &laquo;&nbsp;{{ award.category }}&nbsp;&raquo;
+          {% endif %}
+          pour
+          <a href="{{ path('article_show', { slug: award.article.url }) }}">
+            {{ award.article.title }}
+          </a>
+          {% if award.has('note') %}
+            ({{ award.note }})
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+{% endblock %}

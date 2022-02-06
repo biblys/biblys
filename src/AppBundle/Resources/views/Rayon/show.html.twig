@@ -1,27 +1,40 @@
-<h1 class="page-title rayon-page-title">
-	{{ rayon.name }}
-</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if rayon.has('desc') %}
-	<div class="rayon-description">
-		{{ rayon.desc|raw }}
-	</div>
-{% endif %}
+{% block title %}
+  {{ rayon.name }}
+{% endblock %}
 
-{% include 'AppBundle:Article:_list.html.twig' %}
+{% block main %}
 
-{% if app.user.isAdmin() %}
-	<div class="admin">
-		<p>Rayon n°
-			{{ rayon.id }}</p>
-		<p>
-			<a href="{{ path('rayon_edit', { id: rayon.id }) }}">modifier</a>
-		</p>
-		<p>
-			<a href="{{ path('rayon_add', { id: rayon.id }) }}">ajouter</a>
-		</p>
-		<p>
-			<a href="{{ path('rayon_delete', { id: rayon.id }) }}" data-confirm="Voulez-vous vraiment SUPPRIMER le rayon {{ rayon.name }} ?">supprimer</a>
-		</p>
-	</div>
-{% endif %}
+  <h1 class="page-title rayon-page-title">
+    {{ rayon.name }}
+  </h1>
+
+  {% if rayon.has('desc') %}
+    <div class="rayon-description">
+      {{ rayon.desc|raw }}
+    </div>
+  {% endif %}
+
+  {% include 'AppBundle:Article:_list.html.twig' %}
+
+  {% if app.user.isAdmin() %}
+    <div class="admin">
+      <p>Rayon n°
+        {{ rayon.id }}</p>
+      <p>
+        <a href="{{ path('rayon_edit', { id: rayon.id }) }}">modifier</a>
+      </p>
+      <p>
+        <a href="{{ path('rayon_add', { id: rayon.id }) }}">ajouter</a>
+      </p>
+      <p>
+        <a href="{{ path('rayon_delete', { id: rayon.id }) }}"
+           data-confirm="Voulez-vous vraiment SUPPRIMER le rayon {{ rayon.name }} ?">
+          supprimer
+        </a>
+      </p>
+    </div>
+  {% endif %}
+
+{% endblock %}

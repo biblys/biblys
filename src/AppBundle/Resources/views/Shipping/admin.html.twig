@@ -1,22 +1,32 @@
-<h1>Gestion des frais de port</h1>
+{% extends "layout:base.html.twig" %}
 
-<div class="buttons">
-	<button id="add-range" class="btn btn-primary">
-		Ajouter une tranche
-	</button>
-</div>
+{% block title %}
+  Frais de port
+{% endblock %}
 
-<div id="new-range-form"></div>
+{% block main %}
 
-<table id="shipping-table" class="table">
-	<thead>
-		<tr>
-			<th>Intitulé</th>
-			<th>Type</th>
-			<th>Zone</th>
-			<th>Conditions</th>
-			<th>Montant</th>
-		</tr>
-	</thead>
-	<tbody></tbody>
-</table>
+  <h1>Gestion des frais de port</h1>
+
+  <div class="buttons">
+    <button id="add-range" class="btn btn-primary">
+      Ajouter une tranche
+    </button>
+  </div>
+
+  <div id="new-range-form"></div>
+
+  <table id="shipping-table" class="table">
+    <thead>
+    <tr>
+      <th>Intitulé</th>
+      <th>Type</th>
+      <th>Zone</th>
+      <th>Conditions</th>
+      <th>Montant</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+{% endblock %}

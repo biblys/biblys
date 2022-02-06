@@ -1,23 +1,32 @@
-<h1>Modifier la contrepartie</h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:CFReward:_form.html.twig' %}
+{% block title %}
+  Modifier la contrepartie
+{% endblock %}
 
-<p>
-    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires &raquo;</a>
-</p>
-<form id="viewdetails" class="collapse fieldset">
+{% block main %}
+  <h1>Modifier la contrepartie</h1>
+
+  {% include 'AppBundle:CFReward:_form.html.twig' %}
+
+  <p>
+    <a class="btn btn-default" data-toggle="collapse" data-target="#viewdetails">Informations supplémentaires
+      &raquo;</a>
+  </p>
+  <form id="viewdetails" class="collapse fieldset">
     <fieldset>
-        <p>
-            <label class="after">Identifiant :</label>
-            <input value="{{ reward.id }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de création :</label>
-            <input value="{{ reward.has('created') ? reward.created }}" class="form-control" readonly>
-        </p>
-        <p>
-            <label class="after">Date de modification :</label>
-            <input value="{{ reward.has('updated') ? reward.updated }}" class="form-control" readonly>
-        </p>
+      <p>
+        <label class="after">Identifiant :</label>
+        <input value="{{ reward.id }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de création :</label>
+        <input value="{{ reward.has('created') ? reward.created }}" class="form-control" readonly>
+      </p>
+      <p>
+        <label class="after">Date de modification :</label>
+        <input value="{{ reward.has('updated') ? reward.updated }}" class="form-control" readonly>
+      </p>
     </fieldset>
-</form>
+  </form>
+{% endblock %}

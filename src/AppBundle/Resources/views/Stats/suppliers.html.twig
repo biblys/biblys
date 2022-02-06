@@ -1,29 +1,38 @@
-<h1>
-  <span class="fa fa-truck"></span>
-  Chiffre d'affaires par fournisseur
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<form class="form-inline">
-  <div>
-    <label for="year">Année :</label>
-    <select id="year" name="year" class="goto">
-      <option value="all">Cumul</option>
-      {% for year_option in years %}
-        <option value={{ path('stats_suppliers', { year: year_option }) }}{% if year == year_option %} selected{% endif %}>
-          {{ year_option }}
-        </option>
-      {% endfor %}
-    </select>
-  </div>
-</form>
+{% block title %}
+  Exemplaires perdus
+{% endblock %}
 
-<table class="table">
-  <thead>
-      <th></th>
-      <th>Fournisseur</th>
-      <th class="right">CA HT</th>
-  </thead>
-  <tbody>
+{% block main %}
+
+  <h1>
+    <span class="fa fa-truck"></span>
+    Chiffre d'affaires par fournisseur
+  </h1>
+
+  <form class="form-inline">
+    <div>
+      <label for="year">Année :</label>
+      <select id="year" name="year" class="goto">
+        <option value="all">Cumul</option>
+        {% for year_option in years %}
+          <option
+              value={{ path('stats_suppliers', { year: year_option }) }}{% if year == year_option %} selected{% endif %}>
+            {{ year_option }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+
+  <table class="table">
+    <thead>
+    <th></th>
+    <th>Fournisseur</th>
+    <th class="right">CA HT</th>
+    </thead>
+    <tbody>
     {% for supplier in suppliers %}
       <tr>
         <td>{{ loop.index }}</td>
@@ -31,5 +40,7 @@
         <td class="right">{{ supplier.getRevenue(year)|currency(true)|raw }}</td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+
+{% endblock %}

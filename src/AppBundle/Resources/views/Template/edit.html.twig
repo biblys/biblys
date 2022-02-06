@@ -1,25 +1,36 @@
-<h1>
-	<span class="fa fa-code"></span>
-	Éditer
-	{{ template.name }}
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<form id="template-editor-form" method="post" action="{{ path('template_edit', { slug: template.slug }) }}">
-	<p>
-		<a class="btn btn-default" href="{{ path('template_index') }}">
-			<span class="fa fa-arrow-left"></span>
-			Retour
-		</a>
-		<button id="submitButton" type="submit" class="btn btn-primary" disabled>
-			<span class="fa fa-save"></span>
-			Enregistrer
-		</button>
-		<a type="submit" class="btn btn-danger" href="{{ path('template_delete', { slug: template.slug }) }}" data-confirm="Voulez-vous vraiment SUPPRIMER votre modèle personnalisé pour {{ template.name }} et revenir au modèle par défaut ?">
-			<span class="fa fa-trash-o"></span>
-			Supprimer
-		</a>
-	</p>
-	<fieldset class="form-group">
-		<textarea id="editor" name="content" data-mode="{{ template.aceMode }}">{{ template.content }}</textarea>
-	</fieldset>
-</form>
+{% block title %}
+  Éditer {{ template.name }}
+{% endblock %}
+
+{% block main %}
+
+  <h1>
+    <span class="fa fa-code"></span>
+    Éditer
+    {{ template.name }}
+  </h1>
+
+  <form id="template-editor-form" method="post" action="{{ path('template_edit', { slug: template.slug }) }}">
+    <p>
+      <a class="btn btn-default" href="{{ path('template_index') }}">
+        <span class="fa fa-arrow-left"></span>
+        Retour
+      </a>
+      <button id="submitButton" type="submit" class="btn btn-primary" disabled>
+        <span class="fa fa-save"></span>
+        Enregistrer
+      </button>
+      <a type="submit" class="btn btn-danger" href="{{ path('template_delete', { slug: template.slug }) }}"
+         data-confirm="Voulez-vous vraiment SUPPRIMER votre modèle personnalisé pour {{ template.name }} et revenir au modèle par défaut ?">
+        <span class="fa fa-trash-o"></span>
+        Supprimer
+      </a>
+    </p>
+    <fieldset class="form-group">
+      <textarea id="editor" name="content" data-mode="{{ template.aceMode }}">{{ template.content }}</textarea>
+    </fieldset>
+  </form>
+
+{% endblock %}

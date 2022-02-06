@@ -1,5 +1,15 @@
-<p class="alert alert-success">
-	L'article
-	<strong>{{ title }}</strong>
-	a bien été supprimé.
-</p>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+	Article supprimé
+{% endblock %}
+
+{% block main %}
+
+	<p class="alert alert-success">
+		L'article
+		<strong>{{ title }}</strong>
+		a bien été supprimé.
+	</p>
+
+{% endblock %}

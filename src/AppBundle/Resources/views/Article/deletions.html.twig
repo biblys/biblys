@@ -1,17 +1,25 @@
-<h1>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
     Articles marqués pour suppression
-</h1>
+{% endblock %}
 
-<div class="list-group">
+{% block main %}
+    <h1>
+        Articles marqués pour suppression
+    </h1>
 
-    {% for article in articles %}
+    <div class="list-group">
 
-        <article class="list-group-item">
-            <h2><a href="/{{ article.url }}">{{ article.title }}</a></h2>
-            <p>Suppression demandée par {{ article.deletionUser.userName }} le {{ article.deletion_date|date('d f Y') }}.</p>
-            <p>{{ article.deletion_reason }}</p>
-        </article>
+        {% for article in articles %}
 
-    {% endfor %}
+            <article class="list-group-item">
+                <h2><a href="/{{ article.url }}">{{ article.title }}</a></h2>
+                <p>Suppression demandée par {{ article.deletionUser.userName }} le {{ article.deletion_date|date('d f Y') }}.</p>
+                <p>{{ article.deletion_reason }}</p>
+            </article>
 
-</div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

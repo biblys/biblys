@@ -1,3 +1,19 @@
-{% for gallery in galleries %}
-    {% include 'AppBundle:Gallery:show.html.twig' %}
-{% endfor %}
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Galeries
+{% endblock %}
+
+{% block main %}
+  <h1>Galeries</h1>
+
+  {% for gallery in galleries %}
+    <h2>
+      <a href="{{ path('gallery_show', {'slug': gallery.media_dir }) }}">
+        {{ gallery.title }}
+      </a>
+    </h2>
+    {% include 'AppBundle:Gallery:_gallery.html.twig' %}
+  {% endfor %}
+
+{% endblock %}

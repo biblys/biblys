@@ -1,5 +1,13 @@
-<h1>Support Biblys</h1>
+{% extends "layout:base.html.twig" %}
 
-<h2>Tous les tickets en cours</h2>
+{% block title %}
+  Support Biblys
+{% endblock %}
 
-{{ tickets|raw }}
+{% block main %}
+  <h1>Support Biblys</h1>
+
+  <h2>Tous les tickets en cours</h2>
+
+  {{ tickets|raw }}
+{% endblock %}

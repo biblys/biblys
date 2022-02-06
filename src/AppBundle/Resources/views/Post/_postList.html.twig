@@ -1,0 +1,16 @@
+<div class="posts">
+  {% for post in posts %}
+    <article id="post_{{ post.id }}" class="post">
+      <header class="post-header">
+        <h2 class="post-title">
+          <a href="{{ path('post_show', {'slug':post.url}) }}">{{ post.title }}</a>
+        </h2>
+        <p class="post-infos">Publié le
+          <time datetime="{{ post.date }}">{{ post.date|date('j f Y') }}</time>
+        </p>
+      </header>
+
+      {% include "AppBundle:Post:_post.html.twig" %}
+    </article>
+  {% endfor %}
+</div>

@@ -1,38 +1,50 @@
-<h1>
-  <span class="fa fa-pencil-square-o"></span>
-  Valeurs par défaut
-</h1>
+{% extends "layout:base.html.twig" %}
 
-<form method="post" class="fieldset">
+{% block title %}
+  Valeurs par défaut
+{% endblock %}
+
+{% block main %}
+
+  <h1>
+    <span class="fa fa-pencil-square-o"></span>
+    Valeurs par défaut
+  </h1>
+
+  <form method="post" class="fieldset">
 
     <fieldset>
       <legend>Article</legend>
       <table class="table">
         <tbody>
-          <tr>
-            <td style="line-height: 45px"><label for="default_type_id">Type</label></td>
-            <td>
-              <select name="options[default_type_id]" id="default_type_id" class="form-control">
-                {{ type_options|join|raw }}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_collection_id">Collection n°</label></td>
-            <td><input type="number" name="options[default_collection_id]" id="default_collection_id" value="{{ options.default_collection_id }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_article_source_id">Extrait de l'article n°</label></td>
-            <td><input type="number" name="options[default_article_source_id]" id="default_article_source_id" value="{{ options.default_article_source_id }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_article_pubdate">Date de parution</label></td>
-            <td><input type="date" name="options[default_article_pubdate]" id="default_article_pubdate" value="{{ options.default_article_pubdate }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_article_tags">Mots-clés</label></td>
-            <td><input type="text" name="options[default_article_tags]" id="default_article_tags" value="{{ options.default_article_tags }}" class="form-control"></td>
-          </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_type_id">Type</label></td>
+          <td>
+            <select name="options[default_type_id]" id="default_type_id" class="form-control">
+              {{ type_options|join|raw }}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_collection_id">Collection n°</label></td>
+          <td><input type="number" name="options[default_collection_id]" id="default_collection_id"
+                     value="{{ options.default_collection_id }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_article_source_id">Extrait de l'article n°</label></td>
+          <td><input type="number" name="options[default_article_source_id]" id="default_article_source_id"
+                     value="{{ options.default_article_source_id }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_article_pubdate">Date de parution</label></td>
+          <td><input type="date" name="options[default_article_pubdate]" id="default_article_pubdate"
+                     value="{{ options.default_article_pubdate }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_article_tags">Mots-clés</label></td>
+          <td><input type="text" name="options[default_article_tags]" id="default_article_tags"
+                     value="{{ options.default_article_tags }}" class="form-control"></td>
+        </tr>
         </tbody>
       </table>
     </fieldset>
@@ -41,46 +53,59 @@
       <legend>Exemplaire</legend>
       <table class="table">
         <tbody>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_invoice">Lot/Facture n°</label></td>
-            <td><input type="text" name="options[default_stock_invoice]" id="default_stock_invoice" value="{{ options.default_stock_invoice }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_stockage">Emplacement</label></td>
-            <td><input type="text" name="options[default_stock_stockage]" id="default_stock_stockage" value="{{ options.default_stock_stockage }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_purchase_price">Prix d'achat</label></td>
-            <td><input type="number" name="options[default_stock_purchase_price]" id="default_stock_purchase_price" value="{{ options.default_stock_purchase_price }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_selling_price">Prix de vente</label></td>
-            <td><input type="number" name="options[default_stock_selling_price]" id="default_stock_selling_price" value="{{ options.default_stock_selling_price }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_condition">État</label></td>
-            <td><input type="text" name="options[default_stock_condition]" id="default_stock_condition" value="{{ options.default_stock_condition }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_condition_details">Remarques</label></td>
-            <td><input type="text" name="options[default_stock_condition_details]" id="default_stock_condition_details" value="{{ options.default_stock_condition_details }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_discount">Remise</label></td>
-            <td><input type="number" step="0.01" name="options[default_stock_discount]" id="default_stock_discount" value="{{ options.default_stock_discount }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_super_discount">Sur-remise</label></td>
-            <td><input type="number" step="0.01" name="options[default_stock_super_discount]" id="default_stock_super_discount" value="{{ options.default_stock_super_discount }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_cascading_discount">Remise en cascade</label></td>
-            <td><input type="number" step="0.01" name="options[default_stock_cascading_discount]" id="default_stock_cascading_discount" value="{{ options.default_stock_cascading_discount }}" class="form-control"></td>
-          </tr>
-          <tr>
-            <td style="line-height: 45px"><label for="default_stock_purchase_date">Date d'achat</label></td>
-            <td><input type="datetime" name="options[default_stock_purchase_date]" id="default_stock_purchase_date" value="{{ options.default_stock_purchase_date }}" class="form-control" placeholder="YYYY-MM-DD HH:MM:SS"></td>
-          </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_invoice">Lot/Facture n°</label></td>
+          <td><input type="text" name="options[default_stock_invoice]" id="default_stock_invoice"
+                     value="{{ options.default_stock_invoice }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_stockage">Emplacement</label></td>
+          <td><input type="text" name="options[default_stock_stockage]" id="default_stock_stockage"
+                     value="{{ options.default_stock_stockage }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_purchase_price">Prix d'achat</label></td>
+          <td><input type="number" name="options[default_stock_purchase_price]" id="default_stock_purchase_price"
+                     value="{{ options.default_stock_purchase_price }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_selling_price">Prix de vente</label></td>
+          <td><input type="number" name="options[default_stock_selling_price]" id="default_stock_selling_price"
+                     value="{{ options.default_stock_selling_price }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_condition">État</label></td>
+          <td><input type="text" name="options[default_stock_condition]" id="default_stock_condition"
+                     value="{{ options.default_stock_condition }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_condition_details">Remarques</label></td>
+          <td><input type="text" name="options[default_stock_condition_details]" id="default_stock_condition_details"
+                     value="{{ options.default_stock_condition_details }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_discount">Remise</label></td>
+          <td><input type="number" step="0.01" name="options[default_stock_discount]" id="default_stock_discount"
+                     value="{{ options.default_stock_discount }}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_super_discount">Sur-remise</label></td>
+          <td><input type="number" step="0.01" name="options[default_stock_super_discount]"
+                     id="default_stock_super_discount" value="{{ options.default_stock_super_discount }}"
+                     class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_cascading_discount">Remise en cascade</label></td>
+          <td><input type="number" step="0.01" name="options[default_stock_cascading_discount]"
+                     id="default_stock_cascading_discount" value="{{ options.default_stock_cascading_discount }}"
+                     class="form-control"></td>
+        </tr>
+        <tr>
+          <td style="line-height: 45px"><label for="default_stock_purchase_date">Date d'achat</label></td>
+          <td><input type="datetime" name="options[default_stock_purchase_date]" id="default_stock_purchase_date"
+                     value="{{ options.default_stock_purchase_date }}" class="form-control"
+                     placeholder="YYYY-MM-DD HH:MM:SS"></td>
+        </tr>
         </tbody>
       </table>
     </fieldset>
@@ -89,4 +114,6 @@
       <button type="submit" class="btn btn-primary">Valider</button>
     </fieldset>
 
-</form>
+  </form>
+
+{% endblock %}

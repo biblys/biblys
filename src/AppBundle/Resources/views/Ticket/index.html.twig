@@ -1,12 +1,23 @@
-<a href="{{ path("ticket_new") }}" class="btn btn-primary pull-right">Nouveau ticket</a>
-<h1>
-  <span class="fa fa-medkit"></span>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
   Support Biblys
-</h1>
+{% endblock %}
 
-<h2>Tickets marqués comme résolu</h2>
-<p>Ces tickets ont été marqués comme résolu et sont en attente de votre confirmation. Si le problème est bien résolu, vous pouvez clore le ticket.</p>
-{{ resolved|raw }}
+{% block main %}
 
-<h2>Tickets en cours</h2>
-{{ open|raw }}
+  <a href="{{ path("ticket_new") }}" class="btn btn-primary pull-right">Nouveau ticket</a>
+  <h1>
+    <span class="fa fa-medkit"></span>
+    Support Biblys
+  </h1>
+
+  <h2>Tickets marqués comme résolu</h2>
+  <p>Ces tickets ont été marqués comme résolu et sont en attente de votre confirmation. Si le problème est bien résolu,
+    vous pouvez clore le ticket.</p>
+  {{ resolved|raw }}
+
+  <h2>Tickets en cours</h2>
+  {{ open|raw }}
+
+{% endblock %}

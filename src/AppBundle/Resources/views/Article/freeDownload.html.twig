@@ -1,22 +1,30 @@
-<h1>Téléchargement gratuit</h1>
+{% extends "layout:base.html.twig" %}
 
-<p><strong>{{ article.title }}</strong> sera ajouté à votre <a href="/pages/log_myebooks">bibliothèque numérique</a> d'où vous pourrez le télécharger à volonté et dans tous les formats disponibles.</p>
+{% block title %}
+    Administration Biblys
+{% endblock %}
 
-{% if not app.user.isLogged() %}
-    <p><a href="{{ app.axys.loginUrl }}">Connectez-vous</a> ou <a href="{{ app.axys.signupUrl }}">inscrivez-vous</a> pour continuer.</p>
-{% else %}
-    <form method="post">
+{% block main %}
+    <h1>Téléchargement gratuit</h1>
 
-        {% if newsletter %}
-            <p class="checkbox">
-                <label class="after">
-                    <input type="checkbox"name="newsletter" value="1"{{ newsletter_checked ? 'checked' }}>
-                    Je souhaite recevoir la newsletter pour être tenu-e
-                    au courant de l'actualité du site (facultatif).
-                </label>
-            </p>
-        {% endif %}
+    <p><strong>{{ article.title }}</strong> sera ajouté à votre <a href="/pages/log_myebooks">bibliothèque numérique</a> d'où vous pourrez le télécharger à volonté et dans tous les formats disponibles.</p>
 
-        <button type="submit" class="btn btn-primary">Continuer</a>
-    </form>
-{% endif %}
+    {% if not app.user.isLogged() %}
+        <p><a href="{{ app.axys.loginUrl }}">Connectez-vous</a> ou <a href="{{ app.axys.signupUrl }}">inscrivez-vous</a> pour continuer.</p>
+    {% else %}
+        <form method="post">
+
+            {% if newsletter %}
+                <p class="checkbox">
+                    <label class="after">
+                        <input type="checkbox" name="newsletter" value="1"{{ newsletter_checked ? 'checked' }}>
+                        Je souhaite recevoir la newsletter pour être tenu-e
+                        au courant de l'actualité du site (facultatif).
+                    </label>
+                </p>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Continuer</button>
+        </form>
+    {% endif %}
+{% endblock %}
