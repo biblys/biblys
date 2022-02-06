@@ -109,6 +109,9 @@ class Controller
     {
         global $site, $request, $axys;
 
+        $container = require __DIR__."/../container.php";
+        $urlGenerator = $container->get("url_generator");
+
         //** Twig custom functions **//
 
         $functions = [];
@@ -222,12 +225,14 @@ class Controller
         $config = new Config();
         $currentUser = CurrentUser::buildFromRequest($request);
         $axys = new LegacyClient($config->get("axys"), $currentUser->getToken());
+        $axysMenu = LegacyClient::buildMenu($config, $urlGenerator, $request);
 
         // Global variables
         $app = [
             'request' => $request,
             'user' => $this->user,
             'axys' => $axys,
+            'axysMenu' => $axysMenu,
             'session' => $session,
             'site' => $site,
         ];
