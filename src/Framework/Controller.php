@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Biblys\Axys\Client;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -102,6 +103,7 @@ class Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws PropelException
      */
     public function render(string $template, array $vars = []): Response
     {
@@ -216,6 +218,10 @@ class Controller
             ]
         );
         $twig->addRuntimeLoader($runtimeLoader);
+
+        $config = new Config();
+        $currentUser = CurrentUser::buildFromRequest($request);
+        $axys = new Client($config->get("axys"), $currentUser->getToken());
 
         // Global variables
         $app = [

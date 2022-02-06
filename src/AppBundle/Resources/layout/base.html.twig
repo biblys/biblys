@@ -1,8 +1,10 @@
 <html lang="fr">
   <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | {{ app.site.title }}</title>
   </head>
   <body>
     {% block main %}{% endblock %}
+
+    <script type="text/javascript" src="{{ app.axys.widgetUrl }}"></script>
   </body>
 </html>
