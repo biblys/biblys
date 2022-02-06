@@ -121,13 +121,11 @@ $routes = require __DIR__ . "/../src/AppBundle/routes.php";
 $urlgenerator = new UrlGenerator($routes, new RequestContext());
 
 $container = include __DIR__."/../src/container.php";
-$container->setParameter("routes", $routes);
 $container->register("listener.error", ErrorListener::class)
     ->setArguments(["AppBundle\Controller\ErrorController::exception"]);
 $container->getDefinition("dispatcher")
     ->addMethodCall("addSubscriber", [new Reference("listener.error")]);
-$container->register("url_generator", UrlGenerator::class)
-    ->setArguments(["%routes%", new Reference("context")]);
+
 
 $framework = $container->get("framework");
 $request = Request::createFromGlobals();
