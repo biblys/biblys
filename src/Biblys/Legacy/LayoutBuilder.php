@@ -2,10 +2,12 @@
 
 namespace Biblys\Legacy;
 
-use Biblys\Axys\Client as AxysClient;
+use Axys\LegacyClient;
 use Biblys\Service\Config;
-use Exception;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\CurrentSite;
+use Exception;
+use Propel\Runtime\Exception\PropelException;
 use Site;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -296,9 +298,11 @@ class LayoutBuilder
      * @param Config $config
      * @param Visitor $currentVisitor
      * @param Site $site
+     * @param Request $request
      * @return array
+     * @throws PropelException
      */
-    public static function loadAssets(Config $config, Visitor $currentVisitor, Site $site): array
+    public static function loadAssets(Config $config, Visitor $currentVisitor, Site $site, Request $request): array
     {
         $jsCalls = loadEncoreAssets($config->get('environment'), 'js');
         $cssCalls = loadEncoreAssets($config->get('environment'), 'css');
@@ -322,8 +326,9 @@ class LayoutBuilder
         $jsCalls[] = '/libs/ckeditor/adapters/jquery.js?4.5.7';
 
         // Axys
+        $currentUser = CurrentUser::buildFromRequest($request);
         $axysConfig = $config->get('axys') ?: [];
-        $axys = new AxysClient($axysConfig);
+        $axys = new LegacyClient($axysConfig, $currentUser->getToken());
 
         /** @var Site $site */
         if ($site->get('axys') || $currentVisitor->isAdmin()) {

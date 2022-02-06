@@ -8,11 +8,16 @@ class LegacyClient
     private $base_url;
 
     /**
+     * @var string
+     */
+    private $userToken;
+
+    /**
      * @var int
      */
     private $version;
 
-    public function __construct(array $options = [])
+    public function __construct(array $options = [], string $userToken = null)
     {
         $this->options = $options;
 
@@ -36,6 +41,8 @@ class LegacyClient
         }
 
         $this->base_url = $this->options['protocol'].'://'.$this->options['host'].$port;
+
+        $this->userToken = $userToken;
     }
 
     public function getLoginUrl(): string
@@ -62,12 +69,12 @@ class LegacyClient
         return $this->base_url.'/#Inscription';
     }
 
-    public function getWidgetUrl($user_uid = null): string
+    public function getWidgetUrl(): string
     {
         $url = $this->base_url."/widget.php?version={$this->version}";
 
-        if ($user_uid) {
-            $url .= '&UID='.$user_uid;
+        if ($this->userToken) {
+            $url .= '&UID='.$this->userToken;
         }
 
         return $url;

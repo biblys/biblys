@@ -29,8 +29,10 @@ if ($_V->isLogged()) {
     $_LOG = $_V;
 }
 
+$request = Request::createFromGlobals();
+
 /** @var Site $site */
-list($_JS_CALLS, $_CSS_CALLS) = LayoutBuilder::loadAssets($config, $_V, $site);
+list($_JS_CALLS, $_CSS_CALLS) = LayoutBuilder::loadAssets($config, $_V, $site, $request);
 
 $exceptionController = new ErrorController();
 
@@ -63,7 +65,6 @@ $container->getDefinition("dispatcher")
 
 
 $framework = $container->get("framework");
-$request = Request::createFromGlobals();
 $originalRequest = $request; // used by LegacyController
 /** @var Response $response */
 $response = $framework->handle($request);
