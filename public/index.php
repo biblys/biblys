@@ -6,12 +6,12 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Framework\Exception\ServiceUnavailableException;
 use Framework\Framework;
+use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
@@ -117,8 +117,8 @@ if ($closed) {
     );
 }
 
-$routes = require __DIR__ . "/../src/AppBundle/routes.php";
-$urlgenerator = new UrlGenerator($routes, new RequestContext());
+$routes = RouteLoader::load();
+$GLOBALS["urlgenerator"] = new UrlGenerator($routes, new RequestContext());
 
 $container = include __DIR__."/../src/container.php";
 $container->register("listener.error", ErrorListener::class)

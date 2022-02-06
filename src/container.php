@@ -9,6 +9,7 @@ use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\RequestListener;
+use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -62,8 +63,7 @@ $container->register("config", Config::class);
 $container->register("updater", Updater::class)
     ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
 
-// TODO: also add api routes
-$routes = require __DIR__ . "/../src/AppBundle/routes.php";
+$routes = RouteLoader::load();
 $container->setParameter("routes", $routes);
 $container->register("url_generator", UrlGenerator::class)
     ->setArguments(["%routes%", new Reference("context")]);

@@ -4,6 +4,7 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 use Biblys\Service\Config;
+use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
@@ -16,7 +17,7 @@ require_once __DIR__."/../inc/constants.php";
 $config = new Config();
 Biblys\Database\Connection::initPropel($config->get("db"));
 
-$routes = require __DIR__ . "/../src/ApiBundle/routes.php";
+$routes = RouteLoader::load();
 $urlgenerator = new UrlGenerator($routes, new RequestContext());
 
 $container = include __DIR__."/../src/container.php";

@@ -2,6 +2,7 @@
 
 use Biblys\Service\Config;
 use Framework\RequestListener;
+use Framework\RouteLoader;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -25,7 +26,7 @@ class RequestListenerTest extends TestCase
         ];
         $request = Request::createFromGlobals();
         $container = include __DIR__."/../../src/container.php";
-        $routes = require __DIR__ . "/../../src/AppBundle/routes.php";
+        $routes = RouteLoader::load();
         $container->setParameter("routes", $routes);
 
         // when
@@ -55,7 +56,6 @@ class RequestListenerTest extends TestCase
         ];
         $request = Request::createFromGlobals();
         $container = include __DIR__."/../../src/container.php";
-        $routes = require __DIR__ . "/../../src/AppBundle/routes.php";
         $container->setParameter("routes", $routes);
 
         // when
