@@ -153,6 +153,7 @@ class ModelFactory
         $shippingFee->setFee($attributes["fee"] ?? 560);
         $shippingFee->setMaxWeight($attributes["max_weight"] ?? 1000);
         $shippingFee->setMaxAmount($attributes["max_amount"] ?? 1000);
+        $shippingFee->setInfo($attributes["info"] ?? null);
         $shippingFee->save();
 
         return $shippingFee;

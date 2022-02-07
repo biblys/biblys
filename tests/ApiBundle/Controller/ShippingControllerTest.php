@@ -3,14 +3,16 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
-use Biblys\Test\EntityFactory;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Exception;
 use Framework\Exception\AuthException;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -284,5 +286,76 @@ class ShippingControllerTest extends TestCase
 
         // when
         $controller->deleteAction($request, $config, $shippingFee->getId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSearch()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $shippingFee = ModelFactory::createShippingFee([
+            "fee" => 560,
+            "mode" => "Colissimo",
+            "type" => "suivi",
+            "info" => "Expedition sous 72h",
+            "site_id" => $site->getId(),
+            "max_weight" => 2000,
+            "max_amount" => 10000,
+        ]);
+        $country = ModelFactory::createCountry();
+        $controller = new ShippingController();
+        $request = new Request();
+        $request->query->set("country_id", $country->getId());
+        $request->query->set("order_weight", "500");
+        $request->query->set("order_amount", "2000");
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $response = $controller->search($request, $currentSite);
+
+        // then
+        $expectedResponse = [
+            [
+                "id" => $shippingFee->getId(),
+                "mode" => "Colissimo",
+                "fee" => 560,
+                "type" => "suivi",
+                "info" => "Expedition sous 72h",
+            ],
+        ];
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $this->assertEquals(
+            json_encode($expectedResponse),
+            $response->getContent(),
+            "it should return all fees for current site"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSearchWithUnknownCountry()
+    {
+        // then
+        $this->expectException("Symfony\Component\HttpFoundation\Exception\BadRequestException");
+        $this->expectExceptionMessage("Pays inconnu");
+        $request = new Request();
+        $request->query->set("country_id", 99999);
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // given
+        $controller = new ShippingController();
+
+        // when
+        $controller->search($request, $currentSite);
     }
 }

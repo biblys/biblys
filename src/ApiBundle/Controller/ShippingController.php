@@ -4,11 +4,16 @@ namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Model\CountryQuery;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
+use PHPUnit\Util\Json;
 use Propel\Runtime\Exception\PropelException;
+use ShippingManager;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -102,6 +107,39 @@ class ShippingController extends Controller
         return new JsonResponse(null, 204);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function search(Request $request, CurrentSite $currentSite): JsonResponse
+    {
+        $countryId = $request->query->get('country_id');
+        $country = CountryQuery::create()->findPk($countryId);
+        if (!$country) {
+            throw new BadRequestException("Pays inconnu");
+        }
+
+        $orderWeight = $request->query->get("order_weight", 0);
+        $orderAmount = $request->query->get("order_amount", 0);
+        $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
+            $currentSite,
+            $country,
+            $orderWeight,
+            $orderAmount
+        );
+        $serializedFees = array_values(array_map(function ($fee) {
+                return [
+                    'id' => $fee->getId(),
+                    'mode' => $fee->getMode(),
+                    'fee' => $fee->getFee(),
+                    'type' => $fee->getType(),
+                    'info' => $fee->getInfo(),
+                ];
+            }, $fees
+        ));
+
+        return new JsonResponse($serializedFees);
+    }
+
     private static function _feeToJson(ShippingFee $fee): array
     {
         return [
@@ -117,7 +155,6 @@ class ShippingController extends Controller
             'info' => $fee->getInfo(),
         ];
     }
-
 
     /**
      * @param Request $request
