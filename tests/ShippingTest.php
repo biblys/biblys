@@ -64,37 +64,6 @@ class ShippingTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getting fees
-     * @throws Exception
-     */
-    public function testGetFees()
-    {
-        // given
-        $sm = new ShippingManager();
-        $site = EntityFactory::createSite();
-        $GLOBALS["site"] = $site;
-        $country = EntityFactory::createCountry();
-        $fee = EntityFactory::createShipping([
-            "site_id" => $site->get('id'),
-            "type" => "normal",
-            "zone" => $country->get("shipping_zone"),
-            "max_weight" => 1000,
-            "max_amount" => 2000,
-        ]);
-        $orderWeight = 500;
-        $orderAmount = 1500;
-
-        // when
-        list(, $feeNormal) = $sm->getFees($country, $orderWeight, $orderAmount);
-
-        // then
-        $this->assertEquals(
-            $feeNormal,
-            $fee
-        );
-    }
-
-    /**
      * Test deleting a copy
      * @depends testGet
      * @throws Exception
