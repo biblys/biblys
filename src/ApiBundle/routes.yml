@@ -51,3 +51,8 @@ api_shipping_delete:
   path: /api/admin/shipping/{id}
   methods: DELETE
   controller: ApiBundle\Controller\ShippingController::deleteAction
+
+api_shipping_search:
+  path: /api/shipping/search
+  methods: GET
+  controller: ApiBundle\Controller\ShippingController::search

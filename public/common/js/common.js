@@ -782,73 +782,62 @@ function reloadEvents(scope) {
     })
     .removeClass('event');
 
-  var select_country = function(country_id) {
-    if (country_id == 0 || typeof country_id === 'undefined') {
+  async function selectCountry(countryId) {
+    if (countryId == 0 || typeof countryId === 'undefined') {
       return false;
     }
-    $.ajax('/pages/shipping', {
-      data: {
-        country_id: country_id,
-        order_weight: $('#order_weight').val(),
-        order_amount: $('#order_amount').val()
-      },
-      dataType: 'json',
-      contentType: 'application/json',
-      success: function(res) {
-        var select = $('#shipping_id');
 
-        $('#shipping_id')
-          .html('')
-          .attr('disabled', 'disabled');
-        // $('#continue').attr('disabled', 'disabled');
-        $('.ship_notice').hide();
+    const orderWeightInput = document.querySelector('#order_weight');
+    const orderAmountInput = document.querySelector('#order_amount');
+    const query = `country_id=${countryId}&order_weight=${orderWeightInput.value}&order_amount=${orderAmountInput.value}`;
 
-        if (res) {
-          if (res.length == 0) {
-            _alert(
-              'Aucune option d\'expédition n\'est disponible pour ce pays. Merci de <a href="/contact/">nous contacter</a>.'
-            );
-            return false;
-          }
+    const response = await fetch(`/api/shipping/search?${query}`);
+    const json = await response.json();
+    if (json.error) {
+      _alert(json.error.message);
+      return;
+    }
 
-          var options = $.map(res, function(fee) {
-            return (
-              '<option data-type="' +
-              fee.type +
-              '" data-amount="' +
-              fee.fee +
-              '" data-info="' +
-              fee.info +
-              '" value="' +
-              fee.id +
-              '">' +
-              fee.mode +
-              '</option>'
-            );
-          });
+    const fees = json;
 
-          // If only one option, add an empty option
-          if (options.length > 1) {
-            options.unshift(
-              '<option data-info="Choisissez un mode d\'expédition ci-dessus.">Choisissez un mode d\'expédition...</option>'
-            );
-          }
+    const shippingModeSelector = document.querySelector('#shipping_id');
+    const continueButton = document.querySelector('#continue');
+    const shippingNotice = document.querySelector('.ship_notice');
 
-          $('#shipping_id')
-            .html(options)
-            .removeAttr('disabled');
+    shippingModeSelector.setAttribute('disabled', 'disabled');
+    continueButton.setAttribute('disabled', 'disabled');
+    if (shippingNotice) {
+      shippingNotice.style.display = 'none';
+    }
 
-          $('#shipping_id').trigger('change');
-        }
-      }
+    if (fees.length === 0) {
+      window._alert(
+        `Aucune option d'expédition n'est disponible pour ce pays. Merci de <a href="/contact/">nous contacter</a>.`
+      );
+      return;
+    }
+
+    const feeOptions = fees.map(fee => {
+      return `<option data-type="${fee.type}" data-info="${fee.info}" data-amount="${fee.fee}" value="${fee.id}">
+        ${fee.mode}
+      </option>`;
     });
-  };
-  select_country($('#country_id').val());
 
-  // Choisir le pays de destination
-  $('#country_id').change(function() {
-    select_country($(this).val());
+    if (feeOptions.length > 1) {
+      feeOptions.unshift(
+        `<option data-info="Choisissez un mode d'expédition ci-dessus.">Choisissez une option d'expédition</option>`
+      );
+    }
+
+    shippingModeSelector.innerHTML = feeOptions.join('');
+    shippingModeSelector.removeAttribute('disabled');
+  };
+
+  const countrySelector = document.querySelector('#country_id');
+  countrySelector.addEventListener('change', function() {
+    selectCountry(this.value);
   });
+  selectCountry(countrySelector.value);
 
   var price = function(price, format) {
     if (format == 'EUR') {
