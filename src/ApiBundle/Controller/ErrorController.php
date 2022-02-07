@@ -23,6 +23,10 @@ class ErrorController extends Controller
 
     private function _getStatusForException(Exception $exception): int
     {
+        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\BadRequestHttpException")) {
+            return 400;
+        }
+
         if (
             is_a($exception, "Symfony\Component\Routing\Exception\ResourceNotFoundException") ||
             is_a($exception, "Symfony\Component\HttpKernel\Exception\NotFoundHttpException")

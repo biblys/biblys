@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -11,6 +12,31 @@ require_once __DIR__ . "/../../setUp.php";
 
 class ErrorControllerTest extends TestCase
 {
+    /** 400 */
+    public function testBadRequestExceiption()
+    {
+        // given
+        $controller = new ErrorController();
+        $exception = new BadRequestHttpException("That request is bad, man.");
+
+        // when
+        $response = $controller->exception($exception);
+
+        // then
+        $json = json_decode($response->getContent());
+        $this->assertEquals(
+            400,
+            $response->getStatusCode(),
+            "it should response with HTTP status 400"
+        );
+        $this->assertEquals(
+            "That request is bad, man.",
+            $json->error->message,
+            "it should display error message"
+        );
+    }
+
+    /** 404 */
     public function testResourceNotFoundException()
     {
         // given
@@ -34,6 +60,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /** 404 */
     public function testNotFoundHttpException()
     {
         // given
@@ -57,6 +84,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
+    /** 500 */
     public function testHandleServerError()
     {
         // given
