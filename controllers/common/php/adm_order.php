@@ -1,17 +1,27 @@
 <?php
 
+use Biblys\Service\CurrentSite;
+use Model\CountryQuery;
+use Model\ShippingFeeQuery;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 $cm  = new CustomerManager();
 $om  = new OrderManager();
 $sm  = new StockManager();
 $shm = new ShippingManager();
 
+/** @var Request $request */
 $order_id = $request->query->get('order_id', false);
 $order = $om->get(array('order_id' => $order_id));
+
+$content = null;
 
 // Order has been deleted ?
 $deleted_id = $request->query->get('deleted', false);
 if ($deleted_id) {
-    $_ECHO .= '<p class="success">La vente n° '.$deleted_id.' a été annulée.</p>';
+    $content .= '<p class="success">La vente n° '.$deleted_id.' a été annulée.</p>';
 }
 
 elseif ($order) {
@@ -53,13 +63,13 @@ elseif ($order) {
             $om->update($order);
         }
 
-        redirect('/order/'.$order->get('url').'?updated=1','Enregistrement en cours...');
+        return new RedirectResponse('/order/'.$order->get('url').'?updated=1');
     }
 
     // Delete order
     if ($request->query->get('delete', false)) {
         $om->cancel($order);
-        redirect('/pages/adm_order', ['deleted' => $order->get('id')]);
+        return new RedirectResponse("/pages/adm_order?deleted={$order->get("id")}");
     }
 
     // Ajouter un exemplaire
@@ -78,7 +88,7 @@ elseif ($order) {
                 trigger_error($e->getMessage());
             }
 
-            redirect('/pages/adm_order?order_id='.$order->get('order_id').'&stock_added='.$_GET['stock_add']);
+            return new RedirectResponse("/pages/adm_order?order_id={$order->get("order_id")}&stock_added={$_GET["stock_add"]}");
         }
         else trigger_error("L'exemplaire ".$_GET['stock_add']." n'existe pas !");
     }
@@ -103,7 +113,7 @@ elseif ($order) {
         }
         else trigger_error("L'exemplaire ".$_GET['stock_remove']." n'existe pas !");
 
-        redirect('/pages/adm_order?order_id='.$order->get('order_id').'&stock_removed='.$_GET['stock_remove']);
+        return new RedirectResponse("/pages/adm_order?order_id={$order->get("order_id")}&stock_removed={$_GET["stock_remove"]}");
     }
 
     elseif (isset($_GET["stock_removed"])) {
@@ -124,7 +134,7 @@ elseif ($order) {
 
         if (!$error) {
             $om->update($order);
-            redirect('/pages/adm_order?order_id='.$order->get('order_id').'&shipping_updated=1');
+            return new RedirectResponse("/pages/adm_order?order_id={$order->get('order_id')}&shipping_updated=1");
         }
     }
 
@@ -142,9 +152,10 @@ elseif ($order) {
     }
 
     // Articles de la commande
+    /** @var PDO $_SQL */
     $articles = $_SQL->prepare("SELECT `stock_id`, `article_title`, `stock_selling_price` FROM `stock` JOIN `articles` USING(`article_id`) WHERE `order_id` = :order_id ORDER BY `article_title_alphabetic`");
     $articles->bindValue("order_id",$o["order_id"],PDO::PARAM_STR);
-    $articles->execute() or die(pdo_error());
+    $articles->execute();
     $article_list = NULL;
     while ($a = $articles->fetch())
     {
@@ -184,17 +195,23 @@ elseif ($order) {
         return '<option value="'.$country->get('id').'"'.($country == $order->get('country') ? ' selected' : null).'>'.$country->get('name').'</option>';
     }, $countries);
 
-    $fees_list = [];
+    $feesList = [];
     if ($order->get('country')) {
-        // Shipping options
-        $fees = $shm->getFees($order->get('country'), $order->getTotalWeight(), $order->get('amount'));
-        $fees_list = array_map(function($fee) {
-            return '<option value="'.$fee->get('id').'">'.$fee->get('mode').' ['.currency($fee->get('fee'), true).']</option>';
+        $country = CountryQuery::create()->findPk($order->get('country')->get('id'));
+        /** @var CurrentSite $currentSite */
+        $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
+            $currentSite,
+            $country,
+            $order->getTotalWeight(),
+            $order->get('amount'),
+        );
+        $feesList = array_map(function($fee) {
+            return '<option value="'.$fee->getId().'">'.$fee->getMode().' ['.currency($fee->getFee(), true).']</option>';
         }, $fees);
     }
 
     $_PAGE_TITLE = $order_type.' n&deg; <a href="/order/'.$o['order_url'].'">'.$o["order_id"].'</a>';
-    $_ECHO .= '
+    $content .= '
         <h2>'.$_PAGE_TITLE.'</h2>
 
         <p class="buttonset">
@@ -372,7 +389,7 @@ elseif ($order) {
                     <label for="shipping_fee">Nouveau mode :</label>
                     <select name="shipping_fee" id="shipping_fee">
                         <option/>
-                        '.join($fees_list).'
+                        '.join($feesList).'
                     </select>
                     <button type="submit" class="btn btn-primary btn-sm">Valider</button>
                 </p>
@@ -405,3 +422,5 @@ elseif ($order) {
 
     ';
 } else trigger_error('Commande/Vente inexistante');
+
+return new Response($content);
