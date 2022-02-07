@@ -4,6 +4,7 @@ namespace Biblys\Test;
 
 use Biblys\Service\Config;
 use Model\Article;
+use Model\Country;
 use Model\Page;
 use Model\People;
 use Model\Publisher;
@@ -38,6 +39,18 @@ class ModelFactory
         $right->save();
 
         return $user;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCountry(): Country
+    {
+        $country = new Country();
+        $country->setName("France");
+        $country->save();
+
+        return $country;
     }
 
     /**

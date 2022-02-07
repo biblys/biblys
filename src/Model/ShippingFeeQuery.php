@@ -3,9 +3,8 @@
 namespace Model;
 
 use Biblys\Service\CurrentSite;
-use InvalidArgumentException;
+use Exception;
 use Model\Base\ShippingFeeQuery as BaseShippingFeeQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'shipping' table.
@@ -23,5 +22,75 @@ class ShippingFeeQuery extends BaseShippingFeeQuery
         $query = parent::create();
         $query->filterBySiteId($currentSite->getSite()->getId());
         return $query;
+    }
+
+    /**
+     * @param CurrentSite $currentSite
+     * @param Country $country
+     * @param int $weight
+     * @param int $amount
+     * @return ShippingFee[]
+     * @throws Exception
+     */
+    public static function getForCountryWeightAndAmount(
+        CurrentSite $currentSite,
+        Country $country,
+        int $weight,
+        int $amount
+    ): array
+    {
+        $weightIncludingWrapping = $weight * 1.05;
+        $zone = $country->getShippingZone();
+
+        $query = self::createForSite($currentSite);
+        $fees = $query->orderByFee()->find();
+
+        $shippingTypes = ['magasin', 'normal', 'suivi'];
+
+        $feesForEachTypes = array_map(
+            function ($type) use ($fees, $zone, $weightIncludingWrapping, $amount, $currentSite) {
+                foreach ($fees as $fee) {
+                    // Keeps only fees for current type
+                    if ($fee->getType() !== $type) {
+                        continue;
+                    }
+
+                    // Keep only shipping without article
+                    if ($fee->getArticleId()) {
+                        continue;
+                    }
+
+                    // Keep only fees for destination country's zone or ALL zones
+                    if ($fee->getZone() !== $zone && $fee->getZone() !== 'ALL') {
+                        continue;
+                    }
+
+                    // Keep only fees for weight higher than order
+                    if ($fee->getMaxWeight() !== null && $fee->getMaxWeight() <= $weightIncludingWrapping) {
+                        continue;
+                    }
+
+                    // Keep only fees for which order's amount is higher than min amount
+                    if ($fee->getMinAmount() !== null && $amount < $fee->getMinAmount()) {
+                        continue;
+                    }
+
+                    // Keep only fees for which order's amount is lesser than max amount
+                    if ($fee->getMaxAmount() !== null && $amount > $fee->getMaxAmount()) {
+                        continue;
+                    }
+
+                    // Return first fee that survived until here
+                    return $fee;
+                }
+                return null;
+            },
+            $shippingTypes
+        );
+
+        return array_filter(
+            $feesForEachTypes,
+            function ($fee) { return $fee !== null; }
+        );
     }
 }

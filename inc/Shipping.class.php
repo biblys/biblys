@@ -16,6 +16,7 @@
          * @param int $weight
          * @param int $amount
          * @return Shipping[]
+         * @deprecated ShippingManager->getFee() is deprecated. Use ShippingFeeQuery::getShippingByCountryAndWeightAndAmount instead
          */
         public function getFees(Country $country, int $weight, int $amount): array
         {
