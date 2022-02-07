@@ -347,12 +347,35 @@ class ShippingControllerTest extends TestCase
         // then
         $this->expectException("Symfony\Component\HttpFoundation\Exception\BadRequestException");
         $this->expectExceptionMessage("Pays inconnu");
+
+        //given
         $request = new Request();
         $request->query->set("country_id", 99999);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
+        $controller = new ShippingController();
+
+        // when
+        $controller->search($request, $currentSite);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSearchWithBlockedCountry()
+    {
+        // then
+        $this->expectException("Symfony\Component\HttpFoundation\Exception\BadRequestException");
+        $this->expectExceptionMessage("Expédition non disponible pour ce pays.");
 
         // given
+        $country = ModelFactory::createCountry();
+        $request = new Request();
+        $request->query->set("country_id", $country->getId());
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("countries_blocked_for_shipping", "{$country->getCode()},US,DE");
         $controller = new ShippingController();
 
         // when

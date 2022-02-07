@@ -48,6 +48,7 @@ class ModelFactory
     {
         $country = new Country();
         $country->setName("France");
+        $country->setCode("FR");
         $country->save();
 
         return $country;

@@ -6,6 +6,8 @@ Améliorations
 
 - Une option de site "alerts" a été ajoutée pour activer l'envoi d'alertes 
   par courriel lors de l'ajout d'exemplaires au stock.
+- Une option de site "countries_blocked_for_shipping" a été ajoutée pour 
+  permettre de bloquer l'expédition vers certains pays.
 
 ### 2.58.1 (4 février 2021)
 

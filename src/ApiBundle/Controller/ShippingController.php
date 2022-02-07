@@ -118,6 +118,14 @@ class ShippingController extends Controller
             throw new BadRequestException("Pays inconnu");
         }
 
+        $countriesBlockedForShipping = $currentSite->getOption("countries_blocked_for_shipping");
+        if ($countriesBlockedForShipping) {
+            $blockedCountriesCodes = explode(",", $countriesBlockedForShipping);
+            if (in_array($country->getCode(), $blockedCountriesCodes)) {
+                throw new BadRequestException("Expédition non disponible pour ce pays.");
+            }
+        }
+
         $orderWeight = $request->query->get("order_weight", 0);
         $orderAmount = $request->query->get("order_amount", 0);
         $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
