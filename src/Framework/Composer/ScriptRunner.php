@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Composer\Console\Application;
 use Exception;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class ScriptRunner
 {
@@ -27,16 +28,16 @@ class ScriptRunner
         // Change directory to Biblys root
         chdir(BIBLYS_PATH);
 
-        // Updating composer packages
         $application = new Application();
         $application->setAutoExit(false);
-        $output = new MessageAccumulator();
+        $output = new BufferedOutput();
         $code = $application->run(new ArrayInput(['command' => $command]), $output);
 
         if ($code !== 0) {
             throw new ComposerException(
                 "Une erreur est survenue lors de l'execution du script `$command`.",
-                $output->getOutput()
+                $output->fetch(),
+                $code,
             );
         }
     }
