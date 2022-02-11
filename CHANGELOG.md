@@ -7,6 +7,8 @@ Corrections
 
 - Plusieurs dates identiques pouvaient apparaître dans les raccourcis de la page
   "Ventes par article". C'est corrigé.
+- L'erreur affichée lors de l'enregistrement d'un modèle était laconique.
+  C'est amélioré.
 
 ### 2.58.2 (4 février 2021)
 

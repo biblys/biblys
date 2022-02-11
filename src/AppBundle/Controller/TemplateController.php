@@ -39,16 +39,12 @@ class TemplateController extends Controller
         $this->auth('admin');
 
         $template = Template::get($slug);
-        if (!$template) {
-            throw new NotFoundException("Cannot find template $slug");
-        }
-
         $request->attributes->set("page_title", "Éditer ".$template->getName());
 
         if ($request->getMethod() === 'POST') {
             global $site;
-            $content = $request->request->get('content');
-            $template->updateContent($site, $content);
+            $body = $request->toArray();
+            $template->updateContent($site, $body["content"]);
             return new JsonResponse();
         }
 
