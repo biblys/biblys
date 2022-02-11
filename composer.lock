@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d6ab987df54cb65618e93b550910016",
+    "content-hash": "2e7ed1f4b5cacb37d7d57fc04fb3c827",
     "packages": [
         {
             "name": "biblys/data-client-php",
