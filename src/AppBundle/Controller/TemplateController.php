@@ -6,6 +6,7 @@ use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,8 @@ class TemplateController extends Controller
         if ($request->getMethod() === 'POST') {
             global $site;
             $body = $request->toArray();
-            $template->updateContent($site, $body["content"]);
+            $filesystem = new Filesystem();
+            $template->updateContent($site, $body["content"], $filesystem);
             return new JsonResponse();
         }
 
