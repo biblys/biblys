@@ -3,6 +3,7 @@
 namespace Biblys\Template;
 
 use Exception;
+use Framework\Composer\ComposerException;
 use Framework\Composer\ScriptRunner;
 use Site;
 
@@ -135,10 +136,16 @@ class Template
 
         // If css was modified, refresh theme and bump assets version
         if ($this->getSlug() === 'css') {
-            ScriptRunner::run("theme:refresh");
 
-            $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
-            $site->setOpt('assets_version', $assetsVersion + 1);
+            try {
+                ScriptRunner::run("theme:refresh");
+                $assetsVersion = (int) $site->getOpt('assets_version') ?? '0';
+                $site->setOpt('assets_version', $assetsVersion + 1);
+            } catch (ComposerException $exception) {
+                throw new Exception(
+                    "Une erreur (code {$exception->getCode()}) est survenue pendant le rafraichissement du thème : {$exception->getOutput()}."
+                );
+            }
         }
     }
 

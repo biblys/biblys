@@ -6,6 +6,7 @@ use Biblys\Template\Template;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,7 @@ class TemplateController extends Controller
             global $site;
             $content = $request->request->get('content');
             $template->updateContent($site, $content);
+            return new JsonResponse();
         }
 
         return $this->render('AppBundle:Template:edit.html.twig', [
