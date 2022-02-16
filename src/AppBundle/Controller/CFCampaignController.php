@@ -2,26 +2,43 @@
 
 namespace AppBundle\Controller;
 
+use CFCampaign;
+use CFCampaignManager;
+use CFRewardManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CFCampaignController extends Controller
 {
-    public function showAction($slug)
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function showAction(Request $request, $slug): Response
     {
         global $site, $urlgenerator;
 
-        $cfcm = $this->entityManager('CFCampaign');
+        $cfcm = new CFCampaignManager();
         $campaign = $cfcm->get(['campaign_url' => $slug]);
         if (!$campaign) {
             throw new NotFoundException("Campaign $slug not found.");
         }
 
-        $this->setPageTitle($campaign->get('title'));
+        $request->attributes->set("page_title", $campaign->get("title"));
         $this->setOpengraphTags([
             'type' => 'website',
             'title' => 'Financement participatif : '.$campaign->get('title'),
-            'url' => 'http://'.$site->get('domain').
+            'url' => 'https://'.$site->get('domain').
                 $urlgenerator->generate('cf_campaign_show', ['slug' => $campaign->get('url')]),
             'description' => truncate(strip_tags($campaign->get('description')), '500', '...', true),
             'locale' => 'fr_FR',
@@ -29,7 +46,7 @@ class CFCampaignController extends Controller
             'site_name' => $site->get('name'),
         ]);
 
-        $cfrm = $this->entityManager('CFReward');
+        $cfrm = new CFRewardManager();
         $rewards = $cfrm->getAll(['campaign_id' => $campaign->get('id')], [
             'order' => 'reward_highlighted DESC, reward_price',
         ]);
@@ -40,30 +57,45 @@ class CFCampaignController extends Controller
         ]);
     }
 
-    public function listAction()
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function listAction(Request $request): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager('CFCampaign');
+        $cfcm = new CFCampaignManager();
         $campaigns = $cfcm->getAll();
 
-        $this->setPageTitle('Financement participatif');
+        $request->attributes->set("page_title", "Financement participatif");
 
         return $this->render('AppBundle:CFCampaign:list.html.twig', [
             'campaigns' => $campaigns,
         ]);
     }
 
-    public function newAction()
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function newAction(Request $request)
     {
         global $request;
 
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager('CFCampaign');
-        $campaign = new \CFCampaign([]);
+        $cfcm = new CFCampaignManager();
+        $campaign = new CFCampaign([]);
 
-        $this->setPageTitle('Créer une campagne');
+        $request->attributes->set("page_title", "Créer une campagne");
 
         if ($request->getMethod() == 'POST') {
             $campaign = $cfcm->create();
@@ -87,20 +119,28 @@ class CFCampaignController extends Controller
         ]);
     }
 
-    public function editAction($id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function editAction(Request $request, $id)
     {
         global $request;
 
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager('CFCampaign');
+        $cfcm = new CFCampaignManager();
 
         $campaign = $cfcm->getById($id);
         if (!$campaign) {
             throw new NotFoundException("Campaign $id not found.");
         }
 
-        $this->setPageTitle('Modifier '.$campaign->get('title'));
+        $request->attributes->set("page_title", "Modifier {$campaign->get("title")}");
 
         if ($request->getMethod() == 'POST') {
             $goal = $request->request->get('goal', 0) * 100;
@@ -123,12 +163,17 @@ class CFCampaignController extends Controller
         ]);
     }
 
-    public function refreshAction($id)
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function refreshAction(Request $request, $id): RedirectResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager('CFCampaign');
-        $cfrm = $this->entityManager('CFReward');
+        $cfcm = new CFCampaignManager();
+        $cfrm = new CFRewardManager();
 
         $campaign = $cfcm->getById($id);
         if (!$campaign) {
