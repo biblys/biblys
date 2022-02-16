@@ -2,26 +2,45 @@
 
 namespace AppBundle\Controller;
 
+use CFCampaignManager;
+use CFReward;
+use CFRewardManager;
+use Exception;
 use Framework\Controller;
 
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CFRewardController extends Controller
 {
 
-    public function listAction($campaign_id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function listAction(Request $request, $campaign_id): Response
     {
-        $this->auth("admin");
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager("CFCampaign");
+        $cfcm = new CFCampaignManager();
         $campaign = $cfcm->getById($campaign_id);
         if (!$campaign) {
-            throw new NotFoundException("Campaign $id not found.");
+            throw new NotFoundException("Campaign $campaign_id not found.");
         }
 
-        $this->setPageTitle("Contreparties de ".$campaign->get('title'));
+        $request->attributes->set("page_title", "Contreparties de {$campaign->get("title")}");
 
-        $cfrm = $this->entityManager("CFReward");
+        $cfrm = new CFRewardManager();
         $rewards = $cfrm->getAll(["campaign_id" => $campaign->get('id')]);
 
         return $this->render('AppBundle:CFReward:list.html.twig', [
@@ -30,25 +49,33 @@ class CFRewardController extends Controller
         ]);
     }
 
-    public function newAction($campaign_id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function newAction(Request $request, $campaign_id)
     {
         global $request;
 
-        $this->auth("admin");
+        self::authAdmin($request);
 
-        $cfcm = $this->entityManager("CFCampaign");
+        $cfcm = new CFCampaignManager();
         $campaign = $cfcm->getById($campaign_id);
         if (!$campaign) {
-            throw new NotFoundException("Campaign $id not found.");
+            throw new NotFoundException("Campaign $campaign_id not found.");
         }
 
-        $reward = new \CFReward(["campaign_id" => $campaign->get("id")]);
+        $reward = new CFReward(["campaign_id" => $campaign->get("id")]);
 
-        $this->setPageTitle('Créer une contrepartie');
+        $request->attributes->set("page_title", "Créer une contrepartie");
 
         if ($request->getMethod() == "POST") {
 
-            $cfrm = $this->entityManager("CFReward");
+            $cfrm = new CFRewardManager();
             $reward = $cfrm->create(["campaign_id" => $campaign->get("id")]);
 
             $reward->set("reward_content", $request->request->get("content"))
@@ -74,20 +101,28 @@ class CFRewardController extends Controller
         ]);
     }
 
-    public function editAction($id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     * @throws Exception
+     */
+    public function editAction(Request $request, $id)
     {
         global $request;
 
-        $this->auth("admin");
+        self::authAdmin($request);
 
-        $cfrm = $this->entityManager("CFReward");
-
+        $cfrm = new CFRewardManager();
         $reward = $cfrm->getById($id);
         if (!$reward) {
             throw new NotFoundException("Reward $id not found.");
         }
 
-        $this->setPageTitle('Modifier une contrepartie');
+        $request->attributes->set("pate_title", "Modifier une contrepartie");
 
         if ($request->getMethod() == "POST") {
 
@@ -106,7 +141,12 @@ class CFRewardController extends Controller
             // Update price from content
             $cfrm->updatePrice($reward);
 
-            return $this->redirect($this->generateUrl('cf_reward_list', ['campaign_id' => $reward->getCampaign()->get('id')]));
+            return $this->redirect(
+                $this->generateUrl(
+                    "cf_reward_list",
+                    ["campaign_id" => $reward->getCampaign()->get("id")]
+                )
+            );
         }
 
         return $this->render('AppBundle:CFReward:edit.html.twig', [
@@ -114,11 +154,16 @@ class CFRewardController extends Controller
         ]);
     }
 
-    public function deleteAction($id)
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function deleteAction(Request $request, $id): RedirectResponse
     {
-        $this->auth("admin");
+        self::authAdmin($request);
 
-        $cfrm = $this->entityManager("CFReward");
+        $cfrm = new CFRewardManager();
         $reward = $cfrm->getById($id);
         if (!$reward) {
             throw new NotFoundException("Reward $id not found.");
