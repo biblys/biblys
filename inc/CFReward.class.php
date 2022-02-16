@@ -68,8 +68,9 @@ use AppBundle\Controller\CFRewardController;
         /**
          * Calculate price from content articles
          * @param CFReward $reward
+         * @throws Exception
          */
-        public function updatePrice(CFReward $reward)
+        public function updatePrice(Entity $reward)
         {
             $articles = $reward->getArticles();
             $price = 0;
@@ -82,9 +83,9 @@ use AppBundle\Controller\CFRewardController;
 
         /**
          * Get available quantity for a reward
-         * @param CFReward $reward
+         * @param Entity $reward
          */
-        public function updateQuantity(CFReward $reward)
+        public function updateQuantity(Entity $reward)
         {
             if (!$reward->isLimited()) {
                 return;
