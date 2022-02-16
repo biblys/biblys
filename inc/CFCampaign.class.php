@@ -100,9 +100,10 @@
         /**
          * Update campaign from linked sales
          * @param CFCampaign $campaign The campaign object to update
-         * @return \CFCampaign The updated campaign object
+         * @return CFCampaign The updated campaign object
+         * @throws Exception
          */
-        public function updateFromSales(CFCampaign $campaign)
+        public function updateFromSales(Entity $campaign): CFCampaign
         {
             $sm = new StockManager();
             $rm = new CFRewardManager();
