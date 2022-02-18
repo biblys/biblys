@@ -1,14 +1,13 @@
 <?php
-use AppBundle\Controller\CFRewardController;
 
-    class CFReward extends Entity
+class CFReward extends Entity
     {
         protected $prefix = 'reward';
 
         /**
          * Returns true if reward is unlimited or has quantity
          */
-        public function isLimited()
+        public function isLimited(): bool
         {
             return ($this->get('limited') == 1);
         }
@@ -16,7 +15,7 @@ use AppBundle\Controller\CFRewardController;
         /**
          * Returns true if reward is unlimited or has quantity
          */
-        public function isAvailable()
+        public function isAvailable(): bool
         {
             return ($this->get('quantity') > 0 || !$this->isLimited());
         }
@@ -30,7 +29,11 @@ use AppBundle\Controller\CFRewardController;
             return $this->campaign;
         }
 
-        public function getArticles()
+        /**
+         * @return Article[]
+         * @throws Exception
+         */
+        public function getArticles(): array
         {
             $am = new ArticleManager();
             $articles = json_decode($this->get('articles'));
@@ -52,13 +55,22 @@ use AppBundle\Controller\CFRewardController;
                   $table = 'cf_rewards',
                   $object = 'CFReward';
 
+        /**
+         * @throws Exception
+         */
         public function create(array $defaults = array())
         {
           if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
           return parent::create($defaults);
         }
 
-        public function getAll(array $where = array(), array $options = array(), $withJoins = true)
+        /**
+         * @param array $where
+         * @param array $options
+         * @param $withJoins
+         * @return Entity[]
+         */
+        public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
         {
           $where['site_id'] = $this->site['site_id'];
 
@@ -84,12 +96,13 @@ use AppBundle\Controller\CFRewardController;
         /**
          * Get available quantity for a reward
          * @param Entity $reward
+         * @return Entity
          * @throws Exception
          */
-        public function updateQuantity(Entity $reward)
+        public function updateQuantity(Entity $reward): Entity
         {
             if (!$reward->isLimited()) {
-                return;
+                return $reward;
             }
 
             $am = new ArticleManager();
@@ -103,7 +116,7 @@ use AppBundle\Controller\CFRewardController;
                 $article = $am->getById($articleId);
 
                 if (!$article) {
-                    throw new Exception("Article n° {$articleId} inconnu.");
+                    throw new Exception("L'article n° $articleId n'existe pas.");
                 }
 
                 // if article is downloadable, quantity is unlimited

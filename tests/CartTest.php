@@ -457,7 +457,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CartManager();
         $cart = $cm->create([]);
-        $reward = EntityFactory::createCrowfundingReward();
+        $reward = EntityFactory::createCrowdfundingReward();
         $cm->addCFReward($cart, $reward);
 
         // when / then

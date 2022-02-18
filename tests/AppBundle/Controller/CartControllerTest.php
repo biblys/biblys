@@ -130,7 +130,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $controller = new CartController();
         $cart = $_V->getCart("create");
         $cm->vacuum($cart);
-        $reward = EntityFactory::createCrowfundingReward();
+        $reward = EntityFactory::createCrowdfundingReward();
 
         // when
         $response = $controller->addCrowdfundingRewardAction(

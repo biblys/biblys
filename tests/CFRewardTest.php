@@ -1,6 +1,7 @@
 <?php
 
 use AppBundle\Controller\CFRewardController;
+use Biblys\Test\EntityFactory;
 
 /**
 * @backupGlobals disabled
@@ -89,6 +90,49 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
 
         $reward->set('reward_quantity', 1);
         $this->assertTrue($reward->isAvailable());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateQuantity()
+    {
+        // given
+        $article = EntityFactory::createArticle();
+        EntityFactory::createStock(["article_id" => $article->get('id')]);
+        EntityFactory::createStock(["article_id" => $article->get('id')]);
+        $reward = EntityFactory::createCrowdfundingReward();
+        $reward->set("reward_quantity", 0);
+        $reward->set("reward_limited", 1);
+        $reward->set("reward_articles", "[{$article->get("id")}]");
+        $rm = new CFRewardManager();
+
+        // when
+        $updatedReward = $rm->updateQuantity($reward);
+
+        // then
+        $this->assertEquals(2, $updatedReward->get("reward_quantity"));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateQuantityWithUnexistingArticle()
+    {
+        // given
+        $reward = EntityFactory::createCrowdfundingReward();
+        $reward->set("reward_quantity", 0);
+        $reward->set("reward_limited", 1);
+        $reward->set("reward_articles", "[99999]");
+        $rm = new CFRewardManager();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("L'article n° 99999 n'existe pas.");
+
+        // when
+        $rm->updateQuantity($reward);
+
     }
 
     /**

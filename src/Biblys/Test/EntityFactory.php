@@ -241,7 +241,7 @@ class EntityFactory
      * @return CFReward
      * @throws Exception
      */
-    public static function createCrowfundingReward(): CFReward
+    public static function createCrowdfundingReward(): CFReward
     {
         $cfrm = new CFRewardManager();
 
