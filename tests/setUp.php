@@ -30,10 +30,6 @@ function createFixtures(): void
     $site->setContact("contact@biblys.fr");
     $site->setTag("YS");
     $site->save();
-
-    $country = new \Model\Country();
-    $country->setName("France");
-    $country->save();
 }
 
 /**
