@@ -8,6 +8,8 @@ Améliorations
   par courriel lors de l'ajout d'exemplaires au stock.
 - Une option de site "countries_blocked_for_shipping" a été ajoutée pour 
   permettre de bloquer l'expédition vers certains pays.
+- Une vérification a été ajoutée à la création de contreparties de
+  financement pour empêcher l'association d'articles inexistant.
 
 ### 2.58.1 (4 février 2021)
 

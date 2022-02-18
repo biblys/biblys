@@ -7,6 +7,7 @@ use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -52,6 +53,36 @@ class CFRewardControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    public function testNewActionWithUnexistingArticles()
+    {
+        // given
+        $controller = new CFRewardController();
+        $reward = ModelFactory::createCrowdfundingReward();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->setMethod("POST");
+        $request->request->set("content", $reward->getContent());
+        $request->request->set("articles", "[9999]");
+        $request->request->set("image", $reward->getImage());
+        $request->request->set("limited", $reward->getLimited());
+        $request->request->set("highlighted", $reward->getHighlighted());
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+
+        // then
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage("L'article 9999 n'existe pas");
+
+        // when
+        $controller->newAction($request, $urlGenerator, $reward->getCampaignId());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function testEditAction()
     {
         // given
@@ -72,5 +103,35 @@ class CFRewardControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testEditActionWithUnexistingArticles()
+    {
+        // given
+        $controller = new CFRewardController();
+        $reward = ModelFactory::createCrowdfundingReward();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->setMethod("POST");
+        $request->request->set("content", $reward->getContent());
+        $request->request->set("articles", "[9999]");
+        $request->request->set("image", $reward->getImage());
+        $request->request->set("limited", $reward->getLimited());
+        $request->request->set("highlighted", $reward->getHighlighted());
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+
+        // then
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage("L'article 9999 n'existe pas");
+
+        // when
+        $controller->editAction($request, $urlGenerator, $reward->getId());
     }
 }

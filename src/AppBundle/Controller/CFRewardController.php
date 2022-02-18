@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
 use CFCampaignManager;
 use CFReward;
 use CFRewardManager;
@@ -9,7 +10,9 @@ use Exception;
 use Framework\Controller;
 
 use Framework\Exception\AuthException;
+use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,6 +77,8 @@ class CFRewardController extends Controller
 
         if ($request->getMethod() == "POST") {
 
+            self::_checkArticlesIdsInRequest($request);
+
             $cfrm = new CFRewardManager();
             $reward = $cfrm->create(["campaign_id" => $campaign->get("id")]);
 
@@ -125,6 +130,8 @@ class CFRewardController extends Controller
 
         if ($request->getMethod() == "POST") {
 
+            self::_checkArticlesIdsInRequest($request);
+
             $reward->set("reward_content", $request->request->get("content"))
                 ->set("reward_articles", $request->request->get("articles"))
                 ->set("reward_limited", $request->request->get("limited"))
@@ -171,5 +178,20 @@ class CFRewardController extends Controller
         $cfrm->delete($reward);
 
         return $this->redirect($this->generateUrl('cf_reward_list', ['campaign_id' => $reward->getCampaign()->get('id')]));
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    private static function _checkArticlesIdsInRequest(Request $request): void
+    {
+        $articlesIds = json_decode($request->request->get("articles"), true);
+        $am = new ArticleManager();
+        foreach ($articlesIds as $articleId) {
+            if (!$am->getById($articleId)) {
+                throw new BadRequestException("L'article {$articleId} n'existe pas.");
+            }
+        }
     }
 }
