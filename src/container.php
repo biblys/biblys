@@ -8,6 +8,7 @@ use Framework\ArgumentResolver\CurrentUserValueResolver;
 use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
+use Framework\ArgumentResolver\UrlGeneratorValueResolver;
 use Framework\RequestListener;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -39,6 +40,7 @@ $argumentResolvers[] = new CurrentUserValueResolver();
 $argumentResolvers[] = new MailerValueResolver();
 $argumentResolvers[] = new SessionValueResolver();
 $argumentResolvers[] = new UpdaterValueResolver();
+$argumentResolvers[] = new UrlGeneratorValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
     ->setArguments([null, $argumentResolvers]);
 
