@@ -84,6 +84,7 @@ use AppBundle\Controller\CFRewardController;
         /**
          * Get available quantity for a reward
          * @param Entity $reward
+         * @throws Exception
          */
         public function updateQuantity(Entity $reward)
         {
@@ -98,8 +99,12 @@ use AppBundle\Controller\CFRewardController;
 
             $articles = json_decode($reward->get('articles'));
 
-            foreach($articles as $article_id) {
-                $article = $am->get(array('article_id' => $article_id));
+            foreach($articles as $articleId) {
+                $article = $am->getById($articleId);
+
+                if (!$article) {
+                    throw new Exception("Article n° {$articleId} inconnu.");
+                }
 
                 // if article is downloadable, quantity is unlimited
                 if ($article->get('type_id') == 2 || $article->get('type_id') == 10 || $article->get('type_id') == 11) {
@@ -110,7 +115,7 @@ use AppBundle\Controller\CFRewardController;
                 else {
 
                     $this_qty = 0;
-                    $stocks = $sm->getAll(array('article_id' => $article_id), array(), false);
+                    $stocks = $sm->getAll(array('article_id' => $articleId), array(), false);
                     foreach ($stocks as $stock) {
                         if ($stock->isAvailable()) {
                             $this_qty++;

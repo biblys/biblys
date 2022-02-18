@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -57,10 +58,8 @@ class CFRewardController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function newAction(Request $request, $campaign_id)
+    public function newAction(Request $request, UrlGenerator $urlGenerator, $campaign_id)
     {
-        global $request;
-
         self::authAdmin($request);
 
         $cfcm = new CFCampaignManager();
@@ -93,7 +92,9 @@ class CFRewardController extends Controller
             // Update price from content
             $cfrm->updatePrice($reward);
 
-            return $this->redirect($this->generateUrl('cf_reward_list', ['campaign_id' => $reward->getCampaign()->get('id')]));
+            return $this->redirect($urlGenerator->generate('cf_reward_list', [
+                'campaign_id' => $reward->getCampaign()->get('id')
+            ]));
         }
 
         return $this->render('AppBundle:CFReward:new.html.twig', [
@@ -110,10 +111,8 @@ class CFRewardController extends Controller
      * @throws Exception
      * @throws Exception
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
     {
-        global $request;
-
         self::authAdmin($request);
 
         $cfrm = new CFRewardManager();
@@ -122,7 +121,7 @@ class CFRewardController extends Controller
             throw new NotFoundException("Reward $id not found.");
         }
 
-        $request->attributes->set("pate_title", "Modifier une contrepartie");
+        $request->attributes->set("page_title", "Modifier une contrepartie");
 
         if ($request->getMethod() == "POST") {
 
@@ -142,7 +141,7 @@ class CFRewardController extends Controller
             $cfrm->updatePrice($reward);
 
             return $this->redirect(
-                $this->generateUrl(
+                $urlGenerator->generate(
                     "cf_reward_list",
                     ["campaign_id" => $reward->getCampaign()->get("id")]
                 )

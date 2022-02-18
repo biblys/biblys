@@ -5,6 +5,8 @@ namespace Biblys\Test;
 use Biblys\Service\Config;
 use Model\Article;
 use Model\Country;
+use Model\CrowdfundingCampaign;
+use Model\CrowfundingReward;
 use Model\Page;
 use Model\People;
 use Model\Publisher;
@@ -44,6 +46,22 @@ class ModelFactory
     /**
      * @throws PropelException
      */
+    private static function createArticle(): Article
+    {
+        $article = new Article();
+        $article->setTitle("Article");
+
+        $publisher = ModelFactory::createPublisher();
+        $article->setPublisherId($publisher->getId());
+
+        $article->save();
+
+        return $article;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createCountry(): Country
     {
         $country = new Country();
@@ -52,6 +70,39 @@ class ModelFactory
         $country->save();
 
         return $country;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCrowdfundingReward(): CrowfundingReward
+    {
+        $article = ModelFactory::createArticle();
+
+        $reward = new CrowfundingReward();
+        $reward->setContent("A beautiful reward");
+        $reward->setArticles("[{$article->getId()}]");
+        $reward->setSiteId(1);
+
+        $campaign = ModelFactory::createCrowdfundingCampaign();
+        $reward->setCampaignId($campaign->getId());
+
+        $reward->save();
+
+        return $reward;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCrowdfundingCampaign(): CrowdfundingCampaign
+    {
+        $campaign = new CrowdfundingCampaign();
+        $campaign->setTitle("A beautiful campaign");
+        $campaign->setSiteId(1);
+        $campaign->save();
+
+        return $campaign;
     }
 
     /**
