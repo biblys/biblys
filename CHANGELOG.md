@@ -1,5 +1,9 @@
 # Historique des modifications
 
+### 2.58.4 (DEV)
+
+Correction : l'enregistrement d'un modèle de thème pouvait échouer sans 
+erreur dans certain cas. C'est corrigé.
 
 ### 2.58.3 (11 février 2021)
 
