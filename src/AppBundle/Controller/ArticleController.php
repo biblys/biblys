@@ -417,7 +417,7 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function searchTermsAction(Request $request)
+    public function searchTermsAction(Request $request, UrlGenerator $urlGenerator)
     {
         self::authAdmin($request);
         $request->attributes->set("page_title", "Termes de recherche");
@@ -452,7 +452,7 @@ class ArticleController extends Controller
                     return [
                         'id' => $article->get('id'),
                         'title' => $article->get('title'),
-                        'url' => $this->url->generate('article_show', [
+                        'url' => $urlGenerator->generate('article_show', [
                             'slug' => $article->get('url'),
                         ]),
                     ];
@@ -496,7 +496,7 @@ class ArticleController extends Controller
      * @param UrlGenerator|null $urlGenerator
      * @return Response
      */
-    public function byIsbn(string $ean, UrlGenerator $urlGenerator = null)
+    public function byIsbn(string $ean, UrlGenerator $urlGenerator)
     {
         try {
             $ean = Isbn::convertToEan13($ean);
@@ -508,11 +508,6 @@ class ArticleController extends Controller
         $article = $am->get(['article_ean' => $ean]);
         if (!$article) {
             throw new NotFoundException("Article with ISBN $ean not found.");
-        }
-
-        // TODO: use dependency injection instead
-        if ($urlGenerator === null) {
-            $urlGenerator = $this->url;
         }
 
         $articleUrl = $urlGenerator->generate(

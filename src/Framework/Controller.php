@@ -41,10 +41,9 @@ class Controller
 
     public function __construct()
     {
-        global $_V, $urlgenerator;
+        global $_V;
 
         $this->user = $_V;
-        $this->url = $urlgenerator;
     }
 
     /**

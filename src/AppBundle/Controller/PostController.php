@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 use \Exception;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PostController extends Controller
 {
@@ -127,7 +128,7 @@ class PostController extends Controller
     }
 
     // GET /post/:id/delete
-    public function deleteAction($id)
+    public function deleteAction(UrlGenerator $urlGenerator, $id)
     {
         $pm = $this->entityManager('Post');
         $post = $pm->getById($id);
@@ -141,7 +142,7 @@ class PostController extends Controller
 
         $pm->delete($post);
 
-        return $this->redirect($this->url->generate('posts_admin'));
+        return $this->redirect($urlGenerator->generate('posts_admin'));
     }
 
     // GET /post/:slug

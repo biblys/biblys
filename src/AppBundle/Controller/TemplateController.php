@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -69,7 +70,7 @@ class TemplateController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function deleteAction(Request $request, $slug): RedirectResponse
+    public function deleteAction(Request $request, UrlGenerator $urlGenerator, $slug): RedirectResponse
     {
         self::authAdmin($request);
 
@@ -77,6 +78,6 @@ class TemplateController extends Controller
 
         $template->deleteCustomFile();
 
-        return $this->redirect($this->url->generate('template_index'));
+        return $this->redirect($urlGenerator->generate('template_index'));
     }
 }
