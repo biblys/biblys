@@ -36,6 +36,7 @@ class Controller
 {
     /**
      * @var Visitor
+     * @deprecated Controller->user is deprecated. Use CurrentUser service instead.
      */
     protected $user;
 
