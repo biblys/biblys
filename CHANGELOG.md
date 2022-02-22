@@ -10,6 +10,8 @@ Améliorations
   permettre de bloquer l'expédition vers certains pays.
 - Une vérification a été ajoutée à la création de contreparties de
   financement pour empêcher l'association d'articles inexistant.
+- Les titres des articles de la page Catalogue de l'administration sont 
+  désormais cliquables.
 
 Corrections
 

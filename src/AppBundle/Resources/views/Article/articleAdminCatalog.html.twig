@@ -26,7 +26,11 @@
             {{ article.ean }}
           {% endif %}
         </td>
-        <td>{{ article.title }}</td>
+        <td>
+          <a href="{{ path("article_show", { slug: article.url }) }}">
+            {{ article.title }}
+          </a>
+        </td>
         <td>
           {% if article.collection %}
             {{ article.collection.name }}
