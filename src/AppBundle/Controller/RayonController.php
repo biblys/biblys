@@ -3,16 +3,26 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Article\Type;
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\Pagination;
+use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
+use Rayon;
 use RayonManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class RayonController extends Controller
 {
@@ -52,7 +62,7 @@ class RayonController extends Controller
 
         // Pagination
         $totalCount = $am->countAllFromRayon($rayon);
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalCount);
+        $pagination = new Pagination($pageNumber, $totalCount);
 
         $articles = $am->getAllFromRayon($rayon, [
             'order' => 'article_pubdate',
@@ -107,7 +117,7 @@ class RayonController extends Controller
 
         $rm = $this->entityManager('Rayon');
 
-        $rayon = new \Rayon([]);
+        $rayon = new Rayon([]);
 
         $request->attributes->set("page_title", 'Créer un nouveau rayon ');
 
@@ -124,7 +134,7 @@ class RayonController extends Controller
 
                 // Update rayon to set it's slug (temp. fix)
                 $rayon = $rm->update($rayon);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
@@ -159,15 +169,28 @@ class RayonController extends Controller
      * Adding an Article to a Rayon
      * /rayon/:id/add.
      *
-     * @param [Integer] $id contains the Rayon's id
+     * @param Request $request
+     * @param Session $session
+     * @param UrlGenerator $urlGenerator
+     * @return RedirectResponse|Response
+     * @throws AuthException
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function addArticleAction(Request $request, $id)
+    public function addArticleAction(
+        Request $request,
+        Session $session,
+        UrlGenerator $urlGenerator,
+        $id
+    )
     {
-        global $site, $session;
+        global $site;
 
-        $this->auth('publisher');
+        self::authPublisher($request, null);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $site->get('id')]);
         if (!$rayon) {
@@ -202,7 +225,7 @@ class RayonController extends Controller
                 $error = false;
                 try {
                     $added = $rayon->addArticle($article);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $error = $e->getMessage();
                 }
 
@@ -216,14 +239,14 @@ class RayonController extends Controller
             $session->getFlashBag()->add('articlesAdded', $articles_added);
             $session->getFlashBag()->add('errors', $errors);
 
-            return new RedirectResponse($this->generateUrl('rayon_add', [
-                'id' => $rayon->get('id'),
-            ]));
+            return new RedirectResponse(
+                $urlGenerator->generate("rayon_add", ["id" => $rayon->get('id')])
+            );
         }
 
         $request->attributes->set("page_title", 'Ajouter au rayon '.$rayon->get('name'));
 
-        $types = \Biblys\Article\Type::getAll();
+        $types = Type::getAll();
 
         return $this->render('AppBundle:Rayon:addArticle.html.twig', [
             'rayon' => $rayon,
