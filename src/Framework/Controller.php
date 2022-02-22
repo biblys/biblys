@@ -320,27 +320,20 @@ class Controller
     }
 
     /**
-     * Generates an url from a route using the Routing component.
-     *
-     * @return string the generated url
-     */
-    public function url()
-    {
-        global $urlgenerator;
-
-        return function () {
-            $urlgenerator->generate();
-        };
-    }
-
-    /**
      * Really generates an url from a route using the Routing component.
      *
      * @return string the generated url
+     * @deprecated Calling Controller->generateUrl() is deprecated, inject UrlGenerator in the controller instead.
      */
-    public function generateUrl(string $route, array $params = [])
+    public function generateUrl(string $route, array $params = []): string
     {
         global $urlgenerator;
+
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.59.0",
+            "Calling Controller->generateUrl() is deprecated, inject UrlGenerator in the controller instead."
+        );
 
         return $urlgenerator->generate($route, $params);
     }
