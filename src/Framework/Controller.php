@@ -350,13 +350,6 @@ class Controller
         return $urlgenerator->generate($route, $params);
     }
 
-    public function getConfig()
-    {
-        global $config;
-
-        return $config;
-    }
-
     public function getFormFactory()
     {
         $formFactory = Forms::createFormFactoryBuilder()
