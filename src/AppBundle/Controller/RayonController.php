@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Article\Type;
 use Biblys\Isbn\Isbn as Isbn;
-use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -26,11 +25,18 @@ use Twig\Error\SyntaxError;
 
 class RayonController extends Controller
 {
-    public function indexAction(Request $request)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function indexAction(Request $request): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $request->attributes->set("page_title", "Rayons");
 
@@ -41,12 +47,15 @@ class RayonController extends Controller
         ]);
     }
 
-    public function showAction(Request $request, $url)
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function showAction(Request $request, $url): Response
     {
-        global $site;
-
-        $rm = $this->entityManager('Rayon');
-        $am = $this->entityManager('Article');
+        $rm = new RayonManager();
+        $am = new ArticleManager();
 
         $rayon = $rm->get(['rayon_url' => $url]);
         if (!$rayon) {
@@ -78,13 +87,21 @@ class RayonController extends Controller
         ]);
     }
 
-    public function editAction(Request $request, $id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
     {
         global $site;
 
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $rayon = $rm->get(['rayon_id' => $id, 'site_id' => $site->get('id')]);
         if (!$rayon) {
@@ -101,7 +118,9 @@ class RayonController extends Controller
                 ->set('rayon_desc', $request->request->get('desc'));
             $rayon = $rm->update($rayon);
 
-            return new RedirectResponse($this->generateUrl('rayon_show', ['url' => $rayon->get('url')]));
+            return new RedirectResponse(
+                $urlGenerator->generate("rayon_show", ["url" => $rayon->get("url")])
+            );
         }
 
         return $this->render('AppBundle:Rayon:edit.html.twig', [
@@ -109,13 +128,18 @@ class RayonController extends Controller
         ]);
     }
 
-    public function newAction(Request $request)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function newAction(Request $request, UrlGenerator $urlGenerator)
     {
-        global $site;
+        self::authAdmin($request);
 
-        $this->auth('admin');
-
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $rayon = new Rayon([]);
 
@@ -132,14 +156,16 @@ class RayonController extends Controller
                     'rayon_desc' => $request->request->get('desc'),
                 ]);
 
-                // Update rayon to set it's slug (temp. fix)
+                // Update rayon to set its slug (temp. fix)
                 $rayon = $rm->update($rayon);
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
-                return $this->redirect($this->generateUrl('rayon_show', ['url' => $rayon->get('url')]));
+                return new RedirectResponse(
+                    $urlGenerator->generate("rayon_show", ["url" => $rayon->get("url")])
+                );
             }
         }
 
@@ -149,11 +175,20 @@ class RayonController extends Controller
         ]);
     }
 
-    public function deleteAction($id)
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function deleteAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $id
+    ): RedirectResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
 
         $rayon = $rm->getById($id);
         if (!$rayon) {
@@ -162,7 +197,7 @@ class RayonController extends Controller
 
         $rm->delete($rayon);
 
-        return new RedirectResponse($this->generateUrl('rayon_index'));
+        return new RedirectResponse($urlGenerator->generate("rayon_index"));
     }
 
     /**
@@ -172,10 +207,11 @@ class RayonController extends Controller
      * @param Request $request
      * @param Session $session
      * @param UrlGenerator $urlGenerator
+     * @param $id
      * @return RedirectResponse|Response
      * @throws AuthException
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
@@ -198,7 +234,7 @@ class RayonController extends Controller
         }
 
         if ($request->getMethod() == 'POST') {
-            $am = $this->entityManager('Article');
+            $am = new ArticleManager();
 
             // Get params from POST request
             $article_ean = $request->request->get('article_ean', false);
@@ -207,36 +243,37 @@ class RayonController extends Controller
             $article_type = $request->request->get('article_type', false);
 
             // Get articles to add
+            $articleWhere = [];
             if ($article_ean) {
-                $article_where['article_ean'] = Isbn::convertToEan13($article_ean);
+                $articleWhere['article_ean'] = Isbn::convertToEan13($article_ean);
             } elseif ($article_id) {
-                $article_where['article_id'] = $_POST['article_id'];
+                $articleWhere['article_id'] = $_POST['article_id'];
             } elseif ($collection_id) {
-                $article_where['collection_id'] = $_POST['collection_id'];
+                $articleWhere['collection_id'] = $_POST['collection_id'];
             } elseif ($article_type) {
-                $article_where['type_id'] = $_POST['article_type'];
+                $articleWhere['type_id'] = $_POST['article_type'];
             }
 
-            $articles = $am->getAll($article_where, [], false);
+            $articles = $am->getAll($articleWhere, [], false);
 
-            $articles_added = [];
+            $articlesAdded = [];
             $errors = [];
             foreach ($articles as $article) {
                 $error = false;
                 try {
-                    $added = $rayon->addArticle($article);
+                    $articlesAdded[] = $rayon->addArticle($article);
                 } catch (Exception $e) {
                     $error = $e->getMessage();
                 }
 
                 if (!$error) {
-                    $articles_added[] = $article->get('title');
+                    $articlesAdded[] = $article->get('title');
                 } else {
                     $errors[] = $error;
                 }
             }
 
-            $session->getFlashBag()->add('articlesAdded', $articles_added);
+            $session->getFlashBag()->add('articlesAdded', $articlesAdded);
             $session->getFlashBag()->add('errors', $errors);
 
             return new RedirectResponse(
@@ -250,16 +287,22 @@ class RayonController extends Controller
 
         return $this->render('AppBundle:Rayon:addArticle.html.twig', [
             'rayon' => $rayon,
-            'added' => $request->query->get('added', null),
-            'not_added' => $request->query->get('not_added', null),
+            'added' => $request->query->get("added"),
+            'not_added' => $request->query->get("not_added"),
             'types' => $types,
         ]);
     }
 
     /**
      * Display all articles in a Rayon.
+     * @param Request $request
+     * @param $id
+     * @return Response
      * @throws AuthException
+     * @throws LoaderError
      * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function rayonArticlesAction(Request $request, $id): Response
     {
@@ -285,18 +328,24 @@ class RayonController extends Controller
 
     /**
      * Remove an article from a Rayon.
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function removeArticleAction($rayon_id, $article_id)
+    public function removeArticleAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $rayon_id
+    ): RedirectResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $rm = $this->entityManager('Rayon');
+        $rm = new RayonManager();
         $rayon = $rm->get(['rayon_id' => $rayon_id]);
         if (!$rayon) {
             throw new NotFoundException("Rayon $rayon_id not found.");
         }
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $article = $am->get(['rayon_id' => $rayon_id]);
         if (!$article) {
             throw new NotFoundException("Article $rayon_id not found.");
@@ -304,8 +353,8 @@ class RayonController extends Controller
 
         $rayon->removeArticle($article);
 
-        return new RedirectResponse($this->generateUrl('rayon_articles', [
-            'id' => $rayon->get('id'),
-        ]));
+        return new RedirectResponse(
+            $urlGenerator->generate("rayon_articles", ["id" => $rayon->get('id'),])
+        );
     }
 }
