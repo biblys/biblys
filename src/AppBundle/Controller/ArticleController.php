@@ -492,11 +492,11 @@ class ArticleController extends Controller
      * Find article by ISBN
      * /isbn/{ean}.
      *
-     * @param string $ean An article's ISBN in EAN format
      * @param UrlGenerator|null $urlGenerator
+     * @param string $ean An article's ISBN in EAN format
      * @return Response
      */
-    public function byIsbn(string $ean, UrlGenerator $urlGenerator)
+    public function byIsbn(UrlGenerator $urlGenerator, string $ean)
     {
         try {
             $ean = Isbn::convertToEan13($ean);

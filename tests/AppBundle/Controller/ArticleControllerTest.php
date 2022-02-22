@@ -49,7 +49,7 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
             ->willReturn('/a/article');
 
         // when
-        $response = $controller->byIsbn("9781234567895", $urlGenerator);
+        $response = $controller->byIsbn($urlGenerator, "9781234567895");
 
         // then
         $this->assertEquals(
@@ -69,12 +69,14 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
         // then
         $this->expectException("\Symfony\Component\HttpKernel\Exception\BadRequestHttpException");
         $this->expectExceptionMessage("Product code should be 978 or 979");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/a/article");
 
         // given
         $controller = new ArticleController();
 
         // when
-        $controller->byIsbn("7908026792240");
+        $controller->byIsbn($urlGenerator, "7908026792240");
     }
 
     public function testByIsbnWithUnexistingArticle()
@@ -82,11 +84,13 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
         // then
         $this->expectException("\Symfony\Component\Routing\Exception\ResourceNotFoundException");
         $this->expectExceptionMessage("Article with ISBN 9781233456789 not found.");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/a/article");
 
         // given
         $controller = new ArticleController();
 
         // when
-        $controller->byIsbn("9781233456789");
+        $controller->byIsbn($urlGenerator, "9781233456789");
     }
 }
