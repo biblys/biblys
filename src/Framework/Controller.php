@@ -259,8 +259,20 @@ class Controller
         return new Response($rendered);
     }
 
-    public function redirect(string $url, int $status = 302)
+    /**
+     * @param string $url
+     * @param int $status
+     * @return RedirectResponse
+     * @deprecated Controller->redirect is deprecated. Use Symfony\Component\HttpFoundation\RedirectResponse instead.
+     */
+    public function redirect(string $url, int $status = 302): RedirectResponse
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.59.0",
+            "Controller->redirect is deprecated. Use Symfony\Component\HttpFoundation\RedirectResponse instead."
+        );
+
         return new RedirectResponse($url, $status);
     }
 
