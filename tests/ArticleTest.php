@@ -767,6 +767,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test that updating an article for an unauthorized publisher throws
+     * @throws Exception
      */
     public function testUpdatingArticleWithFilteredPublisher()
     {
@@ -778,10 +779,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherFiltered = $pm->create(["publisher_name" => "Éditeur filtré"]);
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur autorisé"]);
-        $sm = new SiteManager();
-        $site = $sm->create([]);
-        $site->setOpt("publisher_filter", $publisherAllowed->get("id"));
-        $am = new ArticleManager($site);
+        $GLOBALS["site"] = EntityFactory::createSite();
+        $GLOBALS["site"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $am = new ArticleManager();
 
         $article = $am->create([
             "article_url" => "jean-bon/de-bayonne",
@@ -805,10 +805,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
         $sm = new SiteManager();
-        $site = $sm->create([]);
-        $site->setOpt("publisher_filter", $publisherAllowed->get("id"));
-        $am = new ArticleManager($site);
+        $GLOBALS["site"] = $sm->create([]);
+        $GLOBALS["site"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $am = new ArticleManager();
 
+        $am->setIgnoreSiteFilters(true);
         $article = $am->create([
             "article_url" => "jean-bon/de-bayonne",
             "publisher_id" => null,
@@ -819,9 +820,13 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $am->update($article);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testPreprocessSlugWithOneAuthor()
     {
         // given
+        $GLOBALS["site"] = EntityFactory::createSite();
         $am = new ArticleManager();
         $article = EntityFactory::createArticle([
             "article_title" => "Pénates du soir"
@@ -929,24 +934,21 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test deleting a copy
-     * @depends testGet
+     * @throws Exception
      */
-    public function testDelete(Article $article)
+    public function testDelete()
     {
+        // given
+        $article = EntityFactory::createArticle();
         $am = new ArticleManager();
         $lm = new LinkManager();
         $sm = new StockManager();
 
-        $link = $lm->get(['article_id' => $article->get('id')]);
-        $lm->delete($link);
+        // when
+        $am->delete($article);
 
-        $stock = $sm->get(['article_id' => $article->get('id')]);
-        $sm->delete($stock);
-
-        $am->delete($article, 'Test entity');
-
-        $articleExists = $am->getById($article->get('id'));
-
+        // then
+        $articleExists = $am->getById($article->get("id"));
         $this->assertFalse($articleExists);
     }
 

@@ -203,14 +203,11 @@ class EntityManager
     protected $siteAgnostic = true;
     protected $_entityProperties = [];
 
-    public function __construct(Site $site = null)
+    public function __construct()
     {
         global $_SQL;
         global $_V;
-
-        if ($site === null) {
-            global $site;
-        }
+        global $site;
 
         $this->db = $_SQL;
         $this->site = $site;
