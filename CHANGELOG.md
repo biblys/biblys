@@ -17,6 +17,8 @@ Corrections
 
 - Les quantités de contreparties d'une campagne de financement participatif 
   terminée pouvait être mises à jour. C'est corrigé.
+- L'annulation d'une commande contenant un exemplaire associé à une campagne 
+  de financement participatif pouvait déclencher une erreur. Plus maintenant.
 
 ### 2.58.4 (20 février 2022)
 

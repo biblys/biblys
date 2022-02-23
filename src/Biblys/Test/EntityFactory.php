@@ -104,15 +104,18 @@ class EntityFactory
     /**
      * @throws Exception
      */
-    public static function createOrder(): Order
+    public static function createOrder(array $attributes = []): Order
     {
         $om = new OrderManager();
         $order = $om->create([
             "order_email" => "customer@example.net",
-            "order_firstname" => "Alec"
+            "order_firstname" => "Alec",
+            "reward_id" => $attributes["reward_id"] ?? null,
         ]);
+
         $country = self::createCountry();
         $order->set("country_id", $country->get("id"));
+
         return $order;
     }
 

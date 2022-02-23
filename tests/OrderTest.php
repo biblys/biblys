@@ -525,6 +525,46 @@ class OrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
+     */
+    public function testRemoveStock()
+    {
+        // given
+        $stock = EntityFactory::createStock();
+        $order = EntityFactory::createOrder();
+        $om = new OrderManager();
+        $om->addStock($order, $stock);
+
+        // when
+        $om->removeStock($order, $stock);
+
+        // then
+        $copies = $order->getCopies();
+        $this->assertCount(0, $copies);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockAssociatedWithReward()
+    {
+        // given
+        $GLOBALS["site"] = EntityFactory::createSite();
+        $reward = EntityFactory::createCrowdfundingReward(["site_id" => $GLOBALS["site"]->get("id")]);
+        $stock = EntityFactory::createStock(["reward_id" => $reward->get("id")]);
+        $order = EntityFactory::createOrder();
+        $om = new OrderManager();
+        $om->addStock($order, $stock);
+
+        // when
+        $om->removeStock($order, $stock);
+
+        // then
+        $copies = $order->getCopies();
+        $this->assertCount(0, $copies);
+    }
+
+    /**
      * Test deleting an order
      * @depends testGet
      */

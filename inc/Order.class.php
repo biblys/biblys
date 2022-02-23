@@ -794,7 +794,7 @@ class OrderManager extends EntityManager
 
             // Reward
             if ($reward = $stock->get('reward')) {
-                $rm = new CFRewardManager($reward);
+                $rm = new CFRewardManager();
                 $rm->updateQuantity($reward);
             }
 
