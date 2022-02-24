@@ -441,7 +441,7 @@ class MainController extends Controller
 
         $cloudExpirationDate = new DateTime($cloudConfig["expires"]);
         $now = new DateTime();
-        $diff = $now->diff($cloudExpirationDate)->format("%d");
+        $diff = $now->diff($cloudExpirationDate)->format("%a");
 
         if ($diff > 7) {
             return false;
