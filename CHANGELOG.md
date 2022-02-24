@@ -12,6 +12,8 @@ Améliorations
   financement pour empêcher l'association d'articles inexistant.
 - Les titres des articles de la page Catalogue de l'administration sont 
   désormais cliquables.
+- L'affichage du chemin d'accès des fichiers sur la page Gestion des médias 
+  a été amélioré.
 
 Corrections
 

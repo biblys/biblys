@@ -76,10 +76,8 @@ while ($element = readdir($dir)) {
 closedir($dir);
 
 $content .= '
-    <ul class="media-manager">
-        <li>
-            <img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">media</a>
-            <ul style="list-style-type: none;">
+    <img src="/common/icons/directory_16x16.png" alt="Dossier" /> 
+    <a href="/pages/adm_media?CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">media</a>
 ';
 
 /** @var Request $request */
@@ -119,9 +117,9 @@ if ($getDir && $getFile) {
     $media_ext = $fileExt;
 
     $content .= '
-                <li>
-                    <img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a>
-                    <ul style="list-style-type: none;">
+        &raquo;
+        <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
+        <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a>
     ';
 
     if ($getDel) {
@@ -152,7 +150,19 @@ if ($getDir && $getFile) {
                 $categories_options .= '<option value="'.$c['category_id'].'" '.($m['category_id'] == $c['category_id'] ? 'selected' : null).'>'.$c['category_name'].'</option>';
             }
 
-            $content .= '<li><img src="/common/icons/file_16x16.png" alt="file" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['file'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le fichier '.$m['media_file'].'.'.$m['media_ext'].' ?"><i class="fa fa-trash-o"></i></a></li></ul></ul></ul>';
+            $content .= '
+                &raquo;
+                <img src="/common/icons/file_16x16.png" alt="Fichier" /> 
+                <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">
+                    '.$_GET['file'].'
+                </a> 
+                <a 
+                    href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" 
+                    class="data-confirm="Voulez-vous vraiment supprimer le fichier '.$m['media_file'].'.'.$m['media_ext'].' ?"
+                >
+                    <span class="fa fa-trash-o"></span>
+                </a>
+            ';
             $content .= '<div class="center"><img src="'.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\''.$_GET['CKEditorFuncNum'].'\',\''.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer"  alt="Cliquer sur l\'image pour l\'insérer"/></div>';
             $content .= '<br />';
             $content .= '
@@ -203,13 +213,23 @@ if ($getDir && $getFile) {
         $content .= '<br /><p>Le dossier <strong>'.$getDir.'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
     } else {
 
-        $content .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le dossier '.$_GET['dir'].' et tous les fichiers qu\'il contient ?"><i class="fa fa-trash-o"></i></a>';
+        $content .= '
+            &raquo;
+            <img src="/common/icons/directory_16x16.png" alt="" role="presentation" /> 
+            <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">
+                '.$_GET['dir'].'
+            </a>
+            <a 
+                href="/pages/adm_media?dir='.$_GET['dir'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" 
+                data-confirm="Voulez-vous vraiment supprimer le dossier '.$_GET['dir'].' et tous les fichiers qu\'il contient ?"
+            >
+                <span class="fa fa-trash-o"></span>
+            </a>';
 
-        $content .= '<ul style="list-style-type: none;">';
         sort($fichier);
         foreach ($fichier as $lien) {
             if (!strstr($lien, '__')) {
-                $content .= '<li><img src="/common/icons/file_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$lien.'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$lien.'</a></li>';
+                $content .= '<li><img src="/common/icons/file_16x16.png" alt="Dossier" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$lien.'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$lien.'</a></li>';
             }
         }
         $content .= '<ul></li>';
@@ -234,7 +254,7 @@ if ($getDir && $getFile) {
     // A la racine, on liste les dossiers
     sort($dossier);
     foreach ($dossier as $lien) {
-        $content .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$lien.'&CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">'.$lien.'</a></li>';
+        $content .= '<li><img src="/common/icons/directory_16x16.png" alt="Dossier" /> <a href="/pages/adm_media?dir='.$lien.'&CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">'.$lien.'</a></li>';
     }
     $content .= '</ul>';
     $content .= '
