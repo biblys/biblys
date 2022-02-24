@@ -834,10 +834,12 @@ function reloadEvents(scope) {
   };
 
   const countrySelector = document.querySelector('#country_id');
-  countrySelector.addEventListener('change', function() {
-    selectCountry(this.value);
-  });
-  selectCountry(countrySelector.value);
+  if (countrySelector) {
+    countrySelector.addEventListener('change', function() {
+      selectCountry(this.value);
+    });
+    selectCountry(countrySelector.value);
+  }
 
   var price = function(price, format) {
     if (format == 'EUR') {
