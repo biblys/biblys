@@ -787,6 +787,11 @@ function reloadEvents(scope) {
       return false;
     }
 
+    const shippingModeSelector = document.querySelector('#shipping_id');
+    const continueButton = document.querySelector('#continue');
+    shippingModeSelector.setAttribute('disabled', 'disabled');
+    continueButton.setAttribute('disabled', 'disabled');
+
     const orderWeightInput = document.querySelector('#order_weight');
     const orderAmountInput = document.querySelector('#order_amount');
     const query = `country_id=${countryId}&order_weight=${orderWeightInput.value}&order_amount=${orderAmountInput.value}`;
@@ -800,12 +805,7 @@ function reloadEvents(scope) {
 
     const fees = json;
 
-    const shippingModeSelector = document.querySelector('#shipping_id');
-    const continueButton = document.querySelector('#continue');
     const shippingNotice = document.querySelector('.ship_notice');
-
-    shippingModeSelector.setAttribute('disabled', 'disabled');
-    continueButton.setAttribute('disabled', 'disabled');
     if (shippingNotice) {
       shippingNotice.style.display = 'none';
     }
