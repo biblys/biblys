@@ -19,10 +19,10 @@
     </tr>
   </thead>
   <tbody>
-    {% for article in articles %}
+    {% for article in articles|filter(article => not article.isBeingCreated) %}
       <tr>
         <td>
-          {% if article.has('ean') %}
+          {% if article.has("ean") %}
             {{ article.ean }}
           {% endif %}
         </td>
@@ -38,7 +38,7 @@
         </td>
         <td>{{ article.publisher.name }}</td>
         <td>
-          {% if article.has('price') %}
+          {% if article.has("price") %}
             {{ article.price|currency(true)|raw }}
           {% endif %}
         </td>
