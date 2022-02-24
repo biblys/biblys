@@ -1,15 +1,18 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 $mm = new MediaFileManager();
 $mediaFolderPath = $mm->getMediaFolderPath();
 
 $_PAGE_TITLE = 'Gestion des médias';
 
-$_ECHO .= '
+$content = '
     <h1><span class="fa fa-image"></span> Gestion des médias</h1>
 ';
 
-if (!isset($_GET['dir']) || (isset($_GET['dir']) && $_GET['dir'] == '/') || (isset($_GET['path']) && strstr($_GET['path'], '..'))) {
+if (!isset($_GET['dir']) || ($_GET['dir'] == '/') || (isset($_GET['path']) && strstr($_GET['path'], '..'))) {
     $_GET['dir'] = null;
 }
 
@@ -39,10 +42,11 @@ if (!empty($_FILES)) {
         $file['name'] = $file_name[0].'.'.$file_name[1];
         rename($file['tmp_name'], $mediaFolderPath.$_GET['dir'].'/'.$file['name']);
         chmod($mediaFolderPath.$_GET['dir'].'/'.$file['name'], 0604);
-        $insert = $_SQL->prepare('INSERT INTO `medias`(`site_id`,`media_dir`,`media_file`,`media_ext`,`media_insert`)
-            VALUES(:site_id, :media_dir, :media_file, :media_ext, NOW())');
-        $insert->execute([
-            'site_id' => $site->get('id'),
+        /** @var Request $request */
+        $insert = EntityManager::prepareAndExecute(
+            'INSERT INTO `medias`(`site_id`,`media_dir`,`media_file`,`media_ext`,`media_insert`)
+            VALUES(:site_id, :media_dir, :media_file, :media_ext, NOW())',[
+            'site_id' => $GLOBALS["site"]->get('id'),
             'media_dir' => $request->query->get('dir'),
             'media_file' => $file_name[0],
             'media_ext' => $file_name[1],
@@ -71,13 +75,14 @@ while ($element = readdir($dir)) {
 
 closedir($dir);
 
-$_ECHO .= '
+$content .= '
     <ul class="media-manager">
         <li>
-            <img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?CKEditorFuncNum='.(isset($_GET['CKEditorFuncNum']) ? $_GET['CKEditorFuncNum'] : null).'">media</a>
+            <img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">media</a>
             <ul style="list-style-type: none;">
 ';
 
+/** @var Request $request */
 $getFile = $request->query->get('file');
 $getDir = $request->query->get('dir');
 $getDel = $request->query->get('del');
@@ -96,22 +101,24 @@ if ($getDir && $getFile) {
     }
 
     if (!empty($_POST)) {
-        $update = $_SQL->prepare('UPDATE `medias` SET `category_id` = :category_id, `media_title` = :media_title, `media_desc` = :media_desc, `media_link` = :media_link, `media_headline` = :media_headline WHERE `media_id` = :media_id LIMIT 1');
-        $update->execute([
-            'category_id' => $request->request->get('category_id'),
-            'media_title' => $request->request->get('media_title'),
-            'media_desc' => $request->request->get('media_desc'),
-            'media_link' => $request->request->get('media_link'),
-            'media_headline' => $request->request->get('media_headline'),
-            'media_id' => $request->request->get('media_id'),
-        ]);
+        $update = EntityManager::prepareAndExecute(
+            'UPDATE `medias` SET `category_id` = :category_id, `media_title` = :media_title, `media_desc` = :media_desc, `media_link` = :media_link, `media_headline` = :media_headline WHERE `media_id` = :media_id LIMIT 1',
+            [
+                'category_id' => $request->request->get('category_id'),
+                'media_title' => $request->request->get('media_title'),
+                'media_desc' => $request->request->get('media_desc'),
+                'media_link' => $request->request->get('media_link'),
+                'media_headline' => $request->request->get('media_headline'),
+                'media_id' => $request->request->get('media_id'),
+            ]
+        );
     }
 
     $media_dir = $getDir;
     $media_file = $fileName;
     $media_ext = $fileExt;
 
-    $_ECHO .= '
+    $content .= '
                 <li>
                     <img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a>
                     <ul style="list-style-type: none;">
@@ -119,15 +126,17 @@ if ($getDir && $getFile) {
 
     if ($getDel) {
         $mm->delete($file);
-        $_ECHO .= '<br /><p>Le fichier <strong>'.$_GET['file'].'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
+        $content .= '<br /><p>Le fichier <strong>'.$_GET['file'].'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
     } else {
-        $media = $_SQL->prepare('SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1');
-        $media->execute([
-            'site_id' => $site->get('id'),
-            'media_dir' => $media_dir,
-            'media_file' => $media_file,
-            'media_ext' => $media_ext,
-        ]);
+        $media = EntityManager::prepareAndExecute(
+            'SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
+            [
+                "site_id" => $GLOBALS["site"]->get("id"),
+                "media_dir" => $media_dir,
+                "media_file" => $media_file,
+                "media_ext" => $media_ext,
+            ],
+        );
         if ($m = $media->fetch(PDO::FETCH_ASSOC)) {
             if ($m['media_headline'] == 1) {
                 $headline = ' checked="checked" ';
@@ -135,16 +144,18 @@ if ($getDir && $getFile) {
 
             $categories_options = null;
             $selected[$m['category_id']] = 'selected="selected"';
-            $categories = $_SQL->prepare('SELECT `category_id`, `category_name` FROM `categories` WHERE `site_id` = :site_id');
-            $categories->execute(['site_id' => $site->get('id')]);
+            $categories = EntityManager::prepareAndExecute(
+                'SELECT `category_id`, `category_name` FROM `categories` WHERE `site_id` = :site_id',
+                ['site_id' => $GLOBALS["site"]->get('id')]
+            );
             while ($c = $categories->fetch(PDO::FETCH_ASSOC)) {
                 $categories_options .= '<option value="'.$c['category_id'].'" '.($m['category_id'] == $c['category_id'] ? 'selected' : null).'>'.$c['category_name'].'</option>';
             }
 
-            $_ECHO .= '<li><img src="/common/icons/file_16x16.png" alt="file" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['file'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le fichier '.$m['media_file'].'.'.$m['media_ext'].' ?"><i class="fa fa-trash-o"></i></a></li></ul></ul></ul>';
-            $_ECHO .= '<div class="center"><img src="'.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\''.$_GET['CKEditorFuncNum'].'\',\''.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer" /></div>';
-            $_ECHO .= '<br />';
-            $_ECHO .= '
+            $content .= '<li><img src="/common/icons/file_16x16.png" alt="file" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['file'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$_GET['file'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le fichier '.$m['media_file'].'.'.$m['media_ext'].' ?"><i class="fa fa-trash-o"></i></a></li></ul></ul></ul>';
+            $content .= '<div class="center"><img src="'.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'" style="max-width: 450px;" onClick="window.opener.CKEDITOR.tools.callFunction(\''.$_GET['CKEditorFuncNum'].'\',\''.$request->getScheme().'://'.$_SERVER['HTTP_HOST'].'/media/'.$m['media_dir'].'/'.$m['media_file'].'.'.$m['media_ext'].'\'); window.close();" title="Cliquer sur l\'image pour l\'insérer." class="pointer"  alt="Cliquer sur l\'image pour l\'insérer"/></div>';
+            $content .= '<br />';
+            $content .= '
                 <form method="post">
                     <fieldset>
                         <label for="media_id" class="disabled">Media n&deg;</label>
@@ -189,21 +200,21 @@ if ($getDir && $getFile) {
     
     if ($getDel) {
         $mm->deleteDirectory($getDir);
-        $_ECHO .= '<br /><p>Le dossier <strong>'.$getDir.'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
+        $content .= '<br /><p>Le dossier <strong>'.$getDir.'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
     } else {
 
-        $_ECHO .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le dossier '.$_GET['dir'].' et tous les fichiers qu\'il contient ?"><i class="fa fa-trash-o"></i></a>';
+        $content .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$_GET['dir'].'</a> <a href="/pages/adm_media?dir='.$_GET['dir'].'&del=1&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'" class="btn btn-sm" data-confirm="Voulez-vous vraiment supprimer le dossier '.$_GET['dir'].' et tous les fichiers qu\'il contient ?"><i class="fa fa-trash-o"></i></a>';
 
-        $_ECHO .= '<ul style="list-style-type: none;">';
+        $content .= '<ul style="list-style-type: none;">';
         sort($fichier);
         foreach ($fichier as $lien) {
             if (!strstr($lien, '__')) {
-                $_ECHO .= '<li><img src="/common/icons/file_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$lien.'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$lien.'</a></li>';
+                $content .= '<li><img src="/common/icons/file_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$_GET['dir'].'&file='.$lien.'&CKEditorFuncNum='.$_GET['CKEditorFuncNum'].'">'.$lien.'</a></li>';
             }
         }
-        $_ECHO .= '<ul></li>';
+        $content .= '<ul></li>';
     
-        $_ECHO .= '
+        $content .= '
                     </li>
                 </ul>
             </li>
@@ -211,7 +222,7 @@ if ($getDir && $getFile) {
         ';
     
         // Ajouter un fichier
-        $_ECHO .= '
+        $content .= '
             <br />
             <p>
                 <form enctype="multipart/form-data" method="post">Ajouter un fichier au dossier &laquo; '.$_GET['dir'].' &raquo; :<br />
@@ -223,10 +234,10 @@ if ($getDir && $getFile) {
     // A la racine, on liste les dossiers
     sort($dossier);
     foreach ($dossier as $lien) {
-        $_ECHO .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$lien.'&CKEditorFuncNum='.(isset($_GET['CKEditorFuncNum']) ? $_GET['CKEditorFuncNum'] : null).'">'.$lien.'</a></li>';
+        $content .= '<li><img src="/common/icons/directory_16x16.png" alt="directory" /> <a href="/pages/adm_media?dir='.$lien.'&CKEditorFuncNum='.($_GET['CKEditorFuncNum'] ?? null).'">'.$lien.'</a></li>';
     }
-    $_ECHO .= '</ul>';
-    $_ECHO .= '
+    $content .= '</ul>';
+    $content .= '
         <br>
         <p>Choisir un dossier ci-dessus ou créer un nouveau dossier :</p>
         <form method="post">
@@ -236,4 +247,6 @@ if ($getDir && $getFile) {
     </p>';
 }
 
-$_ECHO .= '</ul>';
+$content .= '</ul>';
+
+return new Response($content);
