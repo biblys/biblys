@@ -59,11 +59,10 @@ class TemplateLoader implements \Twig\Loader\LoaderInterface
         return true;
     }
 
-    private function getTemplatePath($name)
-    {
-    }
-
-    private function findTemplate($name)
+    /**
+     * @throws Exception
+     */
+    private function findTemplate($name): string
     {
         $path = explode(':', $name);
 
