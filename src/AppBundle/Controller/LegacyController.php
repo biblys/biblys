@@ -13,6 +13,7 @@ use Model\PageQuery;
 use PageManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -23,6 +24,7 @@ class LegacyController extends Controller
     /**
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
     public function defaultAction(
         Request $request,
@@ -105,12 +107,24 @@ class LegacyController extends Controller
             }
 
             // If response is JSON, return immediately and die
+            // Is this still necessary? Should be ok to return JsonResponse here.
             if ($response instanceof JsonResponse) {
                 $response->send();
                 die();
             }
 
-            return $response;
+            if ($response instanceof RedirectResponse) {
+                return $response;
+            }
+
+            if (isset($GLOBALS["_PAGE_TITLE"])) {
+                $request->attributes->set("page_title", $GLOBALS["_PAGE_TITLE"]);
+            }
+
+            return $this->render("AppBundle:Legacy:default.html.twig", [
+                "title" => $request->attributes->get("page_title"),
+                "content" => $response->getContent(),
+            ]);
         }
 
         throw new Exception("Could not generate any Response");

@@ -321,7 +321,7 @@ class MainControllerTest extends TestCase
             'Mise à jour
                           <span class="icon-badge">1</span>',
             $response->getContent(),
-            "it should return HTTP 200"
+            "it should contain the update notifications badge"
         );
     }
 

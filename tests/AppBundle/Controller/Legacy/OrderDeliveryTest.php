@@ -45,12 +45,13 @@ class OrderDeliveryTest extends TestCase
         $site = new Site(["site_contact" => "merchant@biblys.fr"]);
         $_POST = ["order_email" => "customer@biblys.fr"];
         $_SITE = $site;
+        $country = ModelFactory::createCountry();
 
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
         $request->query->set("page", "order_delivery");
-        $request->query->set("country_id", 1);
+        $request->query->set("country_id", $country->getId());
         $request->query->set("shipping_id", $shipping->getId());
         $request->request->set("order_firstname", "Barnabé");
         $request->request->set("order_lastname", "Famagouste");
