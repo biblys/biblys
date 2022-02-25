@@ -118,6 +118,10 @@ class LegacyController extends Controller
             }
 
             if (isset($GLOBALS["_PAGE_TITLE"])) {
+                trigger_deprecation(
+                    "biblys",
+                    "2.59.0",
+                    "Using \$_PAGE_TITLE to set page title is deprecated. Use \$request->attributes->set(\"page_title\", …) instead.");
                 $request->attributes->set("page_title", $GLOBALS["_PAGE_TITLE"]);
             }
 
