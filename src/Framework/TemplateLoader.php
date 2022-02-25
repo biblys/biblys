@@ -73,9 +73,6 @@ class TemplateLoader implements LoaderInterface
     /**
      * @throws Exception
      */
-    /**
-     * @throws Exception
-     */
     private function findTemplate($name): string
     {
         $path = explode(':', $name);
