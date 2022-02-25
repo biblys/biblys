@@ -83,10 +83,6 @@ article_deletions:
   path: /admin/articles/deletions
   controller: AppBundle\Controller\ArticleController::deletionsAction
 
-article_push_to_data:
-  path: /admin/articles/push_to_data
-  controller: AppBundle\Controller\ArticleController::pushToDataAction
-
 article_tags_add:
   path: /admin/articles/{id}/tags/add
   controller: AppBundle\Controller\ArticleController::addTagsAction

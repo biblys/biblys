@@ -284,38 +284,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * List article marked for deletions (root only).
-     *
-     * @return Response
-     */
-    public function pushToDataAction()
-    {
-        $this->auth('root');
-
-        $am = $this->entityManager('Article');
-
-        $articlesToPush = $am->getArticlesToBePushedToData();
-        $articlesToPushCount = count($articlesToPush);
-
-        $this->setPageTitle($articlesToPushCount + ' articles à envoyer à Biblys Data');
-
-        $pushedArticle = null;
-        if ($articlesToPushCount) {
-            $pushedArticle = $articlesToPush[0];
-            $am->pushToDataServer($pushedArticle);
-        }
-
-        if ($articlesToPushCount > 99) {
-            $articlesToPushCount = '100+';
-        }
-
-        return $this->render('AppBundle:Article:pushToData.html.twig', [
-            'articlesToPush' => $articlesToPushCount,
-            'pushedArticle' => $pushedArticle,
-        ]);
-    }
-
-    /**
      * Add tags to an article via an XHR request
      * /articles/{id}/tags/add.
      *
