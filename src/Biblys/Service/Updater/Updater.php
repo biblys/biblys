@@ -42,7 +42,7 @@ class Updater
 
         try {
             $repository = $this->getRepository();
-            $repository->run('fetch', ['origin', '--tags']);
+            $repository->run('fetch', ['origin', '--tags', '-f']);
             return true;
         } catch (ProcessException $exception) {
             throw new UpdaterException(
