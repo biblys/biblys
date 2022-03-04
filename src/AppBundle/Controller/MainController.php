@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use Biblys\Admin\Entry;
+use Biblys\Exception\ContactPageException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Biblys\Service\Pagination;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use DateTime;
@@ -26,8 +28,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-
-class ContactPageException extends Exception {}
 
 class MainController extends Controller
 {
@@ -87,7 +87,7 @@ class MainController extends Controller
                 // Pagination
                 $page = (int) $request->query->get('p', 0);
                 $totalCount = $am->countAll();
-                $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+                $pagination = new Pagination($page, $totalCount);
 
                 $articles = $am->getAll(['article_pubdate' => '<= '.date('Y-m-d H:i:s')], [
                     'order' => 'article_pubdate',
