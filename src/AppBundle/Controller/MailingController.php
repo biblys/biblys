@@ -2,18 +2,20 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\CaptchaValidationException;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use MailingManager;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-
 
 class MailingController extends Controller
 {
@@ -23,7 +25,7 @@ class MailingController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function subscribeAction(Request $request)
+    public function subscribeAction(Request $request, UrlGenerator $urlGenerator)
     {
         global $config;
 
@@ -53,17 +55,21 @@ class MailingController extends Controller
                     $check = $recaptcha->verify($answer, $request->getClientIp());
 
                     if (!$check->isSuccess()) {
-                        throw new Exception("Vous n'avez pas correctement complété le test anti-spam.");
+                        $errorCodes = join($check->getErrorCodes(), ", ");
+                        throw new CaptchaValidationException(
+                            "Vous n'avez pas correctement complété le test anti-spam ($errorCodes)."
+                        );
                     }
                 }
 
                 $result = $mm->addSubscriber($email, true);
-            } catch (Exception $e) {
+            } catch (CaptchaValidationException $e) {
                 $error = $e->getMessage();
             }
 
             if (isset($result)) {
-                return $this->redirect($this->generateUrl('mailing_subscribe', ['success' => 1]));
+                $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
+                return new RedirectResponse($successUrl);
             }
         }
 
@@ -84,7 +90,7 @@ class MailingController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function unsubscribeAction(Request $request)
+    public function unsubscribeAction(Request $request, UrlGenerator $urlGenerator)
     {
         $mm = new MailingManager();
         $request->attributes->set("page_title", "Désinscription de la newsletter");
@@ -99,7 +105,8 @@ class MailingController extends Controller
             }
 
             if (isset($result)) {
-                return $this->redirect($this->generateUrl('mailing_unsubscribe', ['success' => 1]));
+                $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
+                return new RedirectResponse($successUrl);
             }
         }
 
