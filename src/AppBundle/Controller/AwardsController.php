@@ -14,6 +14,7 @@ class AwardsController extends Controller
 
         $awm = $this->entityManager("Award");
 
+        $where = [];
         $filter = $site->getOpt('publisher_filter');
         if ($filter) {
             $where = ['publisher_id' => explode(',', $filter)];
