@@ -170,7 +170,10 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
-        $config->set("cloud", ["expires" => "2019-04-28"]);
+        $config->set("cloud", [
+            "expires" => "2019-04-28",
+            "renew_link" => "https://biblys.cloud/renew",
+        ]);
         $this->_mockContainerWithUrlGenerator();
         $updater = new Updater('', '3.0', $config);
 

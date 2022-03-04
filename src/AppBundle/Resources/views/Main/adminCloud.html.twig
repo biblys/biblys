@@ -1,7 +1,5 @@
 <h1>Abonnement Biblys Cloud</h1>
 
-{% include "AppBundle:Main:_cloudBanner.html.twig" %}
-
 <p>Date d'expiration : {{ cloud_expiration_date|date("j f Y") }}</p>
 {% if domains %}
     <p>Domaines inclus : {{ domains|join(", ") }}</p>
@@ -9,10 +7,7 @@
 
 {% if renew_link %}
     <a href="{{ renew_link }}" target="_blank" rel="noopener noreferer" class="btn btn-success">
+        <span class="fa fa-refresh"></span>
         Renouveler
     </a>
-{%  else %}
-    <a href="https://www.biblys.fr/contact/" target="_blank" rel="noopener noreferer" class="btn btn-success">
-        Renouveler
-    </a>
-{% endif %}
+{%  endif %}

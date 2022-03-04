@@ -21,5 +21,6 @@
     {% else %}
         Votre abonnement Biblys Cloud expire le {{ cloud_expiration_date|date("j f Y") }}.
     {% endif %}
-    <a href="{{ renew_link }}" class="btn btn-primary">Renouveler</a>
+    &nbsp;
+    <a href="{{ path('main_admin_cloud') }}" class="btn btn-sm btn-primary">En savoir plus</a>
 </div>

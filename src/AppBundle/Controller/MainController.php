@@ -292,7 +292,7 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "renew_link" => $urlGenerator->generate("main_admin_cloud"),
+            "renew_link" => $cloudConfig["renew_link"] ?? null,
             "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudConfig),
             "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudConfig),
             "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
@@ -397,9 +397,7 @@ class MainController extends Controller
 
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
-            "renew_link" => $cloudConfig["renew_link"] ?? "https://www.biblys.fr/contact/",
-            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudConfig),
-            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudConfig),
+            "renew_link" => $cloudConfig["renew_link"] ?? null,
             "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
         ]);
     }

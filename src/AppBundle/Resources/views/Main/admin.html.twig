@@ -1,6 +1,6 @@
 <h1>Administration Biblys</h1>
 
-{% if cloud_subscription_expires_soon or cloud_subscription_has_expired %}
+{% if renew_link %}
   {% include "AppBundle:Main:_cloudBanner.html.twig" %}
 {% endif %}
 
