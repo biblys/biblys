@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.59.0 (DEV)
+## 2.59.0 (4 mars 2022)
 
 Améliorations
 
