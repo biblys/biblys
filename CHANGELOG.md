@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.59.1 (DEV)
+
+Corrections
+
+- Une erreur pouvait s'afficher sur la page de gestion des raccourcis de 
+  l'administration. C'est corrigé.
+
 ## 2.59.0 (4 mars 2022)
 
 Améliorations

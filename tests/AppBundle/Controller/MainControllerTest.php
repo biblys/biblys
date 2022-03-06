@@ -226,6 +226,38 @@ class MainControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws UpdaterException
+     */
+    public function testAdminShortcuts()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+
+        // when
+        $response = $controller->adminShortcutsAction($request, $urlGenerator);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Raccourcis",
+            $response->getContent(),
+            "it should display the title"
+        );
+    }
+
 
     /**
      * @return void

@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -299,11 +300,19 @@ class MainController extends Controller
         ]);
     }
 
-    public function adminShortcutsAction(Request $request)
+    /**
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws UpdaterException
+     * @throws PropelException
+     */
+    public function adminShortcutsAction(Request $request, UrlGenerator $urlGenerator)
     {
         global $_V, $site;
 
-        $this->auth('admin');
+        self::authAdmin($request);
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
@@ -330,15 +339,30 @@ class MainController extends Controller
         $request->attributes->set("page_title", "Gestion des raccourcis");
         return $this->render('AppBundle:Main:adminShortcuts.html.twig', [
             'shortcuts' => $_V->getOpt('shortcuts'),
-            'articles' => Entry::findByCategory('articles'),
-            'stock' => Entry::findByCategory('stock'),
-            'sales' => Entry::findByCategory('sales'),
-            'ebooks' => Entry::findByCategory('ebooks'),
-            'content' => Entry::findByCategory('content'),
-            'stats' => Entry::findByCategory('stats'),
-            'site' => Entry::findByCategory('site'),
-            'biblys' => Entry::findByCategory('biblys'),
-            'custom' => Entry::findByCategory('custom'),
+            'articles' => Entry::generateUrlsForEntries(
+                Entry::findByCategory('articles'),
+                $urlGenerator
+            ),
+            'stock' => Entry::generateUrlsForEntries(Entry::findByCategory('stock'), $urlGenerator),
+            'sales' => Entry::generateUrlsForEntries(Entry::findByCategory('sales'), $urlGenerator),
+            'ebooks' => Entry::generateUrlsForEntries(
+                Entry::findByCategory('ebooks'),
+                $urlGenerator
+            ),
+            'content' => Entry::generateUrlsForEntries(
+                Entry::findByCategory('content'),
+                $urlGenerator
+            ),
+            'stats' => Entry::generateUrlsForEntries(Entry::findByCategory('stats'), $urlGenerator),
+            'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
+            'biblys' => Entry::generateUrlsForEntries(
+                Entry::findByCategory('biblys'),
+                $urlGenerator
+            ),
+            'custom' => Entry::generateUrlsForEntries(
+                Entry::findByCategory('custom'),
+                $urlGenerator
+            ),
             'site_title' => $site->get('title'),
         ]);
     }
