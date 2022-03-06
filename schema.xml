@@ -131,6 +131,14 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="axys_apps" phpName="AxysApp">
+    <column name="id" primaryKey="true" required="true" type="INTEGER" autoIncrement="true" />
+    <column name="client_id" required="true" type="VARCHAR" size="32" />
+    <column name="client_secret" required="true" type="VARCHAR" size="64" />
+    <column name="name" required="true" type="VARCHAR" size="64" />
+    <column name="redirect_uri" required="true" type="VARCHAR" size="256" />
+    <behavior name="timestampable" />
+  </table>
   <table name="awards" idMethod="native" phpName="Award">
     <column name="award_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
