@@ -3,26 +3,6 @@
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 
-if (!function_exists('tva_rate')) {
-    function tva_rate($tva, $date)
-    {
-
-        if ($tva == 1) // Taux reduit livre
-        {
-            if ($date < "2013-01-01" && $date >= "2012-04-01") $rate = '7';
-            else $rate = '5.5';
-        } elseif ($tva == 2) // Taux reduit presse
-        {
-            $rate = '2.1';
-        } elseif ($tva == 3) {
-            if ($date < "2014-01-01") $rate = '19.6';
-            else $rate = '20';
-        }
-
-        return $rate;
-    }
-}
-
 $TVA = array();
 
 $_PAGE_TITLE = 'Ventes';
@@ -37,7 +17,7 @@ $orders = EntityManager::prepareAndExecute(
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ['site_id' => $site->get('id')]
+    ['site_id' => $GLOBALS["site"]->get('id')]
 );
 while ($o = $orders->fetch(PDO::FETCH_ASSOC)) {
     $dates .= '<option value="?d=' . $o["date"] . '">' . _date($o["date"], "l j F") . '</option>';
@@ -50,7 +30,7 @@ $mois = EntityManager::prepareAndExecute(
     WHERE `orders`.`site_id` = :site_id AND `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ["site_id" => $site->get("id")]
+    ["site_id" => $GLOBALS["site"]->get("id")]
 );
 while ($m = $mois->fetch(PDO::FETCH_ASSOC)) {
     $months .= '<option value="?m=' . $m["date"] . '">' . _date($m["date"], "F Y") . '</option>';
@@ -107,7 +87,7 @@ if (isset($_GET["customer_id"]) && !empty($_GET['customer_id'])) {
 $config = new Config();
 $usersTableName = $config->get("users_table_name");
 
-$sql = $_SQL->prepare(
+$sql = $GLOBALS["_SQL"]->prepare(
     "SELECT
         `article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`,
         `article_number`, `article_tva`, `stock_id`, `stock_condition`, `stock_shop`,
@@ -127,7 +107,7 @@ $sql = $_SQL->prepare(
     WHERE `orders`.`site_id` = :site_id $req
     GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"
 );
-$sql->execute(['site_id' => $site->get('id')]);
+$sql->execute(['site_id' => $GLOBALS["site"]->get('id')]);
 $num = $sql->rowCount();
 
 $content = '
