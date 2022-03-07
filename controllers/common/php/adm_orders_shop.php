@@ -428,22 +428,4 @@ $content .= '
 </table>
 ';
 
-if ($_SITE["site_id"] == 5 && !empty($_GET["m"])) {
-    $objectif = 12660;
-    $percent = round($Total / 100 / $objectif * 100);
-    $reste = $objectif - $Total / 100;
-    $ppg = null;
-    if ($reste <= 0) $ppg = '<br /><br /><img src="http://24.media.tumblr.com/tumblr_m6b489RVkZ1qf1n9ho1_250.gif">';
-    if ($reste < 1000 && $reste > 0) $ppg = '<br /><img src="http://www.gifsmaniac.com/gifs-animes/personnages/pompom-girls/personnages-pompom-girls-21.gif" height="150">';
-    if ($reste > 0) $reste = ' (encore ' . $reste . ' &euro;)';
-    else $reste = null;
-    $content .= '
-    <div class="center">
-        <br />
-        Objectif : <progress id="progressBar" value="' . $percent . '" max="100"></progress> ' . $percent . ' % ' . $reste . '
-        ' . $ppg . '
-    </div>
-';
-}
-
 return new Response($content);
