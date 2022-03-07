@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Axys\Client as AxysClient;
+use Axys\LegacyClient as AxysClient;
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 

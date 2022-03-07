@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $config = new Config();
-$axys = new Client($config->get("axys"));
+$axys = new LegacyClient($config->get("axys"));
 
 $_PAGE_TITLE = 'Commande &raquo; Validation';
 

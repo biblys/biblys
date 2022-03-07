@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -19,7 +19,7 @@ $um = new UserManager();
 $content = null;
 
 $config = new Config();
-$axys = new Client($config->get("axys"));
+$axys = new LegacyClient($config->get("axys"));
 
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {

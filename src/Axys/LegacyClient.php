@@ -1,8 +1,8 @@
 <?php
 
-namespace Biblys\Axys;
+namespace Axys;
 
-class Client
+class LegacyClient
 {
     private $options;
     private $base_url;
@@ -31,7 +31,7 @@ class Client
         $this->base_url = $this->options['protocol'].'://'.$this->options['host'].$port;
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl(): string
     {
         global $config;
 
@@ -46,12 +46,12 @@ class Client
         return $this->base_url.'/login/?return_url='.$returnUrl;
     }
 
-    public function getSignupUrl()
+    public function getSignupUrl(): string
     {
         return $this->base_url.'/#Inscription';
     }
 
-    public function getWidgetUrl($user_uid = null)
+    public function getWidgetUrl($user_uid = null): string
     {
         $url = $this->base_url.'/widget.php';
 

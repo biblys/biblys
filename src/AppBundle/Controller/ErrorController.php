@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
@@ -26,10 +26,10 @@ class ErrorController extends Controller
     /**
      * @param Request $request
      * @param Exception $exception
-     * @param Client|null $axys
+     * @param LegacyClient|null $axys
      * @return Response
      */
-    public function exception(Request $request, Exception $exception, Client $axys = null): Response
+    public function exception(Request $request, Exception $exception, LegacyClient $axys = null): Response
     {
         if (is_a($exception, "Symfony\Component\Routing\Exception\ResourceNotFoundException")) {
             return $this->handlePageNotFound($request, $exception);
@@ -91,10 +91,10 @@ class ErrorController extends Controller
      *
      * @param Request $request
      * @param AuthException $exception
-     * @param Client $axys
+     * @param LegacyClient $axys
      * @return Response
      */
-    private function handleUnauthorizedAccess(Request $request, AuthException $exception, Client $axys): Response
+    private function handleUnauthorizedAccess(Request $request, AuthException $exception, LegacyClient $axys): Response
     {
         if (
             $request->isXmlHttpRequest()

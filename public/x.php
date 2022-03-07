@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Biblys\Axys\Client as AxysClient;
+use Axys\LegacyClient as AxysClient;
 
 // INCLUDES
 if (file_exists('../inc/functions.php')) {

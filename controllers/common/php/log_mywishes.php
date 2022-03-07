@@ -1,13 +1,13 @@
 <?php
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $config = new Config();
-$axys = new Client($config->get("axys"));
+$axys = new LegacyClient($config->get("axys"));
 
 $wlm = new WishlistManager();
 $wm = new WishManager();

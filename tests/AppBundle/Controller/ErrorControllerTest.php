@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Exception;
 use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
@@ -84,7 +84,7 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AuthException("Unauthorized");
-        $axys = new Client();
+        $axys = new LegacyClient();
 
         // when
         $response = $controller->exception($request, $exception, $axys);
