@@ -14,6 +14,7 @@ $orders = EntityManager::prepareAndExecute(
     WHERE
         `orders`.`site_id` = :site_id AND
         `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND
+        `order_payment_date` != '0000-00-00 00:00:00' AND
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
@@ -27,7 +28,9 @@ $months = null;
 $mois = EntityManager::prepareAndExecute(
     "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, MAX(`order_payment_date`)
     FROM `orders`
-    WHERE `orders`.`site_id` = :site_id AND `order_cancel_date` IS null
+    WHERE `orders`.`site_id` = :site_id 
+      AND `order_cancel_date` IS NULL
+      AND `order_payment_date` != '0000-00-00 00:00:00'
     GROUP BY `date`
     ORDER BY `date` DESC",
     ["site_id" => $GLOBALS["site"]->get("id")]
