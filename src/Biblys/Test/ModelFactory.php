@@ -4,7 +4,6 @@ namespace Biblys\Test;
 
 use Biblys\Service\Config;
 use Model\Article;
-use Model\Cart;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
@@ -213,8 +212,10 @@ class ModelFactory
         $shippingFee->setType($attributes["type"] ?? "normal");
         $shippingFee->setMode($attributes["mode"] ?? "Colissimo");
         $shippingFee->setFee($attributes["fee"] ?? 560);
+        $shippingFee->setMinAmount($attributes["min_amount"] ?? 0);
         $shippingFee->setMaxWeight($attributes["max_weight"] ?? 1000);
         $shippingFee->setMaxAmount($attributes["max_amount"] ?? 1000);
+        $shippingFee->setMaxArticles($attributes["max_articles"] ?? 10);
         $shippingFee->setInfo($attributes["info"] ?? null);
         $shippingFee->save();
 

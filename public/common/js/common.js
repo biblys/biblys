@@ -450,22 +450,22 @@ function price(price, currency) {
   return price;
 }
 
-function currency(amount) {
-  if (typeof amount !== 'number') {
+function currency(amountInEuros) {
+  if (typeof amountInEuros !== 'number') {
     throw new Error('Currency amount must be a number');
   }
 
-  var currency = (window.site && window.site.currency) || 'EUR';
-  amount = amount
+  const currency = (window.site && window.site.currency) || 'EUR';
+  const formattedAmountInEuros = amountInEuros
     .toFixed(2)
     .toString()
     .replace('.', ',');
 
   if (currency === 'FCFA') {
-    return amount + '&nbsp;F&#8239;CFA';
+    return formattedAmountInEuros + '&nbsp;F&#8239;CFA';
   }
 
-  return amount + '&nbsp;&euro;';
+  return formattedAmountInEuros + '&nbsp;&euro;';
 }
 
 function reloadEvents(scope) {
@@ -817,21 +817,50 @@ function reloadEvents(scope) {
       return;
     }
 
-    const feeOptions = fees.map(fee => {
-      return `<option data-type="${fee.type}" data-info="${fee.info}" data-amount="${fee.fee}" value="${fee.id}">
-        ${fee.mode}
-      </option>`;
-    });
-
+    const feeOptions = fees.map(fee => `<option value="${fee.id}">${fee.mode}</option>`);
     if (feeOptions.length > 1) {
-      feeOptions.unshift(
-        `<option data-info="Choisissez un mode d'expédition ci-dessus.">Choisissez une option d'expédition</option>`
-      );
+      feeOptions.unshift(`<option value="0">Choisissez une option d'expédition</option>`);
     }
 
     shippingModeSelector.innerHTML = feeOptions.join('');
+
+    if (feeOptions.length === 1) {
+      await selectShippingMode(fees[0].id);
+    }
+
     shippingModeSelector.removeAttribute('disabled');
   };
+
+  async function selectShippingMode(shippingId) {
+    const continueButton = document.querySelector('#continue');
+
+    if (shippingId === 0) {
+      continueButton.setAttribute('disabled', 'disabled');
+      return false;
+    }
+
+    const response = await fetch(`/api/shipping/${shippingId}`);
+    const shipping = await response.json();
+
+    const subTotalElement = document.querySelector('#sub_total');
+    const subTotal = parseInt(subTotalElement.value);
+    const shippingFee = parseInt(shipping.fee);
+    const total = subTotal + shippingFee;
+
+    const shippingFeeInEuros = currency(shippingFee / 100);
+    const totalInEuros = currency(total / 100);
+
+    const shippingInfoElement = document.querySelector('#shipping_info');
+    shippingInfoElement.textContent = shipping.info;
+
+    const shippingAmountElement = document.querySelector('#shipping_amount');
+    shippingAmountElement.innerHTML = shippingFeeInEuros;
+
+    const totalElement = document.querySelector('#total');
+    totalElement.innerHTML = totalInEuros;
+
+    continueButton.removeAttribute('disabled');
+  }
 
   const countrySelector = document.querySelector('#country_id');
   if (countrySelector) {
@@ -841,6 +870,14 @@ function reloadEvents(scope) {
     selectCountry(countrySelector.value);
   }
 
+  const shippingSelectorMenu = document.querySelector('#shipping_id');
+  if (shippingSelectorMenu) {
+    shippingSelectorMenu.addEventListener('change', function (event) {
+      const shippingId = parseInt(event.target.value);
+      selectShippingMode(shippingId);
+    });
+  }
+
   var price = function(price, format) {
     if (format == 'EUR') {
       return (parseInt(price) / 100).toFixed(2).replace('.', ',') + '&nbsp;&euro;';
@@ -848,46 +885,14 @@ function reloadEvents(scope) {
     return (parseInt(price) / 100).toFixed(2);
   };
 
-  // Choisir le mode d'expedition
-  $('#shipping_id').change(function() {
-    var option = $('#shipping_id option:selected');
-    var sub_total = parseInt($('#sub_total').val());
-    var shipping_type = option.attr('type');
-    var shipping_fee = option.data('amount');
-    var shipping_info = option.data('info') || '';
-    var total = '—';
-
-    if (typeof shipping_fee !== 'undefined') {
-      total = currency((sub_total + parseInt(shipping_fee)) / 100);
-      shipping_fee = currency(shipping_fee / 100);
-    } else {
-      shipping_fee = '—';
-    }
-
-    $('#shipping_info').text(shipping_info);
-    $('#shipping_amount').html(shipping_fee);
-    $('#total').html(total);
-    $('#' + shipping_type).show();
-    $('#continue').removeAttr('disabled');
-  });
-
   $('#validate_cart').on('submit', function() {
     var select = $('#shipping_id'),
       option = select.find('option:selected');
 
     // If there is no shipping_id field, we don't need to check
-    if (select.length == 0) {
+    if (select.length === 0) {
       return true;
     }
-
-    // If the select optino has an amount, we're okay
-    if (typeof option.data('amount') !== 'undefined') {
-      return true;
-    }
-
-    // Else, display an alert
-    _alert("Merci de choisir un mode d'expédition afin de pouvoir finaliser la commande.");
-    return false;
   });
 
   // ** ALERTS ** //

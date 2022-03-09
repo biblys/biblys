@@ -56,3 +56,8 @@ api_shipping_search:
   path: /api/shipping/search
   methods: GET
   controller: ApiBundle\Controller\ShippingController::search
+
+api_shipping_get:
+  path: /api/shipping/{id}
+  methods: GET
+  controller: ApiBundle\Controller\ShippingController::get

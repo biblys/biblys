@@ -381,4 +381,54 @@ class ShippingControllerTest extends TestCase
         // when
         $controller->search($request, $currentSite);
     }
+
+    /**
+     * @throws PropelException
+     * @throws AuthException
+     */
+    public function testGetAction()
+    {
+        // given
+        $config = new Config();
+        $shippingFee = ModelFactory::createShippingFee([
+            "mode" => "Colissimo",
+            "type" => "Type C",
+            "zone" => "Z2",
+            "max_weight" => 1,
+            "min_amount" => 2,
+            "max_amount" => 3,
+            "max_articles" => 4,
+            "fee" => 90,
+            "info" => "A shipping fee",
+        ]);
+        $shippingFee->save();
+        $controller = new ShippingController();
+
+        // when
+        $response = $controller->get($config, $shippingFee->getId());
+
+        // then
+        $expectedResponse = [
+            "id" => $shippingFee->getId(),
+            "mode" => "Colissimo",
+            "type" => "Type C",
+            "zone" => "Z2",
+            "max_weight" => 1,
+            "min_amount" => 2,
+            "max_amount" => 3,
+            "max_articles" => 4,
+            "fee" => 90,
+            "info" => "A shipping fee",
+        ];
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should respond with http 200"
+        );
+        $this->assertEquals(
+            json_encode($expectedResponse),
+            $response->getContent(),
+            "it should return all fees for current site"
+        );
+    }
 }

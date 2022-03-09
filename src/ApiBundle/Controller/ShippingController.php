@@ -10,9 +10,7 @@ use Framework\Exception\AuthException;
 use Model\CountryQuery;
 use Model\ShippingFee;
 use Model\ShippingFeeQuery;
-use PHPUnit\Util\Json;
 use Propel\Runtime\Exception\PropelException;
-use ShippingManager;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,6 +103,16 @@ class ShippingController extends Controller
         $fee->delete();
 
         return new JsonResponse(null, 204);
+    }
+
+    /**
+     * @route GET /api/shipping/{id}
+     */
+    public function get(Config $config, int $id): JsonResponse
+    {
+        $fee = self::_getFeeFromId($config, $id);
+        $json = self::_feeToJson($fee);
+        return new JsonResponse($json, 200);
     }
 
     /**

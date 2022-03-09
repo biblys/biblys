@@ -6,6 +6,8 @@ Corrections
 
 - Une erreur pouvait s'afficher sur la page de gestion des raccourcis de 
   l'administration. C'est corrigé.
+- Un problème pouvait empêcher de valider un panier sur un site ne proposant 
+  qu'un seul mode d'expédition. Ça n'arrivera plus.
 
 ## 2.59.0 (4 mars 2022)
 
