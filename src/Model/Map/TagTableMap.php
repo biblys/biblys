@@ -275,6 +275,13 @@ class TagTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':tag_id',
+    1 => ':tag_id',
+  ),
+), null, null, 'Links', false);
     } // buildRelations()
 
     /**

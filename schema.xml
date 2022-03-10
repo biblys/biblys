@@ -83,7 +83,7 @@
     <column name="article_copyright" phpName="Copyright" type="SMALLINT" size="4" sqlType="mediumint(4) unsigned"/>
     <column name="article_pubdate" phpName="Pubdate" type="DATE"/>
     <column name="article_keywords" phpName="Keywords" type="VARCHAR" size="1024"/>
-    <column name="article_links" phpName="Links" type="VARCHAR" size="1024"/>
+    <column name="article_links" phpName="ComputedLinks" type="VARCHAR" size="1024"/>
     <column name="article_keywords_generated" phpName="KeywordsGenerated" type="TIMESTAMP"/>
     <column name="article_publisher_stock" phpName="PublisherStock" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
     <column name="article_hits" phpName="Hits" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
@@ -706,6 +706,12 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="articles" skipSql="true">
+      <reference local="article_id" foreign="article_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="tags" skipSql="true">
+      <reference local="tag_id" foreign="tag_id"/>
+    </foreign-key>
   </table>
   <table name="lists" idMethod="native" phpName="StockItemList">
     <column name="list_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

@@ -5,14 +5,18 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Link as ChildLink;
+use Model\LinkQuery as ChildLinkQuery;
 use Model\Tag as ChildTag;
 use Model\TagQuery as ChildTagQuery;
+use Model\Map\LinkTableMap;
 use Model\Map\TagTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -133,12 +137,26 @@ abstract class Tag implements ActiveRecordInterface
     protected $tag_updated;
 
     /**
+     * @var        ObjectCollection|ChildLink[] Collection to store aggregation of ChildLink objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildLink> Collection to store aggregation of ChildLink objects.
+     */
+    protected $collLinks;
+    protected $collLinksPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildLink[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildLink>
+     */
+    protected $linksScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Model\Base\Tag object.
@@ -873,6 +891,8 @@ abstract class Tag implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collLinks = null;
+
         } // if (deep)
     }
 
@@ -998,6 +1018,24 @@ abstract class Tag implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->linksScheduledForDeletion !== null) {
+                if (!$this->linksScheduledForDeletion->isEmpty()) {
+                    foreach ($this->linksScheduledForDeletion as $link) {
+                        // need to save related object because we set the relation to null
+                        $link->save($con);
+                    }
+                    $this->linksScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collLinks !== null) {
+                foreach ($this->collLinks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1206,10 +1244,11 @@ abstract class Tag implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['Tag'][$this->hashCode()])) {
@@ -1254,6 +1293,23 @@ abstract class Tag implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collLinks) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'links';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'linkss';
+                        break;
+                    default:
+                        $key = 'Links';
+                }
+
+                $result[$key] = $this->collLinks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1541,6 +1597,20 @@ abstract class Tag implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getLinks() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addLink($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1567,6 +1637,284 @@ abstract class Tag implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Link' === $relationName) {
+            $this->initLinks();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collLinks collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addLinks()
+     */
+    public function clearLinks()
+    {
+        $this->collLinks = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collLinks collection loaded partially.
+     */
+    public function resetPartialLinks($v = true)
+    {
+        $this->collLinksPartial = $v;
+    }
+
+    /**
+     * Initializes the collLinks collection.
+     *
+     * By default this just sets the collLinks collection to an empty array (like clearcollLinks());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initLinks($overrideExisting = true)
+    {
+        if (null !== $this->collLinks && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = LinkTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collLinks = new $collectionClassName;
+        $this->collLinks->setModel('\Model\Link');
+    }
+
+    /**
+     * Gets an array of ChildLink objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildTag is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildLink[] List of ChildLink objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildLink> List of ChildLink objects
+     * @throws PropelException
+     */
+    public function getLinks(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLinksPartial && !$this->isNew();
+        if (null === $this->collLinks || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collLinks) {
+                    $this->initLinks();
+                } else {
+                    $collectionClassName = LinkTableMap::getTableMap()->getCollectionClassName();
+
+                    $collLinks = new $collectionClassName;
+                    $collLinks->setModel('\Model\Link');
+
+                    return $collLinks;
+                }
+            } else {
+                $collLinks = ChildLinkQuery::create(null, $criteria)
+                    ->filterByTag($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collLinksPartial && count($collLinks)) {
+                        $this->initLinks(false);
+
+                        foreach ($collLinks as $obj) {
+                            if (false == $this->collLinks->contains($obj)) {
+                                $this->collLinks->append($obj);
+                            }
+                        }
+
+                        $this->collLinksPartial = true;
+                    }
+
+                    return $collLinks;
+                }
+
+                if ($partial && $this->collLinks) {
+                    foreach ($this->collLinks as $obj) {
+                        if ($obj->isNew()) {
+                            $collLinks[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collLinks = $collLinks;
+                $this->collLinksPartial = false;
+            }
+        }
+
+        return $this->collLinks;
+    }
+
+    /**
+     * Sets a collection of ChildLink objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $links A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildTag The current object (for fluent API support)
+     */
+    public function setLinks(Collection $links, ConnectionInterface $con = null)
+    {
+        /** @var ChildLink[] $linksToDelete */
+        $linksToDelete = $this->getLinks(new Criteria(), $con)->diff($links);
+
+
+        $this->linksScheduledForDeletion = $linksToDelete;
+
+        foreach ($linksToDelete as $linkRemoved) {
+            $linkRemoved->setTag(null);
+        }
+
+        $this->collLinks = null;
+        foreach ($links as $link) {
+            $this->addLink($link);
+        }
+
+        $this->collLinks = $links;
+        $this->collLinksPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Link objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Link objects.
+     * @throws PropelException
+     */
+    public function countLinks(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLinksPartial && !$this->isNew();
+        if (null === $this->collLinks || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collLinks) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getLinks());
+            }
+
+            $query = ChildLinkQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByTag($this)
+                ->count($con);
+        }
+
+        return count($this->collLinks);
+    }
+
+    /**
+     * Method called to associate a ChildLink object to this object
+     * through the ChildLink foreign key attribute.
+     *
+     * @param  ChildLink $l ChildLink
+     * @return $this|\Model\Tag The current object (for fluent API support)
+     */
+    public function addLink(ChildLink $l)
+    {
+        if ($this->collLinks === null) {
+            $this->initLinks();
+            $this->collLinksPartial = true;
+        }
+
+        if (!$this->collLinks->contains($l)) {
+            $this->doAddLink($l);
+
+            if ($this->linksScheduledForDeletion and $this->linksScheduledForDeletion->contains($l)) {
+                $this->linksScheduledForDeletion->remove($this->linksScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildLink $link The ChildLink object to add.
+     */
+    protected function doAddLink(ChildLink $link)
+    {
+        $this->collLinks[]= $link;
+        $link->setTag($this);
+    }
+
+    /**
+     * @param  ChildLink $link The ChildLink object to remove.
+     * @return $this|ChildTag The current object (for fluent API support)
+     */
+    public function removeLink(ChildLink $link)
+    {
+        if ($this->getLinks()->contains($link)) {
+            $pos = $this->collLinks->search($link);
+            $this->collLinks->remove($pos);
+            if (null === $this->linksScheduledForDeletion) {
+                $this->linksScheduledForDeletion = clone $this->collLinks;
+                $this->linksScheduledForDeletion->clear();
+            }
+            $this->linksScheduledForDeletion[]= $link;
+            $link->setTag(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Tag is new, it will return
+     * an empty collection; or if this Tag has previously
+     * been saved, it will retrieve related Links from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Tag.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildLink[] List of ChildLink objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildLink}> List of ChildLink objects
+     */
+    public function getLinksJoinArticle(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildLinkQuery::create(null, $criteria);
+        $query->joinWith('Article', $joinBehavior);
+
+        return $this->getLinks($query, $con);
     }
 
     /**
@@ -1604,8 +1952,14 @@ abstract class Tag implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collLinks) {
+                foreach ($this->collLinks as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collLinks = null;
     }
 
     /**

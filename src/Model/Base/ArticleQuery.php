@@ -83,7 +83,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery orderByCopyright($order = Criteria::ASC) Order by the article_copyright column
  * @method     ChildArticleQuery orderByPubdate($order = Criteria::ASC) Order by the article_pubdate column
  * @method     ChildArticleQuery orderByKeywords($order = Criteria::ASC) Order by the article_keywords column
- * @method     ChildArticleQuery orderByLinks($order = Criteria::ASC) Order by the article_links column
+ * @method     ChildArticleQuery orderByComputedLinks($order = Criteria::ASC) Order by the article_links column
  * @method     ChildArticleQuery orderByKeywordsGenerated($order = Criteria::ASC) Order by the article_keywords_generated column
  * @method     ChildArticleQuery orderByPublisherStock($order = Criteria::ASC) Order by the article_publisher_stock column
  * @method     ChildArticleQuery orderByHits($order = Criteria::ASC) Order by the article_hits column
@@ -162,7 +162,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery groupByCopyright() Group by the article_copyright column
  * @method     ChildArticleQuery groupByPubdate() Group by the article_pubdate column
  * @method     ChildArticleQuery groupByKeywords() Group by the article_keywords column
- * @method     ChildArticleQuery groupByLinks() Group by the article_links column
+ * @method     ChildArticleQuery groupByComputedLinks() Group by the article_links column
  * @method     ChildArticleQuery groupByKeywordsGenerated() Group by the article_keywords_generated column
  * @method     ChildArticleQuery groupByPublisherStock() Group by the article_publisher_stock column
  * @method     ChildArticleQuery groupByHits() Group by the article_hits column
@@ -186,6 +186,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildArticleQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildArticleQuery leftJoinLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the Link relation
+ * @method     ChildArticleQuery rightJoinLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Link relation
+ * @method     ChildArticleQuery innerJoinLink($relationAlias = null) Adds a INNER JOIN clause to the query using the Link relation
+ *
+ * @method     ChildArticleQuery joinWithLink($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Link relation
+ *
+ * @method     ChildArticleQuery leftJoinWithLink() Adds a LEFT JOIN clause and with to the query using the Link relation
+ * @method     ChildArticleQuery rightJoinWithLink() Adds a RIGHT JOIN clause and with to the query using the Link relation
+ * @method     ChildArticleQuery innerJoinWithLink() Adds a INNER JOIN clause and with to the query using the Link relation
+ *
  * @method     ChildArticleQuery leftJoinRole($relationAlias = null) Adds a LEFT JOIN clause to the query using the Role relation
  * @method     ChildArticleQuery rightJoinRole($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Role relation
  * @method     ChildArticleQuery innerJoinRole($relationAlias = null) Adds a INNER JOIN clause to the query using the Role relation
@@ -196,7 +206,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithRole() Adds a RIGHT JOIN clause and with to the query using the Role relation
  * @method     ChildArticleQuery innerJoinWithRole() Adds a INNER JOIN clause and with to the query using the Role relation
  *
- * @method     \Model\RoleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\LinkQuery|\Model\RoleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildArticle|null findOne(ConnectionInterface $con = null) Return the first ChildArticle matching the query
  * @method     ChildArticle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
@@ -264,7 +274,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByCopyright(int $article_copyright) Return the first ChildArticle filtered by the article_copyright column
  * @method     ChildArticle|null findOneByPubdate(string $article_pubdate) Return the first ChildArticle filtered by the article_pubdate column
  * @method     ChildArticle|null findOneByKeywords(string $article_keywords) Return the first ChildArticle filtered by the article_keywords column
- * @method     ChildArticle|null findOneByLinks(string $article_links) Return the first ChildArticle filtered by the article_links column
+ * @method     ChildArticle|null findOneByComputedLinks(string $article_links) Return the first ChildArticle filtered by the article_links column
  * @method     ChildArticle|null findOneByKeywordsGenerated(string $article_keywords_generated) Return the first ChildArticle filtered by the article_keywords_generated column
  * @method     ChildArticle|null findOneByPublisherStock(int $article_publisher_stock) Return the first ChildArticle filtered by the article_publisher_stock column
  * @method     ChildArticle|null findOneByHits(int $article_hits) Return the first ChildArticle filtered by the article_hits column
@@ -346,7 +356,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByCopyright(int $article_copyright) Return the first ChildArticle filtered by the article_copyright column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByPubdate(string $article_pubdate) Return the first ChildArticle filtered by the article_pubdate column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByKeywords(string $article_keywords) Return the first ChildArticle filtered by the article_keywords column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOneByLinks(string $article_links) Return the first ChildArticle filtered by the article_links column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOneByComputedLinks(string $article_links) Return the first ChildArticle filtered by the article_links column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByKeywordsGenerated(string $article_keywords_generated) Return the first ChildArticle filtered by the article_keywords_generated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByPublisherStock(int $article_publisher_stock) Return the first ChildArticle filtered by the article_publisher_stock column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByHits(int $article_hits) Return the first ChildArticle filtered by the article_hits column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -490,8 +500,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
  * @method     ChildArticle[]|ObjectCollection findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
- * @method     ChildArticle[]|ObjectCollection findByLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
+ * @method     ChildArticle[]|ObjectCollection findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
  * @method     ChildArticle[]|ObjectCollection findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
  * @method     ChildArticle[]|ObjectCollection findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
@@ -2727,24 +2737,24 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByLinks('fooValue');   // WHERE article_links = 'fooValue'
-     * $query->filterByLinks('%fooValue%', Criteria::LIKE); // WHERE article_links LIKE '%fooValue%'
+     * $query->filterByComputedLinks('fooValue');   // WHERE article_links = 'fooValue'
+     * $query->filterByComputedLinks('%fooValue%', Criteria::LIKE); // WHERE article_links LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $links The value to use as filter.
+     * @param     string $computedLinks The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildArticleQuery The current query, for fluid interface
      */
-    public function filterByLinks($links = null, $comparison = null)
+    public function filterByComputedLinks($computedLinks = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($links)) {
+            if (is_array($computedLinks)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LINKS, $links, $comparison);
+        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LINKS, $computedLinks, $comparison);
     }
 
     /**
@@ -3291,6 +3301,134 @@ abstract class ArticleQuery extends ModelCriteria
         return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $deletionReason, $comparison);
     }
 
+    /**
+     * Filter the query by a related \Model\Link object
+     *
+     * @param \Model\Link|ObjectCollection $link the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildArticleQuery The current query, for fluid interface
+     */
+    public function filterByLink($link, $comparison = null)
+    {
+        if ($link instanceof \Model\Link) {
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $link->getArticleId(), $comparison);
+        } elseif ($link instanceof ObjectCollection) {
+            return $this
+                ->useLinkQuery()
+                ->filterByPrimaryKeys($link->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByLink() only accepts arguments of type \Model\Link or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Link relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildArticleQuery The current query, for fluid interface
+     */
+    public function joinLink($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Link');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Link');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Link relation Link object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\LinkQuery A secondary query class using the current class as primary query
+     */
+    public function useLinkQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinLink($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Link', '\Model\LinkQuery');
+    }
+
+    /**
+     * Use the Link relation Link object
+     *
+     * @param callable(\Model\LinkQuery):\Model\LinkQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withLinkQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useLinkQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Link table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\LinkQuery The inner query object of the EXISTS statement
+     */
+    public function useLinkExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Link', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Link table for a NOT EXISTS query.
+     *
+     * @see useLinkExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\LinkQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useLinkNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Link', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Filter the query by a related \Model\Role object
      *

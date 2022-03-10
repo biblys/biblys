@@ -443,14 +443,14 @@ class LinkTableMap extends TableMap
         $this->addPrimaryKey('link_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
         $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
-        $this->addColumn('article_id', 'ArticleId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('stock_id', 'StockId', 'INTEGER', false, 10, null);
         $this->addColumn('list_id', 'ListId', 'INTEGER', false, 10, null);
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
         $this->addColumn('people_id', 'PeopleId', 'INTEGER', false, 10, null);
         $this->addColumn('job_id', 'JobId', 'INTEGER', false, 10, null);
         $this->addColumn('rayon_id', 'RayonId', 'INTEGER', false, 10, null);
-        $this->addColumn('tag_id', 'TagId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'tags', 'tag_id', false, 10, null);
         $this->addColumn('event_id', 'EventId', 'INTEGER', false, null, null);
         $this->addColumn('post_id', 'PostId', 'INTEGER', false, null, null);
         $this->addColumn('collection_id', 'CollectionId', 'INTEGER', false, 10, null);
@@ -471,6 +471,20 @@ class LinkTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':article_id',
+    1 => ':article_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('Tag', '\\Model\\Tag', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':tag_id',
+    1 => ':tag_id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**
