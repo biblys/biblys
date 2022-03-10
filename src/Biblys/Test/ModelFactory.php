@@ -7,6 +7,7 @@ use Model\Article;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
+use Model\Link;
 use Model\Page;
 use Model\People;
 use Model\Publisher;
@@ -109,6 +110,17 @@ class ModelFactory
         $campaign->save();
 
         return $campaign;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createLink(): Link
+    {
+        $link = new Link();
+        $link->save();
+
+        return $link;
     }
 
     /**

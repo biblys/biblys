@@ -10,8 +10,8 @@ Corrections
   qu'un seul mode d'expédition. Ça n'arrivera plus.
 - La barre d'administration pouvait apparaître pour un utilisateur qui 
   n'avait pas les droits d'adminstration. Ce n'est plus le cas.
-- Une erreur pouvait empêcher un éditeur d'ajouter des mots-clés à un livre. 
-  Maintenant, c'est mieux.
+- Une erreur pouvait empêcher un éditeur d'ajouter des mots-clés à un 
+  article ou de les supprimer. Maintenant, ça marche.
 
 ## 2.59.0 (4 mars 2022)
 
