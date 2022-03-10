@@ -90,7 +90,7 @@ $_CSS_CALLS[] = 'screen:/common/css/common.css';
 $_CSS_CALLS[] = 'print:/common/css/print.css';
 $_JS_CALLS[] = '/common/js/common.js';
 
-if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary()) {
+if ($_V->isAdmin()) {
     $_JS_CALLS[] = '/common/js/biblys-admin.js';
     $_CSS_CALLS[] = 'screen:/common/css/biblys-admin.css';
 }

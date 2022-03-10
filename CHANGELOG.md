@@ -8,6 +8,8 @@ Corrections
   l'administration. C'est corrigé.
 - Un problème pouvait empêcher de valider un panier sur un site ne proposant 
   qu'un seul mode d'expédition. Ça n'arrivera plus.
+- La barre d'administration pouvait apparaître pour un utilisateur qui 
+  n'avait pas les droits d'adminstration. Ce n'est plus le cas.
 
 ## 2.59.0 (4 mars 2022)
 
