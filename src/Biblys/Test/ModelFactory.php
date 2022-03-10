@@ -46,12 +46,12 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    private static function createArticle(): Article
+    public static function createArticle(array $attributes = []): Article
     {
         $article = new Article();
         $article->setTitle("Article");
 
-        $publisher = ModelFactory::createPublisher();
+        $publisher = $attributes["publisher"] ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
 
         $article->save();

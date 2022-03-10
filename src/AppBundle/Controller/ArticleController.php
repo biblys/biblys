@@ -2,11 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
+use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Model\PublisherQuery;
+use Propel\Runtime\Exception\PropelException;
+use RayonManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,7 +107,7 @@ class ArticleController extends Controller
         } elseif ($query !== null) {
             $count = $am->countSearchResults($query);
             $page = (int) $request->query->get('p', 0);
-            $pagination = new \Biblys\Service\Pagination($page, $count);
+            $pagination = new Pagination($page, $count);
 
             $articles = $am->search($query, [
                 'order' => 'article_pubdate',
@@ -313,10 +319,16 @@ class ArticleController extends Controller
      * Add tags to an article via an XHR request
      * /articles/{id}/tags/add.
      *
+     * @param Request $request
+     * @param $id
      * @return Response
+     * @throws AuthException
+     * @throws PropelException
      */
     public function addTagsAction(Request $request, $id)
     {
+        self::authPublisher($request, null);
+
         $am = $this->entityManager('Article');
         $tm = $this->entityManager('Tag');
         $lm = $this->entityManager('Link');
@@ -329,7 +341,8 @@ class ArticleController extends Controller
         }
 
         if ($article->has('publisher_id')) {
-            $this->auth('publisher', $article->get('publisher_id'));
+            $publisher = PublisherQuery::create()->findPk($article->get("publisher_id"));
+            self::authPublisher($request, $publisher);
         }
 
         $links = [];
@@ -379,8 +392,8 @@ class ArticleController extends Controller
      */
     public function addRayonsAction(Request $request, $id)
     {
-        $am = new \ArticleManager();
-        $rm = new \RayonManager();
+        $am = new ArticleManager();
+        $rm = new RayonManager();
 
         $am->setIgnoreSiteFilters(true);
 
@@ -564,7 +577,7 @@ class ArticleController extends Controller
      */
     public function updatePublisherStock(Request $request, int $articleId)
     {
-        $am = new \ArticleManager();
+        $am = new ArticleManager();
 
         $requestBody = $request->getContent();
         $publisherStock = (int) $requestBody;

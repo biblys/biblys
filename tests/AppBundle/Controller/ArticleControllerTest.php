@@ -1,19 +1,25 @@
 <?php
 
-/**
- * @backupGlobals disabled
- * @backupStaticAttributes disabled
- */
+namespace AppBundle\Controller;
 
-use AppBundle\Controller\ArticleController;
+use ArticleManager;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
+use Biblys\Test\RequestFactory;
+use Exception;
+use Framework\Exception\AuthException;
+use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
-class ArticleControllerTest extends PHPUnit\Framework\TestCase
+class ArticleControllerTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testUpdatePublisherStock()
     {
         // given
@@ -38,6 +44,9 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testByIsbn()
     {
         // given
@@ -92,5 +101,45 @@ class ArticleControllerTest extends PHPUnit\Framework\TestCase
 
         // when
         $controller->byIsbn($urlGenerator, "9781233456789");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddTagsActionForUser()
+    {
+        // given
+        $controller = new ArticleController();
+        $request = new Request();
+
+        // then
+        $this->expectException(AuthException::class);
+
+        // when
+        $controller->addTagsAction($request, 1);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddTagsActionForPublisher()
+    {
+        // given
+        $controller = new ArticleController();
+        $publisher = ModelFactory::createPublisher();
+        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
+        $article = ModelFactory::createArticle(["publisher" => $publisher]);
+
+        // when
+        $response = $controller->addTagsAction($request, $article->getId());
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
     }
 }
