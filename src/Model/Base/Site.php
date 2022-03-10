@@ -11,9 +11,12 @@ use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\OptionTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SiteTableMap;
+use Model\Map\UserTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -370,6 +373,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collRightsPartial;
 
     /**
+     * @var        ObjectCollection|ChildUser[] Collection to store aggregation of ChildUser objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildUser> Collection to store aggregation of ChildUser objects.
+     */
+    protected $collUsers;
+    protected $collUsersPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -390,6 +400,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildRight>
      */
     protected $rightsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildUser[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildUser>
+     */
+    protected $usersScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2384,6 +2401,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collRights = null;
 
+            $this->collUsers = null;
+
         } // if (deep)
     }
 
@@ -2541,6 +2560,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collRights !== null) {
                 foreach ($this->collRights as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->usersScheduledForDeletion !== null) {
+                if (!$this->usersScheduledForDeletion->isEmpty()) {
+                    foreach ($this->usersScheduledForDeletion as $user) {
+                        // need to save related object because we set the relation to null
+                        $user->save($con);
+                    }
+                    $this->usersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUsers !== null) {
+                foreach ($this->collUsers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3114,6 +3151,21 @@ abstract class Site implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collRights->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collUsers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'users';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'userss';
+                        break;
+                    default:
+                        $key = 'Users';
+                }
+
+                $result[$key] = $this->collUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -3711,6 +3763,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getUsers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addUser($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -3758,6 +3816,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Right' === $relationName) {
             $this->initRights();
+            return;
+        }
+        if ('User' === $relationName) {
+            $this->initUsers();
             return;
         }
     }
@@ -4311,6 +4373,241 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collUsers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addUsers()
+     */
+    public function clearUsers()
+    {
+        $this->collUsers = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collUsers collection loaded partially.
+     */
+    public function resetPartialUsers($v = true)
+    {
+        $this->collUsersPartial = $v;
+    }
+
+    /**
+     * Initializes the collUsers collection.
+     *
+     * By default this just sets the collUsers collection to an empty array (like clearcollUsers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUsers($overrideExisting = true)
+    {
+        if (null !== $this->collUsers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collUsers = new $collectionClassName;
+        $this->collUsers->setModel('\Model\User');
+    }
+
+    /**
+     * Gets an array of ChildUser objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildUser[] List of ChildUser objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildUser> List of ChildUser objects
+     * @throws PropelException
+     */
+    public function getUsers(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUsersPartial && !$this->isNew();
+        if (null === $this->collUsers || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collUsers) {
+                    $this->initUsers();
+                } else {
+                    $collectionClassName = UserTableMap::getTableMap()->getCollectionClassName();
+
+                    $collUsers = new $collectionClassName;
+                    $collUsers->setModel('\Model\User');
+
+                    return $collUsers;
+                }
+            } else {
+                $collUsers = ChildUserQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collUsersPartial && count($collUsers)) {
+                        $this->initUsers(false);
+
+                        foreach ($collUsers as $obj) {
+                            if (false == $this->collUsers->contains($obj)) {
+                                $this->collUsers->append($obj);
+                            }
+                        }
+
+                        $this->collUsersPartial = true;
+                    }
+
+                    return $collUsers;
+                }
+
+                if ($partial && $this->collUsers) {
+                    foreach ($this->collUsers as $obj) {
+                        if ($obj->isNew()) {
+                            $collUsers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUsers = $collUsers;
+                $this->collUsersPartial = false;
+            }
+        }
+
+        return $this->collUsers;
+    }
+
+    /**
+     * Sets a collection of ChildUser objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $users A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function setUsers(Collection $users, ConnectionInterface $con = null)
+    {
+        /** @var ChildUser[] $usersToDelete */
+        $usersToDelete = $this->getUsers(new Criteria(), $con)->diff($users);
+
+
+        $this->usersScheduledForDeletion = $usersToDelete;
+
+        foreach ($usersToDelete as $userRemoved) {
+            $userRemoved->setSite(null);
+        }
+
+        $this->collUsers = null;
+        foreach ($users as $user) {
+            $this->addUser($user);
+        }
+
+        $this->collUsers = $users;
+        $this->collUsersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related User objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related User objects.
+     * @throws PropelException
+     */
+    public function countUsers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collUsersPartial && !$this->isNew();
+        if (null === $this->collUsers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUsers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUsers());
+            }
+
+            $query = ChildUserQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collUsers);
+    }
+
+    /**
+     * Method called to associate a ChildUser object to this object
+     * through the ChildUser foreign key attribute.
+     *
+     * @param  ChildUser $l ChildUser
+     * @return $this|\Model\Site The current object (for fluent API support)
+     */
+    public function addUser(ChildUser $l)
+    {
+        if ($this->collUsers === null) {
+            $this->initUsers();
+            $this->collUsersPartial = true;
+        }
+
+        if (!$this->collUsers->contains($l)) {
+            $this->doAddUser($l);
+
+            if ($this->usersScheduledForDeletion and $this->usersScheduledForDeletion->contains($l)) {
+                $this->usersScheduledForDeletion->remove($this->usersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildUser $user The ChildUser object to add.
+     */
+    protected function doAddUser(ChildUser $user)
+    {
+        $this->collUsers[]= $user;
+        $user->setSite($this);
+    }
+
+    /**
+     * @param  ChildUser $user The ChildUser object to remove.
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function removeUser(ChildUser $user)
+    {
+        if ($this->getUsers()->contains($user)) {
+            $pos = $this->collUsers->search($user);
+            $this->collUsers->remove($pos);
+            if (null === $this->usersScheduledForDeletion) {
+                $this->usersScheduledForDeletion = clone $this->collUsers;
+                $this->usersScheduledForDeletion->clear();
+            }
+            $this->usersScheduledForDeletion[]= $user;
+            $user->setSite(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -4385,10 +4682,16 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collUsers) {
+                foreach ($this->collUsers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collOptions = null;
         $this->collRights = null;
+        $this->collUsers = null;
     }
 
     /**

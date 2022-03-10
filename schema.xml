@@ -1477,6 +1477,7 @@
   </table>
   <table name="users" idMethod="native" phpName="User">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="Email" phpName="Email" type="VARCHAR" size="255"/>
     <column name="user_password" phpName="Password" type="VARCHAR" size="255"/>
     <column name="user_key" phpName="Key" type="LONGVARCHAR"/>
@@ -1534,6 +1535,9 @@
     <behavior name="validate">
       <parameter name="rule1" value="{column: email, validator: Email}" />
     </behavior>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
   </table>
   <table name="votes" idMethod="native" phpName="Vote">
     <column name="vote_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

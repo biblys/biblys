@@ -11,6 +11,8 @@ use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
 use Model\Session as ChildSession;
 use Model\SessionQuery as ChildSessionQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\OptionTableMap;
@@ -88,6 +90,13 @@ abstract class User implements ActiveRecordInterface
      * @var        int
      */
     protected $id;
+
+    /**
+     * The value for the site_id field.
+     *
+     * @var        int|null
+     */
+    protected $site_id;
 
     /**
      * The value for the email field.
@@ -334,6 +343,11 @@ abstract class User implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $user_updated;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ObjectCollection|ChildOption[] Collection to store aggregation of ChildOption objects.
@@ -647,6 +661,16 @@ abstract class User implements ActiveRecordInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get the [site_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
     }
 
     /**
@@ -1120,6 +1144,30 @@ abstract class User implements ActiveRecordInterface
 
         return $this;
     } // setId()
+
+    /**
+     * Set the value of [site_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this|\Model\User The current object (for fluent API support)
+     */
+    public function setSiteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->site_id !== $v) {
+            $this->site_id = $v;
+            $this->modifiedColumns[UserTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
+        }
+
+        return $this;
+    } // setSiteId()
 
     /**
      * Set the value of [email] column.
@@ -1888,124 +1936,127 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->site_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_password = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Key', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('EmailKey', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email_key = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('FacebookUid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('FacebookUid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->facebook_uid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_screen_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_slug = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('WishlistShip', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : UserTableMap::translateFieldName('WishlistShip', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_wishlist_ship = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : UserTableMap::translateFieldName('Top', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : UserTableMap::translateFieldName('Top', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_top = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : UserTableMap::translateFieldName('Biblio', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : UserTableMap::translateFieldName('Biblio', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_biblio = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : UserTableMap::translateFieldName('AdresseIp', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : UserTableMap::translateFieldName('AdresseIp', TableMap::TYPE_PHPNAME, $indexType)];
             $this->adresse_ip = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : UserTableMap::translateFieldName('RecaptchaScore', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : UserTableMap::translateFieldName('RecaptchaScore', TableMap::TYPE_PHPNAME, $indexType)];
             $this->recaptcha_score = (null !== $col) ? (double) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : UserTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : UserTableMap::translateFieldName('Dateinscription', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateinscription = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : UserTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : UserTableMap::translateFieldName('Dateconnexion', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->dateconnexion = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : UserTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : UserTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : UserTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : UserTableMap::translateFieldName('BookshopId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->bookshop_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : UserTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : UserTableMap::translateFieldName('LibraryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->library_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : UserTableMap::translateFieldName('Civilite', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : UserTableMap::translateFieldName('Civilite', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_civilite = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 19 + $startcol : UserTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : UserTableMap::translateFieldName('Nom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_nom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 20 + $startcol : UserTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : UserTableMap::translateFieldName('Prenom', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_prenom = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 21 + $startcol : UserTableMap::translateFieldName('Adresse1', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : UserTableMap::translateFieldName('Adresse1', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_adresse1 = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 22 + $startcol : UserTableMap::translateFieldName('Adresse2', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : UserTableMap::translateFieldName('Adresse2', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_adresse2 = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 23 + $startcol : UserTableMap::translateFieldName('Codepostal', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : UserTableMap::translateFieldName('Codepostal', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_codepostal = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : UserTableMap::translateFieldName('Ville', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : UserTableMap::translateFieldName('Ville', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_ville = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : UserTableMap::translateFieldName('Pays', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : UserTableMap::translateFieldName('Pays', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_pays = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : UserTableMap::translateFieldName('Telephone', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : UserTableMap::translateFieldName('Telephone', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_telephone = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : UserTableMap::translateFieldName('PrefArticlesShow', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : UserTableMap::translateFieldName('PrefArticlesShow', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_pref_articles_show = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : UserTableMap::translateFieldName('FbId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : UserTableMap::translateFieldName('FbId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_fb_id = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : UserTableMap::translateFieldName('FbToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : UserTableMap::translateFieldName('FbToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_fb_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 30 + $startcol : UserTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : UserTableMap::translateFieldName('CountryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->country_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 31 + $startcol : UserTableMap::translateFieldName('PasswordResetToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : UserTableMap::translateFieldName('PasswordResetToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_password_reset_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 32 + $startcol : UserTableMap::translateFieldName('PasswordResetTokenCreated', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : UserTableMap::translateFieldName('PasswordResetTokenCreated', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_password_reset_token_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 33 + $startcol : UserTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : UserTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 34 + $startcol : UserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : UserTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->user_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 35 + $startcol : UserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : UserTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2018,7 +2069,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 36; // 36 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 37; // 37 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\User'), 0, $e);
@@ -2040,6 +2091,9 @@ abstract class User implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
     } // ensureConsistency
 
     /**
@@ -2079,6 +2133,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->collOptions = null;
 
             $this->collRights = null;
@@ -2201,6 +2256,18 @@ abstract class User implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -2294,6 +2361,9 @@ abstract class User implements ActiveRecordInterface
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(UserTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
+        }
+        if ($this->isColumnModified(UserTableMap::COL_SITE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'site_id';
         }
         if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'Email';
@@ -2413,6 +2483,9 @@ abstract class User implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
+                    case 'site_id':
+                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
                         break;
                     case 'Email':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
@@ -2585,108 +2658,111 @@ abstract class User implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getEmail();
+                return $this->getSiteId();
                 break;
             case 2:
-                return $this->getPassword();
+                return $this->getEmail();
                 break;
             case 3:
-                return $this->getKey();
+                return $this->getPassword();
                 break;
             case 4:
-                return $this->getEmailKey();
+                return $this->getKey();
                 break;
             case 5:
-                return $this->getFacebookUid();
+                return $this->getEmailKey();
                 break;
             case 6:
-                return $this->getUsername();
+                return $this->getFacebookUid();
                 break;
             case 7:
-                return $this->getSlug();
+                return $this->getUsername();
                 break;
             case 8:
-                return $this->getWishlistShip();
+                return $this->getSlug();
                 break;
             case 9:
-                return $this->getTop();
+                return $this->getWishlistShip();
                 break;
             case 10:
-                return $this->getBiblio();
+                return $this->getTop();
                 break;
             case 11:
-                return $this->getAdresseIp();
+                return $this->getBiblio();
                 break;
             case 12:
-                return $this->getRecaptchaScore();
+                return $this->getAdresseIp();
                 break;
             case 13:
-                return $this->getDateinscription();
+                return $this->getRecaptchaScore();
                 break;
             case 14:
-                return $this->getDateconnexion();
+                return $this->getDateinscription();
                 break;
             case 15:
-                return $this->getPublisherId();
+                return $this->getDateconnexion();
                 break;
             case 16:
-                return $this->getBookshopId();
+                return $this->getPublisherId();
                 break;
             case 17:
-                return $this->getLibraryId();
+                return $this->getBookshopId();
                 break;
             case 18:
-                return $this->getCivilite();
+                return $this->getLibraryId();
                 break;
             case 19:
-                return $this->getNom();
+                return $this->getCivilite();
                 break;
             case 20:
-                return $this->getPrenom();
+                return $this->getNom();
                 break;
             case 21:
-                return $this->getAdresse1();
+                return $this->getPrenom();
                 break;
             case 22:
-                return $this->getAdresse2();
+                return $this->getAdresse1();
                 break;
             case 23:
-                return $this->getCodepostal();
+                return $this->getAdresse2();
                 break;
             case 24:
-                return $this->getVille();
+                return $this->getCodepostal();
                 break;
             case 25:
-                return $this->getPays();
+                return $this->getVille();
                 break;
             case 26:
-                return $this->getTelephone();
+                return $this->getPays();
                 break;
             case 27:
-                return $this->getPrefArticlesShow();
+                return $this->getTelephone();
                 break;
             case 28:
-                return $this->getFbId();
+                return $this->getPrefArticlesShow();
                 break;
             case 29:
-                return $this->getFbToken();
+                return $this->getFbId();
                 break;
             case 30:
-                return $this->getCountryId();
+                return $this->getFbToken();
                 break;
             case 31:
-                return $this->getPasswordResetToken();
+                return $this->getCountryId();
                 break;
             case 32:
-                return $this->getPasswordResetTokenCreated();
+                return $this->getPasswordResetToken();
                 break;
             case 33:
-                return $this->getUpdate();
+                return $this->getPasswordResetTokenCreated();
                 break;
             case 34:
-                return $this->getCreatedAt();
+                return $this->getUpdate();
                 break;
             case 35:
+                return $this->getCreatedAt();
+                break;
+            case 36:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -2720,52 +2796,49 @@ abstract class User implements ActiveRecordInterface
         $keys = UserTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getEmail(),
-            $keys[2] => $this->getPassword(),
-            $keys[3] => $this->getKey(),
-            $keys[4] => $this->getEmailKey(),
-            $keys[5] => $this->getFacebookUid(),
-            $keys[6] => $this->getUsername(),
-            $keys[7] => $this->getSlug(),
-            $keys[8] => $this->getWishlistShip(),
-            $keys[9] => $this->getTop(),
-            $keys[10] => $this->getBiblio(),
-            $keys[11] => $this->getAdresseIp(),
-            $keys[12] => $this->getRecaptchaScore(),
-            $keys[13] => $this->getDateinscription(),
-            $keys[14] => $this->getDateconnexion(),
-            $keys[15] => $this->getPublisherId(),
-            $keys[16] => $this->getBookshopId(),
-            $keys[17] => $this->getLibraryId(),
-            $keys[18] => $this->getCivilite(),
-            $keys[19] => $this->getNom(),
-            $keys[20] => $this->getPrenom(),
-            $keys[21] => $this->getAdresse1(),
-            $keys[22] => $this->getAdresse2(),
-            $keys[23] => $this->getCodepostal(),
-            $keys[24] => $this->getVille(),
-            $keys[25] => $this->getPays(),
-            $keys[26] => $this->getTelephone(),
-            $keys[27] => $this->getPrefArticlesShow(),
-            $keys[28] => $this->getFbId(),
-            $keys[29] => $this->getFbToken(),
-            $keys[30] => $this->getCountryId(),
-            $keys[31] => $this->getPasswordResetToken(),
-            $keys[32] => $this->getPasswordResetTokenCreated(),
-            $keys[33] => $this->getUpdate(),
-            $keys[34] => $this->getCreatedAt(),
-            $keys[35] => $this->getUpdatedAt(),
+            $keys[1] => $this->getSiteId(),
+            $keys[2] => $this->getEmail(),
+            $keys[3] => $this->getPassword(),
+            $keys[4] => $this->getKey(),
+            $keys[5] => $this->getEmailKey(),
+            $keys[6] => $this->getFacebookUid(),
+            $keys[7] => $this->getUsername(),
+            $keys[8] => $this->getSlug(),
+            $keys[9] => $this->getWishlistShip(),
+            $keys[10] => $this->getTop(),
+            $keys[11] => $this->getBiblio(),
+            $keys[12] => $this->getAdresseIp(),
+            $keys[13] => $this->getRecaptchaScore(),
+            $keys[14] => $this->getDateinscription(),
+            $keys[15] => $this->getDateconnexion(),
+            $keys[16] => $this->getPublisherId(),
+            $keys[17] => $this->getBookshopId(),
+            $keys[18] => $this->getLibraryId(),
+            $keys[19] => $this->getCivilite(),
+            $keys[20] => $this->getNom(),
+            $keys[21] => $this->getPrenom(),
+            $keys[22] => $this->getAdresse1(),
+            $keys[23] => $this->getAdresse2(),
+            $keys[24] => $this->getCodepostal(),
+            $keys[25] => $this->getVille(),
+            $keys[26] => $this->getPays(),
+            $keys[27] => $this->getTelephone(),
+            $keys[28] => $this->getPrefArticlesShow(),
+            $keys[29] => $this->getFbId(),
+            $keys[30] => $this->getFbToken(),
+            $keys[31] => $this->getCountryId(),
+            $keys[32] => $this->getPasswordResetToken(),
+            $keys[33] => $this->getPasswordResetTokenCreated(),
+            $keys[34] => $this->getUpdate(),
+            $keys[35] => $this->getCreatedAt(),
+            $keys[36] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[13]] instanceof \DateTimeInterface) {
-            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[14]] instanceof \DateTimeInterface) {
             $result[$keys[14]] = $result[$keys[14]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[32]] instanceof \DateTimeInterface) {
-            $result[$keys[32]] = $result[$keys[32]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[15]] instanceof \DateTimeInterface) {
+            $result[$keys[15]] = $result[$keys[15]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[33]] instanceof \DateTimeInterface) {
@@ -2780,12 +2853,31 @@ abstract class User implements ActiveRecordInterface
             $result[$keys[35]] = $result[$keys[35]]->format('Y-m-d H:i:s.u');
         }
 
+        if ($result[$keys[36]] instanceof \DateTimeInterface) {
+            $result[$keys[36]] = $result[$keys[36]]->format('Y-m-d H:i:s.u');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collOptions) {
 
                 switch ($keyType) {
@@ -2869,108 +2961,111 @@ abstract class User implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setEmail($value);
+                $this->setSiteId($value);
                 break;
             case 2:
-                $this->setPassword($value);
+                $this->setEmail($value);
                 break;
             case 3:
-                $this->setKey($value);
+                $this->setPassword($value);
                 break;
             case 4:
-                $this->setEmailKey($value);
+                $this->setKey($value);
                 break;
             case 5:
-                $this->setFacebookUid($value);
+                $this->setEmailKey($value);
                 break;
             case 6:
-                $this->setUsername($value);
+                $this->setFacebookUid($value);
                 break;
             case 7:
-                $this->setSlug($value);
+                $this->setUsername($value);
                 break;
             case 8:
-                $this->setWishlistShip($value);
+                $this->setSlug($value);
                 break;
             case 9:
-                $this->setTop($value);
+                $this->setWishlistShip($value);
                 break;
             case 10:
-                $this->setBiblio($value);
+                $this->setTop($value);
                 break;
             case 11:
-                $this->setAdresseIp($value);
+                $this->setBiblio($value);
                 break;
             case 12:
-                $this->setRecaptchaScore($value);
+                $this->setAdresseIp($value);
                 break;
             case 13:
-                $this->setDateinscription($value);
+                $this->setRecaptchaScore($value);
                 break;
             case 14:
-                $this->setDateconnexion($value);
+                $this->setDateinscription($value);
                 break;
             case 15:
-                $this->setPublisherId($value);
+                $this->setDateconnexion($value);
                 break;
             case 16:
-                $this->setBookshopId($value);
+                $this->setPublisherId($value);
                 break;
             case 17:
-                $this->setLibraryId($value);
+                $this->setBookshopId($value);
                 break;
             case 18:
-                $this->setCivilite($value);
+                $this->setLibraryId($value);
                 break;
             case 19:
-                $this->setNom($value);
+                $this->setCivilite($value);
                 break;
             case 20:
-                $this->setPrenom($value);
+                $this->setNom($value);
                 break;
             case 21:
-                $this->setAdresse1($value);
+                $this->setPrenom($value);
                 break;
             case 22:
-                $this->setAdresse2($value);
+                $this->setAdresse1($value);
                 break;
             case 23:
-                $this->setCodepostal($value);
+                $this->setAdresse2($value);
                 break;
             case 24:
-                $this->setVille($value);
+                $this->setCodepostal($value);
                 break;
             case 25:
-                $this->setPays($value);
+                $this->setVille($value);
                 break;
             case 26:
-                $this->setTelephone($value);
+                $this->setPays($value);
                 break;
             case 27:
-                $this->setPrefArticlesShow($value);
+                $this->setTelephone($value);
                 break;
             case 28:
-                $this->setFbId($value);
+                $this->setPrefArticlesShow($value);
                 break;
             case 29:
-                $this->setFbToken($value);
+                $this->setFbId($value);
                 break;
             case 30:
-                $this->setCountryId($value);
+                $this->setFbToken($value);
                 break;
             case 31:
-                $this->setPasswordResetToken($value);
+                $this->setCountryId($value);
                 break;
             case 32:
-                $this->setPasswordResetTokenCreated($value);
+                $this->setPasswordResetToken($value);
                 break;
             case 33:
-                $this->setUpdate($value);
+                $this->setPasswordResetTokenCreated($value);
                 break;
             case 34:
-                $this->setCreatedAt($value);
+                $this->setUpdate($value);
                 break;
             case 35:
+                $this->setCreatedAt($value);
+                break;
+            case 36:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -3003,109 +3098,112 @@ abstract class User implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setEmail($arr[$keys[1]]);
+            $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setPassword($arr[$keys[2]]);
+            $this->setEmail($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setKey($arr[$keys[3]]);
+            $this->setPassword($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setEmailKey($arr[$keys[4]]);
+            $this->setKey($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setFacebookUid($arr[$keys[5]]);
+            $this->setEmailKey($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUsername($arr[$keys[6]]);
+            $this->setFacebookUid($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setSlug($arr[$keys[7]]);
+            $this->setUsername($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setWishlistShip($arr[$keys[8]]);
+            $this->setSlug($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setTop($arr[$keys[9]]);
+            $this->setWishlistShip($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setBiblio($arr[$keys[10]]);
+            $this->setTop($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAdresseIp($arr[$keys[11]]);
+            $this->setBiblio($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setRecaptchaScore($arr[$keys[12]]);
+            $this->setAdresseIp($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setDateinscription($arr[$keys[13]]);
+            $this->setRecaptchaScore($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
-            $this->setDateconnexion($arr[$keys[14]]);
+            $this->setDateinscription($arr[$keys[14]]);
         }
         if (array_key_exists($keys[15], $arr)) {
-            $this->setPublisherId($arr[$keys[15]]);
+            $this->setDateconnexion($arr[$keys[15]]);
         }
         if (array_key_exists($keys[16], $arr)) {
-            $this->setBookshopId($arr[$keys[16]]);
+            $this->setPublisherId($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setLibraryId($arr[$keys[17]]);
+            $this->setBookshopId($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
-            $this->setCivilite($arr[$keys[18]]);
+            $this->setLibraryId($arr[$keys[18]]);
         }
         if (array_key_exists($keys[19], $arr)) {
-            $this->setNom($arr[$keys[19]]);
+            $this->setCivilite($arr[$keys[19]]);
         }
         if (array_key_exists($keys[20], $arr)) {
-            $this->setPrenom($arr[$keys[20]]);
+            $this->setNom($arr[$keys[20]]);
         }
         if (array_key_exists($keys[21], $arr)) {
-            $this->setAdresse1($arr[$keys[21]]);
+            $this->setPrenom($arr[$keys[21]]);
         }
         if (array_key_exists($keys[22], $arr)) {
-            $this->setAdresse2($arr[$keys[22]]);
+            $this->setAdresse1($arr[$keys[22]]);
         }
         if (array_key_exists($keys[23], $arr)) {
-            $this->setCodepostal($arr[$keys[23]]);
+            $this->setAdresse2($arr[$keys[23]]);
         }
         if (array_key_exists($keys[24], $arr)) {
-            $this->setVille($arr[$keys[24]]);
+            $this->setCodepostal($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setPays($arr[$keys[25]]);
+            $this->setVille($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
-            $this->setTelephone($arr[$keys[26]]);
+            $this->setPays($arr[$keys[26]]);
         }
         if (array_key_exists($keys[27], $arr)) {
-            $this->setPrefArticlesShow($arr[$keys[27]]);
+            $this->setTelephone($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setFbId($arr[$keys[28]]);
+            $this->setPrefArticlesShow($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
-            $this->setFbToken($arr[$keys[29]]);
+            $this->setFbId($arr[$keys[29]]);
         }
         if (array_key_exists($keys[30], $arr)) {
-            $this->setCountryId($arr[$keys[30]]);
+            $this->setFbToken($arr[$keys[30]]);
         }
         if (array_key_exists($keys[31], $arr)) {
-            $this->setPasswordResetToken($arr[$keys[31]]);
+            $this->setCountryId($arr[$keys[31]]);
         }
         if (array_key_exists($keys[32], $arr)) {
-            $this->setPasswordResetTokenCreated($arr[$keys[32]]);
+            $this->setPasswordResetToken($arr[$keys[32]]);
         }
         if (array_key_exists($keys[33], $arr)) {
-            $this->setUpdate($arr[$keys[33]]);
+            $this->setPasswordResetTokenCreated($arr[$keys[33]]);
         }
         if (array_key_exists($keys[34], $arr)) {
-            $this->setCreatedAt($arr[$keys[34]]);
+            $this->setUpdate($arr[$keys[34]]);
         }
         if (array_key_exists($keys[35], $arr)) {
-            $this->setUpdatedAt($arr[$keys[35]]);
+            $this->setCreatedAt($arr[$keys[35]]);
+        }
+        if (array_key_exists($keys[36], $arr)) {
+            $this->setUpdatedAt($arr[$keys[36]]);
         }
 
         return $this;
@@ -3152,6 +3250,9 @@ abstract class User implements ActiveRecordInterface
 
         if ($this->isColumnModified(UserTableMap::COL_ID)) {
             $criteria->add(UserTableMap::COL_ID, $this->id);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_SITE_ID)) {
+            $criteria->add(UserTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(UserTableMap::COL_EMAIL)) {
             $criteria->add(UserTableMap::COL_EMAIL, $this->email);
@@ -3344,6 +3445,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPassword($this->getPassword());
         $copyObj->setKey($this->getKey());
@@ -3431,6 +3533,57 @@ abstract class User implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param  ChildSite|null $v
+     * @return $this|\Model\User The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addUser($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws PropelException
+     */
+    public function getSite(ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addUsers($this);
+             */
+        }
+
+        return $this->aSite;
     }
 
 
@@ -4248,7 +4401,11 @@ abstract class User implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeUser($this);
+        }
         $this->id = null;
+        $this->site_id = null;
         $this->email = null;
         $this->user_password = null;
         $this->user_key = null;
@@ -4323,6 +4480,7 @@ abstract class User implements ActiveRecordInterface
         $this->collOptions = null;
         $this->collRights = null;
         $this->collSessions = null;
+        $this->aSite = null;
     }
 
     /**
@@ -4385,6 +4543,17 @@ abstract class User implements ActiveRecordInterface
             $this->alreadyInValidation = true;
             $retval = null;
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            // If validate() method exists, the validate-behavior is configured for related object
+            if (is_object($this->aSite) and method_exists($this->aSite, 'validate')) {
+                if (!$this->aSite->validate($validator)) {
+                    $failureMap->addAll($this->aSite->getValidationFailures());
+                }
+            }
 
             $retval = $validator->validate($this);
             if (count($retval) > 0) {

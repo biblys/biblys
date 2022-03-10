@@ -58,7 +58,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 36;
+    const NUM_COLUMNS = 37;
 
     /**
      * The number of lazy-loaded columns
@@ -68,12 +68,17 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 36;
+    const NUM_HYDRATE_COLUMNS = 37;
 
     /**
      * the column name for the id field
      */
     const COL_ID = 'users.id';
+
+    /**
+     * the column name for the site_id field
+     */
+    const COL_SITE_ID = 'users.site_id';
 
     /**
      * the column name for the Email field
@@ -262,11 +267,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Email', 'Password', 'Key', 'EmailKey', 'FacebookUid', 'Username', 'Slug', 'WishlistShip', 'Top', 'Biblio', 'AdresseIp', 'RecaptchaScore', 'Dateinscription', 'Dateconnexion', 'PublisherId', 'BookshopId', 'LibraryId', 'Civilite', 'Nom', 'Prenom', 'Adresse1', 'Adresse2', 'Codepostal', 'Ville', 'Pays', 'Telephone', 'PrefArticlesShow', 'FbId', 'FbToken', 'CountryId', 'PasswordResetToken', 'PasswordResetTokenCreated', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'email', 'password', 'key', 'emailKey', 'facebookUid', 'username', 'slug', 'wishlistShip', 'top', 'biblio', 'adresseIp', 'recaptchaScore', 'dateinscription', 'dateconnexion', 'publisherId', 'bookshopId', 'libraryId', 'civilite', 'nom', 'prenom', 'adresse1', 'adresse2', 'codepostal', 'ville', 'pays', 'telephone', 'prefArticlesShow', 'fbId', 'fbToken', 'countryId', 'passwordResetToken', 'passwordResetTokenCreated', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USER_PASSWORD, UserTableMap::COL_USER_KEY, UserTableMap::COL_EMAIL_KEY, UserTableMap::COL_FACEBOOK_UID, UserTableMap::COL_USER_SCREEN_NAME, UserTableMap::COL_USER_SLUG, UserTableMap::COL_USER_WISHLIST_SHIP, UserTableMap::COL_USER_TOP, UserTableMap::COL_USER_BIBLIO, UserTableMap::COL_ADRESSE_IP, UserTableMap::COL_RECAPTCHA_SCORE, UserTableMap::COL_DATEINSCRIPTION, UserTableMap::COL_DATECONNEXION, UserTableMap::COL_PUBLISHER_ID, UserTableMap::COL_BOOKSHOP_ID, UserTableMap::COL_LIBRARY_ID, UserTableMap::COL_USER_CIVILITE, UserTableMap::COL_USER_NOM, UserTableMap::COL_USER_PRENOM, UserTableMap::COL_USER_ADRESSE1, UserTableMap::COL_USER_ADRESSE2, UserTableMap::COL_USER_CODEPOSTAL, UserTableMap::COL_USER_VILLE, UserTableMap::COL_USER_PAYS, UserTableMap::COL_USER_TELEPHONE, UserTableMap::COL_USER_PREF_ARTICLES_SHOW, UserTableMap::COL_USER_FB_ID, UserTableMap::COL_USER_FB_TOKEN, UserTableMap::COL_COUNTRY_ID, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, UserTableMap::COL_USER_UPDATE, UserTableMap::COL_USER_CREATED, UserTableMap::COL_USER_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('id', 'Email', 'user_password', 'user_key', 'email_key', 'facebook_uid', 'user_screen_name', 'user_slug', 'user_wishlist_ship', 'user_top', 'user_biblio', 'adresse_ip', 'recaptcha_score', 'DateInscription', 'DateConnexion', 'publisher_id', 'bookshop_id', 'library_id', 'user_civilite', 'user_nom', 'user_prenom', 'user_adresse1', 'user_adresse2', 'user_codepostal', 'user_ville', 'user_pays', 'user_telephone', 'user_pref_articles_show', 'user_fb_id', 'user_fb_token', 'country_id', 'user_password_reset_token', 'user_password_reset_token_created', 'user_update', 'user_created', 'user_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, )
+        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'FacebookUid', 'Username', 'Slug', 'WishlistShip', 'Top', 'Biblio', 'AdresseIp', 'RecaptchaScore', 'Dateinscription', 'Dateconnexion', 'PublisherId', 'BookshopId', 'LibraryId', 'Civilite', 'Nom', 'Prenom', 'Adresse1', 'Adresse2', 'Codepostal', 'Ville', 'Pays', 'Telephone', 'PrefArticlesShow', 'FbId', 'FbToken', 'CountryId', 'PasswordResetToken', 'PasswordResetTokenCreated', 'Update', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('id', 'siteId', 'email', 'password', 'key', 'emailKey', 'facebookUid', 'username', 'slug', 'wishlistShip', 'top', 'biblio', 'adresseIp', 'recaptchaScore', 'dateinscription', 'dateconnexion', 'publisherId', 'bookshopId', 'libraryId', 'civilite', 'nom', 'prenom', 'adresse1', 'adresse2', 'codepostal', 'ville', 'pays', 'telephone', 'prefArticlesShow', 'fbId', 'fbToken', 'countryId', 'passwordResetToken', 'passwordResetTokenCreated', 'update', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USER_PASSWORD, UserTableMap::COL_USER_KEY, UserTableMap::COL_EMAIL_KEY, UserTableMap::COL_FACEBOOK_UID, UserTableMap::COL_USER_SCREEN_NAME, UserTableMap::COL_USER_SLUG, UserTableMap::COL_USER_WISHLIST_SHIP, UserTableMap::COL_USER_TOP, UserTableMap::COL_USER_BIBLIO, UserTableMap::COL_ADRESSE_IP, UserTableMap::COL_RECAPTCHA_SCORE, UserTableMap::COL_DATEINSCRIPTION, UserTableMap::COL_DATECONNEXION, UserTableMap::COL_PUBLISHER_ID, UserTableMap::COL_BOOKSHOP_ID, UserTableMap::COL_LIBRARY_ID, UserTableMap::COL_USER_CIVILITE, UserTableMap::COL_USER_NOM, UserTableMap::COL_USER_PRENOM, UserTableMap::COL_USER_ADRESSE1, UserTableMap::COL_USER_ADRESSE2, UserTableMap::COL_USER_CODEPOSTAL, UserTableMap::COL_USER_VILLE, UserTableMap::COL_USER_PAYS, UserTableMap::COL_USER_TELEPHONE, UserTableMap::COL_USER_PREF_ARTICLES_SHOW, UserTableMap::COL_USER_FB_ID, UserTableMap::COL_USER_FB_TOKEN, UserTableMap::COL_COUNTRY_ID, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, UserTableMap::COL_USER_UPDATE, UserTableMap::COL_USER_CREATED, UserTableMap::COL_USER_UPDATED, ),
+        self::TYPE_FIELDNAME     => array('id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'facebook_uid', 'user_screen_name', 'user_slug', 'user_wishlist_ship', 'user_top', 'user_biblio', 'adresse_ip', 'recaptcha_score', 'DateInscription', 'DateConnexion', 'publisher_id', 'bookshop_id', 'library_id', 'user_civilite', 'user_nom', 'user_prenom', 'user_adresse1', 'user_adresse2', 'user_codepostal', 'user_ville', 'user_pays', 'user_telephone', 'user_pref_articles_show', 'user_fb_id', 'user_fb_token', 'country_id', 'user_password_reset_token', 'user_password_reset_token_created', 'user_update', 'user_created', 'user_updated', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, )
     );
 
     /**
@@ -276,11 +281,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Email' => 1, 'Password' => 2, 'Key' => 3, 'EmailKey' => 4, 'FacebookUid' => 5, 'Username' => 6, 'Slug' => 7, 'WishlistShip' => 8, 'Top' => 9, 'Biblio' => 10, 'AdresseIp' => 11, 'RecaptchaScore' => 12, 'Dateinscription' => 13, 'Dateconnexion' => 14, 'PublisherId' => 15, 'BookshopId' => 16, 'LibraryId' => 17, 'Civilite' => 18, 'Nom' => 19, 'Prenom' => 20, 'Adresse1' => 21, 'Adresse2' => 22, 'Codepostal' => 23, 'Ville' => 24, 'Pays' => 25, 'Telephone' => 26, 'PrefArticlesShow' => 27, 'FbId' => 28, 'FbToken' => 29, 'CountryId' => 30, 'PasswordResetToken' => 31, 'PasswordResetTokenCreated' => 32, 'Update' => 33, 'CreatedAt' => 34, 'UpdatedAt' => 35, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'email' => 1, 'password' => 2, 'key' => 3, 'emailKey' => 4, 'facebookUid' => 5, 'username' => 6, 'slug' => 7, 'wishlistShip' => 8, 'top' => 9, 'biblio' => 10, 'adresseIp' => 11, 'recaptchaScore' => 12, 'dateinscription' => 13, 'dateconnexion' => 14, 'publisherId' => 15, 'bookshopId' => 16, 'libraryId' => 17, 'civilite' => 18, 'nom' => 19, 'prenom' => 20, 'adresse1' => 21, 'adresse2' => 22, 'codepostal' => 23, 'ville' => 24, 'pays' => 25, 'telephone' => 26, 'prefArticlesShow' => 27, 'fbId' => 28, 'fbToken' => 29, 'countryId' => 30, 'passwordResetToken' => 31, 'passwordResetTokenCreated' => 32, 'update' => 33, 'createdAt' => 34, 'updatedAt' => 35, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_EMAIL => 1, UserTableMap::COL_USER_PASSWORD => 2, UserTableMap::COL_USER_KEY => 3, UserTableMap::COL_EMAIL_KEY => 4, UserTableMap::COL_FACEBOOK_UID => 5, UserTableMap::COL_USER_SCREEN_NAME => 6, UserTableMap::COL_USER_SLUG => 7, UserTableMap::COL_USER_WISHLIST_SHIP => 8, UserTableMap::COL_USER_TOP => 9, UserTableMap::COL_USER_BIBLIO => 10, UserTableMap::COL_ADRESSE_IP => 11, UserTableMap::COL_RECAPTCHA_SCORE => 12, UserTableMap::COL_DATEINSCRIPTION => 13, UserTableMap::COL_DATECONNEXION => 14, UserTableMap::COL_PUBLISHER_ID => 15, UserTableMap::COL_BOOKSHOP_ID => 16, UserTableMap::COL_LIBRARY_ID => 17, UserTableMap::COL_USER_CIVILITE => 18, UserTableMap::COL_USER_NOM => 19, UserTableMap::COL_USER_PRENOM => 20, UserTableMap::COL_USER_ADRESSE1 => 21, UserTableMap::COL_USER_ADRESSE2 => 22, UserTableMap::COL_USER_CODEPOSTAL => 23, UserTableMap::COL_USER_VILLE => 24, UserTableMap::COL_USER_PAYS => 25, UserTableMap::COL_USER_TELEPHONE => 26, UserTableMap::COL_USER_PREF_ARTICLES_SHOW => 27, UserTableMap::COL_USER_FB_ID => 28, UserTableMap::COL_USER_FB_TOKEN => 29, UserTableMap::COL_COUNTRY_ID => 30, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN => 31, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED => 32, UserTableMap::COL_USER_UPDATE => 33, UserTableMap::COL_USER_CREATED => 34, UserTableMap::COL_USER_UPDATED => 35, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'Email' => 1, 'user_password' => 2, 'user_key' => 3, 'email_key' => 4, 'facebook_uid' => 5, 'user_screen_name' => 6, 'user_slug' => 7, 'user_wishlist_ship' => 8, 'user_top' => 9, 'user_biblio' => 10, 'adresse_ip' => 11, 'recaptcha_score' => 12, 'DateInscription' => 13, 'DateConnexion' => 14, 'publisher_id' => 15, 'bookshop_id' => 16, 'library_id' => 17, 'user_civilite' => 18, 'user_nom' => 19, 'user_prenom' => 20, 'user_adresse1' => 21, 'user_adresse2' => 22, 'user_codepostal' => 23, 'user_ville' => 24, 'user_pays' => 25, 'user_telephone' => 26, 'user_pref_articles_show' => 27, 'user_fb_id' => 28, 'user_fb_token' => 29, 'country_id' => 30, 'user_password_reset_token' => 31, 'user_password_reset_token_created' => 32, 'user_update' => 33, 'user_created' => 34, 'user_updated' => 35, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'FacebookUid' => 6, 'Username' => 7, 'Slug' => 8, 'WishlistShip' => 9, 'Top' => 10, 'Biblio' => 11, 'AdresseIp' => 12, 'RecaptchaScore' => 13, 'Dateinscription' => 14, 'Dateconnexion' => 15, 'PublisherId' => 16, 'BookshopId' => 17, 'LibraryId' => 18, 'Civilite' => 19, 'Nom' => 20, 'Prenom' => 21, 'Adresse1' => 22, 'Adresse2' => 23, 'Codepostal' => 24, 'Ville' => 25, 'Pays' => 26, 'Telephone' => 27, 'PrefArticlesShow' => 28, 'FbId' => 29, 'FbToken' => 30, 'CountryId' => 31, 'PasswordResetToken' => 32, 'PasswordResetTokenCreated' => 33, 'Update' => 34, 'CreatedAt' => 35, 'UpdatedAt' => 36, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'facebookUid' => 6, 'username' => 7, 'slug' => 8, 'wishlistShip' => 9, 'top' => 10, 'biblio' => 11, 'adresseIp' => 12, 'recaptchaScore' => 13, 'dateinscription' => 14, 'dateconnexion' => 15, 'publisherId' => 16, 'bookshopId' => 17, 'libraryId' => 18, 'civilite' => 19, 'nom' => 20, 'prenom' => 21, 'adresse1' => 22, 'adresse2' => 23, 'codepostal' => 24, 'ville' => 25, 'pays' => 26, 'telephone' => 27, 'prefArticlesShow' => 28, 'fbId' => 29, 'fbToken' => 30, 'countryId' => 31, 'passwordResetToken' => 32, 'passwordResetTokenCreated' => 33, 'update' => 34, 'createdAt' => 35, 'updatedAt' => 36, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_USER_PASSWORD => 3, UserTableMap::COL_USER_KEY => 4, UserTableMap::COL_EMAIL_KEY => 5, UserTableMap::COL_FACEBOOK_UID => 6, UserTableMap::COL_USER_SCREEN_NAME => 7, UserTableMap::COL_USER_SLUG => 8, UserTableMap::COL_USER_WISHLIST_SHIP => 9, UserTableMap::COL_USER_TOP => 10, UserTableMap::COL_USER_BIBLIO => 11, UserTableMap::COL_ADRESSE_IP => 12, UserTableMap::COL_RECAPTCHA_SCORE => 13, UserTableMap::COL_DATEINSCRIPTION => 14, UserTableMap::COL_DATECONNEXION => 15, UserTableMap::COL_PUBLISHER_ID => 16, UserTableMap::COL_BOOKSHOP_ID => 17, UserTableMap::COL_LIBRARY_ID => 18, UserTableMap::COL_USER_CIVILITE => 19, UserTableMap::COL_USER_NOM => 20, UserTableMap::COL_USER_PRENOM => 21, UserTableMap::COL_USER_ADRESSE1 => 22, UserTableMap::COL_USER_ADRESSE2 => 23, UserTableMap::COL_USER_CODEPOSTAL => 24, UserTableMap::COL_USER_VILLE => 25, UserTableMap::COL_USER_PAYS => 26, UserTableMap::COL_USER_TELEPHONE => 27, UserTableMap::COL_USER_PREF_ARTICLES_SHOW => 28, UserTableMap::COL_USER_FB_ID => 29, UserTableMap::COL_USER_FB_TOKEN => 30, UserTableMap::COL_COUNTRY_ID => 31, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN => 32, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED => 33, UserTableMap::COL_USER_UPDATE => 34, UserTableMap::COL_USER_CREATED => 35, UserTableMap::COL_USER_UPDATED => 36, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'facebook_uid' => 6, 'user_screen_name' => 7, 'user_slug' => 8, 'user_wishlist_ship' => 9, 'user_top' => 10, 'user_biblio' => 11, 'adresse_ip' => 12, 'recaptcha_score' => 13, 'DateInscription' => 14, 'DateConnexion' => 15, 'publisher_id' => 16, 'bookshop_id' => 17, 'library_id' => 18, 'user_civilite' => 19, 'user_nom' => 20, 'user_prenom' => 21, 'user_adresse1' => 22, 'user_adresse2' => 23, 'user_codepostal' => 24, 'user_ville' => 25, 'user_pays' => 26, 'user_telephone' => 27, 'user_pref_articles_show' => 28, 'user_fb_id' => 29, 'user_fb_token' => 30, 'country_id' => 31, 'user_password_reset_token' => 32, 'user_password_reset_token_created' => 33, 'user_update' => 34, 'user_created' => 35, 'user_updated' => 36, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, )
     );
 
     /**
@@ -296,6 +301,14 @@ class UserTableMap extends TableMap
         'UserTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
         'users.id' => 'ID',
+        'SiteId' => 'SITE_ID',
+        'User.SiteId' => 'SITE_ID',
+        'siteId' => 'SITE_ID',
+        'user.siteId' => 'SITE_ID',
+        'UserTableMap::COL_SITE_ID' => 'SITE_ID',
+        'COL_SITE_ID' => 'SITE_ID',
+        'site_id' => 'SITE_ID',
+        'users.site_id' => 'SITE_ID',
         'Email' => 'EMAIL',
         'User.Email' => 'EMAIL',
         'email' => 'EMAIL',
@@ -595,6 +608,7 @@ class UserTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('Email', 'Email', 'VARCHAR', false, 255, null);
         $this->addColumn('user_password', 'Password', 'VARCHAR', false, 255, null);
         $this->addColumn('user_key', 'Key', 'LONGVARCHAR', false, null, null);
@@ -637,6 +651,13 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -816,6 +837,7 @@ class UserTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(UserTableMap::COL_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_SITE_ID);
             $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
             $criteria->addSelectColumn(UserTableMap::COL_USER_PASSWORD);
             $criteria->addSelectColumn(UserTableMap::COL_USER_KEY);
@@ -853,6 +875,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_USER_UPDATED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.site_id');
             $criteria->addSelectColumn($alias . '.Email');
             $criteria->addSelectColumn($alias . '.user_password');
             $criteria->addSelectColumn($alias . '.user_key');
@@ -906,6 +929,7 @@ class UserTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(UserTableMap::COL_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_SITE_ID);
             $criteria->removeSelectColumn(UserTableMap::COL_EMAIL);
             $criteria->removeSelectColumn(UserTableMap::COL_USER_PASSWORD);
             $criteria->removeSelectColumn(UserTableMap::COL_USER_KEY);
@@ -943,6 +967,7 @@ class UserTableMap extends TableMap
             $criteria->removeSelectColumn(UserTableMap::COL_USER_UPDATED);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
+            $criteria->removeSelectColumn($alias . '.site_id');
             $criteria->removeSelectColumn($alias . '.Email');
             $criteria->removeSelectColumn($alias . '.user_password');
             $criteria->removeSelectColumn($alias . '.user_key');
