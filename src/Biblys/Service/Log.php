@@ -60,6 +60,10 @@ class Log
             self::_sendToRollbar($logger);
         }
 
+        if ($level === "CRITICAL ERROR") {
+            $level = Logger::CRITICAL;
+        }
+
         $logger->log($level, $message, $context);
     }
 
