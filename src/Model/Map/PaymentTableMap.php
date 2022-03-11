@@ -260,7 +260,7 @@ class PaymentTableMap extends TableMap
         // columns
         $this->addPrimaryKey('payment_id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
-        $this->addColumn('order_id', 'OrderId', 'INTEGER', false, null, null);
+        $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'orders', 'order_id', false, null, null);
         $this->addColumn('payment_amount', 'Amount', 'INTEGER', false, null, null);
         $this->addColumn('payment_mode', 'Mode', 'VARCHAR', false, 16, null);
         $this->addColumn('payment_provider_id', 'ProviderId', 'VARCHAR', false, 256, null);
@@ -275,6 +275,13 @@ class PaymentTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Order', '\\Model\\Order', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':order_id',
+    1 => ':order_id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

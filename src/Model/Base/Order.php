@@ -7,12 +7,16 @@ use \Exception;
 use \PDO;
 use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
+use Model\Payment as ChildPayment;
+use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Map\OrderTableMap;
+use Model\Map\PaymentTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -424,12 +428,26 @@ abstract class Order implements ActiveRecordInterface
     protected $order_updated;
 
     /**
+     * @var        ObjectCollection|ChildPayment[] Collection to store aggregation of ChildPayment objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildPayment> Collection to store aggregation of ChildPayment objects.
+     */
+    protected $collPayments;
+    protected $collPaymentsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPayment[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildPayment>
+     */
+    protected $paymentsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2611,6 +2629,8 @@ abstract class Order implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collPayments = null;
+
         } // if (deep)
     }
 
@@ -2736,6 +2756,24 @@ abstract class Order implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->paymentsScheduledForDeletion !== null) {
+                if (!$this->paymentsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->paymentsScheduledForDeletion as $payment) {
+                        // need to save related object because we set the relation to null
+                        $payment->save($con);
+                    }
+                    $this->paymentsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPayments !== null) {
+                foreach ($this->collPayments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -3304,10 +3342,11 @@ abstract class Order implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['Order'][$this->hashCode()])) {
@@ -3408,6 +3447,23 @@ abstract class Order implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collPayments) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'payments';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'paymentss';
+                        break;
+                    default:
+                        $key = 'Payments';
+                }
+
+                $result[$key] = $this->collPayments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -4095,6 +4151,20 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setUpdate($this->getUpdate());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getPayments() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPayment($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -4121,6 +4191,258 @@ abstract class Order implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Payment' === $relationName) {
+            $this->initPayments();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collPayments collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPayments()
+     */
+    public function clearPayments()
+    {
+        $this->collPayments = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPayments collection loaded partially.
+     */
+    public function resetPartialPayments($v = true)
+    {
+        $this->collPaymentsPartial = $v;
+    }
+
+    /**
+     * Initializes the collPayments collection.
+     *
+     * By default this just sets the collPayments collection to an empty array (like clearcollPayments());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPayments($overrideExisting = true)
+    {
+        if (null !== $this->collPayments && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PaymentTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPayments = new $collectionClassName;
+        $this->collPayments->setModel('\Model\Payment');
+    }
+
+    /**
+     * Gets an array of ChildPayment objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildOrder is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPayment[] List of ChildPayment objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPayment> List of ChildPayment objects
+     * @throws PropelException
+     */
+    public function getPayments(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentsPartial && !$this->isNew();
+        if (null === $this->collPayments || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collPayments) {
+                    $this->initPayments();
+                } else {
+                    $collectionClassName = PaymentTableMap::getTableMap()->getCollectionClassName();
+
+                    $collPayments = new $collectionClassName;
+                    $collPayments->setModel('\Model\Payment');
+
+                    return $collPayments;
+                }
+            } else {
+                $collPayments = ChildPaymentQuery::create(null, $criteria)
+                    ->filterByOrder($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPaymentsPartial && count($collPayments)) {
+                        $this->initPayments(false);
+
+                        foreach ($collPayments as $obj) {
+                            if (false == $this->collPayments->contains($obj)) {
+                                $this->collPayments->append($obj);
+                            }
+                        }
+
+                        $this->collPaymentsPartial = true;
+                    }
+
+                    return $collPayments;
+                }
+
+                if ($partial && $this->collPayments) {
+                    foreach ($this->collPayments as $obj) {
+                        if ($obj->isNew()) {
+                            $collPayments[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPayments = $collPayments;
+                $this->collPaymentsPartial = false;
+            }
+        }
+
+        return $this->collPayments;
+    }
+
+    /**
+     * Sets a collection of ChildPayment objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $payments A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildOrder The current object (for fluent API support)
+     */
+    public function setPayments(Collection $payments, ConnectionInterface $con = null)
+    {
+        /** @var ChildPayment[] $paymentsToDelete */
+        $paymentsToDelete = $this->getPayments(new Criteria(), $con)->diff($payments);
+
+
+        $this->paymentsScheduledForDeletion = $paymentsToDelete;
+
+        foreach ($paymentsToDelete as $paymentRemoved) {
+            $paymentRemoved->setOrder(null);
+        }
+
+        $this->collPayments = null;
+        foreach ($payments as $payment) {
+            $this->addPayment($payment);
+        }
+
+        $this->collPayments = $payments;
+        $this->collPaymentsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Payment objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Payment objects.
+     * @throws PropelException
+     */
+    public function countPayments(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentsPartial && !$this->isNew();
+        if (null === $this->collPayments || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPayments) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPayments());
+            }
+
+            $query = ChildPaymentQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByOrder($this)
+                ->count($con);
+        }
+
+        return count($this->collPayments);
+    }
+
+    /**
+     * Method called to associate a ChildPayment object to this object
+     * through the ChildPayment foreign key attribute.
+     *
+     * @param  ChildPayment $l ChildPayment
+     * @return $this|\Model\Order The current object (for fluent API support)
+     */
+    public function addPayment(ChildPayment $l)
+    {
+        if ($this->collPayments === null) {
+            $this->initPayments();
+            $this->collPaymentsPartial = true;
+        }
+
+        if (!$this->collPayments->contains($l)) {
+            $this->doAddPayment($l);
+
+            if ($this->paymentsScheduledForDeletion and $this->paymentsScheduledForDeletion->contains($l)) {
+                $this->paymentsScheduledForDeletion->remove($this->paymentsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPayment $payment The ChildPayment object to add.
+     */
+    protected function doAddPayment(ChildPayment $payment)
+    {
+        $this->collPayments[]= $payment;
+        $payment->setOrder($this);
+    }
+
+    /**
+     * @param  ChildPayment $payment The ChildPayment object to remove.
+     * @return $this|ChildOrder The current object (for fluent API support)
+     */
+    public function removePayment(ChildPayment $payment)
+    {
+        if ($this->getPayments()->contains($payment)) {
+            $pos = $this->collPayments->search($payment);
+            $this->collPayments->remove($pos);
+            if (null === $this->paymentsScheduledForDeletion) {
+                $this->paymentsScheduledForDeletion = clone $this->collPayments;
+                $this->paymentsScheduledForDeletion->clear();
+            }
+            $this->paymentsScheduledForDeletion[]= $payment;
+            $payment->setOrder(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -4199,8 +4521,14 @@ abstract class Order implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collPayments) {
+                foreach ($this->collPayments as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collPayments = null;
     }
 
     /**

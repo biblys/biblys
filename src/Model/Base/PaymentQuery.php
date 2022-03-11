@@ -10,6 +10,7 @@ use Model\Map\PaymentTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -48,6 +49,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildPaymentQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPaymentQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildPaymentQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildPaymentQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildPaymentQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ *
+ * @method     ChildPaymentQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ *
+ * @method     ChildPaymentQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildPaymentQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildPaymentQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ *
+ * @method     \Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPayment|null findOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query
  * @method     ChildPayment findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPayment matching the query, or a new ChildPayment object populated from the query conditions when no match is found
@@ -380,6 +393,8 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterByOrderId(array('min' => 12)); // WHERE order_id > 12
      * </code>
      *
+     * @see       filterByOrder()
+     *
      * @param     mixed $orderId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -656,6 +671,138 @@ abstract class PaymentQuery extends ModelCriteria
         return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, $updatedAt, $comparison);
     }
 
+    /**
+     * Filter the query by a related \Model\Order object
+     *
+     * @param \Model\Order|ObjectCollection $order The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterByOrder($order, $comparison = null)
+    {
+        if ($order instanceof \Model\Order) {
+            return $this
+                ->addUsingAlias(PaymentTableMap::COL_ORDER_ID, $order->getId(), $comparison);
+        } elseif ($order instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(PaymentTableMap::COL_ORDER_ID, $order->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function joinOrder($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Model\OrderQuery');
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @param callable(\Model\OrderQuery):\Model\OrderQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withOrderQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useOrderQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Order table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\OrderQuery The inner query object of the EXISTS statement
+     */
+    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Order table for a NOT EXISTS query.
+     *
+     * @see useOrderExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Exclude object from result
      *

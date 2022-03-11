@@ -835,6 +835,13 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Payment', '\\Model\\Payment', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':order_id',
+    1 => ':order_id',
+  ),
+), null, null, 'Payments', false);
     } // buildRelations()
 
     /**

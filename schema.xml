@@ -905,6 +905,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="orders" skipSql="true">
+      <reference local="order_id" foreign="order_id"/>
+    </foreign-key>
   </table>
   <table name="people" idMethod="native" phpName="People" description="Intervenants">
     <column name="people_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
