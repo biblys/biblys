@@ -39,7 +39,6 @@ class TemplateLoader implements LoaderInterface
      *
      * @return string The cache key
      * @throws Exception
-     * @throws Exception
      */
     public function getCacheKey(string $name): string
     {

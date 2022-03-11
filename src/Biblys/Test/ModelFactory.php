@@ -10,6 +10,7 @@ use Model\BookCollection;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
+use Model\Option;
 use Model\Link;
 use Model\Order;
 use Model\Page;
@@ -309,6 +310,18 @@ class ModelFactory
     /**
      * @throws PropelException
      */
+    public static function createSiteOption($site, $key, $value)
+    {
+        $option = new Option();
+        $option->setSite($site);
+        $option->setKey($key);
+        $option->setValue($value);
+        $option->save();
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createPublisherUser(Publisher $publisher): User
     {
         $user = new User();
@@ -377,4 +390,5 @@ class ModelFactory
         $contribution->setJobId(1);
         $contribution->save();
     }
+
 }

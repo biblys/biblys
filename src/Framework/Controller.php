@@ -2,7 +2,7 @@
 
 namespace Framework;
 
-use Biblys\Axys\Client;
+use Axys\LegacyClient;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -221,7 +221,7 @@ class Controller
 
         $config = new Config();
         $currentUser = CurrentUser::buildFromRequest($request);
-        $axys = new Client($config->get("axys"), $currentUser->getToken());
+        $axys = new LegacyClient($config->get("axys"), $currentUser->getToken());
 
         // Global variables
         $app = [

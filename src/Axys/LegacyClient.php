@@ -2,6 +2,13 @@
 
 namespace Axys;
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
 class LegacyClient
 {
     private $options;
@@ -43,6 +50,58 @@ class LegacyClient
         $this->base_url = $this->options['protocol'].'://'.$this->options['host'].$port;
 
         $this->userToken = $userToken;
+    }
+
+    /**
+     * @param Config $config
+     * @param UrlGenerator $urlgenerator
+     * @param Request $request
+     * @return string
+     * @throws PropelException
+     */
+    public static function buildMenu(
+        Config       $config,
+        UrlGenerator $urlgenerator,
+        Request      $request
+    ): string
+    {
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $site = $currentSite->getSite();
+        $currentUser = CurrentUser::buildFromRequest($request);
+
+        $menuEntries = [];
+
+        if ($site->getWishlist()) {
+            $menuEntries[] = '<li><a href="/pages/log_mywishes" rel="nofollow">mes envies</a></li>';
+        }
+
+        if ($currentSite->hasOptionEnabled("alerts")) {
+            $menuEntries[] = '<li><a href="/pages/log_myalerts" rel="nofollow">mes alertes</a></li>';
+        }
+
+        if ($site->getVpc()) {
+            $menuEntries[] = '<li><a href="/pages/log_myorders" rel="nofollow">mes commandes</a></li>';
+        }
+
+        if ($site->getShop()) {
+            $menuEntries[] = '<li><a href="/pages/log_mybooks" rel="nofollow">mes achats</a></li>';
+        }
+
+        if ($currentSite->hasOptionEnabled("show_elibrary")) {
+            $menuEntries[] = '<li><a href="/pages/log_myebooks" rel="nofollow">ma bibliothèque</a></li>';
+        }
+
+        if ($currentUser->hasPublisherRight()) {
+            $menuEntries[] = '<li><a href="/pages/log_dashboard" rel="nofollow">tableau de bord</a></li>';
+        }
+
+        if ($currentUser->isAdminForSite($site)) {
+            $menuEntries[] = '<li>
+                <a href="' . $urlgenerator->generate('main_admin') . '" rel="nofollow">administration</a>
+            </li>';
+        }
+
+        return '<ul id="addToAxysMenu" class="hidden">' . join($menuEntries) . '</ul>';
     }
 
     public function getLoginUrl(): string

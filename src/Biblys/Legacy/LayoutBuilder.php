@@ -5,7 +5,7 @@ namespace Biblys\Legacy;
 use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\CurrentSite;
+use Cart;
 use Exception;
 use Propel\Runtime\Exception\PropelException;
 use Site;
@@ -79,32 +79,8 @@ class LayoutBuilder
             include $php_wrap;
         }
 
-
         // Add custom entries to Axys menu
-        $menuAxys = null;
-        if ($site->get('wishlist')) {
-            $menuAxys .= '<li><a href="/pages/log_mywishes" rel="nofollow">mes envies</a></li>';
-        }
-        $currentSite = CurrentSite::buildFromConfig($config);
-        if ($currentSite->hasOptionEnabled("alerts")) {
-            $menuAxys .= '<li><a href="/pages/log_myalerts" rel="nofollow">mes alertes</a></li>';
-        }
-        if ($site->get('vpc')) {
-            $menuAxys .= '<li><a href="/pages/log_myorders" rel="nofollow">mes commandes</a></li>';
-        }
-        if ($site->get('shop')) {
-            $menuAxys .= '<li><a href="/pages/log_mybooks" rel="nofollow">mes achats</a></li>';
-        }
-        if ($site->getOpt('show_elibrary')) {
-            $menuAxys .= '<li><a href="/pages/log_myebooks" rel="nofollow">ma bibliothèque</a></li>';
-        }
-        if ($currentVisitor->hasRight('publisher') || $currentVisitor->hasRight('bookshop') || $currentVisitor->hasRight('library')) {
-            $menuAxys .= '<li><a href="/pages/log_dashboard" rel="nofollow">tableau de bord</a></li>';
-        }
-        if ($currentVisitor->isAdmin() && isset($urlgenerator)) {
-            $menuAxys .= '<li><a href="' . $urlgenerator->generate('main_admin') . '" rel="nofollow">administration</a></li>';
-        }
-        $axysMenu = '<ul id="addToAxysMenu" class="hidden">' . $menuAxys . '</ul>';
+        $axysMenu = AxysClient::buildMenu($config, $urlgenerator, $request);
 
         $pageTitle = $site->get('title');
         if (isset($_PAGE_TITLE)) {
