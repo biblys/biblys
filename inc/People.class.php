@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Contributor\Contributor;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class People extends Entity
@@ -81,27 +82,34 @@ class People extends Entity
 
         /**
          * Get all people related to articles from a publisher
-         * @param  int $publisher_id the publisher's id
-         * @return Array of People   the people
+         * @return Contributor[]
          */
-        public function getAllFromCatalog()
+        public function getAllFromCatalog(): array
         {
             $am = new ArticleManager();
             $articles = $am->getAll([], [], false);
 
-            $people = [];
+            $contributors = [];
             foreach ($articles as $article) {
-                $people = array_merge($people, $article->getContributors());
+                $contributors = array_merge($contributors, $article->getContributors());
             }
 
             // Remove duplicate
-            $people = array_unique($people);
-
-            usort($people, function($a, $b) {
-                return strcmp($a->get('last_name'), $b->get('last_name'));
+            $contributorIds = [];
+            $uniqueContributors = array_filter($contributors, function($contributor) use
+            (&$contributorIds) {
+                if (in_array($contributor->getId(), $contributorIds)) {
+                    return false;
+                }
+                $contributorIds[] = $contributor->getId();
+                return true;
             });
 
-            return $people;
+            usort($uniqueContributors, function($a, $b) {
+                return strcmp($a->getLastName(), $b->getLastName());
+            });
+
+            return $uniqueContributors;
         }
 
         public function preprocess($people)
