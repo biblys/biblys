@@ -145,6 +145,7 @@ class ModelFactory
     {
         $people = new People();
         $people->setGender($attributes["gender"] ?? "N");
+        $people->setUrl($attributes["slug"] ?? "slug");
         $people->save();
 
         return $people;

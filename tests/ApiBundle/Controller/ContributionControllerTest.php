@@ -198,10 +198,12 @@ class ContributionControllerTest extends TestCase
     {
         // given
         $article = EntityFactory::createArticle();
+        $people = ModelFactory::createPeople();
         $content = '{"job_id":"2"}';
         $request = RequestFactory::createAuthRequestForAdminUser($content);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
+        $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
         $controller = new ContributionController();
@@ -242,6 +244,7 @@ class ContributionControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher, $content);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
+        $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
         $controller = new ContributionController();
@@ -269,6 +272,7 @@ class ContributionControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
+        $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
         $controller = new ContributionController();
@@ -307,6 +311,7 @@ class ContributionControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
         $contribution = new Role();
         $contribution->setArticleId($article->get("id"));
+        $contribution->setPeople(ModelFactory::createPeople());
         $contribution->setJobId(1);
         $contribution->save();
         $controller = new ContributionController();
