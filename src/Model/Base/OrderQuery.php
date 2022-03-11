@@ -27,8 +27,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
  * @method     ChildOrderQuery orderBySellerId($order = Criteria::ASC) Order by the seller_id column
  * @method     ChildOrderQuery orderByType($order = Criteria::ASC) Order by the order_type column
- * @method     ChildOrderQuery orderByAs-a-gift($order = Criteria::ASC) Order by the order_as-a-gift column
- * @method     ChildOrderQuery orderByGift-recipient($order = Criteria::ASC) Order by the order_gift-recipient column
+ * @method     ChildOrderQuery orderByAsAGift($order = Criteria::ASC) Order by the order_as_a_gift column
+ * @method     ChildOrderQuery orderByGiftRecipient($order = Criteria::ASC) Order by the order_gift_recipient column
  * @method     ChildOrderQuery orderByAmount($order = Criteria::ASC) Order by the order_amount column
  * @method     ChildOrderQuery orderByDiscount($order = Criteria::ASC) Order by the order_discount column
  * @method     ChildOrderQuery orderByAmountTobepaid($order = Criteria::ASC) Order by the order_amount_tobepaid column
@@ -78,8 +78,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByCustomerId() Group by the customer_id column
  * @method     ChildOrderQuery groupBySellerId() Group by the seller_id column
  * @method     ChildOrderQuery groupByType() Group by the order_type column
- * @method     ChildOrderQuery groupByAs-a-gift() Group by the order_as-a-gift column
- * @method     ChildOrderQuery groupByGift-recipient() Group by the order_gift-recipient column
+ * @method     ChildOrderQuery groupByAsAGift() Group by the order_as_a_gift column
+ * @method     ChildOrderQuery groupByGiftRecipient() Group by the order_gift_recipient column
  * @method     ChildOrderQuery groupByAmount() Group by the order_amount column
  * @method     ChildOrderQuery groupByDiscount() Group by the order_discount column
  * @method     ChildOrderQuery groupByAmountTobepaid() Group by the order_amount_tobepaid column
@@ -152,8 +152,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column
  * @method     ChildOrder|null findOneBySellerId(int $seller_id) Return the first ChildOrder filtered by the seller_id column
  * @method     ChildOrder|null findOneByType(string $order_type) Return the first ChildOrder filtered by the order_type column
- * @method     ChildOrder|null findOneByAs-a-gift(string $order_as-a-gift) Return the first ChildOrder filtered by the order_as-a-gift column
- * @method     ChildOrder|null findOneByGift-recipient(int $order_gift-recipient) Return the first ChildOrder filtered by the order_gift-recipient column
+ * @method     ChildOrder|null findOneByAsAGift(string $order_as_a_gift) Return the first ChildOrder filtered by the order_as_a_gift column
+ * @method     ChildOrder|null findOneByGiftRecipient(int $order_gift_recipient) Return the first ChildOrder filtered by the order_gift_recipient column
  * @method     ChildOrder|null findOneByAmount(int $order_amount) Return the first ChildOrder filtered by the order_amount column
  * @method     ChildOrder|null findOneByDiscount(int $order_discount) Return the first ChildOrder filtered by the order_discount column
  * @method     ChildOrder|null findOneByAmountTobepaid(int $order_amount_tobepaid) Return the first ChildOrder filtered by the order_amount_tobepaid column
@@ -206,8 +206,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySellerId(int $seller_id) Return the first ChildOrder filtered by the seller_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByType(string $order_type) Return the first ChildOrder filtered by the order_type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByAs-a-gift(string $order_as-a-gift) Return the first ChildOrder filtered by the order_as-a-gift column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByGift-recipient(int $order_gift-recipient) Return the first ChildOrder filtered by the order_gift-recipient column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByAsAGift(string $order_as_a_gift) Return the first ChildOrder filtered by the order_as_a_gift column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByGiftRecipient(int $order_gift_recipient) Return the first ChildOrder filtered by the order_gift_recipient column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByAmount(int $order_amount) Return the first ChildOrder filtered by the order_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByDiscount(int $order_discount) Return the first ChildOrder filtered by the order_discount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByAmountTobepaid(int $order_amount_tobepaid) Return the first ChildOrder filtered by the order_amount_tobepaid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -266,10 +266,10 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
  * @method     ChildOrder[]|ObjectCollection findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
- * @method     ChildOrder[]|ObjectCollection findByAs-a-gift(string $order_as-a-gift) Return ChildOrder objects filtered by the order_as-a-gift column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAs-a-gift(string $order_as-a-gift) Return ChildOrder objects filtered by the order_as-a-gift column
- * @method     ChildOrder[]|ObjectCollection findByGift-recipient(int $order_gift-recipient) Return ChildOrder objects filtered by the order_gift-recipient column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByGift-recipient(int $order_gift-recipient) Return ChildOrder objects filtered by the order_gift-recipient column
+ * @method     ChildOrder[]|ObjectCollection findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @method     ChildOrder[]|ObjectCollection findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
+ * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
  * @method     ChildOrder[]|ObjectCollection findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
  * @method     ChildOrder[]|ObjectCollection findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
@@ -451,7 +451,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as-a-gift, order_gift-recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_utm_source, order_utm_campaign, order_utm_medium, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
+        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_utm_source, order_utm_campaign, order_utm_medium, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -797,41 +797,41 @@ abstract class OrderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the order_as-a-gift column
+     * Filter the query on the order_as_a_gift column
      *
      * Example usage:
      * <code>
-     * $query->filterByAs-a-gift('fooValue');   // WHERE order_as-a-gift = 'fooValue'
-     * $query->filterByAs-a-gift('%fooValue%', Criteria::LIKE); // WHERE order_as-a-gift LIKE '%fooValue%'
+     * $query->filterByAsAGift('fooValue');   // WHERE order_as_a_gift = 'fooValue'
+     * $query->filterByAsAGift('%fooValue%', Criteria::LIKE); // WHERE order_as_a_gift LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $as-a-gift The value to use as filter.
+     * @param     string $asAGift The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
-    public function filterByAs-a-gift($as-a-gift = null, $comparison = null)
+    public function filterByAsAGift($asAGift = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($as-a-gift)) {
+            if (is_array($asAGift)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_AS_A_GIFT, $as-a-gift, $comparison);
+        return $this->addUsingAlias(OrderTableMap::COL_AS_A_GIFT, $asAGift, $comparison);
     }
 
     /**
-     * Filter the query on the order_gift-recipient column
+     * Filter the query on the order_gift_recipient column
      *
      * Example usage:
      * <code>
-     * $query->filterByGift-recipient(1234); // WHERE order_gift-recipient = 1234
-     * $query->filterByGift-recipient(array(12, 34)); // WHERE order_gift-recipient IN (12, 34)
-     * $query->filterByGift-recipient(array('min' => 12)); // WHERE order_gift-recipient > 12
+     * $query->filterByGiftRecipient(1234); // WHERE order_gift_recipient = 1234
+     * $query->filterByGiftRecipient(array(12, 34)); // WHERE order_gift_recipient IN (12, 34)
+     * $query->filterByGiftRecipient(array('min' => 12)); // WHERE order_gift_recipient > 12
      * </code>
      *
-     * @param     mixed $gift-recipient The value to use as filter.
+     * @param     mixed $giftRecipient The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -839,16 +839,16 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
-    public function filterByGift-recipient($gift-recipient = null, $comparison = null)
+    public function filterByGiftRecipient($giftRecipient = null, $comparison = null)
     {
-        if (is_array($gift-recipient)) {
+        if (is_array($giftRecipient)) {
             $useMinMax = false;
-            if (isset($gift-recipient['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $gift-recipient['min'], Criteria::GREATER_EQUAL);
+            if (isset($giftRecipient['min'])) {
+                $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $giftRecipient['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($gift-recipient['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $gift-recipient['max'], Criteria::LESS_EQUAL);
+            if (isset($giftRecipient['max'])) {
+                $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $giftRecipient['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -859,7 +859,7 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $gift-recipient, $comparison);
+        return $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $giftRecipient, $comparison);
     }
 
     /**

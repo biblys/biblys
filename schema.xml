@@ -811,8 +811,8 @@
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="seller_id" phpName="SellerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="order_type" phpName="Type" type="VARCHAR" size="8" defaultValue=""/>
-    <column name="order_as-a-gift" phpName="As-a-gift" tableMapName="as_a_gift" type="VARCHAR" size="16"/>
-    <column name="order_gift-recipient" phpName="Gift-recipient" tableMapName="gift_recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="order_as_a_gift" phpName="AsAGift" tableMapName="as_a_gift" type="VARCHAR" size="16"/>
+    <column name="order_gift_recipient" phpName="GiftRecipient" tableMapName="gift_recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="order_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
     <column name="order_discount" phpName="Discount" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="order_amount_tobepaid" phpName="AmountTobepaid" type="INTEGER" defaultValue="0"/>

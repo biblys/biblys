@@ -117,18 +117,18 @@ abstract class Order implements ActiveRecordInterface
     protected $order_type;
 
     /**
-     * The value for the order_as-a-gift field.
+     * The value for the order_as_a_gift field.
      *
      * @var        string|null
      */
-    protected $order_as-a-gift;
+    protected $order_as_a_gift;
 
     /**
-     * The value for the order_gift-recipient field.
+     * The value for the order_gift_recipient field.
      *
      * @var        int|null
      */
-    protected $order_gift-recipient;
+    protected $order_gift_recipient;
 
     /**
      * The value for the order_amount field.
@@ -767,23 +767,23 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Get the [order_as-a-gift] column value.
+     * Get the [order_as_a_gift] column value.
      *
      * @return string|null
      */
-    public function getAs-a-gift()
+    public function getAsAGift()
     {
-        return $this->order_as-a-gift;
+        return $this->order_as_a_gift;
     }
 
     /**
-     * Get the [order_gift-recipient] column value.
+     * Get the [order_gift_recipient] column value.
      *
      * @return int|null
      */
-    public function getGift-recipient()
+    public function getGiftRecipient()
     {
-        return $this->order_gift-recipient;
+        return $this->order_gift_recipient;
     }
 
     /**
@@ -1445,44 +1445,44 @@ abstract class Order implements ActiveRecordInterface
     } // setType()
 
     /**
-     * Set the value of [order_as-a-gift] column.
+     * Set the value of [order_as_a_gift] column.
      *
      * @param string|null $v New value
      * @return $this|\Model\Order The current object (for fluent API support)
      */
-    public function setAs-a-gift($v)
+    public function setAsAGift($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->order_as-a-gift !== $v) {
-            $this->order_as-a-gift = $v;
+        if ($this->order_as_a_gift !== $v) {
+            $this->order_as_a_gift = $v;
             $this->modifiedColumns[OrderTableMap::COL_AS_A_GIFT] = true;
         }
 
         return $this;
-    } // setAs-a-gift()
+    } // setAsAGift()
 
     /**
-     * Set the value of [order_gift-recipient] column.
+     * Set the value of [order_gift_recipient] column.
      *
      * @param int|null $v New value
      * @return $this|\Model\Order The current object (for fluent API support)
      */
-    public function setGift-recipient($v)
+    public function setGiftRecipient($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->order_gift-recipient !== $v) {
-            $this->order_gift-recipient = $v;
+        if ($this->order_gift_recipient !== $v) {
+            $this->order_gift_recipient = $v;
             $this->modifiedColumns[OrderTableMap::COL_GIFT_RECIPIENT] = true;
         }
 
         return $this;
-    } // setGift-recipient()
+    } // setGiftRecipient()
 
     /**
      * Set the value of [order_amount] column.
@@ -2405,11 +2405,11 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrderTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_type = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrderTableMap::translateFieldName('As-a-gift', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->order_as-a-gift = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrderTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->order_as_a_gift = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : OrderTableMap::translateFieldName('Gift-recipient', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->order_gift-recipient = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : OrderTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->order_gift_recipient = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : OrderTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_amount = (null !== $col) ? (int) $col : null;
@@ -2824,10 +2824,10 @@ abstract class Order implements ActiveRecordInterface
             $modifiedColumns[':p' . $index++]  = 'order_type';
         }
         if ($this->isColumnModified(OrderTableMap::COL_AS_A_GIFT)) {
-            $modifiedColumns[':p' . $index++]  = 'order_as-a-gift';
+            $modifiedColumns[':p' . $index++]  = 'order_as_a_gift';
         }
         if ($this->isColumnModified(OrderTableMap::COL_GIFT_RECIPIENT)) {
-            $modifiedColumns[':p' . $index++]  = 'order_gift-recipient';
+            $modifiedColumns[':p' . $index++]  = 'order_gift_recipient';
         }
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = 'order_amount';
@@ -2984,11 +2984,11 @@ abstract class Order implements ActiveRecordInterface
                     case 'order_type':
                         $stmt->bindValue($identifier, $this->order_type, PDO::PARAM_STR);
                         break;
-                    case 'order_as-a-gift':
-                        $stmt->bindValue($identifier, $this->order_as-a-gift, PDO::PARAM_STR);
+                    case 'order_as_a_gift':
+                        $stmt->bindValue($identifier, $this->order_as_a_gift, PDO::PARAM_STR);
                         break;
-                    case 'order_gift-recipient':
-                        $stmt->bindValue($identifier, $this->order_gift-recipient, PDO::PARAM_INT);
+                    case 'order_gift_recipient':
+                        $stmt->bindValue($identifier, $this->order_gift_recipient, PDO::PARAM_INT);
                         break;
                     case 'order_amount':
                         $stmt->bindValue($identifier, $this->order_amount, PDO::PARAM_INT);
@@ -3197,10 +3197,10 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getType();
                 break;
             case 7:
-                return $this->getAs-a-gift();
+                return $this->getAsAGift();
                 break;
             case 8:
-                return $this->getGift-recipient();
+                return $this->getGiftRecipient();
                 break;
             case 9:
                 return $this->getAmount();
@@ -3362,8 +3362,8 @@ abstract class Order implements ActiveRecordInterface
             $keys[4] => $this->getCustomerId(),
             $keys[5] => $this->getSellerId(),
             $keys[6] => $this->getType(),
-            $keys[7] => $this->getAs-a-gift(),
-            $keys[8] => $this->getGift-recipient(),
+            $keys[7] => $this->getAsAGift(),
+            $keys[8] => $this->getGiftRecipient(),
             $keys[9] => $this->getAmount(),
             $keys[10] => $this->getDiscount(),
             $keys[11] => $this->getAmountTobepaid(),
@@ -3519,10 +3519,10 @@ abstract class Order implements ActiveRecordInterface
                 $this->setType($value);
                 break;
             case 7:
-                $this->setAs-a-gift($value);
+                $this->setAsAGift($value);
                 break;
             case 8:
-                $this->setGift-recipient($value);
+                $this->setGiftRecipient($value);
                 break;
             case 9:
                 $this->setAmount($value);
@@ -3695,10 +3695,10 @@ abstract class Order implements ActiveRecordInterface
             $this->setType($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAs-a-gift($arr[$keys[7]]);
+            $this->setAsAGift($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setGift-recipient($arr[$keys[8]]);
+            $this->setGiftRecipient($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setAmount($arr[$keys[9]]);
@@ -3888,10 +3888,10 @@ abstract class Order implements ActiveRecordInterface
             $criteria->add(OrderTableMap::COL_ORDER_TYPE, $this->order_type);
         }
         if ($this->isColumnModified(OrderTableMap::COL_AS_A_GIFT)) {
-            $criteria->add(OrderTableMap::COL_AS_A_GIFT, $this->order_as-a-gift);
+            $criteria->add(OrderTableMap::COL_AS_A_GIFT, $this->order_as_a_gift);
         }
         if ($this->isColumnModified(OrderTableMap::COL_GIFT_RECIPIENT)) {
-            $criteria->add(OrderTableMap::COL_GIFT_RECIPIENT, $this->order_gift-recipient);
+            $criteria->add(OrderTableMap::COL_GIFT_RECIPIENT, $this->order_gift_recipient);
         }
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_AMOUNT)) {
             $criteria->add(OrderTableMap::COL_ORDER_AMOUNT, $this->order_amount);
@@ -4108,8 +4108,8 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setCustomerId($this->getCustomerId());
         $copyObj->setSellerId($this->getSellerId());
         $copyObj->setType($this->getType());
-        $copyObj->setAs-a-gift($this->getAs-a-gift());
-        $copyObj->setGift-recipient($this->getGift-recipient());
+        $copyObj->setAsAGift($this->getAsAGift());
+        $copyObj->setGiftRecipient($this->getGiftRecipient());
         $copyObj->setAmount($this->getAmount());
         $copyObj->setDiscount($this->getDiscount());
         $copyObj->setAmountTobepaid($this->getAmountTobepaid());
@@ -4459,8 +4459,8 @@ abstract class Order implements ActiveRecordInterface
         $this->customer_id = null;
         $this->seller_id = null;
         $this->order_type = null;
-        $this->order_as-a-gift = null;
-        $this->order_gift-recipient = null;
+        $this->order_as_a_gift = null;
+        $this->order_gift_recipient = null;
         $this->order_amount = null;
         $this->order_discount = null;
         $this->order_amount_tobepaid = null;
