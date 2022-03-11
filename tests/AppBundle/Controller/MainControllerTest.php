@@ -319,7 +319,7 @@ class MainControllerTest extends TestCase
         );
         $this->assertStringContainsString(
             'Mise à jour
-                          <span class="icon-badge">1</span>',
+                              <span class="icon-badge">1</span>',
             $response->getContent(),
             "it should contain the update notifications badge"
         );

@@ -1,12 +1,22 @@
-<h1>Mise à jour {{ release.version }}</h1>
+{% extends "layout:base.html.twig" %}
 
-<p>{{ release.date|date('j f Y') }}</p>
+{% block title %}
+  Historique des mises à jour
+{% endblock %}
 
-<p>{{ release.notes|nl2br }}</p>
+{% block main %}
 
-<p>
-  <a class="btn btn-default" href="{{ path('maintenance_changelog_index') }}">
-    <span class="fa fa-arrow-left"></span>&nbsp;
-    Retour aux mises à jour
-  </a>
-</p>
+  <h1>Historique des mises à jour</h1>
+
+  <p>{{ release.date|date('j f Y') }}</p>
+
+  <p>{{ release.notes|nl2br }}</p>
+
+  <p>
+    <a class="btn btn-default" href="{{ path('maintenance_changelog_index') }}">
+      <span class="fa fa-arrow-left"></span>&nbsp;
+      Retour aux mises à jour
+    </a>
+  </p>
+
+{% endblock %}

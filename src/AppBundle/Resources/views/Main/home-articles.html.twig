@@ -1,3 +1,11 @@
-<h1>Dernières parutions</h1>
+{% extends "layout:base.html.twig" %}
 
-{% include 'AppBundle:Article:_list.html.twig' %}
+{% block title %}
+  Dernières parutions
+{% endblock %}
+
+{% block main %}
+  <h1>Dernières parutions</h1>
+
+  {% include 'AppBundle:Article:_list.html.twig' %}
+{% endblock %}

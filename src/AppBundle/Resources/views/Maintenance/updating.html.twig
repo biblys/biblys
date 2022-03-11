@@ -1,11 +1,19 @@
-<h1>Mise à jour de Biblys</h1>
+{% extends "layout:base.html.twig" %}
 
-<p class="alert alert-info">
-  <i class="fa fa-cog fa-spin"></i> Mise à jour de {{ current }} à {{ target }} en cours...
-</p>
+{% block title %}
+  Mise à jour de Biblys
+{% endblock %}
 
-<script type="text/javascript">
-  setTimeout(function() {
-    window.location.reload();
-  }, 5000)
-</script>
+{% block main %}
+  <h1>Mise à jour de Biblys</h1>
+
+  <p class="alert alert-info">
+    <i class="fa fa-cog fa-spin"></i> Mise à jour de {{ current }} à {{ target }} en cours...
+  </p>
+
+  <script type="text/javascript">
+    setTimeout(function() {
+      window.location.reload();
+    }, 5000)
+  </script>
+{% endblock %}

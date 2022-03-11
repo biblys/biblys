@@ -1,46 +1,55 @@
-<h1><span class="fa fa-cloud-download"></span> Mise à jour de Biblys</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if releases %}
+{% block title %}
+  Mise à jour de Biblys
+{% endblock %}
+
+{% block main %}
+
+  <h1><span class="fa fa-cloud-download"></span> Mise à jour de Biblys</h1>
+
+  {% if releases %}
 
     <p class="alert alert-info">
-        <span class="pull-right"></span>
-        <i class="fa fa-info-circle"></i>
-        {% if releases|length == 1 %}
-          Une mise à jour est disponible.
-        {% else %}
-          Plusieurs mises à jour sont disponibles.
-        {% endif %}
+      <span class="pull-right"></span>
+      <i class="fa fa-info-circle"></i>
+      {% if releases|length == 1 %}
+        Une mise à jour est disponible.
+      {% else %}
+        Plusieurs mises à jour sont disponibles.
+      {% endif %}
     </p>
 
     {% for release in releases %}
 
-        <h3 id="v{{release.version}}">{{ release.version }} ({{ release.date|date }})</h3>
+      <h3 id="v{{ release.version }}">{{ release.version }} ({{ release.date|date }})</h3>
 
-        <p>{{ release.notes|nl2br }}</p>
+      <p>{{ release.notes|nl2br }}</p>
 
     {% endfor %}
 
     <p class="alert alert-warning">
-        <i class="fa fa-warning"></i>
-        Avant de mettre à jour, assurez vous d'avoir bien sauvegardé vos fichiers personnels.
+      <i class="fa fa-warning"></i>
+      Avant de mettre à jour, assurez vous d'avoir bien sauvegardé vos fichiers personnels.
     </p>
 
     <form class="fieldset text-center" method="post" action="{{ path("maintenance_update") }}">
-        <fieldset>
-            <button class="btn btn-primary"><i class="fa fa-refresh"></i>
-              Mettre à jour
-            </button>
-        </fieldset>
+      <fieldset>
+        <button class="btn btn-primary"><i class="fa fa-refresh"></i>
+          Mettre à jour
+        </button>
+      </fieldset>
     </form>
 
-{% elseif error %}
+  {% elseif error %}
 
     <p class="alert alert-danger">
-        {{ error }}
+      {{ error }}
     </p>
 
-{% else %}
+  {% else %}
 
     <p class="success">Biblys est à jour.</p>
 
-{% endif %}
+  {% endif %}
+{% endblock %}

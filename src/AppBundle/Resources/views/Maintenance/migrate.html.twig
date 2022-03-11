@@ -1,34 +1,43 @@
-<h1>
-  <span class="fa fa-database"></span>
-  Migration BDD
-</h1>
+{% extends "layout:base.html.twig" %}
 
-{% if error is defined %}
+{% block title %}
+  Migration de la base de données
+{% endblock %}
 
-  <p class="alert alert-danger">
-    {{ error }} Avant de continuer, la migration devra être effectuée manuellement à l'aide de la commande :
-  </p>
+{% block main %}
 
-  <pre>composer run propel:migrate</pre>
+  <h1>
+    <span class="fa fa-database"></span>
+    Migration de la base de données
+  </h1>
 
-  <h2>Sortie :</h2>
+  {% if error is defined %}
 
-  <pre>
-    {{ output }}
-  </pre>
+    <p class="alert alert-danger">
+      {{ error }} Avant de continuer, la migration devra être effectuée manuellement à l'aide de la commande :
+    </p>
 
-  <a href="{{ path('main_admin') }}" class="btn btn-primary">Continuer</a>
+    <pre>composer run propel:migrate</pre>
 
-{% else %}
+    <h2>Sortie :</h2>
 
-  <p class="alert alert-info">
-    <i class="fa fa-cog fa-spin"></i> Mise à jour du schéma de la base de données en cours...
-  </p>
+    <pre>
+      {{ output }}
+    </pre>
 
-  <script type="text/javascript">
-    setTimeout(function() {
-      window.location.href = "{{ path('main_admin') }}";
-    }, 5000)
-  </script>
+    <a href="{{ path('main_admin') }}" class="btn btn-primary">Continuer</a>
 
-{% endif %}
+  {% else %}
+
+    <p class="alert alert-info">
+      <i class="fa fa-cog fa-spin"></i> Mise à jour du schéma de la base de données en cours...
+    </p>
+
+    <script type="text/javascript">
+      setTimeout(function() {
+        window.location.href = "{{ path('main_admin') }}";
+      }, 5000)
+    </script>
+
+  {% endif %}
+{% endblock %}

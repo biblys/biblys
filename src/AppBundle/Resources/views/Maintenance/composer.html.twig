@@ -1,32 +1,41 @@
-<h1>
-  <span class="fa fa-puzzle-piece"></span>
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
   Composants
-</h1>
+{% endblock %}
 
-{% if error is defined %}
+{% block main %}
 
-  <p class="alert alert-danger">
-    {{ error }} Avant de continuer, la mise à jour devra être effectuée manuellement à l'aide de <em>composer</em>.
-  </p>
+  <h1>
+    <span class="fa fa-puzzle-piece"></span>
+    Composants
+  </h1>
 
-  <h2>Sortie :</h2>
+  {% if error is defined %}
 
-  <pre>
-    {{ output }}
-  </pre>
+    <p class="alert alert-danger">
+      {{ error }} Avant de continuer, la mise à jour devra être effectuée manuellement à l'aide de <em>composer</em>.
+    </p>
 
-  <a href="{{ path('main_admin') }}" class="btn btn-primary">Continuer</a>
+    <h2>Sortie :</h2>
 
-{% else %}
+    <pre>
+      {{ output }}
+    </pre>
 
-  <p class="alert alert-info">
-    <i class="fa fa-cog fa-spin"></i> Mise à jour des composants en cours...
-  </p>
+    <a href="{{ path('main_admin') }}" class="btn btn-primary">Continuer</a>
 
-  <script type="text/javascript">
-    setTimeout(function() {
-      window.location.href = "{{ path('maintenance_migrate') }}";
-    }, 5000)
-  </script>
+  {% else %}
 
-{% endif %}
+    <p class="alert alert-info">
+      <i class="fa fa-cog fa-spin"></i> Mise à jour des composants en cours...
+    </p>
+
+    <script type="text/javascript">
+      setTimeout(function() {
+        window.location.href = "{{ path('maintenance_migrate') }}";
+      }, 5000)
+    </script>
+
+  {% endif %}
+{% endblock %}
