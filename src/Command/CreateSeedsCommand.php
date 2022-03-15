@@ -2,6 +2,7 @@
 
 namespace Command;
 
+use Model\AxysApp;
 use Model\Country;
 use Model\Publisher;
 use Model\Right;
@@ -36,6 +37,14 @@ class CreateSeedsCommand extends Command
         $site->setContact("contact@librys.fr");
         $site->save();
         $output->writeln(["Inserted site: Librairie Ys"]);
+
+        $axysApp = new AxysApp();
+        $axysApp->setName("Librairie Ys");
+        $axysApp->setClientId("librys");
+        $axysApp->setClientSecret("librys-secret");
+        $axysApp->setRedirectUri("http://localhost:8088/oauth/callback");
+        $axysApp->save();
+        $output->writeln(["Inserted Axys app: librys"]);
 
         // Admin
         $admin = new User();
