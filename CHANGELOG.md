@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.59.2
+### 2.59.2 (18 mars 2022)
 
 Correction
 
