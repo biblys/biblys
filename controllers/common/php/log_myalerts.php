@@ -1,12 +1,21 @@
 <?php
 
+/** @noinspection HtmlUnknownTarget */
+
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-/** @var CurrentSite $currentSite */
-if (!$currentSite->hasOptionEnabled("alerts")) {
+$config = new Config();
+$currentSiteService = CurrentSite::buildFromConfig($config);
+$currentSite = $currentSiteService->getSite();
+/** @noinspection PhpUnhandledExceptionInspection */
+if (!$currentSiteService->hasOptionEnabled("alerts")) {
     throw new ResourceNotFoundException("Alerts are not enabled for this site");
 }
 
@@ -20,16 +29,19 @@ if ($request->getMethod() === "POST") {
     $params = json_decode($body, true);
     /** @var Visitor $_V */
     if (!$_V->hasAlert($params["article_id"])) {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $alert = $am->create();
 
         $alert->set('user_id', $_V->get('id'));
         $alert->set('article_id', $params["article_id"]);
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $am->update($alert);
         $result['created'] = 1;
     } else {
         $alert = $am->get(array('user_id' => $_V->get('id'), 'article_id' => $params["article_id"]));
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);
         $result['deleted'] = 1;
     }
@@ -41,18 +53,26 @@ $table = null;
 
 $_PAGE_TITLE = 'Mes alertes Biblys';
 
+$content = null;
+
 $alertToDeleteId = $request->query->get('del');
 if ($alertToDeleteId) {
     $alert = $am->getById($alertToDeleteId);
     if ($alert) {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);
     }
-    redirect('/pages/log_myalerts?deleted=1');
+    return new RedirectResponse('/pages/log_myalerts?deleted=1');
 }
 
-$user_id = $_V->get('id');
+/** @noinspection PhpUnhandledExceptionInspection */
+$currentUserService = CurrentUser::buildFromRequest($request);
+/** @noinspection PhpUnhandledExceptionInspection */
+$currentUser = $currentUserService->getUser();
 
+/** @var PDO $_SQL */
 $_SQL->query("SET SESSION sql_mode=''")->execute();
+/** @noinspection SqlCheckUsingColumns */
 $sql = $_SQL->prepare("
     SELECT `articles`.`article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`, `article_number`, `article_publisher`,
     `alert_id`, `alert_pub_year`, `alert_max_price`, `alert_condition`,
@@ -69,7 +89,7 @@ $sql = $_SQL->prepare("
     GROUP BY `alert_id`
     ORDER BY `alert_id`, `stock_purchase_date`
 ");
-$sql->execute(['user_id' => $user_id, 'site_id' => $site->get('id')]);
+$sql->execute(['user_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
 
 while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
     if ($a["alert_max_price"]) {
@@ -96,27 +116,29 @@ while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
     $current_article = $a["article_id"];
 }
 
-$_ECHO .= '
+$content .= '
+    <h2>
+        <span class="fa fa-bell-o"></span>
+        '.$_PAGE_TITLE.'
+    </h2>
 
-    <h2><img src="/common/icons/alert_32.png" /> '.$_PAGE_TITLE.'</h2>
-
-    <h4>Ci-dessous, la liste des alertes que vous avez cr&eacute;&eacute;es.</h4>
-    <p>Vous recevrez un courriel d&egrave;s qu\'ils seront disponibles aux conditions que vous avez indiqu&eacute;es dans une des librairies Biblys.</p>
+    <p><strong>Ci-dessous, la liste des alertes que vous avez créées.</strong></p>
+    <p>Vous recevrez un courriel dès qu\'ils seront disponibles aux conditions que vous avez indiquées dans une des librairies Biblys.</p>
 ';
 
 if (isset($_GET["deleted"])) {
-    $_ECHO .= '<p class="success">L\'alerte pour ce livre a bien été supprimée !</p>';
+    $content .= '<p class="success">L\'alerte pour ce livre a bien été supprimée !</p>';
 }
 
-$_ECHO .= '
+$content .= '
     <table class="list">
         <thead>
             <tr>
                 <th></th>
                 <th>Livre</th>
-                <th>Ann&eacute;e</th>
+                <th>Année</th>
                 <th>Prix max.</th>
-                <th>&Eacute;tat</th>
+                <th>État</th>
                 <th></th>
             </tr>
         </thead>
@@ -124,5 +146,6 @@ $_ECHO .= '
             '.$table.'
         </tbody>
     </table>
-
 ';
+
+return new Response($content);

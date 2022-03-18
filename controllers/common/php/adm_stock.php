@@ -250,7 +250,7 @@ if ($request->getMethod() === 'POST') {
     }
 
     $copyCondition = $request->request->get("stock_condition");
-    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSite)) {
+    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSiteService)) {
         /** @var PDO $_SQL */
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
