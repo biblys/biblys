@@ -63,7 +63,8 @@
     "propel/propel": "^2.0.0-alpha12",
     "ircmaxell/random-lib": "^1.2",
     "symfony/filesystem": "^5.4",
-    "league/csv": "^9.7"
+    "league/csv": "^9.7",
+    "steverhoades/oauth2-openid-connect-client": "^0.4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
