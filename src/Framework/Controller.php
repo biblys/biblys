@@ -113,7 +113,7 @@ class Controller
 
         // return relative url for a route
         $functions[] = new TwigFunction('path', function ($route, $vars = []) {
-            global $container;
+            $container = require __DIR__."/../container.php";
             $urlGenerator = $container->get("url_generator");
             return $urlGenerator->generate($route, $vars);
         });
