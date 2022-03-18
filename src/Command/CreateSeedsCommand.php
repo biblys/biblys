@@ -74,6 +74,7 @@ class CreateSeedsCommand extends Command
         $publisherUser->save();
         $publisher = new Publisher();
         $publisher->setName("Les Éditions Paronymie");
+        $publisher->setUrl("les-editions-paronymie");
         $publisher->save();
         $right = new Right();
         $right->setUser($publisherUser);
