@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.59.2
+
+Correction
+
+La création d'une alerte pouvait échouer silencieusement si l'utilisateur 
+n'était pas authentifié. Un message d'erreur est désormais affiché.
+
 ### 2.59.1 (11 mars 2022)
 
 Corrections

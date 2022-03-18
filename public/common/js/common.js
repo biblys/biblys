@@ -899,41 +899,43 @@ function reloadEvents(scope) {
 
   // Create & delete alert
   $('[data-alert].event')
-    .click(function() {
-      var button = $(this);
-      button
-        .find('i.fa')
+    .click(async function () {
+
+      const buttonIcon = $(this).find('i.fa');
+      buttonIcon
         .removeClass('fa-bell-o fa-bell orange')
         .addClass('fa-spin fa-spinner');
-      $.post(
-        '/pages/log_myalerts',
-        {
-          article_id: $(this).attr('data-alert')
+
+      const articleId = this.getAttribute('data-alert');
+      const response = await fetch(`/pages/log_myalerts`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         },
-        function(data) {
-          if (data.error) _alert(data.error);
-          else if (data.created) {
-            button
-              .find('i.fa')
-              .removeClass('fa-spin fa-spinner')
-              .addClass('fa-bell orange');
-            new Biblys.Notification(
-              'L\'article a bien été ajouté à <a href="/pages/log_myalerts">vos alertes</a>.',
-              { type: 'success' }
-            );
-          } else if (data.deleted) {
-            button
-              .find('i.fa')
-              .removeClass('fa-spin fa-spinner')
-              .addClass('fa-bell-o');
-            new Biblys.Notification(
-              'L\'article a bien été retiré de <a href="/pages/log_myalerts">vos alertes</a>.',
-              { type: 'success' }
-            );
-          }
-        },
-        'json'
-      );
+        body: JSON.stringify({article_id: articleId})
+      });
+      const data = await response.json();
+
+      buttonIcon.removeClass('fa-spin fa-spinner')
+
+      if (data.error) {
+        _alert(data.error);
+      } else if (data.created) {
+        buttonIcon
+          .addClass('fa-bell orange');
+        new Biblys.Notification(
+          `L'article a bien été ajouté à <a href="/pages/log_myalerts">vos alertes</a>.`,
+          {type: 'success'}
+        );
+      } else if (data.deleted) {
+        buttonIcon
+          .addClass('fa-bell-o');
+        new Biblys.Notification(
+          `L'article a bien été retiré de <a href="/pages/log_myalerts">vos alertes</a>.`,
+          {type: 'success'}
+        );
+      }
     })
     .removeClass('event');
 
