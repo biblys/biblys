@@ -233,7 +233,7 @@ $achats = $_SQL->prepare("SELECT `article_title`, `Email`,`stock_selling_price`,
     FROM `articles`
     JOIN `stock` USING(`article_id`)
     JOIN `$usersTableName` ON `$usersTableName`.`id` = `stock`.`user_id`
-    WHERE  `site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) ".$req.$reqPeople."
+    WHERE `stock`.`site_id` = :site_id AND (`type_id` = '2' OR `type_id` = 11) ".$req.$reqPeople."
     GROUP BY `stock_id`
 ORDER BY `stock_selling_date` DESC");
 $achats->execute(array_merge($reqParams, $reqPeopleParams));

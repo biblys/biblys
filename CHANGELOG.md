@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.59.3 (DEV)
+
+Corrections
+
+Une erreur est empêchait l'utilisateur de la page ”Ventes numériques” de 
+l'administration. C'est corrigé.
+
 ### 2.59.2 (18 mars 2022)
 
 Correction
