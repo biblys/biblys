@@ -334,6 +334,11 @@ openid_axys:
   controller: AppBundle\Controller\OpenIDConnectController::axys
   methods: GET
 
+openid_callback:
+  path: /openid/callback
+  controller: AppBundle\Controller\OpenIDConnectController::callback
+  methods: GET
+
 # Orders
 
 order_index:
