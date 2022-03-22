@@ -24,6 +24,11 @@ logs:
 #   protocol: https
 #   host: axys.me
 #   port: 80
+#   version: 2
+#   client_id: abcd1234
+#   client_secret: efgh5678
+#   redirect_uri: http://librys.fr/openid/callback
+#   base_uri: https://axys.me/
 
 # smtp:
 #   host: smtp.example.com

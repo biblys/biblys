@@ -327,6 +327,13 @@ mailing_contacts:
   path: /admin/mailing/contacts
   controller: AppBundle\Controller\MailingController::contactsAction
 
+# OpenID Connect
+
+openid_axys:
+  path: /openid/axys
+  controller: AppBundle\Controller\OpenIDConnectController::axys
+  methods: GET
+
 # Orders
 
 order_index:
