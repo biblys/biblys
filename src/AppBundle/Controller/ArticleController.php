@@ -6,12 +6,14 @@ use ArticleManager;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use LinkManager;
 use MailingManager;
+use Model\ArticleQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 use RayonManager;
@@ -529,16 +531,18 @@ class ArticleController extends Controller
      * @route GET /admin/articles/
      * @param Request $request
      * @return Response
+     * @throws AuthException
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function adminCatalog(Request $request): Response
+    public function adminCatalog(Request $request, CurrentSite $currentSite): Response
     {
-        $am = new ArticleManager();
-        $articles = $am->getAll();
-
-        $request->attributes->set("page_title", "Catalogue");
+        self::authAdmin($request);
+        $articles = ArticleQuery::create()
+            ->filterForCurrentSite($currentSite)
+            ->find();
 
         return $this->render("AppBundle:Article:articleAdminCatalog.html.twig", [
             "articles" => $articles,

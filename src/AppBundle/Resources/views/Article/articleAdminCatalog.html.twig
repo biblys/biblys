@@ -3,10 +3,10 @@
   Catalogue</h1>
 </h1>
 
-<button class="btn btn-primary" data-table-to-csv="#catalog" data-csv-file-name="catalogue">
-  <span class="fa fa-share-square-o"></span>
-  Exporter
-</button>
+<a class="btn btn-primary" href="{{ path("api_articles_export") }}">
+  <span class="fa fa-cloud-download"></span>
+  Télécharger
+</a>
 
 <table id="catalog" class="table">
   <thead>
@@ -19,29 +19,17 @@
     </tr>
   </thead>
   <tbody>
-    {% for article in articles|filter(article => not article.isBeingCreated) %}
+    {% for article in articles %}
       <tr>
+        <td>{{ article.ean }}</td>
         <td>
-          {% if article.has("ean") %}
-            {{ article.ean }}
-          {% endif %}
-        </td>
-        <td>
-          <a href="{{ path("article_show", { slug: article.url }) }}">
+          <a href="/a/{{ article.url }}">
             {{ article.title }}
           </a>
         </td>
-        <td>
-          {% if article.collection %}
-            {{ article.collection.name }}
-          {% endif %}
-        </td>
-        <td>{{ article.publisher.name }}</td>
-        <td>
-          {% if article.has("price") %}
-            {{ article.price|currency(true)|raw }}
-          {% endif %}
-        </td>
+        <td>{{ article.collectionName }}</td>
+        <td>{{ article.publisherName }}</td>
+        <td>{{ article.price|currency(true)|raw }}</td>
       </tr>
     {% endfor %}
   </tbody>
