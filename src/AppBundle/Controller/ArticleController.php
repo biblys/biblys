@@ -10,23 +10,36 @@ use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use LinkManager;
+use MailingManager;
 use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 use RayonManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use TagManager;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use UserManager;
 
 class ArticleController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function showAction(Request $request, $slug)
     {
         global $site, $urlgenerator;
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $article = $am->get(['article_url' => $slug]);
 
         if (!$article) {
@@ -36,7 +49,7 @@ class ArticleController extends Controller
 
         $use_old_controller = $site->getOpt('use_old_article_controller');
         if ($use_old_controller) {
-            return $this->redirect('/'.$slug);
+            return new RedirectResponse("/".$slug);
         }
 
         $request->attributes->set(
@@ -87,15 +100,16 @@ class ArticleController extends Controller
     /**
      * Search results page.
      *
-     * @param string $terms search terms
-     *
-     * @return Response
+     * @route GET /articles/search
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function searchAction(Request $request)
+    public function searchAction(Request $request): Response
     {
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
 
-        $query = $request->query->get('q', null);
+        $query = $request->query->get('q');
 
         $error = false;
         $articles = [];
@@ -131,11 +145,17 @@ class ArticleController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws Exception
+     */
     public function freeDownloadAction(Request $request, $id)
     {
         global $_V, $site;
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $article = $am->getById($id);
 
         if (!$article) {
@@ -156,17 +176,18 @@ class ArticleController extends Controller
 
         // If article is already in library, redirect to library page
         if ($_V->hasPurchased($article)) {
-            return $this->redirect('/pages/log_myebooks');
+            return new RedirectResponse("/pages/log_myebooks");
         }
 
-        $this->setPageTitle('Téléchargement gratuit de '.$article->get('title'));
+
+        $request->attributes->set("page_title", "Téléchargement gratuit de {$article->get('title')}");
 
         $newsletter = false;
         $newsletter_checked = false;
         if ($site->getOpt('newsletter') == 1) {
             $newsletter = true;
             if ($_V->isLogged()) {
-                $mm = $this->entityManager('Mailing');
+                $mm = new MailingManager();
                 $mailing = $mm->get(['mailing_email' => $_V->get('email')]);
                 if ($mailing && $mailing->hasUnsubscribed()) {
                     $newsletter_checked = null;
@@ -180,19 +201,19 @@ class ArticleController extends Controller
             $email = $_V->get('email');
             if ($newsletter_checked) {
                 try {
-                    $result = $mm->addSubscriber($email, true);
+                    $mm = new MailingManager();
+                    $mm->addSubscriber($email, true);
                 } catch (Exception $e) {
                     // Ignore errors
                 }
             }
 
             // Add book to library
-            $um = $this->entityManager('User');
+            $um = new UserManager();
             $current_user = $um->getById($_V->get('id'));
             $um->addToLibrary($current_user, [$article], [], false, ['send_email' => false]);
-            $success = 'Le livre '.$article->get('title').' a bien été ajouté à votre bibliothèque !';
 
-            return $this->redirect('/pages/log_myebooks');
+            return new RedirectResponse("/pages/log_myebooks");
         }
 
         return $this->render('AppBundle:Article:freeDownload.html.twig', [
@@ -205,30 +226,27 @@ class ArticleController extends Controller
     /**
      * Mark an article for deletion.
      *
-     * @param int $id id of article to delete
-     *
-     * @return Response
+     * @route POST /admin/article/{id}/delete
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws PropelException
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, UrlGenerator $urlGenerator, $id)
     {
-        global $_SQL;
 
-        $this->auth('publisher');
-
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
 
         $article = $am->getById($id);
         if (!$article) {
             throw new NotFoundException("L'article $id n'existe pas.");
         }
 
+        self::authPublisher($request, $article->getPublisher());
+
         $error = null;
         if ($request->getMethod() == 'POST') {
-            $article->set('article_deletion_by', $this->user->get('id'));
-            $article->set('article_deletion_date', date('Y-m-d H:i:s'));
-            $article->set('article_deletion_reason', $request->request->get('reason'));
-            $am->update($article);
-
             try {
                 $am->delete($article);
             } catch (Exception $e) {
@@ -236,11 +254,13 @@ class ArticleController extends Controller
             }
 
             if (!$error) {
-                return $this->redirect($this->generateUrl('article_deleted', ['title' => $article->get('title')]));
+                return new RedirectResponse(
+                    $urlGenerator->generate("article_deleted", ["title" => $article->get("title")])
+                );
             }
         }
 
-        $this->setPageTitle("Suppression de l'article ".$article->get('title'));
+        $request->attributes->set("page_title", "Suppression de l'article {$article->get("title")}");
 
         return $this->render('AppBundle:Article:delete.html.twig', [
             'article' => $article,
@@ -251,35 +271,18 @@ class ArticleController extends Controller
     /**
      * Show that a book has been deleted.
      *
-     * @param string $title the book's title
-     *
+     * @param Request $request
      * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function deletedAction(Request $request)
+    public function deletedAction(Request $request): Response
     {
         $title = $request->query->get('title');
 
         return $this->render('AppBundle:Article:deleted.html.twig', [
             'title' => $title,
-        ]);
-    }
-
-    /**
-     * List article marked for deletions (root only).
-     *
-     * @return Response
-     */
-    public function deletionsAction(Request $request)
-    {
-        $this->auth('root');
-        $request->attributes->set("page_title", "Articles à supprimer");
-
-        $am = $this->entityManager('Article');
-
-        $articles = $am->getAll(['article_deletion_by' => 'NOT NULL']);
-
-        return $this->render('AppBundle:Article:deletions.html.twig', [
-            'articles' => $articles,
         ]);
     }
 
@@ -292,14 +295,15 @@ class ArticleController extends Controller
      * @return Response
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
     public function addTagsAction(Request $request, $id)
     {
         self::authPublisher($request, null);
 
-        $am = $this->entityManager('Article');
-        $tm = $this->entityManager('Tag');
-        $lm = $this->entityManager('Link');
+        $am = new ArticleManager();
+        $tm = new TagManager();
+        $lm = new LinkManager();
 
         $am->setIgnoreSiteFilters(true);
 
@@ -356,9 +360,13 @@ class ArticleController extends Controller
      * Add rayon to an article via an XHR request
      * /articles/{id}/rayons/add.
      *
+     * @param Request $request
+     * @param $id
      * @return JsonResponse
+     * @throws AuthException
+     * @throws Exception
      */
-    public function addRayonsAction(Request $request, $id)
+    public function addRayonsAction(Request $request, $id): JsonResponse
     {
         $am = new ArticleManager();
         $rm = new RayonManager();
@@ -371,7 +379,7 @@ class ArticleController extends Controller
         }
 
         if ($article->has('publisher_id')) {
-            $this->auth('publisher', $article->get('publisher_id'));
+            self::authPublisher($request, $article->getPublisher());
         }
 
         $rayon_id = $request->request->get('rayon_id');
@@ -396,14 +404,21 @@ class ArticleController extends Controller
      * Refresh articles search terms
      * /admin/articles/search-terms.
      *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
      * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function searchTermsAction(Request $request, UrlGenerator $urlGenerator)
     {
         self::authAdmin($request);
         $request->attributes->set("page_title", "Termes de recherche");
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $total = $am->count([
             'article_keywords_generated' => 'NULL',
             'article_title' => 'NOT NULL',
@@ -417,7 +432,9 @@ class ArticleController extends Controller
                 $am->update($article);
             }
 
-            return $this->redirect($this->generateUrl('article_search_terms'));
+            return new RedirectResponse(
+                $urlGenerator->generate("article_search_terms")
+            );
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -429,7 +446,7 @@ class ArticleController extends Controller
 
             return new JsonResponse([
                 'count' => $total,
-                'articles' => array_map(function ($article) {
+                'articles' => array_map(function ($article) use ($urlGenerator) {
                     return [
                         'id' => $article->get('id'),
                         'title' => $article->get('title'),
@@ -450,13 +467,17 @@ class ArticleController extends Controller
      * Refresh an article's search terms
      * /admin/articles/{id}/refresh-search-terms.
      *
+     * @param Request $request
+     * @param $id
      * @return JsonResponse
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function refreshSearchTermsAction($id)
+    public function refreshSearchTermsAction(Request $request, $id): JsonResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $article = $am->getById($id);
 
         if (!$article) {
@@ -477,15 +498,15 @@ class ArticleController extends Controller
      * @param string $ean An article's ISBN in EAN format
      * @return Response
      */
-    public function byIsbn(UrlGenerator $urlGenerator, string $ean)
+    public function byIsbn(UrlGenerator $urlGenerator, string $ean): Response
     {
         try {
             $ean = Isbn::convertToEan13($ean);
-        } catch (IsbnParsingException $exception) {
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (IsbnParsingException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $article = $am->get(['article_ean' => $ean]);
         if (!$article) {
             throw new NotFoundException("Article with ISBN $ean not found.");
@@ -496,23 +517,28 @@ class ArticleController extends Controller
             ['slug' => $article->get('url')]
         );
 
-        return $this->redirect($articleUrl, 301);
+        return new RedirectResponse($articleUrl, 301);
     }
 
     /**
      * List all articles in catalog.
      *
+     * @route GET /admin/articles/
+     * @param Request $request
      * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function adminCatalog(Request $request)
+    public function adminCatalog(Request $request): Response
     {
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $articles = $am->getAll();
 
         $request->attributes->set("page_title", "Catalogue");
 
-        return $this->render('AppBundle:Article:articleAdminCatalog.html.twig', [
-            'articles' => $articles,
+        return $this->render("AppBundle:Article:articleAdminCatalog.html.twig", [
+            "articles" => $articles,
         ]);
     }
 
@@ -524,7 +550,7 @@ class ArticleController extends Controller
     public function checkIsbn(Request $request)
     {
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $content = $request->getContent();
         $params = json_decode($content, true);
 
@@ -549,6 +575,7 @@ class ArticleController extends Controller
 
         $requestBody = $request->getContent();
         $publisherStock = (int) $requestBody;
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if (!is_int($publisherStock) || $requestBody === "NaN") {
             throw new BadRequestHttpException("article_publisher_stock $requestBody is not an integer.");
         }
