@@ -32,6 +32,7 @@ class CreateSeedsCommand extends Command
 
         // Site
         $site = new Site();
+        $site->setName("librys");
         $site->setTitle("Librairie Ys");
         $site->setDomain("www.librys.fr");
         $site->setContact("contact@librys.fr");
