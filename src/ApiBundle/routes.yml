@@ -8,6 +8,13 @@ api_me:
   path: /api/me
   controller: ApiBundle\Controller\AuthController::meAction
 
+# Articles
+
+api_articles_export:
+  methods: GET
+  path: /api/admin/articles/export
+  controller: ApiBundle\Controller\ArticleController::export
+
 # Contribution
 
 api_contribution:

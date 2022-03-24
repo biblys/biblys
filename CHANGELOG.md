@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.60.0 (DEV)
+
+Améliorations
+
+Les performances de la page Catalogue dans l'administration ont été améliorées.
+
 ### 2.59.3 (25 mars 2022)
 
 Correction
