@@ -117,6 +117,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ircmaxell/security-lib" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/propel/propel" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/validator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/csv" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
