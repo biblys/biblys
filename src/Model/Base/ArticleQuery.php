@@ -186,6 +186,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildArticleQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildArticleQuery leftJoinPublisher($relationAlias = null) Adds a LEFT JOIN clause to the query using the Publisher relation
+ * @method     ChildArticleQuery rightJoinPublisher($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Publisher relation
+ * @method     ChildArticleQuery innerJoinPublisher($relationAlias = null) Adds a INNER JOIN clause to the query using the Publisher relation
+ *
+ * @method     ChildArticleQuery joinWithPublisher($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Publisher relation
+ *
+ * @method     ChildArticleQuery leftJoinWithPublisher() Adds a LEFT JOIN clause and with to the query using the Publisher relation
+ * @method     ChildArticleQuery rightJoinWithPublisher() Adds a RIGHT JOIN clause and with to the query using the Publisher relation
+ * @method     ChildArticleQuery innerJoinWithPublisher() Adds a INNER JOIN clause and with to the query using the Publisher relation
+ *
+ * @method     ChildArticleQuery leftJoinBookCollection($relationAlias = null) Adds a LEFT JOIN clause to the query using the BookCollection relation
+ * @method     ChildArticleQuery rightJoinBookCollection($relationAlias = null) Adds a RIGHT JOIN clause to the query using the BookCollection relation
+ * @method     ChildArticleQuery innerJoinBookCollection($relationAlias = null) Adds a INNER JOIN clause to the query using the BookCollection relation
+ *
+ * @method     ChildArticleQuery joinWithBookCollection($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the BookCollection relation
+ *
+ * @method     ChildArticleQuery leftJoinWithBookCollection() Adds a LEFT JOIN clause and with to the query using the BookCollection relation
+ * @method     ChildArticleQuery rightJoinWithBookCollection() Adds a RIGHT JOIN clause and with to the query using the BookCollection relation
+ * @method     ChildArticleQuery innerJoinWithBookCollection() Adds a INNER JOIN clause and with to the query using the BookCollection relation
+ *
  * @method     ChildArticleQuery leftJoinLink($relationAlias = null) Adds a LEFT JOIN clause to the query using the Link relation
  * @method     ChildArticleQuery rightJoinLink($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Link relation
  * @method     ChildArticleQuery innerJoinLink($relationAlias = null) Adds a INNER JOIN clause to the query using the Link relation
@@ -206,7 +226,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery rightJoinWithRole() Adds a RIGHT JOIN clause and with to the query using the Role relation
  * @method     ChildArticleQuery innerJoinWithRole() Adds a INNER JOIN clause and with to the query using the Role relation
  *
- * @method     \Model\LinkQuery|\Model\RoleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\LinkQuery|\Model\RoleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildArticle|null findOne(ConnectionInterface $con = null) Return the first ChildArticle matching the query
  * @method     ChildArticle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
@@ -1473,6 +1493,8 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCollectionId(array('min' => 12)); // WHERE collection_id > 12
      * </code>
      *
+     * @see       filterByBookCollection()
+     *
      * @param     mixed $collectionId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -1563,6 +1585,8 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPublisherId(array(12, 34)); // WHERE publisher_id IN (12, 34)
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
+     *
+     * @see       filterByPublisher()
      *
      * @param     mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
@@ -3301,6 +3325,270 @@ abstract class ArticleQuery extends ModelCriteria
         return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $deletionReason, $comparison);
     }
 
+    /**
+     * Filter the query by a related \Model\Publisher object
+     *
+     * @param \Model\Publisher|ObjectCollection $publisher The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildArticleQuery The current query, for fluid interface
+     */
+    public function filterByPublisher($publisher, $comparison = null)
+    {
+        if ($publisher instanceof \Model\Publisher) {
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_PUBLISHER_ID, $publisher->getId(), $comparison);
+        } elseif ($publisher instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_PUBLISHER_ID, $publisher->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByPublisher() only accepts arguments of type \Model\Publisher or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Publisher relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildArticleQuery The current query, for fluid interface
+     */
+    public function joinPublisher($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Publisher');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Publisher');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Publisher relation Publisher object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PublisherQuery A secondary query class using the current class as primary query
+     */
+    public function usePublisherQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPublisher($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Publisher', '\Model\PublisherQuery');
+    }
+
+    /**
+     * Use the Publisher relation Publisher object
+     *
+     * @param callable(\Model\PublisherQuery):\Model\PublisherQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withPublisherQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->usePublisherQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Publisher table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\PublisherQuery The inner query object of the EXISTS statement
+     */
+    public function usePublisherExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Publisher', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Publisher table for a NOT EXISTS query.
+     *
+     * @see usePublisherExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PublisherQuery The inner query object of the NOT EXISTS statement
+     */
+    public function usePublisherNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Publisher', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
+    /**
+     * Filter the query by a related \Model\BookCollection object
+     *
+     * @param \Model\BookCollection|ObjectCollection $bookCollection The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildArticleQuery The current query, for fluid interface
+     */
+    public function filterByBookCollection($bookCollection, $comparison = null)
+    {
+        if ($bookCollection instanceof \Model\BookCollection) {
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_COLLECTION_ID, $bookCollection->getId(), $comparison);
+        } elseif ($bookCollection instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ArticleTableMap::COL_COLLECTION_ID, $bookCollection->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByBookCollection() only accepts arguments of type \Model\BookCollection or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the BookCollection relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildArticleQuery The current query, for fluid interface
+     */
+    public function joinBookCollection($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('BookCollection');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'BookCollection');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the BookCollection relation BookCollection object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\BookCollectionQuery A secondary query class using the current class as primary query
+     */
+    public function useBookCollectionQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinBookCollection($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'BookCollection', '\Model\BookCollectionQuery');
+    }
+
+    /**
+     * Use the BookCollection relation BookCollection object
+     *
+     * @param callable(\Model\BookCollectionQuery):\Model\BookCollectionQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withBookCollectionQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useBookCollectionQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to BookCollection table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\BookCollectionQuery The inner query object of the EXISTS statement
+     */
+    public function useBookCollectionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('BookCollection', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to BookCollection table for a NOT EXISTS query.
+     *
+     * @see useBookCollectionExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\BookCollectionQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useBookCollectionNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('BookCollection', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Filter the query by a related \Model\Link object
      *

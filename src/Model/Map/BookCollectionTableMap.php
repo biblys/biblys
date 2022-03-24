@@ -387,6 +387,13 @@ class BookCollectionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Article', '\\Model\\Article', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':collection_id',
+    1 => ':collection_id',
+  ),
+), null, null, 'Articles', false);
     } // buildRelations()
 
     /**

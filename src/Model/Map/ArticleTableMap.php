@@ -1166,10 +1166,10 @@ class ArticleTableMap extends TableMap
         $this->addColumn('article_source_id', 'SourceId', 'INTEGER', false, 10, null);
         $this->addColumn('article_authors', 'Authors', 'VARCHAR', false, 256, null);
         $this->addColumn('article_authors_alphabetic', 'AuthorsAlphabetic', 'VARCHAR', false, 256, null);
-        $this->addColumn('collection_id', 'CollectionId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('collection_id', 'CollectionId', 'INTEGER', 'collections', 'collection_id', false, 10, null);
         $this->addColumn('article_collection', 'CollectionName', 'VARCHAR', false, 256, null);
         $this->addColumn('article_number', 'Number', 'VARCHAR', false, 8, null);
-        $this->addColumn('publisher_id', 'PublisherId', 'INTEGER', false, null, null);
+        $this->addForeignKey('publisher_id', 'PublisherId', 'INTEGER', 'publishers', 'publisher_id', false, null, null);
         $this->addColumn('article_publisher', 'PublisherName', 'VARCHAR', false, 256, null);
         $this->addColumn('cycle_id', 'CycleId', 'INTEGER', false, 10, null);
         $this->addColumn('article_cycle', 'Cycle', 'VARCHAR', false, 256, null);
@@ -1227,6 +1227,20 @@ class ArticleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Publisher', '\\Model\\Publisher', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':publisher_id',
+    1 => ':publisher_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('BookCollection', '\\Model\\BookCollection', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':collection_id',
+    1 => ':collection_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

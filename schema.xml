@@ -130,6 +130,12 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="publishers" skipSql="true">
+      <reference local="publisher_id" foreign="publisher_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="collections" skipSql="true">
+      <reference local="collection_id" foreign="collection_id"/>
+    </foreign-key>
   </table>
   <table name="axys_apps" phpName="AxysApp">
     <column name="id" primaryKey="true" required="true" type="INTEGER" autoIncrement="true" />

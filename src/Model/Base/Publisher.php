@@ -5,10 +5,13 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Article as ChildArticle;
+use Model\ArticleQuery as ChildArticleQuery;
 use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
+use Model\Map\ArticleTableMap;
 use Model\Map\PublisherTableMap;
 use Model\Map\RightTableMap;
 use Propel\Runtime\Propel;
@@ -337,6 +340,13 @@ abstract class Publisher implements ActiveRecordInterface
     protected $publisher_updated;
 
     /**
+     * @var        ObjectCollection|ChildArticle[] Collection to store aggregation of ChildArticle objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildArticle> Collection to store aggregation of ChildArticle objects.
+     */
+    protected $collArticles;
+    protected $collArticlesPartial;
+
+    /**
      * @var        ObjectCollection|ChildRight[] Collection to store aggregation of ChildRight objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildRight> Collection to store aggregation of ChildRight objects.
      */
@@ -350,6 +360,13 @@ abstract class Publisher implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildArticle[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildArticle>
+     */
+    protected $articlesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2045,6 +2062,8 @@ abstract class Publisher implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collArticles = null;
+
             $this->collRights = null;
 
         } // if (deep)
@@ -2172,6 +2191,24 @@ abstract class Publisher implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->articlesScheduledForDeletion !== null) {
+                if (!$this->articlesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->articlesScheduledForDeletion as $article) {
+                        // need to save related object because we set the relation to null
+                        $article->save($con);
+                    }
+                    $this->articlesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collArticles !== null) {
+                foreach ($this->collArticles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->rightsScheduledForDeletion !== null) {
@@ -2724,6 +2761,21 @@ abstract class Publisher implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collArticles) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'articles';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'articless';
+                        break;
+                    default:
+                        $key = 'Articles';
+                }
+
+                $result[$key] = $this->collArticles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collRights) {
 
                 switch ($keyType) {
@@ -3313,6 +3365,12 @@ abstract class Publisher implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getArticles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addArticle($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRights() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRight($relObj->copy($deepCopy));
@@ -3360,10 +3418,275 @@ abstract class Publisher implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('Article' === $relationName) {
+            $this->initArticles();
+            return;
+        }
         if ('Right' === $relationName) {
             $this->initRights();
             return;
         }
+    }
+
+    /**
+     * Clears out the collArticles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addArticles()
+     */
+    public function clearArticles()
+    {
+        $this->collArticles = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collArticles collection loaded partially.
+     */
+    public function resetPartialArticles($v = true)
+    {
+        $this->collArticlesPartial = $v;
+    }
+
+    /**
+     * Initializes the collArticles collection.
+     *
+     * By default this just sets the collArticles collection to an empty array (like clearcollArticles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initArticles($overrideExisting = true)
+    {
+        if (null !== $this->collArticles && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = ArticleTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collArticles = new $collectionClassName;
+        $this->collArticles->setModel('\Model\Article');
+    }
+
+    /**
+     * Gets an array of ChildArticle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPublisher is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildArticle[] List of ChildArticle objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildArticle> List of ChildArticle objects
+     * @throws PropelException
+     */
+    public function getArticles(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collArticlesPartial && !$this->isNew();
+        if (null === $this->collArticles || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collArticles) {
+                    $this->initArticles();
+                } else {
+                    $collectionClassName = ArticleTableMap::getTableMap()->getCollectionClassName();
+
+                    $collArticles = new $collectionClassName;
+                    $collArticles->setModel('\Model\Article');
+
+                    return $collArticles;
+                }
+            } else {
+                $collArticles = ChildArticleQuery::create(null, $criteria)
+                    ->filterByPublisher($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collArticlesPartial && count($collArticles)) {
+                        $this->initArticles(false);
+
+                        foreach ($collArticles as $obj) {
+                            if (false == $this->collArticles->contains($obj)) {
+                                $this->collArticles->append($obj);
+                            }
+                        }
+
+                        $this->collArticlesPartial = true;
+                    }
+
+                    return $collArticles;
+                }
+
+                if ($partial && $this->collArticles) {
+                    foreach ($this->collArticles as $obj) {
+                        if ($obj->isNew()) {
+                            $collArticles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collArticles = $collArticles;
+                $this->collArticlesPartial = false;
+            }
+        }
+
+        return $this->collArticles;
+    }
+
+    /**
+     * Sets a collection of ChildArticle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $articles A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPublisher The current object (for fluent API support)
+     */
+    public function setArticles(Collection $articles, ConnectionInterface $con = null)
+    {
+        /** @var ChildArticle[] $articlesToDelete */
+        $articlesToDelete = $this->getArticles(new Criteria(), $con)->diff($articles);
+
+
+        $this->articlesScheduledForDeletion = $articlesToDelete;
+
+        foreach ($articlesToDelete as $articleRemoved) {
+            $articleRemoved->setPublisher(null);
+        }
+
+        $this->collArticles = null;
+        foreach ($articles as $article) {
+            $this->addArticle($article);
+        }
+
+        $this->collArticles = $articles;
+        $this->collArticlesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Article objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Article objects.
+     * @throws PropelException
+     */
+    public function countArticles(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collArticlesPartial && !$this->isNew();
+        if (null === $this->collArticles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collArticles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getArticles());
+            }
+
+            $query = ChildArticleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPublisher($this)
+                ->count($con);
+        }
+
+        return count($this->collArticles);
+    }
+
+    /**
+     * Method called to associate a ChildArticle object to this object
+     * through the ChildArticle foreign key attribute.
+     *
+     * @param  ChildArticle $l ChildArticle
+     * @return $this|\Model\Publisher The current object (for fluent API support)
+     */
+    public function addArticle(ChildArticle $l)
+    {
+        if ($this->collArticles === null) {
+            $this->initArticles();
+            $this->collArticlesPartial = true;
+        }
+
+        if (!$this->collArticles->contains($l)) {
+            $this->doAddArticle($l);
+
+            if ($this->articlesScheduledForDeletion and $this->articlesScheduledForDeletion->contains($l)) {
+                $this->articlesScheduledForDeletion->remove($this->articlesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildArticle $article The ChildArticle object to add.
+     */
+    protected function doAddArticle(ChildArticle $article)
+    {
+        $this->collArticles[]= $article;
+        $article->setPublisher($this);
+    }
+
+    /**
+     * @param  ChildArticle $article The ChildArticle object to remove.
+     * @return $this|ChildPublisher The current object (for fluent API support)
+     */
+    public function removeArticle(ChildArticle $article)
+    {
+        if ($this->getArticles()->contains($article)) {
+            $pos = $this->collArticles->search($article);
+            $this->collArticles->remove($pos);
+            if (null === $this->articlesScheduledForDeletion) {
+                $this->articlesScheduledForDeletion = clone $this->collArticles;
+                $this->articlesScheduledForDeletion->clear();
+            }
+            $this->articlesScheduledForDeletion[]= $article;
+            $article->setPublisher(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Publisher is new, it will return
+     * an empty collection; or if this Publisher has previously
+     * been saved, it will retrieve related Articles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Publisher.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildArticle[] List of ChildArticle objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildArticle}> List of ChildArticle objects
+     */
+    public function getArticlesJoinBookCollection(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildArticleQuery::create(null, $criteria);
+        $query->joinWith('BookCollection', $joinBehavior);
+
+        return $this->getArticles($query, $con);
     }
 
     /**
@@ -3717,6 +4040,11 @@ abstract class Publisher implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collArticles) {
+                foreach ($this->collArticles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRights) {
                 foreach ($this->collRights as $o) {
                     $o->clearAllReferences($deep);
@@ -3724,6 +4052,7 @@ abstract class Publisher implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collArticles = null;
         $this->collRights = null;
     }
 

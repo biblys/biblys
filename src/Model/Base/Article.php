@@ -7,8 +7,12 @@ use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
+use Model\BookCollection as ChildBookCollection;
+use Model\BookCollectionQuery as ChildBookCollectionQuery;
 use Model\Link as ChildLink;
 use Model\LinkQuery as ChildLinkQuery;
+use Model\Publisher as ChildPublisher;
+use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Role as ChildRole;
 use Model\RoleQuery as ChildRoleQuery;
 use Model\Map\ArticleTableMap;
@@ -626,6 +630,16 @@ abstract class Article implements ActiveRecordInterface
      * @var        string|null
      */
     protected $article_deletion_reason;
+
+    /**
+     * @var        ChildPublisher
+     */
+    protected $aPublisher;
+
+    /**
+     * @var        ChildBookCollection
+     */
+    protected $aBookCollection;
 
     /**
      * @var        ObjectCollection|ChildLink[] Collection to store aggregation of ChildLink objects.
@@ -2324,6 +2338,10 @@ abstract class Article implements ActiveRecordInterface
             $this->modifiedColumns[ArticleTableMap::COL_COLLECTION_ID] = true;
         }
 
+        if ($this->aBookCollection !== null && $this->aBookCollection->getId() !== $v) {
+            $this->aBookCollection = null;
+        }
+
         return $this;
     } // setCollectionId()
 
@@ -2382,6 +2400,10 @@ abstract class Article implements ActiveRecordInterface
         if ($this->publisher_id !== $v) {
             $this->publisher_id = $v;
             $this->modifiedColumns[ArticleTableMap::COL_PUBLISHER_ID] = true;
+        }
+
+        if ($this->aPublisher !== null && $this->aPublisher->getId() !== $v) {
+            $this->aPublisher = null;
         }
 
         return $this;
@@ -3790,6 +3812,12 @@ abstract class Article implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aBookCollection !== null && $this->collection_id !== $this->aBookCollection->getId()) {
+            $this->aBookCollection = null;
+        }
+        if ($this->aPublisher !== null && $this->publisher_id !== $this->aPublisher->getId()) {
+            $this->aPublisher = null;
+        }
     } // ensureConsistency
 
     /**
@@ -3829,6 +3857,8 @@ abstract class Article implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aPublisher = null;
+            $this->aBookCollection = null;
             $this->collLinks = null;
 
             $this->collRoles = null;
@@ -3955,6 +3985,25 @@ abstract class Article implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aPublisher !== null) {
+                if ($this->aPublisher->isModified() || $this->aPublisher->isNew()) {
+                    $affectedRows += $this->aPublisher->save($con);
+                }
+                $this->setPublisher($this->aPublisher);
+            }
+
+            if ($this->aBookCollection !== null) {
+                if ($this->aBookCollection->isModified() || $this->aBookCollection->isNew()) {
+                    $affectedRows += $this->aBookCollection->save($con);
+                }
+                $this->setBookCollection($this->aBookCollection);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -4951,6 +5000,36 @@ abstract class Article implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aPublisher) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'publisher';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'publishers';
+                        break;
+                    default:
+                        $key = 'Publisher';
+                }
+
+                $result[$key] = $this->aPublisher->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aBookCollection) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'bookCollection';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'collections';
+                        break;
+                    default:
+                        $key = 'BookCollection';
+                }
+
+                $result[$key] = $this->aBookCollection->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collLinks) {
 
                 switch ($keyType) {
@@ -5997,6 +6076,108 @@ abstract class Article implements ActiveRecordInterface
         return $copyObj;
     }
 
+    /**
+     * Declares an association between this object and a ChildPublisher object.
+     *
+     * @param  ChildPublisher|null $v
+     * @return $this|\Model\Article The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPublisher(ChildPublisher $v = null)
+    {
+        if ($v === null) {
+            $this->setPublisherId(NULL);
+        } else {
+            $this->setPublisherId($v->getId());
+        }
+
+        $this->aPublisher = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPublisher object, it will not be re-added.
+        if ($v !== null) {
+            $v->addArticle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPublisher object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPublisher|null The associated ChildPublisher object.
+     * @throws PropelException
+     */
+    public function getPublisher(ConnectionInterface $con = null)
+    {
+        if ($this->aPublisher === null && ($this->publisher_id != 0)) {
+            $this->aPublisher = ChildPublisherQuery::create()->findPk($this->publisher_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPublisher->addArticles($this);
+             */
+        }
+
+        return $this->aPublisher;
+    }
+
+    /**
+     * Declares an association between this object and a ChildBookCollection object.
+     *
+     * @param  ChildBookCollection|null $v
+     * @return $this|\Model\Article The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setBookCollection(ChildBookCollection $v = null)
+    {
+        if ($v === null) {
+            $this->setCollectionId(NULL);
+        } else {
+            $this->setCollectionId($v->getId());
+        }
+
+        $this->aBookCollection = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildBookCollection object, it will not be re-added.
+        if ($v !== null) {
+            $v->addArticle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildBookCollection object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildBookCollection|null The associated ChildBookCollection object.
+     * @throws PropelException
+     */
+    public function getBookCollection(ConnectionInterface $con = null)
+    {
+        if ($this->aBookCollection === null && ($this->collection_id != 0)) {
+            $this->aBookCollection = ChildBookCollectionQuery::create()->findPk($this->collection_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aBookCollection->addArticles($this);
+             */
+        }
+
+        return $this->aBookCollection;
+    }
+
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -6547,6 +6728,12 @@ abstract class Article implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aPublisher) {
+            $this->aPublisher->removeArticle($this);
+        }
+        if (null !== $this->aBookCollection) {
+            $this->aBookCollection->removeArticle($this);
+        }
         $this->article_id = null;
         $this->article_item = null;
         $this->article_textid = null;
@@ -6658,6 +6845,8 @@ abstract class Article implements ActiveRecordInterface
 
         $this->collLinks = null;
         $this->collRoles = null;
+        $this->aPublisher = null;
+        $this->aBookCollection = null;
     }
 
     /**
