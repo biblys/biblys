@@ -45,10 +45,10 @@
     <column name="article_authors" phpName="Authors" type="VARCHAR" size="256"/>
     <column name="article_authors_alphabetic" phpName="AuthorsAlphabetic" type="VARCHAR" size="256"/>
     <column name="collection_id" phpName="CollectionId" type="INTEGER" size="10"/>
-    <column name="article_collection" phpName="Collection" type="VARCHAR" size="256"/>
+    <column name="article_collection" phpName="CollectionName" type="VARCHAR" size="256"/>
     <column name="article_number" phpName="Number" type="VARCHAR" size="8"/>
     <column name="publisher_id" phpName="PublisherId" type="INTEGER"/>
-    <column name="article_publisher" phpName="Publisher" type="VARCHAR" size="256"/>
+    <column name="article_publisher" phpName="PublisherName" type="VARCHAR" size="256"/>
     <column name="cycle_id" phpName="CycleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_cycle" phpName="Cycle" type="VARCHAR" size="256"/>
     <column name="article_tome" phpName="Tome" type="VARCHAR" size="8"/>

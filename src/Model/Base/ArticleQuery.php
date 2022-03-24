@@ -45,10 +45,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery orderByAuthors($order = Criteria::ASC) Order by the article_authors column
  * @method     ChildArticleQuery orderByAuthorsAlphabetic($order = Criteria::ASC) Order by the article_authors_alphabetic column
  * @method     ChildArticleQuery orderByCollectionId($order = Criteria::ASC) Order by the collection_id column
- * @method     ChildArticleQuery orderByCollection($order = Criteria::ASC) Order by the article_collection column
+ * @method     ChildArticleQuery orderByCollectionName($order = Criteria::ASC) Order by the article_collection column
  * @method     ChildArticleQuery orderByNumber($order = Criteria::ASC) Order by the article_number column
  * @method     ChildArticleQuery orderByPublisherId($order = Criteria::ASC) Order by the publisher_id column
- * @method     ChildArticleQuery orderByPublisher($order = Criteria::ASC) Order by the article_publisher column
+ * @method     ChildArticleQuery orderByPublisherName($order = Criteria::ASC) Order by the article_publisher column
  * @method     ChildArticleQuery orderByCycleId($order = Criteria::ASC) Order by the cycle_id column
  * @method     ChildArticleQuery orderByCycle($order = Criteria::ASC) Order by the article_cycle column
  * @method     ChildArticleQuery orderByTome($order = Criteria::ASC) Order by the article_tome column
@@ -124,10 +124,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery groupByAuthors() Group by the article_authors column
  * @method     ChildArticleQuery groupByAuthorsAlphabetic() Group by the article_authors_alphabetic column
  * @method     ChildArticleQuery groupByCollectionId() Group by the collection_id column
- * @method     ChildArticleQuery groupByCollection() Group by the article_collection column
+ * @method     ChildArticleQuery groupByCollectionName() Group by the article_collection column
  * @method     ChildArticleQuery groupByNumber() Group by the article_number column
  * @method     ChildArticleQuery groupByPublisherId() Group by the publisher_id column
- * @method     ChildArticleQuery groupByPublisher() Group by the article_publisher column
+ * @method     ChildArticleQuery groupByPublisherName() Group by the article_publisher column
  * @method     ChildArticleQuery groupByCycleId() Group by the cycle_id column
  * @method     ChildArticleQuery groupByCycle() Group by the article_cycle column
  * @method     ChildArticleQuery groupByTome() Group by the article_tome column
@@ -236,10 +236,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByAuthors(string $article_authors) Return the first ChildArticle filtered by the article_authors column
  * @method     ChildArticle|null findOneByAuthorsAlphabetic(string $article_authors_alphabetic) Return the first ChildArticle filtered by the article_authors_alphabetic column
  * @method     ChildArticle|null findOneByCollectionId(int $collection_id) Return the first ChildArticle filtered by the collection_id column
- * @method     ChildArticle|null findOneByCollection(string $article_collection) Return the first ChildArticle filtered by the article_collection column
+ * @method     ChildArticle|null findOneByCollectionName(string $article_collection) Return the first ChildArticle filtered by the article_collection column
  * @method     ChildArticle|null findOneByNumber(string $article_number) Return the first ChildArticle filtered by the article_number column
  * @method     ChildArticle|null findOneByPublisherId(int $publisher_id) Return the first ChildArticle filtered by the publisher_id column
- * @method     ChildArticle|null findOneByPublisher(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column
+ * @method     ChildArticle|null findOneByPublisherName(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column
  * @method     ChildArticle|null findOneByCycleId(int $cycle_id) Return the first ChildArticle filtered by the cycle_id column
  * @method     ChildArticle|null findOneByCycle(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column
  * @method     ChildArticle|null findOneByTome(string $article_tome) Return the first ChildArticle filtered by the article_tome column
@@ -318,10 +318,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByAuthors(string $article_authors) Return the first ChildArticle filtered by the article_authors column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByAuthorsAlphabetic(string $article_authors_alphabetic) Return the first ChildArticle filtered by the article_authors_alphabetic column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByCollectionId(int $collection_id) Return the first ChildArticle filtered by the collection_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOneByCollection(string $article_collection) Return the first ChildArticle filtered by the article_collection column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOneByCollectionName(string $article_collection) Return the first ChildArticle filtered by the article_collection column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByNumber(string $article_number) Return the first ChildArticle filtered by the article_number column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByPublisherId(int $publisher_id) Return the first ChildArticle filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOneByPublisher(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOneByPublisherName(string $article_publisher) Return the first ChildArticle filtered by the article_publisher column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByCycleId(int $cycle_id) Return the first ChildArticle filtered by the cycle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByCycle(string $article_cycle) Return the first ChildArticle filtered by the article_cycle column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByTome(string $article_tome) Return the first ChildArticle filtered by the article_tome column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -424,14 +424,14 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
  * @method     ChildArticle[]|ObjectCollection findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
- * @method     ChildArticle[]|ObjectCollection findByCollection(string $article_collection) Return ChildArticle objects filtered by the article_collection column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollection(string $article_collection) Return ChildArticle objects filtered by the article_collection column
+ * @method     ChildArticle[]|ObjectCollection findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
  * @method     ChildArticle[]|ObjectCollection findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
  * @method     ChildArticle[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
- * @method     ChildArticle[]|ObjectCollection findByPublisher(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisher(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
+ * @method     ChildArticle[]|ObjectCollection findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
+ * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
  * @method     ChildArticle[]|ObjectCollection findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
  * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
  * @method     ChildArticle[]|ObjectCollection findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
@@ -1509,24 +1509,24 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByCollection('fooValue');   // WHERE article_collection = 'fooValue'
-     * $query->filterByCollection('%fooValue%', Criteria::LIKE); // WHERE article_collection LIKE '%fooValue%'
+     * $query->filterByCollectionName('fooValue');   // WHERE article_collection = 'fooValue'
+     * $query->filterByCollectionName('%fooValue%', Criteria::LIKE); // WHERE article_collection LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $collection The value to use as filter.
+     * @param     string $collectionName The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildArticleQuery The current query, for fluid interface
      */
-    public function filterByCollection($collection = null, $comparison = null)
+    public function filterByCollectionName($collectionName = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($collection)) {
+            if (is_array($collectionName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COLLECTION, $collection, $comparison);
+        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COLLECTION, $collectionName, $comparison);
     }
 
     /**
@@ -1600,24 +1600,24 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByPublisher('fooValue');   // WHERE article_publisher = 'fooValue'
-     * $query->filterByPublisher('%fooValue%', Criteria::LIKE); // WHERE article_publisher LIKE '%fooValue%'
+     * $query->filterByPublisherName('fooValue');   // WHERE article_publisher = 'fooValue'
+     * $query->filterByPublisherName('%fooValue%', Criteria::LIKE); // WHERE article_publisher LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $publisher The value to use as filter.
+     * @param     string $publisherName The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildArticleQuery The current query, for fluid interface
      */
-    public function filterByPublisher($publisher = null, $comparison = null)
+    public function filterByPublisherName($publisherName = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($publisher)) {
+            if (is_array($publisherName)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER, $publisher, $comparison);
+        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER, $publisherName, $comparison);
     }
 
     /**

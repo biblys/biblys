@@ -1166,7 +1166,7 @@ abstract class Article implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getCollection()
+    public function getCollectionName()
     {
         return $this->article_collection;
     }
@@ -1196,7 +1196,7 @@ abstract class Article implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getPublisher()
+    public function getPublisherName()
     {
         return $this->article_publisher;
     }
@@ -2333,7 +2333,7 @@ abstract class Article implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this|\Model\Article The current object (for fluent API support)
      */
-    public function setCollection($v)
+    public function setCollectionName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -2345,7 +2345,7 @@ abstract class Article implements ActiveRecordInterface
         }
 
         return $this;
-    } // setCollection()
+    } // setCollectionName()
 
     /**
      * Set the value of [article_number] column.
@@ -2393,7 +2393,7 @@ abstract class Article implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this|\Model\Article The current object (for fluent API support)
      */
-    public function setPublisher($v)
+    public function setPublisherName($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -2405,7 +2405,7 @@ abstract class Article implements ActiveRecordInterface
         }
 
         return $this;
-    } // setPublisher()
+    } // setPublisherName()
 
     /**
      * Set the value of [cycle_id] column.
@@ -3578,7 +3578,7 @@ abstract class Article implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 24 + $startcol : ArticleTableMap::translateFieldName('CollectionId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->collection_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : ArticleTableMap::translateFieldName('Collection', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 25 + $startcol : ArticleTableMap::translateFieldName('CollectionName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_collection = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 26 + $startcol : ArticleTableMap::translateFieldName('Number', TableMap::TYPE_PHPNAME, $indexType)];
@@ -3587,7 +3587,7 @@ abstract class Article implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 27 + $startcol : ArticleTableMap::translateFieldName('PublisherId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->publisher_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : ArticleTableMap::translateFieldName('Publisher', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 28 + $startcol : ArticleTableMap::translateFieldName('PublisherName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_publisher = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 29 + $startcol : ArticleTableMap::translateFieldName('CycleId', TableMap::TYPE_PHPNAME, $indexType)];
@@ -4646,7 +4646,7 @@ abstract class Article implements ActiveRecordInterface
                 return $this->getCollectionId();
                 break;
             case 25:
-                return $this->getCollection();
+                return $this->getCollectionName();
                 break;
             case 26:
                 return $this->getNumber();
@@ -4655,7 +4655,7 @@ abstract class Article implements ActiveRecordInterface
                 return $this->getPublisherId();
                 break;
             case 28:
-                return $this->getPublisher();
+                return $this->getPublisherName();
                 break;
             case 29:
                 return $this->getCycleId();
@@ -4859,10 +4859,10 @@ abstract class Article implements ActiveRecordInterface
             $keys[22] => $this->getAuthors(),
             $keys[23] => $this->getAuthorsAlphabetic(),
             $keys[24] => $this->getCollectionId(),
-            $keys[25] => $this->getCollection(),
+            $keys[25] => $this->getCollectionName(),
             $keys[26] => $this->getNumber(),
             $keys[27] => $this->getPublisherId(),
-            $keys[28] => $this->getPublisher(),
+            $keys[28] => $this->getPublisherName(),
             $keys[29] => $this->getCycleId(),
             $keys[30] => $this->getCycle(),
             $keys[31] => $this->getTome(),
@@ -5091,7 +5091,7 @@ abstract class Article implements ActiveRecordInterface
                 $this->setCollectionId($value);
                 break;
             case 25:
-                $this->setCollection($value);
+                $this->setCollectionName($value);
                 break;
             case 26:
                 $this->setNumber($value);
@@ -5100,7 +5100,7 @@ abstract class Article implements ActiveRecordInterface
                 $this->setPublisherId($value);
                 break;
             case 28:
-                $this->setPublisher($value);
+                $this->setPublisherName($value);
                 break;
             case 29:
                 $this->setCycleId($value);
@@ -5351,7 +5351,7 @@ abstract class Article implements ActiveRecordInterface
             $this->setCollectionId($arr[$keys[24]]);
         }
         if (array_key_exists($keys[25], $arr)) {
-            $this->setCollection($arr[$keys[25]]);
+            $this->setCollectionName($arr[$keys[25]]);
         }
         if (array_key_exists($keys[26], $arr)) {
             $this->setNumber($arr[$keys[26]]);
@@ -5360,7 +5360,7 @@ abstract class Article implements ActiveRecordInterface
             $this->setPublisherId($arr[$keys[27]]);
         }
         if (array_key_exists($keys[28], $arr)) {
-            $this->setPublisher($arr[$keys[28]]);
+            $this->setPublisherName($arr[$keys[28]]);
         }
         if (array_key_exists($keys[29], $arr)) {
             $this->setCycleId($arr[$keys[29]]);
@@ -5896,10 +5896,10 @@ abstract class Article implements ActiveRecordInterface
         $copyObj->setAuthors($this->getAuthors());
         $copyObj->setAuthorsAlphabetic($this->getAuthorsAlphabetic());
         $copyObj->setCollectionId($this->getCollectionId());
-        $copyObj->setCollection($this->getCollection());
+        $copyObj->setCollectionName($this->getCollectionName());
         $copyObj->setNumber($this->getNumber());
         $copyObj->setPublisherId($this->getPublisherId());
-        $copyObj->setPublisher($this->getPublisher());
+        $copyObj->setPublisherName($this->getPublisherName());
         $copyObj->setCycleId($this->getCycleId());
         $copyObj->setCycle($this->getCycle());
         $copyObj->setTome($this->getTome());
