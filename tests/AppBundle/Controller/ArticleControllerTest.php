@@ -130,7 +130,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $article = ModelFactory::createArticle($publisher);
+        $article = ModelFactory::createArticle([], $publisher);
 
         // when
         $response = $controller->addTagsAction($request, $article->getId());
@@ -170,7 +170,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $article = ModelFactory::createArticle($publisher);
+        $article = ModelFactory::createArticle([], $publisher);
         $category = ModelFactory::createArticleCategory();
         $request->request->set("rayon_id", $category->getId());
 

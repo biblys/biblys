@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use DateTime;
 use Model\Article;
 use Model\ArticleCategory;
+use Model\BookCollection;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
@@ -52,15 +53,23 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticle(
-        ?Publisher $publisher = null
-    ):
-    Article
+        array $attributes = [],
+        Publisher $publisher = null,
+        BookCollection $collection = null
+    ): Article
     {
         $article = new Article();
-        $article->setTitle("Article");
+        $article->setTitle($attributes["title"] ?? "Article");
+        $article->setEan($attributes["ean"] ?? "9781234567890");
+        $article->setPrice($attributes["price"] ?? 999);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
+        $article->setPublisherName($publisher->getName());
+
+        $collection = $collection ?? self::createCollection();
+        $article->setCollectionId($collection->getId());
+        $article->setCollectionName($collection->getName());
 
         $article->save();
 
@@ -76,6 +85,21 @@ class ModelFactory
         $category->save();
 
         return $category;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCollection(array $attributes = [], Publisher $publisher = null):
+    BookCollection
+    {
+        $collection = new BookCollection();
+        $collection->setName($attributes["name"] ?? "La Blanche");
+        $publisher = $publisher ?? self::createPublisher();
+        $collection->setPublisherId($publisher->getId());
+        $collection->save();
+
+        return $collection;
     }
 
     /**
