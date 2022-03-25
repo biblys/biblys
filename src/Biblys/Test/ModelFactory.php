@@ -22,6 +22,7 @@ use Model\Session;
 use Model\ShippingFee;
 use Model\Site;
 use Model\SiteQuery;
+use Model\Stock;
 use Model\User;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -226,6 +227,26 @@ class ModelFactory
         $people->save();
 
         return $people;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createStockItem(
+        array $attributes = [],
+        ?Site $site = null,
+        ?Article $article = null
+    ): Stock
+    {
+        $stock = new Stock();
+        $stock->setSite($site ?? self::createSite());
+        $stock->setArticle($article ?? self::createArticle());
+        $stock->setSellingDate($attributes["selling_date"] ?? null);
+        $stock->setReturnDate($attributes["return_date"] ?? null);
+        $stock->setLostDate($attributes["lost_date"] ?? null);
+        $stock->save();
+
+        return $stock;
     }
 
     /**

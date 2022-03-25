@@ -4,6 +4,9 @@ namespace Model;
 
 use Exception;
 use Model\Base\Article as BaseArticle;
+use Model\StockQuery as ChildStockQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
 
 class Article extends BaseArticle
 {
@@ -29,5 +32,28 @@ class Article extends BaseArticle
         $role->save();
 
         return $role;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function countAvailableStockItemsForSite(Site $site): int
+    {
+        $partial = $this->collStocksPartial && !$this->isNew();
+        if (null === $this->collStocks || $partial) {
+            if ($this->isNew() && null === $this->collStocks) {
+                return 0;
+            }
+
+            return ChildStockQuery::create()
+                ->filterByArticle($this)
+                ->filterBySite($site)
+                ->filterBySellingDate(null, Criteria::ISNULL)
+                ->filterByReturnDate(null, Criteria::ISNULL)
+                ->filterByLostDate(null, Criteria::ISNULL)
+                ->count();
+        }
+
+        return count($this->collStocks);
     }
 }
