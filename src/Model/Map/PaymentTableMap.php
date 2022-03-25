@@ -259,7 +259,7 @@ class PaymentTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('payment_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addForeignKey('order_id', 'OrderId', 'INTEGER', 'orders', 'order_id', false, null, null);
         $this->addColumn('payment_amount', 'Amount', 'INTEGER', false, null, null);
         $this->addColumn('payment_mode', 'Mode', 'VARCHAR', false, 16, null);
@@ -275,6 +275,13 @@ class PaymentTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Order', '\\Model\\Order', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (

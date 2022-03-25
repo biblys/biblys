@@ -50,6 +50,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPaymentQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildPaymentQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildPaymentQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildPaymentQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ *
+ * @method     ChildPaymentQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ *
+ * @method     ChildPaymentQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildPaymentQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildPaymentQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
+ *
  * @method     ChildPaymentQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
  * @method     ChildPaymentQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
  * @method     ChildPaymentQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
@@ -60,7 +70,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
  * @method     ChildPaymentQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
- * @method     \Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPayment|null findOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query
  * @method     ChildPayment findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPayment matching the query, or a new ChildPayment object populated from the query conditions when no match is found
@@ -351,6 +361,8 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
+     *
+     * @see       filterBySite()
      *
      * @param     mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
@@ -671,6 +683,138 @@ abstract class PaymentQuery extends ModelCriteria
         return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, $updatedAt, $comparison);
     }
 
+    /**
+     * Filter the query by a related \Model\Site object
+     *
+     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterBySite($site, $comparison = null)
+    {
+        if ($site instanceof \Model\Site) {
+            return $this
+                ->addUsingAlias(PaymentTableMap::COL_SITE_ID, $site->getId(), $comparison);
+        } elseif ($site instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(PaymentTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Site relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Site');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Site');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SiteQuery A secondary query class using the current class as primary query
+     */
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
     /**
      * Filter the query by a related \Model\Order object
      *
