@@ -5,7 +5,7 @@
 
 <a class="btn btn-primary" href="{{ path("api_articles_export") }}">
   <span class="fa fa-cloud-download"></span>
-  Télécharger
+  Télécharger (au format CSV)
 </a>
 
 <table id="catalog" class="table">
@@ -16,6 +16,7 @@
       <th>Collection</th>
       <th>Éditeur</th>
       <th>Prix</th>
+      <th>Stock</th>
     </tr>
   </thead>
   <tbody>
@@ -30,6 +31,9 @@
         <td>{{ article.collectionName }}</td>
         <td>{{ article.publisherName }}</td>
         <td>{{ article.price|currency(true)|raw }}</td>
+        <td class="text-right">
+          {{ article.countAvailableStockItemsForSite(site) }}
+        </td>
       </tr>
     {% endfor %}
   </tbody>

@@ -32,7 +32,7 @@ class ArticleController extends Controller
         $response->headers->set("Content-Disposition", "attachment; filename=$fileName");
 
         $csv = Writer::createFromString();
-        $csv->insertOne(["EAN", "Titre", "Collection", "Éditeur", "Prix"]);
+        $csv->insertOne(["EAN", "Titre", "Collection", "Éditeur", "Prix", "Stock"]);
 
         $articles = ArticleQuery::create()->filterForCurrentSite($currentSiteService)->find();
         foreach ($articles as $article) {
@@ -42,6 +42,7 @@ class ArticleController extends Controller
                 $article->getCollectionName(),
                 $article->getPublisherName(),
                 $article->getPrice() / 100,
+                $article->countAvailableStockItemsForSite($currentSite),
             ]);
         }
 

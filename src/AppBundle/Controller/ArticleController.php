@@ -530,6 +530,7 @@ class ArticleController extends Controller
      *
      * @route GET /admin/articles/
      * @param Request $request
+     * @param CurrentSite $currentSite
      * @return Response
      * @throws AuthException
      * @throws LoaderError
@@ -540,12 +541,16 @@ class ArticleController extends Controller
     public function adminCatalog(Request $request, CurrentSite $currentSite): Response
     {
         self::authAdmin($request);
+
+        $request->attributes->set("page_title", "Catalogue");
+
         $articles = ArticleQuery::create()
             ->filterForCurrentSite($currentSite)
             ->find();
 
         return $this->render("AppBundle:Article:articleAdminCatalog.html.twig", [
             "articles" => $articles,
+            "site" => $currentSite->getSite(),
         ]);
     }
 
@@ -581,7 +586,7 @@ class ArticleController extends Controller
         $am = new ArticleManager();
 
         $requestBody = $request->getContent();
-        $publisherStock = (int) $requestBody;
+        $publisherStock = (int)$requestBody;
         /** @noinspection PhpConditionAlreadyCheckedInspection */
         if (!is_int($publisherStock) || $requestBody === "NaN") {
             throw new BadRequestHttpException("article_publisher_stock $requestBody is not an integer.");

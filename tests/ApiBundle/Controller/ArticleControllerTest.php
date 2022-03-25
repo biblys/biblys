@@ -29,11 +29,12 @@ class ArticleControllerTest extends TestCase
 
         $publisher = ModelFactory::createPublisher(["name" => "Les Éditions Paronymie"]);
         $collection = ModelFactory::createCollection(["publisher" => $publisher]);
-        ModelFactory::createArticle([
+        $article = ModelFactory::createArticle([
             "title" => "L'Animalie",
             "ean" => "9781234567897",
             "price" => "1500",
         ], $publisher, $collection);
+        ModelFactory::createStockItem([], $site, $article);
         ModelFactory::createArticle([
             "title" => "Au-revoir, Mao",
             "ean" => "9781234567844",
@@ -73,10 +74,10 @@ class ArticleControllerTest extends TestCase
             "it should return a downloadable file"
         );
 
-        $csv  = "EAN,Titre,Collection,Éditeur,Prix\n";
-        $csv .= "9781234567897,L'Animalie,\"La Blanche\",\"Les Éditions Paronymie\",15\n";
-        $csv .= "9781234567844,\"Au-revoir, Mao\",\"La Blanche\",\"Les Éditions Paronymie\",9.99\n";
-        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"La Blanche\",\"Les Éditions Paronymie\",0\n";
+        $csv  = "EAN,Titre,Collection,Éditeur,Prix,Stock\n";
+        $csv .= "9781234567897,L'Animalie,\"La Blanche\",\"Les Éditions Paronymie\",15,1\n";
+        $csv .= "9781234567844,\"Au-revoir, Mao\",\"La Blanche\",\"Les Éditions Paronymie\",9.99,0\n";
+        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"La Blanche\",\"Les Éditions Paronymie\",0,0\n";
         $this->assertEquals(
             $csv,
             $response->getContent(),
