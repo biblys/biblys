@@ -2,7 +2,9 @@
 
 namespace Model;
 
+use Biblys\Service\CurrentSite;
 use Model\Base\ArticleQuery as BaseArticleQuery;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'articles' table.
@@ -15,5 +17,17 @@ use Model\Base\ArticleQuery as BaseArticleQuery;
  */
 class ArticleQuery extends BaseArticleQuery
 {
+    /**
+     * @throws PropelException
+     */
+    public function filterForCurrentSite(CurrentSite $currentSite): ArticleQuery
+    {
+        $publisherFilter = $currentSite->getOption("publisher_filter");
+        if (!$publisherFilter) {
+            return $this;
+        }
 
+        $allowedPublishersIds = explode(",", $publisherFilter);
+        return $this->filterByPublisherId($allowedPublishersIds);
+    }
 }
