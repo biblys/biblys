@@ -15,9 +15,12 @@ use Model\Publisher as ChildPublisher;
 use Model\PublisherQuery as ChildPublisherQuery;
 use Model\Role as ChildRole;
 use Model\RoleQuery as ChildRoleQuery;
+use Model\Stock as ChildStock;
+use Model\StockQuery as ChildStockQuery;
 use Model\Map\ArticleTableMap;
 use Model\Map\LinkTableMap;
 use Model\Map\RoleTableMap;
+use Model\Map\StockTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -656,6 +659,13 @@ abstract class Article implements ActiveRecordInterface
     protected $collRolesPartial;
 
     /**
+     * @var        ObjectCollection|ChildStock[] Collection to store aggregation of ChildStock objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildStock> Collection to store aggregation of ChildStock objects.
+     */
+    protected $collStocks;
+    protected $collStocksPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -676,6 +686,13 @@ abstract class Article implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildRole>
      */
     protected $rolesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildStock[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildStock>
+     */
+    protected $stocksScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -3863,6 +3880,8 @@ abstract class Article implements ActiveRecordInterface
 
             $this->collRoles = null;
 
+            $this->collStocks = null;
+
         } // if (deep)
     }
 
@@ -4046,6 +4065,24 @@ abstract class Article implements ActiveRecordInterface
 
             if ($this->collRoles !== null) {
                 foreach ($this->collRoles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->stocksScheduledForDeletion !== null) {
+                if (!$this->stocksScheduledForDeletion->isEmpty()) {
+                    foreach ($this->stocksScheduledForDeletion as $stock) {
+                        // need to save related object because we set the relation to null
+                        $stock->save($con);
+                    }
+                    $this->stocksScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collStocks !== null) {
+                foreach ($this->collStocks as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -5060,6 +5097,21 @@ abstract class Article implements ActiveRecordInterface
 
                 $result[$key] = $this->collRoles->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collStocks) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'stocks';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'stocks';
+                        break;
+                    default:
+                        $key = 'Stocks';
+                }
+
+                $result[$key] = $this->collStocks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -6046,6 +6098,12 @@ abstract class Article implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getStocks() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addStock($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -6195,6 +6253,10 @@ abstract class Article implements ActiveRecordInterface
         }
         if ('Role' === $relationName) {
             $this->initRoles();
+            return;
+        }
+        if ('Stock' === $relationName) {
+            $this->initStocks();
             return;
         }
     }
@@ -6722,6 +6784,241 @@ abstract class Article implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collStocks collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addStocks()
+     */
+    public function clearStocks()
+    {
+        $this->collStocks = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collStocks collection loaded partially.
+     */
+    public function resetPartialStocks($v = true)
+    {
+        $this->collStocksPartial = $v;
+    }
+
+    /**
+     * Initializes the collStocks collection.
+     *
+     * By default this just sets the collStocks collection to an empty array (like clearcollStocks());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initStocks($overrideExisting = true)
+    {
+        if (null !== $this->collStocks && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = StockTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collStocks = new $collectionClassName;
+        $this->collStocks->setModel('\Model\Stock');
+    }
+
+    /**
+     * Gets an array of ChildStock objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildArticle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildStock[] List of ChildStock objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildStock> List of ChildStock objects
+     * @throws PropelException
+     */
+    public function getStocks(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collStocksPartial && !$this->isNew();
+        if (null === $this->collStocks || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collStocks) {
+                    $this->initStocks();
+                } else {
+                    $collectionClassName = StockTableMap::getTableMap()->getCollectionClassName();
+
+                    $collStocks = new $collectionClassName;
+                    $collStocks->setModel('\Model\Stock');
+
+                    return $collStocks;
+                }
+            } else {
+                $collStocks = ChildStockQuery::create(null, $criteria)
+                    ->filterByArticle($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collStocksPartial && count($collStocks)) {
+                        $this->initStocks(false);
+
+                        foreach ($collStocks as $obj) {
+                            if (false == $this->collStocks->contains($obj)) {
+                                $this->collStocks->append($obj);
+                            }
+                        }
+
+                        $this->collStocksPartial = true;
+                    }
+
+                    return $collStocks;
+                }
+
+                if ($partial && $this->collStocks) {
+                    foreach ($this->collStocks as $obj) {
+                        if ($obj->isNew()) {
+                            $collStocks[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collStocks = $collStocks;
+                $this->collStocksPartial = false;
+            }
+        }
+
+        return $this->collStocks;
+    }
+
+    /**
+     * Sets a collection of ChildStock objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $stocks A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildArticle The current object (for fluent API support)
+     */
+    public function setStocks(Collection $stocks, ConnectionInterface $con = null)
+    {
+        /** @var ChildStock[] $stocksToDelete */
+        $stocksToDelete = $this->getStocks(new Criteria(), $con)->diff($stocks);
+
+
+        $this->stocksScheduledForDeletion = $stocksToDelete;
+
+        foreach ($stocksToDelete as $stockRemoved) {
+            $stockRemoved->setArticle(null);
+        }
+
+        $this->collStocks = null;
+        foreach ($stocks as $stock) {
+            $this->addStock($stock);
+        }
+
+        $this->collStocks = $stocks;
+        $this->collStocksPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Stock objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Stock objects.
+     * @throws PropelException
+     */
+    public function countStocks(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collStocksPartial && !$this->isNew();
+        if (null === $this->collStocks || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collStocks) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getStocks());
+            }
+
+            $query = ChildStockQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByArticle($this)
+                ->count($con);
+        }
+
+        return count($this->collStocks);
+    }
+
+    /**
+     * Method called to associate a ChildStock object to this object
+     * through the ChildStock foreign key attribute.
+     *
+     * @param  ChildStock $l ChildStock
+     * @return $this|\Model\Article The current object (for fluent API support)
+     */
+    public function addStock(ChildStock $l)
+    {
+        if ($this->collStocks === null) {
+            $this->initStocks();
+            $this->collStocksPartial = true;
+        }
+
+        if (!$this->collStocks->contains($l)) {
+            $this->doAddStock($l);
+
+            if ($this->stocksScheduledForDeletion and $this->stocksScheduledForDeletion->contains($l)) {
+                $this->stocksScheduledForDeletion->remove($this->stocksScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildStock $stock The ChildStock object to add.
+     */
+    protected function doAddStock(ChildStock $stock)
+    {
+        $this->collStocks[]= $stock;
+        $stock->setArticle($this);
+    }
+
+    /**
+     * @param  ChildStock $stock The ChildStock object to remove.
+     * @return $this|ChildArticle The current object (for fluent API support)
+     */
+    public function removeStock(ChildStock $stock)
+    {
+        if ($this->getStocks()->contains($stock)) {
+            $pos = $this->collStocks->search($stock);
+            $this->collStocks->remove($pos);
+            if (null === $this->stocksScheduledForDeletion) {
+                $this->stocksScheduledForDeletion = clone $this->collStocks;
+                $this->stocksScheduledForDeletion->clear();
+            }
+            $this->stocksScheduledForDeletion[]= $stock;
+            $stock->setArticle(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -6841,10 +7138,16 @@ abstract class Article implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collStocks) {
+                foreach ($this->collStocks as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collLinks = null;
         $this->collRoles = null;
+        $this->collStocks = null;
         $this->aPublisher = null;
         $this->aBookCollection = null;
     }

@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\Article as ChildArticle;
+use Model\ArticleQuery as ChildArticleQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\StockTableMap;
@@ -354,6 +356,11 @@ abstract class Stock implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $stock_updated;
+
+    /**
+     * @var        ChildArticle
+     */
+    protected $aArticle;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -1240,6 +1247,10 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->article_id !== $v) {
             $this->article_id = $v;
             $this->modifiedColumns[StockTableMap::COL_ARTICLE_ID] = true;
+        }
+
+        if ($this->aArticle !== null && $this->aArticle->getId() !== $v) {
+            $this->aArticle = null;
         }
 
         return $this;
@@ -2287,6 +2298,9 @@ abstract class Stock implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
+            $this->aArticle = null;
+        }
     } // ensureConsistency
 
     /**
@@ -2326,6 +2340,7 @@ abstract class Stock implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aArticle = null;
         } // if (deep)
     }
 
@@ -2441,6 +2456,18 @@ abstract class Stock implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aArticle !== null) {
+                if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
+                    $affectedRows += $this->aArticle->save($con);
+                }
+                $this->setArticle($this->aArticle);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -2938,10 +2965,11 @@ abstract class Stock implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
         if (isset($alreadyDumpedObjects['Stock'][$this->hashCode()])) {
@@ -3037,6 +3065,23 @@ abstract class Stock implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aArticle) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'article';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'articles';
+                        break;
+                    default:
+                        $key = 'Article';
+                }
+
+                $result[$key] = $this->aArticle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -3663,12 +3708,66 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildArticle object.
+     *
+     * @param  ChildArticle|null $v
+     * @return $this|\Model\Stock The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setArticle(ChildArticle $v = null)
+    {
+        if ($v === null) {
+            $this->setArticleId(NULL);
+        } else {
+            $this->setArticleId($v->getId());
+        }
+
+        $this->aArticle = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildArticle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStock($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildArticle object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildArticle|null The associated ChildArticle object.
+     * @throws PropelException
+     */
+    public function getArticle(ConnectionInterface $con = null)
+    {
+        if ($this->aArticle === null && ($this->article_id != 0)) {
+            $this->aArticle = ChildArticleQuery::create()->findPk($this->article_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aArticle->addStocks($this);
+             */
+        }
+
+        return $this->aArticle;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
+        if (null !== $this->aArticle) {
+            $this->aArticle->removeStock($this);
+        }
         $this->stock_id = null;
         $this->site_id = null;
         $this->article_id = null;
@@ -3731,6 +3830,7 @@ abstract class Stock implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aArticle = null;
     }
 
     /**
