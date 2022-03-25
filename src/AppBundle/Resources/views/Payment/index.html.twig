@@ -1,0 +1,22 @@
+<h1>Paiements</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Commande n°</th>
+      <th>Mode</th>
+      <th>Montant</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for payment in payments %}
+    <tr>
+      <td>{{ payment.executed|date('d/m/Y') }}</td>
+      <td>{{ payment.orderId }}</td>
+      <td>{{ payment.mode }}</td>
+      <td class="text-right">{{ payment.amount|currency(true)|raw }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

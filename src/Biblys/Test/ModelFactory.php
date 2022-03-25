@@ -9,7 +9,9 @@ use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
 use Model\Link;
+use Model\Order;
 use Model\Page;
+use Model\Payment;
 use Model\People;
 use Model\Publisher;
 use Model\Right;
@@ -141,6 +143,17 @@ class ModelFactory
     /**
      * @throws PropelException
      */
+    public static function createOrder(): Order
+    {
+        $order = new Order();
+        $order->save();
+
+        return $order;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public static function createPage(array $attributes = []): Page
     {
         $page = new Page();
@@ -151,6 +164,26 @@ class ModelFactory
         $page->save();
 
         return $page;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createPayment(
+        array $attributes,
+        Site $site,
+        ?Order $order = null
+    ): Payment
+    {
+        $payment = new Payment();
+        $payment->setSite($site);
+        $payment->setOrder($order ?? self::createOrder());
+        $payment->setAmount($attributes["amount"] ?? 10000);
+        $payment->setMode($attributes["mode"] ?? "stripe");
+        $payment->setExecuted($attributes["executed"] ?? null);
+        $payment->save();
+
+        return $payment;
     }
 
     /**

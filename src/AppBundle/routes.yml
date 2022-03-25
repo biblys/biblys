@@ -368,6 +368,11 @@ people_edit:
 
 # Payment
 
+payments_index:
+  path: /admin/payments/
+  methods: GET
+  controller: AppBundle\Controller\PaymentController::index
+
 payment_stripe_webhook:
   path: /payment/stripe-webhook
   controller: AppBundle\Controller\PaymentController::stripeWebhookAction

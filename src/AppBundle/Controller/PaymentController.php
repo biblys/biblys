@@ -2,20 +2,55 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
 use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Model\PaymentQuery;
 use OrderManager;
 use PaymentManager;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Exception\PropelException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class PaymentController extends Controller
 {
+    /**
+     * @route GET /admin/payments
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function index(Request $request, CurrentSite $currentSite): Response
+    {
+        self::authAdmin($request);
+        $request->attributes->set("page_title", "Paiements");
+
+        $payments = PaymentQuery::create()
+            ->filterBySiteId($currentSite->getSite()->getId())
+            ->filterByExecuted(null, Criteria::ISNOTNULL)
+            ->orderByCreatedAt(Criteria::DESC)
+            ->limit(100)
+            ->find();
+
+        return $this->render(
+            "AppBundle:Payment:index.html.twig",
+            ["payments" => $payments]
+        );
+    }
+
     /**
      * GET /payment/stripe-webhook
      *
