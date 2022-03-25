@@ -144,8 +144,7 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws PropelException
-     * @throws Exception
+     * @throws AuthException
      */
     public function testAddRayonActionForUser()
     {

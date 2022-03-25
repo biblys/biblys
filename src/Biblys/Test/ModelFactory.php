@@ -2,8 +2,6 @@
 
 namespace Biblys\Test;
 
-use Biblys\Contributor\Contributor;
-use Biblys\Contributor\Job;
 use Biblys\Service\Config;
 use DateTime;
 use Model\Article;

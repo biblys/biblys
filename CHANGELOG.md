@@ -9,6 +9,12 @@ Améliorations
 - Les performances de la page Catalogue dans l'administration ont été 
   améliorées.
 
+Corrections
+
+- L'ajout d'un rayon à un article pouvait parfois provoquer l'apparition du
+  message d'erreur "Cet éditeur ne fait pas partie des éditeurs autorisés".
+  C'est corrigé.
+
 ### 2.59.3 (25 mars 2022)
 
 Correction
