@@ -130,10 +130,52 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
-        $article = ModelFactory::createArticle(["publisher" => $publisher]);
+        $article = ModelFactory::createArticle($publisher);
 
         // when
         $response = $controller->addTagsAction($request, $article->getId());
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddRayonActionForUser()
+    {
+        // given
+        $controller = new ArticleController();
+        $request = new Request();
+
+        // then
+        $this->expectException(AuthException::class);
+
+        // when
+        $controller->addRayonsAction($request, 1);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddRayonActionForPublisher()
+    {
+        // given
+        $controller = new ArticleController();
+        $publisher = ModelFactory::createPublisher();
+        $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
+        $article = ModelFactory::createArticle($publisher);
+        $category = ModelFactory::createArticleCategory();
+        $request->request->set("rayon_id", $category->getId());
+
+        // when
+        $response = $controller->addRayonsAction($request, $article->getId());
 
         // then
         $this->assertEquals(

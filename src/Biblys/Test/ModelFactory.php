@@ -4,6 +4,7 @@ namespace Biblys\Test;
 
 use Biblys\Service\Config;
 use Model\Article;
+use Model\ArticleCategory;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
@@ -47,17 +48,31 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createArticle(array $attributes = []): Article
+    public static function createArticle(
+        ?Publisher $publisher = null
+    ):
+    Article
     {
         $article = new Article();
         $article->setTitle("Article");
 
-        $publisher = $attributes["publisher"] ?? self::createPublisher();
+        $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
 
         $article->save();
 
         return $article;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createArticleCategory(): ArticleCategory
+    {
+        $category = new ArticleCategory();
+        $category->save();
+
+        return $category;
     }
 
     /**

@@ -368,6 +368,8 @@ class ArticleController extends Controller
      */
     public function addRayonsAction(Request $request, $id): JsonResponse
     {
+        self::authPublisher($request, null);
+
         $am = new ArticleManager();
         $rm = new RayonManager();
 
@@ -379,7 +381,8 @@ class ArticleController extends Controller
         }
 
         if ($article->has('publisher_id')) {
-            self::authPublisher($request, $article->getPublisher());
+            $publisher = PublisherQuery::create()->findPk($article->get("publisher_id"));
+            self::authPublisher($request, $publisher);
         }
 
         $rayon_id = $request->request->get('rayon_id');

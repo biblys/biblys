@@ -18,10 +18,7 @@ class PeopleControllerTest extends TestCase
     public function testAuthorsAction()
     {
         // given
-        ModelFactory::createArticle([], [
-            EntityFactory::createPeople(),
-            EntityFactory::createPeople(),
-        ]);
+        ModelFactory::createArticle();
         $controller = new PeopleController();
         $request = new Request();
         $GLOBALS["container"] = require_once __DIR__."/../../../src/container.php";
