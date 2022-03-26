@@ -4,9 +4,11 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
+use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use InvalidArgumentException;
 use Model\PaymentQuery;
 use OrderManager;
 use PaymentManager;
@@ -38,17 +40,31 @@ class PaymentController extends Controller
         self::authAdmin($request);
         $request->attributes->set("page_title", "Paiements");
 
-        $payments = PaymentQuery::create()
+
+        $paymentQuery = PaymentQuery::create()
             ->filterBySiteId($currentSite->getSite()->getId())
             ->filterByExecuted(null, Criteria::ISNOTNULL)
-            ->orderByCreatedAt(Criteria::DESC)
-            ->limit(100)
+            ->orderByCreatedAt(Criteria::DESC);
+
+        try {
+            $pageNumber = (int) $request->query->get("p", 0);
+            $paymentsTotalCount = $paymentQuery->count();
+            $paymentsPerPage = 100;
+            $pagination = new Pagination($pageNumber, $paymentsTotalCount, $paymentsPerPage);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+
+        $payments = $paymentQuery
+            ->limit($pagination->getLimit())
+            ->offset($pagination->getOffset())
             ->find();
 
         return $this->render(
-            "AppBundle:Payment:index.html.twig",
-            ["payments" => $payments]
-        );
+            "AppBundle:Payment:index.html.twig", [
+                "payments" => $payments,
+                "pages" => $pagination,
+            ]);
     }
 
     /**
