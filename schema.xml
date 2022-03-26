@@ -867,6 +867,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
   </table>
   <table name="pages" idMethod="native" phpName="Page">
     <column name="page_id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>

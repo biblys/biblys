@@ -9,6 +9,8 @@ use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\Map\OrderTableMap;
 use Model\Map\PaymentTableMap;
 use Propel\Runtime\Propel;
@@ -426,6 +428,11 @@ abstract class Order implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $order_updated;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ObjectCollection|ChildPayment[] Collection to store aggregation of ChildPayment objects.
@@ -1359,6 +1366,10 @@ abstract class Order implements ActiveRecordInterface
         if ($this->site_id !== $v) {
             $this->site_id = $v;
             $this->modifiedColumns[OrderTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
         }
 
         return $this;
@@ -2590,6 +2601,9 @@ abstract class Order implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
     } // ensureConsistency
 
     /**
@@ -2629,6 +2643,7 @@ abstract class Order implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->collPayments = null;
 
         } // if (deep)
@@ -2746,6 +2761,18 @@ abstract class Order implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
+
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -3448,6 +3475,21 @@ abstract class Order implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collPayments) {
 
                 switch ($keyType) {
@@ -4193,6 +4235,57 @@ abstract class Order implements ActiveRecordInterface
         return $copyObj;
     }
 
+    /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param  ChildSite|null $v
+     * @return $this|\Model\Order The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrder($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws PropelException
+     */
+    public function getSite(ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addOrders($this);
+             */
+        }
+
+        return $this->aSite;
+    }
+
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -4478,6 +4571,9 @@ abstract class Order implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeOrder($this);
+        }
         $this->order_id = null;
         $this->order_url = null;
         $this->site_id = null;
@@ -4555,6 +4651,7 @@ abstract class Order implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collPayments = null;
+        $this->aSite = null;
     }
 
     /**

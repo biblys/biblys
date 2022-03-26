@@ -780,7 +780,7 @@ class OrderTableMap extends TableMap
         // columns
         $this->addPrimaryKey('order_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('order_url', 'Slug', 'VARCHAR', false, 16, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('user_id', 'UserId', 'INTEGER', false, null, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('seller_id', 'SellerId', 'INTEGER', false, 10, null);
@@ -835,6 +835,13 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Payment', '\\Model\\Payment', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

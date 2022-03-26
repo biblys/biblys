@@ -118,6 +118,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithOption() Adds a RIGHT JOIN clause and with to the query using the Option relation
  * @method     ChildSiteQuery innerJoinWithOption() Adds a INNER JOIN clause and with to the query using the Option relation
  *
+ * @method     ChildSiteQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildSiteQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildSiteQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ *
+ * @method     ChildSiteQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ *
+ * @method     ChildSiteQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildSiteQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildSiteQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ *
  * @method     ChildSiteQuery leftJoinPayment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Payment relation
  * @method     ChildSiteQuery rightJoinPayment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Payment relation
  * @method     ChildSiteQuery innerJoinPayment($relationAlias = null) Adds a INNER JOIN clause to the query using the Payment relation
@@ -148,7 +158,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildSiteQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\OptionQuery|\Model\PaymentQuery|\Model\RightQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\OptionQuery|\Model\OrderQuery|\Model\PaymentQuery|\Model\RightQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -1817,6 +1827,134 @@ abstract class SiteQuery extends ModelCriteria
     public function useOptionNotExistsQuery($modelAlias = null, $queryClass = null)
     {
         return $this->useExistsQuery('Option', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
+    /**
+     * Filter the query by a related \Model\Order object
+     *
+     * @param \Model\Order|ObjectCollection $order the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildSiteQuery The current query, for fluid interface
+     */
+    public function filterByOrder($order, $comparison = null)
+    {
+        if ($order instanceof \Model\Order) {
+            return $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $order->getSiteId(), $comparison);
+        } elseif ($order instanceof ObjectCollection) {
+            return $this
+                ->useOrderQuery()
+                ->filterByPrimaryKeys($order->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildSiteQuery The current query, for fluid interface
+     */
+    public function joinOrder($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\Model\OrderQuery');
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @param callable(\Model\OrderQuery):\Model\OrderQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withOrderQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useOrderQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Order table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\OrderQuery The inner query object of the EXISTS statement
+     */
+    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Order table for a NOT EXISTS query.
+     *
+     * @see useOrderExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
     }
     /**
      * Filter the query by a related \Model\Payment object

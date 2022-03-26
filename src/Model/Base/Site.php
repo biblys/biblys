@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Option as ChildOption;
 use Model\OptionQuery as ChildOptionQuery;
+use Model\Order as ChildOrder;
+use Model\OrderQuery as ChildOrderQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Right as ChildRight;
@@ -16,6 +18,7 @@ use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\OptionTableMap;
+use Model\Map\OrderTableMap;
 use Model\Map\PaymentTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SiteTableMap;
@@ -369,6 +372,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collOptionsPartial;
 
     /**
+     * @var        ObjectCollection|ChildOrder[] Collection to store aggregation of ChildOrder objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildOrder> Collection to store aggregation of ChildOrder objects.
+     */
+    protected $collOrders;
+    protected $collOrdersPartial;
+
+    /**
      * @var        ObjectCollection|ChildPayment[] Collection to store aggregation of ChildPayment objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildPayment> Collection to store aggregation of ChildPayment objects.
      */
@@ -403,6 +413,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildOption>
      */
     protected $optionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildOrder[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildOrder>
+     */
+    protected $ordersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2416,6 +2433,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collOptions = null;
 
+            $this->collOrders = null;
+
             $this->collPayments = null;
 
             $this->collRights = null;
@@ -2561,6 +2580,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collOptions !== null) {
                 foreach ($this->collOptions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordersScheduledForDeletion !== null) {
+                if (!$this->ordersScheduledForDeletion->isEmpty()) {
+                    foreach ($this->ordersScheduledForDeletion as $order) {
+                        // need to save related object because we set the relation to null
+                        $order->save($con);
+                    }
+                    $this->ordersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrders !== null) {
+                foreach ($this->collOrders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3173,6 +3210,21 @@ abstract class Site implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collOptions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrders) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'orders';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'orderss';
+                        break;
+                    default:
+                        $key = 'Orders';
+                }
+
+                $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPayments) {
 
@@ -3809,6 +3861,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getOrders() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrder($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPayments() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPayment($relObj->copy($deepCopy));
@@ -3870,6 +3928,10 @@ abstract class Site implements ActiveRecordInterface
     {
         if ('Option' === $relationName) {
             $this->initOptions();
+            return;
+        }
+        if ('Order' === $relationName) {
+            $this->initOrders();
             return;
         }
         if ('Payment' === $relationName) {
@@ -4145,6 +4207,241 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('User', $joinBehavior);
 
         return $this->getOptions($query, $con);
+    }
+
+    /**
+     * Clears out the collOrders collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addOrders()
+     */
+    public function clearOrders()
+    {
+        $this->collOrders = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collOrders collection loaded partially.
+     */
+    public function resetPartialOrders($v = true)
+    {
+        $this->collOrdersPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrders collection.
+     *
+     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrders($overrideExisting = true)
+    {
+        if (null !== $this->collOrders && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collOrders = new $collectionClassName;
+        $this->collOrders->setModel('\Model\Order');
+    }
+
+    /**
+     * Gets an array of ChildOrder objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildOrder[] List of ChildOrder objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildOrder> List of ChildOrder objects
+     * @throws PropelException
+     */
+    public function getOrders(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collOrders) {
+                    $this->initOrders();
+                } else {
+                    $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+
+                    $collOrders = new $collectionClassName;
+                    $collOrders->setModel('\Model\Order');
+
+                    return $collOrders;
+                }
+            } else {
+                $collOrders = ChildOrderQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdersPartial && count($collOrders)) {
+                        $this->initOrders(false);
+
+                        foreach ($collOrders as $obj) {
+                            if (false == $this->collOrders->contains($obj)) {
+                                $this->collOrders->append($obj);
+                            }
+                        }
+
+                        $this->collOrdersPartial = true;
+                    }
+
+                    return $collOrders;
+                }
+
+                if ($partial && $this->collOrders) {
+                    foreach ($this->collOrders as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrders[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrders = $collOrders;
+                $this->collOrdersPartial = false;
+            }
+        }
+
+        return $this->collOrders;
+    }
+
+    /**
+     * Sets a collection of ChildOrder objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $orders A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function setOrders(Collection $orders, ConnectionInterface $con = null)
+    {
+        /** @var ChildOrder[] $ordersToDelete */
+        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
+
+
+        $this->ordersScheduledForDeletion = $ordersToDelete;
+
+        foreach ($ordersToDelete as $orderRemoved) {
+            $orderRemoved->setSite(null);
+        }
+
+        $this->collOrders = null;
+        foreach ($orders as $order) {
+            $this->addOrder($order);
+        }
+
+        $this->collOrders = $orders;
+        $this->collOrdersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Order objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Order objects.
+     * @throws PropelException
+     */
+    public function countOrders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrdersPartial && !$this->isNew();
+        if (null === $this->collOrders || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrders) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrders());
+            }
+
+            $query = ChildOrderQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collOrders);
+    }
+
+    /**
+     * Method called to associate a ChildOrder object to this object
+     * through the ChildOrder foreign key attribute.
+     *
+     * @param  ChildOrder $l ChildOrder
+     * @return $this|\Model\Site The current object (for fluent API support)
+     */
+    public function addOrder(ChildOrder $l)
+    {
+        if ($this->collOrders === null) {
+            $this->initOrders();
+            $this->collOrdersPartial = true;
+        }
+
+        if (!$this->collOrders->contains($l)) {
+            $this->doAddOrder($l);
+
+            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
+                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildOrder $order The ChildOrder object to add.
+     */
+    protected function doAddOrder(ChildOrder $order)
+    {
+        $this->collOrders[]= $order;
+        $order->setSite($this);
+    }
+
+    /**
+     * @param  ChildOrder $order The ChildOrder object to remove.
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function removeOrder(ChildOrder $order)
+    {
+        if ($this->getOrders()->contains($order)) {
+            $pos = $this->collOrders->search($order);
+            $this->collOrders->remove($pos);
+            if (null === $this->ordersScheduledForDeletion) {
+                $this->ordersScheduledForDeletion = clone $this->collOrders;
+                $this->ordersScheduledForDeletion->clear();
+            }
+            $this->ordersScheduledForDeletion[]= $order;
+            $order->setSite(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -5000,6 +5297,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrders) {
+                foreach ($this->collOrders as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPayments) {
                 foreach ($this->collPayments as $o) {
                     $o->clearAllReferences($deep);
@@ -5018,6 +5320,7 @@ abstract class Site implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collOptions = null;
+        $this->collOrders = null;
         $this->collPayments = null;
         $this->collRights = null;
         $this->collUsers = null;
