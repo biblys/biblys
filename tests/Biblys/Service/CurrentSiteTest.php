@@ -116,4 +116,20 @@ class CurrentSiteTest extends TestCase
             "it returns false when option is undefined"
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetId()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $id = $currentSite->getId();
+
+        // then
+        $this->assertEquals($site->getId(), $id);
+    }
 }

@@ -25,6 +25,11 @@ class CurrentSite
         return $this->site;
     }
 
+    public function getId(): int
+    {
+        return $this->site->getId();
+    }
+
     /**
      * @param Config $config
      * @return CurrentSite
