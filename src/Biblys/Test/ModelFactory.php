@@ -3,6 +3,7 @@
 namespace Biblys\Test;
 
 use Biblys\Service\Config;
+use DateTime;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\Country;
@@ -180,7 +181,9 @@ class ModelFactory
         $payment->setOrder($order ?? self::createOrder());
         $payment->setAmount($attributes["amount"] ?? 10000);
         $payment->setMode($attributes["mode"] ?? "stripe");
-        $payment->setExecuted($attributes["executed"] ?? null);
+        $payment->setExecuted(
+            array_key_exists("executed", $attributes) ? $attributes["executed"] : new DateTime()
+        );
         $payment->save();
 
         return $payment;

@@ -78,4 +78,38 @@ class PaymentControllerTest extends TestCase
         $this->assertStringNotContainsString("from other site", $response->getContent());
         $this->assertStringNotContainsString("not executed", $response->getContent());
     }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws AuthException
+     */
+    public function testIndexWithModeFilter()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getSite")->willReturn($site);
+
+        $orderPayedUsingStripe = ModelFactory::createOrder();
+        ModelFactory::createPayment(["mode" => "stripe"], $site, $orderPayedUsingStripe);
+        $orderPayedUsingPaypal = ModelFactory::createOrder();
+        ModelFactory::createPayment(["mode" => "paypal"], $site, $orderPayedUsingPaypal);
+
+        $controller = new PaymentController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->query->set("mode", "stripe");
+
+        // when
+        $response = $controller->index($request, $currentSite);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString($orderPayedUsingStripe->getId(), $response->getContent());
+        $this->assertStringNotContainsString(
+            $orderPayedUsingPaypal->getId(), $response->getContent()
+        );
+    }
 }

@@ -9,6 +9,7 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use InvalidArgumentException;
+use Model\Payment;
 use Model\PaymentQuery;
 use OrderManager;
 use PaymentManager;
@@ -40,11 +41,15 @@ class PaymentController extends Controller
         self::authAdmin($request);
         $request->attributes->set("page_title", "Paiements");
 
-
         $paymentQuery = PaymentQuery::create()
             ->filterBySiteId($currentSite->getSite()->getId())
             ->filterByExecuted(null, Criteria::ISNOTNULL)
             ->orderByCreatedAt(Criteria::DESC);
+
+        $modeFilter = $request->query->get("mode");
+        if ($modeFilter) {
+            $paymentQuery->filterByMode($modeFilter);
+        }
 
         try {
             $pageNumber = (int) $request->query->get("p", 0);
@@ -62,6 +67,8 @@ class PaymentController extends Controller
 
         return $this->render(
             "AppBundle:Payment:index.html.twig", [
+                "modes" => Payment::getModes(),
+                "selectedMode" => $modeFilter,
                 "payments" => $payments,
                 "pages" => $pagination,
             ]);
