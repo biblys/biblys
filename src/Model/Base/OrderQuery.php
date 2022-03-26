@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildOrderQuery orderById($order = Criteria::ASC) Order by the order_id column
- * @method     ChildOrderQuery orderByUrl($order = Criteria::ASC) Order by the order_url column
+ * @method     ChildOrderQuery orderBySlug($order = Criteria::ASC) Order by the order_url column
  * @method     ChildOrderQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildOrderQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildOrderQuery orderByCustomerId($order = Criteria::ASC) Order by the customer_id column
@@ -72,7 +72,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the order_updated column
  *
  * @method     ChildOrderQuery groupById() Group by the order_id column
- * @method     ChildOrderQuery groupByUrl() Group by the order_url column
+ * @method     ChildOrderQuery groupBySlug() Group by the order_url column
  * @method     ChildOrderQuery groupBySiteId() Group by the site_id column
  * @method     ChildOrderQuery groupByUserId() Group by the user_id column
  * @method     ChildOrderQuery groupByCustomerId() Group by the customer_id column
@@ -146,7 +146,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
  *
  * @method     ChildOrder|null findOneById(int $order_id) Return the first ChildOrder filtered by the order_id column
- * @method     ChildOrder|null findOneByUrl(string $order_url) Return the first ChildOrder filtered by the order_url column
+ * @method     ChildOrder|null findOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column
  * @method     ChildOrder|null findOneBySiteId(int $site_id) Return the first ChildOrder filtered by the site_id column
  * @method     ChildOrder|null findOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column
  * @method     ChildOrder|null findOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column
@@ -200,7 +200,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder requireOneById(int $order_id) Return the first ChildOrder filtered by the order_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUrl(string $order_url) Return the first ChildOrder filtered by the order_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySiteId(int $site_id) Return the first ChildOrder filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUserId(int $user_id) Return the first ChildOrder filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByCustomerId(int $customer_id) Return the first ChildOrder filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -254,8 +254,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @method     ChildOrder[]|ObjectCollection findById(int $order_id) Return ChildOrder objects filtered by the order_id column
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findById(int $order_id) Return ChildOrder objects filtered by the order_id column
- * @method     ChildOrder[]|ObjectCollection findByUrl(string $order_url) Return ChildOrder objects filtered by the order_url column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUrl(string $order_url) Return ChildOrder objects filtered by the order_url column
+ * @method     ChildOrder[]|ObjectCollection findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
+ * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
  * @method     ChildOrder[]|ObjectCollection findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
  * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
  * @method     ChildOrder[]|ObjectCollection findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
@@ -587,24 +587,24 @@ abstract class OrderQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByUrl('fooValue');   // WHERE order_url = 'fooValue'
-     * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE order_url LIKE '%fooValue%'
+     * $query->filterBySlug('fooValue');   // WHERE order_url = 'fooValue'
+     * $query->filterBySlug('%fooValue%', Criteria::LIKE); // WHERE order_url LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $url The value to use as filter.
+     * @param     string $slug The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterBySlug($slug = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($url)) {
+            if (is_array($slug)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_URL, $url, $comparison);
+        return $this->addUsingAlias(OrderTableMap::COL_ORDER_URL, $slug, $comparison);
     }
 
     /**

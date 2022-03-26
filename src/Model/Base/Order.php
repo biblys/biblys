@@ -711,7 +711,7 @@ abstract class Order implements ActiveRecordInterface
      *
      * @return string|null
      */
-    public function getUrl()
+    public function getSlug()
     {
         return $this->order_url;
     }
@@ -1330,7 +1330,7 @@ abstract class Order implements ActiveRecordInterface
      * @param string|null $v New value
      * @return $this|\Model\Order The current object (for fluent API support)
      */
-    public function setUrl($v)
+    public function setSlug($v)
     {
         if ($v !== null) {
             $v = (string) $v;
@@ -1342,7 +1342,7 @@ abstract class Order implements ActiveRecordInterface
         }
 
         return $this;
-    } // setUrl()
+    } // setSlug()
 
     /**
      * Set the value of [site_id] column.
@@ -2387,7 +2387,7 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : OrderTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OrderTableMap::translateFieldName('Url', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OrderTableMap::translateFieldName('Slug', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_url = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
@@ -3179,7 +3179,7 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getUrl();
+                return $this->getSlug();
                 break;
             case 2:
                 return $this->getSiteId();
@@ -3356,7 +3356,7 @@ abstract class Order implements ActiveRecordInterface
         $keys = OrderTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUrl(),
+            $keys[1] => $this->getSlug(),
             $keys[2] => $this->getSiteId(),
             $keys[3] => $this->getUserId(),
             $keys[4] => $this->getCustomerId(),
@@ -3501,7 +3501,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUrl($value);
+                $this->setSlug($value);
                 break;
             case 2:
                 $this->setSiteId($value);
@@ -3677,7 +3677,7 @@ abstract class Order implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUrl($arr[$keys[1]]);
+            $this->setSlug($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setSiteId($arr[$keys[2]]);
@@ -4102,7 +4102,7 @@ abstract class Order implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setUrl($this->getUrl());
+        $copyObj->setSlug($this->getSlug());
         $copyObj->setSiteId($this->getSiteId());
         $copyObj->setUserId($this->getUserId());
         $copyObj->setCustomerId($this->getCustomerId());

@@ -805,7 +805,7 @@
   </table>
   <table name="orders" idMethod="native" phpName="Order">
     <column name="order_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="order_url" phpName="Url" type="VARCHAR" size="16"/>
+    <column name="order_url" phpName="Slug" type="VARCHAR" size="16"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="customer_id" phpName="CustomerId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
