@@ -16,4 +16,24 @@ use Model\Base\Payment as BasePayment;
 class Payment extends BasePayment
 {
 
+    private const MODE_CASH = 'cash';
+    private const MODE_CHECK = 'cheque';
+    private const MODE_CARD = 'card';
+    private const MODE_TRANSFER = 'transfer';
+    private const MODE_PAYPAL = 'paypal';
+    private const MODE_PAYPLUG = 'payplug';
+    private const MODE_STRIPE = 'stripe';
+
+    public static function getModes(): array
+    {
+        return [
+            self::MODE_CASH,
+            self::MODE_CHECK,
+            self::MODE_CARD,
+            self::MODE_TRANSFER,
+            self::MODE_PAYPAL,
+            self::MODE_PAYPLUG,
+            self::MODE_STRIPE,
+        ];
+    }
 }
