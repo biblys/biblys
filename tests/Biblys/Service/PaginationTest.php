@@ -63,9 +63,33 @@ class PaginationTest extends TestCase
         $this->assertEquals(0, $this->pagination->getPrevious());
     }
 
+    public function testGetPreviousQueryForFirstPage()
+    {
+        $pagination = new Pagination(1, 25, 10);
+        $this->assertEquals(null, $pagination->getPreviousQuery());
+    }
+
+    public function testGetPreviousQuery()
+    {
+        $pagination = new Pagination(2, 25, 10);
+        $this->assertEquals("?p=1", $pagination->getPreviousQuery());
+    }
+
     public function getNext()
     {
         $this->assertEquals(2, $this->pagination->getNext());
+    }
+
+    public function testGetNextQuery()
+    {
+        $pagination = new Pagination(1, 25, 10);
+        $this->assertEquals("?p=2", $pagination->getNextQuery());
+    }
+
+    public function testGetNextQueryForLastPage()
+    {
+        $pagination = new Pagination(3, 25, 10);
+        $this->assertEquals(null, $pagination->getNextQuery());
     }
 
 }

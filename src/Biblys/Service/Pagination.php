@@ -65,12 +65,22 @@ class Pagination
         return $this->_page - 1;
     }
 
+    public function getPreviousQuery(): ?string
+    {
+        return $this->getPrevious() ? "?p={$this->getPrevious()}" : null;
+    }
+
     public function getNext()
     {
         if ($this->_page >= $this->_totalPages - 1) {
             return false;
         }
         return $this->_page + 1;
+    }
+
+    public function getNextQuery(): ?string
+    {
+        return $this->getNext() ? "?p={$this->getNext()}" : null;
     }
 
 }
