@@ -1,5 +1,7 @@
 <?php
 
+/** @var CurrentSite $currentSite */
+
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -250,7 +252,7 @@ if ($request->getMethod() === 'POST') {
     }
 
     $copyCondition = $request->request->get("stock_condition");
-    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSiteService)) {
+    if (_shouldAlertsBeSent($mode, $copyCondition, $currentSite)) {
         /** @var PDO $_SQL */
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
