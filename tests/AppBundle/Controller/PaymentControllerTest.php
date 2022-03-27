@@ -59,6 +59,8 @@ class PaymentControllerTest extends TestCase
             "amount" => "10000",
             "executed" => $today,
         ], $site, $order);
+        ModelFactory::createPayment(["amount" => "300"], $site);
+        ModelFactory::createPayment(["amount" => "900"], $site);
         $otherSite = ModelFactory::createSite();
         ModelFactory::createPayment(
             ["executed" => new DateTime(), "mode" => "from other site"],
@@ -78,6 +80,7 @@ class PaymentControllerTest extends TestCase
         $this->assertStringContainsString("100,00&nbsp;&euro;", $response->getContent());
         $this->assertStringNotContainsString("from other site", $response->getContent());
         $this->assertStringNotContainsString("not executed", $response->getContent());
+        $this->assertStringContainsString("112,00&nbsp;&euro;", $response->getContent());
     }
 
     /**
@@ -95,9 +98,17 @@ class PaymentControllerTest extends TestCase
         $currentSite->method("getSite")->willReturn($site);
 
         $orderPayedUsingStripe = ModelFactory::createOrder();
-        ModelFactory::createPayment(["mode" => "stripe"], $site, $orderPayedUsingStripe);
+        ModelFactory::createPayment(
+            ["mode" => "stripe", "date" => new DateTime("2001-01-01")],
+            $site,
+            $orderPayedUsingStripe
+        );
         $orderPayedUsingPaypal = ModelFactory::createOrder();
-        ModelFactory::createPayment(["mode" => "paypal"], $site, $orderPayedUsingPaypal);
+        ModelFactory::createPayment(
+            ["mode" => "paypal", "date" => new DateTime("2001-01-02")],
+            $site,
+            $orderPayedUsingPaypal
+        );
 
         $controller = new PaymentController();
         $request = RequestFactory::createAuthRequestForAdminUser();
@@ -109,9 +120,7 @@ class PaymentControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString($orderPayedUsingStripe->getId(), $response->getContent());
-        $this->assertStringNotContainsString(
-            $orderPayedUsingPaypal->getId(), $response->getContent()
-        );
+        $this->assertStringNotContainsString("01/02/2001", $response->getContent());
     }
 
     /**

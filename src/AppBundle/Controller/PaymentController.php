@@ -64,7 +64,7 @@ class PaymentController extends Controller
         try {
             $pageNumber = (int) $request->query->get("p", 0);
             $paymentsTotalCount = $paymentQuery->count();
-            $paymentsPerPage = 100;
+            $paymentsPerPage = 1000;
             $pagination = new Pagination($pageNumber, $paymentsTotalCount, $paymentsPerPage);
             $pagination->setQueryParams(["mode" => $modeFilter, "start_date" => $startDateInput, "end_date" => $endDateInput]);
         } catch (InvalidArgumentException $exception) {
@@ -76,6 +76,10 @@ class PaymentController extends Controller
             ->offset($pagination->getOffset())
             ->find();
 
+        $total = array_reduce($payments->getData(), function ($total, $payment) {
+            return $total + $payment->getAmount();
+        }, 0);
+
         return $this->render(
             "AppBundle:Payment:index.html.twig", [
                 "modes" => Payment::getModes(),
@@ -84,6 +88,7 @@ class PaymentController extends Controller
                 "endDate" => $endDate->format("Y-m-d"),
                 "payments" => $payments,
                 "pages" => $pagination,
+                "total" => $total,
             ]);
     }
 
