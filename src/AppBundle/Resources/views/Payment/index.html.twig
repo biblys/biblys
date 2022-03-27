@@ -35,7 +35,11 @@
   {% for payment in payments %}
     <tr>
       <td>{{ payment.executed|date('d/m/Y') }}</td>
-      <td>{{ payment.orderId }}</td>
+      <td>
+        <a href="{{ path('orders_show', { 'id': payment.orderId }) }}">
+          {{ payment.orderId }}
+        </a>
+      </td>
       <td>{{ payment.mode }}</td>
       <td class="text-right">{{ payment.amount|currency(true)|raw }}</td>
     </tr>
