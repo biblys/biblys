@@ -69,10 +69,24 @@ class PaginationTest extends TestCase
         $this->assertEquals(null, $pagination->getPreviousQuery());
     }
 
+    public function testGetPreviousQueryForFirstPageWithParams()
+    {
+        $pagination = new Pagination(1, 25, 10);
+        $pagination->setQueryParams(["date" => "2013-05-22"]);
+        $this->assertEquals("?date=2013-05-22", $pagination->getPreviousQuery());
+    }
+
     public function testGetPreviousQuery()
     {
         $pagination = new Pagination(2, 25, 10);
         $this->assertEquals("?p=1", $pagination->getPreviousQuery());
+    }
+
+    public function testGetPreviousQueryWithParams()
+    {
+        $pagination = new Pagination(2, 25, 10);
+        $pagination->setQueryParams(["date" => "2013-05-22"]);
+        $this->assertEquals("?date=2013-05-22&p=1", $pagination->getPreviousQuery());
     }
 
     public function getNext()
@@ -86,10 +100,23 @@ class PaginationTest extends TestCase
         $this->assertEquals("?p=2", $pagination->getNextQuery());
     }
 
+    public function testGetNextQueryWithParams()
+    {
+        $pagination = new Pagination(1, 25, 10);
+        $pagination->setQueryParams(["date" => "2013-05-22"]);
+        $this->assertEquals("?date=2013-05-22&p=2", $pagination->getNextQuery());
+    }
+
     public function testGetNextQueryForLastPage()
     {
         $pagination = new Pagination(3, 25, 10);
         $this->assertEquals(null, $pagination->getNextQuery());
     }
 
+    public function testGetNextQueryForLastPageWithParams()
+    {
+        $pagination = new Pagination(3, 25, 10);
+        $pagination->setQueryParams(["date" => "2013-05-22"]);
+        $this->assertEquals("?date=2013-05-22", $pagination->getNextQuery());
+    }
 }
