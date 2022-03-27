@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
 use Biblys\Service\Pagination;
+use DateTime;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -35,6 +36,7 @@ class PaymentController extends Controller
      * @throws SyntaxError
      * @throws PropelException
      * @throws LoaderError
+     * @throws Exception
      */
     public function index(Request $request, CurrentSite $currentSite): Response
     {
@@ -51,11 +53,20 @@ class PaymentController extends Controller
             $paymentQuery->filterByMode($modeFilter);
         }
 
+        $startDateInput = $request->query->get("start_date");
+        $startDate = $startDateInput ? new DateTime($startDateInput." 00:00:00") : new DateTime("1 month ago");
+        $paymentQuery->filterByExecuted($startDate, Criteria::GREATER_EQUAL);
+
+        $endDateInput = $request->query->get("end_date");
+        $endDate = $endDateInput ? new DateTime($endDateInput." 23:59:59") : new DateTime("today 23:59:59");
+        $paymentQuery->filterByExecuted($endDate, Criteria::LESS_EQUAL);
+
         try {
             $pageNumber = (int) $request->query->get("p", 0);
             $paymentsTotalCount = $paymentQuery->count();
             $paymentsPerPage = 100;
             $pagination = new Pagination($pageNumber, $paymentsTotalCount, $paymentsPerPage);
+            $pagination->setQueryParams(["mode" => $modeFilter, "start_date" => $startDateInput, "end_date" => $endDateInput]);
         } catch (InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
@@ -69,6 +80,8 @@ class PaymentController extends Controller
             "AppBundle:Payment:index.html.twig", [
                 "modes" => Payment::getModes(),
                 "selectedMode" => $modeFilter,
+                "startDate" => $startDate->format("Y-m-d"),
+                "endDate" => $endDate->format("Y-m-d"),
                 "payments" => $payments,
                 "pages" => $pagination,
             ]);

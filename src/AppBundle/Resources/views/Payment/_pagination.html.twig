@@ -3,23 +3,23 @@
 	<p class="posts-pagination text-center">
 
 		{% if pages.previous > -1 %}
-			<a href="?{% if selectedMode is defined %}mode={{ selectedMode }}&amp;{% endif %}p={{ pages.previous }}" class="btn btn-default btn-sm">
+			<a href="{{ pages.previousQuery }}" class="btn btn-default btn-sm">
 				<span class="fa fa-chevron-circle-left"></span>
 			</a>
 			&nbsp;
 		{% endif %}
 
-		{% for i in 1..pages.total %}
-			{% if pages.current == i %}
-				<span class="pagination-page pagination-page-current">{{ i }}</span>
+		{% for pageNumber in 1..pages.total %}
+			{% if pages.current == pageNumber %}
+				<span class="pagination-page pagination-page-current">{{ pageNumber }}</span>
 			{% else %}
-				<a href="?{% if selectedMode is defined %}mode={{ selectedMode }}&amp;{% endif %}p={{ i - 1 }}" class="pagination-page">{{ i }}</a>
+				<a href="{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if pages.next %}
 			&nbsp;
-			<a href="?{% if selectedMode is defined %}mode={{ selectedMode }}&amp;{% endif %}p={{ pages.next }}" class="btn btn-default btn-sm">
+			<a href="{{ pages.nextQuery }}" class="btn btn-default btn-sm">
 				<span class="fa fa-chevron-circle-right"></span>
 			</a>
 		{% endif %}

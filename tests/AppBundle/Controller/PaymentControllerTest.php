@@ -53,10 +53,11 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getSite")->willReturn($site);
+        $today = new DateTime();
         ModelFactory::createPayment([
             "mode" => "stripe",
             "amount" => "10000",
-            "executed" => new DateTime("1924-11-16"),
+            "executed" => $today,
         ], $site, $order);
         $otherSite = ModelFactory::createSite();
         ModelFactory::createPayment(
@@ -71,7 +72,7 @@ class PaymentControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Paiements", $response->getContent());
-        $this->assertStringContainsString("16/11/1924", $response->getContent());
+        $this->assertStringContainsString($today->format("Y-m-d"), $response->getContent());
         $this->assertStringContainsString($order->getId(), $response->getContent());
         $this->assertStringContainsString("stripe", $response->getContent());
         $this->assertStringContainsString("100,00&nbsp;&euro;", $response->getContent());
@@ -112,4 +113,38 @@ class PaymentControllerTest extends TestCase
             $orderPayedUsingPaypal->getId(), $response->getContent()
         );
     }
+
+    /**
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws PropelException
+     */
+    public function testIndexWithDatesFilter()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getSite")->willReturn($site);
+
+        ModelFactory::createPayment(["executed" => new DateTime("2019-04-26")], $site);
+        ModelFactory::createPayment(["executed" => new DateTime("2019-04-28")], $site);
+        ModelFactory::createPayment(["executed" => new DateTime("2019-04-30")], $site);
+
+        $controller = new PaymentController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $request->query->set("start_date", "2019-04-27");
+        $request->query->set("end_date", "2019-04-29");
+
+        // when
+        $response = $controller->index($request, $currentSite);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("28/04/2019", $response->getContent());
+        $this->assertStringNotContainsString("26/04/2019", $response->getContent());
+        $this->assertStringNotContainsString("30/04/2019", $response->getContent());
+    }
+
 }
