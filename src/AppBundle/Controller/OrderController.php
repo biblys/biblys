@@ -170,16 +170,16 @@ class OrderController extends Controller
         $payerId = $request->query->get('PayerID');
         if (!$paymentId || !$payerId) {
             Log::paypal("ERROR", 'Missing parameters.', ['order_id' => $order->get('id')]);
-            throw new \Exception('Missing parameters.');
+            throw new Exception('Missing parameters.');
         }
         Log::paypal("INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
 
         // Execute payment
         try {
             $payment = $order->executePaypalPayment($paymentId, $payerId);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::paypal("ERROR", $e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
-            throw new \Exception('Une erreur est survenue pendant l\'execution du paiement PayPal. Merci de nous contacter.');
+            throw new Exception('Une erreur est survenue pendant l\'execution du paiement PayPal. Merci de nous contacter.');
         }
         Log::paypal("INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
 
@@ -187,7 +187,7 @@ class OrderController extends Controller
         $state = $payment->getState();
         if ($state !== 'approved') {
             Log::paypal("ERROR", "Payment state is invalid ($state).", ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
-            throw new \Exception("Payment state is invalid ($state).");
+            throw new Exception("Payment state is invalid ($state).");
         }
         Log::paypal("INFO", "Payment ($paymentId) state is $state for order " . $order->get('id'));
 
@@ -196,7 +196,7 @@ class OrderController extends Controller
         $invoice = $transaction->getInvoiceNumber();
         if ($invoice != $order->get('id')) {
             Log::paypal("ERROR", "Invoice number ($invoice) does not match order ID (" . $order->get('id') . ').', ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
-            throw new \Exception('Invoice number does not match order ID.');
+            throw new Exception('Invoice number does not match order ID.');
         }
         Log::paypal("INFO", "Invoice number ($invoice) matches order id (" . $order->get('id') . ')');
 
@@ -216,15 +216,15 @@ class OrderController extends Controller
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
             Log::payplug("ERROR", 'Payplug configuration not found.');
-            throw new \Exception('Payplug configuration not found.');
+            throw new Exception('Payplug configuration not found.');
         }
 
         if (!isset($payplug_config['secret'])) {
             Log::payplug("ERROR", 'Missing payplug private key.');
-            throw new \Exception('Missing payplug private key.');
+            throw new Exception('Missing payplug private key.');
         }
 
-        \Payplug\Payplug::init(["secretKey" => $payplug_config['secret']]);
+        Payplug::init(["secretKey" => $payplug_config['secret']]);
 
         $om = $this->entityManager('Order');
         $pm = $this->entityManager('Payment');
@@ -233,23 +233,23 @@ class OrderController extends Controller
         $order = $om->get(['order_url' => $url]);
         if (!$order) {
             Log::payplug("ERROR", "Order $url not found.");
-            throw new \Exception("Order $url not found.");
+            throw new Exception("Order $url not found.");
         }
         Log::payplug("INFO", 'Receiving Payplug notification for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
 
         // Process notification
         $input = $request->getContent();
         try {
-            $resource = \Payplug\Notification::treat($input);
+            $resource = Notification::treat($input);
 
-            if ($resource instanceof \Payplug\Resource\Refund) {
+            if ($resource instanceof Refund) {
                 Log::payplug("INFO", 'Ignoring resource ' . $resource->id . ' (refund)');
                 return new Response();
             }
 
-            if (!$resource instanceof \Payplug\Resource\Payment) {
+            if (!$resource instanceof Payment) {
                 Log::payplug("ERROR", 'Resource ' . $resource->id . '  is not a Payment.');
-                throw new \Exception('Resource '.$resource->id.'  is not a Payment.');
+                throw new Exception('Resource '.$resource->id.'  is not a Payment.');
             }
 
             // Payment failed, log error and ignore process
@@ -262,14 +262,14 @@ class OrderController extends Controller
             $payment = $pm->get(['payment_provider_id' => $resource->id]);
             if (!$payment) {
                 Log::payplug("ERROR", 'Payment ' . $resource->id . ' not found.');
-                throw new \Exception('Payment '.$resource->id.' not found.');
+                throw new Exception('Payment '.$resource->id.' not found.');
             }
             Log::payplug("INFO", 'Found payment ' . $payment->get('id') . ' in database.');
 
             // Get order id from metadata and compare to database order id
             if ($resource->metadata['order_id'] != $order->get('id')) {
                 Log::payplug("ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->get('id') . ').');
-                throw new \Exception('Invoice number does not match order ID.');
+                throw new Exception('Invoice number does not match order ID.');
             }
             Log::payplug("INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
 
@@ -320,7 +320,7 @@ class OrderController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $om->count($filters);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount, 100);
+        $pagination = new Pagination($page, $totalCount, 100);
 
         $orders = $om->getAll($filters, [
             'order' => 'order_payment_date',
@@ -365,7 +365,7 @@ class OrderController extends Controller
         return $response;
     }
 
-    private function _jsonOrder(\Order $order)
+    private function _jsonOrder(Order $order)
     {
         return [
             'id' => $order->get('id'),
