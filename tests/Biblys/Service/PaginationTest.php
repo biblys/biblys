@@ -4,11 +4,13 @@
 * @backupStaticAttributes disabled
 */
 
-use Biblys\Service\Pagination;
+namespace Biblys\Service;
+
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . "/../../setUp.php";
 
-class PaginationTest extends PHPUnit\Framework\TestCase
+class PaginationTest extends TestCase
 {
 
     /**
@@ -38,32 +40,32 @@ class PaginationTest extends PHPUnit\Framework\TestCase
 
     public function testGetCurrent()
     {
-        $this->assertEquals($this->pagination->getCurrent(), 2);
+        $this->assertEquals(2, $this->pagination->getCurrent());
     }
 
     public function testGetTotal()
     {
-        $this->assertEquals($this->pagination->getTotal(), 3);
+        $this->assertEquals(3, $this->pagination->getTotal());
     }
 
     public function getOffset()
     {
-        $this->assertEquals($this->pagination->getOffset(), 10);
+        $this->assertEquals(10, $this->pagination->getOffset());
     }
 
     public function getLimit()
     {
-        $this->assertEquals($this->pagination->getLimit(), 10);
+        $this->assertEquals(10, $this->pagination->getLimit());
     }
 
     public function getPrevious()
     {
-        $this->assertEquals($this->pagination->getPrevious(), 0);
+        $this->assertEquals(0, $this->pagination->getPrevious());
     }
 
     public function getNext()
     {
-        $this->assertEquals($this->pagination->getNext(), 2);
+        $this->assertEquals(2, $this->pagination->getNext());
     }
 
 }
