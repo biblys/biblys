@@ -144,9 +144,11 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createOrder(): Order
+    public static function createOrder(array $attributes = [], ?Site $site = null): Order
     {
         $order = new Order();
+        $order->setSite($site ?? ModelFactory::createSite());
+        $order->setSlug($attributes["slug"] ?? "order-slug");
         $order->save();
 
         return $order;

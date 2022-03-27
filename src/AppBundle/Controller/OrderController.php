@@ -2,15 +2,28 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
+use Biblys\Service\Pagination;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Model\OrderQuery;
+use Order;
 use OrderManager;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
+use Payplug\Notification;
+use Payplug\Payplug;
+use Payplug\Resource\Payment;
+use Payplug\Resource\Refund;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class OrderController extends Controller
@@ -86,6 +99,26 @@ class OrderController extends Controller
         $request->attributes->set("page_title", "Commandes web");
 
         return $this->render('AppBundle:Order:index.html.twig');
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function show(Request $request, CurrentSite $currentSite, int $id): RedirectResponse
+    {
+        self::authAdmin($request);
+
+        $order = OrderQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterById($id)
+            ->findOne();
+
+        if (!$order) {
+            throw new ResourceNotFoundException();
+        }
+
+        return new RedirectResponse("/order/{$order->getSlug()}");
     }
 
     public function updateAction(Request $request, $id, $action)

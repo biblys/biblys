@@ -348,6 +348,13 @@ orders_convert_utmz:
   path: /admin/orders/convert-utmz
   controller: AppBundle\Controller\OrderController::convertUtmzAction
 
+orders_show:
+  methods: GET
+  path: /admin/orders/{id}
+  controller: AppBundle\Controller\OrderController::show
+  requirements:
+    id: \d+
+
 # People
 
 people_index:
