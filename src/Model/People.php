@@ -16,4 +16,8 @@ use Model\Base\People as BasePeople;
 class People extends BasePeople
 {
 
+    public function getFullName(): string
+    {
+        return trim($this->getFirstName()." ".$this->getLastName());
+    }
 }
