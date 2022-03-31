@@ -13,8 +13,7 @@
     <tr>
       <th>EAN</th>
       <th>Titre</th>
-      <th>Collection</th>
-      <th>Éditeur</th>
+      <th>Collection / Éditeur</th>
       <th>Prix</th>
       <th>Stock</th>
     </tr>
@@ -28,8 +27,10 @@
             {{ article.title }}
           </a>
         </td>
-        <td>{{ article.collectionName }}</td>
-        <td>{{ article.publisherName }}</td>
+        <td>
+          {{ article.collectionName }}<br>
+          <small>{{ article.publisherName }}</small>
+        </td>
         <td>{{ article.price|currency(true)|raw }}</td>
         <td class="text-right">
           {{ article.countAvailableStockItemsForSite(site) }}
