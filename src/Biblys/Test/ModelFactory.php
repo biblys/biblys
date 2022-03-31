@@ -2,6 +2,8 @@
 
 namespace Biblys\Test;
 
+use Biblys\Contributor\Contributor;
+use Biblys\Contributor\Job;
 use Biblys\Service\Config;
 use DateTime;
 use Model\Article;
@@ -56,7 +58,8 @@ class ModelFactory
     public static function createArticle(
         array $attributes = [],
         Publisher $publisher = null,
-        BookCollection $collection = null
+        BookCollection $collection = null,
+        array $authors = []
     ): Article
     {
         $article = new Article();
@@ -71,6 +74,13 @@ class ModelFactory
         $collection = $collection ?? self::createCollection();
         $article->setCollectionId($collection->getId());
         $article->setCollectionName($collection->getName());
+
+        $authorNames = array_map(function($author) use($article) {
+            self::createContribution($article, $author);
+            return $author->getFullName();
+        }, $authors);
+        $authorsString = implode(", ", $authorNames);
+        $article->setAuthors($authorsString);
 
         $article->save();
 
@@ -222,6 +232,8 @@ class ModelFactory
     public static function createPeople(array $attributes = []): People
     {
         $people = new People();
+        $people->setFirstName($attributes["first_name"] ?? "Lili");
+        $people->setLastName($attributes["last_name"] ?? "Raton");
         $people->setGender($attributes["gender"] ?? "N");
         $people->setUrl($attributes["slug"] ?? "slug");
         $people->save();

@@ -32,13 +32,14 @@ class ArticleController extends Controller
         $response->headers->set("Content-Disposition", "attachment; filename=$fileName");
 
         $csv = Writer::createFromString();
-        $csv->insertOne(["EAN", "Titre", "Collection", "Éditeur", "Prix", "Stock"]);
+        $csv->insertOne(["EAN", "Titre", "Auteur·trice·s", "Collection", "Éditeur", "Prix", "Stock"]);
 
         $articles = ArticleQuery::create()->filterForCurrentSite($currentSiteService)->find();
         foreach ($articles as $article) {
             $csv->insertOne([
                 $article->getEan(),
                 $article->getTitle(),
+                $article->getAuthors(),
                 $article->getCollectionName(),
                 $article->getPublisherName(),
                 $article->getPrice() / 100,
