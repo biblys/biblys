@@ -12,8 +12,14 @@
   <thead>
     <tr>
       <th>EAN</th>
-      <th>Titre</th>
-      <th>Collection / Éditeur</th>
+      <th>
+        Titre<br/>
+        <small>Auteur·trice·s</small>
+      </th>
+      <th>
+        Collection<br/>
+        <small>Éditeur</small>
+      </th>
       <th>Prix</th>
       <th>Stock</th>
     </tr>
@@ -25,7 +31,8 @@
         <td>
           <a href="/a/{{ article.url }}">
             {{ article.title }}
-          </a>
+          </a><br />
+          <small>{{ article.authors|authors }}</small>
         </td>
         <td>
           {{ article.collectionName }}<br>
