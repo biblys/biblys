@@ -4,7 +4,10 @@
 
 Améliorations
 
-Les performances de la page Catalogue dans l'administration ont été améliorées.
+- Deux colonnes "Auteur·trice·s" et "Stock" ont été ajoutées à la page 
+  Catalogue et à la fonctionnalité d'export en CSV.
+- Les performances de la page Catalogue dans l'administration ont été 
+  améliorées.
 
 ### 2.59.3 (25 mars 2022)
 
