@@ -1197,6 +1197,7 @@
   </table>
   <table name="session" idMethod="native" phpName="Session">
     <column name="session_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER"/>
     <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="session_token" phpName="Token" type="VARCHAR" size="32"/>
     <column name="session_created" phpName="CreatedAt" type="TIMESTAMP"/>
@@ -1212,6 +1213,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
   </table>
   <table name="shipping" idMethod="native" phpName="ShippingFee">
     <column name="shipping_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

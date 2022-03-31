@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Session as ChildSession;
 use Model\SessionQuery as ChildSessionQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
 use Model\Map\SessionTableMap;
@@ -72,6 +74,13 @@ abstract class Session implements ActiveRecordInterface
     protected $session_id;
 
     /**
+     * The value for the site_id field.
+     *
+     * @var        int|null
+     */
+    protected $site_id;
+
+    /**
      * The value for the user_id field.
      *
      * @var        int|null
@@ -110,6 +119,11 @@ abstract class Session implements ActiveRecordInterface
      * @var        ChildUser
      */
     protected $aUser;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -354,6 +368,16 @@ abstract class Session implements ActiveRecordInterface
     }
 
     /**
+     * Get the [site_id] column value.
+     *
+     * @return int|null
+     */
+    public function getSiteId()
+    {
+        return $this->site_id;
+    }
+
+    /**
      * Get the [user_id] column value.
      *
      * @return int|null
@@ -458,6 +482,30 @@ abstract class Session implements ActiveRecordInterface
 
         return $this;
     } // setId()
+
+    /**
+     * Set the value of [site_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this|\Model\Session The current object (for fluent API support)
+     */
+    public function setSiteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->site_id !== $v) {
+            $this->site_id = $v;
+            $this->modifiedColumns[SessionTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
+        }
+
+        return $this;
+    } // setSiteId()
 
     /**
      * Set the value of [user_id] column.
@@ -602,25 +650,28 @@ abstract class Session implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : SessionTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->session_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : SessionTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : SessionTableMap::translateFieldName('SiteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->site_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : SessionTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : SessionTableMap::translateFieldName('Token', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : SessionTableMap::translateFieldName('Token', TableMap::TYPE_PHPNAME, $indexType)];
             $this->session_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : SessionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : SessionTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->session_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : SessionTableMap::translateFieldName('ExpiresAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : SessionTableMap::translateFieldName('ExpiresAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->session_expires = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : SessionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SessionTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -633,7 +684,7 @@ abstract class Session implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = SessionTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = SessionTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Session'), 0, $e);
@@ -655,6 +706,9 @@ abstract class Session implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
         if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
             $this->aUser = null;
         }
@@ -698,6 +752,7 @@ abstract class Session implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aUser = null;
+            $this->aSite = null;
         } // if (deep)
     }
 
@@ -826,6 +881,13 @@ abstract class Session implements ActiveRecordInterface
                 $this->setUser($this->aUser);
             }
 
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -866,6 +928,9 @@ abstract class Session implements ActiveRecordInterface
         if ($this->isColumnModified(SessionTableMap::COL_SESSION_ID)) {
             $modifiedColumns[':p' . $index++]  = 'session_id';
         }
+        if ($this->isColumnModified(SessionTableMap::COL_SITE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'site_id';
+        }
         if ($this->isColumnModified(SessionTableMap::COL_USER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'user_id';
         }
@@ -894,6 +959,9 @@ abstract class Session implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'session_id':
                         $stmt->bindValue($identifier, $this->session_id, PDO::PARAM_INT);
+                        break;
+                    case 'site_id':
+                        $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
@@ -976,18 +1044,21 @@ abstract class Session implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getUserId();
+                return $this->getSiteId();
                 break;
             case 2:
-                return $this->getToken();
+                return $this->getUserId();
                 break;
             case 3:
-                return $this->getCreatedAt();
+                return $this->getToken();
                 break;
             case 4:
-                return $this->getExpiresAt();
+                return $this->getCreatedAt();
                 break;
             case 5:
+                return $this->getExpiresAt();
+                break;
+            case 6:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1021,22 +1092,23 @@ abstract class Session implements ActiveRecordInterface
         $keys = SessionTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUserId(),
-            $keys[2] => $this->getToken(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getExpiresAt(),
-            $keys[5] => $this->getUpdatedAt(),
+            $keys[1] => $this->getSiteId(),
+            $keys[2] => $this->getUserId(),
+            $keys[3] => $this->getToken(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getExpiresAt(),
+            $keys[6] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[3]] instanceof \DateTimeInterface) {
-            $result[$keys[3]] = $result[$keys[3]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[4]] instanceof \DateTimeInterface) {
             $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
+            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1059,6 +1131,21 @@ abstract class Session implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1098,18 +1185,21 @@ abstract class Session implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUserId($value);
+                $this->setSiteId($value);
                 break;
             case 2:
-                $this->setToken($value);
+                $this->setUserId($value);
                 break;
             case 3:
-                $this->setCreatedAt($value);
+                $this->setToken($value);
                 break;
             case 4:
-                $this->setExpiresAt($value);
+                $this->setCreatedAt($value);
                 break;
             case 5:
+                $this->setExpiresAt($value);
+                break;
+            case 6:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1142,19 +1232,22 @@ abstract class Session implements ActiveRecordInterface
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserId($arr[$keys[1]]);
+            $this->setSiteId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setToken($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCreatedAt($arr[$keys[3]]);
+            $this->setToken($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setExpiresAt($arr[$keys[4]]);
+            $this->setCreatedAt($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUpdatedAt($arr[$keys[5]]);
+            $this->setExpiresAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setUpdatedAt($arr[$keys[6]]);
         }
 
         return $this;
@@ -1201,6 +1294,9 @@ abstract class Session implements ActiveRecordInterface
 
         if ($this->isColumnModified(SessionTableMap::COL_SESSION_ID)) {
             $criteria->add(SessionTableMap::COL_SESSION_ID, $this->session_id);
+        }
+        if ($this->isColumnModified(SessionTableMap::COL_SITE_ID)) {
+            $criteria->add(SessionTableMap::COL_SITE_ID, $this->site_id);
         }
         if ($this->isColumnModified(SessionTableMap::COL_USER_ID)) {
             $criteria->add(SessionTableMap::COL_USER_ID, $this->user_id);
@@ -1303,6 +1399,7 @@ abstract class Session implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setSiteId($this->getSiteId());
         $copyObj->setUserId($this->getUserId());
         $copyObj->setToken($this->getToken());
         $copyObj->setCreatedAt($this->getCreatedAt());
@@ -1388,6 +1485,57 @@ abstract class Session implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param  ChildSite|null $v
+     * @return $this|\Model\Session The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addSession($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws PropelException
+     */
+    public function getSite(ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addSessions($this);
+             */
+        }
+
+        return $this->aSite;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1397,7 +1545,11 @@ abstract class Session implements ActiveRecordInterface
         if (null !== $this->aUser) {
             $this->aUser->removeSession($this);
         }
+        if (null !== $this->aSite) {
+            $this->aSite->removeSession($this);
+        }
         $this->session_id = null;
+        $this->site_id = null;
         $this->user_id = null;
         $this->session_token = null;
         $this->session_created = null;
@@ -1424,6 +1576,7 @@ abstract class Session implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aUser = null;
+        $this->aSite = null;
     }
 
     /**

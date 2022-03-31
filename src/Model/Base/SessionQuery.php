@@ -21,6 +21,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildSessionQuery orderById($order = Criteria::ASC) Order by the session_id column
+ * @method     ChildSessionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
  * @method     ChildSessionQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     ChildSessionQuery orderByToken($order = Criteria::ASC) Order by the session_token column
  * @method     ChildSessionQuery orderByCreatedAt($order = Criteria::ASC) Order by the session_created column
@@ -28,6 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSessionQuery orderByUpdatedAt($order = Criteria::ASC) Order by the session_updated column
  *
  * @method     ChildSessionQuery groupById() Group by the session_id column
+ * @method     ChildSessionQuery groupBySiteId() Group by the site_id column
  * @method     ChildSessionQuery groupByUserId() Group by the user_id column
  * @method     ChildSessionQuery groupByToken() Group by the session_token column
  * @method     ChildSessionQuery groupByCreatedAt() Group by the session_created column
@@ -52,12 +54,23 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSessionQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildSessionQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildSessionQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildSessionQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildSessionQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ *
+ * @method     ChildSessionQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ *
+ * @method     ChildSessionQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildSessionQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildSessionQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
+ *
+ * @method     \Model\UserQuery|\Model\SiteQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSession|null findOne(ConnectionInterface $con = null) Return the first ChildSession matching the query
  * @method     ChildSession findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSession matching the query, or a new ChildSession object populated from the query conditions when no match is found
  *
  * @method     ChildSession|null findOneById(int $session_id) Return the first ChildSession filtered by the session_id column
+ * @method     ChildSession|null findOneBySiteId(int $site_id) Return the first ChildSession filtered by the site_id column
  * @method     ChildSession|null findOneByUserId(int $user_id) Return the first ChildSession filtered by the user_id column
  * @method     ChildSession|null findOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column
  * @method     ChildSession|null findOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column
@@ -68,6 +81,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSession requireOne(ConnectionInterface $con = null) Return the first ChildSession matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSession requireOneById(int $session_id) Return the first ChildSession filtered by the session_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSession requireOneBySiteId(int $site_id) Return the first ChildSession filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByUserId(int $user_id) Return the first ChildSession filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -78,6 +92,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildSession> find(ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
  * @method     ChildSession[]|ObjectCollection findById(int $session_id) Return ChildSession objects filtered by the session_id column
  * @psalm-method ObjectCollection&\Traversable<ChildSession> findById(int $session_id) Return ChildSession objects filtered by the session_id column
+ * @method     ChildSession[]|ObjectCollection findBySiteId(int $site_id) Return ChildSession objects filtered by the site_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildSession> findBySiteId(int $site_id) Return ChildSession objects filtered by the site_id column
  * @method     ChildSession[]|ObjectCollection findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
  * @psalm-method ObjectCollection&\Traversable<ChildSession> findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
  * @method     ChildSession[]|ObjectCollection findByToken(string $session_token) Return ChildSession objects filtered by the session_token column
@@ -187,7 +203,7 @@ abstract class SessionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT session_id, user_id, session_token, session_created, session_expires, session_updated FROM session WHERE session_id = :p0';
+        $sql = 'SELECT session_id, site_id, user_id, session_token, session_created, session_expires, session_updated FROM session WHERE session_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -316,6 +332,49 @@ abstract class SessionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SessionTableMap::COL_SESSION_ID, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the site_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySiteId(1234); // WHERE site_id = 1234
+     * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
+     * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
+     * </code>
+     *
+     * @see       filterBySite()
+     *
+     * @param     mixed $siteId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildSessionQuery The current query, for fluid interface
+     */
+    public function filterBySiteId($siteId = null, $comparison = null)
+    {
+        if (is_array($siteId)) {
+            $useMinMax = false;
+            if (isset($siteId['min'])) {
+                $this->addUsingAlias(SessionTableMap::COL_SITE_ID, $siteId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($siteId['max'])) {
+                $this->addUsingAlias(SessionTableMap::COL_SITE_ID, $siteId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(SessionTableMap::COL_SITE_ID, $siteId, $comparison);
     }
 
     /**
@@ -646,6 +705,138 @@ abstract class SessionQuery extends ModelCriteria
     public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
         return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+    }
+    /**
+     * Filter the query by a related \Model\Site object
+     *
+     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildSessionQuery The current query, for fluid interface
+     */
+    public function filterBySite($site, $comparison = null)
+    {
+        if ($site instanceof \Model\Site) {
+            return $this
+                ->addUsingAlias(SessionTableMap::COL_SITE_ID, $site->getId(), $comparison);
+        } elseif ($site instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(SessionTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Site relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildSessionQuery The current query, for fluid interface
+     */
+    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Site');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Site');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SiteQuery A secondary query class using the current class as primary query
+     */
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
     }
     /**
      * Exclude object from result

@@ -13,6 +13,8 @@ use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Right as ChildRight;
 use Model\RightQuery as ChildRightQuery;
+use Model\Session as ChildSession;
+use Model\SessionQuery as ChildSessionQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
@@ -23,6 +25,7 @@ use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
 use Model\Map\PaymentTableMap;
 use Model\Map\RightTableMap;
+use Model\Map\SessionTableMap;
 use Model\Map\SiteTableMap;
 use Model\Map\StockTableMap;
 use Model\Map\UserTableMap;
@@ -396,6 +399,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collRightsPartial;
 
     /**
+     * @var        ObjectCollection|ChildSession[] Collection to store aggregation of ChildSession objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildSession> Collection to store aggregation of ChildSession objects.
+     */
+    protected $collSessions;
+    protected $collSessionsPartial;
+
+    /**
      * @var        ObjectCollection|ChildStock[] Collection to store aggregation of ChildStock objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildStock> Collection to store aggregation of ChildStock objects.
      */
@@ -444,6 +454,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildRight>
      */
     protected $rightsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildSession[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildSession>
+     */
+    protected $sessionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2456,6 +2473,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collRights = null;
 
+            $this->collSessions = null;
+
             $this->collStocks = null;
 
             $this->collUsers = null;
@@ -2653,6 +2672,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collRights !== null) {
                 foreach ($this->collRights as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->sessionsScheduledForDeletion !== null) {
+                if (!$this->sessionsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->sessionsScheduledForDeletion as $session) {
+                        // need to save related object because we set the relation to null
+                        $session->save($con);
+                    }
+                    $this->sessionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collSessions !== null) {
+                foreach ($this->collSessions as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3293,6 +3330,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collRights->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collSessions) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'sessions';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sessions';
+                        break;
+                    default:
+                        $key = 'Sessions';
+                }
+
+                $result[$key] = $this->collSessions->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collStocks) {
 
                 switch ($keyType) {
@@ -3931,6 +3983,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getSessions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addSession($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getStocks() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addStock($relObj->copy($deepCopy));
@@ -3998,6 +4056,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Right' === $relationName) {
             $this->initRights();
+            return;
+        }
+        if ('Session' === $relationName) {
+            $this->initSessions();
             return;
         }
         if ('Stock' === $relationName) {
@@ -5055,6 +5117,267 @@ abstract class Site implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collSessions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addSessions()
+     */
+    public function clearSessions()
+    {
+        $this->collSessions = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collSessions collection loaded partially.
+     */
+    public function resetPartialSessions($v = true)
+    {
+        $this->collSessionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collSessions collection.
+     *
+     * By default this just sets the collSessions collection to an empty array (like clearcollSessions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initSessions($overrideExisting = true)
+    {
+        if (null !== $this->collSessions && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = SessionTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collSessions = new $collectionClassName;
+        $this->collSessions->setModel('\Model\Session');
+    }
+
+    /**
+     * Gets an array of ChildSession objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildSession[] List of ChildSession objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSession> List of ChildSession objects
+     * @throws PropelException
+     */
+    public function getSessions(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collSessionsPartial && !$this->isNew();
+        if (null === $this->collSessions || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collSessions) {
+                    $this->initSessions();
+                } else {
+                    $collectionClassName = SessionTableMap::getTableMap()->getCollectionClassName();
+
+                    $collSessions = new $collectionClassName;
+                    $collSessions->setModel('\Model\Session');
+
+                    return $collSessions;
+                }
+            } else {
+                $collSessions = ChildSessionQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collSessionsPartial && count($collSessions)) {
+                        $this->initSessions(false);
+
+                        foreach ($collSessions as $obj) {
+                            if (false == $this->collSessions->contains($obj)) {
+                                $this->collSessions->append($obj);
+                            }
+                        }
+
+                        $this->collSessionsPartial = true;
+                    }
+
+                    return $collSessions;
+                }
+
+                if ($partial && $this->collSessions) {
+                    foreach ($this->collSessions as $obj) {
+                        if ($obj->isNew()) {
+                            $collSessions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collSessions = $collSessions;
+                $this->collSessionsPartial = false;
+            }
+        }
+
+        return $this->collSessions;
+    }
+
+    /**
+     * Sets a collection of ChildSession objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $sessions A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function setSessions(Collection $sessions, ConnectionInterface $con = null)
+    {
+        /** @var ChildSession[] $sessionsToDelete */
+        $sessionsToDelete = $this->getSessions(new Criteria(), $con)->diff($sessions);
+
+
+        $this->sessionsScheduledForDeletion = $sessionsToDelete;
+
+        foreach ($sessionsToDelete as $sessionRemoved) {
+            $sessionRemoved->setSite(null);
+        }
+
+        $this->collSessions = null;
+        foreach ($sessions as $session) {
+            $this->addSession($session);
+        }
+
+        $this->collSessions = $sessions;
+        $this->collSessionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Session objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Session objects.
+     * @throws PropelException
+     */
+    public function countSessions(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collSessionsPartial && !$this->isNew();
+        if (null === $this->collSessions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collSessions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getSessions());
+            }
+
+            $query = ChildSessionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collSessions);
+    }
+
+    /**
+     * Method called to associate a ChildSession object to this object
+     * through the ChildSession foreign key attribute.
+     *
+     * @param  ChildSession $l ChildSession
+     * @return $this|\Model\Site The current object (for fluent API support)
+     */
+    public function addSession(ChildSession $l)
+    {
+        if ($this->collSessions === null) {
+            $this->initSessions();
+            $this->collSessionsPartial = true;
+        }
+
+        if (!$this->collSessions->contains($l)) {
+            $this->doAddSession($l);
+
+            if ($this->sessionsScheduledForDeletion and $this->sessionsScheduledForDeletion->contains($l)) {
+                $this->sessionsScheduledForDeletion->remove($this->sessionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildSession $session The ChildSession object to add.
+     */
+    protected function doAddSession(ChildSession $session)
+    {
+        $this->collSessions[]= $session;
+        $session->setSite($this);
+    }
+
+    /**
+     * @param  ChildSession $session The ChildSession object to remove.
+     * @return $this|ChildSite The current object (for fluent API support)
+     */
+    public function removeSession(ChildSession $session)
+    {
+        if ($this->getSessions()->contains($session)) {
+            $pos = $this->collSessions->search($session);
+            $this->collSessions->remove($pos);
+            if (null === $this->sessionsScheduledForDeletion) {
+                $this->sessionsScheduledForDeletion = clone $this->collSessions;
+                $this->sessionsScheduledForDeletion->clear();
+            }
+            $this->sessionsScheduledForDeletion[]= $session;
+            $session->setSite(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Site is new, it will return
+     * an empty collection; or if this Site has previously
+     * been saved, it will retrieve related Sessions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Site.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildSession[] List of ChildSession objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildSession}> List of ChildSession objects
+     */
+    public function getSessionsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildSessionQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getSessions($query, $con);
+    }
+
+    /**
      * Clears out the collStocks collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -5635,6 +5958,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collSessions) {
+                foreach ($this->collSessions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collStocks) {
                 foreach ($this->collStocks as $o) {
                     $o->clearAllReferences($deep);
@@ -5651,6 +5979,7 @@ abstract class Site implements ActiveRecordInterface
         $this->collOrders = null;
         $this->collPayments = null;
         $this->collRights = null;
+        $this->collSessions = null;
         $this->collStocks = null;
         $this->collUsers = null;
     }
