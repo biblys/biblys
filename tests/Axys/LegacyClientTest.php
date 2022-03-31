@@ -50,7 +50,22 @@ class LegacyClientTest extends TestCase
 
         // then
         $this->assertEquals(
-            "https://axys.me/widget.php",
+            "https://axys.me/widget.php?version=1",
+            $widgetUrl
+        );
+    }
+
+    public function testGetWidgetUrlForVersion2()
+    {
+        // given
+        $client = new LegacyClient(["version" => 2]);
+
+        // when
+        $widgetUrl = $client->getWidgetUrl();
+
+        // then
+        $this->assertEquals(
+            "https://axys.me/widget.php?version=2",
             $widgetUrl
         );
     }

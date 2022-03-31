@@ -60,10 +60,10 @@ class LegacyClient
 
     public function getWidgetUrl($user_uid = null): string
     {
-        $url = $this->base_url.'/widget.php';
+        $url = $this->base_url."/widget.php?version={$this->version}";
 
         if ($user_uid) {
-            $url .= '?UID='.$user_uid;
+            $url .= '&UID='.$user_uid;
         }
 
         return $url;
