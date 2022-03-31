@@ -7,9 +7,16 @@ class LegacyClient
     private $options;
     private $base_url;
 
+    /**
+     * @var int
+     */
+    private $version;
+
     public function __construct(array $options = [])
     {
         $this->options = $options;
+
+        $this->version = $options["version"] ?? 1;
 
         if (!isset($this->options['host'])) {
             $this->options['host'] = 'axys.me';
@@ -60,5 +67,10 @@ class LegacyClient
         }
 
         return $url;
+    }
+
+    public function getVersion(): int
+    {
+        return $this->version;
     }
 }

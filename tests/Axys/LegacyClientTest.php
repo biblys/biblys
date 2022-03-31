@@ -54,4 +54,34 @@ class LegacyClientTest extends TestCase
             $widgetUrl
         );
     }
+
+    public function testGetVersion()
+    {
+        // given
+        $client = new LegacyClient();
+
+        // when
+        $version = $client->getVersion();
+
+        // then
+        $this->assertEquals(
+            1,
+            $version
+        );
+    }
+
+    public function testGetVersionForVersion2()
+    {
+        // given
+        $client = new LegacyClient(["version" => 2]);
+
+        // when
+        $version = $client->getVersion();
+
+        // then
+        $this->assertEquals(
+            2,
+            $version
+        );
+    }
 }
