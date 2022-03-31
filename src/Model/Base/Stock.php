@@ -7,6 +7,8 @@ use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
 use Model\ArticleQuery as ChildArticleQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\Map\StockTableMap;
@@ -356,6 +358,11 @@ abstract class Stock implements ActiveRecordInterface
      * @var        DateTime|null
      */
     protected $stock_updated;
+
+    /**
+     * @var        ChildSite
+     */
+    protected $aSite;
 
     /**
      * @var        ChildArticle
@@ -1227,6 +1234,10 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->site_id !== $v) {
             $this->site_id = $v;
             $this->modifiedColumns[StockTableMap::COL_SITE_ID] = true;
+        }
+
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
         }
 
         return $this;
@@ -2298,6 +2309,9 @@ abstract class Stock implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
@@ -2340,6 +2354,7 @@ abstract class Stock implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aSite = null;
             $this->aArticle = null;
         } // if (deep)
     }
@@ -2461,6 +2476,13 @@ abstract class Stock implements ActiveRecordInterface
             // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
+
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
 
             if ($this->aArticle !== null) {
                 if ($this->aArticle->isModified() || $this->aArticle->isNew()) {
@@ -3066,6 +3088,21 @@ abstract class Stock implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aArticle) {
 
                 switch ($keyType) {
@@ -3708,6 +3745,57 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param  ChildSite|null $v
+     * @return $this|\Model\Stock The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStock($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws PropelException
+     */
+    public function getSite(ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addStocks($this);
+             */
+        }
+
+        return $this->aSite;
+    }
+
+    /**
      * Declares an association between this object and a ChildArticle object.
      *
      * @param  ChildArticle|null $v
@@ -3765,6 +3853,9 @@ abstract class Stock implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeStock($this);
+        }
         if (null !== $this->aArticle) {
             $this->aArticle->removeStock($this);
         }
@@ -3830,6 +3921,7 @@ abstract class Stock implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
+        $this->aSite = null;
         $this->aArticle = null;
     }
 

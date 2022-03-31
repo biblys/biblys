@@ -662,7 +662,7 @@ class StockTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('stock_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'TINYINT', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'TINYINT', 'sites', 'site_id', false, null, null);
         $this->addForeignKey('article_id', 'ArticleId', 'INTEGER', 'articles', 'article_id', false, 10, null);
         $this->addColumn('campaign_id', 'CampaignId', 'INTEGER', false, 10, null);
         $this->addColumn('reward_id', 'RewardId', 'INTEGER', false, 10, null);
@@ -709,6 +709,13 @@ class StockTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
         $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (

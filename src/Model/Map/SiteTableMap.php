@@ -709,6 +709,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Rights', false);
+        $this->addRelation('Stock', '\\Model\\Stock', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Stocks', false);
         $this->addRelation('User', '\\Model\\User', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

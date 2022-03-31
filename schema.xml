@@ -1386,6 +1386,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
