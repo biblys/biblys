@@ -616,7 +616,7 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function () {
 
   var article = {
-    id: document.querySelector('#article_id').value
+    id: document.querySelector('#article_id')?.value
   };
 
   // Remove a link
@@ -651,8 +651,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Bulk adding tags
 
-  var addTagsFromInput = function () {
-    var addTagsInput = document.querySelector('#add_tags_input');
+  function addTagsFromInput() {
+    const addTagsInput = document.querySelector('#add_tags_input');
+    if (!addTagsInput) {
+      return;
+    }
 
     addTagsButton.classList.add('disabled');
     addTagsButton.disabled = 'disabled';
@@ -698,8 +701,10 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // Add tags on button click
-  var addTagsButton = document.querySelector('#add_tags_button');
-  addTagsButton.addEventListener('click', addTagsFromInput);
+  const addTagsButton = document.querySelector('#add_tags_button');
+  if (addTagsButton) {
+    addTagsButton.addEventListener('click', addTagsFromInput);
+  }
 
   // Add tags at page start (for default tags)
   addTagsFromInput();
@@ -753,41 +758,45 @@ document.addEventListener('DOMContentLoaded', function () {
   // ** PRICE CATEGORIES ** //
 
   // Create a new price category
-  var createPriceForm = document.querySelector('#create_price');
-  createPriceForm.addEventListener('submit', function(event) {
-    event.preventDefault();
-    $('#createPriceSubmit').addClass('loading').attr('disabled', 'disabled');
-    $.ajax({
-      url: '/x/adm_article_prices',
-      method: 'POST',
-      data: {
-        price_cat: $('#price_cat').val(),
-        price_amount: $('#price_amount').val(),
-        pricegrid_id: $('#pricegrid_id').val()
-      },
-      success: function (res) {
-        $('#createPriceSubmit').removeClass('loading').removeAttr('disabled');
-        if (res.error) _alert(res.error);
-        else {
-          $('#create_price').dialog('close');
-          $('#article_category').val($('#price_cat').val()).autocomplete('search');
+  const createPriceForm = document.querySelector('#create_price');
+  if (createPriceForm) {
+    createPriceForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      $('#createPriceSubmit').addClass('loading').attr('disabled', 'disabled');
+      $.ajax({
+        url: '/x/adm_article_prices',
+        method: 'POST',
+        data: {
+          price_cat: $('#price_cat').val(),
+          price_amount: $('#price_amount').val(),
+          pricegrid_id: $('#pricegrid_id').val()
+        },
+        success: function (res) {
+          $('#createPriceSubmit').removeClass('loading').removeAttr('disabled');
+          if (res.error) _alert(res.error);
+          else {
+            $('#create_price').dialog('close');
+            $('#article_category').val($('#price_cat').val()).autocomplete('search');
+          }
+        },
+        error: function (jqXHR) {
+          var error = jqXHR.responseJSON.error;
+          window._alert(error);
         }
-      },
-      error: function (jqXHR) {
-        var error = jqXHR.responseJSON.error;
-        window._alert(error);
-      }
+      });
     });
-  });
+  }
 
   const titleElement = document.querySelector('#article_title');
-  titleElement.addEventListener('blur', function() {
-    const form = document.querySelector('#article_form');
-    const eanElement = document.querySelector('#article_ean');
-    if(form.dataset.mode === 'insert' && eanElement.value === '' && titleElement.value !== '') {
-      article_search();
-    }
-  });
+  if (titleElement) {
+    titleElement.addEventListener('blur', function() {
+      const form = document.querySelector('#article_form');
+      const eanElement = document.querySelector('#article_ean');
+      if(form.dataset.mode === 'insert' && eanElement.value === '' && titleElement.value !== '') {
+        article_search();
+      }
+    });
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -801,7 +810,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function _loadContributions() {
-  const articleId = document.querySelector('#article_id').value;
+  const articleId = document.querySelector('#article_id')?.value;
+  if (!articleId) {
+    return;
+  }
+
   fetch(`/api/admin/articles/${articleId}/contributions`, {
     method: 'GET',
     credentials: 'same-origin',

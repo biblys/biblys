@@ -1,6 +1,7 @@
 <html lang="fr">
   <head>
     <title>{% block title %}{% endblock %} | {{ app.site.title }}</title>
+    {% include "layout:_assets_css.html.twig" %}
   </head>
   <body>
     <h1>{{ app.site.title }}</h1>
@@ -8,6 +9,7 @@
     {% block main %}{% endblock %}
 
     {{ app.axysMenu|raw }}
-    <script type="text/javascript" src="{{ app.axys.widgetUrl }}"></script>
+
+    {% include "layout:_assets_js.html.twig" %}
   </body>
 </html>
