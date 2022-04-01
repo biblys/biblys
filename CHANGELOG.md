@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.60.1 (DEV)
+
+Corrections
+
+- Une erreur pouvait empêcher la page Mise à jour de s'afficher correctement.
+  Elle a été corrigée.
+
 ## 2.60.0 (1er avril 2022)
 
 Améliorations

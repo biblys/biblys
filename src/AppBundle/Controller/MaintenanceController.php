@@ -13,11 +13,15 @@ use Framework\Composer\ComposerException;
 use Framework\Composer\ScriptRunner;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class MaintenanceController extends Controller
 {
@@ -30,18 +34,22 @@ class MaintenanceController extends Controller
 
     /**
      * @throws AuthException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws PropelException
      */
-    public function updateAction(Request $request, Updater $updater): Response
+    public function updateAction(Request $request, Updater $updater, Config $config): Response
     {
         global $urlgenerator;
 
         $request->attributes->set("page_title", "Mise à jour de Biblys");
-        $this->auth('admin');
+        self::authAdmin($request);
 
         // Download available updates
         $error = null;
         try {
-            $updater->downloadUpdates();
+            $updater->downloadUpdates($config);
         } catch (UpdaterException $exception) {
             $error = "";
             while($exception instanceof Exception) {
