@@ -1,9 +1,11 @@
 # Historique des modifications
 
-## 2.60.0 (DEV)
+## 2.60.0 (1er avril 2022)
 
 Améliorations
 
+- Une page "Paiements", avec des filtres par date et mode de paiement a été 
+  ajoutée à l'administration.
 - Deux colonnes "Auteur·trice·s" et "Stock" ont été ajoutées à la page 
   Catalogue et à la fonctionnalité d'export en CSV.
 - Les performances de la page Catalogue dans l'administration ont été 

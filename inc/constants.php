@@ -1,6 +1,6 @@
 <?php
 
-const BIBLYS_VERSION = "2.60.0_feature/catalog-export_3";
+const BIBLYS_VERSION = "2.60.0";
 const BIBLYS_PATH = __DIR__."/../";
 const DL_PATH = BIBLYS_PATH . "/../../dl";
 const DL_URL = "http://dl.biblys.fr";
