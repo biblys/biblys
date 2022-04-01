@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -81,16 +82,22 @@ class MaintenanceController extends Controller
 
     /**
      * @throws AuthException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws PropelException
      */
-    public function updatingAction(string $version, Request $request)
+    public function updatingAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        string $version
+    ): Response
     {
-        global $urlgenerator;
-
-        $this->auth('admin');
+        self::authAdmin($request);
         $request->attributes->set("page_title", "Mise à jour de Biblys en cours");
 
         if (BIBLYS_VERSION == $version) {
-            return $this->redirect($urlgenerator->generate('maintenance_composer'));
+            return new RedirectResponse($urlGenerator->generate('maintenance_update'));
         }
 
         return $this->render('AppBundle:Maintenance:updating.html.twig', [
@@ -103,9 +110,9 @@ class MaintenanceController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function composerAction(): Response
+    public function composerAction(Request $request): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         try {
             ScriptRunner::run('install');
@@ -123,9 +130,9 @@ class MaintenanceController extends Controller
      * @throws AuthException
      * @throws Exception
      */
-    public function migrateAction(Config $config): Response
+    public function migrateAction(Request $request, Config $config): Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         try {
             $dbConfig = $config->get("db");
@@ -141,6 +148,11 @@ class MaintenanceController extends Controller
         return $this->render('AppBundle:Maintenance:migrate.html.twig');
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function changelogIndexAction(Request $request, Updater $updater): Response
     {
         $request->attributes->set("page_title", "Historique des mises à jour");
@@ -157,6 +169,11 @@ class MaintenanceController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function changelogShowAction(
         string $version,
         Updater $updater,
