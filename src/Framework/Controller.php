@@ -96,7 +96,7 @@ class Controller
     /**
      * Returns a Response with a rendered template.
      *
-     * @param string $template template file path
+     * @param string $templatePath template file path
      * @param array $vars template variables
      *
      * @return Response a Response object containing the rendered template
@@ -105,7 +105,7 @@ class Controller
      * @throws SyntaxError
      * @throws PropelException
      */
-    public function render(string $template, array $vars = []): Response
+    public function render(string $templatePath, array $vars = []): Response
     {
         global $site, $request, $axys;
 
@@ -254,7 +254,7 @@ class Controller
         }
 
         // Load template file
-        $template = $twig->load($template);
+        $template = $twig->load($templatePath);
 
         // Render template
         $rendered = $template->render($vars);
