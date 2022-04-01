@@ -202,8 +202,10 @@ class Controller
         $defaultFormTheme = 'AppBundle:Main:_form_bootstrap_layout.html.twig';
 
         // Custom template loader
+        $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
         $filesystem = new Filesystem();
-        $loader = new TemplateLoader($site, $filesystem);
+        $loader = new TemplateLoader($currentSite, $filesystem);
 
         // Load Twig
         if ($site->get('environment') == 'dev') {

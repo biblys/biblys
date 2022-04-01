@@ -2,7 +2,7 @@
 
 namespace Framework;
 
-use Biblys\Test\EntityFactory;
+use Biblys\Service\CurrentSite;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,10 +18,10 @@ class TemplateLoaderTest extends TestCase
     public function testFindLayoutTemplateDefault()
     {
         // given
-        $site = EntityFactory::createSite();
+        $currentSite = $this->createMock(CurrentSite::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method("exists")->willReturnOnConsecutiveCalls(false, true);
-        $loader = new TemplateLoader($site, $filesystem);
+        $loader = new TemplateLoader($currentSite, $filesystem);
 
         // when
         $templatePath = $loader->getCacheKey("layout:base.html.twig");
@@ -39,10 +39,10 @@ class TemplateLoaderTest extends TestCase
     public function testFindLayoutTemplateCustom()
     {
         // given
-        $site = EntityFactory::createSite();
+        $currentSite = $this->createMock(CurrentSite::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method("exists")->willReturnOnConsecutiveCalls(true, false);
-        $loader = new TemplateLoader($site, $filesystem);
+        $loader = new TemplateLoader($currentSite, $filesystem);
 
         // when
         $templatePath = $loader->getCacheKey("layout:base.html.twig");

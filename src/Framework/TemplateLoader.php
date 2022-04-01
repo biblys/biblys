@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Biblys\Service\CurrentSite;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Twig\Error\LoaderError;
@@ -10,16 +11,19 @@ use Twig\Source;
 
 class TemplateLoader implements LoaderInterface
 {
-    private $site;
+    /**
+     * @var CurrentSite
+     */
+    private $currentSite;
 
     /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct($site, Filesystem $filesystem)
+    public function __construct(CurrentSite $currentSite, Filesystem $filesystem)
     {
-        $this->site = $site;
+        $this->currentSite = $currentSite;
         $this->filesystem = $filesystem;
     }
 
@@ -86,7 +90,8 @@ class TemplateLoader implements LoaderInterface
 
         // Legacy deprecated templates
         if (!isset($path[1])) {
-            $site_file = BIBLYS_PATH.'/public/'.$this->site->get('name').'/templates/'.$name.'.html.twig';
+            $siteName = $this->currentSite->getSite()->getName();
+            $site_file = BIBLYS_PATH.'/public/'. $siteName .'/templates/'.$name.'.html.twig';
             if (file_exists($site_file)) {
                 trigger_error('Using deprecated legacy template '.$site_file, E_USER_DEPRECATED);
 
