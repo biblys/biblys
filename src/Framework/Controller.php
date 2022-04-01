@@ -135,6 +135,11 @@ class Controller
             return share_buttons($url, $message, $options);
         });
 
+        $functions[] = new TwigFunction('asset', function ($url) {
+            $hash = substr(md5(BIBLYS_VERSION), 0, 8);
+            return $url."?".$hash;
+        });
+
         //** Twig custom filters **//
 
         $filters = [];
