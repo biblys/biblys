@@ -13,6 +13,7 @@ use Model\Publisher;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRenderer;
@@ -201,7 +202,8 @@ class Controller
         $defaultFormTheme = 'AppBundle:Main:_form_bootstrap_layout.html.twig';
 
         // Custom template loader
-        $loader = new TemplateLoader($site);
+        $filesystem = new Filesystem();
+        $loader = new TemplateLoader($site, $filesystem);
 
         // Load Twig
         if ($site->get('environment') == 'dev') {

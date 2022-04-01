@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
@@ -11,9 +12,15 @@ class TemplateLoader implements LoaderInterface
 {
     private $site;
 
-    public function __construct($site)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct($site, Filesystem $filesystem)
     {
         $this->site = $site;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -133,16 +140,16 @@ class TemplateLoader implements LoaderInterface
      * @return string
      * @throws Exception
      */
-    private static function _getLayoutFilePath($layoutFileName, $name): string
+    private function _getLayoutFilePath($layoutFileName, $name): string
     {
         $customLayoutFilePath = __DIR__ . "/../../app/layout/".$layoutFileName;
         $defaultLayoutFilePath = __DIR__."/../AppBundle/Resources/layout/".$layoutFileName;
 
-        if (file_exists($customLayoutFilePath)) {
+        if ($this->filesystem->exists($customLayoutFilePath)) {
             return $customLayoutFilePath;
         }
 
-        if (file_exists($defaultLayoutFilePath)) {
+        if ($this->filesystem->exists($defaultLayoutFilePath)) {
             return $defaultLayoutFilePath;
         }
 
