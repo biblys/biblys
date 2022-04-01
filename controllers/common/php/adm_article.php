@@ -276,7 +276,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
             trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name').", merci de <a href='http://".$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
         }
 
-        $_PAGE_TITLE = 'Modifier '.$a['article_title'];
+        $request->attributes->set("page_title", "Modifier {$a["article_title"]}");
         $_MODE = 'update';
 
         $article = $am->getById($a['article_id']);
@@ -318,7 +318,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         ';
         $import_default = '<div class="center"><a class="btn btn-default reimport event">R&eacute;importer la fiche depuis la base externe...</a></div>';
     } else {
-        $_PAGE_TITLE = 'Créer un nouvel article';
+        $request->attributes->set("page_title", "Créer un nouvel article");
         $_MODE = 'insert';
         if (isset($_GET['import'])) {
             if (Isbn::isParsable($_GET['import'])) {
