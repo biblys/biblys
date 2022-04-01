@@ -330,7 +330,7 @@ if (!empty($_GET['id'])) {
     $mode = 'insert';
     $_GET['id'] = null;
 } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
-    $_PAGE_TITLE = 'Ajouter au stock un nouvel exemplaire de...';
+    $request->attributes->set("page_title", "Ajouter au stock un nouvel exemplaire de...");
     $content .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
     $s['article_id'] = $_GET['add'];
     $mode = 'insert';

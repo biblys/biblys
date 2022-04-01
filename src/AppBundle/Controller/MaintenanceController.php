@@ -44,8 +44,8 @@ class MaintenanceController extends Controller
     {
         global $urlgenerator;
 
-        $request->attributes->set("page_title", "Mise à jour de Biblys");
         self::authAdmin($request);
+        $request->attributes->set("page_title", "Mise à jour de Biblys");
 
         // Download available updates
         $error = null;

@@ -5,8 +5,8 @@ use Symfony\Component\HttpFoundation\Response;
 $lm = new ListeManager();
 $sm = new StockManager();
 
-$_PAGE_TITLE = 'Stock';
-$content = '<h1><span class="fa fa-cubes"></span> '.$_PAGE_TITLE.'</h1>';
+$request->attributes->set("page_title", "Stock");
+$content = '<h1><span class="fa fa-cubes"></span> Stock</h1>';
 
 if (isset($_GET['collection_id'])) {
     $content .= '
