@@ -6,6 +6,8 @@ Corrections
 
 - Une erreur pouvait empêcher la page Mise à jour de s'afficher correctement.
   Elle a été corrigée.
+- Le calcul du temps restant pour un campagne pouvait être faussé quand il 
+  restait exactement un mois. Il est maintenant correct.
 
 ## 2.60.0 (1er avril 2022)
 

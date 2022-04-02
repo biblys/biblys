@@ -39,13 +39,16 @@
         /**
          * Returns the number of days left until campaign ends
          */
-        public function getTimeLeft()
+        public function getTimeLeft(DateTime $today = null)
         {
+            if ($today == null) {
+                $today = new DateTime();
+            }
+
             $end = new DateTime($this->get('ends')." 23:59:59");
-            $today = new DateTime();
             $interval = $today->diff($end);
 
-            if ($interval->d > 0) {
+            if ($interval->days > 0) {
                 $days = $interval->format('%a');
                 return "$days jour".s($days);
             }

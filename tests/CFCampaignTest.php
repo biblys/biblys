@@ -135,6 +135,34 @@ class CFCampaignTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($campaign->getProgress(), 25);
     }
 
+    public function testGetTimeLeft()
+    {
+        // given
+        $campaign = new CFCampaign([]);
+        $campaign->set("campaign_ends", "2019-04-28");
+        $today = new DateTime("2019-04-27");
+
+        // when
+        $timeLeft = $campaign->getTimeLeft($today);
+
+        // then
+        $this->assertEquals("1 jour", $timeLeft);
+    }
+
+    public function testGetTimeLeftForExactlyOneMonth()
+    {
+        // given
+        $campaign = new CFCampaign([]);
+        $campaign->set("campaign_ends", "2022-05-02");
+        $today = new DateTime("2022-04-02");
+
+        // when
+        $timeLeft = $campaign->getTimeLeft($today);
+
+        // then
+        $this->assertEquals("30 jours", $timeLeft);
+    }
+
     /**
      * Test deleting a post
      * @depends testGet
