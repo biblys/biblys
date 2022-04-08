@@ -6,8 +6,11 @@ Corrections
 
 - Une erreur pouvait empêcher la page Mise à jour de s'afficher correctement.
   Elle a été corrigée.
-- Le calcul du temps restant pour un campagne pouvait être faussé quand il 
-  restait exactement un mois. Il est maintenant correct.
+- Le calcul du temps restant avant la fin d'une campagne de financement 
+  participatif pouvait être faussé quand il restait exactement un mois. Il 
+  est maintenant correct.
+- Le champ "Client n°" sur la page des ventes permettrait d'entrer du texte. 
+  On ne peut maintenant entrer qu'un identifiant numérique.
 
 ## 2.60.0 (1er avril 2022)
 

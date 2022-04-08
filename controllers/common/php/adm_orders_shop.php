@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $TVA = array();
@@ -73,9 +74,10 @@ if (empty($_GET["time1"])) $_GET["time1"] = "00:00";
 if (empty($_GET["time2"])) $_GET["time2"] = "23:59";
 
 $req = null;
+$sqlParams = ['site_id' => $GLOBALS["site"]->get('id')];
 
 if (!empty($_GET["date1"])) {
-    $req = "AND `order_payment_date` >= '".$_GET["date1"]." ".$_GET["time1"].":00' AND `order_payment_date` <= '".$_GET["date2"]." ".$_GET["time2"].":59'";
+    $req .= "AND `order_payment_date` >= '".$_GET["date1"]." ".$_GET["time1"].":00' AND `order_payment_date` <= '".$_GET["date2"]." ".$_GET["time2"].":59'";
 }
 if (!empty($_GET["p"])) {
     $req .= " AND `".$_GET["p"]."` != '0' ";
@@ -85,12 +87,17 @@ if (!empty($_GET["e"])) {
     else $req .= " AND `stock_condition` != 'Neuf' ";
 }
 
-if (isset($_GET["customer_id"]) && !empty($_GET['customer_id'])) {
-    $req .= " AND `orders`.`customer_id` = '".$_GET["customer_id"]."' ";
-} else $_GET['customer_id'] = null;
+$request = Request::createFromGlobals();
+$customerId = intval($request->query->get("customer_id"));
+if ($customerId) {
+    dump($customerId);
+    $req .= " AND `orders`.`customer_id` = :customer_id ";
+    $sqlParams["customer_id"] = $customerId;
+}
 
 $config = new Config();
 $usersTableName = $config->get("users_table_name");
+
 
 $sql = $GLOBALS["_SQL"]->prepare(
     "SELECT
@@ -112,7 +119,7 @@ $sql = $GLOBALS["_SQL"]->prepare(
     WHERE `orders`.`site_id` = :site_id $req
     GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"
 );
-$sql->execute(['site_id' => $GLOBALS["site"]->get('id')]);
+$sql->execute($sqlParams);
 $num = $sql->rowCount();
 
 $content = '
@@ -166,8 +173,13 @@ $content = '
             </select>
         </p>
         <p>
-            <label for="u">Client n&deg;</label>
-            <input type="text" class="short" name="customer_id" id="customer_id" value="'.$_GET["customer_id"].'" />
+            <label for="u">Client n°</label>
+            <input 
+                type="number" 
+                class="short" 
+                name="customer_id" 
+                id="customer_id" 
+                value="'.$customerId.'" />
             <br />
         </p>
 
