@@ -110,6 +110,13 @@ class TemplateLoader implements LoaderInterface
 
         // Twig layout templates
         if ($path[0] === "layout") {
+            if (
+                $path[1] === "base.html.twig" &&
+                $this->currentSite->getOption("use_legacy_layout_builder")
+            ) {
+                return __DIR__."/../AppBundle/Resources/layout/base_for_legacy_builder.html.twig";
+            }
+
             return self::_getLayoutFilePath($path[1], $name);
         }
 
@@ -148,12 +155,11 @@ class TemplateLoader implements LoaderInterface
     private function _getLayoutFilePath($layoutFileName, $name): string
     {
         $customLayoutFilePath = __DIR__ . "/../../app/layout/".$layoutFileName;
-        $defaultLayoutFilePath = __DIR__."/../AppBundle/Resources/layout/".$layoutFileName;
-
         if ($this->filesystem->exists($customLayoutFilePath)) {
             return $customLayoutFilePath;
         }
 
+        $defaultLayoutFilePath = __DIR__."/../AppBundle/Resources/layout/".$layoutFileName;
         if ($this->filesystem->exists($defaultLayoutFilePath)) {
             return $defaultLayoutFilePath;
         }

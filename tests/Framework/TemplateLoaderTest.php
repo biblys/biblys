@@ -53,4 +53,25 @@ class TemplateLoaderTest extends TestCase
             $templatePath
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testFindLayoutTemplateUsingLegacyBuilder()
+    {
+        // given
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->willReturn("1");
+        $filesystem = $this->createMock(Filesystem::class);
+        $loader = new TemplateLoader($currentSite, $filesystem);
+
+        // when
+        $templatePath = $loader->getCacheKey("layout:base.html.twig");
+
+        // then
+        $this->assertStringEndsWith(
+            "AppBundle/Resources/layout/base_for_legacy_builder.html.twig",
+            $templatePath
+        );
+    }
 }
