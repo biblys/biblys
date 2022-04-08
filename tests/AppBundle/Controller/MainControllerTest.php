@@ -16,6 +16,7 @@ use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use DateTime;
 use Exception;
 use Framework\Exception\AuthException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -139,6 +140,7 @@ class MainControllerTest extends TestCase
      * @throws PropelException
      * @throws UpdaterException
      * @throws AuthException
+     * @throws GuzzleException
      */
     public function testAdmin()
     {
@@ -150,9 +152,10 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(BiblysCloud::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
 
         // then
         $this->assertEquals(
@@ -171,6 +174,7 @@ class MainControllerTest extends TestCase
      * @throws AuthException
      * @throws PropelException
      * @throws UpdaterException
+     * @throws GuzzleException
      */
     public function testAdminWithCloudWarning()
     {
@@ -186,9 +190,14 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("getSubscription")->willReturn([
+            "delay_until_due" => 0,
+            "expires_at" => new DateTime("2019-04-28"),
+        ]);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
 
         // then
         $this->assertEquals(
@@ -207,6 +216,7 @@ class MainControllerTest extends TestCase
      * @throws AuthException
      * @throws PropelException
      * @throws UpdaterException
+     * @throws GuzzleException
      */
     public function testAdminWithUpdates()
     {
@@ -219,9 +229,10 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(true);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(BiblysCloud::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
 
         // then
         $this->assertEquals(
@@ -272,6 +283,7 @@ class MainControllerTest extends TestCase
     /**
      * @throws AuthException
      * @throws PropelException
+     * @throws GuzzleException
      */
     public function testAdminCloud() {
         // given
@@ -279,12 +291,15 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("cloud", [
-            "expires" => "1999-12-31",
             "domains" => ["librys.fr", "librairieys.fr"],
+        ]);
+        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("getSubscription")->willReturn([
+            "expires_at" => new DateTime("1999-12-31"),
         ]);
 
         // when
-        $response = $controller->adminCloud($request, $config);
+        $response = $controller->adminCloud($request, $config, $cloud);
 
         // then
         $this->assertEquals(

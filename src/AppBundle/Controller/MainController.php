@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace AppBundle\Controller;
 
@@ -248,12 +248,14 @@ class MainController extends Controller
      * @throws UpdaterException
      * @throws PropelException
      * @throws Exception
+     * @throws GuzzleException
      */
     public function adminAction(
         Request $request,
         Config $config,
         Updater $updater,
-        UrlGenerator $urlGenerator
+        UrlGenerator $urlGenerator,
+        BiblysCloud $cloud
     ): Response
     {
         global $site;
@@ -278,7 +280,11 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $cloudConfig = $config->get("cloud");
+        $cloudExpiresAt = null;
+        if ($config->get("cloud")) {
+            $subscription = $cloud->getSubscription();
+            $cloudExpiresAt = $subscription["expires_at"];
+        }
 
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
         $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site, $config) {
@@ -310,10 +316,9 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "renew_link" => $cloudConfig["renew_link"] ?? null,
-            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudConfig),
-            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudConfig),
-            "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
+            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudExpiresAt),
+            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudExpiresAt),
+            "cloud_expiration_date" => $cloudExpiresAt,
         ]);
     }
 
@@ -423,37 +428,31 @@ class MainController extends Controller
      * @throws AuthException
      * @throws PropelException
      * @throws Exception
+     * @throws GuzzleException
      */
-    public function adminCloud(Request $request, Config $config): Response
+    public function adminCloud(Request $request, Config $config, BiblysCloud $cloud): Response
     {
         self::authAdmin($request);
         $cloudConfig = $config->get("cloud");
-
-        $request->attributes->set("page_title", "Abonnement Biblys Cloud");
-
         if (!$cloudConfig) {
             throw new ResourceNotFoundException();
         }
 
+        $request->attributes->set("page_title", "Abonnement Biblys Cloud");
+
+        $subscription = $cloud->getSubscription();
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
-            "renew_link" => $cloudConfig["renew_link"] ?? null,
-            "cloud_expiration_date" => $cloudConfig["expires"] ?? "",
+            "cloud_expiration_date" => $subscription["expires_at"],
         ]);
     }
 
-    /**
-     * @param $cloudConfig
-     * @return bool
-     * @throws Exception
-     */
-    private static function _hasCloudSubscriptionExpired($cloudConfig): bool
+    private static function _hasCloudSubscriptionExpired(?DateTime $expirationDate): bool
     {
-        if (!$cloudConfig || !isset($cloudConfig["expires"])) {
+        if ($expirationDate === null) {
             return false;
         }
 
-        $expirationDate = new DateTime($cloudConfig["expires"]);
         $now = new DateTime();
         if ($expirationDate > $now) {
             return false;
@@ -462,24 +461,18 @@ class MainController extends Controller
         return true;
     }
 
-    /**
-     * @param array|false $cloudConfig
-     * @return bool
-     * @throws Exception
-     */
-    private static function _isCloudSubscriptionExpiringSoon($cloudConfig): bool
+    private static function _isCloudSubscriptionExpiringSoon(?DateTime $expirationDate): bool
     {
-        if (!$cloudConfig || !isset($cloudConfig["expires"])) {
+        if ($expirationDate === null) {
             return false;
         }
 
-        if (self::_hasCloudSubscriptionExpired($cloudConfig)) {
+        if (self::_hasCloudSubscriptionExpired($expirationDate)) {
             return false;
         }
 
-        $cloudExpirationDate = new DateTime($cloudConfig["expires"]);
         $now = new DateTime();
-        $diff = $now->diff($cloudExpirationDate)->format("%a");
+        $diff = $now->diff($expirationDate)->format("%a");
 
         if ($diff > 7) {
             return false;
