@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Admin\Entry;
 use Biblys\Exception\ContactPageException;
+use Biblys\Service\BiblysCloud;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -16,6 +17,7 @@ use DateTime;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use GuzzleHttp\Exception\GuzzleException;
 use InvalidArgumentException;
 use Model\OptionQuery;
 use Model\PageQuery;
@@ -485,4 +487,23 @@ class MainController extends Controller
 
         return true;
     }
+
+    /**
+     * @throws AuthException
+     * @throws GuzzleException
+     * @throws PropelException
+     */
+    public function adminCloudPortal(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        BiblysCloud $cloud
+    ): RedirectResponse
+    {
+        self::authAdmin($request);
+
+        $portalUrl = $cloud->getPortalUrl($urlGenerator);
+
+        return new RedirectResponse($portalUrl);
+    }
+
 }

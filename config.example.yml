@@ -13,10 +13,12 @@ logs:
     sql: false
 
 # cloud:
-#   cdn: false
-#   expires: "2019-04-28"
-#   renew_link: https://www.biblys.fr/invoice/1234
-#   domains: librys.fr, librairieys.fr
+#  cdn: false
+#  public_key: cus_abcd1234
+#  secret_key: abcd1234
+#  expires: "2019-04-28"
+#  renew_link: https://www.biblys.fr/invoice/1234
+#  domains: librys.fr, librairieys.fr
 
 # users_table_name: Users
 

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 /**
  * @backupGlobals disabled
@@ -7,6 +7,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BiblysCloud;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -17,6 +18,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
 use Framework\Exception\AuthException;
+use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -306,4 +308,35 @@ class MainControllerTest extends TestCase
             "it should display expiration date"
         );
     }
+
+    /**
+     * @throws AuthException
+     * @throws GuzzleException
+     * @throws PropelException
+     */
+    public function testAdminCloudPortal()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $controller = new MainController();
+        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("getPortalUrl")->willReturn("https://stripe.com/portal");
+
+        // when
+        $response = $controller->adminCloudPortal($request, $urlGenerator, $cloud);
+
+        // then
+        $this->assertEquals(
+            302,
+            $response->getStatusCode(),
+            "it should return HTTP 302"
+        );
+        $this->assertEquals(
+            "https://stripe.com/portal",
+            $response->getTargetUrl(),
+            "it should redirect to the stripe portal"
+        );
+    }
+
 }

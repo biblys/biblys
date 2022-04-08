@@ -2,12 +2,11 @@
 
 <p>Date d'expiration : {{ cloud_expiration_date|date("j f Y") }}</p>
 {% if domains %}
-    <p>Domaines inclus : {{ domains|join(", ") }}</p>
+  <p>Domaines inclus : {{ domains|join(", ") }}</p>
 {% endif %}
 
-{% if renew_link %}
-    <a href="{{ renew_link }}" target="_blank" rel="noopener noreferer" class="btn btn-success">
-        <span class="fa fa-refresh"></span>
-        Renouveler
-    </a>
-{%  endif %}
+<a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-primary">
+  <span class="fa fa-cloud"></span>
+  &nbsp;
+  Gérer mon abonnement
+</a>

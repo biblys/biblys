@@ -55,6 +55,11 @@ main_admin_cloud:
   path: /admin/cloud
   controller: AppBundle\Controller\MainController::adminCloud
 
+main_admin_cloud_portal:
+  methods: GET
+  path: /admin/cloud/portal
+  controller: AppBundle\Controller\MainController::adminCloudPortal
+
 # Article
 
 article_show:
