@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Service\BiblysCloud;
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\ConfigValueResolver;
@@ -7,6 +8,7 @@ use Framework\ArgumentResolver\CurrentSiteValueResolver;
 use Framework\ArgumentResolver\CurrentUserValueResolver;
 use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
+use Framework\ArgumentResolver\BiblysCloudValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\ArgumentResolver\UrlGeneratorValueResolver;
 use Framework\RequestListener;
@@ -34,6 +36,7 @@ $container->register("request_stack", RequestStack::class);
 $container->register("controller_resolver", ControllerResolver::class);
 
 $argumentResolvers = ArgumentResolver::getDefaultArgumentValueResolvers();
+$argumentResolvers[] = new BiblysCloudValueResolver();
 $argumentResolvers[] = new ConfigValueResolver();
 $argumentResolvers[] = new CurrentSiteValueResolver();
 $argumentResolvers[] = new CurrentUserValueResolver();
@@ -64,6 +67,8 @@ $container->register("framework", HttpKernel::class)
 $container->register("config", Config::class);
 $container->register("updater", Updater::class)
     ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
+$container->register("biblys_cloud", BiblysCloud::class)
+    ->setArguments([new Reference("config")]);
 
 $routes = RouteLoader::load();
 $container->setParameter("routes", $routes);
