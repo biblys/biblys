@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
 use Biblys\Admin\Entry;
 use Biblys\Exception\ContactPageException;
 use Biblys\Service\Config;
@@ -10,6 +11,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
+use CartManager;
 use DateTime;
 use Exception;
 use Framework\Controller;
@@ -17,7 +19,10 @@ use Framework\Exception\AuthException;
 use InvalidArgumentException;
 use Model\OptionQuery;
 use Model\PageQuery;
+use OrderManager;
+use PostManager;
 use Propel\Runtime\Exception\PropelException;
+use RayonManager;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -83,7 +88,7 @@ class MainController extends Controller
 
             // Display articles
             } elseif ($behavior == 'articles') {
-                $am = $this->entityManager('Article');
+                $am = new ArticleManager();
 
                 // Pagination
                 $page = (int) $request->query->get('p', 0);
@@ -104,7 +109,7 @@ class MainController extends Controller
 
             // Display ten last posts
             } elseif ($behavior == 'posts') {
-                $pm = $this->entityManager('Post');
+                $pm = new PostManager();
 
                 $posts = $pm->getAll(['post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
 
@@ -112,7 +117,7 @@ class MainController extends Controller
 
             // Display ten last posts in a category
             } elseif (preg_match('/post_category:(\\d+)/', $behavior, $matches)) {
-                $pm = $this->entityManager('Post');
+                $pm = new PostManager();
 
                 $posts = $pm->getAll(['category_id' => $matches[1], 'post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
 
@@ -120,7 +125,7 @@ class MainController extends Controller
 
             // Display a rayon
             } elseif (preg_match('/rayon:(\\d+)/', $behavior, $matches)) {
-                $rm = $this->entityManager('Rayon');
+                $rm = new RayonManager();
 
                 $rayonId = $matches[1];
                 $rayon = $rm->getById($rayonId);
@@ -162,7 +167,13 @@ class MainController extends Controller
         return $this->render('AppBundle:Main:home.html.twig');
     }
 
-    public function contactAction(Request $request)
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function contactAction(Request $request): Response
     {
         global $site, $config;
 
@@ -175,7 +186,7 @@ class MainController extends Controller
         $error = null;
         $success = false;
 
-        $this->setPageTitle('Contact');
+        $request->attributes->set("page_title", "Contact");
 
         // ReCaptcha
         $recaptcha = false;
@@ -236,9 +247,14 @@ class MainController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function adminAction(Request $request, Config $config, Updater $updater): Response
+    public function adminAction(
+        Request $request,
+        Config $config,
+        Updater $updater,
+        UrlGenerator $urlGenerator
+    ): Response
     {
-        global $site, $container;
+        global $site;
 
         $currentUser = self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
@@ -262,7 +278,6 @@ class MainController extends Controller
 
         $cloudConfig = $config->get("cloud");
 
-        $urlGenerator = $container->get("url_generator");
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
         $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site, $config) {
             if ($entry->getName() === "Mise à jour") {
@@ -332,7 +347,7 @@ class MainController extends Controller
 
             $_V->setOpt('shortcuts', $shortcuts);
 
-            return new RedirectResponse($this->generateUrl('main_admin'));
+            return new RedirectResponse($urlGenerator->generate('main_admin'));
         }
 
         // Default home page
@@ -370,13 +385,12 @@ class MainController extends Controller
     /**
      * Returns notifications for asked subscriptions.
      *
-     * @param Request $subscriptions A list of subscriptions
-     *
-     * @return JsonResponse An array of notifications
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function adminNotificationsAction(Request $request)
+    public function adminNotificationsAction(Request $request): JsonResponse
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         $subscriptions = explode(',', $request->query->get('subscriptions'));
 
@@ -384,19 +398,19 @@ class MainController extends Controller
 
         // Orders to be shipped
         if (in_array('orders', $subscriptions)) {
-            $om = $this->entityManager('Order');
+            $om = new OrderManager();
             $notifications['orders'] = $om->count(['order_type' => 'web', 'order_payment_date' => 'NOT NULL', 'order_shipping_date' => 'NULL', 'order_cancel_date' => 'NULL']);
         }
 
         // Carts
         if (in_array('carts', $subscriptions)) {
-            $cm = $this->entityManager('Cart');
+            $cm = new CartManager();
             $notifications['carts'] = $cm->count(['cart_type' => 'web']);
         }
 
         // Search terms
         if (in_array('search-terms', $subscriptions)) {
-            $am = $this->entityManager('Article');
+            $am = new ArticleManager();
             $notifications['search-terms'] = $am->countAllWithoutSearchTerms();
         }
 

@@ -19,7 +19,6 @@ use Exception;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -101,6 +100,11 @@ class MainControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function testContact()
     {
         // given
@@ -142,10 +146,11 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $updater = new Updater('', '3.0', $config);
-        $this->_mockContainerWithUrlGenerator();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
 
         // then
         $this->assertEquals(
@@ -176,11 +181,12 @@ class MainControllerTest extends TestCase
             "renew_link" => "https://biblys.cloud/renew",
         ]);
         $config->set("environment", "test");
-        $this->_mockContainerWithUrlGenerator();
         $updater = new Updater('', '3.0', $config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
 
         // then
         $this->assertEquals(
@@ -207,12 +213,13 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("cloud", ["expires" => "2018-01-01"]);
-        $this->_mockContainerWithUrlGenerator();
         $updater = $this->createMock(Updater::class);
         $updater->method("isUpdateAvailable")->willReturn(true);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator);
 
         // then
         $this->assertEquals(
@@ -258,18 +265,6 @@ class MainControllerTest extends TestCase
             $response->getContent(),
             "it should display the title"
         );
-    }
-
-
-    /**
-     * @return void
-     */
-    public function _mockContainerWithUrlGenerator(): void
-    {
-        $urlgenerator = $this->createMock(UrlGenerator::class);
-        $urlgenerator->method("generate")->willReturn("/some/url");
-        $GLOBALS["container"] = $this->createMock(ContainerInterface::class);
-        $GLOBALS["container"]->method("get")->willReturn($urlgenerator);
     }
 
     /**
