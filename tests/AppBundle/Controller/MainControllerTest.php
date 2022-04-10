@@ -182,10 +182,6 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
-        $config->set("cloud", [
-            "expires" => "2019-04-28",
-            "renew_link" => "https://biblys.cloud/renew",
-        ]);
         $config->set("environment", "test");
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
@@ -195,6 +191,7 @@ class MainControllerTest extends TestCase
             "delay_until_due" => 0,
             "expires_at" => new DateTime("2019-04-28"),
         ]);
+        $cloud->method("hasSubscriptionExpired")->willReturn(true);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);

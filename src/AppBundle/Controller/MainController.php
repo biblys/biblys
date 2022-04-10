@@ -13,7 +13,6 @@ use Biblys\Service\Pagination;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use CartManager;
-use DateTime;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -281,9 +280,14 @@ class MainController extends Controller
         }
 
         $cloudExpiresAt = null;
-        if ($config->get("cloud")) {
+        $cloudSubscriptionHasExpired = false;
+        $cloudSubscriptionIsExpiringSoon = false;
+        $cloudConfig = $config->get("cloud");
+        if ($cloudConfig) {
             $subscription = $cloud->getSubscription();
             $cloudExpiresAt = $subscription["expires_at"];
+            $cloudSubscriptionHasExpired = $cloud->hasSubscriptionExpired();
+            $cloudSubscriptionIsExpiringSoon = $cloud->isSubscriptionExpiringSoon();
         }
 
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
@@ -316,8 +320,8 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "cloud_subscription_has_expired" => self::_hasCloudSubscriptionExpired($cloudExpiresAt),
-            "cloud_subscription_expires_soon" => self::_isCloudSubscriptionExpiringSoon($cloudExpiresAt),
+            "cloud_subscription_has_expired" => $cloudSubscriptionHasExpired,
+            "cloud_subscription_expires_soon" => $cloudSubscriptionIsExpiringSoon,
             "cloud_expiration_date" => $cloudExpiresAt,
         ]);
     }
@@ -445,40 +449,6 @@ class MainController extends Controller
             "domains" => $cloudConfig["domains"] ?? [],
             "cloud_expiration_date" => $subscription["expires_at"],
         ]);
-    }
-
-    private static function _hasCloudSubscriptionExpired(?DateTime $expirationDate): bool
-    {
-        if ($expirationDate === null) {
-            return false;
-        }
-
-        $now = new DateTime();
-        if ($expirationDate > $now) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static function _isCloudSubscriptionExpiringSoon(?DateTime $expirationDate): bool
-    {
-        if ($expirationDate === null) {
-            return false;
-        }
-
-        if (self::_hasCloudSubscriptionExpired($expirationDate)) {
-            return false;
-        }
-
-        $now = new DateTime();
-        $diff = $now->diff($expirationDate)->format("%a");
-
-        if ($diff > 7) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
