@@ -1,6 +1,15 @@
 <h1>Administration Biblys</h1>
 
-{% if cloud_subscription_has_expired or cloud_subscription_expires_soon %}
+
+{% if should_display_cloud_invite %}
+  <div class="alert alert-warning text-center">
+    <span class="fa fa-warning"></span>
+    <strong>Aucun abonnement Biblys Cloud en cours.</strong><br/>
+    <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-sm btn-success">
+      Souscrire
+    </a>
+  </div>
+{% elseif cloud_subscription_has_expired or cloud_subscription_expires_soon %}
   {% include "AppBundle:Main:_cloudBanner.html.twig" %}
 {% endif %}
 

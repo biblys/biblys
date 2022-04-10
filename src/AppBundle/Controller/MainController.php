@@ -280,11 +280,13 @@ class MainController extends Controller
         }
 
         $cloudExpiresAt = null;
+        $cloudSubscriptionExists = false;
         $cloudSubscriptionHasExpired = false;
         $cloudSubscriptionIsExpiringSoon = false;
         $cloudConfig = $config->get("cloud");
-        if ($cloudConfig) {
+        if ($cloudConfig && $cloud->subscriptionExists()) {
             $subscription = $cloud->getSubscription();
+            $cloudSubscriptionExists = true;
             $cloudExpiresAt = $subscription["expires_at"];
             $cloudSubscriptionHasExpired = $cloud->hasSubscriptionExpired();
             $cloudSubscriptionIsExpiringSoon = $cloud->isSubscriptionExpiringSoon();
@@ -320,6 +322,7 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
+            "should_display_cloud_invite" => $cloudConfig && !$cloudSubscriptionExists,
             "cloud_subscription_has_expired" => $cloudSubscriptionHasExpired,
             "cloud_subscription_expires_soon" => $cloudSubscriptionIsExpiringSoon,
             "cloud_expiration_date" => $cloudExpiresAt,
@@ -444,10 +447,18 @@ class MainController extends Controller
 
         $request->attributes->set("page_title", "Abonnement Biblys Cloud");
 
-        $subscription = $cloud->getSubscription();
+        $cloudSubscriptionExists = false;
+        $cloudExpirationDate = null;
+        if ($cloud->subscriptionExists()) {
+            $cloudSubscriptionExists = true;
+            $subscription = $cloud->getSubscription();
+            $cloudExpirationDate = $subscription["expires_at"];
+        }
+
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
-            "cloud_expiration_date" => $subscription["expires_at"],
+            "cloud_subscription_exists" => $cloudSubscriptionExists,
+            "cloud_expiration_date" => $cloudExpirationDate,
         ]);
     }
 

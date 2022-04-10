@@ -16,6 +16,11 @@ class BiblysCloud
     private $cloudConfig;
 
     /**
+     * @var bool
+     */
+    private $subscriptionExists = false;
+
+    /**
      * @var array
      */
     private $subscription = null;
@@ -48,13 +53,29 @@ class BiblysCloud
     {
         if ($this->subscription === null) {
             $subscription = $this->query("/stripe/subscription");
-            $this->subscription = [
-                "expires_at" => (new DateTime())->setTimestamp($subscription["current_period_end"]),
-                "days_until_due" => $subscription["days_until_due"],
-            ];
+
+            if (isset($subscription["id"])) {
+                $this->subscriptionExists = true;
+                $this->subscription = [
+                    "expires_at" => (new DateTime())->setTimestamp($subscription["current_period_end"]),
+                    "days_until_due" => $subscription["days_until_due"],
+                ];
+            } else {
+                $this->subscriptionExists = false;
+                $this->subscription = [];
+            }
         }
 
         return $this->subscription;
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function subscriptionExists(): bool
+    {
+        $this->getSubscription();
+        return $this->subscriptionExists;
     }
 
     /**

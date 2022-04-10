@@ -176,6 +176,42 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
+    public function testAdminWithCloudInvite()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("environment", "test");
+        $config->set("cloud", ["customer_id" => "12345"]);
+        $updater = new Updater('', '3.0', $config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("subscriptionExists")->willReturn(false);
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Aucun abonnement Biblys Cloud en cours",
+            $response->getContent(),
+            "it should display the invite"
+        );
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws GuzzleException
+     */
     public function testAdminWithCloudWarning()
     {
         // given
@@ -183,10 +219,12 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("environment", "test");
+        $config->set("cloud", ["customer_id" => "12345"]);
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn([
             "delay_until_due" => 0,
             "expires_at" => new DateTime("2019-04-28"),
@@ -291,6 +329,45 @@ class MainControllerTest extends TestCase
             "domains" => ["librys.fr", "librairieys.fr"],
         ]);
         $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("subscriptionExists")->willReturn(false);
+        $cloud->method("getSubscription")->willReturn([]);
+
+        // when
+        $response = $controller->adminCloud($request, $config, $cloud);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Abonnement Biblys Cloud",
+            $response->getContent(),
+            "it should display the title"
+        );
+        $this->assertStringContainsString(
+            "Aucun abonnement Biblys Cloud en cours",
+            $response->getContent(),
+            "it should display the invite"
+        );
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws GuzzleException
+     */
+    public function testAdminCloudWithSubscription() {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("cloud", [
+            "domains" => ["librys.fr", "librairieys.fr"],
+        ]);
+        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn([
             "expires_at" => new DateTime("1999-12-31"),
         ]);
