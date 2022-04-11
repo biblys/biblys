@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.60.2 (DEV)
+
+Correction
+
+La suppression d'un livre pouvait provoquer une erreur. C'est corrigé.
+
 ### 2.60.1 (8 avril 2022)
 
 Corrections

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -12,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -175,6 +179,38 @@ class ArticleControllerTest extends TestCase
 
         // when
         $response = $controller->addRayonsAction($request, $article->getId());
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testDeleteAction()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $article = ModelFactory::createArticle();
+        $controller = new ArticleController();
+
+        // when
+        $response = $controller->deleteAction(
+            $request,
+            $urlGenerator,
+            $currentSite,
+            $article->getId()
+        );
 
         // then
         $this->assertEquals(

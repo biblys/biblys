@@ -235,12 +235,14 @@ class ArticleController extends Controller
      * @throws SyntaxError
      * @throws PropelException
      */
-    public function deleteAction(Request $request, UrlGenerator $urlGenerator, $id)
+    public function deleteAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        CurrentSite $currentSite,
+        int $id
+    )
     {
-
-        $am = new ArticleManager();
-
-        $article = $am->getById($id);
+        $article = ArticleQuery::create()->filterForCurrentSite($currentSite)->findOneById($id);
         if (!$article) {
             throw new NotFoundException("L'article $id n'existe pas.");
         }
@@ -250,19 +252,19 @@ class ArticleController extends Controller
         $error = null;
         if ($request->getMethod() == 'POST') {
             try {
-                $am->delete($article);
+                $article->delete();
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
                 return new RedirectResponse(
-                    $urlGenerator->generate("article_deleted", ["title" => $article->get("title")])
+                    $urlGenerator->generate("article_deleted", ["title" => $article->getTitle()])
                 );
             }
         }
 
-        $request->attributes->set("page_title", "Suppression de l'article {$article->get("title")}");
+        $request->attributes->set("page_title", "Suppression de l'article {$article->getTitle()}");
 
         return $this->render('AppBundle:Article:delete.html.twig', [
             'article' => $article,
