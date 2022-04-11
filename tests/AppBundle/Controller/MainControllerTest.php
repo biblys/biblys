@@ -7,7 +7,7 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\BiblysCloud;
+use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -152,7 +152,7 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -187,7 +187,7 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(false);
 
         // when
@@ -223,7 +223,7 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn([
             "delay_until_due" => 0,
@@ -264,7 +264,7 @@ class MainControllerTest extends TestCase
         $updater->method("isUpdateAvailable")->willReturn(true);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -328,7 +328,7 @@ class MainControllerTest extends TestCase
         $config->set("cloud", [
             "domains" => ["librys.fr", "librairieys.fr"],
         ]);
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(false);
         $cloud->method("getSubscription")->willReturn([]);
 
@@ -366,7 +366,7 @@ class MainControllerTest extends TestCase
         $config->set("cloud", [
             "domains" => ["librys.fr", "librairieys.fr"],
         ]);
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn([
             "expires_at" => new DateTime("1999-12-31"),
@@ -409,7 +409,7 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $controller = new MainController();
-        $cloud = $this->createMock(BiblysCloud::class);
+        $cloud = $this->createMock(CloudService::class);
         $cloud->method("getPortalUrl")->willReturn("https://stripe.com/portal");
 
         // when

@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Admin\Entry;
 use Biblys\Exception\ContactPageException;
-use Biblys\Service\BiblysCloud;
+use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -254,7 +254,7 @@ class MainController extends Controller
         Config $config,
         Updater $updater,
         UrlGenerator $urlGenerator,
-        BiblysCloud $cloud
+        CloudService $cloud
     ): Response
     {
         global $site;
@@ -437,7 +437,7 @@ class MainController extends Controller
      * @throws Exception
      * @throws GuzzleException
      */
-    public function adminCloud(Request $request, Config $config, BiblysCloud $cloud): Response
+    public function adminCloud(Request $request, Config $config, CloudService $cloud): Response
     {
         self::authAdmin($request);
         $cloudConfig = $config->get("cloud");
@@ -470,7 +470,7 @@ class MainController extends Controller
     public function adminCloudPortal(
         Request $request,
         UrlGenerator $urlGenerator,
-        BiblysCloud $cloud
+        CloudService $cloud
     ): RedirectResponse
     {
         self::authAdmin($request);

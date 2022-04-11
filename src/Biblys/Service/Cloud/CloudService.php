@@ -1,14 +1,15 @@
 <?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
-namespace Biblys\Service;
+namespace Biblys\Service\Cloud;
 
+use Biblys\Service\Config;
 use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class BiblysCloud
+class CloudService
 {
     /**
      * @var array

@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Service\BiblysCloud;
+use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\Updater\Updater;
 use Framework\ArgumentResolver\ConfigValueResolver;
@@ -67,7 +67,7 @@ $container->register("framework", HttpKernel::class)
 $container->register("config", Config::class);
 $container->register("updater", Updater::class)
     ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
-$container->register("biblys_cloud", BiblysCloud::class)
+$container->register("biblys_cloud", CloudService::class)
     ->setArguments([new Reference("config")]);
 
 $routes = RouteLoader::load();

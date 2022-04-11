@@ -2,7 +2,7 @@
 
 namespace Framework\ArgumentResolver;
 
-use Biblys\Service\BiblysCloud;
+use Biblys\Service\Cloud\CloudService;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -13,7 +13,7 @@ class BiblysCloudValueResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        if ($argument->getType() !== BiblysCloud::class) {
+        if ($argument->getType() !== CloudService::class) {
             return false;
         }
 
