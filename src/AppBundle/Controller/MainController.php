@@ -287,9 +287,9 @@ class MainController extends Controller
         if ($cloudConfig && $cloud->subscriptionExists()) {
             $subscription = $cloud->getSubscription();
             $cloudSubscriptionExists = true;
-            $cloudExpiresAt = $subscription["expires_at"];
-            $cloudSubscriptionHasExpired = $cloud->hasSubscriptionExpired();
-            $cloudSubscriptionIsExpiringSoon = $cloud->isSubscriptionExpiringSoon();
+            $cloudExpiresAt = $subscription->getExpirationDate();
+            $cloudSubscriptionHasExpired = $subscription->hasExpired();
+            $cloudSubscriptionIsExpiringSoon = $subscription->isExpiringSoon();
         }
 
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
@@ -452,7 +452,7 @@ class MainController extends Controller
         if ($cloud->subscriptionExists()) {
             $cloudSubscriptionExists = true;
             $subscription = $cloud->getSubscription();
-            $cloudExpirationDate = $subscription["expires_at"];
+            $cloudExpirationDate = $subscription->getExpirationDate();
         }
 
         return $this->render("AppBundle:Main:adminCloud.html.twig", [

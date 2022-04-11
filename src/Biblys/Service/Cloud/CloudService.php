@@ -3,7 +3,6 @@
 namespace Biblys\Service\Cloud;
 
 use Biblys\Service\Config;
-use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -19,7 +18,7 @@ class CloudService
     /**
      * @var bool
      */
-    private $subscriptionExists = false;
+    private $subscriptionFetched = false;
 
     /**
      * @var array
@@ -42,7 +41,7 @@ class CloudService
             UrlGeneratorInterface::ABSOLUTE_URL
         );
         $endpointUrl = "/stripe/portal-url?return_url=".urlencode($adminCloudUrl);
-        $json = $this->query($endpointUrl);
+        $json = $this->_query($endpointUrl);
 
         return $json["url"];
     }
@@ -50,20 +49,17 @@ class CloudService
     /**
      * @throws GuzzleException
      */
-    public function getSubscription(): array
+    public function getSubscription(): ?CloudSubscription
     {
-        if ($this->subscription === null) {
-            $subscription = $this->query("/stripe/subscription");
+        if (!$this->subscriptionFetched) {
+            $subscription = $this->_query("/stripe/subscription");
+            $this->subscriptionFetched = true;
 
             if (isset($subscription["id"])) {
-                $this->subscriptionExists = true;
-                $this->subscription = [
-                    "expires_at" => (new DateTime())->setTimestamp($subscription["current_period_end"]),
-                    "days_until_due" => $subscription["days_until_due"],
-                ];
-            } else {
-                $this->subscriptionExists = false;
-                $this->subscription = [];
+                $this->subscription = new CloudSubscription(
+                    $subscription["current_period_end"],
+                    $subscription["days_until_due"],
+                );
             }
         }
 
@@ -75,56 +71,13 @@ class CloudService
      */
     public function subscriptionExists(): bool
     {
-        $this->getSubscription();
-        return $this->subscriptionExists;
+        return $this->getSubscription() !== null;
     }
 
     /**
      * @throws GuzzleException
      */
-    public function hasSubscriptionExpired(): bool
-    {
-        $subscription = $this->getSubscription();
-        $daysUntilDue = $subscription["days_until_due"];
-
-        if ($daysUntilDue === null) {
-            return false;
-        }
-
-        if ($daysUntilDue > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws GuzzleException
-     */
-    public function isSubscriptionExpiringSoon(): bool
-    {
-        $subscription = $this->getSubscription();
-        $daysUntilDue = $subscription["days_until_due"];
-
-        if ($daysUntilDue === null) {
-            return false;
-        }
-
-        if ($this->hasSubscriptionExpired()) {
-            return false;
-        }
-
-        if ($daysUntilDue < 7) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws GuzzleException
-     */
-    private function query(string $endpointUrl): array
+    private function _query(string $endpointUrl): array
     {
         $client = new Client();
         $response = $client->request("GET", "https://biblys.cloud/api$endpointUrl", [

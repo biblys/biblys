@@ -8,6 +8,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Cloud\CloudService;
+use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -225,11 +226,10 @@ class MainControllerTest extends TestCase
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(true);
-        $cloud->method("getSubscription")->willReturn([
-            "delay_until_due" => 0,
-            "expires_at" => new DateTime("2019-04-28"),
-        ]);
-        $cloud->method("hasSubscriptionExpired")->willReturn(true);
+        $cloud->method("getSubscription")->willReturn(new CloudSubscription(
+            (new DateTime("2019-04-28"))->getTimestamp(),
+            0
+        ));
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -330,7 +330,7 @@ class MainControllerTest extends TestCase
         ]);
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(false);
-        $cloud->method("getSubscription")->willReturn([]);
+        $cloud->method("getSubscription")->willReturn(null);
 
         // when
         $response = $controller->adminCloud($request, $config, $cloud);
@@ -368,9 +368,10 @@ class MainControllerTest extends TestCase
         ]);
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("subscriptionExists")->willReturn(true);
-        $cloud->method("getSubscription")->willReturn([
-            "expires_at" => new DateTime("1999-12-31"),
-        ]);
+        $cloud->method("getSubscription")->willReturn(new CloudSubscription(
+            (new DateTime("1999-12-31"))->getTimestamp(),
+            0
+        ));
 
         // when
         $response = $controller->adminCloud($request, $config, $cloud);
