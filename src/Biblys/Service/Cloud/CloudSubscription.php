@@ -2,68 +2,30 @@
 
 namespace Biblys\Service\Cloud;
 
-use DateTime;
-
 class CloudSubscription
 {
     /**
-     * @var DateTime
+     * @var string
      */
-    private $expirationDate;
+    private $status;
 
-    /**
-     * @var int
-     */
-    private $daysUntilDue;
-
-    public function __construct(int $expiresAt, ?int $daysUntilDue)
+    public function __construct(string $status)
     {
-        $this->expirationDate = new DateTime();
-        $this->expirationDate->setTimestamp($expiresAt);
-        $this->daysUntilDue = $daysUntilDue;
+        $this->status = $status;
     }
 
-    public function getExpirationDate(): DateTime
+    public function getStatus(): string
     {
-        return $this->expirationDate;
-    }
-
-    public function getDaysUntilDue(): ?int
-    {
-        return $this->daysUntilDue;
+        return $this->status;
     }
 
     public function hasExpired(): bool
     {
-        $daysUntilDue = $this->getDaysUntilDue();
-
-        if ($daysUntilDue === null) {
-            return false;
-        }
-
-        if ($daysUntilDue > 0) {
-            return false;
-        }
-
-        return true;
+        return $this->status !== "active";
     }
 
     public function isExpiringSoon(): bool
     {
-        $daysUntilDue = $this->getDaysUntilDue();
-
-        if ($daysUntilDue === null) {
-            return false;
-        }
-
-        if ($this->hasExpired()) {
-            return false;
-        }
-
-        if ($daysUntilDue < 7) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }

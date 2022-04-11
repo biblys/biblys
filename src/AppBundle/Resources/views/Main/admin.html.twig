@@ -9,7 +9,7 @@
       Souscrire
     </a>
   </div>
-{% elseif cloud_subscription_has_expired or cloud_subscription_expires_soon %}
+{% elseif cloud_subscription.hasExpired %}
   {% include "AppBundle:Main:_cloudBanner.html.twig" %}
 {% endif %}
 

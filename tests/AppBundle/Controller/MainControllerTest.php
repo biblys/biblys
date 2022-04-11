@@ -177,7 +177,7 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
-    public function testAdminWithCloudInvite()
+    public function testAdminWithoutCloudSubscription()
     {
         // given
         $controller = new MainController();
@@ -189,7 +189,6 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
-        $cloud->method("subscriptionExists")->willReturn(false);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -213,7 +212,7 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
-    public function testAdminWithCloudWarning()
+    public function testAdminWithCloudSubscriptionExpiringSoon()
     {
         // given
         $controller = new MainController();
@@ -225,10 +224,9 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
-        $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
+            "past_due",
             (new DateTime("2019-04-28"))->getTimestamp(),
-            0
         ));
 
         // when
@@ -241,7 +239,46 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Votre abonnement Biblys Cloud a expiré le 28 avril 2019.",
+            "Votre abonnement Biblys Cloud a expiré.",
+            $response->getContent(),
+            "it should display the warning"
+        );
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws GuzzleException
+     */
+    public function testAdminWithCloudSubscriptionExpired()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $config->set("environment", "test");
+        $config->set("cloud", ["customer_id" => "12345"]);
+        $updater = new Updater('', '3.0', $config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(CloudService::class);
+        $cloud->method("getSubscription")->willReturn(new CloudSubscription(
+            "past_due",
+            (new DateTime("2019-04-28"))->getTimestamp(),
+        ));
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Votre abonnement Biblys Cloud a expiré.",
             $response->getContent(),
             "it should display the warning"
         );
@@ -329,7 +366,6 @@ class MainControllerTest extends TestCase
             "domains" => ["librys.fr", "librairieys.fr"],
         ]);
         $cloud = $this->createMock(CloudService::class);
-        $cloud->method("subscriptionExists")->willReturn(false);
         $cloud->method("getSubscription")->willReturn(null);
 
         // when
@@ -367,10 +403,9 @@ class MainControllerTest extends TestCase
             "domains" => ["librys.fr", "librairieys.fr"],
         ]);
         $cloud = $this->createMock(CloudService::class);
-        $cloud->method("subscriptionExists")->willReturn(true);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
+            "active",
             (new DateTime("1999-12-31"))->getTimestamp(),
-            0
         ));
 
         // when
@@ -386,11 +421,6 @@ class MainControllerTest extends TestCase
             "Abonnement Biblys Cloud",
             $response->getContent(),
             "it should display the title"
-        );
-        $this->assertStringContainsString(
-            "Date d'expiration : 31 décembre 1999",
-            $response->getContent(),
-            "it should display expiration date"
         );
         $this->assertStringContainsString(
             "Domaines inclus : librys.fr, librairieys.fr",

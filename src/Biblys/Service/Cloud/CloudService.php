@@ -57,6 +57,7 @@ class CloudService
 
             if (isset($subscription["id"])) {
                 $this->subscription = new CloudSubscription(
+                    $subscription["status"],
                     $subscription["current_period_end"],
                     $subscription["days_until_due"],
                 );
@@ -64,14 +65,6 @@ class CloudService
         }
 
         return $this->subscription;
-    }
-
-    /**
-     * @throws GuzzleException
-     */
-    public function subscriptionExists(): bool
-    {
-        return $this->getSubscription() !== null;
     }
 
     /**

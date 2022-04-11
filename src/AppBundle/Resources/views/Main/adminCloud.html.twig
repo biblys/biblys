@@ -1,7 +1,6 @@
 <h1>Abonnement Biblys Cloud</h1>
 
-{% if cloud_subscription_exists %}
-  <p>Date d'expiration : {{ cloud_expiration_date|date("j f Y") }}</p>
+{% if subscription %}
   {% if domains %}
     <p>Domaines inclus : {{ domains|join(", ") }}</p>
   {% endif %}

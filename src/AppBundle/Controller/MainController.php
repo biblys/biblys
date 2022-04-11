@@ -279,17 +279,11 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $cloudExpiresAt = null;
-        $cloudSubscriptionExists = false;
-        $cloudSubscriptionHasExpired = false;
-        $cloudSubscriptionIsExpiringSoon = false;
+
+        $cloudSubscription = null;
         $cloudConfig = $config->get("cloud");
-        if ($cloudConfig && $cloud->subscriptionExists()) {
-            $subscription = $cloud->getSubscription();
-            $cloudSubscriptionExists = true;
-            $cloudExpiresAt = $subscription->getExpirationDate();
-            $cloudSubscriptionHasExpired = $subscription->hasExpired();
-            $cloudSubscriptionIsExpiringSoon = $subscription->isExpiringSoon();
+        if ($cloudConfig) {
+            $cloudSubscription = $cloud->getSubscription();
         }
 
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
@@ -322,10 +316,8 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "should_display_cloud_invite" => $cloudConfig && !$cloudSubscriptionExists,
-            "cloud_subscription_has_expired" => $cloudSubscriptionHasExpired,
-            "cloud_subscription_expires_soon" => $cloudSubscriptionIsExpiringSoon,
-            "cloud_expiration_date" => $cloudExpiresAt,
+            "cloud_subscription" => $cloudSubscription,
+            "should_display_cloud_invite" => $cloudSubscription === null,
         ]);
     }
 
@@ -447,18 +439,9 @@ class MainController extends Controller
 
         $request->attributes->set("page_title", "Abonnement Biblys Cloud");
 
-        $cloudSubscriptionExists = false;
-        $cloudExpirationDate = null;
-        if ($cloud->subscriptionExists()) {
-            $cloudSubscriptionExists = true;
-            $subscription = $cloud->getSubscription();
-            $cloudExpirationDate = $subscription->getExpirationDate();
-        }
-
         return $this->render("AppBundle:Main:adminCloud.html.twig", [
             "domains" => $cloudConfig["domains"] ?? [],
-            "cloud_subscription_exists" => $cloudSubscriptionExists,
-            "cloud_expiration_date" => $cloudExpirationDate,
+            "subscription" => $cloud->getSubscription(),
         ]);
     }
 
