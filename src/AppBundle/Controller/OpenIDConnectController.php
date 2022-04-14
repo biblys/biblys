@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Axys\AxysOpenIDConnectProvider;
+use Biblys\Service\Axys;
 use Biblys\Service\Config;
 use Framework\Controller;
 use OpenIDConnectClient\Exception\InvalidTokenException;
@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OpenIDConnectController extends Controller
 {
-    public function axys(Config $config): RedirectResponse
+
+    public function axys(Axys $axys): RedirectResponse
     {
-        $axysConfig = $config->get("axys");
-        $provider = new AxysOpenIDConnectProvider($axysConfig);
+        $provider = $axys->getOpenIDConnectProvider();
 
         $options = ["scope" => ["openid", "email"]];
         return new RedirectResponse($provider->getAuthorizationUrl($options));
@@ -24,10 +24,9 @@ class OpenIDConnectController extends Controller
     /**
      * @throws InvalidTokenException
      */
-    public function callback(Request $request, Config $config): RedirectResponse
+    public function callback(Request $request, Axys $axys): RedirectResponse
     {
-        $axysConfig = $config->get("axys");
-        $provider = new AxysOpenIDConnectProvider($axysConfig);
+        $provider = $axys->getOpenIDConnectProvider();
         $code = $request->query->get("code");
         $token = $provider->getAccessToken("authorization_code", ["code" => $code]);
         $idToken = $token->getIdToken();
