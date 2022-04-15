@@ -105,7 +105,7 @@ class TemplateLoaderTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getOption")->willReturn("1");
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->method("exists")->willReturnOnConsecutiveCalls(true, false);
+        $filesystem->method("exists")->willReturnOnConsecutiveCalls(true);
         $loader = new TemplateLoader($currentSite, $filesystem);
 
         // when
@@ -114,6 +114,28 @@ class TemplateLoaderTest extends TestCase
         // then
         $this->assertStringEndsWith(
             "app/Resources/AppBundle/views/Main/home.html.twig",
+            $templatePath
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testFindTemplateForCustomView()
+    {
+        // given
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->with("use_legacy_layout_builder")->willReturn("0");
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method("exists")->willReturnOnConsecutiveCalls( true);
+        $loader = new TemplateLoader($currentSite, $filesystem);
+
+        // when
+        $templatePath = $loader->getCacheKey("AppBundle:Main:home.html.twig");
+
+        // then
+        $this->assertStringEndsWith(
+            "app/views/Main/home.html.twig",
             $templatePath
         );
     }
