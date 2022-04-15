@@ -4,10 +4,16 @@ namespace AppBundle\Controller;
 
 use Axys\AxysOpenIDConnectProvider;
 use Biblys\Service\Axys;
+use Biblys\Test\ModelFactory;
+use Lcobucci\JWT\Token;
+use Model\SessionQuery;
 use OpenIDConnectClient\AccessToken;
 use OpenIDConnectClient\Exception\InvalidTokenException;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+
+require_once __DIR__."/../../setUp.php";
 
 class OpenIDConnectControllerTest extends TestCase
 {
@@ -30,6 +36,7 @@ class OpenIDConnectControllerTest extends TestCase
 
     /**
      * @throws InvalidTokenException
+     * @throws PropelException
      */
     public function testCallback()
     {
@@ -37,12 +44,17 @@ class OpenIDConnectControllerTest extends TestCase
         $request = new Request();
         $request->query->set("code", "authorization_code");
         $controller = new OpenIDConnectController();
+        $user = ModelFactory::createUser();
+
+        $idToken = new Token(["alg" => "RS256"], ["sub" => $user->getId()]);
         $accessToken = $this->createMock(AccessToken::class);
-        $accessToken->method("getIdToken")->willReturn("id_token_value");
+        $accessToken->method("getIdToken")->willReturn($idToken);
+
         $oidcProvider = $this->createMock(AxysOpenIDConnectProvider::class);
         $oidcProvider->method("getAccessToken")
             ->with("authorization_code", ["code" => "authorization_code"])
             ->willReturn($accessToken);
+
         $axys = $this->createMock(Axys::class);
         $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
 
@@ -52,7 +64,15 @@ class OpenIDConnectControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/", $response->getTargetUrl());
-        $this->assertEquals("id_token", $response->headers->getCookies()[0]->getName());
-        $this->assertEquals("id_token_value", $response->headers->getCookies()[0]->getValue());
+
+        $cookies = $response->headers->getCookies();
+        $this->assertCount(2, $cookies);
+
+        $this->assertEquals("id_token", $cookies[0]->getName());
+        $this->assertEquals("..", $cookies[0]->getValue());
+
+        $this->assertEquals("user_uid", $cookies[1]->getName());
+        $session = SessionQuery::create()->findOneByToken($cookies[1]->getValue());
+        $this->assertNotNull($session);
     }
 }
