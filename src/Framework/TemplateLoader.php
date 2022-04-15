@@ -120,30 +120,7 @@ class TemplateLoader implements LoaderInterface
             return self::_getLayoutFilePath($path[1], $name);
         }
 
-        // Custom file
-        $customFile = BIBLYS_PATH.'/app/Resources/'.$path[0].'/views/'.$path[1].'/'.$path[2];
-        if ($this->filesystem->exists($customFile)) {
-            return $customFile;
-        }
-
-        // Default file
-        $defaultFile = BIBLYS_PATH.'/src/'.$path[0].'/Resources/views/'.$path[1].'/'.$path[2];
-        if ($this->filesystem->exists($defaultFile)) {
-            return $defaultFile;
-        }
-
-        // Old custom file location (deprecated)
-        $oldCustomFile = SITE_PATH . '/templates/' . $path[1] . '/' . $path[2];
-        if (file_exists($oldCustomFile)) {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.57.0",
-                "Using the /templates/ folder is deprecated. Please move template at $customFile"
-            );
-            return $oldCustomFile;
-        }
-
-        throw new Exception("Cannot find a template named $name at $customFile or $defaultFile.");
+        return $this->_getViewTemplateFilePath($path, $name);
     }
 
     /**
@@ -165,5 +142,36 @@ class TemplateLoader implements LoaderInterface
         }
 
         throw new Exception("Cannot find a layout template named $name at custom path ($customLayoutFilePath) or default path ($defaultLayoutFilePath).");
+    }
+
+    /**
+     * @param array $path
+     * @param $name
+     * @return string
+     * @throws Exception
+     */
+    private function _getViewTemplateFilePath(array $path, $name): string
+    {
+        $customFile = BIBLYS_PATH."/app/Resources/$path[0]/views/$path[1]/$path[2]";
+        if ($this->filesystem->exists($customFile)) {
+            return $customFile;
+        }
+
+        $defaultFile = BIBLYS_PATH."/src/$path[0]/Resources/views/$path[1]/$path[2]";
+        if ($this->filesystem->exists($defaultFile)) {
+            return $defaultFile;
+        }
+
+        $oldCustomFile = SITE_PATH."/templates/$path[1]/$path[2]";
+        if (file_exists($oldCustomFile)) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.57.0",
+                "Using the /templates/ folder is deprecated. Please move template at $customFile"
+            );
+            return $oldCustomFile;
+        }
+
+        throw new Exception("Cannot find a template named $name at $customFile or $defaultFile.");
     }
 }
