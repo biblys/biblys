@@ -2,6 +2,7 @@
 
 namespace Biblys\Admin;
 
+use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
 use OrderManager;
@@ -251,8 +252,8 @@ class Entry
         $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
 
         $entries[] = new Entry('Support Biblys', ['category' => 'biblys', 'path' => 'ticket_index', 'icon' => 'medkit']);
-        $cloudConfig = $config->get("cloud");
-        if ($cloudConfig) {
+        $cloud = new CloudService($config);
+        if ($cloud->isConfigured()) {
             $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);
         }
         $entries[] = new Entry('Documentation', ['category' => 'biblys', 'url' => 'https://www.biblys.fr/pages/doc_index', 'icon' => 'book']);
