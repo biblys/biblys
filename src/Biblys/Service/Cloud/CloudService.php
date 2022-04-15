@@ -3,6 +3,7 @@
 namespace Biblys\Service\Cloud;
 
 use Biblys\Service\Config;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -56,22 +57,32 @@ class CloudService
             $this->subscriptionFetched = true;
 
             if (isset($subscription["id"])) {
-                $this->subscription = new CloudSubscription(
-                    $subscription["status"],
-                    $subscription["current_period_end"],
-                    $subscription["days_until_due"],
-                );
+                $this->subscription = new CloudSubscription($subscription["status"]);
             }
         }
 
         return $this->subscription;
     }
 
+    public function isConfigured(): bool
+    {
+        if (isset($this->cloudConfig["public_key"])) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @throws GuzzleException
+     * @throws Exception
      */
     private function _query(string $endpointUrl): array
     {
+        if (!$this->isConfigured()) {
+            throw new Exception("Biblys Cloud n'est pas configuré.");
+        }
+
         $client = new Client();
         $response = $client->request("GET", "https://biblys.cloud/api$endpointUrl", [
             "auth" => [
