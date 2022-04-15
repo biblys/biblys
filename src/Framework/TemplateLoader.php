@@ -122,13 +122,13 @@ class TemplateLoader implements LoaderInterface
 
         // Custom file
         $customFile = BIBLYS_PATH.'/app/Resources/'.$path[0].'/views/'.$path[1].'/'.$path[2];
-        if (file_exists($customFile)) {
+        if ($this->filesystem->exists($customFile)) {
             return $customFile;
         }
 
         // Default file
         $defaultFile = BIBLYS_PATH.'/src/'.$path[0].'/Resources/views/'.$path[1].'/'.$path[2];
-        if (file_exists($defaultFile)) {
+        if ($this->filesystem->exists($defaultFile)) {
             return $defaultFile;
         }
 
