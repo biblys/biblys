@@ -279,13 +279,6 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-
-        $cloudSubscription = null;
-        $cloudConfig = $config->get("cloud");
-        if ($cloudConfig) {
-            $cloudSubscription = $cloud->getSubscription();
-        }
-
         $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
         $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site, $config) {
             if ($entry->getName() === "Mise à jour") {
@@ -316,8 +309,7 @@ class MainController extends Controller
             'biblys' => $biblysEntriesWithUpdates,
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "cloud_subscription" => $cloudSubscription,
-            "should_display_cloud_invite" => $cloudSubscription === null,
+            "cloud" => $cloud,
         ]);
     }
 

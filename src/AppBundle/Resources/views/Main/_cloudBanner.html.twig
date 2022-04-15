@@ -1,22 +1,22 @@
 <div class="alert
-        {% if cloud_subscription.hasExpired %}
+        {% if cloud.subscription.hasExpired %}
             alert-danger
-        {% elseif cloud_subscription.isExpiringSoon %}
+        {% elseif cloud.subscription.isExpiringSoon %}
             alert-warning
         {% else %}
             alert-success
         {% endif%}
     text-center">
     <span class="fa
-        {% if cloud_subscription.hasExpired %}
+        {% if cloud.subscription.hasExpired %}
             fa-exclamation-circle
-        {% elseif cloud_subscription.isExpiringSoon %}
+        {% elseif cloud.subscription.isExpiringSoon %}
             fa-info-circle
         {% else %}
             fa-check-circle
         {% endif%}
     "></span>
-    {% if cloud_subscription.hasExpired %}
+    {% if cloud.subscription.hasExpired %}
         Votre abonnement Biblys Cloud a expiré.
     {% else %}
         Votre abonnement Biblys Cloud expire.

@@ -150,10 +150,11 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $config = new Config();
         $config->set("environment", "test");
+        $config->set("cloud", ["expires" => "2020-01-01"]);
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(CloudService::class);
+        $cloud = new CloudService($config);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -189,6 +190,8 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
+        $cloud->method("isConfigured")->willReturn(true);
+        $cloud->method("getSubscription")->willReturn(null);
 
         // when
         $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
@@ -224,6 +227,7 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
+        $cloud->method("isConfigured")->willReturn(true);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
             "past_due",
             (new DateTime("2019-04-28"))->getTimestamp(),
@@ -263,6 +267,7 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
+        $cloud->method("isConfigured")->willReturn(true);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
             "past_due",
             (new DateTime("2019-04-28"))->getTimestamp(),
