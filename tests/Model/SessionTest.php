@@ -12,7 +12,6 @@ require_once __DIR__."/../setUp.php";
 
 class SessionTest extends TestCase
 {
-
     /**
      * @throws PropelException
      */
@@ -40,6 +39,11 @@ class SessionTest extends TestCase
             32,
             strlen($token),
             "it should return a 32 chars string"
+        );
+        $this->assertMatchesRegularExpression(
+            '/^[a-zA-Z\d]{32}$/',
+            $token,
+            "it should only contain alphanumeric characters"
         );
     }
 }

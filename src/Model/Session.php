@@ -2,10 +2,12 @@
 
 namespace Model;
 
+use Biblys\Service\CurrentSite;
 use DateTime;
 use Model\Base\Session as BaseSession;
 use Propel\Runtime\Exception\PropelException;
 use RandomLib\Factory;
+use RandomLib\Generator;
 
 /**
  * Skeleton subclass for representing a row from the 'session' table.
@@ -18,7 +20,6 @@ use RandomLib\Factory;
  */
 class Session extends BaseSession
 {
-
     /**
      * @param User $user
      * @return Session
@@ -37,6 +38,6 @@ class Session extends BaseSession
     {
         $factory = new Factory();
         $generator = $factory->getMediumStrengthGenerator();
-        return $generator->generateString(32);
+        return $generator->generateString(32, Generator::CHAR_ALNUM);
     }
 }
