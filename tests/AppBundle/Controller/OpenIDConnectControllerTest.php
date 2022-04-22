@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Axys\AxysOpenIDConnectProvider;
 use Biblys\Service\Axys;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
@@ -47,6 +48,8 @@ class OpenIDConnectControllerTest extends TestCase
         $request->query->set("code", "authorization_code");
         $controller = new OpenIDConnectController();
         $user = ModelFactory::createUser();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
 
         $idToken = new Token(["alg" => "RS256"], ["sub" => $user->getId()]);
         $accessToken = $this->createMock(AccessToken::class);
@@ -61,7 +64,7 @@ class OpenIDConnectControllerTest extends TestCase
         $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
 
         // when
-        $response = $controller->callback($request, $axys);
+        $response = $controller->callback($request, $axys, $currentSite);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -74,7 +77,9 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals("..", $cookies[0]->getValue());
 
         $this->assertEquals("user_uid", $cookies[1]->getName());
-        $session = SessionQuery::create()->findOneByToken($cookies[1]->getValue());
+        $session = SessionQuery::create()
+            ->filterBySite($site)
+            ->findOneByToken($cookies[1]->getValue());
         $this->assertNotNull($session);
     }
 

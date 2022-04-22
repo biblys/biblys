@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Axys;
+use Biblys\Service\CurrentSite;
+use DateTime;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\Session;
@@ -29,7 +31,7 @@ class OpenIDConnectController extends Controller
      * @throws InvalidTokenException
      * @throws PropelException
      */
-    public function callback(Request $request, Axys $axys): RedirectResponse
+    public function callback(Request $request, Axys $axys, CurrentSite $currentSite): RedirectResponse
     {
         $provider = $axys->getOpenIDConnectProvider();
         $code = $request->query->get("code");
@@ -42,7 +44,8 @@ class OpenIDConnectController extends Controller
 
         $userId = $idToken->claims()->get("sub");
         $user = UserQuery::create()->findPk($userId);
-        $session = Session::buildForUser($user);
+        $sessionExpiresAt = new DateTime("+1 day");
+        $session = Session::buildForUserAndCurrentSite($user, $currentSite, $sessionExpiresAt);
         $session->save();
         $response->headers->setCookie(Cookie::create("user_uid")->withValue($session->getToken()));
 
