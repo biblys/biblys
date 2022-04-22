@@ -339,6 +339,11 @@ openid_callback:
   controller: AppBundle\Controller\OpenIDConnectController::callback
   methods: GET
 
+openid_logout:
+  path: /openid/logout
+  controller: AppBundle\Controller\OpenIDConnectController::logout
+  methods: GET
+
 # Orders
 
 order_index:

@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use Axys\AxysOpenIDConnectProvider;
 use Biblys\Service\Axys;
 use Biblys\Test\ModelFactory;
+use Biblys\Test\RequestFactory;
+use Framework\Exception\AuthException;
 use Lcobucci\JWT\Token;
 use Model\SessionQuery;
 use OpenIDConnectClient\AccessToken;
@@ -74,5 +76,27 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals("user_uid", $cookies[1]->getName());
         $session = SessionQuery::create()->findOneByToken($cookies[1]->getValue());
         $this->assertNotNull($session);
+    }
+
+    /**
+     * @route GET /openid/logout
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function testLogout()
+    {
+        // given
+        $request = RequestFactory::createAuthRequest();
+        $controller = new OpenIDConnectController();
+
+        // when
+        $response = $controller->logout($request);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/", $response->getTargetUrl());
+
+        $session = SessionQuery::create()->findOneByToken($request->cookies->get("user_uid"));
+        $this->assertNull($session, "Session should be deleted");
     }
 }

@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Axys;
 use Framework\Controller;
+use Framework\Exception\AuthException;
 use Model\Session;
+use Model\SessionQuery;
 use Model\UserQuery;
 use OpenIDConnectClient\Exception\InvalidTokenException;
 use Propel\Runtime\Exception\PropelException;
@@ -45,5 +47,19 @@ class OpenIDConnectController extends Controller
         $response->headers->setCookie(Cookie::create("user_uid")->withValue($session->getToken()));
 
         return $response;
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function logout(Request $request): RedirectResponse
+    {
+        self::authUser($request);
+
+        $session = SessionQuery::create()->findOneByToken($request->cookies->get("user_uid"));
+        $session->delete();
+
+        return new RedirectResponse("/");
     }
 }
