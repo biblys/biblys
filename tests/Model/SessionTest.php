@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Biblys\Test\EntityFactory;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -27,6 +27,27 @@ class SessionTest extends TestCase
         $this->assertNotNull($session->getToken(), "it creates a token");
         $this->assertEquals($user, $session->getUser(), "it associates given user");
         $this->assertTrue($session->getExpiresAt() > new DateTime(), "it sets an expire date in the future");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildForUserAndCurrentSite()
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $expiresAt = new DateTime("+1 day");
+
+        // when
+        $session = Session::buildForUserAndCurrentSite($user, $currentSite , $expiresAt);
+
+        // then
+        $this->assertNotNull($session->getToken(), "it creates a token");
+        $this->assertEquals($user, $session->getUser(), "it associates given user");
+        $this->assertEquals($site, $session->getSite(), "it associates current site");
+        $this->assertEquals($expiresAt, $session->getExpiresAt(), "it sets an expire date in the future");
     }
 
     public function testGenerateToken()

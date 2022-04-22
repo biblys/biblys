@@ -34,6 +34,23 @@ class Session extends BaseSession
         return $session;
     }
 
+    /**
+     * @throws PropelException
+     */
+    public static function buildForUserAndCurrentSite(
+        User $user,
+        CurrentSite $currentSite,
+        DateTime $expiresAt
+    ): Session
+    {
+        $session = new Session();
+        $session->setUser($user);
+        $session->setSite($currentSite->getSite());
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt($expiresAt);
+        return $session;
+    }
+
     public static function generateToken(): string
     {
         $factory = new Factory();
