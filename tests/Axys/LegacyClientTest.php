@@ -25,6 +25,21 @@ class LegacyClientTest extends TestCase
         );
     }
 
+    public function testGetLoginUrlForV2()
+    {
+        // given
+        $client = new LegacyClient(["version" => 2]);
+
+        // when
+        $loginUrl = $client->getLoginUrl();
+
+        // then
+        $this->assertEquals(
+            "/openid/axys",
+            $loginUrl
+        );
+    }
+
     public function testGetSignUpUrl()
     {
         // given

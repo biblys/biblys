@@ -40,6 +40,10 @@ class LegacyClient
 
     public function getLoginUrl(): string
     {
+        if ($this->version === 2) {
+            return "/openid/axys";
+        }
+
         global $config;
 
         $protocol = 'http';
