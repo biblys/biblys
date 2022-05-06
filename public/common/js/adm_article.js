@@ -82,7 +82,7 @@ function article_search() {
         additionalResults.classList.remove('hidden');
         showAllResults.style.display = 'none';
       });
-      reloadEvents(this);
+      reloadArticleAdminEvents(this);
     }).catch(function (error) {
       _alert(error);
     });
@@ -109,12 +109,12 @@ function duplicate_check(field) {
         $('#duplicates').append(res.content);
         $('#duplicates_fieldset').slideDown();
       }
-      reloadEvents();
+      reloadArticleAdminEvents();
     });
   }
 }
 
-function reloadEvents(scope) {
+function reloadArticleAdminEvents(scope) {
 
   // Lier les doublons potentiels a la fiche en cours de creation
   $('.linkto').click(function () {
@@ -340,7 +340,7 @@ function reloadEvents(scope) {
           $('#add_award').dialog('close');
           $('#awards').append(res.award);
           $('.newAward').slideDown().removeClass('newAward');
-          reloadEvents($('#awards'));
+          reloadArticleAdminEvents($('#awards'));
         }
       }
     });
@@ -367,7 +367,7 @@ function reloadEvents(scope) {
 }
 
 $(document).ready(function () {
-  reloadEvents();
+  reloadArticleAdminEvents();
 
   // Creer un nouveau contributeur
   $('#create_people.e').submit(function (e) {
@@ -500,7 +500,7 @@ $(document).ready(function () {
             $('#article_cycle').addClass('pointer').removeClass('uncomplete').attr('readonly', 'readonly');
             $('#cycle_id').val(data.cycle_id);
             $('#article_tome').focus();
-            reloadEvents(this);
+            reloadArticleAdminEvents(this);
           }
         });
       } else { // Selectionner un cycle existante
@@ -606,7 +606,7 @@ $(document).ready(function () {
           $('#bundle_articles').append(res.link);
           $('.new').slideDown().removeClass('new');
           $('#addToBundle').val('');
-          reloadEvents();
+          reloadArticleAdminEvents();
         }
       });
     }
