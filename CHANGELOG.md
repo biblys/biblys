@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.61.0 (6 mai 2022)
+
+Améliorations
+
+Cette mise à jour apporte le support de la nouvelle version d'Axys basée sur 
+le standard OpenID Connect.
+
 ### 2.60.2 (15 avril 2022)
 
 Correction
