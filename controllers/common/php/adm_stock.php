@@ -273,8 +273,8 @@ $delId = $request->query->get('del');
 
 // Modifier un exemplaire existant
 if (!empty($_GET['id'])) {
-    $_PAGE_TITLE = 'Modifier l\'exemplaire n&deg; ' . $_GET['id'];
-    $content .= '<h1><span class="fa fa-cubes"></span> Modifier l\'exemplaire n&deg; ' . $_GET['id'] . '</h1>';
+    $request->attributes->set("page_title", "Modifier l'exemplaire n° {$_GET['id']}");
+    $content .= "<h1><span class=\"fa fa-cubes\"></span> Modifier l'exemplaire n°{$_GET['id']}</h1>";
 
     if (isset($_GET['created'])) {
         $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
@@ -331,7 +331,7 @@ if (!empty($_GET['id'])) {
     $_GET['id'] = null;
 } elseif (!empty($_GET['add'])) { // Ajouter un exemplaire
     $request->attributes->set("page_title", "Ajouter au stock un nouvel exemplaire de...");
-    $content .= '<h1 id="add"><span class="fa fa-plus"></span> ' . $_PAGE_TITLE . '</h1>';
+    $content .= '<h1 id="add"><span class="fa fa-plus"></span>Ajouter au stock un nouvel exemplaire de...</h1>';
     $s['article_id'] = $_GET['add'];
     $mode = 'insert';
 

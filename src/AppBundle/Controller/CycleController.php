@@ -2,49 +2,55 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
+use Biblys\Service\Pagination;
+use CycleManager;
 use Framework\Controller;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CycleController extends Controller
 {
     /**
-     * Show a Cycle's page and related articles
-     * /cycle/{slug}.
+     * @route GET /cycle/{slug}.
      *
-     * @param  $slug the cycle's slug
-     *
-     * @return Response the rendered templated
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(Request $request, $slug): Response
     {
-        global $site;
-
-        $cm = $this->entityManager('Cycle');
-        $am = $this->entityManager('Article');
+        $cm = new CycleManager();
+        $am = new ArticleManager();
 
         $cycle = $cm->get(['cycle_url' => $slug]);
         if (!$cycle) {
             throw new NotFoundException("Cycle $slug not found");
         }
 
-        $this->setPageTitle($cycle->get('name'));
+        $request->attributes->set("page_title", $cycle->get("name"));
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
-        $totalCount = $am->count(['cycle_id' => $cycle->get('id')]);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+        $page = (int) $request->query->get("p", 0);
+        $totalCount = $am->count(["cycle_id" => $cycle->get("id")]);
+        $pagination = new Pagination($page, $totalCount);
 
-        $articles = $am->getAll(['cycle_id' => $cycle->get('id')], [
-            'order' => 'article_tome',
-            'limit' => $pagination->getLimit(),
-            'offset' => $pagination->getOffset(),
+        $articles = $am->getAll(["cycle_id" => $cycle->get("id")], [
+            "order" => "article_tome",
+            "limit" => $pagination->getLimit(),
+            "offset" => $pagination->getOffset(),
         ]);
 
-        return $this->render('AppBundle:Cycle:show.html.twig', [
-            'cycle' => $cycle,
-            'articles' => $articles,
-            'pages' => $pagination,
+        return $this->render("AppBundle:Cycle:show.html.twig", [
+            "cycle" => $cycle,
+            "articles" => $articles,
+            "pages" => $pagination,
         ]);
     }
 }
