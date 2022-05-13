@@ -7,6 +7,7 @@ use DateTime;
 use Model\Article;
 use Model\ArticleCategory;
 use Model\BookCollection;
+use Model\Cart;
 use Model\Country;
 use Model\CrowdfundingCampaign;
 use Model\CrowfundingReward;
@@ -95,6 +96,24 @@ class ModelFactory
         $category->save();
 
         return $category;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function createCart(
+        array $attributes = [],
+        Site $site = null,
+        User $user = null
+    ): Cart
+    {
+        $cart = new Cart();
+        $cart->setUid($attributes["uid"] ?? "cart-uid");
+        $cart->setSite($site ?? self::createSite());
+        $cart->setUser($user);
+        $cart->save();
+
+        return $cart;
     }
 
     /**

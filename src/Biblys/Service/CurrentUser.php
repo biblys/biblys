@@ -5,7 +5,10 @@ namespace Biblys\Service;
 
 
 use DateTime;
+use Exception;
 use Framework\Exception\AuthException;
+use Model\Cart;
+use Model\CartQuery;
 use Model\Option;
 use Model\OptionQuery;
 use Model\Publisher;
@@ -27,6 +30,10 @@ class CurrentUser
      */
     private $token;
 
+    /**
+     * @var CurrentSite
+     */
+    private $currentSite;
 
     public function __construct(?User $user, ?string $token)
     {
@@ -43,10 +50,12 @@ class CurrentUser
     {
         $cookieToken = $request->cookies->get("user_uid");
         $headerToken = $request->headers->get("AuthToken");
+
         $token = $cookieToken ?: $headerToken;
 
         if ($token === null) {
-            return new CurrentUser(null, null);
+            $visitorUid = $request->cookies->get("visitor_uid");
+            return new CurrentUser(null, $visitorUid);
         }
 
         $session = SessionQuery::create()->filterByToken($token)->findOne();
@@ -64,6 +73,19 @@ class CurrentUser
         }
 
         return new CurrentUser($user, $token);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public static function buildFromRequestAndConfig(Request $request, Config $config): CurrentUser
+    {
+        $currentUser = self::buildFromRequest($request);
+
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $currentUser->injectCurrentSite($currentSite);
+
+        return $currentUser;
     }
 
     public function isAuthentified(): bool
@@ -164,5 +186,40 @@ class CurrentUser
     public function getToken(): ?string
     {
         return $this->token;
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function getCart(): ?Cart
+    {
+        if (!$this->isAuthentified()) {
+            return CartQuery::create()->findOneByUid($this->token);
+        }
+
+        return CartQuery::create()
+            ->filterBySite($this->getCurrentSite()->getSite())
+            ->filterByUser($this->user)
+            ->findOne();
+    }
+
+    private function injectCurrentSite(CurrentSite $currentSite)
+    {
+        $this->currentSite = $currentSite;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCurrentSite(): CurrentSite
+    {
+        if ($this->currentSite === null) {
+            throw new Exception(
+                "CurrentSite dependency was not injected in the CurrentUserService. Use the buildFromRequestAndConfig static method to build CurrentUser"
+            );
+        }
+
+        return $this->currentSite;
     }
 }

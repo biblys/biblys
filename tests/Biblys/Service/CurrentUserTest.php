@@ -359,7 +359,8 @@ class CurrentUserTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testGetUserToken() {
+    public function testGetUserToken()
+    {
         // given
         $request = RequestFactory::createAuthRequest();
         $currentUser = CurrentUser::buildFromRequest($request);
@@ -374,5 +375,45 @@ class CurrentUserTest extends TestCase
             $userToken,
             "it returns the user uid"
         );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCartForAnonymousUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $request = new Request();
+        $request->cookies->set("visitor_uid", "this-visitor-uid");
+        $cart = ModelFactory::createCart(["uid" => "this-visitor-uid"], $site);
+        $currentUser = CurrentUser::buildFromRequest($request);
+
+        // when
+        $userCart = $currentUser->getCart();
+
+        // then
+        $this->assertEquals($cart, $userCart);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCartForAuthentifiedUser()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $config = new Config();
+        $config->set("site", $site->getId());
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest("", $user);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $cart = ModelFactory::createCart([], $site, $user);
+
+        // when
+        $userCart = $currentUser->getCart();
+
+        // then
+        $this->assertEquals($cart, $userCart);
     }
 }
