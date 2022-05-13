@@ -211,8 +211,8 @@
     <column name="cart_ip" phpName="Ip" type="LONGVARCHAR"/>
     <column name="cart_count" phpName="Count" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
     <column name="cart_amount" phpName="Amount" type="INTEGER" size="10" sqlType="int(10) unsigned" defaultValue="0"/>
-    <column name="cart_as-a-gift" phpName="As-a-gift" tableMapName="as_a_gift" type="VARCHAR" size="16"/>
-    <column name="cart_gift-recipient" phpName="Gift-recipient" tableMapName="gift_recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
+    <column name="cart_as_a_gift" phpName="AsAGift" tableMapName="as_a_gift" type="VARCHAR" size="16"/>
+    <column name="cart_gift_recipient" phpName="GiftRecipient" tableMapName="gift_recipient" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="cart_date" phpName="Date" type="TIMESTAMP"/>
     <column name="cart_insert" phpName="Insert" type="TIMESTAMP" defaultExpr="CURRENT_TIMESTAMP"/>
     <column name="cart_update" phpName="Update" type="TIMESTAMP"/>

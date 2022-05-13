@@ -30,8 +30,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery orderByIp($order = Criteria::ASC) Order by the cart_ip column
  * @method     ChildCartQuery orderByCount($order = Criteria::ASC) Order by the cart_count column
  * @method     ChildCartQuery orderByAmount($order = Criteria::ASC) Order by the cart_amount column
- * @method     ChildCartQuery orderByAs-a-gift($order = Criteria::ASC) Order by the cart_as-a-gift column
- * @method     ChildCartQuery orderByGift-recipient($order = Criteria::ASC) Order by the cart_gift-recipient column
+ * @method     ChildCartQuery orderByAsAGift($order = Criteria::ASC) Order by the cart_as_a_gift column
+ * @method     ChildCartQuery orderByGiftRecipient($order = Criteria::ASC) Order by the cart_gift_recipient column
  * @method     ChildCartQuery orderByDate($order = Criteria::ASC) Order by the cart_date column
  * @method     ChildCartQuery orderByInsert($order = Criteria::ASC) Order by the cart_insert column
  * @method     ChildCartQuery orderByUpdate($order = Criteria::ASC) Order by the cart_update column
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCartQuery groupByIp() Group by the cart_ip column
  * @method     ChildCartQuery groupByCount() Group by the cart_count column
  * @method     ChildCartQuery groupByAmount() Group by the cart_amount column
- * @method     ChildCartQuery groupByAs-a-gift() Group by the cart_as-a-gift column
- * @method     ChildCartQuery groupByGift-recipient() Group by the cart_gift-recipient column
+ * @method     ChildCartQuery groupByAsAGift() Group by the cart_as_a_gift column
+ * @method     ChildCartQuery groupByGiftRecipient() Group by the cart_gift_recipient column
  * @method     ChildCartQuery groupByDate() Group by the cart_date column
  * @method     ChildCartQuery groupByInsert() Group by the cart_insert column
  * @method     ChildCartQuery groupByUpdate() Group by the cart_update column
@@ -79,8 +79,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart|null findOneByIp(string $cart_ip) Return the first ChildCart filtered by the cart_ip column
  * @method     ChildCart|null findOneByCount(int $cart_count) Return the first ChildCart filtered by the cart_count column
  * @method     ChildCart|null findOneByAmount(int $cart_amount) Return the first ChildCart filtered by the cart_amount column
- * @method     ChildCart|null findOneByAs-a-gift(string $cart_as-a-gift) Return the first ChildCart filtered by the cart_as-a-gift column
- * @method     ChildCart|null findOneByGift-recipient(int $cart_gift-recipient) Return the first ChildCart filtered by the cart_gift-recipient column
+ * @method     ChildCart|null findOneByAsAGift(string $cart_as_a_gift) Return the first ChildCart filtered by the cart_as_a_gift column
+ * @method     ChildCart|null findOneByGiftRecipient(int $cart_gift_recipient) Return the first ChildCart filtered by the cart_gift_recipient column
  * @method     ChildCart|null findOneByDate(string $cart_date) Return the first ChildCart filtered by the cart_date column
  * @method     ChildCart|null findOneByInsert(string $cart_insert) Return the first ChildCart filtered by the cart_insert column
  * @method     ChildCart|null findOneByUpdate(string $cart_update) Return the first ChildCart filtered by the cart_update column
@@ -101,8 +101,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart requireOneByIp(string $cart_ip) Return the first ChildCart filtered by the cart_ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByCount(int $cart_count) Return the first ChildCart filtered by the cart_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByAmount(int $cart_amount) Return the first ChildCart filtered by the cart_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCart requireOneByAs-a-gift(string $cart_as-a-gift) Return the first ChildCart filtered by the cart_as-a-gift column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCart requireOneByGift-recipient(int $cart_gift-recipient) Return the first ChildCart filtered by the cart_gift-recipient column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCart requireOneByAsAGift(string $cart_as_a_gift) Return the first ChildCart filtered by the cart_as_a_gift column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCart requireOneByGiftRecipient(int $cart_gift_recipient) Return the first ChildCart filtered by the cart_gift_recipient column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByDate(string $cart_date) Return the first ChildCart filtered by the cart_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByInsert(string $cart_insert) Return the first ChildCart filtered by the cart_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOneByUpdate(string $cart_update) Return the first ChildCart filtered by the cart_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -133,10 +133,10 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildCart> findByCount(int $cart_count) Return ChildCart objects filtered by the cart_count column
  * @method     ChildCart[]|ObjectCollection findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
  * @psalm-method ObjectCollection&\Traversable<ChildCart> findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
- * @method     ChildCart[]|ObjectCollection findByAs-a-gift(string $cart_as-a-gift) Return ChildCart objects filtered by the cart_as-a-gift column
- * @psalm-method ObjectCollection&\Traversable<ChildCart> findByAs-a-gift(string $cart_as-a-gift) Return ChildCart objects filtered by the cart_as-a-gift column
- * @method     ChildCart[]|ObjectCollection findByGift-recipient(int $cart_gift-recipient) Return ChildCart objects filtered by the cart_gift-recipient column
- * @psalm-method ObjectCollection&\Traversable<ChildCart> findByGift-recipient(int $cart_gift-recipient) Return ChildCart objects filtered by the cart_gift-recipient column
+ * @method     ChildCart[]|ObjectCollection findByAsAGift(string $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByAsAGift(string $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
+ * @method     ChildCart[]|ObjectCollection findByGiftRecipient(int $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
+ * @psalm-method ObjectCollection&\Traversable<ChildCart> findByGiftRecipient(int $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
  * @method     ChildCart[]|ObjectCollection findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
  * @psalm-method ObjectCollection&\Traversable<ChildCart> findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
  * @method     ChildCart[]|ObjectCollection findByInsert(string $cart_insert) Return ChildCart objects filtered by the cart_insert column
@@ -246,7 +246,7 @@ abstract class CartQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT cart_id, cart_uid, site_id, user_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as-a-gift, cart_gift-recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated FROM carts WHERE cart_id = :p0';
+        $sql = 'SELECT cart_id, cart_uid, site_id, user_id, cart_seller_id, customer_id, cart_title, cart_type, cart_ip, cart_count, cart_amount, cart_as_a_gift, cart_gift_recipient, cart_date, cart_insert, cart_update, cart_created, cart_updated FROM carts WHERE cart_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -724,41 +724,41 @@ abstract class CartQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the cart_as-a-gift column
+     * Filter the query on the cart_as_a_gift column
      *
      * Example usage:
      * <code>
-     * $query->filterByAs-a-gift('fooValue');   // WHERE cart_as-a-gift = 'fooValue'
-     * $query->filterByAs-a-gift('%fooValue%', Criteria::LIKE); // WHERE cart_as-a-gift LIKE '%fooValue%'
+     * $query->filterByAsAGift('fooValue');   // WHERE cart_as_a_gift = 'fooValue'
+     * $query->filterByAsAGift('%fooValue%', Criteria::LIKE); // WHERE cart_as_a_gift LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $as-a-gift The value to use as filter.
+     * @param     string $asAGift The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCartQuery The current query, for fluid interface
      */
-    public function filterByAs-a-gift($as-a-gift = null, $comparison = null)
+    public function filterByAsAGift($asAGift = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($as-a-gift)) {
+            if (is_array($asAGift)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(CartTableMap::COL_AS_A_GIFT, $as-a-gift, $comparison);
+        return $this->addUsingAlias(CartTableMap::COL_AS_A_GIFT, $asAGift, $comparison);
     }
 
     /**
-     * Filter the query on the cart_gift-recipient column
+     * Filter the query on the cart_gift_recipient column
      *
      * Example usage:
      * <code>
-     * $query->filterByGift-recipient(1234); // WHERE cart_gift-recipient = 1234
-     * $query->filterByGift-recipient(array(12, 34)); // WHERE cart_gift-recipient IN (12, 34)
-     * $query->filterByGift-recipient(array('min' => 12)); // WHERE cart_gift-recipient > 12
+     * $query->filterByGiftRecipient(1234); // WHERE cart_gift_recipient = 1234
+     * $query->filterByGiftRecipient(array(12, 34)); // WHERE cart_gift_recipient IN (12, 34)
+     * $query->filterByGiftRecipient(array('min' => 12)); // WHERE cart_gift_recipient > 12
      * </code>
      *
-     * @param     mixed $gift-recipient The value to use as filter.
+     * @param     mixed $giftRecipient The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -766,16 +766,16 @@ abstract class CartQuery extends ModelCriteria
      *
      * @return $this|ChildCartQuery The current query, for fluid interface
      */
-    public function filterByGift-recipient($gift-recipient = null, $comparison = null)
+    public function filterByGiftRecipient($giftRecipient = null, $comparison = null)
     {
-        if (is_array($gift-recipient)) {
+        if (is_array($giftRecipient)) {
             $useMinMax = false;
-            if (isset($gift-recipient['min'])) {
-                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient['min'], Criteria::GREATER_EQUAL);
+            if (isset($giftRecipient['min'])) {
+                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $giftRecipient['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($gift-recipient['max'])) {
-                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient['max'], Criteria::LESS_EQUAL);
+            if (isset($giftRecipient['max'])) {
+                $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $giftRecipient['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -786,7 +786,7 @@ abstract class CartQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $gift-recipient, $comparison);
+        return $this->addUsingAlias(CartTableMap::COL_GIFT_RECIPIENT, $giftRecipient, $comparison);
     }
 
     /**

@@ -143,18 +143,18 @@ abstract class Cart implements ActiveRecordInterface
     protected $cart_amount;
 
     /**
-     * The value for the cart_as-a-gift field.
+     * The value for the cart_as_a_gift field.
      *
      * @var        string|null
      */
-    protected $cart_as-a-gift;
+    protected $cart_as_a_gift;
 
     /**
-     * The value for the cart_gift-recipient field.
+     * The value for the cart_gift_recipient field.
      *
      * @var        int|null
      */
-    protected $cart_gift-recipient;
+    protected $cart_gift_recipient;
 
     /**
      * The value for the cart_date field.
@@ -550,23 +550,23 @@ abstract class Cart implements ActiveRecordInterface
     }
 
     /**
-     * Get the [cart_as-a-gift] column value.
+     * Get the [cart_as_a_gift] column value.
      *
      * @return string|null
      */
-    public function getAs-a-gift()
+    public function getAsAGift()
     {
-        return $this->cart_as-a-gift;
+        return $this->cart_as_a_gift;
     }
 
     /**
-     * Get the [cart_gift-recipient] column value.
+     * Get the [cart_gift_recipient] column value.
      *
      * @return int|null
      */
-    public function getGift-recipient()
+    public function getGiftRecipient()
     {
-        return $this->cart_gift-recipient;
+        return $this->cart_gift_recipient;
     }
 
     /**
@@ -900,44 +900,44 @@ abstract class Cart implements ActiveRecordInterface
     } // setAmount()
 
     /**
-     * Set the value of [cart_as-a-gift] column.
+     * Set the value of [cart_as_a_gift] column.
      *
      * @param string|null $v New value
      * @return $this|\Model\Cart The current object (for fluent API support)
      */
-    public function setAs-a-gift($v)
+    public function setAsAGift($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->cart_as-a-gift !== $v) {
-            $this->cart_as-a-gift = $v;
+        if ($this->cart_as_a_gift !== $v) {
+            $this->cart_as_a_gift = $v;
             $this->modifiedColumns[CartTableMap::COL_AS_A_GIFT] = true;
         }
 
         return $this;
-    } // setAs-a-gift()
+    } // setAsAGift()
 
     /**
-     * Set the value of [cart_gift-recipient] column.
+     * Set the value of [cart_gift_recipient] column.
      *
      * @param int|null $v New value
      * @return $this|\Model\Cart The current object (for fluent API support)
      */
-    public function setGift-recipient($v)
+    public function setGiftRecipient($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->cart_gift-recipient !== $v) {
-            $this->cart_gift-recipient = $v;
+        if ($this->cart_gift_recipient !== $v) {
+            $this->cart_gift_recipient = $v;
             $this->modifiedColumns[CartTableMap::COL_GIFT_RECIPIENT] = true;
         }
 
         return $this;
-    } // setGift-recipient()
+    } // setGiftRecipient()
 
     /**
      * Sets the value of [cart_date] column to a normalized version of the date/time value specified.
@@ -1120,11 +1120,11 @@ abstract class Cart implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CartTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cart_amount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CartTableMap::translateFieldName('As-a-gift', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->cart_as-a-gift = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CartTableMap::translateFieldName('AsAGift', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->cart_as_a_gift = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CartTableMap::translateFieldName('Gift-recipient', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->cart_gift-recipient = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CartTableMap::translateFieldName('GiftRecipient', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->cart_gift_recipient = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CartTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
@@ -1411,10 +1411,10 @@ abstract class Cart implements ActiveRecordInterface
             $modifiedColumns[':p' . $index++]  = 'cart_amount';
         }
         if ($this->isColumnModified(CartTableMap::COL_AS_A_GIFT)) {
-            $modifiedColumns[':p' . $index++]  = 'cart_as-a-gift';
+            $modifiedColumns[':p' . $index++]  = 'cart_as_a_gift';
         }
         if ($this->isColumnModified(CartTableMap::COL_GIFT_RECIPIENT)) {
-            $modifiedColumns[':p' . $index++]  = 'cart_gift-recipient';
+            $modifiedColumns[':p' . $index++]  = 'cart_gift_recipient';
         }
         if ($this->isColumnModified(CartTableMap::COL_CART_DATE)) {
             $modifiedColumns[':p' . $index++]  = 'cart_date';
@@ -1475,11 +1475,11 @@ abstract class Cart implements ActiveRecordInterface
                     case 'cart_amount':
                         $stmt->bindValue($identifier, $this->cart_amount, PDO::PARAM_INT);
                         break;
-                    case 'cart_as-a-gift':
-                        $stmt->bindValue($identifier, $this->cart_as-a-gift, PDO::PARAM_STR);
+                    case 'cart_as_a_gift':
+                        $stmt->bindValue($identifier, $this->cart_as_a_gift, PDO::PARAM_STR);
                         break;
-                    case 'cart_gift-recipient':
-                        $stmt->bindValue($identifier, $this->cart_gift-recipient, PDO::PARAM_INT);
+                    case 'cart_gift_recipient':
+                        $stmt->bindValue($identifier, $this->cart_gift_recipient, PDO::PARAM_INT);
                         break;
                     case 'cart_date':
                         $stmt->bindValue($identifier, $this->cart_date ? $this->cart_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1592,10 +1592,10 @@ abstract class Cart implements ActiveRecordInterface
                 return $this->getAmount();
                 break;
             case 11:
-                return $this->getAs-a-gift();
+                return $this->getAsAGift();
                 break;
             case 12:
-                return $this->getGift-recipient();
+                return $this->getGiftRecipient();
                 break;
             case 13:
                 return $this->getDate();
@@ -1652,8 +1652,8 @@ abstract class Cart implements ActiveRecordInterface
             $keys[8] => $this->getIp(),
             $keys[9] => $this->getCount(),
             $keys[10] => $this->getAmount(),
-            $keys[11] => $this->getAs-a-gift(),
-            $keys[12] => $this->getGift-recipient(),
+            $keys[11] => $this->getAsAGift(),
+            $keys[12] => $this->getGiftRecipient(),
             $keys[13] => $this->getDate(),
             $keys[14] => $this->getInsert(),
             $keys[15] => $this->getUpdate(),
@@ -1752,10 +1752,10 @@ abstract class Cart implements ActiveRecordInterface
                 $this->setAmount($value);
                 break;
             case 11:
-                $this->setAs-a-gift($value);
+                $this->setAsAGift($value);
                 break;
             case 12:
-                $this->setGift-recipient($value);
+                $this->setGiftRecipient($value);
                 break;
             case 13:
                 $this->setDate($value);
@@ -1832,10 +1832,10 @@ abstract class Cart implements ActiveRecordInterface
             $this->setAmount($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAs-a-gift($arr[$keys[11]]);
+            $this->setAsAGift($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setGift-recipient($arr[$keys[12]]);
+            $this->setGiftRecipient($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
             $this->setDate($arr[$keys[13]]);
@@ -1929,10 +1929,10 @@ abstract class Cart implements ActiveRecordInterface
             $criteria->add(CartTableMap::COL_CART_AMOUNT, $this->cart_amount);
         }
         if ($this->isColumnModified(CartTableMap::COL_AS_A_GIFT)) {
-            $criteria->add(CartTableMap::COL_AS_A_GIFT, $this->cart_as-a-gift);
+            $criteria->add(CartTableMap::COL_AS_A_GIFT, $this->cart_as_a_gift);
         }
         if ($this->isColumnModified(CartTableMap::COL_GIFT_RECIPIENT)) {
-            $criteria->add(CartTableMap::COL_GIFT_RECIPIENT, $this->cart_gift-recipient);
+            $criteria->add(CartTableMap::COL_GIFT_RECIPIENT, $this->cart_gift_recipient);
         }
         if ($this->isColumnModified(CartTableMap::COL_CART_DATE)) {
             $criteria->add(CartTableMap::COL_CART_DATE, $this->cart_date);
@@ -2045,8 +2045,8 @@ abstract class Cart implements ActiveRecordInterface
         $copyObj->setIp($this->getIp());
         $copyObj->setCount($this->getCount());
         $copyObj->setAmount($this->getAmount());
-        $copyObj->setAs-a-gift($this->getAs-a-gift());
-        $copyObj->setGift-recipient($this->getGift-recipient());
+        $copyObj->setAsAGift($this->getAsAGift());
+        $copyObj->setGiftRecipient($this->getGiftRecipient());
         $copyObj->setDate($this->getDate());
         $copyObj->setInsert($this->getInsert());
         $copyObj->setUpdate($this->getUpdate());
@@ -2098,8 +2098,8 @@ abstract class Cart implements ActiveRecordInterface
         $this->cart_ip = null;
         $this->cart_count = null;
         $this->cart_amount = null;
-        $this->cart_as-a-gift = null;
-        $this->cart_gift-recipient = null;
+        $this->cart_as_a_gift = null;
+        $this->cart_gift_recipient = null;
         $this->cart_date = null;
         $this->cart_insert = null;
         $this->cart_update = null;
