@@ -365,7 +365,7 @@ class CartTableMap extends TableMap
         $this->addPrimaryKey('cart_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('cart_uid', 'Uid', 'VARCHAR', false, 32, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
-        $this->addColumn('user_id', 'UserId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', false, 10, null);
         $this->addColumn('cart_seller_id', 'SellerId', 'INTEGER', false, 10, null);
         $this->addColumn('customer_id', 'CustomerId', 'INTEGER', false, 10, null);
         $this->addColumn('cart_title', 'Title', 'VARCHAR', false, 128, null);
@@ -387,6 +387,13 @@ class CartTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     } // buildRelations()
 
     /**

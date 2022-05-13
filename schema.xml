@@ -225,6 +225,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
   </table>
   <table name="categories" idMethod="native" phpName="Category">
     <column name="category_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
