@@ -7,6 +7,7 @@ use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Cart;
 use EntityManager;
 use Framework\Exception\AuthException;
 use Model\Publisher;
@@ -112,6 +113,8 @@ class Controller
 
         $container = require __DIR__."/../container.php";
         $urlGenerator = $container->get("url_generator");
+        $config = $container->get("config");
+        $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         //** Twig custom functions **//
 
@@ -139,6 +142,15 @@ class Controller
         $functions[] = new TwigFunction('asset', function ($url) {
             $hash = substr(md5(BIBLYS_VERSION), 0, 8);
             return $url."?".$hash;
+        });
+
+        $functions[] = new TwigFunction("cart_status", function() use($currentUserService) {
+            $cart = $currentUserService->getCart();
+            if (!$cart) {
+                return Cart::getOneLineEmpty();
+            }
+
+            return Cart::buildOneLine($cart->getCount(), $cart->getAmount());
         });
 
         //** Twig custom filters **//
