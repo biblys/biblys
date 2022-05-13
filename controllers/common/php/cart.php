@@ -39,7 +39,7 @@ if ($cart_id) {
     }
 }
 
-$_PAGE_TITLE = 'Panier';
+$request->attributes->set("page_title", "Panier");
 
 $alert = null;
 $OneArticle = 0;
