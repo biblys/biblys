@@ -225,6 +225,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <foreign-key foreignTable="users" skipSql="true">
       <reference local="user_id" foreign="id"/>
     </foreign-key>

@@ -681,6 +681,13 @@ class SiteTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Carts', false);
         $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
