@@ -95,6 +95,11 @@ class ErrorControllerTest extends TestCase
             $response->getStatusCode(),
             "it should response with HTTP status 401"
         );
+        $this->assertStringContainsString(
+            "Erreur d'authentification",
+            $response->getContent(),
+            "it should return the error message"
+        );
     }
 
     public function testHandleServiceUnavailable()

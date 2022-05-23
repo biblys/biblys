@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Log;
@@ -11,6 +10,7 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use PDO;
+use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,18 +18,22 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-
-// TODO: use twig template for exceptions
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class ErrorController extends Controller
 {
     /**
      * @param Request $request
      * @param Exception $exception
-     * @param LegacyClient|null $axys
      * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function exception(Request $request, Exception $exception, LegacyClient $axys = null): Response
+    public function exception(Request $request, Exception $exception): Response
     {
         if (is_a($exception, "Symfony\Component\Routing\Exception\ResourceNotFoundException")) {
             return $this->handlePageNotFound($request, $exception);
@@ -40,11 +44,7 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
-            // TODO: use dependency injection
-            if ($axys === null) {
-                global $axys;
-            }
-            return $this->handleUnauthorizedAccess($request, $exception, $axys);
+            return $this->handleUnauthorizedAccess($request, $exception);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
@@ -91,10 +91,13 @@ class ErrorController extends Controller
      *
      * @param Request $request
      * @param AuthException $exception
-     * @param LegacyClient $axys
      * @return Response
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    private function handleUnauthorizedAccess(Request $request, AuthException $exception, LegacyClient $axys): Response
+    private function handleUnauthorizedAccess(Request $request, AuthException $exception): Response
     {
         if (
             $request->isXmlHttpRequest()
@@ -105,13 +108,10 @@ class ErrorController extends Controller
             return $response;
         }
 
-        $response = new Response();
+        $response = $this->render("AppBundle:Error:401.html.twig", [
+            "message" => $exception->getMessage(),
+        ]);
         $response->setStatusCode(401);
-        $response->setContent('
-            <h1>Erreur d\'authentification</h1>
-            <p>' . $exception->getMessage() . '</p>
-            <p>Pour continuer, veuillez <a href="' . $axys->getLoginUrl() . '">vous identifier</a> ou <a href="' . $axys->getSignupUrl() . '">créer un compte</a>.</p>
-        ');
 
         return $response;
     }
@@ -122,6 +122,10 @@ class ErrorController extends Controller
      * @param Request $request
      * @param ResourceNotFoundException $exception
      * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function handlePageNotFound(Request $request, ResourceNotFoundException $exception): Response
     {
@@ -175,6 +179,10 @@ class ErrorController extends Controller
      * @param Request $request
      * @param Exception $exception
      * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function handleServerError(Request $request, Exception $exception): Response
     {
@@ -250,6 +258,8 @@ class ErrorController extends Controller
         }
         $exceptionClass = new ReflectionClass($exception);
 
+
+        // TODO: use render and twig template
         return new Response('
             <div>
                 <h1>Une erreur '.$exceptionClass->getShortName().' est survenue.</h1>

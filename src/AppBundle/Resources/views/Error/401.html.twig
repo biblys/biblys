@@ -1,0 +1,13 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Erreur d'authentification
+{% endblock %}
+
+{% block main %}
+  <h1>Erreur d'authentification</h1>
+  <p>{{ message }}</p>
+  <p>
+    Pour continuer, veuillez vous <a href="{{ path('user_login') }}">identifier.
+  </p>
+{% endblock %}
