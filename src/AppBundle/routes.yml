@@ -661,6 +661,12 @@ ticket_comment_new:
   path: /ticket/{ticket_id}/comment
   controller: AppBundle\Controller\TicketController::newCommentAction
 
+# User
+
+user_login:
+  path: /user/login
+  controller: AppBundle\Controller\UserController::login
+
 # Old controllers
 
 contact:
