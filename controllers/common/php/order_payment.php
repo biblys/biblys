@@ -154,7 +154,7 @@ if ($request->getMethod() === "POST") {
                     <a href="/payment/'.$order->get('url').'" class="btn btn-default">» Choisir un autre mode de paiement</a>
                 </p>
 
-                <h2>Bon de commande '.$site->get('tag').' n°; '.$order->get('id').'</h2>
+                <h2>Bon de commande '.$site->get('tag').' n° '.$order->get('id').'</h2>
 
                 <p>
                     '.$order->get('firstname').' '.$order->get('lastname').'<br />
@@ -353,7 +353,7 @@ else // CHOIX DU MODE DE PAIMENT
     }
 
     $content .= '
-        <p class="alert alert-info">Veuillez choisir le mode de paiement pour la commande n°; '.$order->get('id').'.<br>Montant à régler : '.currency($order->get('amount_tobepaid') / 100).'</p>
+        <p class="alert alert-info">Veuillez choisir le mode de paiement pour la commande n° '.$order->get('id').'.<br>Montant à régler : '.currency($order->get('amount_tobepaid') / 100).'</p>
 
         <form method="post">
             <fieldset>
