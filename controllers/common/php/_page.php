@@ -1,9 +1,12 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var \Model\Page $page */
-$_PAGE_TITLE = $page->getTitle();
+/** @var Request $request */
+
+$request->attributes->set("page_title", $page->getTitle());
 $errorText = null;
 $content = null;
 

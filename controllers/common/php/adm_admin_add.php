@@ -1,5 +1,12 @@
 <?php
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/** @var Request $request */
+/** @var Site $site */
+
 $um = new UserManager();
 
 if ($request->getMethod() === "POST") {
@@ -10,7 +17,7 @@ if ($request->getMethod() === "POST") {
         trigger_error("Le champ Adresse e-mail est obligatoire.");
     }
 
-    // Create a user if it doesn't exists
+    // Create a user if it doesn't exist
     $user = $um->get(['user_email' => $user_email]);
     if (!$user)  {
         $user = $um->create(array("user_email" => $user_email));
@@ -18,8 +25,8 @@ if ($request->getMethod() === "POST") {
     }
 
     // Set admin right
-    if (!$user->hasRight('site', $_SITE['site_id'])) {
-        $user->giveRight('site', $_SITE['site_id']);
+    if (!$user->hasRight('site', $site['site_id'])) {
+        $user->giveRight('site', $site['site_id']);
     }
 
     // E-mail de bienvenue
@@ -42,11 +49,11 @@ if ($request->getMethod() === "POST") {
         ';
     }
 
-    $headers = 'From: '.$_SITE['site_title'].' <'.$_SITE['site_contact'].'>'."\r\n";
-    $subject = $_SITE['site_tag'].' | Votre accès au site';
+    $headers = 'From: '.$site['site_title'].' <'.$site['site_contact'].'>'."\r\n";
+    $subject = $site['site_tag'].' | Votre accès au site';
     $message = '
 <p>Bonjour,</p>
-<p>Votre accès administrateur a été créé sur le site <a href="http://'.$_SITE['site_domain'].'/">'.$_SITE['site_title'].'</a>.</p>
+<p>Votre accès administrateur a été créé sur le site <a href="https://'.$site['site_domain'].'/">'.$site['site_title'].'</a>.</p>
 '.$credentials;
 
     $um->mail($user,$subject,$message,$headers);
@@ -54,14 +61,13 @@ if ($request->getMethod() === "POST") {
     $params["added"] = 1;
     $params["email"] = $user->get("user_email");
 
-    redirect("/pages/adm_admins",$params);
-
+    return new RedirectResponse("/pages/adm_admins?", http_build_query($params));
 }
 
-$_PAGE_TITLE = 'Ajouter un administrateur';
+$request->attributes->set("page_title", "Ajouter un administrateur");
 
-$_ECHO .= '
-    <h2><span class="fa fa-user-plus"></span> '.$_PAGE_TITLE.'</h2>
+$content = '
+    <h2><span class="fa fa-user-plus"></span> Ajouter un administrateur</h2>
 
     <p class="alert alert-warning">
         <span class="fa fa-warning"></span>&nbsp;
@@ -72,8 +78,8 @@ $_ECHO .= '
         <fieldset>
             <p>
                 <label for="user_email">Adresse e-mail :</label>
-                <input type="email" name="user_email" id="user_email" value="'.(isset($user_email) ? $user_email : null).'" class="long" required>&nbsp;
-                <img src="/common/icons/info.svg" width="16" title="Si cette adresse ne correspond pas à un compte Axys, un nouveau compte sera créé automatiquement avec un mot de passe aléatoire envoyé par e-mail.">
+                <input type="email" name="user_email" id="user_email" value="'.($user_email ?? null).'" class="long" required>&nbsp;
+                <span class="fa fa-info-circle" title="Si cette adresse ne correspond pas à un compte Axys, un nouveau compte sera créé automatiquement avec un mot de passe aléatoire envoyé par e-mail."></span>
             </p>
             <br>
             <div class="center">
@@ -81,6 +87,6 @@ $_ECHO .= '
             </div>
         </fieldset>
     </form>
-
 ';
 
+return new Response($content);

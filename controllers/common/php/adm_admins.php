@@ -1,8 +1,15 @@
 <?php
 
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-$_PAGE_TITLE = 'Admininistrateurs';
+/** @var PDO $_SQL */
+/** @var Site $site */
+/** @var Request $request */
+
+$request->attributes->set("page_title", "Admininistrateurs");
 
 // Supprimer une right
 if (isset($_GET['delete']))
@@ -10,7 +17,7 @@ if (isset($_GET['delete']))
     $rm = new RightManager();
     $right = $rm->getById($_GET['delete']);
     $rm->delete($right);
-    redirect('/pages/adm_admins',array('deleted' => 1, 'email' => $_GET['email']));
+    return new RedirectResponse('/pages/adm_admins?deleted=1&email='.$_GET['email']);
 }
 
 // Permission supprimée
@@ -53,10 +60,10 @@ while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
     ';
 }
 
-$_ECHO .= '
+$content = '
     <h1><span class="fa fa-users"></span> '.$_PAGE_TITLE.'</h1>
 
-    '.(isset($message) ? $message : null).'<br>
+    '.($message ?? null).'<br>
 
     <div class="center">
         <a href="/pages/adm_admin_add" class="btn btn-primary">
@@ -80,3 +87,5 @@ $_ECHO .= '
         </tbody>
     </table>
 ';
+
+return new Response($content);
