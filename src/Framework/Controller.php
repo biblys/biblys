@@ -115,10 +115,34 @@ class Controller
         $urlGenerator = $container->get("url_generator");
         $config = $container->get("config");
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $currentSiteService = CurrentSite::buildFromConfig($config);
+        $currentUserIsAdmin = $currentUserService->isAdminForSite($currentSiteService->getSite());
 
         //** Twig custom functions **//
 
         $functions = [];
+
+        $functions[] = new TwigFunction("get_assets", function ($fileType) use(
+            $config,
+            $currentUserIsAdmin
+        ) {
+            $assets = loadEncoreAssets($config->get("environment"), $fileType);
+
+            if ($currentUserIsAdmin) {
+                $assets = array_merge(
+                    $assets,
+                    loadEncoreAssets($config->get("environment"), $fileType, "admin")
+                );
+            }
+
+            if ($fileType === "css") {
+                $assets = array_map(function ($asset) {
+                    return explode(":", $asset)[1];
+                }, $assets);
+            }
+
+            return $assets;
+        });
 
         // return relative url for a route
         $functions[] = new TwigFunction('path', function ($route, $vars = []) {

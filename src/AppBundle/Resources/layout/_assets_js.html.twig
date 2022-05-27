@@ -1,3 +1,7 @@
+{% for asset in get_assets("js") %}
+  <script type="text/javascript" src="{{ asset }}"></script>
+{% endfor %}
+
 <script type="text/javascript" src="{{ app.axys.widgetUrl }}"></script>
 
 <script type="text/javascript" src="/libs/jquery/dist/jquery.min.js?1.12.2"></script>
