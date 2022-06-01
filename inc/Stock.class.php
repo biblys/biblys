@@ -236,9 +236,11 @@ class Stock extends Entity
             $size = $options['size'];
         }
 
+        $class = $options["class"] ?? "";
+
         return '
-            <a href="'.$this->getPhotoUrl().'" rel="lightbox">
-                <img src="'.$this->getPhotoUrl($size).'">
+            <a href="'.$this->getPhotoUrl().'" class="'.$class.'" rel="lightbox">
+                <img src="' .$this->getPhotoUrl($size).'">
             </a>
         ';
     }
