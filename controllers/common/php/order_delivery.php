@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 $config = new Config();
 $axys = new LegacyClient($config->get("axys"));
 
-$_PAGE_TITLE = 'Commande &raquo; Validation';
+/** @var Request $request */
+$request->attributes->set("page_title", "Commande » Validation");
 
 /** @var Visitor $_V */
 $cart = $_V->getCart();
@@ -213,9 +214,9 @@ if ($request->getMethod() === "POST") {
 }
 
 $content .= '
-    <h2>' . $_PAGE_TITLE . '</h2>
+    <h2>Commande » Validation</h2>
 
-    <h3>R&eacute;capitulatif</h3>
+    <h3>Récapitulatif</h3>
 ';
 
 if (isset($o["order_id"])) {
