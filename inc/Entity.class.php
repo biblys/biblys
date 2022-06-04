@@ -291,6 +291,18 @@ class EntityManager
             $offset = ' OFFSET '.$options['offset'];
         }
 
+        $groupBy = null;
+        if (isset($options["group-by"])) {
+            $groupBy = ' GROUP BY `'.$options["group-by"]."`";
+        }
+
+        $join = null;
+        if (isset($options["join"])) {
+            foreach ($options["join"] as $lj) {
+                $join .= " JOIN `{$lj["table"]}` USING(`{$lj["key"]}`)";
+            }
+        }
+
         $leftjoin = null;
         if (isset($options['left-join'])) {
             foreach ($options['left-join'] as $lj) {
@@ -306,7 +318,12 @@ class EntityManager
             $query = "WHERE ".$query;
         }
 
-        $query = 'SELECT '.$this->select.' FROM `'.$this->table.'`'.$leftjoin.$query.$order.$sort.$limit.$offset;
+        $query = 'SELECT '.$this->select.' FROM `'.$this->table.'`'
+            .$join.$leftjoin
+            .$query
+            .$groupBy
+            .$order.$sort
+            .$limit.$offset;
 
         $qu = self::prepareAndExecute($query, $params);
 
