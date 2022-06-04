@@ -1208,12 +1208,12 @@ function get_controller_path($controller)
     return false;
 }
 
-function loadEncoreAssets(string $env, string $fileType, string $userLevel = 'app')
+function loadEncoreAssets(string $env, string $fileType, string $userLevel = 'app'): array
 {
-    if ($env === 'prod') {
-        $entrypointsFile = './assets/bundle/entrypoints.json';
+    if ($env === "prod" || $env === "test") {
+        $entrypointsFile = __DIR__.'/../public/assets/bundle/entrypoints.json';
     } else {
-        $entrypointsFile = './build/entrypoints.json';
+        $entrypointsFile = __DIR__.'/../public/build/entrypoints.json';
     }
 
     $entrypointsJson = file_get_contents($entrypointsFile);
