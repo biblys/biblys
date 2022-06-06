@@ -1,8 +1,13 @@
-<?php
+<?php /** @noinspection SqlCheckUsingColumns */
+
+/** @noinspection PhpParameterNameChangedDuringInheritanceInspection */
 
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
+use Biblys\Data\Book;
+use Biblys\Data\Client;
+use Biblys\EuroTax;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
@@ -51,8 +56,6 @@ class Article extends Entity
 
     public function __construct($data, $withJoins = true)
     {
-        global $_SQL, $_SITE;
-
         /* JOINS */
 
         if ($withJoins) {
@@ -99,6 +102,7 @@ class Article extends Entity
 
     /**
      * Display deprecated message when calling get('people')
+     * @throws Exception
      */
     public function get($field)
     {
@@ -114,6 +118,7 @@ class Article extends Entity
      * @return Contributor[]
      * @throws InvalidEntityException
      * @throws UnknownJobException
+     * @throws Exception
      */
     public function getContributors(): array
     {
@@ -148,6 +153,8 @@ class Article extends Entity
     /**
      * Get all article contributors except authors
      * @return Contributor[]
+     * @throws InvalidEntityException
+     * @throws UnknownJobException
      */
     public function getAuthors(): array
     {
@@ -166,18 +173,22 @@ class Article extends Entity
 
     /**
      * Returns true if article has other (than authors) contributors
-     * @return boolean
+     * @return bool
+     * @throws InvalidEntityException
+     * @throws UnknownJobException
      */
-    public function hasAuthors()
+    public function hasAuthors(): bool
     {
         return !empty($this->getAuthors());
     }
 
     /**
      * Get all article contributors except authors
-     * @return array of People
+     * @return Contributor[]
+     * @throws InvalidEntityException
+     * @throws UnknownJobException
      */
-    public function getOtherContributors()
+    public function getOtherContributors(): array
     {
         if (!isset($this->otherContributors)) {
             $contributors = $this->getContributors();
@@ -194,9 +205,11 @@ class Article extends Entity
 
     /**
      * Returns true if article has other (than authors) contributors
-     * @return boolean
+     * @return bool
+     * @throws InvalidEntityException
+     * @throws UnknownJobException
      */
-    public function hasOtherContributors()
+    public function hasOtherContributors(): bool
     {
         $otherContributors = $this->getOtherContributors();
         return !empty($otherContributors);
@@ -204,8 +217,10 @@ class Article extends Entity
 
     /**
      * Get CFRewards including this article
+     * @return CFReward[]
+     * @throws Exception
      */
-    public function getCFRewards()
+    public function getCFRewards(): array
     {
         global $_SQL, $site;
 
@@ -220,8 +235,10 @@ class Article extends Entity
 
     /**
      * Get article linked posts
+     * @return Post[]
+     * @throws Exception
      */
-    public function getPosts()
+    public function getPosts(): array
     {
         global $_SQL;
         $pm = new PostManager();
@@ -294,10 +311,6 @@ class Article extends Entity
      */
     public function getCoverTag(array $options = []): string
     {
-        $cover = $this->getCover();
-        if (!$cover->exists()) {
-        }
-
         if (!isset($options["link"])) {
             $options["link"] = $this->getCoverUrl();
         }
@@ -336,6 +349,7 @@ class Article extends Entity
 
     /**
      * Return article's cover url
+     * @throws Exception
      */
     public function getCoverUrl(array $options = [])
     {
@@ -349,7 +363,6 @@ class Article extends Entity
             $urlOptions["version"] = $this->get('cover_version');
         }
 
-        $size = null;
         if (isset($options["size"])) {
             $urlOptions["size"] = $options["size"];
         }
@@ -357,13 +370,17 @@ class Article extends Entity
         return $this->cover->getUrl($urlOptions);
     }
 
-    public function getIsbn()
+    /**
+     * @throws Exception
+     */
+    public function getIsbn(): string
     {
         return Isbn::convertToIsbn13($this->get('ean'));
     }
 
     /**
      * Returns paper linked article if ebook or ebook if papier
+     * @throws Exception
      */
     public function getOtherVersion()
     {
@@ -378,8 +395,10 @@ class Article extends Entity
 
     /**
      * Get article stock
+     * @return Stock[]
+     * @throws Exception
      */
-    public function getStock($mode = 'all')
+    public function getStock($mode = 'all'): array
     {
         global $_SITE;
 
@@ -407,7 +426,11 @@ class Article extends Entity
         return $result;
     }
 
-    public function getAvailableItems($condition = 'all', $options = [])
+    /**
+     * @return Stock[]
+     * @throws Exception
+     */
+    public function getAvailableItems($condition = 'all', $options = []): array
     {
         $sm = new StockManager();
 
@@ -433,7 +456,10 @@ class Article extends Entity
         return $results;
     }
 
-    public function getCheapestAvailableItem($condition = 'all')
+    /**
+     * @throws Exception
+     */
+    public function getCheapestAvailableItem($condition = 'all'): ?Stock
     {
         $copies = $this->getAvailableItems($condition, [
             'order' => 'stock_selling_price'
@@ -443,10 +469,14 @@ class Article extends Entity
             return $copies[0];
         }
 
-        return false;
+        return null;
     }
 
-    public function getDownloadableFiles($type = "all")
+    /**
+     * @return File[]
+     * @throws Exception
+     */
+    public function getDownloadableFiles($type = "all"): array
     {
         if (!isset($this->files)) {
             $fm = new FileManager();
@@ -470,7 +500,10 @@ class Article extends Entity
         return $result;
     }
 
-    public function hasDownloadableFiles($type = "all")
+    /**
+     * @throws Exception
+     */
+    public function hasDownloadableFiles($type = "all"): bool
     {
         $files = $this->getDownloadableFiles($type);
         if (count($files)) {
@@ -479,55 +512,85 @@ class Article extends Entity
         return false;
     }
 
+    /**
+     * @throws Exception
+     */
     public function isInCart()
     {
         global $_V;
         return $_V->hasInCart('article', $this->get('id'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function isInWishlist()
     {
         global $_V;
         return $_V->hasAWish($this->get('id'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function isinAlerts()
     {
         global $_V;
         return $_V->hasAlert($this->get('id'));
     }
 
-    public function isAvailable()
+    /**
+     * @throws Exception
+     */
+    public function isAvailable(): bool
     {
         return ($this->get('availability_dilicom') == 1 || $this->get('availability_dilicom') == 9);
     }
 
-    public function isComingSoon()
+    /**
+     * @throws Exception
+     */
+    public function isComingSoon(): bool
     {
         return (($this->isAvailable() && !$this->isPublished()) || $this->get('availability_dilicom') == 2);
     }
 
-    public function isToBeReprinted()
+    /**
+     * @throws Exception
+     */
+    public function isToBeReprinted(): bool
     {
         return ($this->get('availability_dilicom') == 3);
     }
 
-    public function isSoldOut()
+    /**
+     * @throws Exception
+     */
+    public function isSoldOut(): bool
     {
         return ($this->get('availability_dilicom') == 6);
     }
 
-    public function isSoonUnavailable()
+    /**
+     * @throws Exception
+     */
+    public function isSoonUnavailable(): bool
     {
         return ($this->get('availability_dilicom') == 9);
     }
 
-    public function isPrivatelyPrinted()
+    /**
+     * @throws Exception
+     */
+    public function isPrivatelyPrinted(): bool
     {
         return ($this->get('availability_dilicom') == 10);
     }
 
-    public function getAvailabilityLed()
+    /**
+     * @throws Exception
+     */
+    public function getAvailabilityLed(): string
     {
         if ($this->isSoldOut()) {
             return '<img src="/common/img/square_red.png" title="Épuisé" alt="Épuisé">';
@@ -552,7 +615,10 @@ class Article extends Entity
         return '<img src="/common/img/square_red.png" title="Épuisé" alt="Épuisé">';
     }
 
-    public function getAvailabilityText()
+    /**
+     * @throws Exception
+     */
+    public function getAvailabilityText(): string
     {
         if ($this->isSoldOut()) {
             return 'Épuisé';
@@ -579,8 +645,9 @@ class Article extends Entity
 
     /**
      * Test if article is Purchasable (if cart button should be displayed)
+     * @throws Exception
      */
-    public function isPurchasable()
+    public function isPurchasable(): bool
     {
         if ($this->isSoonUnavailable()) {
             return true;
@@ -603,24 +670,28 @@ class Article extends Entity
 
     /**
      * Returns true if pubdate is lower than today
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
-    public function isPublished()
+    public function isPublished(): bool
     {
         $today = new DateTime('tomorrow');
         return ($this->get('pubdate') < $today->format('Y-m-d'));
     }
 
     /**
-     * Returns true if article can be preorder
-     * @return boolean
+     * Returns true if article can be preordered
+     * @return bool
      */
-    public function isPreorderable()
+    public function isPreorderable(): bool
     {
         return $this->has('preorder');
     }
 
-    public function getDeletionUser()
+    /**
+     * @throws Exception
+     */
+    public function getDeletionUser(): ?User
     {
         $deletion_user_id = $this->get('article_deletion_by');
         if ($deletion_user_id) {
@@ -630,14 +701,16 @@ class Article extends Entity
                 return $user;
             }
         }
-        return false;
+
+        return null;
     }
 
     /**
      * Returns true if article has a physical type
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
-    public function isPhysical()
+    public function isPhysical(): bool
     {
         $type = $this->get('type_id');
         if ($type == 2 || $type == 10 || $type == 11) {
@@ -648,18 +721,20 @@ class Article extends Entity
 
     /**
      * Returns true if article is downloadable (not physical type)
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
-    public function isDownloadable()
+    public function isDownloadable(): bool
     {
         return !$this->isPhysical();
     }
 
     /**
      * Returns true if article price equals 0
-     * @return boolean
+     * @return bool
+     * @throws Exception
      */
-    public function isFree()
+    public function isFree(): bool
     {
         if ($this->get('price') == 0) {
             return true;
@@ -667,10 +742,15 @@ class Article extends Entity
         return false;
     }
 
-    public function getTags()
+    /**
+     * @return Tag[]
+     * @throws Exception
+     */
+    public function getTags(): array
     {
         global $_SQL;
 
+        /** @noinspection SqlCheckUsingColumns */
         $sql = $_SQL->prepare("SELECT `tag_id`, `tag_name`, `tag_url` FROM `links` JOIN `tags` USING(`tag_id`) WHERE `article_id` = :article_id ORDER BY `tag_name`");
         $sql->execute([':article_id' => $this->get('id')]);
         $tags = $sql->fetchAll();
@@ -684,9 +764,10 @@ class Article extends Entity
     }
 
     /**
-     * @return Array of Rayon
+     * @return Rayon[]
+     * @throws Exception
      */
-    public function getRayons()
+    public function getRayons(): array
     {
         global $_SQL, $_SITE;
 
@@ -713,7 +794,10 @@ class Article extends Entity
         return $the_rayons;
     }
 
-    public function getRayonsAsJsArray()
+    /**
+     * @throws Exception
+     */
+    public function getRayonsAsJsArray(): string
     {
         $rayons = array_slice($this->getRayons(), 0, 5);
         $rayonNames = array_map(function ($rayon) {
@@ -722,7 +806,10 @@ class Article extends Entity
         return "[" . join($rayonNames, ",") . "]";
     }
 
-    public function hasRayon(Rayon $rayon)
+    /**
+     * @throws Exception
+     */
+    public function hasRayon(Rayon $rayon): bool
     {
         $rayons = $this->getRayons();
         foreach ($rayons as $r) {
@@ -734,7 +821,10 @@ class Article extends Entity
         return false;
     }
 
-    public function getCartButton($text = false)
+    /**
+     * @throws Exception
+     */
+    public function getCartButton($text = false): string
     {
         global $urlgenerator;
 
@@ -754,11 +844,14 @@ class Article extends Entity
         ';
     }
 
-    public function getWishlistButton($options = [])
+    /**
+     * @throws Exception
+     */
+    public function getWishlistButton($options = []): string
     {
-        $text = isset($options['text']) ? $options['text'] : 'Ajouter à vos envies';
+        $text = $options['text'] ?? 'Ajouter à vos envies';
 
-        $button = '<i class="fa fa-heart-o"></i>&nbsp;' . $text . '';
+        $button = '<i class="fa fa-heart-o"></i>&nbsp;' . $text;
         $classes = ' btn btn-default';
 
 
@@ -776,9 +869,9 @@ class Article extends Entity
 
     /**
      * Return related Language entity
-     * @return Language
+     * @throws Exception
      */
-    public function getLangOriginal()
+    public function getLangOriginal(): Lang
     {
         if (!$this->langOriginal) {
             $lm = new LangManager();
@@ -790,9 +883,9 @@ class Article extends Entity
 
     /**
      * Return related origin Country
-     * @return Country
+     * @throws Exception
      */
-    public function getOriginCountry()
+    public function getOriginCountry(): Country
     {
         if (!$this->originCountry) {
             $cm = new CountryManager();
@@ -804,9 +897,10 @@ class Article extends Entity
 
     /**
      * Return awards related to this Article
-     * @return Array of Awards
+     * @return Award[]
+     * @throws Exception
      */
-    public function getAwards()
+    public function getAwards(): array
     {
         if (!$this->awards) {
             $am = new AwardManager();
@@ -816,6 +910,9 @@ class Article extends Entity
         return $this->awards;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getShareButtons(array $options = [])
     {
         global $request, $urlgenerator;
@@ -830,6 +927,9 @@ class Article extends Entity
         $this->set('type_id', $type->getId());
     }
 
+    /**
+     * @throws Exception
+     */
     public function getType()
     {
         $type_id = $this->get('type_id');
@@ -839,6 +939,7 @@ class Article extends Entity
     /**
      * Calculates tax rate based product type if it were sold today
      * @param [type] $stock [description]
+     * @throws Exception
      */
     public function getTaxRate()
     {
@@ -859,9 +960,9 @@ class Article extends Entity
         }
 
         // Use current date for date of sale
-        $dateOfSale = new \DateTime();
+        $dateOfSale = new DateTime();
 
-        $tax = new \Biblys\EuroTax($sellerCountry, $customerCountry, constant('\Biblys\EuroTax::' . $tax_type), $dateOfSale);
+        $tax = new EuroTax($sellerCountry, $customerCountry, constant('\Biblys\EuroTax::' . $tax_type), $dateOfSale);
 
         return $tax->getTaxRate();
     }
@@ -869,9 +970,9 @@ class Article extends Entity
     /**
      * Set article's publisher
      * @param publisher Publisher: the publisher object to set as article's publisher
-     * @return Article: the current article
+     * @return Article the current article
      */
-    public function setPublisher(Publisher $publisher)
+    public function setPublisher(Publisher $publisher): Article
     {
         $this->set('publisher_id', $publisher->get('id'));
         $this->set('article_publisher', $publisher->get('name'));
@@ -882,9 +983,9 @@ class Article extends Entity
     /**
      * Set article's collection
      * @param collection Collection: the collection object to set as article's collection
-     * @return Article: the current article
+     * @return Article the current article
      */
-    public function setCollection(Collection $collection)
+    public function setCollection(Collection $collection): Article
     {
         $this->set('collection_id', $collection->get('id'));
         $this->set('article_collection', $collection->get('name'));
@@ -894,8 +995,9 @@ class Article extends Entity
 
     /**
      * Get article's formatted age min and max
+     * @throws Exception
      */
-    public function getAgeRange()
+    public function getAgeRange(): ?string
     {
         if ($this->has('age_min') && $this->has('age_max')) {
             return 'de ' . $this->get('age_min') . ' à ' . $this->get('age_max') . ' ans';
@@ -912,14 +1014,20 @@ class Article extends Entity
         return null;
     }
 
-    function bumpCoverVersion()
+    /**
+     * @throws Exception
+     */
+    public function bumpCoverVersion(): Article
     {
         $version = $this->get('cover_version');
         $this->set('article_cover_version', $version + 1);
         return $this;
     }
 
-    function countItemsByAvailability()
+    /**
+     * @throws Exception
+     */
+    public function countItemsByAvailability(): array
     {
         $items = $this->getStock();
 
@@ -972,9 +1080,9 @@ class ArticleManager extends EntityManager
 
     /**
      * If set to true, Manager will ignore site filters
-     * @param boolean $setting true or false (default)
+     * @param bool $setting true or false (default)
      */
-    public function setIgnoreSiteFilters($setting)
+    public function setIgnoreSiteFilters(bool $setting)
     {
         $this->ignoreSiteFilters = $setting;
     }
@@ -1003,7 +1111,7 @@ class ArticleManager extends EntityManager
         return $where;
     }
 
-    public function getAll(array $where = array(), array $options =  array(), $withJoins = true)
+    public function getAll(array $where = array(), array $options =  array(), $withJoins = true): array
     {
         $query = array();
         $params = array();
@@ -1054,16 +1162,10 @@ class ArticleManager extends EntityManager
     {
         $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
 
-        $where = $this->addSiteFilters($where);
-
-        $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
-        $res = $this->db->prepare($query);
-        $res->execute($q['params']);
-        return $res->fetchColumn();
+        return $this->_countAllForWhere($where);
     }
 
-    public function getAllFromPeople($people, $options = [], $withJoins = true)
+    public function getAllFromPeople($people, $options = [], $withJoins = true): array
     {
         $where = ["article_links" => "LIKE %[people:" . $people->get('id') . "]%"];
         return $this->getAll($where, $options, $withJoins);
@@ -1073,16 +1175,10 @@ class ArticleManager extends EntityManager
     {
         $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
 
-        $where = $this->addSiteFilters($where);
-
-        $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
-        $res = $this->db->prepare($query);
-        $res->execute($q['params']);
-        return $res->fetchColumn();
+        return $this->_countAllForWhere($where);
     }
 
-    public function getAllFromRayon($rayon, $options = [], $withJoins = true)
+    public function getAllFromRayon($rayon, $options = [], $withJoins = true): array
     {
         $where = ["article_links" => "LIKE %[rayon:" . $rayon->get('id') . "]%"];
 
@@ -1105,30 +1201,24 @@ class ArticleManager extends EntityManager
     {
         $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
 
-        $where = $this->addSiteFilters($where);
-
-        $q = EntityManager::buildSqlQuery($where);
-        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
-        $res = $this->db->prepare($query);
-        $res->execute($q['params']);
-        return $res->fetchColumn();
+        return $this->_countAllForWhere($where);
     }
 
     /**
      * Get all articles related to this rayon
      * @param  [type]  $rayon     [description]
      * @param  [type]  $options   [description]
-     * @param  boolean $withJoins [description]
+     * @param bool $withJoins [description]
      * @return array of Articles
      */
-    public function getAllFromTag($tag, $options = [], $withJoins = true)
+    public function getAllFromTag($tag, $options = [], bool $withJoins = true): array
     {
         $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
 
         return $this->getAll($where, $options, $withJoins);
     }
 
-    public function buildSearchQuery($keywords)
+    public function buildSearchQuery($keywords): array
     {
         $query = array();
         $params = array();
@@ -1161,17 +1251,17 @@ class ArticleManager extends EntityManager
         return $res->fetchColumn();
     }
 
-    public function search($keywords, $options = [])
+    public function search($keywords, $options = []): array
     {
         $q = $this->buildSearchQuery($keywords);
         return $this->getQuery(implode(' AND ', $q['query']), $q['params'], $options);
     }
 
     /**
-     * Returns articles thats need to be pushed to Biblys Data
-     * @return {array} of Article
+     * Returns articles that need to be pushed to Biblys Data
+     * @return Article[]
      */
-    public function getArticlesToBePushedToData()
+    public function getArticlesToBePushedToData(): array
     {
         return $this->getQuery('
             `article_ean` IS NOT NULL AND `article_ean` != 0 AND
@@ -1187,7 +1277,8 @@ class ArticleManager extends EntityManager
 
     /**
      * Pushes an article to data server
-     * @param $article {Article} the article to push
+     * @param Article $article {Article} the article to push
+     * @throws Exception
      */
     public function pushToDataServer(Article $article)
     {
@@ -1203,7 +1294,7 @@ class ArticleManager extends EntityManager
             return;
         }
 
-        $book = new \Biblys\Data\Book();
+        $book = new Book();
         $book->setEan($article->get('ean'));
         $book->setTitle($article->get('title'));
 
@@ -1228,7 +1319,7 @@ class ArticleManager extends EntityManager
             $dataParams["server"] = $dataConfig["server"];
         }
 
-        $bdc = new \Biblys\Data\Client($dataParams);
+        $bdc = new Client($dataParams);
         $bdc->push($book);
 
         $article->set('article_pushed_to_data', date('Y-d-m H:i:s'));
@@ -1240,6 +1331,7 @@ class ArticleManager extends EntityManager
      * @param $article {Article}
      * @param $rayon {Rayon}
      * @throws ArticleAlreadyInRayonException
+     * @throws Exception
      */
     public function addRayon($article, $rayon)
     {
@@ -1267,15 +1359,13 @@ class ArticleManager extends EntityManager
     /**
      * Checks that ISBN is valid and isn't already used
      *
-     * @param int $articleId  Article id
-     * @param int $ean        Article EAN
-     *
+     * @param int $articleId Article id
+     * @param $articleEan
      * @return bool true if ISBN is valid and not used
+     * @throws Exception
      */
-    public function checkIsbn($articleId, $articleEan)
+    public function checkIsbn(int $articleId, $articleEan): bool
     {
-        global $_SQL;
-
         $articles = $this->search($articleEan);
         if ($articles) {
             $article = $articles[0];
@@ -1296,6 +1386,7 @@ class ArticleManager extends EntityManager
 
     /**
      * Hook to push to data server whenever article is updated
+     * @throws Exception
      */
     public function update(
         $article,
@@ -1316,7 +1407,10 @@ class ArticleManager extends EntityManager
         return $article;
     }
 
-    public function refreshMetadata(Article $article)
+    /**
+     * @throws Exception
+     */
+    public function refreshMetadata(Article $article): Article
     {
         global $_SQL;
 
@@ -1458,7 +1552,10 @@ class ArticleManager extends EntityManager
         }
     }
 
-    public function preprocess($article)
+    /**
+     * @throws Exception
+     */
+    public function preprocess($article): Entity
     {
         $ean = $article->get('ean');
         if ($ean) {
@@ -1482,6 +1579,7 @@ class ArticleManager extends EntityManager
 
     /**
      * Create an article slug from authors and title
+     * @throws Exception
      */
     private function _createArticleSlug(Article $article): string
     {
@@ -1507,12 +1605,11 @@ class ArticleManager extends EntityManager
         return $slug;
     }
 
-    public static function _getAuthorsSegmentForSlug($authors)
+    /**
+     * @throws Exception
+     */
+    public static function _getAuthorsSegmentForSlug($authors): string
     {
-        if (count($authors) === 0) {
-            throw new Exception("Cannot create url for an article without authors");
-        }
-
         if (count($authors) === 1) {
             $firstAuthor = $authors[0];
             return $firstAuthor->getName();
@@ -1521,6 +1618,8 @@ class ArticleManager extends EntityManager
         if (count($authors) > 1) {
             return "collectif";
         }
+
+        throw new Exception("Cannot create url for an article without authors");
     }
 
     public function validate($article)
@@ -1561,5 +1660,20 @@ class ArticleManager extends EntityManager
         if (!$article->has("url")) {
             throw new InvalidEntityException("L'article doit avoir une url.");
         }
+    }
+
+    /**
+     * @param array $where
+     * @return mixed
+     */
+    private function _countAllForWhere(array $where)
+    {
+        $where = $this->addSiteFilters($where);
+
+        $q = EntityManager::buildSqlQuery($where);
+        $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
+        $res = $this->db->prepare($query);
+        $res->execute($q['params']);
+        return $res->fetchColumn();
     }
 }
