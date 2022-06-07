@@ -5,7 +5,9 @@
 */
 
 use Biblys\Exception\ArticleAlreadyInRayonException;
+use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
 use Model\PeopleQuery;
 use Propel\Runtime\Exception\PropelException;
 
@@ -1019,6 +1021,36 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             $article->get('id'),
             $articles[0]->get('id'),
             "it should return all articles from a rayon"
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchWithAvailableStock()
+    {
+        // given
+        $currentSite = ModelFactory::createSite();
+        $articleWithStock = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
+        $otherArticleWithStock = ModelFactory::createArticle(["keywords" => "Sans rapport"]);
+        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStock);
+        $otherSite = ModelFactory::createSite();
+        $articleWithStockFromOtherSite = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createStockItem([], $otherSite, $articleWithStockFromOtherSite);
+        $am = new ArticleManager();
+        $currentSiteService = new CurrentSite($currentSite);
+
+        // when
+        $results = $am->searchWithAvailableStock("Article à trouver", $currentSiteService);
+
+        // then
+        $this->assertCount(1, $results, "returns 1 result");
+        $this->assertEquals(
+            $articleWithStock->getId(),
+            $results[0]->get("id"),
+            "returns all articles with available stock"
         );
     }
 }

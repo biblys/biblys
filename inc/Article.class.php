@@ -13,6 +13,7 @@ use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
 use Biblys\Article\Type;
+use Biblys\Service\CurrentSite;
 use Model\PeopleQuery;
 
 class Article extends Entity
@@ -1218,7 +1219,7 @@ class ArticleManager extends EntityManager
         return $this->getAll($where, $options, $withJoins);
     }
 
-    public function buildSearchQuery($keywords): array
+    public function _buildSearchQuery($keywords): array
     {
         $query = array();
         $params = array();
@@ -1241,9 +1242,33 @@ class ArticleManager extends EntityManager
         return ['query' => $query, 'params' => $params];
     }
 
+    public function _buildSearchQueryForAvailableStock(
+        string $keywords,
+        CurrentSite $currentSite,
+        array $options
+    ): array
+    {
+        $queryWithParams = $this->_buildSearchQuery($keywords);
+
+        $searchCriteria = implode(" AND ", $queryWithParams["query"]);
+        $stockCriteria = " AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL";
+        $siteCriteria = " AND `stock`.`site_id` = :site_id";
+        $queryWithParams["params"]["site_id"] = $currentSite->getSite()->getId();
+
+        $options["fields"] = "`articles`.`article_id`, `article_url`, `article_title`, `article_authors`, `publisher_id`, `collection_id`, `cycle_id`, `article_tome`";
+        $options["join"] = [["table" => "stock", "key" => "article_id"]];
+        $options["group-by"] = "article_id";
+
+        return [
+            "query" => $searchCriteria.$stockCriteria.$siteCriteria,
+            "params" => $queryWithParams["params"],
+            "options" => $options,
+        ];
+    }
+
     public function countSearchResults($keywords)
     {
-        $q = $this->buildSearchQuery($keywords);
+        $q = $this->_buildSearchQuery($keywords);
 
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . implode(' AND ', $q['query']);
         $res = $this->db->prepare($query);
@@ -1253,8 +1278,30 @@ class ArticleManager extends EntityManager
 
     public function search($keywords, $options = []): array
     {
-        $q = $this->buildSearchQuery($keywords);
+        $q = $this->_buildSearchQuery($keywords);
         return $this->getQuery(implode(' AND ', $q['query']), $q['params'], $options);
+    }
+
+    /**
+     * @return Article[]
+     */
+    public function searchWithAvailableStock(
+        string $keywords,
+        CurrentSite $currentSite,
+        array $options = []
+    ): array
+    {
+        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock(
+            $keywords,
+            $currentSite,
+            $options
+        );
+
+        return $this->getQuery(
+            $queryWithParamsAndOptions["query"],
+            $queryWithParamsAndOptions["params"],
+            $queryWithParamsAndOptions["options"]
+        );
     }
 
     /**
