@@ -107,11 +107,12 @@ class ArticleController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function searchAction(Request $request): Response
+    public function searchAction(Request $request, CurrentSite $currentSite): Response
     {
         $am = new ArticleManager();
 
-        $query = $request->query->get('q');
+        $query = $request->query->get("q");
+        $inStockFilter = $request->query->get("in-stock");
 
         $error = false;
         $articles = [];
@@ -119,18 +120,31 @@ class ArticleController extends Controller
         $pagination = null;
 
         if ($query !== null && strlen($query) < 3) {
-            $error = 'Le terme de recherche est trop court (trois caractères minimum).';
+            $error = "Le terme de recherche est trop court (trois caractères minimum).";
         } elseif ($query !== null) {
-            $count = $am->countSearchResults($query);
-            $page = (int) $request->query->get('p', 0);
-            $pagination = new Pagination($page, $count);
+            $page = (int) $request->query->get("p", 0);
 
-            $articles = $am->search($query, [
-                'order' => 'article_pubdate',
-                'sort' => 'desc',
-                'limit' => $pagination->getLimit(),
-                'offset' => $pagination->getOffset(),
-            ]);
+            if ($inStockFilter) {
+                $count = $am->countSearchResultsForAvailableStock($query, $currentSite);
+                $pagination = new Pagination($page, $count);
+                $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
+                $articles = $am->searchWithAvailableStock($query, $currentSite, [
+                    'order' => 'article_pubdate',
+                    'sort' => 'desc',
+                    'limit' => $pagination->getLimit(),
+                    'offset' => $pagination->getOffset(),
+                ]);
+            } else {
+                $count = $am->countSearchResults($query);
+                $pagination = new Pagination($page, $count);
+                $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
+                $articles = $am->search($query, [
+                    'order' => 'article_pubdate',
+                    'sort' => 'desc',
+                    'limit' => $pagination->getLimit(),
+                    'offset' => $pagination->getOffset(),
+                ]);
+            }
         }
 
         $request->attributes->set("page_title", "Recherche");
@@ -144,6 +158,7 @@ class ArticleController extends Controller
             'count' => $count,
             'error' => $error,
             'query' => $query,
+            'inStockFilterChecked' => $inStockFilter ? "checked" : "",
         ]);
     }
 

@@ -1,5 +1,15 @@
 # Historique des modifications
 
+## 2.62.0 (DEV)
+
+Améliorations
+
+- Le modèle principal du thème utilise désormais le langage Twig.
+- Les vues des thèmes utilisent désormais des blocks de manière à pouvoir 
+  utiliser différentes modèles principaux en fonction du contexte.
+- Un filtre "Articles en stock uniquement" a été ajouté à la page des 
+  résultats de recherche.
+
 ## 2.61.0 (6 mai 2022)
 
 Améliorations

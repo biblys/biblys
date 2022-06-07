@@ -3,23 +3,23 @@
 	<p class="articles-pagination text-center">
 
 		{% if pages.previous > -1 %}
-			<a class="btn btn-default btn-sm pagination-button button-prev" href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.previous }}">
-				<span class="icon fa fa-chevron-circle-left"></span>
-			</a>
+		<a href="{{ pages.previousQuery }}" class="btn btn-default btn-sm pagination-button button-prev">
+			<span class="icon fa fa-chevron-circle-left"></span>
+		</a>
 			&nbsp;
 		{% endif %}
 
-		{% for i in 1..pages.total %}
-			{% if pages.current == i %}
-				<span class="pagination-page pagination-page-current">{{ i }}</span>
+		{% for pageNumber in 1..pages.total %}
+			{% if pages.current == pageNumber %}
+				<span class="pagination-page pagination-page-current">{{ pageNumber }}</span>
 			{% else %}
-				<a href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ i - 1 }}" class="pagination-page">{{ i }}</a>
+				<a href="{{ pages.queryForPageNumber(pageNumber) }}" class="pagination-page">{{ pageNumber }}</a>
 			{% endif %}
 		{% endfor %}
 
 		{% if pages.next %}
 			&nbsp;
-			<a class="btn btn-default btn-sm  pagination-button button-next" href="?{% if query is defined %}q={{ query|url_encode }}&amp;{% endif %}p={{ pages.next }}">
+			<a href="{{ pages.nextQuery }}" class="btn btn-default btn-sm pagination-button button-next">
 				<span class="icon fa fa-chevron-circle-right"></span>
 			</a>
 		{% endif %}

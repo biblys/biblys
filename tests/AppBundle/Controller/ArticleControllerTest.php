@@ -219,4 +219,89 @@ class ArticleControllerTest extends TestCase
             "it should return HTTP 200"
         );
     }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testSearchAction()
+    {
+        // given
+        ModelFactory::createArticle(
+            ["title" => "Résultat de recherche"],
+            null,
+            null,
+            [ModelFactory::createPeople()]
+        );
+        $controller = new ArticleController();
+        $request = new Request();
+        $request->query->set("q", "Résultat de recherche");
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        // when
+        $response = $controller->searchAction($request, $currentSite);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "1 résultat",
+            $response->getContent(),
+            "return correct number of results"
+        );
+        $this->assertStringContainsString(
+            "Résultat de recherche",
+            $response->getContent(),
+            "return article with matching title"
+        );
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testSearchActionWithAvailableStock()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $article = ModelFactory::createArticle(
+            ["title" => "Résultat de recherche avec stock"],
+            null,
+            null,
+            [ModelFactory::createPeople()]
+        );
+        ModelFactory::createStockItem([], $site, $article);
+        $controller = new ArticleController();
+        $request = new Request();
+        $request->query->set("q", "Résultat de recherche avec stock");
+        $request->query->set("in-stock", "1");
+
+        // when
+        $response = $controller->searchAction($request, $currentSite);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "1 résultat",
+            $response->getContent(),
+            "return correct number of results"
+        );
+        $this->assertStringContainsString(
+            "Résultat de recherche",
+            $response->getContent(),
+            "return article with matching title"
+        );
+    }
 }

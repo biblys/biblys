@@ -20,7 +20,7 @@
 					{% endif %}
 				</td>
 				<td>
-					{% if article.collection %}
+					{% if article.has('collection') %}
 						<a href="{{ path('collection_show', { slug: article.collection.url }) }}">
 							{{ article.collection.name }}
 						</a>
