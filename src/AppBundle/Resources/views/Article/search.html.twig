@@ -34,14 +34,16 @@
         pour &laquo; {{ query }} &raquo;
       </p>
 
-      <form>
-        <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
-        <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
+      {% if app.site.getOpt("virtual_stock") != 1 %}
+        <form>
+          <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
+          <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
 
-        <input type="hidden" name="q" value="{{ query }}" />
+          <input type="hidden" name="q" value="{{ query }}" />
 
-        <button class="btn btn-sm btn-primary" type="submit">Filtrer</button>
-      </form>
+          <button class="btn btn-sm btn-primary" type="submit">Filtrer</button>
+        </form>
+      {% endif %}
 
       {% include 'AppBundle:Article:_list.html.twig' %}
     {% endif %}
