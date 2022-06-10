@@ -1024,6 +1024,40 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         );
     }
 
+
+
+    /**
+     * @throws Exception
+     */
+    public function testCountSearchResultsForAvailableStock()
+    {
+        // given
+        $currentSite = ModelFactory::createSite();
+        $articleWithStock = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
+        ModelFactory::createStockItem([], $currentSite, $articleWithStock);
+        $otherArticleWithStockToFound = ModelFactory::createArticle(["keywords" => "Article à trouver aussi"]);
+        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStockToFound);
+        $otherArticleWithStock = ModelFactory::createArticle(["keywords" => "Sans rapport"]);
+        ModelFactory::createStockItem([], $currentSite, $otherArticleWithStock);
+        $otherSite = ModelFactory::createSite();
+        $articleWithStockFromOtherSite = ModelFactory::createArticle(["keywords" => "Article à trouver"]);
+        ModelFactory::createStockItem([], $otherSite, $articleWithStockFromOtherSite);
+        $am = new ArticleManager();
+        $currentSiteService = new CurrentSite($currentSite);
+
+        // when
+        $count = $am->countSearchResultsForAvailableStock("Article à trouver", $currentSiteService);
+
+        // then
+        $this->assertEquals(
+            2,
+            $count,
+            "returns the correct number of article with available stock"
+        );
+    }
+
     /**
      * @throws Exception
      */

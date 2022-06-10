@@ -1245,7 +1245,7 @@ class ArticleManager extends EntityManager
     public function _buildSearchQueryForAvailableStock(
         string $keywords,
         CurrentSite $currentSite,
-        array $options
+        array $options = []
     ): array
     {
         $queryWithParams = $this->_buildSearchQuery($keywords);
@@ -1273,6 +1273,23 @@ class ArticleManager extends EntityManager
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . implode(' AND ', $q['query']);
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
+        return $res->fetchColumn();
+    }
+
+    public function countSearchResultsForAvailableStock(
+        string $keywords,
+        CurrentSite $currentSiteService
+    ): int
+    {
+        $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock($keywords, $currentSiteService);
+
+        $query = "
+            SELECT COUNT(DISTINCT(`article_id`)) 
+            FROM `$this->table` 
+            JOIN `stock` USING(`article_id`)
+            WHERE {$queryWithParamsAndOptions["query"]}
+        ";
+        $res = EntityManager::prepareAndExecute($query, $queryWithParamsAndOptions['params']);
         return $res->fetchColumn();
     }
 
