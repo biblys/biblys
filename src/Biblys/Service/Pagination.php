@@ -90,7 +90,7 @@ class Pagination
         return $this->_queryParams;
     }
 
-    public function getQueryForPageNumber(int $pageNumber): string
+    public function getQueryForPageNumber(int $pageNumber): ?string
     {
         $pageIndex = $pageNumber - 1;
         return $this->getQueryForPageIndex($pageIndex);
