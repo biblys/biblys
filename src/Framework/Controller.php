@@ -141,7 +141,7 @@ class Controller
                 }, $assets);
             }
 
-            return $assets;
+            return array_unique($assets);
         });
 
         // return relative url for a route
