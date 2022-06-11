@@ -2,25 +2,36 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\Pagination;
 use Framework\Controller;
+use PostManager;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
-use \Exception;
+use Exception;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class PostController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
     public function indexAction(Request $request)
     {
         global $site;
 
         $use_old_controller = $site->getOpt('use_old_post_controller');
         if ($use_old_controller) {
-            return $this->redirect('/o/blog/');
+            return new RedirectResponse("/o/blog/");
         }
 
         $queryParams = [
@@ -28,7 +39,7 @@ class PostController extends Controller
             "post_date" => "< ".date("Y-m-d H:i:s")
         ];
 
-        $pm = $this->entityManager("Post");
+        $pm = new PostManager();
 
         $pageNumber = (int) $request->query->get("p", 0);
         if ($pageNumber < 0) {
@@ -36,7 +47,7 @@ class PostController extends Controller
         }
 
         $totalPostCount = $pm->count($queryParams);
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalPostCount);
+        $pagination = new Pagination($pageNumber, $totalPostCount);
 
         $posts = $pm->getAll($queryParams, [
             "order" => "post_date",
@@ -53,16 +64,22 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
     public function showAction(Request $request, $slug)
     {
         global $site, $urlgenerator;
 
         $use_old_controller = $site->getOpt('use_old_post_controller');
         if ($use_old_controller) {
-            return $this->redirect('/o/blog/'.$slug);
+            return new RedirectResponse('/o/blog/'.$slug);
         }
 
-        $pm = $this->entityManager("Post");
+        $pm = new PostManager();
         $post = $pm->get(["post_url" => $slug]);
 
         // Offline post
@@ -83,15 +100,15 @@ class PostController extends Controller
 
         $use_old_controller = $site->getOpt('use_old_post_controller');
         if ($use_old_controller) {
-            return $this->redirect('/o/blog/'.$slug, 301);
+            return new RedirectResponse('/o/blog/'.$slug, 301);
         }
 
-        $this->setPageTitle($post->get("title"));
+        $request->attributes->set("page_title", $post->get("title"));
 
         $opengraphTags = [
             "type" => "article",
             "title" => $post->get("title"),
-            "url" => "http://".$request->getHost().
+            "url" => "https://" .$request->getHost().
                 $urlgenerator->generate("post_show", ["slug" => $post->get("url")]),
             "description" => truncate(strip_tags($post->get('content')), '500', '...', true),
             "site_name" => $site->get("title"),
@@ -106,7 +123,7 @@ class PostController extends Controller
             $opengraphTags["image"] = $post->getIllustration()->url();
         }
         // Else get first image from post
-        else if ($image) {
+        elseif ($image) {
             $opengraphTags["image"] = $image;
         }
 
@@ -118,19 +135,23 @@ class PostController extends Controller
     }
 
     // GET /admin/posts/
-    public function adminAction()
+    public function adminAction(): RedirectResponse
     {
         if ($this->user->isAdmin()) {
-            return $this->redirect('/pages/adm_posts');
+            return new RedirectResponse('/pages/adm_posts');
         }
 
-        return $this->redirect('/pages/pub_posts');
+        return new RedirectResponse('/pages/pub_posts');
     }
 
     // GET /post/:id/delete
-    public function deleteAction(UrlGenerator $urlGenerator, $id)
+
+    /**
+     * @throws Exception
+     */
+    public function deleteAction(UrlGenerator $urlGenerator, $id): RedirectResponse
     {
-        $pm = $this->entityManager('Post');
+        $pm = new PostManager();
         $post = $pm->getById($id);
         if (!$post) {
             throw new NotFoundException("Post $id not found.");
@@ -142,13 +163,13 @@ class PostController extends Controller
 
         $pm->delete($post);
 
-        return $this->redirect($urlGenerator->generate('posts_admin'));
+        return new RedirectResponse($urlGenerator->generate('posts_admin'));
     }
 
     // GET /post/:slug
-    public function oldUrlAction($slug)
+    public function oldUrlAction($slug): RedirectResponse
     {
-        return $this->redirect('/blog/'.$slug);
+        return new RedirectResponse('/blog/'.$slug);
     }
 
 }

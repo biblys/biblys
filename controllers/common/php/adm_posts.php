@@ -1,10 +1,14 @@
 <?php
 
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $the_categories = null;
 
+/** @var Visitor $_V */
+$rank = "log_";
 if ($_V->isAdmin()) {
     $cm = new CategoryManager();
     $categories = $cm->getAll();
@@ -56,16 +60,17 @@ else $post_url = 'blog';
 
 $table = NULL;
 while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
-    if($p["post_status"] == 1) $p["status"] = '<img src="/common/img/square_green.png" />';
-    else $p["status"] = '<img src="/common/img/square_red.png" />';
+    if($p["post_status"] == 1) $p["status"] = '<img src="/common/img/square_green.png" alt="En ligne" />';
+    else $p["status"] = '<img src="/common/img/square_red.png" alt="Hors ligne" />';
     if(!empty($p["user_screen_name"])) $p["user"] = $p["user_screen_name"];
     else $p["user"] = $p["Email"];
     if(empty($p["post_title"])) $p["post_title"] = truncate(strip_tags($p["post_content"]),50);
     if(!empty($p["publisher_id"])) $p["user"] = $p["publisher_name"];
+    /** @var UrlGenerator $urlgenerator */
     $table .= '
         <tr>
             <td class="right">'.$p["status"].'</td>
-            <td width="99%"><a href="/'.$post_url.'/'.$p["post_url"].'">'.$p["post_title"].'</a></td>
+            <td><a href="/'.$post_url.'/'.$p["post_url"].'">'.$p["post_title"].'</a></td>
             <td class="nowrap">'.$p["user"].'</td>
             <td>'.$p["category_name"].'</td>
             <td>'._date($p["post_date"],'d/m/Y').'</td>
@@ -82,7 +87,8 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
     ';
 }
 
-$_PAGE_TITLE = 'Gestion des billets';
+/** @var Request $request */
+$request->attributes->set("page_title", $_PAGE_TITLE);
 $content = '
     <h1><span class="fa fa-newspaper-o"></span> Gestion des billets</h1>
 

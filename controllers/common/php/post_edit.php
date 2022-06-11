@@ -1,10 +1,14 @@
 <?php
 
 use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var UrlGenerator $urlgenerator */
+/** @var Site $site */
 
 /** @var Visitor $_V */
-/** @var string $rank */
 if (!isset($rank)) {
     throw new AuthException("Accès réservé aux administrateurs.");
 }
@@ -63,9 +67,7 @@ if ($request->getMethod() === 'POST') {
         "post_show",
         ["slug" => $post->get("url")]
     );
-    redirect($postUrl);
-
-    $content .= '<p class="reussite">Le billet n&deg;<a href="/pages/adm_post?id='.$post->get("id").'">'.$post->get("id").'</a> (<a href="/blog/'.$_POST["post_url"].'">'.stripslashes($_POST["post_title"]).'</a>) a &eacute;t&eacute; mis &agrave; jour.</p>';
+    return new RedirectResponse($postUrl);
 
 } elseif(!empty($_POST) AND empty($_POST["title"])) {
     $p = $_POST;
@@ -80,9 +82,39 @@ $post_illustration_upload = '<input type="file" id="post_illustration_upload" na
 
 $postId = $request->query->get('id');
 $post = $pm->getById($postId);
+$author = null;
+
+$pageTitle = 'Nouveau billet';
+
+$content .= '
+        <div class="admin">
+            <p>Nouveau billet</p>
+            <p><a href="/pages/'.$rank.'posts">billets</a></p>
+        </div>
+    ';
+
+// Valeurs par defaut pour un nouveau billet
+$p["user_id"] = $_V->get("id");
+$p["post_date"] = date("Y-m-d");
+$p["post_time"] = date("H:i");
+
+// Auteur
+if ($_V->isAdmin()) {
+    if(!empty($_LOG["user_screen_name"])) $author = $_LOG["user_screen_name"];
+    else $author = $site->get("id");
+}
+elseif ($_V->isPublisher()) {
+    $pum = new PublisherManager();
+    $publisherId = $_V->getCurrentRight()->get("publisher_id");
+    $publisher = $pum->getById($publisherId);
+    if ($publisher) {
+        $author = $publisher->get("name");
+    }
+}
+
 if ($post) {
     $p = $post;
-    $_PAGE_TITLE = 'Modifier &laquo; <a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a> &raquo';
+    $pageTitle = 'Modifier &laquo; <a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a> &raquo';
     $content .= '
         <div class="admin">
             <p>Billet n&deg; '.$p["post_id"].'</p>
@@ -103,36 +135,6 @@ if ($post) {
     if ($p['post_status']) $status_online = ' selected';
     if ($p['post_selected']) $post_selected = ' checked';
 }
-else
-{
-    $_PAGE_TITLE = 'Nouveau billet';
-
-    $content .= '
-        <div class="admin">
-            <p>Nouveau billet</p>
-            <p><a href="/pages/'.$rank.'posts">billets</a></p>
-        </div>
-    ';
-
-    // Valeurs par defaut pour un nouveau billet
-    $p["user_id"] = $_LOG["user_id"];
-    $p["post_date"] = date("Y-m-d");
-    $p["post_time"] = date("H:i");
-
-    // Auteur
-    if ($_V->isAdmin()) {
-        if(!empty($_LOG["user_screen_name"])) $author = $_LOG["user_screen_name"];
-        else $author = $_SITE["site_title"];
-    }
-    elseif ($_V->isPublisher()) {
-        $pum = new PublisherManager();
-        $publisherId = $_V->getCurrentRight()->get("publisher_id");
-        $publisher = $pum->getById($publisherId);
-        if ($publisher) {
-            $author = $publisher->get("name");
-        }
-    }
-}
 
 $post = false;
 $post_id = $request->query->get('id', false);
@@ -146,7 +148,7 @@ if ($post_id) {
 }
 
 $content .= '
-    <h1><i class="fa fa-newspaper-o"></i> '.$_PAGE_TITLE.'</h1>
+    <h1><i class="fa fa-newspaper-o"></i> '.$pageTitle.'</h1>
 
     <form method="post" class="check fieldset" enctype="multipart/form-data">
         <fieldset>
@@ -155,7 +157,7 @@ $content .= '
                 <label for="post_author">Auteur :</label>
                 <input type="text" name="post_author" id="post_author" value="'.$author.'" class="long" disabled="disabled" />
                 <input type="hidden" name="user_id" id="user_id" value="'.$p["user_id"].'" />
-                <input type="hidden" name="publisher_id" id="publisher_id" value="'.(isset($p['publisher_id']) ? $p['publisher_id'] : null).'">
+                <input type="hidden" name="publisher_id" id="publisher_id" value="'.($p['publisher_id'] ?? null).'">
             </p>
 ';
 if($_V->isAdmin()) {
@@ -205,7 +207,14 @@ if (auth("admin"))
 {
     $content .= '
             <label for="post_link">Lien :</label>
-            <input type="url" name="post_link" id="post_link" placeholder="http://" value="'.(isset($p['post_link']) ? $p['post_link'] : null).'" class="long" />
+            <input 
+                type="url" 
+                name="post_link" 
+                id="post_link" 
+                placeholder="https://" 
+                value="'.($p['post_link'] ?? null).'" 
+                class="long" 
+            />
             <br /><br />
 
             <label for="post_selected">&Agrave; la une :</label>
@@ -220,17 +229,17 @@ $content .= '
             <legend>Illustration</legend>
             <p>
                 <label for="post_illustration">Image :</label>
-                '.(isset($post_illustration_upload) ? $post_illustration_upload : null).'
+                '.($post_illustration_upload).'
             </p>
             <p>
                 <label for="post_illustration_legend">L&eacute;gende :</label>
-                <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="'.(isset($p['post_illustration_legend']) ? $p['post_illustration_legend'] : null).'" maxlength=64 class="long" />
+                <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="'.($p['post_illustration_legend'] ?? null).'" maxlength=64 class="long" />
             </p>
             <p>Cette image (au format JPEG) sera utilis&eacute;e comme vignette pour les aperçus du billet sur le site ou sur les r&eacute;seaux sociaux. Taille minimale conseillée pour Facebook : 1200 x 627 pixels.</p>
         </fieldset>
         <fieldset>
             <legend>Contenu</legend>
-            <textarea id="post_content" name="post_content" class="wysiwyg">'.(isset($p['post_content']) ? $p['post_content'] : null).'</textarea>
+            <textarea id="post_content" name="post_content" class="wysiwyg">'.($p['post_content'] ?? null).'</textarea>
         </fieldset>
 
         <fieldset class="center">
@@ -258,26 +267,28 @@ $content .= '
 
         <p>
             <label for="post_id" class="disabled">Billet n&deg;</label>
-            <input type="text" name="post_id" id="post_id" value="'.(isset($p['post_id']) ? $p['post_id'] : null).'" readonly>
+            <input type="text" name="post_id" id="post_id" value="'.($p['post_id'] ?? null).'" readonly>
         </p>
 
         <p>
             <label for="post_url">Adresse du billet :</label>
-            <input type="hidden" name="post_url_old" value='.(isset($p['post_url']) ? $p['post_url'] : null).'>
-            <input type="text" name="post_url" id="post_url" value="'.(isset($p['post_url']) ? $p['post_url'] : null).'" placeholder="Champ rempli automatiquement" class="long" />
+            <input type="hidden" name="post_url_old" value='.($p['post_url'] ?? null).'>
+            <input type="text" name="post_url" id="post_url" value="'.($p['post_url'] ?? null).'" placeholder="Champ rempli automatiquement" class="long" />
         </p>
         <br>
 
         <p>
             <label for="post_insert" class="readonly">Billet cr&eacute;&eacute; le :</label>
-            <input type="text" name="post_insert" id="post_insert" value="'.(isset($p['post_insert']) ? $p['post_insert'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
+            <input type="text" name="post_insert" id="post_insert" value="'.($p['post_insert'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
         <p>
             <label for="post_update" class="readonly">Billet modifi&eacute; le :</label>
-            <input type="text" name="post_update" id="post_update" value="'.(isset($p['post_update']) ? $p['post_update'] : null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
+            <input type="text" name="post_update" id="post_update" value="'.($p['post_update'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
     </fieldset>
 </form>
 ';
+
+$request->attributes->set("page_title", $pageTitle);
 
 return new Symfony\Component\HttpFoundation\Response($content);
