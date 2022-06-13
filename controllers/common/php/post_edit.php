@@ -37,10 +37,11 @@ if ($request->getMethod() === 'POST') {
     $post->set('post_url', $postUrl);
 
     // Illustration
+    $illustration = new Media("post", $post->get("id"));
     if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
-        media_upload("post", $post->get("id"));
+        $illustration->upload($_FILES["post_illustration_upload"]["tmp_name"]);
     } elseif (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
-        media_delete("post", $post->get("id"));
+        $illustration->delete();
         unset($_POST["post_illustration_delete"]);
     }
 

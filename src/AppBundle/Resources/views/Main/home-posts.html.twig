@@ -14,7 +14,7 @@
           {% if post.has('category') %} dans {{ post.category.name }} {% endif %}
         </p>
       </header>
-      {% if post.content %}
+      {% if post.has("content") %}
         <section class="content">
           {{ post.content|raw }}
         </section>
