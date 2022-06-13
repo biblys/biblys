@@ -350,17 +350,6 @@ function auth($type = 'user')
     return false;
 }
 
-function urlp($url, $params)
-{
-    if (strstr($url, '?')) {
-        $signe = '&';
-    } else {
-        $signe = '?';
-    }
-
-    return $url . $signe . $params;
-}
-
 function authors($x, $m = null)
 {
     $x = explode(',', $x);
@@ -376,44 +365,6 @@ function authors($x, $m = null)
         return $x[0] . ' & ' . $x[1];
     } else {
         return $x[0];
-    }
-}
-
-// Formatage du bb code
-function bbcode($var)
-{
-    $search = [
-        '/\[b\](.*?)\[\/b\]/is',
-        '/\[i\](.*?)\[\/i\]/is',
-        '/\[u\](.*?)\[\/u\]/is',
-        '/\[img\](.*?)\[\/img\]/is',
-        '/\[url\](.*?)\[\/url\]/is',
-        '/\[url\=(.*?)\](.*?)\[\/url\]/is',
-    ];
-
-    $replace = [
-        '<strong>$1</strong>',
-        '<em>$1</em>',
-        '<u>$1</u>',
-        '<img src="$1" />',
-        '<a href="$1">$1</a>',
-        '<a href="$1">$2</a>',
-    ];
-    $var = preg_replace($search, $replace, $var);
-
-    return $var;
-}
-
-function cache($etag)
-{
-    global $_LOG;
-    global $_SITE;
-    $etag = 'W/"' . md5($_SITE['site_version'] . $_LOG['user_id'] . $_SERVER['HTTP_ACCEPT_ENCODING'] . $etag) . '"';
-    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
-        header('HTTP/1.1 304 Not Modified');
-        exit;
-    } else {
-        header('Etag: ' . $etag);
     }
 }
 
@@ -531,14 +482,6 @@ function _date($dateToFormat, $format = 'd-m-Y')
     return strtr($format, $trans);
 }
 
-function userE()
-{
-    global $_LOG;
-    if ('Mme' == $_LOG['user_title'] or 'Mlle' == $_LOG['user_title']) {
-        return 'e';
-    }
-}
-
 function e404($debug = 'e404 function called without debug info')
 {
     throw new Symfony\Component\Routing\Exception\ResourceNotFoundException($debug);
@@ -555,32 +498,6 @@ function error($x, $t = 'MySQL')
     }
     if ('404' != $t) {
         trigger_error($x, E_USER_ERROR);
-    }
-}
-
-// Calcul de la date d'expédition
-function expdate($date = 'today', $format = 'none')
-{
-    if ('today' == $date) {
-        $date = date('Y-m-d H:m:s');
-    }
-    $d = 0;
-    if (('Mon' == date('D', strtotime($date))) && (date('G', strtotime($date)) > '19')) {
-        $d += 2;
-    } // A partir de jeudi 20h, on passe au vendredi suivant
-    $expDay = null;
-    while ('Tue' != $expDay) {
-        $expDate = date('Y-m-d', strtotime("$date + $d day"));
-        $expDay = date('D', strtotime("$date + $d day"));
-        ++$d;
-    }
-    //$expDate = "2014-01-04"; // Forcer la date d'expedition
-    if ('none' == $format) {
-        return $expDate;
-    } elseif ('days' == $format) {
-        return $d;
-    } else {
-        return _date($expDate, $format);
     }
 }
 
@@ -629,17 +546,6 @@ function media_url($type, $id, $size = '0')
     }
 
     return 'https://' . $host . '/' . $type . '/' . file_dir($id) . '/' . $id . $size . '.' . $ext;
-}
-
-// path
-function media_path($type, $id)
-{
-    if (strstr($type, 'ebook-')) { // ebook
-        $ext = str_replace('ebook-', '', $type);
-        $path = BIBLYS_PATH . 'dl/' . $ext . '/' . file_dir($id) . '/' . $id . '.' . $ext;
-    }
-
-    return $path;
 }
 
 // supprimer
@@ -701,44 +607,6 @@ function media_exists($type, $id)
     } else {
         return false;
     }
-}
-
-// uploader
-function media_upload($type, $id)
-{
-    trigger_error("media_upload is deprecated. Use Media->upload instead.", E_USER_DEPRECATED);
-
-    global $_FILES;
-    media_delete($type, $id);
-    if ('post' == $type) {
-        move_uploaded_file($_FILES['post_illustration_upload']['tmp_name'], MEDIA_PATH . '/post/' . file_dir($id) . '/' . $id . '.jpg') or die('error');
-
-        return 1;
-    } elseif ('event' == $type) {
-        move_uploaded_file($_FILES['event_image']['tmp_name'], MEDIA_PATH . '/event/' . file_dir($id) . '/' . $id . '.jpg') or die('media upload error');
-
-        return 1;
-    } elseif ('publisher' == $type) {
-        move_uploaded_file($_FILES['publisher_logo_upload']['tmp_name'], MEDIA_PATH . '/publisher/' . file_dir($id) . '/' . $id . '.png') or die('error');
-
-        return 1;
-    } elseif ('article' == $type || 'book' == $type) {
-        $path = MEDIA_PATH . '/book/' . file_dir($id) . '/' . $id . '.jpg';
-        $field = 'cover';
-    } elseif ('extrait' == $type) {
-        $path = MEDIA_PATH . '/extrait/' . file_dir($id) . '/' . $id . '.pdf';
-        $field = 'excerpt';
-    } elseif ('ebook-pdf' == $type) {
-        $path = BIBLYS_PATH . 'dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
-        $field = 'pdf';
-    } elseif ('ebook-epub' == $type) {
-        $path = BIBLYS_PATH . 'dl/epub/' . file_dir($id) . '/' . $id . '.epub';
-        $field = 'epub';
-    } elseif ('ebook-azw' == $type) {
-        $path = BIBLYS_PATH . 'dl/azw/' . file_dir($id) . '/' . $id . '.azw';
-        $field = 'azw';
-    }
-    move_uploaded_file($_FILES['article_' . $field . '_upload']['tmp_name'], $path);
 }
 
 function numero($x, $b = ' n&deg;&nbsp;')
@@ -805,13 +673,6 @@ function redirect($url, $params = null, $text = null, $status = 302): void
     die();
 }
 
-function root($x)
-{
-    if (auth('root')) {
-        die($x);
-    }
-}
-
 function s($x, $s = null, $p = null)
 {
     if (empty($p) and $x > 1) {
@@ -820,13 +681,6 @@ function s($x, $s = null, $p = null)
         return $s;
     } elseif (isset($p) and $x > 1) {
         return $p;
-    }
-}
-
-function test($x)
-{
-    if (auth('root')) {
-        echo 'Test : ' . $x;
     }
 }
 
@@ -1178,15 +1032,6 @@ function share_buttons($url, $text = null, $options = [])
                 ' . join($buttons) . '
             </ul>
         ';
-}
-
-// Verif adresse mail
-function check_email($email_address)
-{
-    if (preg_match(";^(?=.{4,256}$)((?=.{1,64}(?!.+@))((((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?[\x41-\x5A\x61-\x7A\x30-\x39\x21\x23-\x27\x2A\x2B\\x2D\x2F\x3D\x3F\x5E-\x60\x7B-\x7E]+(\.[\x41-\x5A\x61-\x7A\x30-\x39\x21\x23-\x27\x2A\x2B\\x2D\x2F\x3D\x3F\x5E-\x60\x7B-\x7E]+)*((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|(((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\x22((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21\x23-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\x22((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)))@((?=.{1,255}$)(((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?(?!(.*\.|)([\x30-\x39]{2,64}|.)($|\())(?=(.{1,63}(\.|$|\())+)(?!(-.*)|(.*-($|\()))(?!.*-\.)[\x41-\x5A\x61-\x7A\x30-\x39\\x2D]+(\.[\x41-\x5A\x61-\x7A\x30-\x39\\x2D]+)*((((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]|\(((([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?([\x21-\x27\x2A-\x5B\\x5D-\x7E]|\\\\[\x21-\x7E\x20\x09]))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\)))*(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?\))+(([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?)|([\x20\x09]*\x0D\x0A)?[\x20\x09]+)?|\[((\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})(\.(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})){3}|IPv6\x3A([\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){7}|(?=((\x3A\x3A)?(([^\x3A]*)(\x3A|\x3A\x3A|(?=\]))){0,6}\]))([\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){0,5})?\x3A\x3A([\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){0,5})?|[\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){5}\x3A(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})(\.(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})){3}|(?=((\x3A\x3A)?(([^\x3A]*)(\x3A|\x3A\x3A)){0,4}(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})(\.(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})){3}\]))([\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){0,3})?\x3A\x3A([\x30-\x39\x41-\x46\x61-\x66]{1,4}(\x3A[\x30-\x39\x41-\x46\x61-\x66]{1,4}){0,3}\x3A)?(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})(\.(\x32\x35[\x30-\x35]|\x32[\x30-\x34][\x30-\x39]|[\x30\x31]?[\x30-\x39]{1,2})){3}))\]))$;ius", $email_address)) {
-        return true;
-    }    // Return affirmative if successful match
-    return false; // No successful match was made - Return Negatory
 }
 
 // Returns site controller if it exists, or default controller, or false
