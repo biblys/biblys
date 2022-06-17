@@ -384,6 +384,7 @@ class ModelFactory
     {
         $publisher = new Publisher();
         $publisher->setName($attributes["name"] ?? "Les Éditions Paronymie");
+        $publisher->setUrl($attributes["url"] ?? "les-editions-paronymie.com");
         $publisher->save();
 
         return $publisher;
