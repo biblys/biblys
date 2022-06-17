@@ -524,7 +524,9 @@ function json_error($errno, $errstr, $errfile = null, $errline = null, $errconte
 
 //** MEDIAS **//
 
-// url
+/**
+ * @deprecated Use Media->getUrl instead
+ */
 function media_url($type, $id, $size = '0')
 {
     $host = 'media.biblys.fr';
@@ -548,7 +550,9 @@ function media_url($type, $id, $size = '0')
     return 'https://' . $host . '/' . $type . '/' . file_dir($id) . '/' . $id . $size . '.' . $ext;
 }
 
-// supprimer
+/**
+ * @deprecated Use Media->delete() instead
+ */
 function media_delete($type, $id)
 {
     if (media_exists($type, $id)) {
@@ -579,8 +583,11 @@ function media_delete($type, $id)
     }
 }
 
-// tester la presence
-function media_exists($type, $id)
+
+/**
+ * @deprecated Use Media->exists() instead
+ */
+function media_exists($type, $id): bool
 {
     if ('article' == $type) {
         $type = 'book';
