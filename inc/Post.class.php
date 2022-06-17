@@ -4,6 +4,16 @@
     {
         protected $prefix = 'post';
 
+        /**
+         * @var Media
+         */
+        private $illustration = null;
+
+        /**
+         * @var Publisher
+         */
+        private $publisher = null;
+
         public function __construct($data)
         {
             /* JOINS */
@@ -16,25 +26,19 @@
             $cm = new CategoryManager();
             if (isset($data['category_id'])) $data['category'] = $cm->get(array('category_id' => $data['category_id']));
 
-            // Illustration
-            if (isset($data['post_id']) && media_exists("post", $data['post_id']))
-            {
-                $data['illustration']['url'] = media_url("post", $data["post_id"]);
-                $data['illustration']['legend'] = $data["post_illustration_legend"];
-            }
-
             parent::__construct($data);
         }
 
-        public function getIllustration()
+        public function getIllustration(): Media
         {
             if (!isset($this->illustration)) {
                 $this->illustration = new Media('post', $this->get('id'));
             }
+
             return $this->illustration;
         }
 
-        public function hasIllustration()
+        public function hasIllustration(): bool
         {
             $illustration = $this->getIllustration();
             if (!isset($this->illustrationExists)) {
@@ -43,7 +47,7 @@
             return $this->illustrationExists;
         }
 
-        public function getIllustrationTag()
+        public function getIllustrationTag(): string
         {
             $illustration = $this->getIllustration();
             return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'" class="illustration">';
@@ -60,27 +64,31 @@
 
         /**
          * Get related publisher
-         * @return {Publisher} or false
          */
-        public function getPublisher()
+        public function getPublisher(): ?Publisher
         {
-            if (!isset($this->publisher)) {
-                if (!$this->has('publisher_id')) {
-                    $this->publisher = false;
-                }
-
-                $pm = new PublisherManager();
-                $this->publisher = $pm->getById($this->get('publisher_id'));
+            if (isset($this->publisher)) {
+                return $this->publisher;
             }
 
+            $publisher = null;
+            if ($this->has('publisher_id')) {
+                $pm = new PublisherManager();
+                $publisher = $pm->getById($this->get('publisher_id'));
+                if ($publisher === false) {
+                    $publisher = null;
+                }
+            }
+
+            $this->publisher = $publisher;
             return $this->publisher;
         }
 
         /**
          * Get related articles
-         * @return {array} of {Articles}
+         * @return Article[]
          */
-        public function getArticles()
+        public function getArticles(): array
         {
             $lm = new LinkManager();
             $am = new ArticleManager();
@@ -101,9 +109,9 @@
 
         /**
          * Get related (linked) people
-         * @return {array} of {People}
+         * @return People[]
          */
-        public function getRelatedPeople()
+        public function getRelatedPeople(): array
         {
 
             $lm = new LinkManager();
@@ -120,9 +128,10 @@
 
         /**
          * Test if user can delete post
-         * @return {boolean} true if user is admin or post's author
+         * @param User $user
+         * @return bool true if user is admin or post's author
          */
-        public function canBeDeletedBy(User $user)
+        public function canBeDeletedBy(User $user): bool
         {
             if ($user->isAdmin()) {
                 return true;
@@ -140,15 +149,11 @@
          */
         public function getPrevPost()
         {
-            global $_SQL;
-
             $pm = new PostManager();
-            $prev = $pm->get(
+            return $pm->get(
                 ['post_date' => '< '.$this->get('date')],
                 ['order' => 'post_date', 'sort' => 'desc']
             );
-
-            return $prev;
         }
 
         /**
@@ -156,12 +161,8 @@
          */
         public function getNextPost()
         {
-            global $_SQL;
-
             $pm = new PostManager();
-            $next = $pm->get(['post_date' => '> '.$this->get('date')]);
-
-            return $next;
+            return $pm->get(['post_date' => '> '.$this->get('date')]);
         }
     }
 
@@ -172,13 +173,16 @@
                   $object = 'Post',
                   $siteAgnostic = false;
 
+        /**
+         * @throws Exception
+         */
         public function create(array $defaults = array())
         {
             if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
             return parent::create($defaults);
         }
 
-        public function getAll(array $where = array(), array $options = array(), $withJoins = true)
+        public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
         {
             $where['posts`.`site_id'] = $this->site['site_id'];
             return parent::getAll($where, $options);

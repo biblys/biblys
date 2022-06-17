@@ -128,7 +128,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $publisher = $pum->create(['publisher_name' => 'Éditeur']);
         $postWithPublisher = $pm->create(["publisher_id" => $publisher->get("id")]);
 
-        $this->assertFalse($postWithoutPublisher->getPublisher());
+        $this->assertNull($postWithoutPublisher->getPublisher());
 
         $postPublisher = $postWithPublisher->getPublisher();
         $this->assertInstanceOf('Publisher', $postPublisher);

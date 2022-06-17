@@ -10,6 +10,11 @@ Améliorations
 - Un filtre "Articles en stock uniquement" a été ajouté à la page des 
   résultats de recherche.
 
+Corrections
+
+- Les illustrations des billets ne s'affichaient pas sur la page d'accueil. 
+  C'est corrigé.
+
 ## 2.61.0 (6 mai 2022)
 
 Améliorations

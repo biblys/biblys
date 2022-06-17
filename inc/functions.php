@@ -527,7 +527,7 @@ function json_error($errno, $errstr, $errfile = null, $errline = null, $errconte
 /**
  * @deprecated Use Media->getUrl instead
  */
-function media_url($type, $id, $size = '0')
+function media_url($type, $id, $size = '0'): string
 {
     $host = 'media.biblys.fr';
 
