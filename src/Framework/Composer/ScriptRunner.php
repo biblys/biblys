@@ -25,8 +25,7 @@ class ScriptRunner
         }
         putenv('COMPOSER_HOME='.$composer_home);
 
-        // Change directory to Biblys root
-        chdir(BIBLYS_PATH);
+        chdir(__DIR__."/../../../");
 
         $application = new Application();
         $application->setAutoExit(false);
