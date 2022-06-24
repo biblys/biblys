@@ -28,3 +28,4 @@ app/
 yarn-error.log
 node_modules
 .phpunit.result.cache
+data
