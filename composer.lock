@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83d3171f1acdb8ec9a30a215fa6304d8",
+    "content-hash": "38a9bf430d6e1940ecf8251eaae93ff8",
     "packages": [
         {
             "name": "biblys/data-client-php",
@@ -9537,7 +9537,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "swiftmailer/swiftmailer": 0,
-        "propel/propel": 15,
+        "propel/propel": 10,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

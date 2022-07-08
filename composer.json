@@ -60,7 +60,7 @@
     "egulias/email-validator": "3.1.2",
     "symfony/mime": "^5.2",
     "rollbar/rollbar": "~2.1",
-    "propel/propel": "^2.0.0-alpha12",
+    "propel/propel": "2.0.0-beta1",
     "ircmaxell/random-lib": "^1.2",
     "symfony/filesystem": "^5.4",
     "league/csv": "^9.7",
