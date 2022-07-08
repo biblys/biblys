@@ -36,6 +36,7 @@ class ArticleController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
      */
     public function showAction(Request $request, $slug)
     {
@@ -106,6 +107,7 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws PropelException
      */
     public function searchAction(Request $request, CurrentSite $currentSite): Response
     {
@@ -295,6 +297,7 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws PropelException
      */
     public function deletedAction(Request $request): Response
     {
@@ -434,6 +437,7 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function searchTermsAction(Request $request, UrlGenerator $urlGenerator)
     {
@@ -494,6 +498,7 @@ class ArticleController extends Controller
      * @return JsonResponse
      * @throws AuthException
      * @throws PropelException
+     * @throws Exception
      */
     public function refreshSearchTermsAction(Request $request, $id): JsonResponse
     {
@@ -597,6 +602,7 @@ class ArticleController extends Controller
      * Update article's publisher stock property
      *
      * @return Response
+     * @throws Exception
      */
     public function updatePublisherStock(Request $request, int $articleId)
     {
