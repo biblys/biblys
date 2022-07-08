@@ -2,7 +2,7 @@
 
 namespace Biblys\Legacy;
 
-use Axys\LegacyClient;
+use Axys\LegacyClient as AxysClient;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Cart;
@@ -304,7 +304,7 @@ class LayoutBuilder
         // Axys
         $currentUser = CurrentUser::buildFromRequest($request);
         $axysConfig = $config->get('axys') ?: [];
-        $axys = new LegacyClient($axysConfig, $currentUser->getToken());
+        $axys = new AxysClient($axysConfig, $currentUser->getToken());
 
         /** @var Site $site */
         if ($site->get('axys') || $currentVisitor->isAdmin()) {
