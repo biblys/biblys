@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.62.0 (DEV)
+## 2.62.0 (8 juillet 2022)
 
 Améliorations
 
