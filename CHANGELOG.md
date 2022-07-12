@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.62.1 (12 juillet 2022)
+
+Corrections
+
+- Une erreur pouvait empêcher l'utilisation des anciens modèles principaux. 
+  C'est corrigé.
+
 ## 2.62.0 (8 juillet 2022)
 
 Améliorations
