@@ -71,10 +71,6 @@ logs:
 #   secret_key: sk_test_4kveWtXiWclDNqqiSZrgekdC
 #   endpoint_secret: whsec_ZPyZqxI7GaUyGplp1LP3lyveOCRPngjg
 
-# data:
-#   server: http://data.biblys.fr
-#   api_key: biblys-key
-
 # recaptcha:
 #   sitekey: recaptcha_sitekey
 #   secret: recaptcha_secret

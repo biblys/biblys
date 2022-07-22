@@ -93,7 +93,6 @@
       <path value="$PROJECT_DIR$/vendor/nesbot/carbon" />
       <path value="$PROJECT_DIR$/vendor/biblys/eurotax" />
       <path value="$PROJECT_DIR$/vendor/biblys/isbn" />
-      <path value="$PROJECT_DIR$/vendor/biblys/data-client-php" />
       <path value="$PROJECT_DIR$/vendor/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/vendor/seld/jsonlint" />
       <path value="$PROJECT_DIR$/vendor/stripe/stripe-php" />

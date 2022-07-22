@@ -5,8 +5,6 @@
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
-use Biblys\Data\Book;
-use Biblys\Data\Client;
 use Biblys\EuroTax;
 use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
@@ -1322,75 +1320,6 @@ class ArticleManager extends EntityManager
     }
 
     /**
-     * Returns articles that need to be pushed to Biblys Data
-     * @return Article[]
-     */
-    public function getArticlesToBePushedToData(): array
-    {
-        return $this->getQuery('
-            `article_ean` IS NOT NULL AND `article_ean` != 0 AND
-            (
-                `article_pushed_to_data` < `article_updated` OR
-                `article_pushed_to_data` IS NULL
-            )
-        ', [], [
-            "limit" => 100,
-            "order" => "article_updated"
-        ], false);
-    }
-
-    /**
-     * Pushes an article to data server
-     * @param Article $article {Article} the article to push
-     * @throws Exception
-     */
-    public function pushToDataServer(Article $article)
-    {
-        global $config;
-
-        if (!$article->has('ean')) {
-            throw new Exception("Article does not have an EAN");
-        }
-
-        $dataConfig = $config->get('data');
-
-        if (!$dataConfig) {
-            return;
-        }
-
-        $book = new Book();
-        $book->setEan($article->get('ean'));
-        $book->setTitle($article->get('title'));
-
-        // Add publisher
-        $pm = new PublisherManager();
-        $article_publisher = $pm->getById($article->get('publisher_id'));
-        $publisher = new \Biblys\Data\Publisher();
-        $publisher->setName($article_publisher->get('name'));
-        $book->setPublisher($publisher);
-
-        // Add authors
-        $authors = $article->getAuthors();
-        foreach ($authors as $author) {
-            $contributor = new \Biblys\Data\Contributor();
-            $contributor->setFirstName($author->get('first_name'));
-            $contributor->setLastName($author->get('last_name'));
-            $book->addAuthor($contributor);
-        }
-
-        $dataParams = ["apiKey" => $dataConfig["api_key"]];
-        if (isset($dataConfig["server"])) {
-            $dataParams["server"] = $dataConfig["server"];
-        }
-
-        $bdc = new Client($dataParams);
-        $bdc->push($book);
-
-        $article->set('article_pushed_to_data', date('Y-d-m H:i:s'));
-        $this->update($article, null, false);
-    }
-
-    /**
      * Add rayon to article (and update article links)
      * @param $article {Article}
      * @param $rayon {Rayon}
@@ -1446,29 +1375,6 @@ class ArticleManager extends EntityManager
         }
 
         return true;
-    }
-
-    /**
-     * Hook to push to data server whenever article is updated
-     * @throws Exception
-     */
-    public function update(
-        $article,
-        $reason = null,
-        $pushToBiblysData = true,
-        $refreshMetadata = false
-    )
-    {
-        $article = parent::update($article);
-
-        global $config;
-        $dataConfig = $config->get('data');
-
-        if ($dataConfig && $pushToBiblysData && $article->has('ean')) {
-            $this->pushToDataServer($this->reload($article));
-        }
-
-        return $article;
     }
 
     /**

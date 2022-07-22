@@ -4,61 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e02bead460be1ac8eaa367c47a4aaaf0",
+    "content-hash": "a1221fbe15a3749251e46b72b91de0c0",
     "packages": [
-        {
-            "name": "biblys/data-client-php",
-            "version": "0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/biblys/biblys-data-client-php.git",
-                "reference": "755f8f61c7369b52e63f54a9a2b7760ef34f0c2b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/biblys/biblys-data-client-php/zipball/755f8f61c7369b52e63f54a9a2b7760ef34f0c2b",
-                "reference": "755f8f61c7369b52e63f54a9a2b7760ef34f0c2b",
-                "shasum": ""
-            },
-            "require": {
-                "biblys/isbn": "~2.0",
-                "guzzlehttp/guzzle": "^6.1",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Biblys": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Clement Bourgoin",
-                    "email": "cb@nokto.net"
-                }
-            ],
-            "description": "Biblys Data PHP client library",
-            "homepage": "https://github.com/biblys/biblys-data-client-php",
-            "keywords": [
-                "Bibliography",
-                "Biblys",
-                "ISBN",
-                "book"
-            ],
-            "support": {
-                "issues": "https://github.com/biblys/biblys-data-client-php/issues",
-                "source": "https://github.com/biblys/biblys-data-client-php/tree/0.3.0"
-            },
-            "abandoned": true,
-            "time": "2016-03-25T00:00:00+00:00"
-        },
         {
             "name": "biblys/eurotax",
             "version": "v1.0.3",
