@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.65.0 (DEV)
+
+Améliorations
+
+- Biblys supporte désormais PHP 8.0.
+
 ### 2.64.3 (23 décembre 2022)
 
 Corrections

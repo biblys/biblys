@@ -2,7 +2,7 @@ version: '3.7'
 services:
   biblys:
     container_name: biblys-dev-env
-    image: biblys/php-dev-env:7.4
+    image: biblys/php-dev-env:8.0
     restart: on-failure
     volumes:
       - './:/usr/src/:cached'
