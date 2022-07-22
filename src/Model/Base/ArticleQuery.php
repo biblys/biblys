@@ -95,7 +95,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery orderByUpdatedAt($order = Criteria::ASC) Order by the article_updated column
  * @method     ChildArticleQuery orderByDone($order = Criteria::ASC) Order by the article_done column
  * @method     ChildArticleQuery orderByToCheck($order = Criteria::ASC) Order by the article_to_check column
- * @method     ChildArticleQuery orderByPushedToData($order = Criteria::ASC) Order by the article_pushed_to_data column
  * @method     ChildArticleQuery orderByDeletionBy($order = Criteria::ASC) Order by the article_deletion_by column
  * @method     ChildArticleQuery orderByDeletionDate($order = Criteria::ASC) Order by the article_deletion_date column
  * @method     ChildArticleQuery orderByDeletionReason($order = Criteria::ASC) Order by the article_deletion_reason column
@@ -174,7 +173,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleQuery groupByUpdatedAt() Group by the article_updated column
  * @method     ChildArticleQuery groupByDone() Group by the article_done column
  * @method     ChildArticleQuery groupByToCheck() Group by the article_to_check column
- * @method     ChildArticleQuery groupByPushedToData() Group by the article_pushed_to_data column
  * @method     ChildArticleQuery groupByDeletionBy() Group by the article_deletion_by column
  * @method     ChildArticleQuery groupByDeletionDate() Group by the article_deletion_date column
  * @method     ChildArticleQuery groupByDeletionReason() Group by the article_deletion_reason column
@@ -316,7 +314,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByUpdatedAt(string $article_updated) Return the first ChildArticle filtered by the article_updated column
  * @method     ChildArticle|null findOneByDone(boolean $article_done) Return the first ChildArticle filtered by the article_done column
  * @method     ChildArticle|null findOneByToCheck(boolean $article_to_check) Return the first ChildArticle filtered by the article_to_check column
- * @method     ChildArticle|null findOneByPushedToData(string $article_pushed_to_data) Return the first ChildArticle filtered by the article_pushed_to_data column
  * @method     ChildArticle|null findOneByDeletionBy(int $article_deletion_by) Return the first ChildArticle filtered by the article_deletion_by column
  * @method     ChildArticle|null findOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column
  * @method     ChildArticle|null findOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column *
@@ -398,7 +395,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByUpdatedAt(string $article_updated) Return the first ChildArticle filtered by the article_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDone(boolean $article_done) Return the first ChildArticle filtered by the article_done column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByToCheck(boolean $article_to_check) Return the first ChildArticle filtered by the article_to_check column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOneByPushedToData(string $article_pushed_to_data) Return the first ChildArticle filtered by the article_pushed_to_data column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionBy(int $article_deletion_by) Return the first ChildArticle filtered by the article_deletion_by column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -553,8 +549,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildArticle> findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
  * @method     ChildArticle[]|Collection findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
  * @psalm-method Collection&\Traversable<ChildArticle> findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
- * @method     ChildArticle[]|Collection findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
- * @psalm-method Collection&\Traversable<ChildArticle> findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
  * @method     ChildArticle[]|Collection findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
  * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
  * @method     ChildArticle[]|Collection findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
@@ -660,7 +654,7 @@ abstract class ArticleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT article_id, article_item, article_textid, article_ean, article_ean_others, article_asin, article_noosfere_id, article_url, type_id, article_title, article_title_alphabetic, article_title_original, article_title_others, article_subtitle, article_lang_current, article_lang_original, article_origin_country, article_theme_bisac, article_theme_clil, article_theme_dewey, article_theme_electre, article_source_id, article_authors, article_authors_alphabetic, collection_id, article_collection, article_number, publisher_id, article_publisher, cycle_id, article_cycle, article_tome, article_cover_version, article_availability, article_availability_dilicom, article_preorder, article_price, article_price_editable, article_new_price, article_category, article_tva, article_pdf_ean, article_pdf_version, article_epub_ean, article_epub_version, article_azw_ean, article_azw_version, article_pages, article_weight, article_shaping, article_format, article_printing_process, article_age_min, article_age_max, article_summary, article_contents, article_bonus, article_catchline, article_biography, article_motsv, article_copyright, article_pubdate, article_keywords, article_links, article_keywords_generated, article_publisher_stock, article_hits, article_editing_user, article_insert, article_update, article_created, article_updated, article_done, article_to_check, article_pushed_to_data, article_deletion_by, article_deletion_date, article_deletion_reason FROM articles WHERE article_id = :p0';
+        $sql = 'SELECT article_id, article_item, article_textid, article_ean, article_ean_others, article_asin, article_noosfere_id, article_url, type_id, article_title, article_title_alphabetic, article_title_original, article_title_others, article_subtitle, article_lang_current, article_lang_original, article_origin_country, article_theme_bisac, article_theme_clil, article_theme_dewey, article_theme_electre, article_source_id, article_authors, article_authors_alphabetic, collection_id, article_collection, article_number, publisher_id, article_publisher, cycle_id, article_cycle, article_tome, article_cover_version, article_availability, article_availability_dilicom, article_preorder, article_price, article_price_editable, article_new_price, article_category, article_tva, article_pdf_ean, article_pdf_version, article_epub_ean, article_epub_version, article_azw_ean, article_azw_version, article_pages, article_weight, article_shaping, article_format, article_printing_process, article_age_min, article_age_max, article_summary, article_contents, article_bonus, article_catchline, article_biography, article_motsv, article_copyright, article_pubdate, article_keywords, article_links, article_keywords_generated, article_publisher_stock, article_hits, article_editing_user, article_insert, article_update, article_created, article_updated, article_done, article_to_check, article_deletion_by, article_deletion_date, article_deletion_reason FROM articles WHERE article_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -3367,51 +3361,6 @@ abstract class ArticleQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TO_CHECK, $toCheck, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the article_pushed_to_data column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPushedToData('2011-03-14'); // WHERE article_pushed_to_data = '2011-03-14'
-     * $query->filterByPushedToData('now'); // WHERE article_pushed_to_data = '2011-03-14'
-     * $query->filterByPushedToData(array('max' => 'yesterday')); // WHERE article_pushed_to_data > '2011-03-13'
-     * </code>
-     *
-     * @param mixed $pushedToData The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByPushedToData($pushedToData = null, ?string $comparison = null)
-    {
-        if (is_array($pushedToData)) {
-            $useMinMax = false;
-            if (isset($pushedToData['min'])) {
-                $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $pushedToData['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($pushedToData['max'])) {
-                $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $pushedToData['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $pushedToData, $comparison);
 
         return $this;
     }

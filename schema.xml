@@ -94,7 +94,6 @@
     <column name="article_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <column name="article_done" phpName="Done" type="BOOLEAN" size="1" defaultValue="false"/>
     <column name="article_to_check" phpName="ToCheck" type="BOOLEAN" size="1" defaultValue="false"/>
-    <column name="article_pushed_to_data" phpName="PushedToData" type="TIMESTAMP"/>
     <column name="article_deletion_by" phpName="DeletionBy" type="INTEGER" size="10" sqlType="int(10) unsigned"/>
     <column name="article_deletion_date" phpName="DeletionDate" type="TIMESTAMP"/>
     <column name="article_deletion_reason" phpName="DeletionReason" type="VARCHAR" size="512"/>

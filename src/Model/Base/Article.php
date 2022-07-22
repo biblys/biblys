@@ -609,13 +609,6 @@ abstract class Article implements ActiveRecordInterface
     protected $article_to_check;
 
     /**
-     * The value for the article_pushed_to_data field.
-     *
-     * @var        DateTime|null
-     */
-    protected $article_pushed_to_data;
-
-    /**
      * The value for the article_deletion_by field.
      *
      * @var        int|null
@@ -1796,28 +1789,6 @@ abstract class Article implements ActiveRecordInterface
     public function isToCheck()
     {
         return $this->getToCheck();
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [article_pushed_to_data] column value.
-     *
-     *
-     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
-     *   If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
-     *
-     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
-     *
-     * @psalm-return ($format is null ? DateTime|null : string|null)
-     */
-    public function getPushedToData($format = null)
-    {
-        if ($format === null) {
-            return $this->article_pushed_to_data;
-        } else {
-            return $this->article_pushed_to_data instanceof \DateTimeInterface ? $this->article_pushed_to_data->format($format) : null;
-        }
     }
 
     /**
@@ -3383,26 +3354,6 @@ abstract class Article implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [article_pushed_to_data] column to a normalized version of the date/time value specified.
-     *
-     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this The current object (for fluent API support)
-     */
-    public function setPushedToData($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->article_pushed_to_data !== null || $dt !== null) {
-            if ($this->article_pushed_to_data === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->article_pushed_to_data->format("Y-m-d H:i:s.u")) {
-                $this->article_pushed_to_data = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    }
-
-    /**
      * Set the value of [article_deletion_by] column.
      *
      * @param int|null $v New value
@@ -3786,22 +3737,16 @@ abstract class Article implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 73 + $startcol : ArticleTableMap::translateFieldName('ToCheck', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_to_check = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 74 + $startcol : ArticleTableMap::translateFieldName('PushedToData', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->article_pushed_to_data = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 75 + $startcol : ArticleTableMap::translateFieldName('DeletionBy', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 74 + $startcol : ArticleTableMap::translateFieldName('DeletionBy', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_deletion_by = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 76 + $startcol : ArticleTableMap::translateFieldName('DeletionDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 75 + $startcol : ArticleTableMap::translateFieldName('DeletionDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->article_deletion_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 77 + $startcol : ArticleTableMap::translateFieldName('DeletionReason', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 76 + $startcol : ArticleTableMap::translateFieldName('DeletionReason', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_deletion_reason = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -3811,7 +3756,7 @@ abstract class Article implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 78; // 78 = ArticleTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 77; // 77 = ArticleTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Article'), 0, $e);
@@ -4342,9 +4287,6 @@ abstract class Article implements ActiveRecordInterface
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_TO_CHECK)) {
             $modifiedColumns[':p' . $index++]  = 'article_to_check';
         }
-        if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA)) {
-            $modifiedColumns[':p' . $index++]  = 'article_pushed_to_data';
-        }
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_DELETION_BY)) {
             $modifiedColumns[':p' . $index++]  = 'article_deletion_by';
         }
@@ -4586,9 +4528,6 @@ abstract class Article implements ActiveRecordInterface
                         break;
                     case 'article_to_check':
                         $stmt->bindValue($identifier, (int) $this->article_to_check, PDO::PARAM_INT);
-                        break;
-                    case 'article_pushed_to_data':
-                        $stmt->bindValue($identifier, $this->article_pushed_to_data ? $this->article_pushed_to_data->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'article_deletion_by':
                         $stmt->bindValue($identifier, $this->article_deletion_by, PDO::PARAM_INT);
@@ -4884,15 +4823,12 @@ abstract class Article implements ActiveRecordInterface
                 return $this->getToCheck();
 
             case 74:
-                return $this->getPushedToData();
-
-            case 75:
                 return $this->getDeletionBy();
 
-            case 76:
+            case 75:
                 return $this->getDeletionDate();
 
-            case 77:
+            case 76:
                 return $this->getDeletionReason();
 
             default:
@@ -4997,10 +4933,9 @@ abstract class Article implements ActiveRecordInterface
             $keys[71] => $this->getUpdatedAt(),
             $keys[72] => $this->getDone(),
             $keys[73] => $this->getToCheck(),
-            $keys[74] => $this->getPushedToData(),
-            $keys[75] => $this->getDeletionBy(),
-            $keys[76] => $this->getDeletionDate(),
-            $keys[77] => $this->getDeletionReason(),
+            $keys[74] => $this->getDeletionBy(),
+            $keys[75] => $this->getDeletionDate(),
+            $keys[76] => $this->getDeletionReason(),
         ];
         if ($result[$keys[61]] instanceof \DateTimeInterface) {
             $result[$keys[61]] = $result[$keys[61]]->format('Y-m-d');
@@ -5026,12 +4961,8 @@ abstract class Article implements ActiveRecordInterface
             $result[$keys[71]] = $result[$keys[71]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[74]] instanceof \DateTimeInterface) {
-            $result[$keys[74]] = $result[$keys[74]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[76]] instanceof \DateTimeInterface) {
-            $result[$keys[76]] = $result[$keys[76]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[75]] instanceof \DateTimeInterface) {
+            $result[$keys[75]] = $result[$keys[75]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -5374,15 +5305,12 @@ abstract class Article implements ActiveRecordInterface
                 $this->setToCheck($value);
                 break;
             case 74:
-                $this->setPushedToData($value);
-                break;
-            case 75:
                 $this->setDeletionBy($value);
                 break;
-            case 76:
+            case 75:
                 $this->setDeletionDate($value);
                 break;
-            case 77:
+            case 76:
                 $this->setDeletionReason($value);
                 break;
         } // switch()
@@ -5634,16 +5562,13 @@ abstract class Article implements ActiveRecordInterface
             $this->setToCheck($arr[$keys[73]]);
         }
         if (array_key_exists($keys[74], $arr)) {
-            $this->setPushedToData($arr[$keys[74]]);
+            $this->setDeletionBy($arr[$keys[74]]);
         }
         if (array_key_exists($keys[75], $arr)) {
-            $this->setDeletionBy($arr[$keys[75]]);
+            $this->setDeletionDate($arr[$keys[75]]);
         }
         if (array_key_exists($keys[76], $arr)) {
-            $this->setDeletionDate($arr[$keys[76]]);
-        }
-        if (array_key_exists($keys[77], $arr)) {
-            $this->setDeletionReason($arr[$keys[77]]);
+            $this->setDeletionReason($arr[$keys[76]]);
         }
 
         return $this;
@@ -5910,9 +5835,6 @@ abstract class Article implements ActiveRecordInterface
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_TO_CHECK)) {
             $criteria->add(ArticleTableMap::COL_ARTICLE_TO_CHECK, $this->article_to_check);
         }
-        if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA)) {
-            $criteria->add(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $this->article_pushed_to_data);
-        }
         if ($this->isColumnModified(ArticleTableMap::COL_ARTICLE_DELETION_BY)) {
             $criteria->add(ArticleTableMap::COL_ARTICLE_DELETION_BY, $this->article_deletion_by);
         }
@@ -6083,7 +6005,6 @@ abstract class Article implements ActiveRecordInterface
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setDone($this->getDone());
         $copyObj->setToCheck($this->getToCheck());
-        $copyObj->setPushedToData($this->getPushedToData());
         $copyObj->setDeletionBy($this->getDeletionBy());
         $copyObj->setDeletionDate($this->getDeletionDate());
         $copyObj->setDeletionReason($this->getDeletionReason());
@@ -7152,7 +7073,6 @@ abstract class Article implements ActiveRecordInterface
         $this->article_updated = null;
         $this->article_done = null;
         $this->article_to_check = null;
-        $this->article_pushed_to_data = null;
         $this->article_deletion_by = null;
         $this->article_deletion_date = null;
         $this->article_deletion_reason = null;
