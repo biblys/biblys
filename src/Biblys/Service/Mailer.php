@@ -8,67 +8,70 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use InvalidArgumentException;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SendmailTransport;
-use Swift_SmtpTransport;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\SendmailTransport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 /**
  * SwiftMailer wrapper
  */
 class Mailer
 {
-    private $transport;
-    private $mailer;
-    private $from;
-    private $method;
+    private TransportInterface $transport;
+    private \Symfony\Component\Mailer\Mailer $mailer;
+    private Address $defaultSender;
+    private string $method = "sendmail";
 
     public function __construct()
     {
         global $site, $config;
 
-        // Default from: site contact address
-        $this->from = [$site->get('site_contact') => $site->get('site_title')];
+        $this->defaultSender = new Address($site->get("site_contact"), $site->get("site_title"));
+        $this->transport = new SendmailTransport();
 
-        // Default mailer: php mail() function
-        $this->method = 'sendmail';
-        $this->transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
-
-        // If a SMTP config is defined
-        $smtp = $config->get('smtp');
+        // If an SMTP config is defined
+        $smtp = $config->get("smtp");
         if ($smtp) {
-            $this->method = 'smtp';
-            $this->transport = new Swift_SmtpTransport(
-                $smtp['host'] ?? 'localhost',
-                $smtp['port'] ?? 25,
-                $smtp['encryption'] ?? null
-            );
-            $this->transport->setUsername($smtp['user']);
-            $this->transport->setPassword($smtp['pass']);
+            $this->method = "smtp";
+            $smtpDsn = "smtp://{$smtp["user"]}:{$smtp["pass"]}@{$smtp["host"]}:{$smtp["port"]}";
+            $this->transport = Transport::fromDsn($smtpDsn);
         }
 
         // Create mailer with defined transport
-        $this->mailer = new Swift_Mailer($this->transport);
+        $this->mailer = new \Symfony\Component\Mailer\Mailer($this->transport);
     }
 
     /**
      * Send an email using Mailer
      *
-     * @param $to
-     * @param $subject
-     * @param $body
+     * @param string $to
+     * @param string $subject
+     * @param string $body
      * @param array $from ["email" => "name"]
      * @param array $options
      * @param array $headers
      * @return bool [bool]          true if mail was sent
+     * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function send($to, $subject, $body, array $from = [], array $options = [], array $headers = []): bool
+    public function send(
+        string $to,
+        string $subject,
+        string $body,
+        array $from = [],
+        array $options = [],
+        array $headers = []
+    ): bool
     {
-
-        $from = count($from) > 0 ? $from : $this->from;
-        if (count($from) === 0) {
-            throw new Exception("Cannot send mail without sender");
+        $sender = $this->defaultSender;
+        if (count($from) > 0) {
+            $senderEmail = array_keys($from)[0];
+            $senderName = array_values($from)[0];
+            $this->validateEmail($senderEmail);
+            $sender = new Address($senderEmail, $senderName);
         }
 
         $this->validateEmail($to);
@@ -77,16 +80,16 @@ class Mailer
         }
 
         // Create message
-        $message = new Swift_Message();
-        $message->setFrom($from)
-            ->setTo($to)
-            ->setSubject($subject)
-            ->setBody($body, 'text/html');
+        $message = new Email();
+        $message->from($sender)
+            ->to($to)
+            ->subject($subject)
+            ->html($body, 'text/html');
 
         // Reply-to
         if (isset($options["reply-to"])) {
             $this->validateEmail($options["reply-to"]);
-            $message->setReplyTo($options["reply-to"]);
+            $message->replyTo($options["reply-to"]);
         }
 
         // CC
@@ -107,17 +110,13 @@ class Mailer
         }
 
         // Send mail
-        $this->mailer->send($message, $errors);
+        $this->mailer->send($message);
 
         // Log
         Log::mail(
             "INFO",
             "Sent mail \"$subject\" to \"$to\" through " . $this->method
         );
-
-        if ($errors) {
-            trigger_error('Error: ' . implode($errors));
-        }
 
         return true;
     }

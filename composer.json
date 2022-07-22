@@ -32,7 +32,6 @@
     "symfony/routing": "^4.4.3",
     "symfony/var-dumper": "~5.1",
     "symfony/http-kernel": "^4.4",
-    "swiftmailer/swiftmailer": "@stable",
     "symfony/yaml": "^5.2",
     "symfony/config": "^4.3",
     "monolog/monolog": "^2.0",
@@ -66,7 +65,8 @@
     "steverhoades/oauth2-openid-connect-client": "^0.4.0",
     "ext-dom": "*",
     "ext-libxml": "*",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "symfony/mailer": "^5.4"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",

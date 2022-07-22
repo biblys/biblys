@@ -3,11 +3,15 @@
 namespace Biblys\Service;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 require_once __DIR__."/../../setUp.php";
 
 class MailerTest extends TestCase
 {
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function testInvalidToEmail()
     {
         $this->expectException("InvalidArgumentException");
@@ -24,8 +28,12 @@ class MailerTest extends TestCase
         );
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function testInvalidFromEmail()
     {
+        // then
         $this->expectException("InvalidArgumentException");
         $this->expectExceptionMessage("L'adresse vendor.4.@biblys.fr est invalide.");
 
@@ -41,6 +49,9 @@ class MailerTest extends TestCase
         );
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function testInvalidReplyToEmail()
     {
         $this->expectException("InvalidArgumentException");
