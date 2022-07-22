@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -156,8 +157,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\SiteQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildUser|null findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
- * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
+ * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
+ * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
  *
  * @method     ChildUser|null findOneById(int $id) Return the first ChildUser filtered by the id column
  * @method     ChildUser|null findOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column
@@ -197,8 +198,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser|null findOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column
  * @method     ChildUser|null findOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column *
 
- * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requirePk($key, ?ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser requireOneById(int $id) Return the first ChildUser filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneBySiteId(int $site_id) Return the first ChildUser filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -238,84 +239,84 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByCreatedAt(string $user_created) Return the first ChildUser filtered by the user_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByUpdatedAt(string $user_updated) Return the first ChildUser filtered by the user_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildUser> find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @method     ChildUser[]|ObjectCollection findById(int $id) Return ChildUser objects filtered by the id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findById(int $id) Return ChildUser objects filtered by the id column
- * @method     ChildUser[]|ObjectCollection findBySiteId(int $site_id) Return ChildUser objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findBySiteId(int $site_id) Return ChildUser objects filtered by the site_id column
- * @method     ChildUser[]|ObjectCollection findByEmail(string $Email) Return ChildUser objects filtered by the Email column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByEmail(string $Email) Return ChildUser objects filtered by the Email column
- * @method     ChildUser[]|ObjectCollection findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
- * @method     ChildUser[]|ObjectCollection findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
- * @method     ChildUser[]|ObjectCollection findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
- * @method     ChildUser[]|ObjectCollection findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
- * @method     ChildUser[]|ObjectCollection findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
- * @method     ChildUser[]|ObjectCollection findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
- * @method     ChildUser[]|ObjectCollection findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
- * @method     ChildUser[]|ObjectCollection findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
- * @method     ChildUser[]|ObjectCollection findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
- * @method     ChildUser[]|ObjectCollection findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
- * @method     ChildUser[]|ObjectCollection findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
- * @method     ChildUser[]|ObjectCollection findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
- * @method     ChildUser[]|ObjectCollection findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
- * @method     ChildUser[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
- * @method     ChildUser[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
- * @method     ChildUser[]|ObjectCollection findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
- * @method     ChildUser[]|ObjectCollection findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
- * @method     ChildUser[]|ObjectCollection findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
- * @method     ChildUser[]|ObjectCollection findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
- * @method     ChildUser[]|ObjectCollection findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
- * @method     ChildUser[]|ObjectCollection findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
- * @method     ChildUser[]|ObjectCollection findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
- * @method     ChildUser[]|ObjectCollection findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
- * @method     ChildUser[]|ObjectCollection findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
- * @method     ChildUser[]|ObjectCollection findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
- * @method     ChildUser[]|ObjectCollection findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
- * @method     ChildUser[]|ObjectCollection findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
- * @method     ChildUser[]|ObjectCollection findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
- * @method     ChildUser[]|ObjectCollection findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
- * @method     ChildUser[]|ObjectCollection findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
- * @method     ChildUser[]|ObjectCollection findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
- * @method     ChildUser[]|ObjectCollection findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
- * @method     ChildUser[]|ObjectCollection findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
- * @method     ChildUser[]|ObjectCollection findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildUser> findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
- * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildUser[]|Collection find(?ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildUser> find(?ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
+ * @method     ChildUser[]|Collection findById(int $id) Return ChildUser objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildUser> findById(int $id) Return ChildUser objects filtered by the id column
+ * @method     ChildUser[]|Collection findBySiteId(int $site_id) Return ChildUser objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findBySiteId(int $site_id) Return ChildUser objects filtered by the site_id column
+ * @method     ChildUser[]|Collection findByEmail(string $Email) Return ChildUser objects filtered by the Email column
+ * @psalm-method Collection&\Traversable<ChildUser> findByEmail(string $Email) Return ChildUser objects filtered by the Email column
+ * @method     ChildUser[]|Collection findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPassword(string $user_password) Return ChildUser objects filtered by the user_password column
+ * @method     ChildUser[]|Collection findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
+ * @psalm-method Collection&\Traversable<ChildUser> findByKey(string $user_key) Return ChildUser objects filtered by the user_key column
+ * @method     ChildUser[]|Collection findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
+ * @psalm-method Collection&\Traversable<ChildUser> findByEmailKey(string $email_key) Return ChildUser objects filtered by the email_key column
+ * @method     ChildUser[]|Collection findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
+ * @psalm-method Collection&\Traversable<ChildUser> findByFacebookUid(int $facebook_uid) Return ChildUser objects filtered by the facebook_uid column
+ * @method     ChildUser[]|Collection findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
+ * @psalm-method Collection&\Traversable<ChildUser> findByUsername(string $user_screen_name) Return ChildUser objects filtered by the user_screen_name column
+ * @method     ChildUser[]|Collection findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
+ * @psalm-method Collection&\Traversable<ChildUser> findBySlug(string $user_slug) Return ChildUser objects filtered by the user_slug column
+ * @method     ChildUser[]|Collection findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
+ * @psalm-method Collection&\Traversable<ChildUser> findByWishlistShip(boolean $user_wishlist_ship) Return ChildUser objects filtered by the user_wishlist_ship column
+ * @method     ChildUser[]|Collection findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
+ * @psalm-method Collection&\Traversable<ChildUser> findByTop(boolean $user_top) Return ChildUser objects filtered by the user_top column
+ * @method     ChildUser[]|Collection findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
+ * @psalm-method Collection&\Traversable<ChildUser> findByBiblio(boolean $user_biblio) Return ChildUser objects filtered by the user_biblio column
+ * @method     ChildUser[]|Collection findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
+ * @psalm-method Collection&\Traversable<ChildUser> findByAdresseIp(string $adresse_ip) Return ChildUser objects filtered by the adresse_ip column
+ * @method     ChildUser[]|Collection findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
+ * @psalm-method Collection&\Traversable<ChildUser> findByRecaptchaScore(double $recaptcha_score) Return ChildUser objects filtered by the recaptcha_score column
+ * @method     ChildUser[]|Collection findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
+ * @psalm-method Collection&\Traversable<ChildUser> findByDateinscription(string $DateInscription) Return ChildUser objects filtered by the DateInscription column
+ * @method     ChildUser[]|Collection findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
+ * @psalm-method Collection&\Traversable<ChildUser> findByDateconnexion(string $DateConnexion) Return ChildUser objects filtered by the DateConnexion column
+ * @method     ChildUser[]|Collection findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPublisherId(int $publisher_id) Return ChildUser objects filtered by the publisher_id column
+ * @method     ChildUser[]|Collection findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findByBookshopId(int $bookshop_id) Return ChildUser objects filtered by the bookshop_id column
+ * @method     ChildUser[]|Collection findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findByLibraryId(int $library_id) Return ChildUser objects filtered by the library_id column
+ * @method     ChildUser[]|Collection findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
+ * @psalm-method Collection&\Traversable<ChildUser> findByCivilite(string $user_civilite) Return ChildUser objects filtered by the user_civilite column
+ * @method     ChildUser[]|Collection findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
+ * @psalm-method Collection&\Traversable<ChildUser> findByNom(string $user_nom) Return ChildUser objects filtered by the user_nom column
+ * @method     ChildUser[]|Collection findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPrenom(string $user_prenom) Return ChildUser objects filtered by the user_prenom column
+ * @method     ChildUser[]|Collection findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
+ * @psalm-method Collection&\Traversable<ChildUser> findByAdresse1(string $user_adresse1) Return ChildUser objects filtered by the user_adresse1 column
+ * @method     ChildUser[]|Collection findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
+ * @psalm-method Collection&\Traversable<ChildUser> findByAdresse2(string $user_adresse2) Return ChildUser objects filtered by the user_adresse2 column
+ * @method     ChildUser[]|Collection findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
+ * @psalm-method Collection&\Traversable<ChildUser> findByCodepostal(string $user_codepostal) Return ChildUser objects filtered by the user_codepostal column
+ * @method     ChildUser[]|Collection findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
+ * @psalm-method Collection&\Traversable<ChildUser> findByVille(string $user_ville) Return ChildUser objects filtered by the user_ville column
+ * @method     ChildUser[]|Collection findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPays(string $user_pays) Return ChildUser objects filtered by the user_pays column
+ * @method     ChildUser[]|Collection findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
+ * @psalm-method Collection&\Traversable<ChildUser> findByTelephone(string $user_telephone) Return ChildUser objects filtered by the user_telephone column
+ * @method     ChildUser[]|Collection findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPrefArticlesShow(string $user_pref_articles_show) Return ChildUser objects filtered by the user_pref_articles_show column
+ * @method     ChildUser[]|Collection findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findByFbId(string $user_fb_id) Return ChildUser objects filtered by the user_fb_id column
+ * @method     ChildUser[]|Collection findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
+ * @psalm-method Collection&\Traversable<ChildUser> findByFbToken(string $user_fb_token) Return ChildUser objects filtered by the user_fb_token column
+ * @method     ChildUser[]|Collection findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildUser> findByCountryId(int $country_id) Return ChildUser objects filtered by the country_id column
+ * @method     ChildUser[]|Collection findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPasswordResetToken(string $user_password_reset_token) Return ChildUser objects filtered by the user_password_reset_token column
+ * @method     ChildUser[]|Collection findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
+ * @psalm-method Collection&\Traversable<ChildUser> findByPasswordResetTokenCreated(string $user_password_reset_token_created) Return ChildUser objects filtered by the user_password_reset_token_created column
+ * @method     ChildUser[]|Collection findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
+ * @psalm-method Collection&\Traversable<ChildUser> findByUpdate(string $user_update) Return ChildUser objects filtered by the user_update column
+ * @method     ChildUser[]|Collection findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
+ * @psalm-method Collection&\Traversable<ChildUser> findByCreatedAt(string $user_created) Return ChildUser objects filtered by the user_created column
+ * @method     ChildUser[]|Collection findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
+ * @psalm-method Collection&\Traversable<ChildUser> findByUpdatedAt(string $user_updated) Return ChildUser objects filtered by the user_updated column
+ * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class UserQuery extends ModelCriteria
@@ -325,9 +326,9 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\UserQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\User', $modelAlias = null)
     {
@@ -337,12 +338,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Returns a new ChildUserQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildUserQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildUserQuery) {
             return $criteria;
@@ -372,7 +373,7 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return ChildUser|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -404,8 +405,8 @@ abstract class UserQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -437,8 +438,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildUser|array|mixed the result, formatted by the current formatter
      */
@@ -458,12 +459,12 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -480,27 +481,31 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(UserTableMap::COL_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(UserTableMap::COL_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(UserTableMap::COL_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(UserTableMap::COL_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -513,15 +518,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -541,7 +546,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_ID, $id, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -556,15 +563,15 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see       filterBySite()
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -584,7 +591,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -594,14 +603,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE Email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE Email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE Email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -609,7 +619,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_EMAIL, $email, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -619,14 +631,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByPassword('fooValue');   // WHERE user_password = 'fooValue'
      * $query->filterByPassword('%fooValue%', Criteria::LIKE); // WHERE user_password LIKE '%fooValue%'
+     * $query->filterByPassword(['foo', 'bar']); // WHERE user_password IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $password The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $password The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPassword($password = null, $comparison = null)
+    public function filterByPassword($password = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($password)) {
@@ -634,7 +647,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD, $password, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD, $password, $comparison);
+
+        return $this;
     }
 
     /**
@@ -644,14 +659,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByKey('fooValue');   // WHERE user_key = 'fooValue'
      * $query->filterByKey('%fooValue%', Criteria::LIKE); // WHERE user_key LIKE '%fooValue%'
+     * $query->filterByKey(['foo', 'bar']); // WHERE user_key IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $key The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $key The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByKey($key = null, $comparison = null)
+    public function filterByKey($key = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($key)) {
@@ -659,7 +675,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_KEY, $key, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_KEY, $key, $comparison);
+
+        return $this;
     }
 
     /**
@@ -669,14 +687,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByEmailKey('fooValue');   // WHERE email_key = 'fooValue'
      * $query->filterByEmailKey('%fooValue%', Criteria::LIKE); // WHERE email_key LIKE '%fooValue%'
+     * $query->filterByEmailKey(['foo', 'bar']); // WHERE email_key IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $emailKey The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $emailKey The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmailKey($emailKey = null, $comparison = null)
+    public function filterByEmailKey($emailKey = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($emailKey)) {
@@ -684,7 +703,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_EMAIL_KEY, $emailKey, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_EMAIL_KEY, $emailKey, $comparison);
+
+        return $this;
     }
 
     /**
@@ -697,15 +718,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByFacebookUid(array('min' => 12)); // WHERE facebook_uid > 12
      * </code>
      *
-     * @param     mixed $facebookUid The value to use as filter.
+     * @param mixed $facebookUid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFacebookUid($facebookUid = null, $comparison = null)
+    public function filterByFacebookUid($facebookUid = null, ?string $comparison = null)
     {
         if (is_array($facebookUid)) {
             $useMinMax = false;
@@ -725,7 +746,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_FACEBOOK_UID, $facebookUid, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_FACEBOOK_UID, $facebookUid, $comparison);
+
+        return $this;
     }
 
     /**
@@ -735,14 +758,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByUsername('fooValue');   // WHERE user_screen_name = 'fooValue'
      * $query->filterByUsername('%fooValue%', Criteria::LIKE); // WHERE user_screen_name LIKE '%fooValue%'
+     * $query->filterByUsername(['foo', 'bar']); // WHERE user_screen_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $username The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $username The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUsername($username = null, $comparison = null)
+    public function filterByUsername($username = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($username)) {
@@ -750,7 +774,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_SCREEN_NAME, $username, $comparison);
+
+        return $this;
     }
 
     /**
@@ -760,14 +786,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterBySlug('fooValue');   // WHERE user_slug = 'fooValue'
      * $query->filterBySlug('%fooValue%', Criteria::LIKE); // WHERE user_slug LIKE '%fooValue%'
+     * $query->filterBySlug(['foo', 'bar']); // WHERE user_slug IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $slug The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $slug The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySlug($slug = null, $comparison = null)
+    public function filterBySlug($slug = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($slug)) {
@@ -775,7 +802,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_SLUG, $slug, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_SLUG, $slug, $comparison);
+
+        return $this;
     }
 
     /**
@@ -787,22 +816,24 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByWishlistShip('yes'); // WHERE user_wishlist_ship = true
      * </code>
      *
-     * @param     boolean|string $wishlistShip The value to use as filter.
+     * @param bool|string $wishlistShip The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWishlistShip($wishlistShip = null, $comparison = null)
+    public function filterByWishlistShip($wishlistShip = null, ?string $comparison = null)
     {
         if (is_string($wishlistShip)) {
             $wishlistShip = in_array(strtolower($wishlistShip), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_WISHLIST_SHIP, $wishlistShip, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_WISHLIST_SHIP, $wishlistShip, $comparison);
+
+        return $this;
     }
 
     /**
@@ -814,22 +845,24 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByTop('yes'); // WHERE user_top = true
      * </code>
      *
-     * @param     boolean|string $top The value to use as filter.
+     * @param bool|string $top The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTop($top = null, $comparison = null)
+    public function filterByTop($top = null, ?string $comparison = null)
     {
         if (is_string($top)) {
             $top = in_array(strtolower($top), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_TOP, $top, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_TOP, $top, $comparison);
+
+        return $this;
     }
 
     /**
@@ -841,22 +874,24 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByBiblio('yes'); // WHERE user_biblio = true
      * </code>
      *
-     * @param     boolean|string $biblio The value to use as filter.
+     * @param bool|string $biblio The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBiblio($biblio = null, $comparison = null)
+    public function filterByBiblio($biblio = null, ?string $comparison = null)
     {
         if (is_string($biblio)) {
             $biblio = in_array(strtolower($biblio), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_BIBLIO, $biblio, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_BIBLIO, $biblio, $comparison);
+
+        return $this;
     }
 
     /**
@@ -866,14 +901,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByAdresseIp('fooValue');   // WHERE adresse_ip = 'fooValue'
      * $query->filterByAdresseIp('%fooValue%', Criteria::LIKE); // WHERE adresse_ip LIKE '%fooValue%'
+     * $query->filterByAdresseIp(['foo', 'bar']); // WHERE adresse_ip IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $adresseIp The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $adresseIp The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAdresseIp($adresseIp = null, $comparison = null)
+    public function filterByAdresseIp($adresseIp = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($adresseIp)) {
@@ -881,7 +917,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_ADRESSE_IP, $adresseIp, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_ADRESSE_IP, $adresseIp, $comparison);
+
+        return $this;
     }
 
     /**
@@ -894,15 +932,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByRecaptchaScore(array('min' => 12)); // WHERE recaptcha_score > 12
      * </code>
      *
-     * @param     mixed $recaptchaScore The value to use as filter.
+     * @param mixed $recaptchaScore The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRecaptchaScore($recaptchaScore = null, $comparison = null)
+    public function filterByRecaptchaScore($recaptchaScore = null, ?string $comparison = null)
     {
         if (is_array($recaptchaScore)) {
             $useMinMax = false;
@@ -922,7 +960,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_RECAPTCHA_SCORE, $recaptchaScore, $comparison);
+
+        return $this;
     }
 
     /**
@@ -935,17 +975,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByDateinscription(array('max' => 'yesterday')); // WHERE DateInscription > '2011-03-13'
      * </code>
      *
-     * @param     mixed $dateinscription The value to use as filter.
+     * @param mixed $dateinscription The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDateinscription($dateinscription = null, $comparison = null)
+    public function filterByDateinscription($dateinscription = null, ?string $comparison = null)
     {
         if (is_array($dateinscription)) {
             $useMinMax = false;
@@ -965,7 +1005,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_DATEINSCRIPTION, $dateinscription, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_DATEINSCRIPTION, $dateinscription, $comparison);
+
+        return $this;
     }
 
     /**
@@ -978,17 +1020,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByDateconnexion(array('max' => 'yesterday')); // WHERE DateConnexion > '2011-03-13'
      * </code>
      *
-     * @param     mixed $dateconnexion The value to use as filter.
+     * @param mixed $dateconnexion The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDateconnexion($dateconnexion = null, $comparison = null)
+    public function filterByDateconnexion($dateconnexion = null, ?string $comparison = null)
     {
         if (is_array($dateconnexion)) {
             $useMinMax = false;
@@ -1008,7 +1050,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_DATECONNEXION, $dateconnexion, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_DATECONNEXION, $dateconnexion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1021,15 +1065,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -1049,7 +1093,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1062,15 +1108,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -1090,7 +1136,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1103,15 +1151,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $libraryId The value to use as filter.
+     * @param mixed $libraryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLibraryId($libraryId = null, $comparison = null)
+    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
     {
         if (is_array($libraryId)) {
             $useMinMax = false;
@@ -1131,7 +1179,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1141,14 +1191,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByCivilite('fooValue');   // WHERE user_civilite = 'fooValue'
      * $query->filterByCivilite('%fooValue%', Criteria::LIKE); // WHERE user_civilite LIKE '%fooValue%'
+     * $query->filterByCivilite(['foo', 'bar']); // WHERE user_civilite IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $civilite The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $civilite The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCivilite($civilite = null, $comparison = null)
+    public function filterByCivilite($civilite = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($civilite)) {
@@ -1156,7 +1207,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_CIVILITE, $civilite, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_CIVILITE, $civilite, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1166,14 +1219,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByNom('fooValue');   // WHERE user_nom = 'fooValue'
      * $query->filterByNom('%fooValue%', Criteria::LIKE); // WHERE user_nom LIKE '%fooValue%'
+     * $query->filterByNom(['foo', 'bar']); // WHERE user_nom IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nom The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nom The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNom($nom = null, $comparison = null)
+    public function filterByNom($nom = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nom)) {
@@ -1181,7 +1235,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_NOM, $nom, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_NOM, $nom, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1191,14 +1247,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByPrenom('fooValue');   // WHERE user_prenom = 'fooValue'
      * $query->filterByPrenom('%fooValue%', Criteria::LIKE); // WHERE user_prenom LIKE '%fooValue%'
+     * $query->filterByPrenom(['foo', 'bar']); // WHERE user_prenom IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $prenom The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $prenom The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPrenom($prenom = null, $comparison = null)
+    public function filterByPrenom($prenom = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($prenom)) {
@@ -1206,7 +1263,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PRENOM, $prenom, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PRENOM, $prenom, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1216,14 +1275,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByAdresse1('fooValue');   // WHERE user_adresse1 = 'fooValue'
      * $query->filterByAdresse1('%fooValue%', Criteria::LIKE); // WHERE user_adresse1 LIKE '%fooValue%'
+     * $query->filterByAdresse1(['foo', 'bar']); // WHERE user_adresse1 IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $adresse1 The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $adresse1 The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAdresse1($adresse1 = null, $comparison = null)
+    public function filterByAdresse1($adresse1 = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($adresse1)) {
@@ -1231,7 +1291,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE1, $adresse1, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE1, $adresse1, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1241,14 +1303,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByAdresse2('fooValue');   // WHERE user_adresse2 = 'fooValue'
      * $query->filterByAdresse2('%fooValue%', Criteria::LIKE); // WHERE user_adresse2 LIKE '%fooValue%'
+     * $query->filterByAdresse2(['foo', 'bar']); // WHERE user_adresse2 IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $adresse2 The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $adresse2 The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAdresse2($adresse2 = null, $comparison = null)
+    public function filterByAdresse2($adresse2 = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($adresse2)) {
@@ -1256,7 +1319,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE2, $adresse2, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_ADRESSE2, $adresse2, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1266,14 +1331,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByCodepostal('fooValue');   // WHERE user_codepostal = 'fooValue'
      * $query->filterByCodepostal('%fooValue%', Criteria::LIKE); // WHERE user_codepostal LIKE '%fooValue%'
+     * $query->filterByCodepostal(['foo', 'bar']); // WHERE user_codepostal IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $codepostal The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $codepostal The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCodepostal($codepostal = null, $comparison = null)
+    public function filterByCodepostal($codepostal = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($codepostal)) {
@@ -1281,7 +1347,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_CODEPOSTAL, $codepostal, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_CODEPOSTAL, $codepostal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1291,14 +1359,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByVille('fooValue');   // WHERE user_ville = 'fooValue'
      * $query->filterByVille('%fooValue%', Criteria::LIKE); // WHERE user_ville LIKE '%fooValue%'
+     * $query->filterByVille(['foo', 'bar']); // WHERE user_ville IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $ville The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $ville The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVille($ville = null, $comparison = null)
+    public function filterByVille($ville = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($ville)) {
@@ -1306,7 +1375,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_VILLE, $ville, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_VILLE, $ville, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1316,14 +1387,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByPays('fooValue');   // WHERE user_pays = 'fooValue'
      * $query->filterByPays('%fooValue%', Criteria::LIKE); // WHERE user_pays LIKE '%fooValue%'
+     * $query->filterByPays(['foo', 'bar']); // WHERE user_pays IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $pays The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $pays The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPays($pays = null, $comparison = null)
+    public function filterByPays($pays = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($pays)) {
@@ -1331,7 +1403,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PAYS, $pays, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PAYS, $pays, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1341,14 +1415,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByTelephone('fooValue');   // WHERE user_telephone = 'fooValue'
      * $query->filterByTelephone('%fooValue%', Criteria::LIKE); // WHERE user_telephone LIKE '%fooValue%'
+     * $query->filterByTelephone(['foo', 'bar']); // WHERE user_telephone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $telephone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $telephone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTelephone($telephone = null, $comparison = null)
+    public function filterByTelephone($telephone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($telephone)) {
@@ -1356,7 +1431,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_TELEPHONE, $telephone, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_TELEPHONE, $telephone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1366,14 +1443,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByPrefArticlesShow('fooValue');   // WHERE user_pref_articles_show = 'fooValue'
      * $query->filterByPrefArticlesShow('%fooValue%', Criteria::LIKE); // WHERE user_pref_articles_show LIKE '%fooValue%'
+     * $query->filterByPrefArticlesShow(['foo', 'bar']); // WHERE user_pref_articles_show IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $prefArticlesShow The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $prefArticlesShow The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPrefArticlesShow($prefArticlesShow = null, $comparison = null)
+    public function filterByPrefArticlesShow($prefArticlesShow = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($prefArticlesShow)) {
@@ -1381,7 +1459,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PREF_ARTICLES_SHOW, $prefArticlesShow, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PREF_ARTICLES_SHOW, $prefArticlesShow, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1394,15 +1474,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByFbId(array('min' => 12)); // WHERE user_fb_id > 12
      * </code>
      *
-     * @param     mixed $fbId The value to use as filter.
+     * @param mixed $fbId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFbId($fbId = null, $comparison = null)
+    public function filterByFbId($fbId = null, ?string $comparison = null)
     {
         if (is_array($fbId)) {
             $useMinMax = false;
@@ -1422,7 +1502,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_FB_ID, $fbId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_FB_ID, $fbId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1432,14 +1514,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByFbToken('fooValue');   // WHERE user_fb_token = 'fooValue'
      * $query->filterByFbToken('%fooValue%', Criteria::LIKE); // WHERE user_fb_token LIKE '%fooValue%'
+     * $query->filterByFbToken(['foo', 'bar']); // WHERE user_fb_token IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $fbToken The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $fbToken The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFbToken($fbToken = null, $comparison = null)
+    public function filterByFbToken($fbToken = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($fbToken)) {
@@ -1447,7 +1530,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_FB_TOKEN, $fbToken, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_FB_TOKEN, $fbToken, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1460,15 +1545,15 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByCountryId(array('min' => 12)); // WHERE country_id > 12
      * </code>
      *
-     * @param     mixed $countryId The value to use as filter.
+     * @param mixed $countryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountryId($countryId = null, $comparison = null)
+    public function filterByCountryId($countryId = null, ?string $comparison = null)
     {
         if (is_array($countryId)) {
             $useMinMax = false;
@@ -1488,7 +1573,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1498,14 +1585,15 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $query->filterByPasswordResetToken('fooValue');   // WHERE user_password_reset_token = 'fooValue'
      * $query->filterByPasswordResetToken('%fooValue%', Criteria::LIKE); // WHERE user_password_reset_token LIKE '%fooValue%'
+     * $query->filterByPasswordResetToken(['foo', 'bar']); // WHERE user_password_reset_token IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $passwordResetToken The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $passwordResetToken The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPasswordResetToken($passwordResetToken = null, $comparison = null)
+    public function filterByPasswordResetToken($passwordResetToken = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($passwordResetToken)) {
@@ -1513,7 +1601,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $passwordResetToken, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, $passwordResetToken, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1526,17 +1616,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByPasswordResetTokenCreated(array('max' => 'yesterday')); // WHERE user_password_reset_token_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $passwordResetTokenCreated The value to use as filter.
+     * @param mixed $passwordResetTokenCreated The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPasswordResetTokenCreated($passwordResetTokenCreated = null, $comparison = null)
+    public function filterByPasswordResetTokenCreated($passwordResetTokenCreated = null, ?string $comparison = null)
     {
         if (is_array($passwordResetTokenCreated)) {
             $useMinMax = false;
@@ -1556,7 +1646,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, $passwordResetTokenCreated, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1569,17 +1661,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE user_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -1599,7 +1691,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1612,17 +1706,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE user_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1642,7 +1736,9 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1655,17 +1751,17 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE user_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1685,20 +1781,22 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site, $comparison = null)
+    public function filterBySite($site, ?string $comparison = null)
     {
         if ($site instanceof \Model\Site) {
             return $this
@@ -1708,8 +1806,10 @@ abstract class UserQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(UserTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
         }
@@ -1718,12 +1818,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Site relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -1752,9 +1852,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
@@ -1824,20 +1924,24 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \Model\Cart object
      *
      * @param \Model\Cart|ObjectCollection $cart the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCart($cart, $comparison = null)
+    public function filterByCart($cart, ?string $comparison = null)
     {
         if ($cart instanceof \Model\Cart) {
-            return $this
+            $this
                 ->addUsingAlias(UserTableMap::COL_ID, $cart->getUserId(), $comparison);
+
+            return $this;
         } elseif ($cart instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useCartQuery()
                 ->filterByPrimaryKeys($cart->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByCart() only accepts arguments of type \Model\Cart or Collection');
         }
@@ -1846,12 +1950,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Cart relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinCart($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinCart(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Cart');
@@ -1880,9 +1984,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\CartQuery A secondary query class using the current class as primary query
      */
@@ -1952,20 +2056,24 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \Model\Option object
      *
      * @param \Model\Option|ObjectCollection $option the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOption($option, $comparison = null)
+    public function filterByOption($option, ?string $comparison = null)
     {
         if ($option instanceof \Model\Option) {
-            return $this
+            $this
                 ->addUsingAlias(UserTableMap::COL_ID, $option->getUserId(), $comparison);
+
+            return $this;
         } elseif ($option instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useOptionQuery()
                 ->filterByPrimaryKeys($option->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByOption() only accepts arguments of type \Model\Option or Collection');
         }
@@ -1974,12 +2082,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Option relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinOption($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinOption(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Option');
@@ -2008,9 +2116,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\OptionQuery A secondary query class using the current class as primary query
      */
@@ -2080,20 +2188,24 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \Model\Right object
      *
      * @param \Model\Right|ObjectCollection $right the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRight($right, $comparison = null)
+    public function filterByRight($right, ?string $comparison = null)
     {
         if ($right instanceof \Model\Right) {
-            return $this
+            $this
                 ->addUsingAlias(UserTableMap::COL_ID, $right->getUserId(), $comparison);
+
+            return $this;
         } elseif ($right instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useRightQuery()
                 ->filterByPrimaryKeys($right->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByRight() only accepts arguments of type \Model\Right or Collection');
         }
@@ -2102,12 +2214,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Right relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinRight($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRight(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Right');
@@ -2136,9 +2248,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\RightQuery A secondary query class using the current class as primary query
      */
@@ -2208,20 +2320,24 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \Model\Session object
      *
      * @param \Model\Session|ObjectCollection $session the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySession($session, $comparison = null)
+    public function filterBySession($session, ?string $comparison = null)
     {
         if ($session instanceof \Model\Session) {
-            return $this
+            $this
                 ->addUsingAlias(UserTableMap::COL_ID, $session->getUserId(), $comparison);
+
+            return $this;
         } elseif ($session instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useSessionQuery()
                 ->filterByPrimaryKeys($session->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterBySession() only accepts arguments of type \Model\Session or Collection');
         }
@@ -2230,12 +2346,12 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Session relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSession($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSession(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Session');
@@ -2264,9 +2380,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SessionQuery A secondary query class using the current class as primary query
      */
@@ -2335,9 +2451,9 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildUser $user Object to remove from the list of results
+     * @param ChildUser $user Object to remove from the list of results
      *
-     * @return $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($user = null)
     {
@@ -2354,7 +2470,7 @@ abstract class UserQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
@@ -2379,12 +2495,12 @@ abstract class UserQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
@@ -2414,65 +2530,77 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(UserTableMap::COL_USER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+        $this->addDescendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+        $this->addAscendingOrderByColumn(UserTableMap::COL_USER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+        $this->addDescendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(UserTableMap::COL_USER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(UserTableMap::COL_USER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildUserQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+        $this->addAscendingOrderByColumn(UserTableMap::COL_USER_CREATED);
+
+        return $this;
     }
 
-} // UserQuery
+}

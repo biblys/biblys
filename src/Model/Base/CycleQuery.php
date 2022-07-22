@@ -10,7 +10,7 @@ use Model\Map\CycleTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycleQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCycleQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCycle|null findOne(ConnectionInterface $con = null) Return the first ChildCycle matching the query
- * @method     ChildCycle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCycle matching the query, or a new ChildCycle object populated from the query conditions when no match is found
+ * @method     ChildCycle|null findOne(?ConnectionInterface $con = null) Return the first ChildCycle matching the query
+ * @method     ChildCycle findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCycle matching the query, or a new ChildCycle object populated from the query conditions when no match is found
  *
  * @method     ChildCycle|null findOneById(int $cycle_id) Return the first ChildCycle filtered by the cycle_id column
  * @method     ChildCycle|null findOneByName(string $cycle_name) Return the first ChildCycle filtered by the cycle_name column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycle|null findOneByCreatedAt(string $cycle_created) Return the first ChildCycle filtered by the cycle_created column
  * @method     ChildCycle|null findOneByUpdatedAt(string $cycle_updated) Return the first ChildCycle filtered by the cycle_updated column *
 
- * @method     ChildCycle requirePk($key, ConnectionInterface $con = null) Return the ChildCycle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCycle requireOne(ConnectionInterface $con = null) Return the first ChildCycle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCycle requirePk($key, ?ConnectionInterface $con = null) Return the ChildCycle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCycle requireOne(?ConnectionInterface $con = null) Return the first ChildCycle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCycle requireOneById(int $cycle_id) Return the first ChildCycle filtered by the cycle_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCycle requireOneByName(string $cycle_name) Return the first ChildCycle filtered by the cycle_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCycle requireOneByCreatedAt(string $cycle_created) Return the first ChildCycle filtered by the cycle_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCycle requireOneByUpdatedAt(string $cycle_updated) Return the first ChildCycle filtered by the cycle_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCycle[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> find(ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
- * @method     ChildCycle[]|ObjectCollection findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
- * @method     ChildCycle[]|ObjectCollection findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
- * @method     ChildCycle[]|ObjectCollection findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
- * @method     ChildCycle[]|ObjectCollection findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
- * @method     ChildCycle[]|ObjectCollection findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
- * @method     ChildCycle[]|ObjectCollection findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
- * @method     ChildCycle[]|ObjectCollection findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
- * @method     ChildCycle[]|ObjectCollection findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
- * @method     ChildCycle[]|ObjectCollection findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
- * @method     ChildCycle[]|ObjectCollection findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCycle> findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
- * @method     ChildCycle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCycle> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCycle[]|Collection find(?ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCycle> find(?ConnectionInterface $con = null) Return ChildCycle objects based on current ModelCriteria
+ * @method     ChildCycle[]|Collection findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
+ * @psalm-method Collection&\Traversable<ChildCycle> findById(int $cycle_id) Return ChildCycle objects filtered by the cycle_id column
+ * @method     ChildCycle[]|Collection findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByName(string $cycle_name) Return ChildCycle objects filtered by the cycle_name column
+ * @method     ChildCycle[]|Collection findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByUrl(string $cycle_url) Return ChildCycle objects filtered by the cycle_url column
+ * @method     ChildCycle[]|Collection findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByDesc(string $cycle_desc) Return ChildCycle objects filtered by the cycle_desc column
+ * @method     ChildCycle[]|Collection findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByHits(int $cycle_hits) Return ChildCycle objects filtered by the cycle_hits column
+ * @method     ChildCycle[]|Collection findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByNoosfereId(int $cycle_noosfere_id) Return ChildCycle objects filtered by the cycle_noosfere_id column
+ * @method     ChildCycle[]|Collection findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByInsert(string $cycle_insert) Return ChildCycle objects filtered by the cycle_insert column
+ * @method     ChildCycle[]|Collection findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByUpdate(string $cycle_update) Return ChildCycle objects filtered by the cycle_update column
+ * @method     ChildCycle[]|Collection findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByCreatedAt(string $cycle_created) Return ChildCycle objects filtered by the cycle_created column
+ * @method     ChildCycle[]|Collection findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
+ * @psalm-method Collection&\Traversable<ChildCycle> findByUpdatedAt(string $cycle_updated) Return ChildCycle objects filtered by the cycle_updated column
+ * @method     ChildCycle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCycle> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CycleQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class CycleQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CycleQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Cycle', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class CycleQuery extends ModelCriteria
     /**
      * Returns a new ChildCycleQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCycleQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCycleQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class CycleQuery extends ModelCriteria
      *
      * @return ChildCycle|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class CycleQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class CycleQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCycle|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class CycleQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class CycleQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE cycle_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $id, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -336,14 +342,15 @@ abstract class CycleQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE cycle_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE cycle_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE cycle_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -351,7 +358,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_NAME, $name, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -361,14 +370,15 @@ abstract class CycleQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE cycle_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE cycle_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE cycle_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -376,7 +386,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_URL, $url, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -386,14 +398,15 @@ abstract class CycleQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE cycle_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE cycle_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE cycle_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -401,7 +414,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_DESC, $desc, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -414,15 +429,15 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByHits(array('min' => 12)); // WHERE cycle_hits > 12
      * </code>
      *
-     * @param     mixed $hits The value to use as filter.
+     * @param mixed $hits The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHits($hits = null, $comparison = null)
+    public function filterByHits($hits = null, ?string $comparison = null)
     {
         if (is_array($hits)) {
             $useMinMax = false;
@@ -442,7 +457,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_HITS, $hits, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_HITS, $hits, $comparison);
+
+        return $this;
     }
 
     /**
@@ -455,15 +472,15 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByNoosfereId(array('min' => 12)); // WHERE cycle_noosfere_id > 12
      * </code>
      *
-     * @param     mixed $noosfereId The value to use as filter.
+     * @param mixed $noosfereId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNoosfereId($noosfereId = null, $comparison = null)
+    public function filterByNoosfereId($noosfereId = null, ?string $comparison = null)
     {
         if (is_array($noosfereId)) {
             $useMinMax = false;
@@ -483,7 +500,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_NOOSFERE_ID, $noosfereId, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_NOOSFERE_ID, $noosfereId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -496,17 +515,17 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE cycle_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -526,7 +545,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_INSERT, $insert, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -539,17 +560,17 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE cycle_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -569,7 +590,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATE, $update, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -582,17 +605,17 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE cycle_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -612,7 +635,9 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -625,17 +650,17 @@ abstract class CycleQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE cycle_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -655,15 +680,17 @@ abstract class CycleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCycle $cycle Object to remove from the list of results
+     * @param ChildCycle $cycle Object to remove from the list of results
      *
-     * @return $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($cycle = null)
     {
@@ -680,7 +707,7 @@ abstract class CycleQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CycleTableMap::DATABASE_NAME);
@@ -705,12 +732,12 @@ abstract class CycleQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CycleTableMap::DATABASE_NAME);
@@ -740,65 +767,77 @@ abstract class CycleQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CycleTableMap::COL_CYCLE_UPDATED);
+        $this->addDescendingOrderByColumn(CycleTableMap::COL_CYCLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CycleTableMap::COL_CYCLE_UPDATED);
+        $this->addAscendingOrderByColumn(CycleTableMap::COL_CYCLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CycleTableMap::COL_CYCLE_CREATED);
+        $this->addDescendingOrderByColumn(CycleTableMap::COL_CYCLE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CycleTableMap::COL_CYCLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CycleTableMap::COL_CYCLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCycleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CycleTableMap::COL_CYCLE_CREATED);
+        $this->addAscendingOrderByColumn(CycleTableMap::COL_CYCLE_CREATED);
+
+        return $this;
     }
 
-} // CycleQuery
+}

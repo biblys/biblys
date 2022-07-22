@@ -10,7 +10,7 @@ use Model\Map\LibraryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -71,8 +71,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibraryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildLibraryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildLibrary|null findOne(ConnectionInterface $con = null) Return the first ChildLibrary matching the query
- * @method     ChildLibrary findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLibrary matching the query, or a new ChildLibrary object populated from the query conditions when no match is found
+ * @method     ChildLibrary|null findOne(?ConnectionInterface $con = null) Return the first ChildLibrary matching the query
+ * @method     ChildLibrary findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLibrary matching the query, or a new ChildLibrary object populated from the query conditions when no match is found
  *
  * @method     ChildLibrary|null findOneById(int $library_id) Return the first ChildLibrary filtered by the library_id column
  * @method     ChildLibrary|null findOneByName(string $library_name) Return the first ChildLibrary filtered by the library_name column
@@ -96,8 +96,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibrary|null findOneByCreatedAt(string $library_created) Return the first ChildLibrary filtered by the library_created column
  * @method     ChildLibrary|null findOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column *
 
- * @method     ChildLibrary requirePk($key, ConnectionInterface $con = null) Return the ChildLibrary by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLibrary requireOne(ConnectionInterface $con = null) Return the first ChildLibrary matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLibrary requirePk($key, ?ConnectionInterface $con = null) Return the ChildLibrary by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLibrary requireOne(?ConnectionInterface $con = null) Return the first ChildLibrary matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLibrary requireOneById(int $library_id) Return the first ChildLibrary filtered by the library_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOneByName(string $library_name) Return the first ChildLibrary filtered by the library_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -121,52 +121,52 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibrary requireOneByCreatedAt(string $library_created) Return the first ChildLibrary filtered by the library_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildLibrary[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> find(ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
- * @method     ChildLibrary[]|ObjectCollection findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
- * @method     ChildLibrary[]|ObjectCollection findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
- * @method     ChildLibrary[]|ObjectCollection findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
- * @method     ChildLibrary[]|ObjectCollection findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
- * @method     ChildLibrary[]|ObjectCollection findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
- * @method     ChildLibrary[]|ObjectCollection findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
- * @method     ChildLibrary[]|ObjectCollection findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
- * @method     ChildLibrary[]|ObjectCollection findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
- * @method     ChildLibrary[]|ObjectCollection findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
- * @method     ChildLibrary[]|ObjectCollection findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
- * @method     ChildLibrary[]|ObjectCollection findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
- * @method     ChildLibrary[]|ObjectCollection findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
- * @method     ChildLibrary[]|ObjectCollection findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
- * @method     ChildLibrary[]|ObjectCollection findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
- * @method     ChildLibrary[]|ObjectCollection findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
- * @method     ChildLibrary[]|ObjectCollection findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
- * @method     ChildLibrary[]|ObjectCollection findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
- * @method     ChildLibrary[]|ObjectCollection findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
- * @method     ChildLibrary[]|ObjectCollection findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
- * @method     ChildLibrary[]|ObjectCollection findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
- * @method     ChildLibrary[]|ObjectCollection findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildLibrary> findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
- * @method     ChildLibrary[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLibrary> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildLibrary[]|Collection find(?ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildLibrary> find(?ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
+ * @method     ChildLibrary[]|Collection findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
+ * @method     ChildLibrary[]|Collection findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
+ * @method     ChildLibrary[]|Collection findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
+ * @method     ChildLibrary[]|Collection findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
+ * @method     ChildLibrary[]|Collection findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
+ * @method     ChildLibrary[]|Collection findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
+ * @method     ChildLibrary[]|Collection findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
+ * @method     ChildLibrary[]|Collection findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
+ * @method     ChildLibrary[]|Collection findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
+ * @method     ChildLibrary[]|Collection findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
+ * @method     ChildLibrary[]|Collection findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
+ * @method     ChildLibrary[]|Collection findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
+ * @method     ChildLibrary[]|Collection findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
+ * @method     ChildLibrary[]|Collection findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
+ * @method     ChildLibrary[]|Collection findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
+ * @method     ChildLibrary[]|Collection findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
+ * @method     ChildLibrary[]|Collection findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
+ * @method     ChildLibrary[]|Collection findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
+ * @method     ChildLibrary[]|Collection findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
+ * @method     ChildLibrary[]|Collection findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
+ * @method     ChildLibrary[]|Collection findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
+ * @method     ChildLibrary[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLibrary> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class LibraryQuery extends ModelCriteria
@@ -176,9 +176,9 @@ abstract class LibraryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\LibraryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Library', $modelAlias = null)
     {
@@ -188,12 +188,12 @@ abstract class LibraryQuery extends ModelCriteria
     /**
      * Returns a new ChildLibraryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildLibraryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildLibraryQuery) {
             return $criteria;
@@ -223,7 +223,7 @@ abstract class LibraryQuery extends ModelCriteria
      *
      * @return ChildLibrary|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -255,8 +255,8 @@ abstract class LibraryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -288,8 +288,8 @@ abstract class LibraryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildLibrary|array|mixed the result, formatted by the current formatter
      */
@@ -309,12 +309,12 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -331,27 +331,31 @@ abstract class LibraryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -364,15 +368,15 @@ abstract class LibraryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -392,7 +396,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $id, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -402,14 +408,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE library_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE library_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE library_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -417,7 +424,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_NAME, $name, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -427,14 +436,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByNameAlphabetic('fooValue');   // WHERE library_name_alphabetic = 'fooValue'
      * $query->filterByNameAlphabetic('%fooValue%', Criteria::LIKE); // WHERE library_name_alphabetic LIKE '%fooValue%'
+     * $query->filterByNameAlphabetic(['foo', 'bar']); // WHERE library_name_alphabetic IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nameAlphabetic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nameAlphabetic The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNameAlphabetic($nameAlphabetic = null, $comparison = null)
+    public function filterByNameAlphabetic($nameAlphabetic = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nameAlphabetic)) {
@@ -442,7 +452,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+
+        return $this;
     }
 
     /**
@@ -452,14 +464,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE library_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE library_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE library_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -467,7 +480,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_URL, $url, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -477,14 +492,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByRepresentative('fooValue');   // WHERE library_representative = 'fooValue'
      * $query->filterByRepresentative('%fooValue%', Criteria::LIKE); // WHERE library_representative LIKE '%fooValue%'
+     * $query->filterByRepresentative(['foo', 'bar']); // WHERE library_representative IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $representative The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $representative The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRepresentative($representative = null, $comparison = null)
+    public function filterByRepresentative($representative = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($representative)) {
@@ -492,7 +508,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_REPRESENTATIVE, $representative, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_REPRESENTATIVE, $representative, $comparison);
+
+        return $this;
     }
 
     /**
@@ -502,14 +520,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress('fooValue');   // WHERE library_address = 'fooValue'
      * $query->filterByAddress('%fooValue%', Criteria::LIKE); // WHERE library_address LIKE '%fooValue%'
+     * $query->filterByAddress(['foo', 'bar']); // WHERE library_address IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress($address = null, $comparison = null)
+    public function filterByAddress($address = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address)) {
@@ -517,7 +536,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ADDRESS, $address, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_ADDRESS, $address, $comparison);
+
+        return $this;
     }
 
     /**
@@ -527,14 +548,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByPostalCode('fooValue');   // WHERE library_postal_code = 'fooValue'
      * $query->filterByPostalCode('%fooValue%', Criteria::LIKE); // WHERE library_postal_code LIKE '%fooValue%'
+     * $query->filterByPostalCode(['foo', 'bar']); // WHERE library_postal_code IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $postalCode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $postalCode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPostalCode($postalCode = null, $comparison = null)
+    public function filterByPostalCode($postalCode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($postalCode)) {
@@ -542,7 +564,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_POSTAL_CODE, $postalCode, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_POSTAL_CODE, $postalCode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -552,14 +576,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByCity('fooValue');   // WHERE library_city = 'fooValue'
      * $query->filterByCity('%fooValue%', Criteria::LIKE); // WHERE library_city LIKE '%fooValue%'
+     * $query->filterByCity(['foo', 'bar']); // WHERE library_city IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $city The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $city The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCity($city = null, $comparison = null)
+    public function filterByCity($city = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($city)) {
@@ -567,7 +592,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CITY, $city, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CITY, $city, $comparison);
+
+        return $this;
     }
 
     /**
@@ -577,14 +604,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByCountry('fooValue');   // WHERE library_country = 'fooValue'
      * $query->filterByCountry('%fooValue%', Criteria::LIKE); // WHERE library_country LIKE '%fooValue%'
+     * $query->filterByCountry(['foo', 'bar']); // WHERE library_country IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $country The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $country The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountry($country = null, $comparison = null)
+    public function filterByCountry($country = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($country)) {
@@ -592,7 +620,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_COUNTRY, $country, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_COUNTRY, $country, $comparison);
+
+        return $this;
     }
 
     /**
@@ -602,14 +632,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByPhone('fooValue');   // WHERE library_phone = 'fooValue'
      * $query->filterByPhone('%fooValue%', Criteria::LIKE); // WHERE library_phone LIKE '%fooValue%'
+     * $query->filterByPhone(['foo', 'bar']); // WHERE library_phone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $phone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $phone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhone($phone = null, $comparison = null)
+    public function filterByPhone($phone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($phone)) {
@@ -617,7 +648,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_PHONE, $phone, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_PHONE, $phone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -627,14 +660,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByFax('fooValue');   // WHERE library_fax = 'fooValue'
      * $query->filterByFax('%fooValue%', Criteria::LIKE); // WHERE library_fax LIKE '%fooValue%'
+     * $query->filterByFax(['foo', 'bar']); // WHERE library_fax IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $fax The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $fax The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFax($fax = null, $comparison = null)
+    public function filterByFax($fax = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($fax)) {
@@ -642,7 +676,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_FAX, $fax, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_FAX, $fax, $comparison);
+
+        return $this;
     }
 
     /**
@@ -652,14 +688,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByWebsite('fooValue');   // WHERE library_website = 'fooValue'
      * $query->filterByWebsite('%fooValue%', Criteria::LIKE); // WHERE library_website LIKE '%fooValue%'
+     * $query->filterByWebsite(['foo', 'bar']); // WHERE library_website IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $website The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $website The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWebsite($website = null, $comparison = null)
+    public function filterByWebsite($website = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($website)) {
@@ -667,7 +704,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_WEBSITE, $website, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_WEBSITE, $website, $comparison);
+
+        return $this;
     }
 
     /**
@@ -677,14 +716,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE library_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE library_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE library_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -692,7 +732,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_EMAIL, $email, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -702,14 +744,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByFacebook('fooValue');   // WHERE library_facebook = 'fooValue'
      * $query->filterByFacebook('%fooValue%', Criteria::LIKE); // WHERE library_facebook LIKE '%fooValue%'
+     * $query->filterByFacebook(['foo', 'bar']); // WHERE library_facebook IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $facebook The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $facebook The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFacebook($facebook = null, $comparison = null)
+    public function filterByFacebook($facebook = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($facebook)) {
@@ -717,7 +760,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_FACEBOOK, $facebook, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_FACEBOOK, $facebook, $comparison);
+
+        return $this;
     }
 
     /**
@@ -727,14 +772,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByTwitter('fooValue');   // WHERE library_twitter = 'fooValue'
      * $query->filterByTwitter('%fooValue%', Criteria::LIKE); // WHERE library_twitter LIKE '%fooValue%'
+     * $query->filterByTwitter(['foo', 'bar']); // WHERE library_twitter IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $twitter The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $twitter The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTwitter($twitter = null, $comparison = null)
+    public function filterByTwitter($twitter = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($twitter)) {
@@ -742,7 +788,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_TWITTER, $twitter, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_TWITTER, $twitter, $comparison);
+
+        return $this;
     }
 
     /**
@@ -752,14 +800,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByCreationYear('fooValue');   // WHERE library_creation_year = 'fooValue'
      * $query->filterByCreationYear('%fooValue%', Criteria::LIKE); // WHERE library_creation_year LIKE '%fooValue%'
+     * $query->filterByCreationYear(['foo', 'bar']); // WHERE library_creation_year IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $creationYear The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $creationYear The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreationYear($creationYear = null, $comparison = null)
+    public function filterByCreationYear($creationYear = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($creationYear)) {
@@ -767,7 +816,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATION_YEAR, $creationYear, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATION_YEAR, $creationYear, $comparison);
+
+        return $this;
     }
 
     /**
@@ -777,14 +828,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterBySpecialities('fooValue');   // WHERE library_specialities = 'fooValue'
      * $query->filterBySpecialities('%fooValue%', Criteria::LIKE); // WHERE library_specialities LIKE '%fooValue%'
+     * $query->filterBySpecialities(['foo', 'bar']); // WHERE library_specialities IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $specialities The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $specialities The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySpecialities($specialities = null, $comparison = null)
+    public function filterBySpecialities($specialities = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($specialities)) {
@@ -792,7 +844,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_SPECIALITIES, $specialities, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_SPECIALITIES, $specialities, $comparison);
+
+        return $this;
     }
 
     /**
@@ -802,14 +856,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByReadings('fooValue');   // WHERE library_readings = 'fooValue'
      * $query->filterByReadings('%fooValue%', Criteria::LIKE); // WHERE library_readings LIKE '%fooValue%'
+     * $query->filterByReadings(['foo', 'bar']); // WHERE library_readings IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $readings The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $readings The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByReadings($readings = null, $comparison = null)
+    public function filterByReadings($readings = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($readings)) {
@@ -817,7 +872,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_READINGS, $readings, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_READINGS, $readings, $comparison);
+
+        return $this;
     }
 
     /**
@@ -827,14 +884,15 @@ abstract class LibraryQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE library_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE library_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE library_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -842,7 +900,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_DESC, $desc, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -855,17 +915,17 @@ abstract class LibraryQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE library_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -885,7 +945,9 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -898,17 +960,17 @@ abstract class LibraryQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE library_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -928,15 +990,17 @@ abstract class LibraryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildLibrary $library Object to remove from the list of results
+     * @param ChildLibrary $library Object to remove from the list of results
      *
-     * @return $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($library = null)
     {
@@ -953,7 +1017,7 @@ abstract class LibraryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LibraryTableMap::DATABASE_NAME);
@@ -978,12 +1042,12 @@ abstract class LibraryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LibraryTableMap::DATABASE_NAME);
@@ -1013,65 +1077,77 @@ abstract class LibraryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
+        $this->addDescendingOrderByColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
+        $this->addAscendingOrderByColumn(LibraryTableMap::COL_LIBRARY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LibraryTableMap::COL_LIBRARY_CREATED);
+        $this->addDescendingOrderByColumn(LibraryTableMap::COL_LIBRARY_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LibraryTableMap::COL_LIBRARY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildLibraryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LibraryTableMap::COL_LIBRARY_CREATED);
+        $this->addAscendingOrderByColumn(LibraryTableMap::COL_LIBRARY_CREATED);
+
+        return $this;
     }
 
-} // LibraryQuery
+}

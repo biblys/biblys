@@ -33,115 +33,119 @@ class AxysAppTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.AxysAppTableMap';
+    public const CLASS_NAME = 'Model.Map.AxysAppTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'axys_apps';
+    public const TABLE_NAME = 'axys_apps';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\AxysApp';
+    public const OM_CLASS = '\\Model\\AxysApp';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.AxysApp';
+    public const CLASS_DEFAULT = 'Model.AxysApp';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'axys_apps.id';
+    public const COL_ID = 'axys_apps.id';
 
     /**
      * the column name for the client_id field
      */
-    const COL_CLIENT_ID = 'axys_apps.client_id';
+    public const COL_CLIENT_ID = 'axys_apps.client_id';
 
     /**
      * the column name for the client_secret field
      */
-    const COL_CLIENT_SECRET = 'axys_apps.client_secret';
+    public const COL_CLIENT_SECRET = 'axys_apps.client_secret';
 
     /**
      * the column name for the name field
      */
-    const COL_NAME = 'axys_apps.name';
+    public const COL_NAME = 'axys_apps.name';
 
     /**
      * the column name for the redirect_uri field
      */
-    const COL_REDIRECT_URI = 'axys_apps.redirect_uri';
+    public const COL_REDIRECT_URI = 'axys_apps.redirect_uri';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'axys_apps.created_at';
+    public const COL_CREATED_AT = 'axys_apps.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'axys_apps.updated_at';
+    public const COL_UPDATED_AT = 'axys_apps.updated_at';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ClientId', 'ClientSecret', 'Name', 'RedirectUri', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'clientId', 'clientSecret', 'name', 'redirectUri', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(AxysAppTableMap::COL_ID, AxysAppTableMap::COL_CLIENT_ID, AxysAppTableMap::COL_CLIENT_SECRET, AxysAppTableMap::COL_NAME, AxysAppTableMap::COL_REDIRECT_URI, AxysAppTableMap::COL_CREATED_AT, AxysAppTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('id', 'client_id', 'client_secret', 'name', 'redirect_uri', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'ClientId', 'ClientSecret', 'Name', 'RedirectUri', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'clientId', 'clientSecret', 'name', 'redirectUri', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysAppTableMap::COL_ID, AxysAppTableMap::COL_CLIENT_ID, AxysAppTableMap::COL_CLIENT_SECRET, AxysAppTableMap::COL_NAME, AxysAppTableMap::COL_REDIRECT_URI, AxysAppTableMap::COL_CREATED_AT, AxysAppTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'client_id', 'client_secret', 'name', 'redirect_uri', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ClientId' => 1, 'ClientSecret' => 2, 'Name' => 3, 'RedirectUri' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'clientId' => 1, 'clientSecret' => 2, 'name' => 3, 'redirectUri' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        self::TYPE_COLNAME       => array(AxysAppTableMap::COL_ID => 0, AxysAppTableMap::COL_CLIENT_ID => 1, AxysAppTableMap::COL_CLIENT_SECRET => 2, AxysAppTableMap::COL_NAME => 3, AxysAppTableMap::COL_REDIRECT_URI => 4, AxysAppTableMap::COL_CREATED_AT => 5, AxysAppTableMap::COL_UPDATED_AT => 6, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'client_id' => 1, 'client_secret' => 2, 'name' => 3, 'redirect_uri' => 4, 'created_at' => 5, 'updated_at' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'ClientId' => 1, 'ClientSecret' => 2, 'Name' => 3, 'RedirectUri' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'clientId' => 1, 'clientSecret' => 2, 'name' => 3, 'redirectUri' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [AxysAppTableMap::COL_ID => 0, AxysAppTableMap::COL_CLIENT_ID => 1, AxysAppTableMap::COL_CLIENT_SECRET => 2, AxysAppTableMap::COL_NAME => 3, AxysAppTableMap::COL_REDIRECT_URI => 4, AxysAppTableMap::COL_CREATED_AT => 5, AxysAppTableMap::COL_UPDATED_AT => 6, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'client_id' => 1, 'client_secret' => 2, 'name' => 3, 'redirect_uri' => 4, 'created_at' => 5, 'updated_at' => 6, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
@@ -205,9 +209,9 @@ class AxysAppTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('axys_apps');
@@ -224,27 +228,29 @@ class AxysAppTableMap extends TableMap
         $this->addColumn('redirect_uri', 'RedirectUri', 'VARCHAR', true, 256, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -252,14 +258,14 @@ class AxysAppTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -274,14 +280,14 @@ class AxysAppTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -298,10 +304,10 @@ class AxysAppTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? AxysAppTableMap::CLASS_DEFAULT : AxysAppTableMap::OM_CLASS;
     }
@@ -309,17 +315,17 @@ class AxysAppTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (AxysApp object, last column rank)
+     * @return array (AxysApp object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = AxysAppTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = AxysAppTableMap::getInstanceFromPool($key))) {
@@ -343,13 +349,13 @@ class AxysAppTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -379,12 +385,13 @@ class AxysAppTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(AxysAppTableMap::COL_ID);
@@ -411,12 +418,13 @@ class AxysAppTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(AxysAppTableMap::COL_ID);
@@ -441,10 +449,10 @@ class AxysAppTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(AxysAppTableMap::DATABASE_NAME)->getTable(AxysAppTableMap::TABLE_NAME);
     }
@@ -452,15 +460,15 @@ class AxysAppTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a AxysApp or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or AxysApp object or primary key or array of primary keys
+     * @param mixed $values Criteria or AxysApp object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
@@ -496,7 +504,7 @@ class AxysAppTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return AxysAppQuery::create()->doDeleteAll($con);
     }
@@ -504,13 +512,13 @@ class AxysAppTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a AxysApp or Criteria object.
      *
-     * @param mixed               $criteria Criteria or AxysApp object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or AxysApp object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
@@ -537,4 +545,4 @@ class AxysAppTableMap extends TableMap
         });
     }
 
-} // AxysAppTableMap
+}

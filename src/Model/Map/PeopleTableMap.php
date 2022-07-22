@@ -33,195 +33,199 @@ class PeopleTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.PeopleTableMap';
+    public const CLASS_NAME = 'Model.Map.PeopleTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'people';
+    public const TABLE_NAME = 'people';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\People';
+    public const OM_CLASS = '\\Model\\People';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.People';
+    public const CLASS_DEFAULT = 'Model.People';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 23;
+    public const NUM_COLUMNS = 23;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 23;
+    public const NUM_HYDRATE_COLUMNS = 23;
 
     /**
      * the column name for the people_id field
      */
-    const COL_PEOPLE_ID = 'people.people_id';
+    public const COL_PEOPLE_ID = 'people.people_id';
 
     /**
      * the column name for the people_first_name field
      */
-    const COL_PEOPLE_FIRST_NAME = 'people.people_first_name';
+    public const COL_PEOPLE_FIRST_NAME = 'people.people_first_name';
 
     /**
      * the column name for the people_last_name field
      */
-    const COL_PEOPLE_LAST_NAME = 'people.people_last_name';
+    public const COL_PEOPLE_LAST_NAME = 'people.people_last_name';
 
     /**
      * the column name for the people_name field
      */
-    const COL_PEOPLE_NAME = 'people.people_name';
+    public const COL_PEOPLE_NAME = 'people.people_name';
 
     /**
      * the column name for the people_alpha field
      */
-    const COL_PEOPLE_ALPHA = 'people.people_alpha';
+    public const COL_PEOPLE_ALPHA = 'people.people_alpha';
 
     /**
      * the column name for the people_url_old field
      */
-    const COL_PEOPLE_URL_OLD = 'people.people_url_old';
+    public const COL_PEOPLE_URL_OLD = 'people.people_url_old';
 
     /**
      * the column name for the people_url field
      */
-    const COL_PEOPLE_URL = 'people.people_url';
+    public const COL_PEOPLE_URL = 'people.people_url';
 
     /**
      * the column name for the people_pseudo field
      */
-    const COL_PEOPLE_PSEUDO = 'people.people_pseudo';
+    public const COL_PEOPLE_PSEUDO = 'people.people_pseudo';
 
     /**
      * the column name for the people_noosfere_id field
      */
-    const COL_PEOPLE_NOOSFERE_ID = 'people.people_noosfere_id';
+    public const COL_PEOPLE_NOOSFERE_ID = 'people.people_noosfere_id';
 
     /**
      * the column name for the people_birth field
      */
-    const COL_PEOPLE_BIRTH = 'people.people_birth';
+    public const COL_PEOPLE_BIRTH = 'people.people_birth';
 
     /**
      * the column name for the people_death field
      */
-    const COL_PEOPLE_DEATH = 'people.people_death';
+    public const COL_PEOPLE_DEATH = 'people.people_death';
 
     /**
      * the column name for the people_gender field
      */
-    const COL_PEOPLE_GENDER = 'people.people_gender';
+    public const COL_PEOPLE_GENDER = 'people.people_gender';
 
     /**
      * the column name for the people_nation field
      */
-    const COL_PEOPLE_NATION = 'people.people_nation';
+    public const COL_PEOPLE_NATION = 'people.people_nation';
 
     /**
      * the column name for the people_bio field
      */
-    const COL_PEOPLE_BIO = 'people.people_bio';
+    public const COL_PEOPLE_BIO = 'people.people_bio';
 
     /**
      * the column name for the people_site field
      */
-    const COL_PEOPLE_SITE = 'people.people_site';
+    public const COL_PEOPLE_SITE = 'people.people_site';
 
     /**
      * the column name for the people_facebook field
      */
-    const COL_PEOPLE_FACEBOOK = 'people.people_facebook';
+    public const COL_PEOPLE_FACEBOOK = 'people.people_facebook';
 
     /**
      * the column name for the people_twitter field
      */
-    const COL_PEOPLE_TWITTER = 'people.people_twitter';
+    public const COL_PEOPLE_TWITTER = 'people.people_twitter';
 
     /**
      * the column name for the people_hits field
      */
-    const COL_PEOPLE_HITS = 'people.people_hits';
+    public const COL_PEOPLE_HITS = 'people.people_hits';
 
     /**
      * the column name for the people_date field
      */
-    const COL_PEOPLE_DATE = 'people.people_date';
+    public const COL_PEOPLE_DATE = 'people.people_date';
 
     /**
      * the column name for the people_insert field
      */
-    const COL_PEOPLE_INSERT = 'people.people_insert';
+    public const COL_PEOPLE_INSERT = 'people.people_insert';
 
     /**
      * the column name for the people_update field
      */
-    const COL_PEOPLE_UPDATE = 'people.people_update';
+    public const COL_PEOPLE_UPDATE = 'people.people_update';
 
     /**
      * the column name for the people_created field
      */
-    const COL_PEOPLE_CREATED = 'people.people_created';
+    public const COL_PEOPLE_CREATED = 'people.people_created';
 
     /**
      * the column name for the people_updated field
      */
-    const COL_PEOPLE_UPDATED = 'people.people_updated';
+    public const COL_PEOPLE_UPDATED = 'people.people_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'FirstName', 'LastName', 'Name', 'Alpha', 'UrlOld', 'Url', 'Pseudo', 'NoosfereId', 'Birth', 'Death', 'Gender', 'Nation', 'Bio', 'Site', 'Facebook', 'Twitter', 'Hits', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'firstName', 'lastName', 'name', 'alpha', 'urlOld', 'url', 'pseudo', 'noosfereId', 'birth', 'death', 'gender', 'nation', 'bio', 'site', 'facebook', 'twitter', 'hits', 'date', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID, PeopleTableMap::COL_PEOPLE_FIRST_NAME, PeopleTableMap::COL_PEOPLE_LAST_NAME, PeopleTableMap::COL_PEOPLE_NAME, PeopleTableMap::COL_PEOPLE_ALPHA, PeopleTableMap::COL_PEOPLE_URL_OLD, PeopleTableMap::COL_PEOPLE_URL, PeopleTableMap::COL_PEOPLE_PSEUDO, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, PeopleTableMap::COL_PEOPLE_BIRTH, PeopleTableMap::COL_PEOPLE_DEATH, PeopleTableMap::COL_PEOPLE_GENDER, PeopleTableMap::COL_PEOPLE_NATION, PeopleTableMap::COL_PEOPLE_BIO, PeopleTableMap::COL_PEOPLE_SITE, PeopleTableMap::COL_PEOPLE_FACEBOOK, PeopleTableMap::COL_PEOPLE_TWITTER, PeopleTableMap::COL_PEOPLE_HITS, PeopleTableMap::COL_PEOPLE_DATE, PeopleTableMap::COL_PEOPLE_INSERT, PeopleTableMap::COL_PEOPLE_UPDATE, PeopleTableMap::COL_PEOPLE_CREATED, PeopleTableMap::COL_PEOPLE_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('people_id', 'people_first_name', 'people_last_name', 'people_name', 'people_alpha', 'people_url_old', 'people_url', 'people_pseudo', 'people_noosfere_id', 'people_birth', 'people_death', 'people_gender', 'people_nation', 'people_bio', 'people_site', 'people_facebook', 'people_twitter', 'people_hits', 'people_date', 'people_insert', 'people_update', 'people_created', 'people_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'FirstName', 'LastName', 'Name', 'Alpha', 'UrlOld', 'Url', 'Pseudo', 'NoosfereId', 'Birth', 'Death', 'Gender', 'Nation', 'Bio', 'Site', 'Facebook', 'Twitter', 'Hits', 'Date', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'firstName', 'lastName', 'name', 'alpha', 'urlOld', 'url', 'pseudo', 'noosfereId', 'birth', 'death', 'gender', 'nation', 'bio', 'site', 'facebook', 'twitter', 'hits', 'date', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [PeopleTableMap::COL_PEOPLE_ID, PeopleTableMap::COL_PEOPLE_FIRST_NAME, PeopleTableMap::COL_PEOPLE_LAST_NAME, PeopleTableMap::COL_PEOPLE_NAME, PeopleTableMap::COL_PEOPLE_ALPHA, PeopleTableMap::COL_PEOPLE_URL_OLD, PeopleTableMap::COL_PEOPLE_URL, PeopleTableMap::COL_PEOPLE_PSEUDO, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, PeopleTableMap::COL_PEOPLE_BIRTH, PeopleTableMap::COL_PEOPLE_DEATH, PeopleTableMap::COL_PEOPLE_GENDER, PeopleTableMap::COL_PEOPLE_NATION, PeopleTableMap::COL_PEOPLE_BIO, PeopleTableMap::COL_PEOPLE_SITE, PeopleTableMap::COL_PEOPLE_FACEBOOK, PeopleTableMap::COL_PEOPLE_TWITTER, PeopleTableMap::COL_PEOPLE_HITS, PeopleTableMap::COL_PEOPLE_DATE, PeopleTableMap::COL_PEOPLE_INSERT, PeopleTableMap::COL_PEOPLE_UPDATE, PeopleTableMap::COL_PEOPLE_CREATED, PeopleTableMap::COL_PEOPLE_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['people_id', 'people_first_name', 'people_last_name', 'people_name', 'people_alpha', 'people_url_old', 'people_url', 'people_pseudo', 'people_noosfere_id', 'people_birth', 'people_death', 'people_gender', 'people_nation', 'people_bio', 'people_site', 'people_facebook', 'people_twitter', 'people_hits', 'people_date', 'people_insert', 'people_update', 'people_created', 'people_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'FirstName' => 1, 'LastName' => 2, 'Name' => 3, 'Alpha' => 4, 'UrlOld' => 5, 'Url' => 6, 'Pseudo' => 7, 'NoosfereId' => 8, 'Birth' => 9, 'Death' => 10, 'Gender' => 11, 'Nation' => 12, 'Bio' => 13, 'Site' => 14, 'Facebook' => 15, 'Twitter' => 16, 'Hits' => 17, 'Date' => 18, 'Insert' => 19, 'Update' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'firstName' => 1, 'lastName' => 2, 'name' => 3, 'alpha' => 4, 'urlOld' => 5, 'url' => 6, 'pseudo' => 7, 'noosfereId' => 8, 'birth' => 9, 'death' => 10, 'gender' => 11, 'nation' => 12, 'bio' => 13, 'site' => 14, 'facebook' => 15, 'twitter' => 16, 'hits' => 17, 'date' => 18, 'insert' => 19, 'update' => 20, 'createdAt' => 21, 'updatedAt' => 22, ),
-        self::TYPE_COLNAME       => array(PeopleTableMap::COL_PEOPLE_ID => 0, PeopleTableMap::COL_PEOPLE_FIRST_NAME => 1, PeopleTableMap::COL_PEOPLE_LAST_NAME => 2, PeopleTableMap::COL_PEOPLE_NAME => 3, PeopleTableMap::COL_PEOPLE_ALPHA => 4, PeopleTableMap::COL_PEOPLE_URL_OLD => 5, PeopleTableMap::COL_PEOPLE_URL => 6, PeopleTableMap::COL_PEOPLE_PSEUDO => 7, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID => 8, PeopleTableMap::COL_PEOPLE_BIRTH => 9, PeopleTableMap::COL_PEOPLE_DEATH => 10, PeopleTableMap::COL_PEOPLE_GENDER => 11, PeopleTableMap::COL_PEOPLE_NATION => 12, PeopleTableMap::COL_PEOPLE_BIO => 13, PeopleTableMap::COL_PEOPLE_SITE => 14, PeopleTableMap::COL_PEOPLE_FACEBOOK => 15, PeopleTableMap::COL_PEOPLE_TWITTER => 16, PeopleTableMap::COL_PEOPLE_HITS => 17, PeopleTableMap::COL_PEOPLE_DATE => 18, PeopleTableMap::COL_PEOPLE_INSERT => 19, PeopleTableMap::COL_PEOPLE_UPDATE => 20, PeopleTableMap::COL_PEOPLE_CREATED => 21, PeopleTableMap::COL_PEOPLE_UPDATED => 22, ),
-        self::TYPE_FIELDNAME     => array('people_id' => 0, 'people_first_name' => 1, 'people_last_name' => 2, 'people_name' => 3, 'people_alpha' => 4, 'people_url_old' => 5, 'people_url' => 6, 'people_pseudo' => 7, 'people_noosfere_id' => 8, 'people_birth' => 9, 'people_death' => 10, 'people_gender' => 11, 'people_nation' => 12, 'people_bio' => 13, 'people_site' => 14, 'people_facebook' => 15, 'people_twitter' => 16, 'people_hits' => 17, 'people_date' => 18, 'people_insert' => 19, 'people_update' => 20, 'people_created' => 21, 'people_updated' => 22, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'FirstName' => 1, 'LastName' => 2, 'Name' => 3, 'Alpha' => 4, 'UrlOld' => 5, 'Url' => 6, 'Pseudo' => 7, 'NoosfereId' => 8, 'Birth' => 9, 'Death' => 10, 'Gender' => 11, 'Nation' => 12, 'Bio' => 13, 'Site' => 14, 'Facebook' => 15, 'Twitter' => 16, 'Hits' => 17, 'Date' => 18, 'Insert' => 19, 'Update' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'firstName' => 1, 'lastName' => 2, 'name' => 3, 'alpha' => 4, 'urlOld' => 5, 'url' => 6, 'pseudo' => 7, 'noosfereId' => 8, 'birth' => 9, 'death' => 10, 'gender' => 11, 'nation' => 12, 'bio' => 13, 'site' => 14, 'facebook' => 15, 'twitter' => 16, 'hits' => 17, 'date' => 18, 'insert' => 19, 'update' => 20, 'createdAt' => 21, 'updatedAt' => 22, ],
+        self::TYPE_COLNAME       => [PeopleTableMap::COL_PEOPLE_ID => 0, PeopleTableMap::COL_PEOPLE_FIRST_NAME => 1, PeopleTableMap::COL_PEOPLE_LAST_NAME => 2, PeopleTableMap::COL_PEOPLE_NAME => 3, PeopleTableMap::COL_PEOPLE_ALPHA => 4, PeopleTableMap::COL_PEOPLE_URL_OLD => 5, PeopleTableMap::COL_PEOPLE_URL => 6, PeopleTableMap::COL_PEOPLE_PSEUDO => 7, PeopleTableMap::COL_PEOPLE_NOOSFERE_ID => 8, PeopleTableMap::COL_PEOPLE_BIRTH => 9, PeopleTableMap::COL_PEOPLE_DEATH => 10, PeopleTableMap::COL_PEOPLE_GENDER => 11, PeopleTableMap::COL_PEOPLE_NATION => 12, PeopleTableMap::COL_PEOPLE_BIO => 13, PeopleTableMap::COL_PEOPLE_SITE => 14, PeopleTableMap::COL_PEOPLE_FACEBOOK => 15, PeopleTableMap::COL_PEOPLE_TWITTER => 16, PeopleTableMap::COL_PEOPLE_HITS => 17, PeopleTableMap::COL_PEOPLE_DATE => 18, PeopleTableMap::COL_PEOPLE_INSERT => 19, PeopleTableMap::COL_PEOPLE_UPDATE => 20, PeopleTableMap::COL_PEOPLE_CREATED => 21, PeopleTableMap::COL_PEOPLE_UPDATED => 22, ],
+        self::TYPE_FIELDNAME     => ['people_id' => 0, 'people_first_name' => 1, 'people_last_name' => 2, 'people_name' => 3, 'people_alpha' => 4, 'people_url_old' => 5, 'people_url' => 6, 'people_pseudo' => 7, 'people_noosfere_id' => 8, 'people_birth' => 9, 'people_death' => 10, 'people_gender' => 11, 'people_nation' => 12, 'people_bio' => 13, 'people_site' => 14, 'people_facebook' => 15, 'people_twitter' => 16, 'people_hits' => 17, 'people_date' => 18, 'people_insert' => 19, 'people_update' => 20, 'people_created' => 21, 'people_updated' => 22, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'PEOPLE_ID',
@@ -415,9 +419,9 @@ class PeopleTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('people');
@@ -450,12 +454,14 @@ class PeopleTableMap extends TableMap
         $this->addColumn('people_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('people_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('people_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Role', '\\Model\\Role', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -464,20 +470,20 @@ class PeopleTableMap extends TableMap
     1 => ':people_id',
   ),
 ), null, null, 'Roles', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'people_created', 'update_column' => 'people_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -485,14 +491,14 @@ class PeopleTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -507,14 +513,14 @@ class PeopleTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -531,10 +537,10 @@ class PeopleTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? PeopleTableMap::CLASS_DEFAULT : PeopleTableMap::OM_CLASS;
     }
@@ -542,17 +548,17 @@ class PeopleTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (People object, last column rank)
+     * @return array (People object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = PeopleTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = PeopleTableMap::getInstanceFromPool($key))) {
@@ -576,13 +582,13 @@ class PeopleTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -612,12 +618,13 @@ class PeopleTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PeopleTableMap::COL_PEOPLE_ID);
@@ -676,12 +683,13 @@ class PeopleTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(PeopleTableMap::COL_PEOPLE_ID);
@@ -738,10 +746,10 @@ class PeopleTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(PeopleTableMap::DATABASE_NAME)->getTable(PeopleTableMap::TABLE_NAME);
     }
@@ -749,15 +757,15 @@ class PeopleTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a People or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or People object or primary key or array of primary keys
+     * @param mixed $values Criteria or People object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PeopleTableMap::DATABASE_NAME);
@@ -793,7 +801,7 @@ class PeopleTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return PeopleQuery::create()->doDeleteAll($con);
     }
@@ -801,13 +809,13 @@ class PeopleTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a People or Criteria object.
      *
-     * @param mixed               $criteria Criteria or People object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or People object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PeopleTableMap::DATABASE_NAME);
@@ -834,4 +842,4 @@ class PeopleTableMap extends TableMap
         });
     }
 
-} // PeopleTableMap
+}

@@ -33,190 +33,194 @@ class PostTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.PostTableMap';
+    public const CLASS_NAME = 'Model.Map.PostTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'posts';
+    public const TABLE_NAME = 'posts';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Post';
+    public const OM_CLASS = '\\Model\\Post';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Post';
+    public const CLASS_DEFAULT = 'Model.Post';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 22;
+    public const NUM_COLUMNS = 22;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 22;
+    public const NUM_HYDRATE_COLUMNS = 22;
 
     /**
      * the column name for the post_id field
      */
-    const COL_POST_ID = 'posts.post_id';
+    public const COL_POST_ID = 'posts.post_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'posts.user_id';
+    public const COL_USER_ID = 'posts.user_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'posts.site_id';
+    public const COL_SITE_ID = 'posts.site_id';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'posts.publisher_id';
+    public const COL_PUBLISHER_ID = 'posts.publisher_id';
 
     /**
      * the column name for the category_id field
      */
-    const COL_CATEGORY_ID = 'posts.category_id';
+    public const COL_CATEGORY_ID = 'posts.category_id';
 
     /**
      * the column name for the post_url field
      */
-    const COL_POST_URL = 'posts.post_url';
+    public const COL_POST_URL = 'posts.post_url';
 
     /**
      * the column name for the post_title field
      */
-    const COL_POST_TITLE = 'posts.post_title';
+    public const COL_POST_TITLE = 'posts.post_title';
 
     /**
      * the column name for the post_content field
      */
-    const COL_POST_CONTENT = 'posts.post_content';
+    public const COL_POST_CONTENT = 'posts.post_content';
 
     /**
      * the column name for the post_illustration_legend field
      */
-    const COL_POST_ILLUSTRATION_LEGEND = 'posts.post_illustration_legend';
+    public const COL_POST_ILLUSTRATION_LEGEND = 'posts.post_illustration_legend';
 
     /**
      * the column name for the post_selected field
      */
-    const COL_POST_SELECTED = 'posts.post_selected';
+    public const COL_POST_SELECTED = 'posts.post_selected';
 
     /**
      * the column name for the post_link field
      */
-    const COL_POST_LINK = 'posts.post_link';
+    public const COL_POST_LINK = 'posts.post_link';
 
     /**
      * the column name for the post_status field
      */
-    const COL_POST_STATUS = 'posts.post_status';
+    public const COL_POST_STATUS = 'posts.post_status';
 
     /**
      * the column name for the post_keywords field
      */
-    const COL_POST_KEYWORDS = 'posts.post_keywords';
+    public const COL_POST_KEYWORDS = 'posts.post_keywords';
 
     /**
      * the column name for the post_links field
      */
-    const COL_POST_LINKS = 'posts.post_links';
+    public const COL_POST_LINKS = 'posts.post_links';
 
     /**
      * the column name for the post_keywords_generated field
      */
-    const COL_POST_KEYWORDS_GENERATED = 'posts.post_keywords_generated';
+    public const COL_POST_KEYWORDS_GENERATED = 'posts.post_keywords_generated';
 
     /**
      * the column name for the post_fb_id field
      */
-    const COL_POST_FB_ID = 'posts.post_fb_id';
+    public const COL_POST_FB_ID = 'posts.post_fb_id';
 
     /**
      * the column name for the post_date field
      */
-    const COL_POST_DATE = 'posts.post_date';
+    public const COL_POST_DATE = 'posts.post_date';
 
     /**
      * the column name for the post_hits field
      */
-    const COL_POST_HITS = 'posts.post_hits';
+    public const COL_POST_HITS = 'posts.post_hits';
 
     /**
      * the column name for the post_insert field
      */
-    const COL_POST_INSERT = 'posts.post_insert';
+    public const COL_POST_INSERT = 'posts.post_insert';
 
     /**
      * the column name for the post_update field
      */
-    const COL_POST_UPDATE = 'posts.post_update';
+    public const COL_POST_UPDATE = 'posts.post_update';
 
     /**
      * the column name for the post_created field
      */
-    const COL_POST_CREATED = 'posts.post_created';
+    public const COL_POST_CREATED = 'posts.post_created';
 
     /**
      * the column name for the post_updated field
      */
-    const COL_POST_UPDATED = 'posts.post_updated';
+    public const COL_POST_UPDATED = 'posts.post_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationLegend' => 8, 'Selected' => 9, 'Link' => 10, 'Status' => 11, 'Keywords' => 12, 'Links' => 13, 'KeywordsGenerated' => 14, 'FbId' => 15, 'Date' => 16, 'Hits' => 17, 'Insert' => 18, 'Update' => 19, 'CreatedAt' => 20, 'UpdatedAt' => 21, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationLegend' => 8, 'selected' => 9, 'link' => 10, 'status' => 11, 'keywords' => 12, 'links' => 13, 'keywordsGenerated' => 14, 'fbId' => 15, 'date' => 16, 'hits' => 17, 'insert' => 18, 'update' => 19, 'createdAt' => 20, 'updatedAt' => 21, ),
-        self::TYPE_COLNAME       => array(PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 8, PostTableMap::COL_POST_SELECTED => 9, PostTableMap::COL_POST_LINK => 10, PostTableMap::COL_POST_STATUS => 11, PostTableMap::COL_POST_KEYWORDS => 12, PostTableMap::COL_POST_LINKS => 13, PostTableMap::COL_POST_KEYWORDS_GENERATED => 14, PostTableMap::COL_POST_FB_ID => 15, PostTableMap::COL_POST_DATE => 16, PostTableMap::COL_POST_HITS => 17, PostTableMap::COL_POST_INSERT => 18, PostTableMap::COL_POST_UPDATE => 19, PostTableMap::COL_POST_CREATED => 20, PostTableMap::COL_POST_UPDATED => 21, ),
-        self::TYPE_FIELDNAME     => array('post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_legend' => 8, 'post_selected' => 9, 'post_link' => 10, 'post_status' => 11, 'post_keywords' => 12, 'post_links' => 13, 'post_keywords_generated' => 14, 'post_fb_id' => 15, 'post_date' => 16, 'post_hits' => 17, 'post_insert' => 18, 'post_update' => 19, 'post_created' => 20, 'post_updated' => 21, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationLegend' => 8, 'Selected' => 9, 'Link' => 10, 'Status' => 11, 'Keywords' => 12, 'Links' => 13, 'KeywordsGenerated' => 14, 'FbId' => 15, 'Date' => 16, 'Hits' => 17, 'Insert' => 18, 'Update' => 19, 'CreatedAt' => 20, 'UpdatedAt' => 21, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationLegend' => 8, 'selected' => 9, 'link' => 10, 'status' => 11, 'keywords' => 12, 'links' => 13, 'keywordsGenerated' => 14, 'fbId' => 15, 'date' => 16, 'hits' => 17, 'insert' => 18, 'update' => 19, 'createdAt' => 20, 'updatedAt' => 21, ],
+        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 8, PostTableMap::COL_POST_SELECTED => 9, PostTableMap::COL_POST_LINK => 10, PostTableMap::COL_POST_STATUS => 11, PostTableMap::COL_POST_KEYWORDS => 12, PostTableMap::COL_POST_LINKS => 13, PostTableMap::COL_POST_KEYWORDS_GENERATED => 14, PostTableMap::COL_POST_FB_ID => 15, PostTableMap::COL_POST_DATE => 16, PostTableMap::COL_POST_HITS => 17, PostTableMap::COL_POST_INSERT => 18, PostTableMap::COL_POST_UPDATE => 19, PostTableMap::COL_POST_CREATED => 20, PostTableMap::COL_POST_UPDATED => 21, ],
+        self::TYPE_FIELDNAME     => ['post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_legend' => 8, 'post_selected' => 9, 'post_link' => 10, 'post_status' => 11, 'post_keywords' => 12, 'post_links' => 13, 'post_keywords_generated' => 14, 'post_fb_id' => 15, 'post_date' => 16, 'post_hits' => 17, 'post_insert' => 18, 'post_update' => 19, 'post_created' => 20, 'post_updated' => 21, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'POST_ID',
@@ -402,9 +406,9 @@ class PostTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('posts');
@@ -436,27 +440,29 @@ class PostTableMap extends TableMap
         $this->addColumn('post_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('post_updated', 'UpdatedAt', 'DATE', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'post_created', 'update_column' => 'post_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -464,14 +470,14 @@ class PostTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -486,14 +492,14 @@ class PostTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -510,10 +516,10 @@ class PostTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? PostTableMap::CLASS_DEFAULT : PostTableMap::OM_CLASS;
     }
@@ -521,17 +527,17 @@ class PostTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Post object, last column rank)
+     * @return array (Post object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = PostTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = PostTableMap::getInstanceFromPool($key))) {
@@ -555,13 +561,13 @@ class PostTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -591,12 +597,13 @@ class PostTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PostTableMap::COL_POST_ID);
@@ -653,12 +660,13 @@ class PostTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(PostTableMap::COL_POST_ID);
@@ -713,10 +721,10 @@ class PostTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(PostTableMap::DATABASE_NAME)->getTable(PostTableMap::TABLE_NAME);
     }
@@ -724,15 +732,15 @@ class PostTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Post or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Post object or primary key or array of primary keys
+     * @param mixed $values Criteria or Post object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PostTableMap::DATABASE_NAME);
@@ -768,7 +776,7 @@ class PostTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return PostQuery::create()->doDeleteAll($con);
     }
@@ -776,13 +784,13 @@ class PostTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Post or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Post object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Post object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PostTableMap::DATABASE_NAME);
@@ -809,4 +817,4 @@ class PostTableMap extends TableMap
         });
     }
 
-} // PostTableMap
+}

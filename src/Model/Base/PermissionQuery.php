@@ -10,7 +10,7 @@ use Model\Map\PermissionTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -41,8 +41,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermissionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPermissionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPermission|null findOne(ConnectionInterface $con = null) Return the first ChildPermission matching the query
- * @method     ChildPermission findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPermission matching the query, or a new ChildPermission object populated from the query conditions when no match is found
+ * @method     ChildPermission|null findOne(?ConnectionInterface $con = null) Return the first ChildPermission matching the query
+ * @method     ChildPermission findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPermission matching the query, or a new ChildPermission object populated from the query conditions when no match is found
  *
  * @method     ChildPermission|null findOneById(int $permission_id) Return the first ChildPermission filtered by the permission_id column
  * @method     ChildPermission|null findOneByUserId(int $user_id) Return the first ChildPermission filtered by the user_id column
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermission|null findOneByLast(string $permission_last) Return the first ChildPermission filtered by the permission_last column
  * @method     ChildPermission|null findOneByDate(string $permission_date) Return the first ChildPermission filtered by the permission_date column *
 
- * @method     ChildPermission requirePk($key, ConnectionInterface $con = null) Return the ChildPermission by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPermission requireOne(ConnectionInterface $con = null) Return the first ChildPermission matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPermission requirePk($key, ?ConnectionInterface $con = null) Return the ChildPermission by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPermission requireOne(?ConnectionInterface $con = null) Return the first ChildPermission matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPermission requireOneById(int $permission_id) Return the first ChildPermission filtered by the permission_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOneByUserId(int $user_id) Return the first ChildPermission filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -61,22 +61,22 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermission requireOneByLast(string $permission_last) Return the first ChildPermission filtered by the permission_last column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOneByDate(string $permission_date) Return the first ChildPermission filtered by the permission_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPermission[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> find(ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
- * @method     ChildPermission[]|ObjectCollection findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
- * @method     ChildPermission[]|ObjectCollection findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
- * @method     ChildPermission[]|ObjectCollection findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
- * @method     ChildPermission[]|ObjectCollection findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
- * @method     ChildPermission[]|ObjectCollection findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
- * @method     ChildPermission[]|ObjectCollection findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
- * @psalm-method ObjectCollection&\Traversable<ChildPermission> findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
- * @method     ChildPermission[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPermission> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPermission[]|Collection find(?ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPermission> find(?ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
+ * @method     ChildPermission[]|Collection findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
+ * @method     ChildPermission[]|Collection findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
+ * @method     ChildPermission[]|Collection findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
+ * @method     ChildPermission[]|Collection findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
+ * @method     ChildPermission[]|Collection findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
+ * @method     ChildPermission[]|Collection findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
+ * @method     ChildPermission[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPermission> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PermissionQuery extends ModelCriteria
@@ -86,9 +86,9 @@ abstract class PermissionQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PermissionQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Permission', $modelAlias = null)
     {
@@ -98,12 +98,12 @@ abstract class PermissionQuery extends ModelCriteria
     /**
      * Returns a new ChildPermissionQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPermissionQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPermissionQuery) {
             return $criteria;
@@ -133,7 +133,7 @@ abstract class PermissionQuery extends ModelCriteria
      *
      * @return ChildPermission|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -165,8 +165,8 @@ abstract class PermissionQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -198,8 +198,8 @@ abstract class PermissionQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPermission|array|mixed the result, formatted by the current formatter
      */
@@ -219,12 +219,12 @@ abstract class PermissionQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -241,27 +241,31 @@ abstract class PermissionQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -274,15 +278,15 @@ abstract class PermissionQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE permission_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -302,7 +306,9 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $id, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -315,15 +321,15 @@ abstract class PermissionQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -343,7 +349,9 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -356,15 +364,15 @@ abstract class PermissionQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -384,7 +392,9 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -394,14 +404,15 @@ abstract class PermissionQuery extends ModelCriteria
      * <code>
      * $query->filterByRank('fooValue');   // WHERE permission_rank = 'fooValue'
      * $query->filterByRank('%fooValue%', Criteria::LIKE); // WHERE permission_rank LIKE '%fooValue%'
+     * $query->filterByRank(['foo', 'bar']); // WHERE permission_rank IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $rank The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $rank The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRank($rank = null, $comparison = null)
+    public function filterByRank($rank = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($rank)) {
@@ -409,7 +420,9 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_RANK, $rank, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_RANK, $rank, $comparison);
+
+        return $this;
     }
 
     /**
@@ -422,17 +435,17 @@ abstract class PermissionQuery extends ModelCriteria
      * $query->filterByLast(array('max' => 'yesterday')); // WHERE permission_last > '2011-03-13'
      * </code>
      *
-     * @param     mixed $last The value to use as filter.
+     * @param mixed $last The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLast($last = null, $comparison = null)
+    public function filterByLast($last = null, ?string $comparison = null)
     {
         if (is_array($last)) {
             $useMinMax = false;
@@ -452,7 +465,9 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_LAST, $last, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_LAST, $last, $comparison);
+
+        return $this;
     }
 
     /**
@@ -465,17 +480,17 @@ abstract class PermissionQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE permission_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -495,15 +510,17 @@ abstract class PermissionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_DATE, $date, $comparison);
+        $this->addUsingAlias(PermissionTableMap::COL_PERMISSION_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildPermission $permission Object to remove from the list of results
+     * @param ChildPermission $permission Object to remove from the list of results
      *
-     * @return $this|ChildPermissionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($permission = null)
     {
@@ -520,7 +537,7 @@ abstract class PermissionQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PermissionTableMap::DATABASE_NAME);
@@ -545,12 +562,12 @@ abstract class PermissionQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PermissionTableMap::DATABASE_NAME);
@@ -575,4 +592,4 @@ abstract class PermissionQuery extends ModelCriteria
         });
     }
 
-} // PermissionQuery
+}

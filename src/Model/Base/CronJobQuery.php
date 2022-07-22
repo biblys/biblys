@@ -10,7 +10,7 @@ use Model\Map\CronJobTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -43,8 +43,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJobQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCronJobQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCronJob|null findOne(ConnectionInterface $con = null) Return the first ChildCronJob matching the query
- * @method     ChildCronJob findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCronJob matching the query, or a new ChildCronJob object populated from the query conditions when no match is found
+ * @method     ChildCronJob|null findOne(?ConnectionInterface $con = null) Return the first ChildCronJob matching the query
+ * @method     ChildCronJob findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCronJob matching the query, or a new ChildCronJob object populated from the query conditions when no match is found
  *
  * @method     ChildCronJob|null findOneById(int $cron_job_id) Return the first ChildCronJob filtered by the cron_job_id column
  * @method     ChildCronJob|null findOneBySiteId(int $site_id) Return the first ChildCronJob filtered by the site_id column
@@ -54,8 +54,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJob|null findOneByCreatedAt(string $cron_job_created) Return the first ChildCronJob filtered by the cron_job_created column
  * @method     ChildCronJob|null findOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column *
 
- * @method     ChildCronJob requirePk($key, ConnectionInterface $con = null) Return the ChildCronJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCronJob requireOne(ConnectionInterface $con = null) Return the first ChildCronJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCronJob requirePk($key, ?ConnectionInterface $con = null) Return the ChildCronJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCronJob requireOne(?ConnectionInterface $con = null) Return the first ChildCronJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCronJob requireOneById(int $cron_job_id) Return the first ChildCronJob filtered by the cron_job_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOneBySiteId(int $site_id) Return the first ChildCronJob filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -65,24 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJob requireOneByCreatedAt(string $cron_job_created) Return the first ChildCronJob filtered by the cron_job_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCronJob[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> find(ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
- * @method     ChildCronJob[]|ObjectCollection findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
- * @method     ChildCronJob[]|ObjectCollection findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
- * @method     ChildCronJob[]|ObjectCollection findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
- * @method     ChildCronJob[]|ObjectCollection findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
- * @method     ChildCronJob[]|ObjectCollection findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
- * @method     ChildCronJob[]|ObjectCollection findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
- * @method     ChildCronJob[]|ObjectCollection findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCronJob> findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
- * @method     ChildCronJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCronJob> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCronJob[]|Collection find(?ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCronJob> find(?ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
+ * @method     ChildCronJob[]|Collection findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
+ * @method     ChildCronJob[]|Collection findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
+ * @method     ChildCronJob[]|Collection findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
+ * @method     ChildCronJob[]|Collection findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
+ * @method     ChildCronJob[]|Collection findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
+ * @method     ChildCronJob[]|Collection findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
+ * @method     ChildCronJob[]|Collection findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
+ * @method     ChildCronJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCronJob> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CronJobQuery extends ModelCriteria
@@ -92,9 +92,9 @@ abstract class CronJobQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CronJobQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\CronJob', $modelAlias = null)
     {
@@ -104,12 +104,12 @@ abstract class CronJobQuery extends ModelCriteria
     /**
      * Returns a new ChildCronJobQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCronJobQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCronJobQuery) {
             return $criteria;
@@ -139,7 +139,7 @@ abstract class CronJobQuery extends ModelCriteria
      *
      * @return ChildCronJob|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -171,8 +171,8 @@ abstract class CronJobQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -204,8 +204,8 @@ abstract class CronJobQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCronJob|array|mixed the result, formatted by the current formatter
      */
@@ -225,12 +225,12 @@ abstract class CronJobQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -247,27 +247,31 @@ abstract class CronJobQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -280,15 +284,15 @@ abstract class CronJobQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE cron_job_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -308,7 +312,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $id, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -321,15 +327,15 @@ abstract class CronJobQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -349,7 +355,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -359,14 +367,15 @@ abstract class CronJobQuery extends ModelCriteria
      * <code>
      * $query->filterByTask('fooValue');   // WHERE cron_job_task = 'fooValue'
      * $query->filterByTask('%fooValue%', Criteria::LIKE); // WHERE cron_job_task LIKE '%fooValue%'
+     * $query->filterByTask(['foo', 'bar']); // WHERE cron_job_task IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $task The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $task The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTask($task = null, $comparison = null)
+    public function filterByTask($task = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($task)) {
@@ -374,7 +383,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_TASK, $task, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_TASK, $task, $comparison);
+
+        return $this;
     }
 
     /**
@@ -384,14 +395,15 @@ abstract class CronJobQuery extends ModelCriteria
      * <code>
      * $query->filterByResult('fooValue');   // WHERE cron_job_result = 'fooValue'
      * $query->filterByResult('%fooValue%', Criteria::LIKE); // WHERE cron_job_result LIKE '%fooValue%'
+     * $query->filterByResult(['foo', 'bar']); // WHERE cron_job_result IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $result The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $result The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByResult($result = null, $comparison = null)
+    public function filterByResult($result = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($result)) {
@@ -399,7 +411,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_RESULT, $result, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_RESULT, $result, $comparison);
+
+        return $this;
     }
 
     /**
@@ -409,14 +423,15 @@ abstract class CronJobQuery extends ModelCriteria
      * <code>
      * $query->filterByMessage('fooValue');   // WHERE cron_job_message = 'fooValue'
      * $query->filterByMessage('%fooValue%', Criteria::LIKE); // WHERE cron_job_message LIKE '%fooValue%'
+     * $query->filterByMessage(['foo', 'bar']); // WHERE cron_job_message IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $message The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $message The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMessage($message = null, $comparison = null)
+    public function filterByMessage($message = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($message)) {
@@ -424,7 +439,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_MESSAGE, $message, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_MESSAGE, $message, $comparison);
+
+        return $this;
     }
 
     /**
@@ -437,17 +454,17 @@ abstract class CronJobQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE cron_job_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -467,7 +484,9 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -480,17 +499,17 @@ abstract class CronJobQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE cron_job_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -510,15 +529,17 @@ abstract class CronJobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCronJob $cronJob Object to remove from the list of results
+     * @param ChildCronJob $cronJob Object to remove from the list of results
      *
-     * @return $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($cronJob = null)
     {
@@ -535,7 +556,7 @@ abstract class CronJobQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CronJobTableMap::DATABASE_NAME);
@@ -560,12 +581,12 @@ abstract class CronJobQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CronJobTableMap::DATABASE_NAME);
@@ -595,65 +616,77 @@ abstract class CronJobQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
+        $this->addDescendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
+        $this->addAscendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
+        $this->addDescendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CronJobTableMap::COL_CRON_JOB_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCronJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
+        $this->addAscendingOrderByColumn(CronJobTableMap::COL_CRON_JOB_CREATED);
+
+        return $this;
     }
 
-} // CronJobQuery
+}

@@ -10,7 +10,7 @@ use Model\Map\AxysAppTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -43,8 +43,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysAppQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildAxysAppQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAxysApp|null findOne(ConnectionInterface $con = null) Return the first ChildAxysApp matching the query
- * @method     ChildAxysApp findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAxysApp matching the query, or a new ChildAxysApp object populated from the query conditions when no match is found
+ * @method     ChildAxysApp|null findOne(?ConnectionInterface $con = null) Return the first ChildAxysApp matching the query
+ * @method     ChildAxysApp findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAxysApp matching the query, or a new ChildAxysApp object populated from the query conditions when no match is found
  *
  * @method     ChildAxysApp|null findOneById(int $id) Return the first ChildAxysApp filtered by the id column
  * @method     ChildAxysApp|null findOneByClientId(string $client_id) Return the first ChildAxysApp filtered by the client_id column
@@ -54,8 +54,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysApp|null findOneByCreatedAt(string $created_at) Return the first ChildAxysApp filtered by the created_at column
  * @method     ChildAxysApp|null findOneByUpdatedAt(string $updated_at) Return the first ChildAxysApp filtered by the updated_at column *
 
- * @method     ChildAxysApp requirePk($key, ConnectionInterface $con = null) Return the ChildAxysApp by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAxysApp requireOne(ConnectionInterface $con = null) Return the first ChildAxysApp matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysApp requirePk($key, ?ConnectionInterface $con = null) Return the ChildAxysApp by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAxysApp requireOne(?ConnectionInterface $con = null) Return the first ChildAxysApp matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAxysApp requireOneById(int $id) Return the first ChildAxysApp filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysApp requireOneByClientId(string $client_id) Return the first ChildAxysApp filtered by the client_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -65,24 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysApp requireOneByCreatedAt(string $created_at) Return the first ChildAxysApp filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysApp requireOneByUpdatedAt(string $updated_at) Return the first ChildAxysApp filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAxysApp[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> find(ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
- * @method     ChildAxysApp[]|ObjectCollection findById(int $id) Return ChildAxysApp objects filtered by the id column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findById(int $id) Return ChildAxysApp objects filtered by the id column
- * @method     ChildAxysApp[]|ObjectCollection findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
- * @method     ChildAxysApp[]|ObjectCollection findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
- * @method     ChildAxysApp[]|ObjectCollection findByName(string $name) Return ChildAxysApp objects filtered by the name column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByName(string $name) Return ChildAxysApp objects filtered by the name column
- * @method     ChildAxysApp[]|ObjectCollection findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
- * @method     ChildAxysApp[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
- * @method     ChildAxysApp[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
- * @psalm-method ObjectCollection&\Traversable<ChildAxysApp> findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
- * @method     ChildAxysApp[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAxysApp> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAxysApp[]|Collection find(?ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildAxysApp> find(?ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
+ * @method     ChildAxysApp[]|Collection findById(int $id) Return ChildAxysApp objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findById(int $id) Return ChildAxysApp objects filtered by the id column
+ * @method     ChildAxysApp[]|Collection findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
+ * @method     ChildAxysApp[]|Collection findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
+ * @method     ChildAxysApp[]|Collection findByName(string $name) Return ChildAxysApp objects filtered by the name column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByName(string $name) Return ChildAxysApp objects filtered by the name column
+ * @method     ChildAxysApp[]|Collection findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
+ * @method     ChildAxysApp[]|Collection findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
+ * @method     ChildAxysApp[]|Collection findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
+ * @method     ChildAxysApp[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAxysApp> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class AxysAppQuery extends ModelCriteria
@@ -92,9 +92,9 @@ abstract class AxysAppQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\AxysAppQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\AxysApp', $modelAlias = null)
     {
@@ -104,12 +104,12 @@ abstract class AxysAppQuery extends ModelCriteria
     /**
      * Returns a new ChildAxysAppQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildAxysAppQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildAxysAppQuery) {
             return $criteria;
@@ -139,7 +139,7 @@ abstract class AxysAppQuery extends ModelCriteria
      *
      * @return ChildAxysApp|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -171,8 +171,8 @@ abstract class AxysAppQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -204,8 +204,8 @@ abstract class AxysAppQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildAxysApp|array|mixed the result, formatted by the current formatter
      */
@@ -225,12 +225,12 @@ abstract class AxysAppQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -247,27 +247,31 @@ abstract class AxysAppQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(AxysAppTableMap::COL_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(AxysAppTableMap::COL_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -280,15 +284,15 @@ abstract class AxysAppQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -308,7 +312,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_ID, $id, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -318,14 +324,15 @@ abstract class AxysAppQuery extends ModelCriteria
      * <code>
      * $query->filterByClientId('fooValue');   // WHERE client_id = 'fooValue'
      * $query->filterByClientId('%fooValue%', Criteria::LIKE); // WHERE client_id LIKE '%fooValue%'
+     * $query->filterByClientId(['foo', 'bar']); // WHERE client_id IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $clientId The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $clientId The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByClientId($clientId = null, $comparison = null)
+    public function filterByClientId($clientId = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($clientId)) {
@@ -333,7 +340,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_CLIENT_ID, $clientId, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_CLIENT_ID, $clientId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -343,14 +352,15 @@ abstract class AxysAppQuery extends ModelCriteria
      * <code>
      * $query->filterByClientSecret('fooValue');   // WHERE client_secret = 'fooValue'
      * $query->filterByClientSecret('%fooValue%', Criteria::LIKE); // WHERE client_secret LIKE '%fooValue%'
+     * $query->filterByClientSecret(['foo', 'bar']); // WHERE client_secret IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $clientSecret The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $clientSecret The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByClientSecret($clientSecret = null, $comparison = null)
+    public function filterByClientSecret($clientSecret = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($clientSecret)) {
@@ -358,7 +368,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_CLIENT_SECRET, $clientSecret, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_CLIENT_SECRET, $clientSecret, $comparison);
+
+        return $this;
     }
 
     /**
@@ -368,14 +380,15 @@ abstract class AxysAppQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -383,7 +396,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_NAME, $name, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -393,14 +408,15 @@ abstract class AxysAppQuery extends ModelCriteria
      * <code>
      * $query->filterByRedirectUri('fooValue');   // WHERE redirect_uri = 'fooValue'
      * $query->filterByRedirectUri('%fooValue%', Criteria::LIKE); // WHERE redirect_uri LIKE '%fooValue%'
+     * $query->filterByRedirectUri(['foo', 'bar']); // WHERE redirect_uri IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $redirectUri The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $redirectUri The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRedirectUri($redirectUri = null, $comparison = null)
+    public function filterByRedirectUri($redirectUri = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($redirectUri)) {
@@ -408,7 +424,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_REDIRECT_URI, $redirectUri, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_REDIRECT_URI, $redirectUri, $comparison);
+
+        return $this;
     }
 
     /**
@@ -421,17 +439,17 @@ abstract class AxysAppQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -451,7 +469,9 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_CREATED_AT, $createdAt, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_CREATED_AT, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -464,17 +484,17 @@ abstract class AxysAppQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -494,15 +514,17 @@ abstract class AxysAppQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AxysAppTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+        $this->addUsingAlias(AxysAppTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildAxysApp $axysApp Object to remove from the list of results
+     * @param ChildAxysApp $axysApp Object to remove from the list of results
      *
-     * @return $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($axysApp = null)
     {
@@ -519,7 +541,7 @@ abstract class AxysAppQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
@@ -544,12 +566,12 @@ abstract class AxysAppQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
@@ -579,65 +601,77 @@ abstract class AxysAppQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(AxysAppTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysAppTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AxysAppTableMap::COL_UPDATED_AT);
+        $this->addDescendingOrderByColumn(AxysAppTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AxysAppTableMap::COL_UPDATED_AT);
+        $this->addAscendingOrderByColumn(AxysAppTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AxysAppTableMap::COL_CREATED_AT);
+        $this->addDescendingOrderByColumn(AxysAppTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(AxysAppTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AxysAppTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildAxysAppQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AxysAppTableMap::COL_CREATED_AT);
+        $this->addAscendingOrderByColumn(AxysAppTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
-} // AxysAppQuery
+}

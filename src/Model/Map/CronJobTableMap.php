@@ -33,115 +33,119 @@ class CronJobTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.CronJobTableMap';
+    public const CLASS_NAME = 'Model.Map.CronJobTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'cron_jobs';
+    public const TABLE_NAME = 'cron_jobs';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\CronJob';
+    public const OM_CLASS = '\\Model\\CronJob';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.CronJob';
+    public const CLASS_DEFAULT = 'Model.CronJob';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the cron_job_id field
      */
-    const COL_CRON_JOB_ID = 'cron_jobs.cron_job_id';
+    public const COL_CRON_JOB_ID = 'cron_jobs.cron_job_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'cron_jobs.site_id';
+    public const COL_SITE_ID = 'cron_jobs.site_id';
 
     /**
      * the column name for the cron_job_task field
      */
-    const COL_CRON_JOB_TASK = 'cron_jobs.cron_job_task';
+    public const COL_CRON_JOB_TASK = 'cron_jobs.cron_job_task';
 
     /**
      * the column name for the cron_job_result field
      */
-    const COL_CRON_JOB_RESULT = 'cron_jobs.cron_job_result';
+    public const COL_CRON_JOB_RESULT = 'cron_jobs.cron_job_result';
 
     /**
      * the column name for the cron_job_message field
      */
-    const COL_CRON_JOB_MESSAGE = 'cron_jobs.cron_job_message';
+    public const COL_CRON_JOB_MESSAGE = 'cron_jobs.cron_job_message';
 
     /**
      * the column name for the cron_job_created field
      */
-    const COL_CRON_JOB_CREATED = 'cron_jobs.cron_job_created';
+    public const COL_CRON_JOB_CREATED = 'cron_jobs.cron_job_created';
 
     /**
      * the column name for the cron_job_updated field
      */
-    const COL_CRON_JOB_UPDATED = 'cron_jobs.cron_job_updated';
+    public const COL_CRON_JOB_UPDATED = 'cron_jobs.cron_job_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Task', 'Result', 'Message', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'task', 'result', 'message', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID, CronJobTableMap::COL_SITE_ID, CronJobTableMap::COL_CRON_JOB_TASK, CronJobTableMap::COL_CRON_JOB_RESULT, CronJobTableMap::COL_CRON_JOB_MESSAGE, CronJobTableMap::COL_CRON_JOB_CREATED, CronJobTableMap::COL_CRON_JOB_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('cron_job_id', 'site_id', 'cron_job_task', 'cron_job_result', 'cron_job_message', 'cron_job_created', 'cron_job_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Task', 'Result', 'Message', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'task', 'result', 'message', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CronJobTableMap::COL_CRON_JOB_ID, CronJobTableMap::COL_SITE_ID, CronJobTableMap::COL_CRON_JOB_TASK, CronJobTableMap::COL_CRON_JOB_RESULT, CronJobTableMap::COL_CRON_JOB_MESSAGE, CronJobTableMap::COL_CRON_JOB_CREATED, CronJobTableMap::COL_CRON_JOB_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['cron_job_id', 'site_id', 'cron_job_task', 'cron_job_result', 'cron_job_message', 'cron_job_created', 'cron_job_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Task' => 2, 'Result' => 3, 'Message' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'task' => 2, 'result' => 3, 'message' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        self::TYPE_COLNAME       => array(CronJobTableMap::COL_CRON_JOB_ID => 0, CronJobTableMap::COL_SITE_ID => 1, CronJobTableMap::COL_CRON_JOB_TASK => 2, CronJobTableMap::COL_CRON_JOB_RESULT => 3, CronJobTableMap::COL_CRON_JOB_MESSAGE => 4, CronJobTableMap::COL_CRON_JOB_CREATED => 5, CronJobTableMap::COL_CRON_JOB_UPDATED => 6, ),
-        self::TYPE_FIELDNAME     => array('cron_job_id' => 0, 'site_id' => 1, 'cron_job_task' => 2, 'cron_job_result' => 3, 'cron_job_message' => 4, 'cron_job_created' => 5, 'cron_job_updated' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Task' => 2, 'Result' => 3, 'Message' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'task' => 2, 'result' => 3, 'message' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [CronJobTableMap::COL_CRON_JOB_ID => 0, CronJobTableMap::COL_SITE_ID => 1, CronJobTableMap::COL_CRON_JOB_TASK => 2, CronJobTableMap::COL_CRON_JOB_RESULT => 3, CronJobTableMap::COL_CRON_JOB_MESSAGE => 4, CronJobTableMap::COL_CRON_JOB_CREATED => 5, CronJobTableMap::COL_CRON_JOB_UPDATED => 6, ],
+        self::TYPE_FIELDNAME     => ['cron_job_id' => 0, 'site_id' => 1, 'cron_job_task' => 2, 'cron_job_result' => 3, 'cron_job_message' => 4, 'cron_job_created' => 5, 'cron_job_updated' => 6, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'CRON_JOB_ID',
@@ -207,9 +211,9 @@ class CronJobTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('cron_jobs');
@@ -226,27 +230,29 @@ class CronJobTableMap extends TableMap
         $this->addColumn('cron_job_message', 'Message', 'VARCHAR', false, 256, null);
         $this->addColumn('cron_job_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('cron_job_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'cron_job_created', 'update_column' => 'cron_job_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -254,14 +260,14 @@ class CronJobTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -276,14 +282,14 @@ class CronJobTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -300,10 +306,10 @@ class CronJobTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? CronJobTableMap::CLASS_DEFAULT : CronJobTableMap::OM_CLASS;
     }
@@ -311,17 +317,17 @@ class CronJobTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (CronJob object, last column rank)
+     * @return array (CronJob object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = CronJobTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = CronJobTableMap::getInstanceFromPool($key))) {
@@ -345,13 +351,13 @@ class CronJobTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -381,12 +387,13 @@ class CronJobTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(CronJobTableMap::COL_CRON_JOB_ID);
@@ -413,12 +420,13 @@ class CronJobTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(CronJobTableMap::COL_CRON_JOB_ID);
@@ -443,10 +451,10 @@ class CronJobTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(CronJobTableMap::DATABASE_NAME)->getTable(CronJobTableMap::TABLE_NAME);
     }
@@ -454,15 +462,15 @@ class CronJobTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a CronJob or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or CronJob object or primary key or array of primary keys
+     * @param mixed $values Criteria or CronJob object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CronJobTableMap::DATABASE_NAME);
@@ -498,7 +506,7 @@ class CronJobTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return CronJobQuery::create()->doDeleteAll($con);
     }
@@ -506,13 +514,13 @@ class CronJobTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a CronJob or Criteria object.
      *
-     * @param mixed               $criteria Criteria or CronJob object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or CronJob object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CronJobTableMap::DATABASE_NAME);
@@ -539,4 +547,4 @@ class CronJobTableMap extends TableMap
         });
     }
 
-} // CronJobTableMap
+}

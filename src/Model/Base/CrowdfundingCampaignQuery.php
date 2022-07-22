@@ -10,7 +10,7 @@ use Model\Map\CrowdfundingCampaignTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -55,8 +55,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaignQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCrowdfundingCampaignQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCrowdfundingCampaign|null findOne(ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query
- * @method     ChildCrowdfundingCampaign findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query, or a new ChildCrowdfundingCampaign object populated from the query conditions when no match is found
+ * @method     ChildCrowdfundingCampaign|null findOne(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query
+ * @method     ChildCrowdfundingCampaign findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query, or a new ChildCrowdfundingCampaign object populated from the query conditions when no match is found
  *
  * @method     ChildCrowdfundingCampaign|null findOneById(int $campaign_id) Return the first ChildCrowdfundingCampaign filtered by the campaign_id column
  * @method     ChildCrowdfundingCampaign|null findOneBySiteId(int $site_id) Return the first ChildCrowdfundingCampaign filtered by the site_id column
@@ -72,8 +72,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaign|null findOneByCreatedAt(string $campaign_created) Return the first ChildCrowdfundingCampaign filtered by the campaign_created column
  * @method     ChildCrowdfundingCampaign|null findOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column *
 
- * @method     ChildCrowdfundingCampaign requirePk($key, ConnectionInterface $con = null) Return the ChildCrowdfundingCampaign by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCrowdfundingCampaign requireOne(ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCrowdfundingCampaign requirePk($key, ?ConnectionInterface $con = null) Return the ChildCrowdfundingCampaign by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCrowdfundingCampaign requireOne(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCrowdfundingCampaign requireOneById(int $campaign_id) Return the first ChildCrowdfundingCampaign filtered by the campaign_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOneBySiteId(int $site_id) Return the first ChildCrowdfundingCampaign filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -89,36 +89,36 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaign requireOneByCreatedAt(string $campaign_created) Return the first ChildCrowdfundingCampaign filtered by the campaign_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> find(ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
- * @method     ChildCrowdfundingCampaign[]|ObjectCollection findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCrowdfundingCampaign> findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
- * @method     ChildCrowdfundingCampaign[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowdfundingCampaign> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCrowdfundingCampaign[]|Collection find(?ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> find(?ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
+ * @method     ChildCrowdfundingCampaign[]|Collection findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
+ * @method     ChildCrowdfundingCampaign[]|Collection findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
+ * @method     ChildCrowdfundingCampaign[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowdfundingCampaign> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CrowdfundingCampaignQuery extends ModelCriteria
@@ -128,9 +128,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CrowdfundingCampaignQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\CrowdfundingCampaign', $modelAlias = null)
     {
@@ -140,12 +140,12 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
     /**
      * Returns a new ChildCrowdfundingCampaignQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCrowdfundingCampaignQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCrowdfundingCampaignQuery) {
             return $criteria;
@@ -175,7 +175,7 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      *
      * @return ChildCrowdfundingCampaign|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -207,8 +207,8 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -240,8 +240,8 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCrowdfundingCampaign|array|mixed the result, formatted by the current formatter
      */
@@ -261,12 +261,12 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -283,27 +283,31 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -316,15 +320,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE campaign_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -344,7 +348,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $id, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -357,15 +363,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -385,7 +391,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -395,14 +403,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE campaign_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE campaign_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE campaign_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -410,7 +419,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE, $title, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -420,14 +431,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE campaign_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE campaign_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE campaign_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -435,7 +447,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL, $url, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -445,14 +459,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * <code>
      * $query->filterByDescription('fooValue');   // WHERE campaign_description = 'fooValue'
      * $query->filterByDescription('%fooValue%', Criteria::LIKE); // WHERE campaign_description LIKE '%fooValue%'
+     * $query->filterByDescription(['foo', 'bar']); // WHERE campaign_description IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $description The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $description The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDescription($description = null, $comparison = null)
+    public function filterByDescription($description = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($description)) {
@@ -460,7 +475,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION, $description, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_DESCRIPTION, $description, $comparison);
+
+        return $this;
     }
 
     /**
@@ -470,14 +487,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * <code>
      * $query->filterByImage('fooValue');   // WHERE campaign_image = 'fooValue'
      * $query->filterByImage('%fooValue%', Criteria::LIKE); // WHERE campaign_image LIKE '%fooValue%'
+     * $query->filterByImage(['foo', 'bar']); // WHERE campaign_image IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $image The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $image The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByImage($image = null, $comparison = null)
+    public function filterByImage($image = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($image)) {
@@ -485,7 +503,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE, $image, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_IMAGE, $image, $comparison);
+
+        return $this;
     }
 
     /**
@@ -498,15 +518,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByGoal(array('min' => 12)); // WHERE campaign_goal > 12
      * </code>
      *
-     * @param     mixed $goal The value to use as filter.
+     * @param mixed $goal The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByGoal($goal = null, $comparison = null)
+    public function filterByGoal($goal = null, ?string $comparison = null)
     {
         if (is_array($goal)) {
             $useMinMax = false;
@@ -526,7 +546,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL, $goal, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_GOAL, $goal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -539,15 +561,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByPledged(array('min' => 12)); // WHERE campaign_pledged > 12
      * </code>
      *
-     * @param     mixed $pledged The value to use as filter.
+     * @param mixed $pledged The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPledged($pledged = null, $comparison = null)
+    public function filterByPledged($pledged = null, ?string $comparison = null)
     {
         if (is_array($pledged)) {
             $useMinMax = false;
@@ -567,7 +589,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED, $pledged, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_PLEDGED, $pledged, $comparison);
+
+        return $this;
     }
 
     /**
@@ -580,15 +604,15 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByBackers(array('min' => 12)); // WHERE campaign_backers > 12
      * </code>
      *
-     * @param     mixed $backers The value to use as filter.
+     * @param mixed $backers The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBackers($backers = null, $comparison = null)
+    public function filterByBackers($backers = null, ?string $comparison = null)
     {
         if (is_array($backers)) {
             $useMinMax = false;
@@ -608,7 +632,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS, $backers, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_BACKERS, $backers, $comparison);
+
+        return $this;
     }
 
     /**
@@ -621,17 +647,17 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByStarts(array('max' => 'yesterday')); // WHERE campaign_starts > '2011-03-13'
      * </code>
      *
-     * @param     mixed $starts The value to use as filter.
+     * @param mixed $starts The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStarts($starts = null, $comparison = null)
+    public function filterByStarts($starts = null, ?string $comparison = null)
     {
         if (is_array($starts)) {
             $useMinMax = false;
@@ -651,7 +677,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS, $starts, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_STARTS, $starts, $comparison);
+
+        return $this;
     }
 
     /**
@@ -664,17 +692,17 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByEnds(array('max' => 'yesterday')); // WHERE campaign_ends > '2011-03-13'
      * </code>
      *
-     * @param     mixed $ends The value to use as filter.
+     * @param mixed $ends The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEnds($ends = null, $comparison = null)
+    public function filterByEnds($ends = null, ?string $comparison = null)
     {
         if (is_array($ends)) {
             $useMinMax = false;
@@ -694,7 +722,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS, $ends, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ENDS, $ends, $comparison);
+
+        return $this;
     }
 
     /**
@@ -707,17 +737,17 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE campaign_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -737,7 +767,9 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -750,17 +782,17 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE campaign_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -780,15 +812,17 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCrowdfundingCampaign $crowdfundingCampaign Object to remove from the list of results
+     * @param ChildCrowdfundingCampaign $crowdfundingCampaign Object to remove from the list of results
      *
-     * @return $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($crowdfundingCampaign = null)
     {
@@ -805,7 +839,7 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CrowdfundingCampaignTableMap::DATABASE_NAME);
@@ -830,12 +864,12 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CrowdfundingCampaignTableMap::DATABASE_NAME);
@@ -865,65 +899,77 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
+        $this->addDescendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
+        $this->addAscendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
+        $this->addDescendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCrowdfundingCampaignQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
+        $this->addAscendingOrderByColumn(CrowdfundingCampaignTableMap::COL_CAMPAIGN_CREATED);
+
+        return $this;
     }
 
-} // CrowdfundingCampaignQuery
+}

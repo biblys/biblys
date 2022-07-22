@@ -10,7 +10,7 @@ use Model\Map\BookshopTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -75,8 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshopQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildBookshopQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildBookshop|null findOne(ConnectionInterface $con = null) Return the first ChildBookshop matching the query
- * @method     ChildBookshop findOneOrCreate(ConnectionInterface $con = null) Return the first ChildBookshop matching the query, or a new ChildBookshop object populated from the query conditions when no match is found
+ * @method     ChildBookshop|null findOne(?ConnectionInterface $con = null) Return the first ChildBookshop matching the query
+ * @method     ChildBookshop findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildBookshop matching the query, or a new ChildBookshop object populated from the query conditions when no match is found
  *
  * @method     ChildBookshop|null findOneById(int $bookshop_id) Return the first ChildBookshop filtered by the bookshop_id column
  * @method     ChildBookshop|null findOneByName(string $bookshop_name) Return the first ChildBookshop filtered by the bookshop_name column
@@ -102,8 +102,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshop|null findOneByCreatedAt(string $bookshop_created) Return the first ChildBookshop filtered by the bookshop_created column
  * @method     ChildBookshop|null findOneByUpdatedAt(string $bookshop_updated) Return the first ChildBookshop filtered by the bookshop_updated column *
 
- * @method     ChildBookshop requirePk($key, ConnectionInterface $con = null) Return the ChildBookshop by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildBookshop requireOne(ConnectionInterface $con = null) Return the first ChildBookshop matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBookshop requirePk($key, ?ConnectionInterface $con = null) Return the ChildBookshop by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildBookshop requireOne(?ConnectionInterface $con = null) Return the first ChildBookshop matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildBookshop requireOneById(int $bookshop_id) Return the first ChildBookshop filtered by the bookshop_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookshop requireOneByName(string $bookshop_name) Return the first ChildBookshop filtered by the bookshop_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -129,56 +129,56 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookshop requireOneByCreatedAt(string $bookshop_created) Return the first ChildBookshop filtered by the bookshop_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookshop requireOneByUpdatedAt(string $bookshop_updated) Return the first ChildBookshop filtered by the bookshop_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildBookshop[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> find(ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
- * @method     ChildBookshop[]|ObjectCollection findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
- * @method     ChildBookshop[]|ObjectCollection findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
- * @method     ChildBookshop[]|ObjectCollection findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
- * @method     ChildBookshop[]|ObjectCollection findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
- * @method     ChildBookshop[]|ObjectCollection findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
- * @method     ChildBookshop[]|ObjectCollection findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
- * @method     ChildBookshop[]|ObjectCollection findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
- * @method     ChildBookshop[]|ObjectCollection findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
- * @method     ChildBookshop[]|ObjectCollection findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
- * @method     ChildBookshop[]|ObjectCollection findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
- * @method     ChildBookshop[]|ObjectCollection findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
- * @method     ChildBookshop[]|ObjectCollection findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
- * @method     ChildBookshop[]|ObjectCollection findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
- * @method     ChildBookshop[]|ObjectCollection findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
- * @method     ChildBookshop[]|ObjectCollection findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
- * @method     ChildBookshop[]|ObjectCollection findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
- * @method     ChildBookshop[]|ObjectCollection findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
- * @method     ChildBookshop[]|ObjectCollection findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
- * @method     ChildBookshop[]|ObjectCollection findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
- * @method     ChildBookshop[]|ObjectCollection findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
- * @method     ChildBookshop[]|ObjectCollection findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
- * @method     ChildBookshop[]|ObjectCollection findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
- * @method     ChildBookshop[]|ObjectCollection findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildBookshop> findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
- * @method     ChildBookshop[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookshop> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildBookshop[]|Collection find(?ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildBookshop> find(?ConnectionInterface $con = null) Return ChildBookshop objects based on current ModelCriteria
+ * @method     ChildBookshop[]|Collection findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findById(int $bookshop_id) Return ChildBookshop objects filtered by the bookshop_id column
+ * @method     ChildBookshop[]|Collection findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByName(string $bookshop_name) Return ChildBookshop objects filtered by the bookshop_name column
+ * @method     ChildBookshop[]|Collection findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByNameAlphabetic(string $bookshop_name_alphabetic) Return ChildBookshop objects filtered by the bookshop_name_alphabetic column
+ * @method     ChildBookshop[]|Collection findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByUrl(string $bookshop_url) Return ChildBookshop objects filtered by the bookshop_url column
+ * @method     ChildBookshop[]|Collection findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByRepresentative(string $bookshop_representative) Return ChildBookshop objects filtered by the bookshop_representative column
+ * @method     ChildBookshop[]|Collection findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByAddress(string $bookshop_address) Return ChildBookshop objects filtered by the bookshop_address column
+ * @method     ChildBookshop[]|Collection findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByPostalCode(string $bookshop_postal_code) Return ChildBookshop objects filtered by the bookshop_postal_code column
+ * @method     ChildBookshop[]|Collection findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByCity(string $bookshop_city) Return ChildBookshop objects filtered by the bookshop_city column
+ * @method     ChildBookshop[]|Collection findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByCountry(string $bookshop_country) Return ChildBookshop objects filtered by the bookshop_country column
+ * @method     ChildBookshop[]|Collection findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByPhone(string $bookshop_phone) Return ChildBookshop objects filtered by the bookshop_phone column
+ * @method     ChildBookshop[]|Collection findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByFax(string $bookshop_fax) Return ChildBookshop objects filtered by the bookshop_fax column
+ * @method     ChildBookshop[]|Collection findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByWebsite(string $bookshop_website) Return ChildBookshop objects filtered by the bookshop_website column
+ * @method     ChildBookshop[]|Collection findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByEmail(string $bookshop_email) Return ChildBookshop objects filtered by the bookshop_email column
+ * @method     ChildBookshop[]|Collection findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByFacebook(string $bookshop_facebook) Return ChildBookshop objects filtered by the bookshop_facebook column
+ * @method     ChildBookshop[]|Collection findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByTwitter(string $bookshop_twitter) Return ChildBookshop objects filtered by the bookshop_twitter column
+ * @method     ChildBookshop[]|Collection findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByLegalForm(string $bookshop_legal_form) Return ChildBookshop objects filtered by the bookshop_legal_form column
+ * @method     ChildBookshop[]|Collection findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByCreationYear(string $bookshop_creation_year) Return ChildBookshop objects filtered by the bookshop_creation_year column
+ * @method     ChildBookshop[]|Collection findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findBySpecialities(string $bookshop_specialities) Return ChildBookshop objects filtered by the bookshop_specialities column
+ * @method     ChildBookshop[]|Collection findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByMembership(string $bookshop_membership) Return ChildBookshop objects filtered by the bookshop_membership column
+ * @method     ChildBookshop[]|Collection findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByMotto(string $bookshop_motto) Return ChildBookshop objects filtered by the bookshop_motto column
+ * @method     ChildBookshop[]|Collection findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByDesc(string $bookshop_desc) Return ChildBookshop objects filtered by the bookshop_desc column
+ * @method     ChildBookshop[]|Collection findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByCreatedAt(string $bookshop_created) Return ChildBookshop objects filtered by the bookshop_created column
+ * @method     ChildBookshop[]|Collection findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
+ * @psalm-method Collection&\Traversable<ChildBookshop> findByUpdatedAt(string $bookshop_updated) Return ChildBookshop objects filtered by the bookshop_updated column
+ * @method     ChildBookshop[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookshop> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class BookshopQuery extends ModelCriteria
@@ -188,9 +188,9 @@ abstract class BookshopQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\BookshopQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Bookshop', $modelAlias = null)
     {
@@ -200,12 +200,12 @@ abstract class BookshopQuery extends ModelCriteria
     /**
      * Returns a new ChildBookshopQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildBookshopQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildBookshopQuery) {
             return $criteria;
@@ -235,7 +235,7 @@ abstract class BookshopQuery extends ModelCriteria
      *
      * @return ChildBookshop|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -267,8 +267,8 @@ abstract class BookshopQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -300,8 +300,8 @@ abstract class BookshopQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildBookshop|array|mixed the result, formatted by the current formatter
      */
@@ -321,12 +321,12 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -343,27 +343,31 @@ abstract class BookshopQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -376,15 +380,15 @@ abstract class BookshopQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -404,7 +408,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $id, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -414,14 +420,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE bookshop_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE bookshop_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE bookshop_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -429,7 +436,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_NAME, $name, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -439,14 +448,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByNameAlphabetic('fooValue');   // WHERE bookshop_name_alphabetic = 'fooValue'
      * $query->filterByNameAlphabetic('%fooValue%', Criteria::LIKE); // WHERE bookshop_name_alphabetic LIKE '%fooValue%'
+     * $query->filterByNameAlphabetic(['foo', 'bar']); // WHERE bookshop_name_alphabetic IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nameAlphabetic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nameAlphabetic The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNameAlphabetic($nameAlphabetic = null, $comparison = null)
+    public function filterByNameAlphabetic($nameAlphabetic = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nameAlphabetic)) {
@@ -454,7 +464,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+
+        return $this;
     }
 
     /**
@@ -464,14 +476,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE bookshop_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE bookshop_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE bookshop_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -479,7 +492,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_URL, $url, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -489,14 +504,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByRepresentative('fooValue');   // WHERE bookshop_representative = 'fooValue'
      * $query->filterByRepresentative('%fooValue%', Criteria::LIKE); // WHERE bookshop_representative LIKE '%fooValue%'
+     * $query->filterByRepresentative(['foo', 'bar']); // WHERE bookshop_representative IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $representative The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $representative The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRepresentative($representative = null, $comparison = null)
+    public function filterByRepresentative($representative = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($representative)) {
@@ -504,7 +520,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, $representative, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, $representative, $comparison);
+
+        return $this;
     }
 
     /**
@@ -514,14 +532,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress('fooValue');   // WHERE bookshop_address = 'fooValue'
      * $query->filterByAddress('%fooValue%', Criteria::LIKE); // WHERE bookshop_address LIKE '%fooValue%'
+     * $query->filterByAddress(['foo', 'bar']); // WHERE bookshop_address IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress($address = null, $comparison = null)
+    public function filterByAddress($address = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address)) {
@@ -529,7 +548,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ADDRESS, $address, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_ADDRESS, $address, $comparison);
+
+        return $this;
     }
 
     /**
@@ -539,14 +560,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByPostalCode('fooValue');   // WHERE bookshop_postal_code = 'fooValue'
      * $query->filterByPostalCode('%fooValue%', Criteria::LIKE); // WHERE bookshop_postal_code LIKE '%fooValue%'
+     * $query->filterByPostalCode(['foo', 'bar']); // WHERE bookshop_postal_code IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $postalCode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $postalCode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPostalCode($postalCode = null, $comparison = null)
+    public function filterByPostalCode($postalCode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($postalCode)) {
@@ -554,7 +576,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, $postalCode, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, $postalCode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -564,14 +588,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByCity('fooValue');   // WHERE bookshop_city = 'fooValue'
      * $query->filterByCity('%fooValue%', Criteria::LIKE); // WHERE bookshop_city LIKE '%fooValue%'
+     * $query->filterByCity(['foo', 'bar']); // WHERE bookshop_city IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $city The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $city The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCity($city = null, $comparison = null)
+    public function filterByCity($city = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($city)) {
@@ -579,7 +604,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CITY, $city, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CITY, $city, $comparison);
+
+        return $this;
     }
 
     /**
@@ -589,14 +616,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByCountry('fooValue');   // WHERE bookshop_country = 'fooValue'
      * $query->filterByCountry('%fooValue%', Criteria::LIKE); // WHERE bookshop_country LIKE '%fooValue%'
+     * $query->filterByCountry(['foo', 'bar']); // WHERE bookshop_country IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $country The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $country The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountry($country = null, $comparison = null)
+    public function filterByCountry($country = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($country)) {
@@ -604,7 +632,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_COUNTRY, $country, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_COUNTRY, $country, $comparison);
+
+        return $this;
     }
 
     /**
@@ -614,14 +644,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByPhone('fooValue');   // WHERE bookshop_phone = 'fooValue'
      * $query->filterByPhone('%fooValue%', Criteria::LIKE); // WHERE bookshop_phone LIKE '%fooValue%'
+     * $query->filterByPhone(['foo', 'bar']); // WHERE bookshop_phone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $phone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $phone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhone($phone = null, $comparison = null)
+    public function filterByPhone($phone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($phone)) {
@@ -629,7 +660,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_PHONE, $phone, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_PHONE, $phone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -639,14 +672,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByFax('fooValue');   // WHERE bookshop_fax = 'fooValue'
      * $query->filterByFax('%fooValue%', Criteria::LIKE); // WHERE bookshop_fax LIKE '%fooValue%'
+     * $query->filterByFax(['foo', 'bar']); // WHERE bookshop_fax IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $fax The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $fax The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFax($fax = null, $comparison = null)
+    public function filterByFax($fax = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($fax)) {
@@ -654,7 +688,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_FAX, $fax, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_FAX, $fax, $comparison);
+
+        return $this;
     }
 
     /**
@@ -664,14 +700,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByWebsite('fooValue');   // WHERE bookshop_website = 'fooValue'
      * $query->filterByWebsite('%fooValue%', Criteria::LIKE); // WHERE bookshop_website LIKE '%fooValue%'
+     * $query->filterByWebsite(['foo', 'bar']); // WHERE bookshop_website IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $website The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $website The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWebsite($website = null, $comparison = null)
+    public function filterByWebsite($website = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($website)) {
@@ -679,7 +716,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_WEBSITE, $website, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_WEBSITE, $website, $comparison);
+
+        return $this;
     }
 
     /**
@@ -689,14 +728,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE bookshop_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE bookshop_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE bookshop_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -704,7 +744,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_EMAIL, $email, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -714,14 +756,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByFacebook('fooValue');   // WHERE bookshop_facebook = 'fooValue'
      * $query->filterByFacebook('%fooValue%', Criteria::LIKE); // WHERE bookshop_facebook LIKE '%fooValue%'
+     * $query->filterByFacebook(['foo', 'bar']); // WHERE bookshop_facebook IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $facebook The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $facebook The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFacebook($facebook = null, $comparison = null)
+    public function filterByFacebook($facebook = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($facebook)) {
@@ -729,7 +772,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_FACEBOOK, $facebook, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_FACEBOOK, $facebook, $comparison);
+
+        return $this;
     }
 
     /**
@@ -739,14 +784,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByTwitter('fooValue');   // WHERE bookshop_twitter = 'fooValue'
      * $query->filterByTwitter('%fooValue%', Criteria::LIKE); // WHERE bookshop_twitter LIKE '%fooValue%'
+     * $query->filterByTwitter(['foo', 'bar']); // WHERE bookshop_twitter IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $twitter The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $twitter The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTwitter($twitter = null, $comparison = null)
+    public function filterByTwitter($twitter = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($twitter)) {
@@ -754,7 +800,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_TWITTER, $twitter, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_TWITTER, $twitter, $comparison);
+
+        return $this;
     }
 
     /**
@@ -764,14 +812,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByLegalForm('fooValue');   // WHERE bookshop_legal_form = 'fooValue'
      * $query->filterByLegalForm('%fooValue%', Criteria::LIKE); // WHERE bookshop_legal_form LIKE '%fooValue%'
+     * $query->filterByLegalForm(['foo', 'bar']); // WHERE bookshop_legal_form IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $legalForm The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $legalForm The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLegalForm($legalForm = null, $comparison = null)
+    public function filterByLegalForm($legalForm = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($legalForm)) {
@@ -779,7 +828,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, $legalForm, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, $legalForm, $comparison);
+
+        return $this;
     }
 
     /**
@@ -789,14 +840,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByCreationYear('fooValue');   // WHERE bookshop_creation_year = 'fooValue'
      * $query->filterByCreationYear('%fooValue%', Criteria::LIKE); // WHERE bookshop_creation_year LIKE '%fooValue%'
+     * $query->filterByCreationYear(['foo', 'bar']); // WHERE bookshop_creation_year IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $creationYear The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $creationYear The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreationYear($creationYear = null, $comparison = null)
+    public function filterByCreationYear($creationYear = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($creationYear)) {
@@ -804,7 +856,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, $creationYear, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, $creationYear, $comparison);
+
+        return $this;
     }
 
     /**
@@ -814,14 +868,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterBySpecialities('fooValue');   // WHERE bookshop_specialities = 'fooValue'
      * $query->filterBySpecialities('%fooValue%', Criteria::LIKE); // WHERE bookshop_specialities LIKE '%fooValue%'
+     * $query->filterBySpecialities(['foo', 'bar']); // WHERE bookshop_specialities IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $specialities The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $specialities The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySpecialities($specialities = null, $comparison = null)
+    public function filterBySpecialities($specialities = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($specialities)) {
@@ -829,7 +884,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, $specialities, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, $specialities, $comparison);
+
+        return $this;
     }
 
     /**
@@ -839,14 +896,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByMembership('fooValue');   // WHERE bookshop_membership = 'fooValue'
      * $query->filterByMembership('%fooValue%', Criteria::LIKE); // WHERE bookshop_membership LIKE '%fooValue%'
+     * $query->filterByMembership(['foo', 'bar']); // WHERE bookshop_membership IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $membership The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $membership The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMembership($membership = null, $comparison = null)
+    public function filterByMembership($membership = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($membership)) {
@@ -854,7 +912,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, $membership, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, $membership, $comparison);
+
+        return $this;
     }
 
     /**
@@ -864,14 +924,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByMotto('fooValue');   // WHERE bookshop_motto = 'fooValue'
      * $query->filterByMotto('%fooValue%', Criteria::LIKE); // WHERE bookshop_motto LIKE '%fooValue%'
+     * $query->filterByMotto(['foo', 'bar']); // WHERE bookshop_motto IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $motto The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $motto The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMotto($motto = null, $comparison = null)
+    public function filterByMotto($motto = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($motto)) {
@@ -879,7 +940,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_MOTTO, $motto, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_MOTTO, $motto, $comparison);
+
+        return $this;
     }
 
     /**
@@ -889,14 +952,15 @@ abstract class BookshopQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE bookshop_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE bookshop_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE bookshop_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -904,7 +968,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_DESC, $desc, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -917,17 +983,17 @@ abstract class BookshopQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE bookshop_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -947,7 +1013,9 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -960,17 +1028,17 @@ abstract class BookshopQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE bookshop_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -990,15 +1058,17 @@ abstract class BookshopQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildBookshop $bookshop Object to remove from the list of results
+     * @param ChildBookshop $bookshop Object to remove from the list of results
      *
-     * @return $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($bookshop = null)
     {
@@ -1015,7 +1085,7 @@ abstract class BookshopQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookshopTableMap::DATABASE_NAME);
@@ -1040,12 +1110,12 @@ abstract class BookshopQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookshopTableMap::DATABASE_NAME);
@@ -1075,65 +1145,77 @@ abstract class BookshopQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
+        $this->addDescendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
+        $this->addAscendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
+        $this->addDescendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(BookshopTableMap::COL_BOOKSHOP_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildBookshopQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
+        $this->addAscendingOrderByColumn(BookshopTableMap::COL_BOOKSHOP_CREATED);
+
+        return $this;
     }
 
-} // BookshopQuery
+}

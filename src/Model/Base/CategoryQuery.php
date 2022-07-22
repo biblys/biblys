@@ -10,7 +10,7 @@ use Model\Map\CategoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCategoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCategory|null findOne(ConnectionInterface $con = null) Return the first ChildCategory matching the query
- * @method     ChildCategory findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCategory matching the query, or a new ChildCategory object populated from the query conditions when no match is found
+ * @method     ChildCategory|null findOne(?ConnectionInterface $con = null) Return the first ChildCategory matching the query
+ * @method     ChildCategory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCategory matching the query, or a new ChildCategory object populated from the query conditions when no match is found
  *
  * @method     ChildCategory|null findOneById(int $category_id) Return the first ChildCategory filtered by the category_id column
  * @method     ChildCategory|null findOneBySiteId(int $site_id) Return the first ChildCategory filtered by the site_id column
@@ -66,8 +66,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory|null findOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column
  * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column *
 
- * @method     ChildCategory requirePk($key, ConnectionInterface $con = null) Return the ChildCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCategory requireOne(ConnectionInterface $con = null) Return the first ChildCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCategory requireOne(?ConnectionInterface $con = null) Return the first ChildCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCategory requireOneById(int $category_id) Return the first ChildCategory filtered by the category_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOneBySiteId(int $site_id) Return the first ChildCategory filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -81,32 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory requireOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCategory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> find(ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
- * @method     ChildCategory[]|ObjectCollection findById(int $category_id) Return ChildCategory objects filtered by the category_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findById(int $category_id) Return ChildCategory objects filtered by the category_id column
- * @method     ChildCategory[]|ObjectCollection findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
- * @method     ChildCategory[]|ObjectCollection findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
- * @method     ChildCategory[]|ObjectCollection findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
- * @method     ChildCategory[]|ObjectCollection findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @method     ChildCategory[]|ObjectCollection findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
- * @method     ChildCategory[]|ObjectCollection findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @method     ChildCategory[]|ObjectCollection findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @method     ChildCategory[]|ObjectCollection findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
- * @method     ChildCategory[]|ObjectCollection findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
- * @method     ChildCategory[]|ObjectCollection findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCategory> findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
- * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCategory> find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
+ * @method     ChildCategory[]|Collection findById(int $category_id) Return ChildCategory objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildCategory> findById(int $category_id) Return ChildCategory objects filtered by the category_id column
+ * @method     ChildCategory[]|Collection findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCategory> findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
+ * @method     ChildCategory[]|Collection findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
+ * @method     ChildCategory[]|Collection findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
+ * @method     ChildCategory[]|Collection findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
+ * @method     ChildCategory[]|Collection findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
+ * @method     ChildCategory[]|Collection findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
+ * @method     ChildCategory[]|Collection findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
+ * @method     ChildCategory[]|Collection findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
+ * @method     ChildCategory[]|Collection findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
+ * @method     ChildCategory[]|Collection findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
+ * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CategoryQuery extends ModelCriteria
@@ -116,9 +116,9 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CategoryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Category', $modelAlias = null)
     {
@@ -128,12 +128,12 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Returns a new ChildCategoryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCategoryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCategoryQuery) {
             return $criteria;
@@ -163,7 +163,7 @@ abstract class CategoryQuery extends ModelCriteria
      *
      * @return ChildCategory|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -195,8 +195,8 @@ abstract class CategoryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -228,8 +228,8 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCategory|array|mixed the result, formatted by the current formatter
      */
@@ -249,12 +249,12 @@ abstract class CategoryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -271,27 +271,31 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -304,15 +308,15 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE category_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -332,7 +336,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $id, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -345,15 +351,15 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -373,7 +379,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -383,14 +391,15 @@ abstract class CategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE category_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE category_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE category_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -398,7 +407,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_NAME, $name, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -408,14 +419,15 @@ abstract class CategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE category_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE category_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE category_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -423,7 +435,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_URL, $url, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -433,14 +447,15 @@ abstract class CategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE category_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE category_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE category_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -448,7 +463,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DESC, $desc, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -461,15 +478,15 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByOrder(array('min' => 12)); // WHERE category_order > 12
      * </code>
      *
-     * @param     mixed $order The value to use as filter.
+     * @param mixed $order The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order = null, $comparison = null)
+    public function filterByOrder($order = null, ?string $comparison = null)
     {
         if (is_array($order)) {
             $useMinMax = false;
@@ -489,7 +506,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ORDER, $order, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_ORDER, $order, $comparison);
+
+        return $this;
     }
 
     /**
@@ -501,22 +520,24 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByHidden('yes'); // WHERE category_hidden = true
      * </code>
      *
-     * @param     boolean|string $hidden The value to use as filter.
+     * @param bool|string $hidden The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHidden($hidden = null, $comparison = null)
+    public function filterByHidden($hidden = null, ?string $comparison = null)
     {
         if (is_string($hidden)) {
             $hidden = in_array(strtolower($hidden), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_HIDDEN, $hidden, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_HIDDEN, $hidden, $comparison);
+
+        return $this;
     }
 
     /**
@@ -529,17 +550,17 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE category_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -559,7 +580,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_INSERT, $insert, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -572,17 +595,17 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE category_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -602,7 +625,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATE, $update, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -615,17 +640,17 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE category_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -645,7 +670,9 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -658,17 +685,17 @@ abstract class CategoryQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE category_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -688,15 +715,17 @@ abstract class CategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCategory $category Object to remove from the list of results
+     * @param ChildCategory $category Object to remove from the list of results
      *
-     * @return $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($category = null)
     {
@@ -713,7 +742,7 @@ abstract class CategoryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
@@ -738,12 +767,12 @@ abstract class CategoryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
@@ -773,65 +802,77 @@ abstract class CategoryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+        $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+        $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+        $this->addDescendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+        $this->addAscendingOrderByColumn(CategoryTableMap::COL_CATEGORY_CREATED);
+
+        return $this;
     }
 
-} // CategoryQuery
+}

@@ -33,155 +33,159 @@ class ShippingFeeTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.ShippingFeeTableMap';
+    public const CLASS_NAME = 'Model.Map.ShippingFeeTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'shipping';
+    public const TABLE_NAME = 'shipping';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\ShippingFee';
+    public const OM_CLASS = '\\Model\\ShippingFee';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.ShippingFee';
+    public const CLASS_DEFAULT = 'Model.ShippingFee';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 15;
+    public const NUM_COLUMNS = 15;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 15;
+    public const NUM_HYDRATE_COLUMNS = 15;
 
     /**
      * the column name for the shipping_id field
      */
-    const COL_SHIPPING_ID = 'shipping.shipping_id';
+    public const COL_SHIPPING_ID = 'shipping.shipping_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'shipping.site_id';
+    public const COL_SITE_ID = 'shipping.site_id';
 
     /**
      * the column name for the article_id field
      */
-    const COL_ARTICLE_ID = 'shipping.article_id';
+    public const COL_ARTICLE_ID = 'shipping.article_id';
 
     /**
      * the column name for the shipping_mode field
      */
-    const COL_SHIPPING_MODE = 'shipping.shipping_mode';
+    public const COL_SHIPPING_MODE = 'shipping.shipping_mode';
 
     /**
      * the column name for the shipping_type field
      */
-    const COL_SHIPPING_TYPE = 'shipping.shipping_type';
+    public const COL_SHIPPING_TYPE = 'shipping.shipping_type';
 
     /**
      * the column name for the shipping_zone field
      */
-    const COL_SHIPPING_ZONE = 'shipping.shipping_zone';
+    public const COL_SHIPPING_ZONE = 'shipping.shipping_zone';
 
     /**
      * the column name for the shipping_min_weight field
      */
-    const COL_SHIPPING_MIN_WEIGHT = 'shipping.shipping_min_weight';
+    public const COL_SHIPPING_MIN_WEIGHT = 'shipping.shipping_min_weight';
 
     /**
      * the column name for the shipping_max_weight field
      */
-    const COL_SHIPPING_MAX_WEIGHT = 'shipping.shipping_max_weight';
+    public const COL_SHIPPING_MAX_WEIGHT = 'shipping.shipping_max_weight';
 
     /**
      * the column name for the shipping_max_articles field
      */
-    const COL_SHIPPING_MAX_ARTICLES = 'shipping.shipping_max_articles';
+    public const COL_SHIPPING_MAX_ARTICLES = 'shipping.shipping_max_articles';
 
     /**
      * the column name for the shipping_min_amount field
      */
-    const COL_SHIPPING_MIN_AMOUNT = 'shipping.shipping_min_amount';
+    public const COL_SHIPPING_MIN_AMOUNT = 'shipping.shipping_min_amount';
 
     /**
      * the column name for the shipping_max_amount field
      */
-    const COL_SHIPPING_MAX_AMOUNT = 'shipping.shipping_max_amount';
+    public const COL_SHIPPING_MAX_AMOUNT = 'shipping.shipping_max_amount';
 
     /**
      * the column name for the shipping_fee field
      */
-    const COL_SHIPPING_FEE = 'shipping.shipping_fee';
+    public const COL_SHIPPING_FEE = 'shipping.shipping_fee';
 
     /**
      * the column name for the shipping_info field
      */
-    const COL_SHIPPING_INFO = 'shipping.shipping_info';
+    public const COL_SHIPPING_INFO = 'shipping.shipping_info';
 
     /**
      * the column name for the shipping_created field
      */
-    const COL_SHIPPING_CREATED = 'shipping.shipping_created';
+    public const COL_SHIPPING_CREATED = 'shipping.shipping_created';
 
     /**
      * the column name for the shipping_updated field
      */
-    const COL_SHIPPING_UPDATED = 'shipping.shipping_updated';
+    public const COL_SHIPPING_UPDATED = 'shipping.shipping_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'ArticleId', 'Mode', 'Type', 'Zone', 'MinWeight', 'MaxWeight', 'MaxArticles', 'MinAmount', 'MaxAmount', 'Fee', 'Info', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'articleId', 'mode', 'type', 'zone', 'minWeight', 'maxWeight', 'maxArticles', 'minAmount', 'maxAmount', 'fee', 'info', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(ShippingFeeTableMap::COL_SHIPPING_ID, ShippingFeeTableMap::COL_SITE_ID, ShippingFeeTableMap::COL_ARTICLE_ID, ShippingFeeTableMap::COL_SHIPPING_MODE, ShippingFeeTableMap::COL_SHIPPING_TYPE, ShippingFeeTableMap::COL_SHIPPING_ZONE, ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, ShippingFeeTableMap::COL_SHIPPING_FEE, ShippingFeeTableMap::COL_SHIPPING_INFO, ShippingFeeTableMap::COL_SHIPPING_CREATED, ShippingFeeTableMap::COL_SHIPPING_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('shipping_id', 'site_id', 'article_id', 'shipping_mode', 'shipping_type', 'shipping_zone', 'shipping_min_weight', 'shipping_max_weight', 'shipping_max_articles', 'shipping_min_amount', 'shipping_max_amount', 'shipping_fee', 'shipping_info', 'shipping_created', 'shipping_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'Mode', 'Type', 'Zone', 'MinWeight', 'MaxWeight', 'MaxArticles', 'MinAmount', 'MaxAmount', 'Fee', 'Info', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'mode', 'type', 'zone', 'minWeight', 'maxWeight', 'maxArticles', 'minAmount', 'maxAmount', 'fee', 'info', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [ShippingFeeTableMap::COL_SHIPPING_ID, ShippingFeeTableMap::COL_SITE_ID, ShippingFeeTableMap::COL_ARTICLE_ID, ShippingFeeTableMap::COL_SHIPPING_MODE, ShippingFeeTableMap::COL_SHIPPING_TYPE, ShippingFeeTableMap::COL_SHIPPING_ZONE, ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, ShippingFeeTableMap::COL_SHIPPING_FEE, ShippingFeeTableMap::COL_SHIPPING_INFO, ShippingFeeTableMap::COL_SHIPPING_CREATED, ShippingFeeTableMap::COL_SHIPPING_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['shipping_id', 'site_id', 'article_id', 'shipping_mode', 'shipping_type', 'shipping_zone', 'shipping_min_weight', 'shipping_max_weight', 'shipping_max_articles', 'shipping_min_amount', 'shipping_max_amount', 'shipping_fee', 'shipping_info', 'shipping_created', 'shipping_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'Mode' => 3, 'Type' => 4, 'Zone' => 5, 'MinWeight' => 6, 'MaxWeight' => 7, 'MaxArticles' => 8, 'MinAmount' => 9, 'MaxAmount' => 10, 'Fee' => 11, 'Info' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'articleId' => 2, 'mode' => 3, 'type' => 4, 'zone' => 5, 'minWeight' => 6, 'maxWeight' => 7, 'maxArticles' => 8, 'minAmount' => 9, 'maxAmount' => 10, 'fee' => 11, 'info' => 12, 'createdAt' => 13, 'updatedAt' => 14, ),
-        self::TYPE_COLNAME       => array(ShippingFeeTableMap::COL_SHIPPING_ID => 0, ShippingFeeTableMap::COL_SITE_ID => 1, ShippingFeeTableMap::COL_ARTICLE_ID => 2, ShippingFeeTableMap::COL_SHIPPING_MODE => 3, ShippingFeeTableMap::COL_SHIPPING_TYPE => 4, ShippingFeeTableMap::COL_SHIPPING_ZONE => 5, ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT => 6, ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT => 7, ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES => 8, ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT => 9, ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT => 10, ShippingFeeTableMap::COL_SHIPPING_FEE => 11, ShippingFeeTableMap::COL_SHIPPING_INFO => 12, ShippingFeeTableMap::COL_SHIPPING_CREATED => 13, ShippingFeeTableMap::COL_SHIPPING_UPDATED => 14, ),
-        self::TYPE_FIELDNAME     => array('shipping_id' => 0, 'site_id' => 1, 'article_id' => 2, 'shipping_mode' => 3, 'shipping_type' => 4, 'shipping_zone' => 5, 'shipping_min_weight' => 6, 'shipping_max_weight' => 7, 'shipping_max_articles' => 8, 'shipping_min_amount' => 9, 'shipping_max_amount' => 10, 'shipping_fee' => 11, 'shipping_info' => 12, 'shipping_created' => 13, 'shipping_updated' => 14, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'Mode' => 3, 'Type' => 4, 'Zone' => 5, 'MinWeight' => 6, 'MaxWeight' => 7, 'MaxArticles' => 8, 'MinAmount' => 9, 'MaxAmount' => 10, 'Fee' => 11, 'Info' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'mode' => 3, 'type' => 4, 'zone' => 5, 'minWeight' => 6, 'maxWeight' => 7, 'maxArticles' => 8, 'minAmount' => 9, 'maxAmount' => 10, 'fee' => 11, 'info' => 12, 'createdAt' => 13, 'updatedAt' => 14, ],
+        self::TYPE_COLNAME       => [ShippingFeeTableMap::COL_SHIPPING_ID => 0, ShippingFeeTableMap::COL_SITE_ID => 1, ShippingFeeTableMap::COL_ARTICLE_ID => 2, ShippingFeeTableMap::COL_SHIPPING_MODE => 3, ShippingFeeTableMap::COL_SHIPPING_TYPE => 4, ShippingFeeTableMap::COL_SHIPPING_ZONE => 5, ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT => 6, ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT => 7, ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES => 8, ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT => 9, ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT => 10, ShippingFeeTableMap::COL_SHIPPING_FEE => 11, ShippingFeeTableMap::COL_SHIPPING_INFO => 12, ShippingFeeTableMap::COL_SHIPPING_CREATED => 13, ShippingFeeTableMap::COL_SHIPPING_UPDATED => 14, ],
+        self::TYPE_FIELDNAME     => ['shipping_id' => 0, 'site_id' => 1, 'article_id' => 2, 'shipping_mode' => 3, 'shipping_type' => 4, 'shipping_zone' => 5, 'shipping_min_weight' => 6, 'shipping_max_weight' => 7, 'shipping_max_articles' => 8, 'shipping_min_amount' => 9, 'shipping_max_amount' => 10, 'shipping_fee' => 11, 'shipping_info' => 12, 'shipping_created' => 13, 'shipping_updated' => 14, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'SHIPPING_ID',
@@ -311,9 +315,9 @@ class ShippingFeeTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('shipping');
@@ -338,27 +342,29 @@ class ShippingFeeTableMap extends TableMap
         $this->addColumn('shipping_info', 'Info', 'VARCHAR', false, 512, null);
         $this->addColumn('shipping_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('shipping_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'shipping_created', 'update_column' => 'shipping_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -366,14 +372,14 @@ class ShippingFeeTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -388,14 +394,14 @@ class ShippingFeeTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -412,10 +418,10 @@ class ShippingFeeTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? ShippingFeeTableMap::CLASS_DEFAULT : ShippingFeeTableMap::OM_CLASS;
     }
@@ -423,17 +429,17 @@ class ShippingFeeTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (ShippingFee object, last column rank)
+     * @return array (ShippingFee object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = ShippingFeeTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = ShippingFeeTableMap::getInstanceFromPool($key))) {
@@ -457,13 +463,13 @@ class ShippingFeeTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -493,12 +499,13 @@ class ShippingFeeTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ShippingFeeTableMap::COL_SHIPPING_ID);
@@ -541,12 +548,13 @@ class ShippingFeeTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(ShippingFeeTableMap::COL_SHIPPING_ID);
@@ -587,10 +595,10 @@ class ShippingFeeTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(ShippingFeeTableMap::DATABASE_NAME)->getTable(ShippingFeeTableMap::TABLE_NAME);
     }
@@ -598,15 +606,15 @@ class ShippingFeeTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a ShippingFee or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or ShippingFee object or primary key or array of primary keys
+     * @param mixed $values Criteria or ShippingFee object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
@@ -642,7 +650,7 @@ class ShippingFeeTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return ShippingFeeQuery::create()->doDeleteAll($con);
     }
@@ -650,13 +658,13 @@ class ShippingFeeTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a ShippingFee or Criteria object.
      *
-     * @param mixed               $criteria Criteria or ShippingFee object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or ShippingFee object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
@@ -683,4 +691,4 @@ class ShippingFeeTableMap extends TableMap
         });
     }
 
-} // ShippingFeeTableMap
+}

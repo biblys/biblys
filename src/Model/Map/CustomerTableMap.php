@@ -33,150 +33,154 @@ class CustomerTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.CustomerTableMap';
+    public const CLASS_NAME = 'Model.Map.CustomerTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'customers';
+    public const TABLE_NAME = 'customers';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Customer';
+    public const OM_CLASS = '\\Model\\Customer';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Customer';
+    public const CLASS_DEFAULT = 'Model.Customer';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the customer_id field
      */
-    const COL_CUSTOMER_ID = 'customers.customer_id';
+    public const COL_CUSTOMER_ID = 'customers.customer_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'customers.site_id';
+    public const COL_SITE_ID = 'customers.site_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'customers.user_id';
+    public const COL_USER_ID = 'customers.user_id';
 
     /**
      * the column name for the customer_type field
      */
-    const COL_CUSTOMER_TYPE = 'customers.customer_type';
+    public const COL_CUSTOMER_TYPE = 'customers.customer_type';
 
     /**
      * the column name for the customer_first_name field
      */
-    const COL_CUSTOMER_FIRST_NAME = 'customers.customer_first_name';
+    public const COL_CUSTOMER_FIRST_NAME = 'customers.customer_first_name';
 
     /**
      * the column name for the customer_last_name field
      */
-    const COL_CUSTOMER_LAST_NAME = 'customers.customer_last_name';
+    public const COL_CUSTOMER_LAST_NAME = 'customers.customer_last_name';
 
     /**
      * the column name for the customer_email field
      */
-    const COL_CUSTOMER_EMAIL = 'customers.customer_email';
+    public const COL_CUSTOMER_EMAIL = 'customers.customer_email';
 
     /**
      * the column name for the customer_phone field
      */
-    const COL_CUSTOMER_PHONE = 'customers.customer_phone';
+    public const COL_CUSTOMER_PHONE = 'customers.customer_phone';
 
     /**
      * the column name for the country_id field
      */
-    const COL_COUNTRY_ID = 'customers.country_id';
+    public const COL_COUNTRY_ID = 'customers.country_id';
 
     /**
      * the column name for the customer_privatization field
      */
-    const COL_CUSTOMER_PRIVATIZATION = 'customers.customer_privatization';
+    public const COL_CUSTOMER_PRIVATIZATION = 'customers.customer_privatization';
 
     /**
      * the column name for the customer_insert field
      */
-    const COL_CUSTOMER_INSERT = 'customers.customer_insert';
+    public const COL_CUSTOMER_INSERT = 'customers.customer_insert';
 
     /**
      * the column name for the customer_update field
      */
-    const COL_CUSTOMER_UPDATE = 'customers.customer_update';
+    public const COL_CUSTOMER_UPDATE = 'customers.customer_update';
 
     /**
      * the column name for the customer_created field
      */
-    const COL_CUSTOMER_CREATED = 'customers.customer_created';
+    public const COL_CUSTOMER_CREATED = 'customers.customer_created';
 
     /**
      * the column name for the customer_updated field
      */
-    const COL_CUSTOMER_UPDATED = 'customers.customer_updated';
+    public const COL_CUSTOMER_UPDATED = 'customers.customer_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_USER_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('customer_id', 'site_id', 'user_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'UserId', 'Type', 'FirstName', 'LastName', 'Email', 'Phone', 'CountryId', 'Privatization', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'userId', 'type', 'firstName', 'lastName', 'email', 'phone', 'countryId', 'privatization', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID, CustomerTableMap::COL_SITE_ID, CustomerTableMap::COL_USER_ID, CustomerTableMap::COL_CUSTOMER_TYPE, CustomerTableMap::COL_CUSTOMER_FIRST_NAME, CustomerTableMap::COL_CUSTOMER_LAST_NAME, CustomerTableMap::COL_CUSTOMER_EMAIL, CustomerTableMap::COL_CUSTOMER_PHONE, CustomerTableMap::COL_COUNTRY_ID, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, CustomerTableMap::COL_CUSTOMER_INSERT, CustomerTableMap::COL_CUSTOMER_UPDATE, CustomerTableMap::COL_CUSTOMER_CREATED, CustomerTableMap::COL_CUSTOMER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['customer_id', 'site_id', 'user_id', 'customer_type', 'customer_first_name', 'customer_last_name', 'customer_email', 'customer_phone', 'country_id', 'customer_privatization', 'customer_insert', 'customer_update', 'customer_created', 'customer_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Type' => 3, 'FirstName' => 4, 'LastName' => 5, 'Email' => 6, 'Phone' => 7, 'CountryId' => 8, 'Privatization' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'type' => 3, 'firstName' => 4, 'lastName' => 5, 'email' => 6, 'phone' => 7, 'countryId' => 8, 'privatization' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_USER_ID => 2, CustomerTableMap::COL_CUSTOMER_TYPE => 3, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 4, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 5, CustomerTableMap::COL_CUSTOMER_EMAIL => 6, CustomerTableMap::COL_CUSTOMER_PHONE => 7, CustomerTableMap::COL_COUNTRY_ID => 8, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 9, CustomerTableMap::COL_CUSTOMER_INSERT => 10, CustomerTableMap::COL_CUSTOMER_UPDATE => 11, CustomerTableMap::COL_CUSTOMER_CREATED => 12, CustomerTableMap::COL_CUSTOMER_UPDATED => 13, ),
-        self::TYPE_FIELDNAME     => array('customer_id' => 0, 'site_id' => 1, 'user_id' => 2, 'customer_type' => 3, 'customer_first_name' => 4, 'customer_last_name' => 5, 'customer_email' => 6, 'customer_phone' => 7, 'country_id' => 8, 'customer_privatization' => 9, 'customer_insert' => 10, 'customer_update' => 11, 'customer_created' => 12, 'customer_updated' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Type' => 3, 'FirstName' => 4, 'LastName' => 5, 'Email' => 6, 'Phone' => 7, 'CountryId' => 8, 'Privatization' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'userId' => 2, 'type' => 3, 'firstName' => 4, 'lastName' => 5, 'email' => 6, 'phone' => 7, 'countryId' => 8, 'privatization' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
+        self::TYPE_COLNAME       => [CustomerTableMap::COL_CUSTOMER_ID => 0, CustomerTableMap::COL_SITE_ID => 1, CustomerTableMap::COL_USER_ID => 2, CustomerTableMap::COL_CUSTOMER_TYPE => 3, CustomerTableMap::COL_CUSTOMER_FIRST_NAME => 4, CustomerTableMap::COL_CUSTOMER_LAST_NAME => 5, CustomerTableMap::COL_CUSTOMER_EMAIL => 6, CustomerTableMap::COL_CUSTOMER_PHONE => 7, CustomerTableMap::COL_COUNTRY_ID => 8, CustomerTableMap::COL_CUSTOMER_PRIVATIZATION => 9, CustomerTableMap::COL_CUSTOMER_INSERT => 10, CustomerTableMap::COL_CUSTOMER_UPDATE => 11, CustomerTableMap::COL_CUSTOMER_CREATED => 12, CustomerTableMap::COL_CUSTOMER_UPDATED => 13, ],
+        self::TYPE_FIELDNAME     => ['customer_id' => 0, 'site_id' => 1, 'user_id' => 2, 'customer_type' => 3, 'customer_first_name' => 4, 'customer_last_name' => 5, 'customer_email' => 6, 'customer_phone' => 7, 'country_id' => 8, 'customer_privatization' => 9, 'customer_insert' => 10, 'customer_update' => 11, 'customer_created' => 12, 'customer_updated' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'CUSTOMER_ID',
@@ -298,9 +302,9 @@ class CustomerTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('customers');
@@ -324,27 +328,29 @@ class CustomerTableMap extends TableMap
         $this->addColumn('customer_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('customer_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('customer_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'customer_created', 'update_column' => 'customer_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -352,14 +358,14 @@ class CustomerTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -374,14 +380,14 @@ class CustomerTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -398,10 +404,10 @@ class CustomerTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? CustomerTableMap::CLASS_DEFAULT : CustomerTableMap::OM_CLASS;
     }
@@ -409,17 +415,17 @@ class CustomerTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Customer object, last column rank)
+     * @return array (Customer object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = CustomerTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = CustomerTableMap::getInstanceFromPool($key))) {
@@ -443,13 +449,13 @@ class CustomerTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -479,12 +485,13 @@ class CustomerTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMER_ID);
@@ -525,12 +532,13 @@ class CustomerTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(CustomerTableMap::COL_CUSTOMER_ID);
@@ -569,10 +577,10 @@ class CustomerTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(CustomerTableMap::DATABASE_NAME)->getTable(CustomerTableMap::TABLE_NAME);
     }
@@ -580,15 +588,15 @@ class CustomerTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Customer or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Customer object or primary key or array of primary keys
+     * @param mixed $values Criteria or Customer object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
@@ -624,7 +632,7 @@ class CustomerTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return CustomerQuery::create()->doDeleteAll($con);
     }
@@ -632,13 +640,13 @@ class CustomerTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Customer or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Customer object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Customer object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
@@ -665,4 +673,4 @@ class CustomerTableMap extends TableMap
         });
     }
 
-} // CustomerTableMap
+}

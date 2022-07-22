@@ -10,7 +10,7 @@ use Model\Map\CouponTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -53,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCouponQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCouponQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCoupon|null findOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query
- * @method     ChildCoupon findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCoupon matching the query, or a new ChildCoupon object populated from the query conditions when no match is found
+ * @method     ChildCoupon|null findOne(?ConnectionInterface $con = null) Return the first ChildCoupon matching the query
+ * @method     ChildCoupon findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCoupon matching the query, or a new ChildCoupon object populated from the query conditions when no match is found
  *
  * @method     ChildCoupon|null findOneById(int $coupon_id) Return the first ChildCoupon filtered by the coupon_id column
  * @method     ChildCoupon|null findOneBySiteId(int $site_id) Return the first ChildCoupon filtered by the site_id column
@@ -69,8 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon|null findOneByCreatedAt(string $coupon_insert) Return the first ChildCoupon filtered by the coupon_insert column
  * @method     ChildCoupon|null findOneByUpdatedAt(string $coupon_update) Return the first ChildCoupon filtered by the coupon_update column *
 
- * @method     ChildCoupon requirePk($key, ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCoupon requirePk($key, ?ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCoupon requireOne(?ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCoupon requireOneById(int $coupon_id) Return the first ChildCoupon filtered by the coupon_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneBySiteId(int $site_id) Return the first ChildCoupon filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -85,34 +85,34 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon requireOneByCreatedAt(string $coupon_insert) Return the first ChildCoupon filtered by the coupon_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByUpdatedAt(string $coupon_update) Return the first ChildCoupon filtered by the coupon_update column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCoupon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
- * @method     ChildCoupon[]|ObjectCollection findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
- * @method     ChildCoupon[]|ObjectCollection findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
- * @method     ChildCoupon[]|ObjectCollection findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
- * @method     ChildCoupon[]|ObjectCollection findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
- * @method     ChildCoupon[]|ObjectCollection findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
- * @method     ChildCoupon[]|ObjectCollection findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
- * @method     ChildCoupon[]|ObjectCollection findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
- * @method     ChildCoupon[]|ObjectCollection findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
- * @method     ChildCoupon[]|ObjectCollection findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
- * @method     ChildCoupon[]|ObjectCollection findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
- * @method     ChildCoupon[]|ObjectCollection findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
- * @method     ChildCoupon[]|ObjectCollection findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
- * @psalm-method ObjectCollection&\Traversable<ChildCoupon> findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
- * @method     ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCoupon> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCoupon[]|Collection find(?ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCoupon> find(?ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
+ * @method     ChildCoupon[]|Collection findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
+ * @method     ChildCoupon[]|Collection findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
+ * @method     ChildCoupon[]|Collection findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
+ * @method     ChildCoupon[]|Collection findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
+ * @method     ChildCoupon[]|Collection findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
+ * @method     ChildCoupon[]|Collection findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
+ * @method     ChildCoupon[]|Collection findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
+ * @method     ChildCoupon[]|Collection findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
+ * @method     ChildCoupon[]|Collection findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
+ * @method     ChildCoupon[]|Collection findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
+ * @method     ChildCoupon[]|Collection findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
+ * @method     ChildCoupon[]|Collection findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
+ * @method     ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCoupon> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CouponQuery extends ModelCriteria
@@ -122,9 +122,9 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CouponQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Coupon', $modelAlias = null)
     {
@@ -134,12 +134,12 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Returns a new ChildCouponQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCouponQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCouponQuery) {
             return $criteria;
@@ -169,7 +169,7 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @return ChildCoupon|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -201,8 +201,8 @@ abstract class CouponQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -234,8 +234,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCoupon|array|mixed the result, formatted by the current formatter
      */
@@ -255,12 +255,12 @@ abstract class CouponQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -277,27 +277,31 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -310,15 +314,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE coupon_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -338,7 +342,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $id, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -351,15 +357,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -379,7 +385,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -392,15 +400,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -420,7 +428,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -430,14 +440,15 @@ abstract class CouponQuery extends ModelCriteria
      * <code>
      * $query->filterByCode('fooValue');   // WHERE coupon_code = 'fooValue'
      * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE coupon_code LIKE '%fooValue%'
+     * $query->filterByCode(['foo', 'bar']); // WHERE coupon_code IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $code The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $code The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCode($code = null, $comparison = null)
+    public function filterByCode($code = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($code)) {
@@ -445,7 +456,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_CODE, $code, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_CODE, $code, $comparison);
+
+        return $this;
     }
 
     /**
@@ -458,15 +471,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -486,7 +499,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -499,15 +514,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByStockId(array('min' => 12)); // WHERE stock_id > 12
      * </code>
      *
-     * @param     mixed $stockId The value to use as filter.
+     * @param mixed $stockId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStockId($stockId = null, $comparison = null)
+    public function filterByStockId($stockId = null, ?string $comparison = null)
     {
         if (is_array($stockId)) {
             $useMinMax = false;
@@ -527,7 +542,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_STOCK_ID, $stockId, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_STOCK_ID, $stockId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -540,15 +557,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE coupon_amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
+     * @param mixed $amount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAmount($amount = null, $comparison = null)
+    public function filterByAmount($amount = null, ?string $comparison = null)
     {
         if (is_array($amount)) {
             $useMinMax = false;
@@ -568,7 +585,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_AMOUNT, $amount, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_AMOUNT, $amount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -578,14 +597,15 @@ abstract class CouponQuery extends ModelCriteria
      * <code>
      * $query->filterByNote('fooValue');   // WHERE coupon_note = 'fooValue'
      * $query->filterByNote('%fooValue%', Criteria::LIKE); // WHERE coupon_note LIKE '%fooValue%'
+     * $query->filterByNote(['foo', 'bar']); // WHERE coupon_note IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $note The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $note The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNote($note = null, $comparison = null)
+    public function filterByNote($note = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($note)) {
@@ -593,7 +613,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_NOTE, $note, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_NOTE, $note, $comparison);
+
+        return $this;
     }
 
     /**
@@ -606,17 +628,17 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByUsed(array('max' => 'yesterday')); // WHERE coupon_used > '2011-03-13'
      * </code>
      *
-     * @param     mixed $used The value to use as filter.
+     * @param mixed $used The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUsed($used = null, $comparison = null)
+    public function filterByUsed($used = null, ?string $comparison = null)
     {
         if (is_array($used)) {
             $useMinMax = false;
@@ -636,7 +658,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_USED, $used, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_USED, $used, $comparison);
+
+        return $this;
     }
 
     /**
@@ -649,15 +673,15 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCreator(array('min' => 12)); // WHERE coupon_creator > 12
      * </code>
      *
-     * @param     mixed $creator The value to use as filter.
+     * @param mixed $creator The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreator($creator = null, $comparison = null)
+    public function filterByCreator($creator = null, ?string $comparison = null)
     {
         if (is_array($creator)) {
             $useMinMax = false;
@@ -677,7 +701,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_CREATOR, $creator, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_CREATOR, $creator, $comparison);
+
+        return $this;
     }
 
     /**
@@ -690,17 +716,17 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE coupon_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -720,7 +746,9 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_INSERT, $createdAt, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_INSERT, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -733,17 +761,17 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE coupon_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -763,15 +791,17 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_UPDATE, $updatedAt, $comparison);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_UPDATE, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCoupon $coupon Object to remove from the list of results
+     * @param ChildCoupon $coupon Object to remove from the list of results
      *
-     * @return $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($coupon = null)
     {
@@ -788,7 +818,7 @@ abstract class CouponQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
@@ -813,12 +843,12 @@ abstract class CouponQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
@@ -848,65 +878,77 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_UPDATE, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_UPDATE, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CouponTableMap::COL_COUPON_UPDATE);
+        $this->addDescendingOrderByColumn(CouponTableMap::COL_COUPON_UPDATE);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CouponTableMap::COL_COUPON_UPDATE);
+        $this->addAscendingOrderByColumn(CouponTableMap::COL_COUPON_UPDATE);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CouponTableMap::COL_COUPON_INSERT);
+        $this->addDescendingOrderByColumn(CouponTableMap::COL_COUPON_INSERT);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CouponTableMap::COL_COUPON_INSERT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CouponTableMap::COL_COUPON_INSERT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCouponQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CouponTableMap::COL_COUPON_INSERT);
+        $this->addAscendingOrderByColumn(CouponTableMap::COL_COUPON_INSERT);
+
+        return $this;
     }
 
-} // CouponQuery
+}

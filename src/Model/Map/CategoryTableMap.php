@@ -33,135 +33,139 @@ class CategoryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.CategoryTableMap';
+    public const CLASS_NAME = 'Model.Map.CategoryTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'categories';
+    public const TABLE_NAME = 'categories';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Category';
+    public const OM_CLASS = '\\Model\\Category';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Category';
+    public const CLASS_DEFAULT = 'Model.Category';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    public const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    public const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the category_id field
      */
-    const COL_CATEGORY_ID = 'categories.category_id';
+    public const COL_CATEGORY_ID = 'categories.category_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'categories.site_id';
+    public const COL_SITE_ID = 'categories.site_id';
 
     /**
      * the column name for the category_name field
      */
-    const COL_CATEGORY_NAME = 'categories.category_name';
+    public const COL_CATEGORY_NAME = 'categories.category_name';
 
     /**
      * the column name for the category_url field
      */
-    const COL_CATEGORY_URL = 'categories.category_url';
+    public const COL_CATEGORY_URL = 'categories.category_url';
 
     /**
      * the column name for the category_desc field
      */
-    const COL_CATEGORY_DESC = 'categories.category_desc';
+    public const COL_CATEGORY_DESC = 'categories.category_desc';
 
     /**
      * the column name for the category_order field
      */
-    const COL_CATEGORY_ORDER = 'categories.category_order';
+    public const COL_CATEGORY_ORDER = 'categories.category_order';
 
     /**
      * the column name for the category_hidden field
      */
-    const COL_CATEGORY_HIDDEN = 'categories.category_hidden';
+    public const COL_CATEGORY_HIDDEN = 'categories.category_hidden';
 
     /**
      * the column name for the category_insert field
      */
-    const COL_CATEGORY_INSERT = 'categories.category_insert';
+    public const COL_CATEGORY_INSERT = 'categories.category_insert';
 
     /**
      * the column name for the category_update field
      */
-    const COL_CATEGORY_UPDATE = 'categories.category_update';
+    public const COL_CATEGORY_UPDATE = 'categories.category_update';
 
     /**
      * the column name for the category_created field
      */
-    const COL_CATEGORY_CREATED = 'categories.category_created';
+    public const COL_CATEGORY_CREATED = 'categories.category_created';
 
     /**
      * the column name for the category_updated field
      */
-    const COL_CATEGORY_UPDATED = 'categories.category_updated';
+    public const COL_CATEGORY_UPDATED = 'categories.category_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'Hidden', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'hidden', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID, CategoryTableMap::COL_SITE_ID, CategoryTableMap::COL_CATEGORY_NAME, CategoryTableMap::COL_CATEGORY_URL, CategoryTableMap::COL_CATEGORY_DESC, CategoryTableMap::COL_CATEGORY_ORDER, CategoryTableMap::COL_CATEGORY_HIDDEN, CategoryTableMap::COL_CATEGORY_INSERT, CategoryTableMap::COL_CATEGORY_UPDATE, CategoryTableMap::COL_CATEGORY_CREATED, CategoryTableMap::COL_CATEGORY_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('category_id', 'site_id', 'category_name', 'category_url', 'category_desc', 'category_order', 'category_hidden', 'category_insert', 'category_update', 'category_created', 'category_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'Hidden', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'name', 'url', 'desc', 'order', 'hidden', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CategoryTableMap::COL_CATEGORY_ID, CategoryTableMap::COL_SITE_ID, CategoryTableMap::COL_CATEGORY_NAME, CategoryTableMap::COL_CATEGORY_URL, CategoryTableMap::COL_CATEGORY_DESC, CategoryTableMap::COL_CATEGORY_ORDER, CategoryTableMap::COL_CATEGORY_HIDDEN, CategoryTableMap::COL_CATEGORY_INSERT, CategoryTableMap::COL_CATEGORY_UPDATE, CategoryTableMap::COL_CATEGORY_CREATED, CategoryTableMap::COL_CATEGORY_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['category_id', 'site_id', 'category_name', 'category_url', 'category_desc', 'category_order', 'category_hidden', 'category_insert', 'category_update', 'category_created', 'category_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'Hidden' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'hidden' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
-        self::TYPE_COLNAME       => array(CategoryTableMap::COL_CATEGORY_ID => 0, CategoryTableMap::COL_SITE_ID => 1, CategoryTableMap::COL_CATEGORY_NAME => 2, CategoryTableMap::COL_CATEGORY_URL => 3, CategoryTableMap::COL_CATEGORY_DESC => 4, CategoryTableMap::COL_CATEGORY_ORDER => 5, CategoryTableMap::COL_CATEGORY_HIDDEN => 6, CategoryTableMap::COL_CATEGORY_INSERT => 7, CategoryTableMap::COL_CATEGORY_UPDATE => 8, CategoryTableMap::COL_CATEGORY_CREATED => 9, CategoryTableMap::COL_CATEGORY_UPDATED => 10, ),
-        self::TYPE_FIELDNAME     => array('category_id' => 0, 'site_id' => 1, 'category_name' => 2, 'category_url' => 3, 'category_desc' => 4, 'category_order' => 5, 'category_hidden' => 6, 'category_insert' => 7, 'category_update' => 8, 'category_created' => 9, 'category_updated' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'Hidden' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'hidden' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ],
+        self::TYPE_COLNAME       => [CategoryTableMap::COL_CATEGORY_ID => 0, CategoryTableMap::COL_SITE_ID => 1, CategoryTableMap::COL_CATEGORY_NAME => 2, CategoryTableMap::COL_CATEGORY_URL => 3, CategoryTableMap::COL_CATEGORY_DESC => 4, CategoryTableMap::COL_CATEGORY_ORDER => 5, CategoryTableMap::COL_CATEGORY_HIDDEN => 6, CategoryTableMap::COL_CATEGORY_INSERT => 7, CategoryTableMap::COL_CATEGORY_UPDATE => 8, CategoryTableMap::COL_CATEGORY_CREATED => 9, CategoryTableMap::COL_CATEGORY_UPDATED => 10, ],
+        self::TYPE_FIELDNAME     => ['category_id' => 0, 'site_id' => 1, 'category_name' => 2, 'category_url' => 3, 'category_desc' => 4, 'category_order' => 5, 'category_hidden' => 6, 'category_insert' => 7, 'category_update' => 8, 'category_created' => 9, 'category_updated' => 10, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'CATEGORY_ID',
@@ -259,9 +263,9 @@ class CategoryTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('categories');
@@ -282,27 +286,29 @@ class CategoryTableMap extends TableMap
         $this->addColumn('category_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('category_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('category_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'category_created', 'update_column' => 'category_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -310,14 +316,14 @@ class CategoryTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -332,14 +338,14 @@ class CategoryTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -356,10 +362,10 @@ class CategoryTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? CategoryTableMap::CLASS_DEFAULT : CategoryTableMap::OM_CLASS;
     }
@@ -367,17 +373,17 @@ class CategoryTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Category object, last column rank)
+     * @return array (Category object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = CategoryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = CategoryTableMap::getInstanceFromPool($key))) {
@@ -401,13 +407,13 @@ class CategoryTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -437,12 +443,13 @@ class CategoryTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(CategoryTableMap::COL_CATEGORY_ID);
@@ -477,12 +484,13 @@ class CategoryTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(CategoryTableMap::COL_CATEGORY_ID);
@@ -515,10 +523,10 @@ class CategoryTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(CategoryTableMap::DATABASE_NAME)->getTable(CategoryTableMap::TABLE_NAME);
     }
@@ -526,15 +534,15 @@ class CategoryTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Category or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Category object or primary key or array of primary keys
+     * @param mixed $values Criteria or Category object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
@@ -570,7 +578,7 @@ class CategoryTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return CategoryQuery::create()->doDeleteAll($con);
     }
@@ -578,13 +586,13 @@ class CategoryTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Category or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Category object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Category object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CategoryTableMap::DATABASE_NAME);
@@ -611,4 +619,4 @@ class CategoryTableMap extends TableMap
         });
     }
 
-} // CategoryTableMap
+}

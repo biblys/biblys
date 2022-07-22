@@ -10,7 +10,7 @@ use Model\Map\PageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPageQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPageQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPage|null findOne(ConnectionInterface $con = null) Return the first ChildPage matching the query
- * @method     ChildPage findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPage matching the query, or a new ChildPage object populated from the query conditions when no match is found
+ * @method     ChildPage|null findOne(?ConnectionInterface $con = null) Return the first ChildPage matching the query
+ * @method     ChildPage findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPage matching the query, or a new ChildPage object populated from the query conditions when no match is found
  *
  * @method     ChildPage|null findOneById(int $page_id) Return the first ChildPage filtered by the page_id column
  * @method     ChildPage|null findOneBySiteId(int $site_id) Return the first ChildPage filtered by the site_id column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPage|null findOneByCreatedAt(string $page_created) Return the first ChildPage filtered by the page_created column
  * @method     ChildPage|null findOneByUpdatedAt(string $page_updated) Return the first ChildPage filtered by the page_updated column *
 
- * @method     ChildPage requirePk($key, ConnectionInterface $con = null) Return the ChildPage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPage requireOne(ConnectionInterface $con = null) Return the first ChildPage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPage requirePk($key, ?ConnectionInterface $con = null) Return the ChildPage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPage requireOne(?ConnectionInterface $con = null) Return the first ChildPage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPage requireOneById(int $page_id) Return the first ChildPage filtered by the page_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPage requireOneBySiteId(int $site_id) Return the first ChildPage filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPage requireOneByCreatedAt(string $page_created) Return the first ChildPage filtered by the page_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPage requireOneByUpdatedAt(string $page_updated) Return the first ChildPage filtered by the page_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPage> find(ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
- * @method     ChildPage[]|ObjectCollection findById(int $page_id) Return ChildPage objects filtered by the page_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findById(int $page_id) Return ChildPage objects filtered by the page_id column
- * @method     ChildPage[]|ObjectCollection findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
- * @method     ChildPage[]|ObjectCollection findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
- * @method     ChildPage[]|ObjectCollection findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
- * @method     ChildPage[]|ObjectCollection findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
- * @method     ChildPage[]|ObjectCollection findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
- * @method     ChildPage[]|ObjectCollection findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
- * @method     ChildPage[]|ObjectCollection findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
- * @method     ChildPage[]|ObjectCollection findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
- * @method     ChildPage[]|ObjectCollection findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildPage> findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
- * @method     ChildPage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPage[]|Collection find(?ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPage> find(?ConnectionInterface $con = null) Return ChildPage objects based on current ModelCriteria
+ * @method     ChildPage[]|Collection findById(int $page_id) Return ChildPage objects filtered by the page_id column
+ * @psalm-method Collection&\Traversable<ChildPage> findById(int $page_id) Return ChildPage objects filtered by the page_id column
+ * @method     ChildPage[]|Collection findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPage> findBySiteId(int $site_id) Return ChildPage objects filtered by the site_id column
+ * @method     ChildPage[]|Collection findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
+ * @psalm-method Collection&\Traversable<ChildPage> findByUrl(string $page_url) Return ChildPage objects filtered by the page_url column
+ * @method     ChildPage[]|Collection findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
+ * @psalm-method Collection&\Traversable<ChildPage> findByTitle(string $page_title) Return ChildPage objects filtered by the page_title column
+ * @method     ChildPage[]|Collection findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
+ * @psalm-method Collection&\Traversable<ChildPage> findByContent(string $page_content) Return ChildPage objects filtered by the page_content column
+ * @method     ChildPage[]|Collection findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
+ * @psalm-method Collection&\Traversable<ChildPage> findByStatus(boolean $page_status) Return ChildPage objects filtered by the page_status column
+ * @method     ChildPage[]|Collection findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
+ * @psalm-method Collection&\Traversable<ChildPage> findByInsert(string $page_insert) Return ChildPage objects filtered by the page_insert column
+ * @method     ChildPage[]|Collection findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
+ * @psalm-method Collection&\Traversable<ChildPage> findByUpdate(string $page_update) Return ChildPage objects filtered by the page_update column
+ * @method     ChildPage[]|Collection findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
+ * @psalm-method Collection&\Traversable<ChildPage> findByCreatedAt(string $page_created) Return ChildPage objects filtered by the page_created column
+ * @method     ChildPage[]|Collection findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
+ * @psalm-method Collection&\Traversable<ChildPage> findByUpdatedAt(string $page_updated) Return ChildPage objects filtered by the page_updated column
+ * @method     ChildPage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPage> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PageQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class PageQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PageQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Page', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class PageQuery extends ModelCriteria
     /**
      * Returns a new ChildPageQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPageQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPageQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class PageQuery extends ModelCriteria
      *
      * @return ChildPage|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class PageQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class PageQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPage|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class PageQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class PageQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE page_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $id, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -339,15 +345,15 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -367,7 +373,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -377,14 +385,15 @@ abstract class PageQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE page_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE page_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE page_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -392,7 +401,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_URL, $url, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -402,14 +413,15 @@ abstract class PageQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE page_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE page_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE page_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -417,7 +429,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_TITLE, $title, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -427,14 +441,15 @@ abstract class PageQuery extends ModelCriteria
      * <code>
      * $query->filterByContent('fooValue');   // WHERE page_content = 'fooValue'
      * $query->filterByContent('%fooValue%', Criteria::LIKE); // WHERE page_content LIKE '%fooValue%'
+     * $query->filterByContent(['foo', 'bar']); // WHERE page_content IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $content The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $content The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByContent($content = null, $comparison = null)
+    public function filterByContent($content = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($content)) {
@@ -442,7 +457,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_CONTENT, $content, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_CONTENT, $content, $comparison);
+
+        return $this;
     }
 
     /**
@@ -454,22 +471,24 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterByStatus('yes'); // WHERE page_status = true
      * </code>
      *
-     * @param     boolean|string $status The value to use as filter.
+     * @param bool|string $status The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStatus($status = null, $comparison = null)
+    public function filterByStatus($status = null, ?string $comparison = null)
     {
         if (is_string($status)) {
             $status = in_array(strtolower($status), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_STATUS, $status, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_STATUS, $status, $comparison);
+
+        return $this;
     }
 
     /**
@@ -482,17 +501,17 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE page_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -512,7 +531,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_INSERT, $insert, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -525,17 +546,17 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE page_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -555,7 +576,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATE, $update, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -568,17 +591,17 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE page_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -598,7 +621,9 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -611,17 +636,17 @@ abstract class PageQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE page_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -641,15 +666,17 @@ abstract class PageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildPage $page Object to remove from the list of results
+     * @param ChildPage $page Object to remove from the list of results
      *
-     * @return $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($page = null)
     {
@@ -666,7 +693,7 @@ abstract class PageQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PageTableMap::DATABASE_NAME);
@@ -691,12 +718,12 @@ abstract class PageQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PageTableMap::DATABASE_NAME);
@@ -726,65 +753,77 @@ abstract class PageQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PageTableMap::COL_PAGE_UPDATED);
+        $this->addDescendingOrderByColumn(PageTableMap::COL_PAGE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PageTableMap::COL_PAGE_UPDATED);
+        $this->addAscendingOrderByColumn(PageTableMap::COL_PAGE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PageTableMap::COL_PAGE_CREATED);
+        $this->addDescendingOrderByColumn(PageTableMap::COL_PAGE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PageTableMap::COL_PAGE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PageTableMap::COL_PAGE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PageTableMap::COL_PAGE_CREATED);
+        $this->addAscendingOrderByColumn(PageTableMap::COL_PAGE_CREATED);
+
+        return $this;
     }
 
-} // PageQuery
+}

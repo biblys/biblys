@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -152,8 +153,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\SiteQuery|\Model\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildOrder|null findOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query
- * @method     ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
+ * @method     ChildOrder|null findOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query
+ * @method     ChildOrder findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
  *
  * @method     ChildOrder|null findOneById(int $order_id) Return the first ChildOrder filtered by the order_id column
  * @method     ChildOrder|null findOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column
@@ -206,8 +207,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByCreatedAt(string $order_created) Return the first ChildOrder filtered by the order_created column
  * @method     ChildOrder|null findOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column *
 
- * @method     ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requirePk($key, ?ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder requireOneById(int $order_id) Return the first ChildOrder filtered by the order_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneBySlug(string $order_url) Return the first ChildOrder filtered by the order_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -260,110 +261,110 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByCreatedAt(string $order_created) Return the first ChildOrder filtered by the order_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
- * @method     ChildOrder[]|ObjectCollection findById(int $order_id) Return ChildOrder objects filtered by the order_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findById(int $order_id) Return ChildOrder objects filtered by the order_id column
- * @method     ChildOrder[]|ObjectCollection findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
- * @method     ChildOrder[]|ObjectCollection findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
- * @method     ChildOrder[]|ObjectCollection findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
- * @method     ChildOrder[]|ObjectCollection findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
- * @method     ChildOrder[]|ObjectCollection findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
- * @method     ChildOrder[]|ObjectCollection findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
- * @method     ChildOrder[]|ObjectCollection findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
- * @method     ChildOrder[]|ObjectCollection findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
- * @method     ChildOrder[]|ObjectCollection findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
- * @method     ChildOrder[]|ObjectCollection findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
- * @method     ChildOrder[]|ObjectCollection findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
- * @method     ChildOrder[]|ObjectCollection findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
- * @method     ChildOrder[]|ObjectCollection findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
- * @method     ChildOrder[]|ObjectCollection findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
- * @method     ChildOrder[]|ObjectCollection findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
- * @method     ChildOrder[]|ObjectCollection findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
- * @method     ChildOrder[]|ObjectCollection findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
- * @method     ChildOrder[]|ObjectCollection findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
- * @method     ChildOrder[]|ObjectCollection findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
- * @method     ChildOrder[]|ObjectCollection findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
- * @method     ChildOrder[]|ObjectCollection findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
- * @method     ChildOrder[]|ObjectCollection findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
- * @method     ChildOrder[]|ObjectCollection findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
- * @method     ChildOrder[]|ObjectCollection findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
- * @method     ChildOrder[]|ObjectCollection findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
- * @method     ChildOrder[]|ObjectCollection findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
- * @method     ChildOrder[]|ObjectCollection findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
- * @method     ChildOrder[]|ObjectCollection findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
- * @method     ChildOrder[]|ObjectCollection findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
- * @method     ChildOrder[]|ObjectCollection findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
- * @method     ChildOrder[]|ObjectCollection findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
- * @method     ChildOrder[]|ObjectCollection findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
- * @method     ChildOrder[]|ObjectCollection findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
- * @method     ChildOrder[]|ObjectCollection findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
- * @method     ChildOrder[]|ObjectCollection findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
- * @method     ChildOrder[]|ObjectCollection findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
- * @method     ChildOrder[]|ObjectCollection findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @method     ChildOrder[]|ObjectCollection findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @method     ChildOrder[]|ObjectCollection findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
- * @method     ChildOrder[]|ObjectCollection findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
- * @method     ChildOrder[]|ObjectCollection findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
- * @method     ChildOrder[]|ObjectCollection findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
- * @method     ChildOrder[]|ObjectCollection findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
- * @method     ChildOrder[]|ObjectCollection findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
- * @method     ChildOrder[]|ObjectCollection findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
- * @method     ChildOrder[]|ObjectCollection findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
- * @method     ChildOrder[]|ObjectCollection findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
- * @method     ChildOrder[]|ObjectCollection findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
- * @method     ChildOrder[]|ObjectCollection findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildOrder> findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
- * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildOrder> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildOrder[]|Collection find(?ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildOrder> find(?ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
+ * @method     ChildOrder[]|Collection findById(int $order_id) Return ChildOrder objects filtered by the order_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findById(int $order_id) Return ChildOrder objects filtered by the order_id column
+ * @method     ChildOrder[]|Collection findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
+ * @method     ChildOrder[]|Collection findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
+ * @method     ChildOrder[]|Collection findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
+ * @method     ChildOrder[]|Collection findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
+ * @method     ChildOrder[]|Collection findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
+ * @method     ChildOrder[]|Collection findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
+ * @method     ChildOrder[]|Collection findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @method     ChildOrder[]|Collection findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
+ * @method     ChildOrder[]|Collection findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
+ * @method     ChildOrder[]|Collection findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
+ * @method     ChildOrder[]|Collection findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
+ * @method     ChildOrder[]|Collection findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
+ * @method     ChildOrder[]|Collection findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
+ * @method     ChildOrder[]|Collection findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @method     ChildOrder[]|Collection findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
+ * @method     ChildOrder[]|Collection findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
+ * @method     ChildOrder[]|Collection findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
+ * @method     ChildOrder[]|Collection findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
+ * @method     ChildOrder[]|Collection findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
+ * @method     ChildOrder[]|Collection findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
+ * @method     ChildOrder[]|Collection findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
+ * @method     ChildOrder[]|Collection findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
+ * @method     ChildOrder[]|Collection findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
+ * @method     ChildOrder[]|Collection findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
+ * @method     ChildOrder[]|Collection findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
+ * @method     ChildOrder[]|Collection findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
+ * @method     ChildOrder[]|Collection findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
+ * @method     ChildOrder[]|Collection findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
+ * @method     ChildOrder[]|Collection findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
+ * @method     ChildOrder[]|Collection findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
+ * @method     ChildOrder[]|Collection findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
+ * @method     ChildOrder[]|Collection findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
+ * @method     ChildOrder[]|Collection findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
+ * @method     ChildOrder[]|Collection findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
+ * @method     ChildOrder[]|Collection findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
+ * @method     ChildOrder[]|Collection findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
+ * @method     ChildOrder[]|Collection findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
+ * @method     ChildOrder[]|Collection findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
+ * @method     ChildOrder[]|Collection findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
+ * @method     ChildOrder[]|Collection findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
+ * @method     ChildOrder[]|Collection findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
+ * @method     ChildOrder[]|Collection findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
+ * @method     ChildOrder[]|Collection findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
+ * @method     ChildOrder[]|Collection findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
+ * @method     ChildOrder[]|Collection findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
+ * @method     ChildOrder[]|Collection findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
+ * @method     ChildOrder[]|Collection findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
+ * @method     ChildOrder[]|Collection findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
+ * @method     ChildOrder[]|Collection findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
+ * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildOrder> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class OrderQuery extends ModelCriteria
@@ -373,9 +374,9 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\OrderQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Order', $modelAlias = null)
     {
@@ -385,12 +386,12 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Returns a new ChildOrderQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildOrderQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildOrderQuery) {
             return $criteria;
@@ -420,7 +421,7 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -452,8 +453,8 @@ abstract class OrderQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -485,8 +486,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
      */
@@ -506,12 +507,12 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -528,27 +529,31 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -561,15 +566,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE order_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -589,7 +594,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $id, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -599,14 +606,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterBySlug('fooValue');   // WHERE order_url = 'fooValue'
      * $query->filterBySlug('%fooValue%', Criteria::LIKE); // WHERE order_url LIKE '%fooValue%'
+     * $query->filterBySlug(['foo', 'bar']); // WHERE order_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $slug The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $slug The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySlug($slug = null, $comparison = null)
+    public function filterBySlug($slug = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($slug)) {
@@ -614,7 +622,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_URL, $slug, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_URL, $slug, $comparison);
+
+        return $this;
     }
 
     /**
@@ -629,15 +639,15 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see       filterBySite()
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -657,7 +667,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -670,15 +682,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -698,7 +710,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -711,15 +725,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCustomerId(array('min' => 12)); // WHERE customer_id > 12
      * </code>
      *
-     * @param     mixed $customerId The value to use as filter.
+     * @param mixed $customerId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCustomerId($customerId = null, $comparison = null)
+    public function filterByCustomerId($customerId = null, ?string $comparison = null)
     {
         if (is_array($customerId)) {
             $useMinMax = false;
@@ -739,7 +753,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_CUSTOMER_ID, $customerId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_CUSTOMER_ID, $customerId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -752,15 +768,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterBySellerId(array('min' => 12)); // WHERE seller_id > 12
      * </code>
      *
-     * @param     mixed $sellerId The value to use as filter.
+     * @param mixed $sellerId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellerId($sellerId = null, $comparison = null)
+    public function filterBySellerId($sellerId = null, ?string $comparison = null)
     {
         if (is_array($sellerId)) {
             $useMinMax = false;
@@ -780,7 +796,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_SELLER_ID, $sellerId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_SELLER_ID, $sellerId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -790,14 +808,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE order_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE order_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE order_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -805,7 +824,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_TYPE, $type, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -815,14 +836,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByAsAGift('fooValue');   // WHERE order_as_a_gift = 'fooValue'
      * $query->filterByAsAGift('%fooValue%', Criteria::LIKE); // WHERE order_as_a_gift LIKE '%fooValue%'
+     * $query->filterByAsAGift(['foo', 'bar']); // WHERE order_as_a_gift IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $asAGift The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $asAGift The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAsAGift($asAGift = null, $comparison = null)
+    public function filterByAsAGift($asAGift = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($asAGift)) {
@@ -830,7 +852,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_AS_A_GIFT, $asAGift, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_AS_A_GIFT, $asAGift, $comparison);
+
+        return $this;
     }
 
     /**
@@ -843,15 +867,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByGiftRecipient(array('min' => 12)); // WHERE order_gift_recipient > 12
      * </code>
      *
-     * @param     mixed $giftRecipient The value to use as filter.
+     * @param mixed $giftRecipient The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByGiftRecipient($giftRecipient = null, $comparison = null)
+    public function filterByGiftRecipient($giftRecipient = null, ?string $comparison = null)
     {
         if (is_array($giftRecipient)) {
             $useMinMax = false;
@@ -871,7 +895,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $giftRecipient, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_GIFT_RECIPIENT, $giftRecipient, $comparison);
+
+        return $this;
     }
 
     /**
@@ -884,15 +910,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE order_amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
+     * @param mixed $amount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAmount($amount = null, $comparison = null)
+    public function filterByAmount($amount = null, ?string $comparison = null)
     {
         if (is_array($amount)) {
             $useMinMax = false;
@@ -912,7 +938,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_AMOUNT, $amount, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_AMOUNT, $amount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -925,15 +953,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByDiscount(array('min' => 12)); // WHERE order_discount > 12
      * </code>
      *
-     * @param     mixed $discount The value to use as filter.
+     * @param mixed $discount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDiscount($discount = null, $comparison = null)
+    public function filterByDiscount($discount = null, ?string $comparison = null)
     {
         if (is_array($discount)) {
             $useMinMax = false;
@@ -953,7 +981,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_DISCOUNT, $discount, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_DISCOUNT, $discount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -966,15 +996,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByAmountTobepaid(array('min' => 12)); // WHERE order_amount_tobepaid > 12
      * </code>
      *
-     * @param     mixed $amountTobepaid The value to use as filter.
+     * @param mixed $amountTobepaid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAmountTobepaid($amountTobepaid = null, $comparison = null)
+    public function filterByAmountTobepaid($amountTobepaid = null, ?string $comparison = null)
     {
         if (is_array($amountTobepaid)) {
             $useMinMax = false;
@@ -994,7 +1024,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, $amountTobepaid, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, $amountTobepaid, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1007,15 +1039,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByShippingId(array('min' => 12)); // WHERE shipping_id > 12
      * </code>
      *
-     * @param     mixed $shippingId The value to use as filter.
+     * @param mixed $shippingId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingId($shippingId = null, $comparison = null)
+    public function filterByShippingId($shippingId = null, ?string $comparison = null)
     {
         if (is_array($shippingId)) {
             $useMinMax = false;
@@ -1035,7 +1067,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_SHIPPING_ID, $shippingId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1048,15 +1082,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCountryId(array('min' => 12)); // WHERE country_id > 12
      * </code>
      *
-     * @param     mixed $countryId The value to use as filter.
+     * @param mixed $countryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountryId($countryId = null, $comparison = null)
+    public function filterByCountryId($countryId = null, ?string $comparison = null)
     {
         if (is_array($countryId)) {
             $useMinMax = false;
@@ -1076,7 +1110,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1089,15 +1125,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByShipping(array('min' => 12)); // WHERE order_shipping > 12
      * </code>
      *
-     * @param     mixed $shipping The value to use as filter.
+     * @param mixed $shipping The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShipping($shipping = null, $comparison = null)
+    public function filterByShipping($shipping = null, ?string $comparison = null)
     {
         if (is_array($shipping)) {
             $useMinMax = false;
@@ -1117,7 +1153,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shipping, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING, $shipping, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1127,14 +1165,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByShippingMode('fooValue');   // WHERE order_shipping_mode = 'fooValue'
      * $query->filterByShippingMode('%fooValue%', Criteria::LIKE); // WHERE order_shipping_mode LIKE '%fooValue%'
+     * $query->filterByShippingMode(['foo', 'bar']); // WHERE order_shipping_mode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $shippingMode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $shippingMode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingMode($shippingMode = null, $comparison = null)
+    public function filterByShippingMode($shippingMode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($shippingMode)) {
@@ -1142,7 +1181,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING_MODE, $shippingMode, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING_MODE, $shippingMode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1152,14 +1193,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByTrackNumber('fooValue');   // WHERE order_track_number = 'fooValue'
      * $query->filterByTrackNumber('%fooValue%', Criteria::LIKE); // WHERE order_track_number LIKE '%fooValue%'
+     * $query->filterByTrackNumber(['foo', 'bar']); // WHERE order_track_number IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $trackNumber The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $trackNumber The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTrackNumber($trackNumber = null, $comparison = null)
+    public function filterByTrackNumber($trackNumber = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($trackNumber)) {
@@ -1167,7 +1209,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_TRACK_NUMBER, $trackNumber, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_TRACK_NUMBER, $trackNumber, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1177,14 +1221,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByPaymentMode('fooValue');   // WHERE order_payment_mode = 'fooValue'
      * $query->filterByPaymentMode('%fooValue%', Criteria::LIKE); // WHERE order_payment_mode LIKE '%fooValue%'
+     * $query->filterByPaymentMode(['foo', 'bar']); // WHERE order_payment_mode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $paymentMode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $paymentMode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentMode($paymentMode = null, $comparison = null)
+    public function filterByPaymentMode($paymentMode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($paymentMode)) {
@@ -1192,7 +1237,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_MODE, $paymentMode, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_MODE, $paymentMode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1205,15 +1252,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentCash(array('min' => 12)); // WHERE order_payment_cash > 12
      * </code>
      *
-     * @param     mixed $paymentCash The value to use as filter.
+     * @param mixed $paymentCash The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentCash($paymentCash = null, $comparison = null)
+    public function filterByPaymentCash($paymentCash = null, ?string $comparison = null)
     {
         if (is_array($paymentCash)) {
             $useMinMax = false;
@@ -1233,7 +1280,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CASH, $paymentCash, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CASH, $paymentCash, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1246,15 +1295,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentCheque(array('min' => 12)); // WHERE order_payment_cheque > 12
      * </code>
      *
-     * @param     mixed $paymentCheque The value to use as filter.
+     * @param mixed $paymentCheque The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentCheque($paymentCheque = null, $comparison = null)
+    public function filterByPaymentCheque($paymentCheque = null, ?string $comparison = null)
     {
         if (is_array($paymentCheque)) {
             $useMinMax = false;
@@ -1274,7 +1323,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, $paymentCheque, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, $paymentCheque, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1287,15 +1338,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentTransfer(array('min' => 12)); // WHERE order_payment_transfer > 12
      * </code>
      *
-     * @param     mixed $paymentTransfer The value to use as filter.
+     * @param mixed $paymentTransfer The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentTransfer($paymentTransfer = null, $comparison = null)
+    public function filterByPaymentTransfer($paymentTransfer = null, ?string $comparison = null)
     {
         if (is_array($paymentTransfer)) {
             $useMinMax = false;
@@ -1315,7 +1366,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1328,15 +1381,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentCard(array('min' => 12)); // WHERE order_payment_card > 12
      * </code>
      *
-     * @param     mixed $paymentCard The value to use as filter.
+     * @param mixed $paymentCard The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentCard($paymentCard = null, $comparison = null)
+    public function filterByPaymentCard($paymentCard = null, ?string $comparison = null)
     {
         if (is_array($paymentCard)) {
             $useMinMax = false;
@@ -1356,7 +1409,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CARD, $paymentCard, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_CARD, $paymentCard, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1369,15 +1424,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentPaypal(array('min' => 12)); // WHERE order_payment_paypal > 12
      * </code>
      *
-     * @param     mixed $paymentPaypal The value to use as filter.
+     * @param mixed $paymentPaypal The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentPaypal($paymentPaypal = null, $comparison = null)
+    public function filterByPaymentPaypal($paymentPaypal = null, ?string $comparison = null)
     {
         if (is_array($paymentPaypal)) {
             $useMinMax = false;
@@ -1397,7 +1452,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, $paymentPaypal, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, $paymentPaypal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1410,15 +1467,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentPayplug(array('min' => 12)); // WHERE order_payment_payplug > 12
      * </code>
      *
-     * @param     mixed $paymentPayplug The value to use as filter.
+     * @param mixed $paymentPayplug The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentPayplug($paymentPayplug = null, $comparison = null)
+    public function filterByPaymentPayplug($paymentPayplug = null, ?string $comparison = null)
     {
         if (is_array($paymentPayplug)) {
             $useMinMax = false;
@@ -1438,7 +1495,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, $paymentPayplug, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, $paymentPayplug, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1451,15 +1510,15 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentLeft(array('min' => 12)); // WHERE order_payment_left > 12
      * </code>
      *
-     * @param     mixed $paymentLeft The value to use as filter.
+     * @param mixed $paymentLeft The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentLeft($paymentLeft = null, $comparison = null)
+    public function filterByPaymentLeft($paymentLeft = null, ?string $comparison = null)
     {
         if (is_array($paymentLeft)) {
             $useMinMax = false;
@@ -1479,7 +1538,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_LEFT, $paymentLeft, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_LEFT, $paymentLeft, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1489,14 +1550,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE order_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE order_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE order_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -1504,7 +1566,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_TITLE, $title, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1514,14 +1578,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByFirstname('fooValue');   // WHERE order_firstname = 'fooValue'
      * $query->filterByFirstname('%fooValue%', Criteria::LIKE); // WHERE order_firstname LIKE '%fooValue%'
+     * $query->filterByFirstname(['foo', 'bar']); // WHERE order_firstname IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $firstname The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $firstname The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFirstname($firstname = null, $comparison = null)
+    public function filterByFirstname($firstname = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($firstname)) {
@@ -1529,7 +1594,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_FIRSTNAME, $firstname, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_FIRSTNAME, $firstname, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1539,14 +1606,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByLastname('fooValue');   // WHERE order_lastname = 'fooValue'
      * $query->filterByLastname('%fooValue%', Criteria::LIKE); // WHERE order_lastname LIKE '%fooValue%'
+     * $query->filterByLastname(['foo', 'bar']); // WHERE order_lastname IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $lastname The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $lastname The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLastname($lastname = null, $comparison = null)
+    public function filterByLastname($lastname = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($lastname)) {
@@ -1554,7 +1622,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_LASTNAME, $lastname, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_LASTNAME, $lastname, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1564,14 +1634,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress1('fooValue');   // WHERE order_address1 = 'fooValue'
      * $query->filterByAddress1('%fooValue%', Criteria::LIKE); // WHERE order_address1 LIKE '%fooValue%'
+     * $query->filterByAddress1(['foo', 'bar']); // WHERE order_address1 IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address1 The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address1 The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress1($address1 = null, $comparison = null)
+    public function filterByAddress1($address1 = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address1)) {
@@ -1579,7 +1650,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_ADDRESS1, $address1, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_ADDRESS1, $address1, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1589,14 +1662,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress2('fooValue');   // WHERE order_address2 = 'fooValue'
      * $query->filterByAddress2('%fooValue%', Criteria::LIKE); // WHERE order_address2 LIKE '%fooValue%'
+     * $query->filterByAddress2(['foo', 'bar']); // WHERE order_address2 IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address2 The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address2 The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress2($address2 = null, $comparison = null)
+    public function filterByAddress2($address2 = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address2)) {
@@ -1604,7 +1678,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_ADDRESS2, $address2, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_ADDRESS2, $address2, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1614,14 +1690,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByPostalcode('fooValue');   // WHERE order_postalcode = 'fooValue'
      * $query->filterByPostalcode('%fooValue%', Criteria::LIKE); // WHERE order_postalcode LIKE '%fooValue%'
+     * $query->filterByPostalcode(['foo', 'bar']); // WHERE order_postalcode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $postalcode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $postalcode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPostalcode($postalcode = null, $comparison = null)
+    public function filterByPostalcode($postalcode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($postalcode)) {
@@ -1629,7 +1706,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_POSTALCODE, $postalcode, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_POSTALCODE, $postalcode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1639,14 +1718,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByCity('fooValue');   // WHERE order_city = 'fooValue'
      * $query->filterByCity('%fooValue%', Criteria::LIKE); // WHERE order_city LIKE '%fooValue%'
+     * $query->filterByCity(['foo', 'bar']); // WHERE order_city IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $city The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $city The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCity($city = null, $comparison = null)
+    public function filterByCity($city = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($city)) {
@@ -1654,7 +1734,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_CITY, $city, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_CITY, $city, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1664,14 +1746,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByCountry('fooValue');   // WHERE order_country = 'fooValue'
      * $query->filterByCountry('%fooValue%', Criteria::LIKE); // WHERE order_country LIKE '%fooValue%'
+     * $query->filterByCountry(['foo', 'bar']); // WHERE order_country IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $country The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $country The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountry($country = null, $comparison = null)
+    public function filterByCountry($country = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($country)) {
@@ -1679,7 +1762,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_COUNTRY, $country, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_COUNTRY, $country, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1689,14 +1774,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE order_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE order_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE order_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -1704,7 +1790,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_EMAIL, $email, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1714,14 +1802,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByPhone('fooValue');   // WHERE order_phone = 'fooValue'
      * $query->filterByPhone('%fooValue%', Criteria::LIKE); // WHERE order_phone LIKE '%fooValue%'
+     * $query->filterByPhone(['foo', 'bar']); // WHERE order_phone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $phone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $phone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhone($phone = null, $comparison = null)
+    public function filterByPhone($phone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($phone)) {
@@ -1729,7 +1818,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PHONE, $phone, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PHONE, $phone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1739,14 +1830,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByComment('fooValue');   // WHERE order_comment = 'fooValue'
      * $query->filterByComment('%fooValue%', Criteria::LIKE); // WHERE order_comment LIKE '%fooValue%'
+     * $query->filterByComment(['foo', 'bar']); // WHERE order_comment IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $comment The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $comment The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByComment($comment = null, $comparison = null)
+    public function filterByComment($comment = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($comment)) {
@@ -1754,7 +1846,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_COMMENT, $comment, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_COMMENT, $comment, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1764,14 +1858,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByUtmz('fooValue');   // WHERE order_utmz = 'fooValue'
      * $query->filterByUtmz('%fooValue%', Criteria::LIKE); // WHERE order_utmz LIKE '%fooValue%'
+     * $query->filterByUtmz(['foo', 'bar']); // WHERE order_utmz IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $utmz The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $utmz The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUtmz($utmz = null, $comparison = null)
+    public function filterByUtmz($utmz = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($utmz)) {
@@ -1779,7 +1874,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UTMZ, $utmz, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTMZ, $utmz, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1789,14 +1886,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByUtmSource('fooValue');   // WHERE order_utm_source = 'fooValue'
      * $query->filterByUtmSource('%fooValue%', Criteria::LIKE); // WHERE order_utm_source LIKE '%fooValue%'
+     * $query->filterByUtmSource(['foo', 'bar']); // WHERE order_utm_source IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $utmSource The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $utmSource The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUtmSource($utmSource = null, $comparison = null)
+    public function filterByUtmSource($utmSource = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($utmSource)) {
@@ -1804,7 +1902,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_SOURCE, $utmSource, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_SOURCE, $utmSource, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1814,14 +1914,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByUtmCampaign('fooValue');   // WHERE order_utm_campaign = 'fooValue'
      * $query->filterByUtmCampaign('%fooValue%', Criteria::LIKE); // WHERE order_utm_campaign LIKE '%fooValue%'
+     * $query->filterByUtmCampaign(['foo', 'bar']); // WHERE order_utm_campaign IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $utmCampaign The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $utmCampaign The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUtmCampaign($utmCampaign = null, $comparison = null)
+    public function filterByUtmCampaign($utmCampaign = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($utmCampaign)) {
@@ -1829,7 +1930,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_CAMPAIGN, $utmCampaign, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_CAMPAIGN, $utmCampaign, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1839,14 +1942,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByUtmMedium('fooValue');   // WHERE order_utm_medium = 'fooValue'
      * $query->filterByUtmMedium('%fooValue%', Criteria::LIKE); // WHERE order_utm_medium LIKE '%fooValue%'
+     * $query->filterByUtmMedium(['foo', 'bar']); // WHERE order_utm_medium IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $utmMedium The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $utmMedium The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUtmMedium($utmMedium = null, $comparison = null)
+    public function filterByUtmMedium($utmMedium = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($utmMedium)) {
@@ -1854,7 +1958,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_MEDIUM, $utmMedium, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_MEDIUM, $utmMedium, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1864,14 +1970,15 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $query->filterByReferer('fooValue');   // WHERE order_referer = 'fooValue'
      * $query->filterByReferer('%fooValue%', Criteria::LIKE); // WHERE order_referer LIKE '%fooValue%'
+     * $query->filterByReferer(['foo', 'bar']); // WHERE order_referer IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $referer The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $referer The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByReferer($referer = null, $comparison = null)
+    public function filterByReferer($referer = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($referer)) {
@@ -1879,7 +1986,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_REFERER, $referer, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_REFERER, $referer, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1892,17 +2001,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE order_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -1922,7 +2031,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_INSERT, $insert, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1935,17 +2046,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPaymentDate(array('max' => 'yesterday')); // WHERE order_payment_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $paymentDate The value to use as filter.
+     * @param mixed $paymentDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentDate($paymentDate = null, $comparison = null)
+    public function filterByPaymentDate($paymentDate = null, ?string $comparison = null)
     {
         if (is_array($paymentDate)) {
             $useMinMax = false;
@@ -1965,7 +2076,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_DATE, $paymentDate, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_PAYMENT_DATE, $paymentDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1978,17 +2091,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByShippingDate(array('max' => 'yesterday')); // WHERE order_shipping_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $shippingDate The value to use as filter.
+     * @param mixed $shippingDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingDate($shippingDate = null, $comparison = null)
+    public function filterByShippingDate($shippingDate = null, ?string $comparison = null)
     {
         if (is_array($shippingDate)) {
             $useMinMax = false;
@@ -2008,7 +2121,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING_DATE, $shippingDate, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_SHIPPING_DATE, $shippingDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2021,17 +2136,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByFollowupDate(array('max' => 'yesterday')); // WHERE order_followup_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $followupDate The value to use as filter.
+     * @param mixed $followupDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFollowupDate($followupDate = null, $comparison = null)
+    public function filterByFollowupDate($followupDate = null, ?string $comparison = null)
     {
         if (is_array($followupDate)) {
             $useMinMax = false;
@@ -2051,7 +2166,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_FOLLOWUP_DATE, $followupDate, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_FOLLOWUP_DATE, $followupDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2064,17 +2181,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByConfirmationDate(array('max' => 'yesterday')); // WHERE order_confirmation_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $confirmationDate The value to use as filter.
+     * @param mixed $confirmationDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByConfirmationDate($confirmationDate = null, $comparison = null)
+    public function filterByConfirmationDate($confirmationDate = null, ?string $comparison = null)
     {
         if (is_array($confirmationDate)) {
             $useMinMax = false;
@@ -2094,7 +2211,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_CONFIRMATION_DATE, $confirmationDate, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_CONFIRMATION_DATE, $confirmationDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2107,17 +2226,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCancelDate(array('max' => 'yesterday')); // WHERE order_cancel_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $cancelDate The value to use as filter.
+     * @param mixed $cancelDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCancelDate($cancelDate = null, $comparison = null)
+    public function filterByCancelDate($cancelDate = null, ?string $comparison = null)
     {
         if (is_array($cancelDate)) {
             $useMinMax = false;
@@ -2137,7 +2256,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_CANCEL_DATE, $cancelDate, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_CANCEL_DATE, $cancelDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2150,17 +2271,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE order_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -2180,7 +2301,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2193,17 +2316,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE order_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -2223,7 +2346,9 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2236,17 +2361,17 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE order_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -2266,20 +2391,22 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site, $comparison = null)
+    public function filterBySite($site, ?string $comparison = null)
     {
         if ($site instanceof \Model\Site) {
             return $this
@@ -2289,8 +2416,10 @@ abstract class OrderQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(OrderTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
         }
@@ -2299,12 +2428,12 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Site relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -2333,9 +2462,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
@@ -2405,20 +2534,24 @@ abstract class OrderQuery extends ModelCriteria
      * Filter the query by a related \Model\Payment object
      *
      * @param \Model\Payment|ObjectCollection $payment the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPayment($payment, $comparison = null)
+    public function filterByPayment($payment, ?string $comparison = null)
     {
         if ($payment instanceof \Model\Payment) {
-            return $this
+            $this
                 ->addUsingAlias(OrderTableMap::COL_ORDER_ID, $payment->getOrderId(), $comparison);
+
+            return $this;
         } elseif ($payment instanceof ObjectCollection) {
-            return $this
+            $this
                 ->usePaymentQuery()
                 ->filterByPrimaryKeys($payment->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByPayment() only accepts arguments of type \Model\Payment or Collection');
         }
@@ -2427,12 +2560,12 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Payment relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinPayment($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPayment(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Payment');
@@ -2461,9 +2594,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\PaymentQuery A secondary query class using the current class as primary query
      */
@@ -2532,9 +2665,9 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildOrder $order Object to remove from the list of results
+     * @param ChildOrder $order Object to remove from the list of results
      *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($order = null)
     {
@@ -2551,7 +2684,7 @@ abstract class OrderQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
@@ -2576,12 +2709,12 @@ abstract class OrderQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
@@ -2611,65 +2744,77 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(OrderTableMap::COL_ORDER_UPDATED);
+        $this->addDescendingOrderByColumn(OrderTableMap::COL_ORDER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(OrderTableMap::COL_ORDER_UPDATED);
+        $this->addAscendingOrderByColumn(OrderTableMap::COL_ORDER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(OrderTableMap::COL_ORDER_CREATED);
+        $this->addDescendingOrderByColumn(OrderTableMap::COL_ORDER_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(OrderTableMap::COL_ORDER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(OrderTableMap::COL_ORDER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildOrderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(OrderTableMap::COL_ORDER_CREATED);
+        $this->addAscendingOrderByColumn(OrderTableMap::COL_ORDER_CREATED);
+
+        return $this;
     }
 
-} // OrderQuery
+}

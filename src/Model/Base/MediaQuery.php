@@ -10,7 +10,7 @@ use Model\Map\MediaTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMediaQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMediaQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMedia|null findOne(ConnectionInterface $con = null) Return the first ChildMedia matching the query
- * @method     ChildMedia findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMedia matching the query, or a new ChildMedia object populated from the query conditions when no match is found
+ * @method     ChildMedia|null findOne(?ConnectionInterface $con = null) Return the first ChildMedia matching the query
+ * @method     ChildMedia findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildMedia matching the query, or a new ChildMedia object populated from the query conditions when no match is found
  *
  * @method     ChildMedia|null findOneById(int $media_id) Return the first ChildMedia filtered by the media_id column
  * @method     ChildMedia|null findOneBySiteId(int $site_id) Return the first ChildMedia filtered by the site_id column
@@ -75,8 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia|null findOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column
  * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column *
 
- * @method     ChildMedia requirePk($key, ConnectionInterface $con = null) Return the ChildMedia by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMedia requireOne(ConnectionInterface $con = null) Return the first ChildMedia matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMedia requirePk($key, ?ConnectionInterface $con = null) Return the ChildMedia by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMedia requireOne(?ConnectionInterface $con = null) Return the first ChildMedia matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMedia requireOneById(int $media_id) Return the first ChildMedia filtered by the media_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOneBySiteId(int $site_id) Return the first ChildMedia filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -93,38 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia requireOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMedia[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> find(ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
- * @method     ChildMedia[]|ObjectCollection findById(int $media_id) Return ChildMedia objects filtered by the media_id column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findById(int $media_id) Return ChildMedia objects filtered by the media_id column
- * @method     ChildMedia[]|ObjectCollection findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
- * @method     ChildMedia[]|ObjectCollection findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
- * @method     ChildMedia[]|ObjectCollection findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @method     ChildMedia[]|ObjectCollection findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
- * @method     ChildMedia[]|ObjectCollection findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @method     ChildMedia[]|ObjectCollection findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
- * @method     ChildMedia[]|ObjectCollection findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @method     ChildMedia[]|ObjectCollection findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
- * @method     ChildMedia[]|ObjectCollection findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @method     ChildMedia[]|ObjectCollection findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @method     ChildMedia[]|ObjectCollection findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
- * @method     ChildMedia[]|ObjectCollection findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
- * @method     ChildMedia[]|ObjectCollection findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildMedia> findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
- * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildMedia[]|Collection find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildMedia> find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
+ * @method     ChildMedia[]|Collection findById(int $media_id) Return ChildMedia objects filtered by the media_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findById(int $media_id) Return ChildMedia objects filtered by the media_id column
+ * @method     ChildMedia[]|Collection findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
+ * @method     ChildMedia[]|Collection findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
+ * @method     ChildMedia[]|Collection findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
+ * @method     ChildMedia[]|Collection findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
+ * @method     ChildMedia[]|Collection findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
+ * @method     ChildMedia[]|Collection findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
+ * @method     ChildMedia[]|Collection findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
+ * @method     ChildMedia[]|Collection findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
+ * @method     ChildMedia[]|Collection findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
+ * @method     ChildMedia[]|Collection findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
+ * @method     ChildMedia[]|Collection findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
+ * @method     ChildMedia[]|Collection findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
+ * @method     ChildMedia[]|Collection findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
+ * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class MediaQuery extends ModelCriteria
@@ -134,9 +134,9 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\MediaQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Media', $modelAlias = null)
     {
@@ -146,12 +146,12 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Returns a new ChildMediaQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildMediaQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildMediaQuery) {
             return $criteria;
@@ -181,7 +181,7 @@ abstract class MediaQuery extends ModelCriteria
      *
      * @return ChildMedia|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -213,8 +213,8 @@ abstract class MediaQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -246,8 +246,8 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildMedia|array|mixed the result, formatted by the current formatter
      */
@@ -267,12 +267,12 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -289,27 +289,31 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -322,15 +326,15 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE media_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -350,7 +354,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $id, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -363,15 +369,15 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -391,7 +397,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -404,15 +412,15 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterByCategoryId(array('min' => 12)); // WHERE category_id > 12
      * </code>
      *
-     * @param     mixed $categoryId The value to use as filter.
+     * @param mixed $categoryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCategoryId($categoryId = null, $comparison = null)
+    public function filterByCategoryId($categoryId = null, ?string $comparison = null)
     {
         if (is_array($categoryId)) {
             $useMinMax = false;
@@ -432,7 +440,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -442,14 +452,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByDir('fooValue');   // WHERE media_dir = 'fooValue'
      * $query->filterByDir('%fooValue%', Criteria::LIKE); // WHERE media_dir LIKE '%fooValue%'
+     * $query->filterByDir(['foo', 'bar']); // WHERE media_dir IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $dir The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $dir The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDir($dir = null, $comparison = null)
+    public function filterByDir($dir = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($dir)) {
@@ -457,7 +468,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_DIR, $dir, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_DIR, $dir, $comparison);
+
+        return $this;
     }
 
     /**
@@ -467,14 +480,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByFile('fooValue');   // WHERE media_file = 'fooValue'
      * $query->filterByFile('%fooValue%', Criteria::LIKE); // WHERE media_file LIKE '%fooValue%'
+     * $query->filterByFile(['foo', 'bar']); // WHERE media_file IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $file The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $file The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFile($file = null, $comparison = null)
+    public function filterByFile($file = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($file)) {
@@ -482,7 +496,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_FILE, $file, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_FILE, $file, $comparison);
+
+        return $this;
     }
 
     /**
@@ -492,14 +508,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByExt('fooValue');   // WHERE media_ext = 'fooValue'
      * $query->filterByExt('%fooValue%', Criteria::LIKE); // WHERE media_ext LIKE '%fooValue%'
+     * $query->filterByExt(['foo', 'bar']); // WHERE media_ext IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $ext The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $ext The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByExt($ext = null, $comparison = null)
+    public function filterByExt($ext = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($ext)) {
@@ -507,7 +524,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_EXT, $ext, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_EXT, $ext, $comparison);
+
+        return $this;
     }
 
     /**
@@ -517,14 +536,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE media_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE media_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE media_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -532,7 +552,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_TITLE, $title, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -542,14 +564,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE media_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE media_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE media_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -557,7 +580,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_DESC, $desc, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -567,14 +592,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByLink('fooValue');   // WHERE media_link = 'fooValue'
      * $query->filterByLink('%fooValue%', Criteria::LIKE); // WHERE media_link LIKE '%fooValue%'
+     * $query->filterByLink(['foo', 'bar']); // WHERE media_link IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $link The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $link The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLink($link = null, $comparison = null)
+    public function filterByLink($link = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($link)) {
@@ -582,7 +608,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_LINK, $link, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_LINK, $link, $comparison);
+
+        return $this;
     }
 
     /**
@@ -592,14 +620,15 @@ abstract class MediaQuery extends ModelCriteria
      * <code>
      * $query->filterByHeadline('fooValue');   // WHERE media_headline = 'fooValue'
      * $query->filterByHeadline('%fooValue%', Criteria::LIKE); // WHERE media_headline LIKE '%fooValue%'
+     * $query->filterByHeadline(['foo', 'bar']); // WHERE media_headline IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $headline The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $headline The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHeadline($headline = null, $comparison = null)
+    public function filterByHeadline($headline = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($headline)) {
@@ -607,7 +636,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_HEADLINE, $headline, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_HEADLINE, $headline, $comparison);
+
+        return $this;
     }
 
     /**
@@ -620,17 +651,17 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE media_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -650,7 +681,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_INSERT, $insert, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -663,17 +696,17 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE media_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -693,7 +726,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATE, $update, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -706,17 +741,17 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE media_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -736,7 +771,9 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -749,17 +786,17 @@ abstract class MediaQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE media_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -779,15 +816,17 @@ abstract class MediaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildMedia $media Object to remove from the list of results
+     * @param ChildMedia $media Object to remove from the list of results
      *
-     * @return $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($media = null)
     {
@@ -804,7 +843,7 @@ abstract class MediaQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
@@ -829,12 +868,12 @@ abstract class MediaQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
@@ -864,65 +903,77 @@ abstract class MediaQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+        $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+        $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+        $this->addDescendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MediaTableMap::COL_MEDIA_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildMediaQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+        $this->addAscendingOrderByColumn(MediaTableMap::COL_MEDIA_CREATED);
+
+        return $this;
     }
 
-} // MediaQuery
+}

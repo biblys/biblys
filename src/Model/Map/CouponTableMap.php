@@ -33,140 +33,144 @@ class CouponTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.CouponTableMap';
+    public const CLASS_NAME = 'Model.Map.CouponTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'coupons';
+    public const TABLE_NAME = 'coupons';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Coupon';
+    public const OM_CLASS = '\\Model\\Coupon';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Coupon';
+    public const CLASS_DEFAULT = 'Model.Coupon';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    public const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    public const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the coupon_id field
      */
-    const COL_COUPON_ID = 'coupons.coupon_id';
+    public const COL_COUPON_ID = 'coupons.coupon_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'coupons.site_id';
+    public const COL_SITE_ID = 'coupons.site_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'coupons.user_id';
+    public const COL_USER_ID = 'coupons.user_id';
 
     /**
      * the column name for the coupon_code field
      */
-    const COL_COUPON_CODE = 'coupons.coupon_code';
+    public const COL_COUPON_CODE = 'coupons.coupon_code';
 
     /**
      * the column name for the article_id field
      */
-    const COL_ARTICLE_ID = 'coupons.article_id';
+    public const COL_ARTICLE_ID = 'coupons.article_id';
 
     /**
      * the column name for the stock_id field
      */
-    const COL_STOCK_ID = 'coupons.stock_id';
+    public const COL_STOCK_ID = 'coupons.stock_id';
 
     /**
      * the column name for the coupon_amount field
      */
-    const COL_COUPON_AMOUNT = 'coupons.coupon_amount';
+    public const COL_COUPON_AMOUNT = 'coupons.coupon_amount';
 
     /**
      * the column name for the coupon_note field
      */
-    const COL_COUPON_NOTE = 'coupons.coupon_note';
+    public const COL_COUPON_NOTE = 'coupons.coupon_note';
 
     /**
      * the column name for the coupon_used field
      */
-    const COL_COUPON_USED = 'coupons.coupon_used';
+    public const COL_COUPON_USED = 'coupons.coupon_used';
 
     /**
      * the column name for the coupon_creator field
      */
-    const COL_COUPON_CREATOR = 'coupons.coupon_creator';
+    public const COL_COUPON_CREATOR = 'coupons.coupon_creator';
 
     /**
      * the column name for the coupon_insert field
      */
-    const COL_COUPON_INSERT = 'coupons.coupon_insert';
+    public const COL_COUPON_INSERT = 'coupons.coupon_insert';
 
     /**
      * the column name for the coupon_update field
      */
-    const COL_COUPON_UPDATE = 'coupons.coupon_update';
+    public const COL_COUPON_UPDATE = 'coupons.coupon_update';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'UserId', 'Code', 'ArticleId', 'StockId', 'Amount', 'Note', 'Used', 'Creator', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'userId', 'code', 'articleId', 'stockId', 'amount', 'note', 'used', 'creator', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPON_ID, CouponTableMap::COL_SITE_ID, CouponTableMap::COL_USER_ID, CouponTableMap::COL_COUPON_CODE, CouponTableMap::COL_ARTICLE_ID, CouponTableMap::COL_STOCK_ID, CouponTableMap::COL_COUPON_AMOUNT, CouponTableMap::COL_COUPON_NOTE, CouponTableMap::COL_COUPON_USED, CouponTableMap::COL_COUPON_CREATOR, CouponTableMap::COL_COUPON_INSERT, CouponTableMap::COL_COUPON_UPDATE, ),
-        self::TYPE_FIELDNAME     => array('coupon_id', 'site_id', 'user_id', 'coupon_code', 'article_id', 'stock_id', 'coupon_amount', 'coupon_note', 'coupon_used', 'coupon_creator', 'coupon_insert', 'coupon_update', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'UserId', 'Code', 'ArticleId', 'StockId', 'Amount', 'Note', 'Used', 'Creator', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'userId', 'code', 'articleId', 'stockId', 'amount', 'note', 'used', 'creator', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID, CouponTableMap::COL_SITE_ID, CouponTableMap::COL_USER_ID, CouponTableMap::COL_COUPON_CODE, CouponTableMap::COL_ARTICLE_ID, CouponTableMap::COL_STOCK_ID, CouponTableMap::COL_COUPON_AMOUNT, CouponTableMap::COL_COUPON_NOTE, CouponTableMap::COL_COUPON_USED, CouponTableMap::COL_COUPON_CREATOR, CouponTableMap::COL_COUPON_INSERT, CouponTableMap::COL_COUPON_UPDATE, ],
+        self::TYPE_FIELDNAME     => ['coupon_id', 'site_id', 'user_id', 'coupon_code', 'article_id', 'stock_id', 'coupon_amount', 'coupon_note', 'coupon_used', 'coupon_creator', 'coupon_insert', 'coupon_update', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Code' => 3, 'ArticleId' => 4, 'StockId' => 5, 'Amount' => 6, 'Note' => 7, 'Used' => 8, 'Creator' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'userId' => 2, 'code' => 3, 'articleId' => 4, 'stockId' => 5, 'amount' => 6, 'note' => 7, 'used' => 8, 'creator' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPON_ID => 0, CouponTableMap::COL_SITE_ID => 1, CouponTableMap::COL_USER_ID => 2, CouponTableMap::COL_COUPON_CODE => 3, CouponTableMap::COL_ARTICLE_ID => 4, CouponTableMap::COL_STOCK_ID => 5, CouponTableMap::COL_COUPON_AMOUNT => 6, CouponTableMap::COL_COUPON_NOTE => 7, CouponTableMap::COL_COUPON_USED => 8, CouponTableMap::COL_COUPON_CREATOR => 9, CouponTableMap::COL_COUPON_INSERT => 10, CouponTableMap::COL_COUPON_UPDATE => 11, ),
-        self::TYPE_FIELDNAME     => array('coupon_id' => 0, 'site_id' => 1, 'user_id' => 2, 'coupon_code' => 3, 'article_id' => 4, 'stock_id' => 5, 'coupon_amount' => 6, 'coupon_note' => 7, 'coupon_used' => 8, 'coupon_creator' => 9, 'coupon_insert' => 10, 'coupon_update' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'UserId' => 2, 'Code' => 3, 'ArticleId' => 4, 'StockId' => 5, 'Amount' => 6, 'Note' => 7, 'Used' => 8, 'Creator' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'userId' => 2, 'code' => 3, 'articleId' => 4, 'stockId' => 5, 'amount' => 6, 'note' => 7, 'used' => 8, 'creator' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
+        self::TYPE_COLNAME       => [CouponTableMap::COL_COUPON_ID => 0, CouponTableMap::COL_SITE_ID => 1, CouponTableMap::COL_USER_ID => 2, CouponTableMap::COL_COUPON_CODE => 3, CouponTableMap::COL_ARTICLE_ID => 4, CouponTableMap::COL_STOCK_ID => 5, CouponTableMap::COL_COUPON_AMOUNT => 6, CouponTableMap::COL_COUPON_NOTE => 7, CouponTableMap::COL_COUPON_USED => 8, CouponTableMap::COL_COUPON_CREATOR => 9, CouponTableMap::COL_COUPON_INSERT => 10, CouponTableMap::COL_COUPON_UPDATE => 11, ],
+        self::TYPE_FIELDNAME     => ['coupon_id' => 0, 'site_id' => 1, 'user_id' => 2, 'coupon_code' => 3, 'article_id' => 4, 'stock_id' => 5, 'coupon_amount' => 6, 'coupon_note' => 7, 'coupon_used' => 8, 'coupon_creator' => 9, 'coupon_insert' => 10, 'coupon_update' => 11, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'COUPON_ID',
@@ -272,9 +276,9 @@ class CouponTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('coupons');
@@ -296,27 +300,29 @@ class CouponTableMap extends TableMap
         $this->addColumn('coupon_creator', 'Creator', 'INTEGER', false, 10, null);
         $this->addColumn('coupon_insert', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('coupon_update', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'coupon_insert', 'update_column' => 'coupon_update', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -324,14 +330,14 @@ class CouponTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -346,14 +352,14 @@ class CouponTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -370,10 +376,10 @@ class CouponTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? CouponTableMap::CLASS_DEFAULT : CouponTableMap::OM_CLASS;
     }
@@ -381,17 +387,17 @@ class CouponTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Coupon object, last column rank)
+     * @return array (Coupon object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = CouponTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = CouponTableMap::getInstanceFromPool($key))) {
@@ -415,13 +421,13 @@ class CouponTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -451,12 +457,13 @@ class CouponTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(CouponTableMap::COL_COUPON_ID);
@@ -493,12 +500,13 @@ class CouponTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(CouponTableMap::COL_COUPON_ID);
@@ -533,10 +541,10 @@ class CouponTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(CouponTableMap::DATABASE_NAME)->getTable(CouponTableMap::TABLE_NAME);
     }
@@ -544,15 +552,15 @@ class CouponTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Coupon or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Coupon object or primary key or array of primary keys
+     * @param mixed $values Criteria or Coupon object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
@@ -588,7 +596,7 @@ class CouponTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return CouponQuery::create()->doDeleteAll($con);
     }
@@ -596,13 +604,13 @@ class CouponTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Coupon or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Coupon object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Coupon object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
@@ -629,4 +637,4 @@ class CouponTableMap extends TableMap
         });
     }
 
-} // CouponTableMap
+}

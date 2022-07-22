@@ -33,140 +33,144 @@ class RoleTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.RoleTableMap';
+    public const CLASS_NAME = 'Model.Map.RoleTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'roles';
+    public const TABLE_NAME = 'roles';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Role';
+    public const OM_CLASS = '\\Model\\Role';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Role';
+    public const CLASS_DEFAULT = 'Model.Role';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    public const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    public const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'roles.id';
+    public const COL_ID = 'roles.id';
 
     /**
      * the column name for the article_id field
      */
-    const COL_ARTICLE_ID = 'roles.article_id';
+    public const COL_ARTICLE_ID = 'roles.article_id';
 
     /**
      * the column name for the book_id field
      */
-    const COL_BOOK_ID = 'roles.book_id';
+    public const COL_BOOK_ID = 'roles.book_id';
 
     /**
      * the column name for the event_id field
      */
-    const COL_EVENT_ID = 'roles.event_id';
+    public const COL_EVENT_ID = 'roles.event_id';
 
     /**
      * the column name for the people_id field
      */
-    const COL_PEOPLE_ID = 'roles.people_id';
+    public const COL_PEOPLE_ID = 'roles.people_id';
 
     /**
      * the column name for the job_id field
      */
-    const COL_JOB_ID = 'roles.job_id';
+    public const COL_JOB_ID = 'roles.job_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'roles.user_id';
+    public const COL_USER_ID = 'roles.user_id';
 
     /**
      * the column name for the role_hide field
      */
-    const COL_ROLE_HIDE = 'roles.role_hide';
+    public const COL_ROLE_HIDE = 'roles.role_hide';
 
     /**
      * the column name for the role_presence field
      */
-    const COL_ROLE_PRESENCE = 'roles.role_presence';
+    public const COL_ROLE_PRESENCE = 'roles.role_presence';
 
     /**
      * the column name for the role_date field
      */
-    const COL_ROLE_DATE = 'roles.role_date';
+    public const COL_ROLE_DATE = 'roles.role_date';
 
     /**
      * the column name for the role_created field
      */
-    const COL_ROLE_CREATED = 'roles.role_created';
+    public const COL_ROLE_CREATED = 'roles.role_created';
 
     /**
      * the column name for the role_updated field
      */
-    const COL_ROLE_UPDATED = 'roles.role_updated';
+    public const COL_ROLE_UPDATED = 'roles.role_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'BookId', 'EventId', 'PeopleId', 'JobId', 'UserId', 'Hide', 'Presence', 'Date', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'articleId', 'bookId', 'eventId', 'peopleId', 'jobId', 'userId', 'hide', 'presence', 'date', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID, RoleTableMap::COL_ARTICLE_ID, RoleTableMap::COL_BOOK_ID, RoleTableMap::COL_EVENT_ID, RoleTableMap::COL_PEOPLE_ID, RoleTableMap::COL_JOB_ID, RoleTableMap::COL_USER_ID, RoleTableMap::COL_ROLE_HIDE, RoleTableMap::COL_ROLE_PRESENCE, RoleTableMap::COL_ROLE_DATE, RoleTableMap::COL_ROLE_CREATED, RoleTableMap::COL_ROLE_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('id', 'article_id', 'book_id', 'event_id', 'people_id', 'job_id', 'user_id', 'role_hide', 'role_presence', 'role_date', 'role_created', 'role_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'BookId', 'EventId', 'PeopleId', 'JobId', 'UserId', 'Hide', 'Presence', 'Date', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'articleId', 'bookId', 'eventId', 'peopleId', 'jobId', 'userId', 'hide', 'presence', 'date', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [RoleTableMap::COL_ID, RoleTableMap::COL_ARTICLE_ID, RoleTableMap::COL_BOOK_ID, RoleTableMap::COL_EVENT_ID, RoleTableMap::COL_PEOPLE_ID, RoleTableMap::COL_JOB_ID, RoleTableMap::COL_USER_ID, RoleTableMap::COL_ROLE_HIDE, RoleTableMap::COL_ROLE_PRESENCE, RoleTableMap::COL_ROLE_DATE, RoleTableMap::COL_ROLE_CREATED, RoleTableMap::COL_ROLE_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['id', 'article_id', 'book_id', 'event_id', 'people_id', 'job_id', 'user_id', 'role_hide', 'role_presence', 'role_date', 'role_created', 'role_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'EventId' => 3, 'PeopleId' => 4, 'JobId' => 5, 'UserId' => 6, 'Hide' => 7, 'Presence' => 8, 'Date' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'bookId' => 2, 'eventId' => 3, 'peopleId' => 4, 'jobId' => 5, 'userId' => 6, 'hide' => 7, 'presence' => 8, 'date' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-        self::TYPE_COLNAME       => array(RoleTableMap::COL_ID => 0, RoleTableMap::COL_ARTICLE_ID => 1, RoleTableMap::COL_BOOK_ID => 2, RoleTableMap::COL_EVENT_ID => 3, RoleTableMap::COL_PEOPLE_ID => 4, RoleTableMap::COL_JOB_ID => 5, RoleTableMap::COL_USER_ID => 6, RoleTableMap::COL_ROLE_HIDE => 7, RoleTableMap::COL_ROLE_PRESENCE => 8, RoleTableMap::COL_ROLE_DATE => 9, RoleTableMap::COL_ROLE_CREATED => 10, RoleTableMap::COL_ROLE_UPDATED => 11, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'article_id' => 1, 'book_id' => 2, 'event_id' => 3, 'people_id' => 4, 'job_id' => 5, 'user_id' => 6, 'role_hide' => 7, 'role_presence' => 8, 'role_date' => 9, 'role_created' => 10, 'role_updated' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'BookId' => 2, 'EventId' => 3, 'PeopleId' => 4, 'JobId' => 5, 'UserId' => 6, 'Hide' => 7, 'Presence' => 8, 'Date' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'bookId' => 2, 'eventId' => 3, 'peopleId' => 4, 'jobId' => 5, 'userId' => 6, 'hide' => 7, 'presence' => 8, 'date' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
+        self::TYPE_COLNAME       => [RoleTableMap::COL_ID => 0, RoleTableMap::COL_ARTICLE_ID => 1, RoleTableMap::COL_BOOK_ID => 2, RoleTableMap::COL_EVENT_ID => 3, RoleTableMap::COL_PEOPLE_ID => 4, RoleTableMap::COL_JOB_ID => 5, RoleTableMap::COL_USER_ID => 6, RoleTableMap::COL_ROLE_HIDE => 7, RoleTableMap::COL_ROLE_PRESENCE => 8, RoleTableMap::COL_ROLE_DATE => 9, RoleTableMap::COL_ROLE_CREATED => 10, RoleTableMap::COL_ROLE_UPDATED => 11, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'article_id' => 1, 'book_id' => 2, 'event_id' => 3, 'people_id' => 4, 'job_id' => 5, 'user_id' => 6, 'role_hide' => 7, 'role_presence' => 8, 'role_date' => 9, 'role_created' => 10, 'role_updated' => 11, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
@@ -271,9 +275,9 @@ class RoleTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('roles');
@@ -295,12 +299,14 @@ class RoleTableMap extends TableMap
         $this->addColumn('role_date', 'Date', 'TIMESTAMP', false, null, null);
         $this->addColumn('role_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('role_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Article', '\\Model\\Article', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -316,20 +322,20 @@ class RoleTableMap extends TableMap
     1 => ':people_id',
   ),
 ), null, null, null, false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'role_created', 'update_column' => 'role_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -337,14 +343,14 @@ class RoleTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -359,14 +365,14 @@ class RoleTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -383,10 +389,10 @@ class RoleTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? RoleTableMap::CLASS_DEFAULT : RoleTableMap::OM_CLASS;
     }
@@ -394,17 +400,17 @@ class RoleTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Role object, last column rank)
+     * @return array (Role object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = RoleTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = RoleTableMap::getInstanceFromPool($key))) {
@@ -428,13 +434,13 @@ class RoleTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -464,12 +470,13 @@ class RoleTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(RoleTableMap::COL_ID);
@@ -506,12 +513,13 @@ class RoleTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(RoleTableMap::COL_ID);
@@ -546,10 +554,10 @@ class RoleTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(RoleTableMap::DATABASE_NAME)->getTable(RoleTableMap::TABLE_NAME);
     }
@@ -557,15 +565,15 @@ class RoleTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Role or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Role object or primary key or array of primary keys
+     * @param mixed $values Criteria or Role object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RoleTableMap::DATABASE_NAME);
@@ -601,7 +609,7 @@ class RoleTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return RoleQuery::create()->doDeleteAll($con);
     }
@@ -609,13 +617,13 @@ class RoleTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Role or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Role object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Role object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RoleTableMap::DATABASE_NAME);
@@ -642,4 +650,4 @@ class RoleTableMap extends TableMap
         });
     }
 
-} // RoleTableMap
+}

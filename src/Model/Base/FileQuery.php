@@ -10,7 +10,7 @@ use Model\Map\FileTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFileQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildFileQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildFile|null findOne(ConnectionInterface $con = null) Return the first ChildFile matching the query
- * @method     ChildFile findOneOrCreate(ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
+ * @method     ChildFile|null findOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query
+ * @method     ChildFile findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildFile matching the query, or a new ChildFile object populated from the query conditions when no match is found
  *
  * @method     ChildFile|null findOneById(int $file_id) Return the first ChildFile filtered by the file_id column
  * @method     ChildFile|null findOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column
@@ -75,8 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile|null findOneByUpdatedAt(string $file_updated) Return the first ChildFile filtered by the file_updated column
  * @method     ChildFile|null findOneByCreatedAt(string $file_created) Return the first ChildFile filtered by the file_created column *
 
- * @method     ChildFile requirePk($key, ConnectionInterface $con = null) Return the ChildFile by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildFile requireOne(ConnectionInterface $con = null) Return the first ChildFile matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildFile requirePk($key, ?ConnectionInterface $con = null) Return the ChildFile by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildFile requireOne(?ConnectionInterface $con = null) Return the first ChildFile matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildFile requireOneById(int $file_id) Return the first ChildFile filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByArticleId(int $article_id) Return the first ChildFile filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -93,38 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildFile requireOneByUpdatedAt(string $file_updated) Return the first ChildFile filtered by the file_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildFile requireOneByCreatedAt(string $file_created) Return the first ChildFile filtered by the file_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildFile[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildFile> find(ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
- * @method     ChildFile[]|ObjectCollection findById(int $file_id) Return ChildFile objects filtered by the file_id column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findById(int $file_id) Return ChildFile objects filtered by the file_id column
- * @method     ChildFile[]|ObjectCollection findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
- * @method     ChildFile[]|ObjectCollection findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
- * @method     ChildFile[]|ObjectCollection findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
- * @method     ChildFile[]|ObjectCollection findByType(string $file_type) Return ChildFile objects filtered by the file_type column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByType(string $file_type) Return ChildFile objects filtered by the file_type column
- * @method     ChildFile[]|ObjectCollection findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
- * @method     ChildFile[]|ObjectCollection findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
- * @method     ChildFile[]|ObjectCollection findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
- * @method     ChildFile[]|ObjectCollection findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
- * @method     ChildFile[]|ObjectCollection findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
- * @method     ChildFile[]|ObjectCollection findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
- * @method     ChildFile[]|ObjectCollection findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
- * @method     ChildFile[]|ObjectCollection findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
- * @method     ChildFile[]|ObjectCollection findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
- * @psalm-method ObjectCollection&\Traversable<ChildFile> findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
- * @method     ChildFile[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildFile> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildFile[]|Collection find(?ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildFile> find(?ConnectionInterface $con = null) Return ChildFile objects based on current ModelCriteria
+ * @method     ChildFile[]|Collection findById(int $file_id) Return ChildFile objects filtered by the file_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findById(int $file_id) Return ChildFile objects filtered by the file_id column
+ * @method     ChildFile[]|Collection findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findByArticleId(int $article_id) Return ChildFile objects filtered by the article_id column
+ * @method     ChildFile[]|Collection findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildFile> findByUserId(int $user_id) Return ChildFile objects filtered by the user_id column
+ * @method     ChildFile[]|Collection findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
+ * @psalm-method Collection&\Traversable<ChildFile> findByTitle(string $file_title) Return ChildFile objects filtered by the file_title column
+ * @method     ChildFile[]|Collection findByType(string $file_type) Return ChildFile objects filtered by the file_type column
+ * @psalm-method Collection&\Traversable<ChildFile> findByType(string $file_type) Return ChildFile objects filtered by the file_type column
+ * @method     ChildFile[]|Collection findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
+ * @psalm-method Collection&\Traversable<ChildFile> findByAccess(boolean $file_access) Return ChildFile objects filtered by the file_access column
+ * @method     ChildFile[]|Collection findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
+ * @psalm-method Collection&\Traversable<ChildFile> findByVersion(string $file_version) Return ChildFile objects filtered by the file_version column
+ * @method     ChildFile[]|Collection findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
+ * @psalm-method Collection&\Traversable<ChildFile> findByHash(string $file_hash) Return ChildFile objects filtered by the file_hash column
+ * @method     ChildFile[]|Collection findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
+ * @psalm-method Collection&\Traversable<ChildFile> findBySize(string $file_size) Return ChildFile objects filtered by the file_size column
+ * @method     ChildFile[]|Collection findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
+ * @psalm-method Collection&\Traversable<ChildFile> findByEan(string $file_ean) Return ChildFile objects filtered by the file_ean column
+ * @method     ChildFile[]|Collection findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
+ * @psalm-method Collection&\Traversable<ChildFile> findByInserted(string $file_inserted) Return ChildFile objects filtered by the file_inserted column
+ * @method     ChildFile[]|Collection findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
+ * @psalm-method Collection&\Traversable<ChildFile> findByUploaded(string $file_uploaded) Return ChildFile objects filtered by the file_uploaded column
+ * @method     ChildFile[]|Collection findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
+ * @psalm-method Collection&\Traversable<ChildFile> findByUpdatedAt(string $file_updated) Return ChildFile objects filtered by the file_updated column
+ * @method     ChildFile[]|Collection findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
+ * @psalm-method Collection&\Traversable<ChildFile> findByCreatedAt(string $file_created) Return ChildFile objects filtered by the file_created column
+ * @method     ChildFile[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildFile> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class FileQuery extends ModelCriteria
@@ -134,9 +134,9 @@ abstract class FileQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\FileQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\File', $modelAlias = null)
     {
@@ -146,12 +146,12 @@ abstract class FileQuery extends ModelCriteria
     /**
      * Returns a new ChildFileQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildFileQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildFileQuery) {
             return $criteria;
@@ -181,7 +181,7 @@ abstract class FileQuery extends ModelCriteria
      *
      * @return ChildFile|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -213,8 +213,8 @@ abstract class FileQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -246,8 +246,8 @@ abstract class FileQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildFile|array|mixed the result, formatted by the current formatter
      */
@@ -267,12 +267,12 @@ abstract class FileQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -289,27 +289,31 @@ abstract class FileQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(FileTableMap::COL_FILE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(FileTableMap::COL_FILE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -322,15 +326,15 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE file_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -350,7 +354,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_ID, $id, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -363,15 +369,15 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -391,7 +397,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -404,15 +412,15 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -432,7 +440,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -442,14 +452,15 @@ abstract class FileQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE file_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE file_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE file_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -457,7 +468,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_TITLE, $title, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -467,14 +480,15 @@ abstract class FileQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE file_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE file_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE file_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -482,7 +496,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_TYPE, $type, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -494,22 +510,24 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByAccess('yes'); // WHERE file_access = true
      * </code>
      *
-     * @param     boolean|string $access The value to use as filter.
+     * @param bool|string $access The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAccess($access = null, $comparison = null)
+    public function filterByAccess($access = null, ?string $comparison = null)
     {
         if (is_string($access)) {
             $access = in_array(strtolower($access), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_ACCESS, $access, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_ACCESS, $access, $comparison);
+
+        return $this;
     }
 
     /**
@@ -519,14 +537,15 @@ abstract class FileQuery extends ModelCriteria
      * <code>
      * $query->filterByVersion('fooValue');   // WHERE file_version = 'fooValue'
      * $query->filterByVersion('%fooValue%', Criteria::LIKE); // WHERE file_version LIKE '%fooValue%'
+     * $query->filterByVersion(['foo', 'bar']); // WHERE file_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $version The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $version The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVersion($version = null, $comparison = null)
+    public function filterByVersion($version = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($version)) {
@@ -534,7 +553,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_VERSION, $version, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_VERSION, $version, $comparison);
+
+        return $this;
     }
 
     /**
@@ -544,14 +565,15 @@ abstract class FileQuery extends ModelCriteria
      * <code>
      * $query->filterByHash('fooValue');   // WHERE file_hash = 'fooValue'
      * $query->filterByHash('%fooValue%', Criteria::LIKE); // WHERE file_hash LIKE '%fooValue%'
+     * $query->filterByHash(['foo', 'bar']); // WHERE file_hash IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $hash The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $hash The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHash($hash = null, $comparison = null)
+    public function filterByHash($hash = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($hash)) {
@@ -559,7 +581,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_HASH, $hash, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_HASH, $hash, $comparison);
+
+        return $this;
     }
 
     /**
@@ -572,15 +596,15 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterBySize(array('min' => 12)); // WHERE file_size > 12
      * </code>
      *
-     * @param     mixed $size The value to use as filter.
+     * @param mixed $size The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySize($size = null, $comparison = null)
+    public function filterBySize($size = null, ?string $comparison = null)
     {
         if (is_array($size)) {
             $useMinMax = false;
@@ -600,7 +624,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_SIZE, $size, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_SIZE, $size, $comparison);
+
+        return $this;
     }
 
     /**
@@ -613,15 +639,15 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByEan(array('min' => 12)); // WHERE file_ean > 12
      * </code>
      *
-     * @param     mixed $ean The value to use as filter.
+     * @param mixed $ean The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEan($ean = null, $comparison = null)
+    public function filterByEan($ean = null, ?string $comparison = null)
     {
         if (is_array($ean)) {
             $useMinMax = false;
@@ -641,7 +667,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_EAN, $ean, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_EAN, $ean, $comparison);
+
+        return $this;
     }
 
     /**
@@ -654,17 +682,17 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByInserted(array('max' => 'yesterday')); // WHERE file_inserted > '2011-03-13'
      * </code>
      *
-     * @param     mixed $inserted The value to use as filter.
+     * @param mixed $inserted The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInserted($inserted = null, $comparison = null)
+    public function filterByInserted($inserted = null, ?string $comparison = null)
     {
         if (is_array($inserted)) {
             $useMinMax = false;
@@ -684,7 +712,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_INSERTED, $inserted, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_INSERTED, $inserted, $comparison);
+
+        return $this;
     }
 
     /**
@@ -697,17 +727,17 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByUploaded(array('max' => 'yesterday')); // WHERE file_uploaded > '2011-03-13'
      * </code>
      *
-     * @param     mixed $uploaded The value to use as filter.
+     * @param mixed $uploaded The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUploaded($uploaded = null, $comparison = null)
+    public function filterByUploaded($uploaded = null, ?string $comparison = null)
     {
         if (is_array($uploaded)) {
             $useMinMax = false;
@@ -727,7 +757,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_UPLOADED, $uploaded, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_UPLOADED, $uploaded, $comparison);
+
+        return $this;
     }
 
     /**
@@ -740,17 +772,17 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE file_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -770,7 +802,9 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -783,17 +817,17 @@ abstract class FileQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE file_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -813,15 +847,17 @@ abstract class FileQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildFile $file Object to remove from the list of results
+     * @param ChildFile $file Object to remove from the list of results
      *
-     * @return $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($file = null)
     {
@@ -838,7 +874,7 @@ abstract class FileQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(FileTableMap::DATABASE_NAME);
@@ -863,12 +899,12 @@ abstract class FileQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(FileTableMap::DATABASE_NAME);
@@ -898,65 +934,77 @@ abstract class FileQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(FileTableMap::COL_FILE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(FileTableMap::COL_FILE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(FileTableMap::COL_FILE_UPDATED);
+        $this->addDescendingOrderByColumn(FileTableMap::COL_FILE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(FileTableMap::COL_FILE_UPDATED);
+        $this->addAscendingOrderByColumn(FileTableMap::COL_FILE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(FileTableMap::COL_FILE_CREATED);
+        $this->addDescendingOrderByColumn(FileTableMap::COL_FILE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(FileTableMap::COL_FILE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildFileQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(FileTableMap::COL_FILE_CREATED);
+        $this->addAscendingOrderByColumn(FileTableMap::COL_FILE_CREATED);
+
+        return $this;
     }
 
-} // FileQuery
+}

@@ -10,7 +10,7 @@ use Model\Map\SubscriptionTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscriptionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSubscriptionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildSubscription|null findOne(ConnectionInterface $con = null) Return the first ChildSubscription matching the query
- * @method     ChildSubscription findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSubscription matching the query, or a new ChildSubscription object populated from the query conditions when no match is found
+ * @method     ChildSubscription|null findOne(?ConnectionInterface $con = null) Return the first ChildSubscription matching the query
+ * @method     ChildSubscription findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSubscription matching the query, or a new ChildSubscription object populated from the query conditions when no match is found
  *
  * @method     ChildSubscription|null findOneById(int $subscription_id) Return the first ChildSubscription filtered by the subscription_id column
  * @method     ChildSubscription|null findOneBySiteId(int $site_id) Return the first ChildSubscription filtered by the site_id column
@@ -75,8 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription|null findOneByCreatedAt(string $subscription_created) Return the first ChildSubscription filtered by the subscription_created column
  * @method     ChildSubscription|null findOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column *
 
- * @method     ChildSubscription requirePk($key, ConnectionInterface $con = null) Return the ChildSubscription by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSubscription requireOne(ConnectionInterface $con = null) Return the first ChildSubscription matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSubscription requirePk($key, ?ConnectionInterface $con = null) Return the ChildSubscription by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSubscription requireOne(?ConnectionInterface $con = null) Return the first ChildSubscription matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSubscription requireOneById(int $subscription_id) Return the first ChildSubscription filtered by the subscription_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneBySiteId(int $site_id) Return the first ChildSubscription filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -93,38 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription requireOneByCreatedAt(string $subscription_created) Return the first ChildSubscription filtered by the subscription_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildSubscription[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> find(ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
- * @method     ChildSubscription[]|ObjectCollection findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
- * @method     ChildSubscription[]|ObjectCollection findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
- * @method     ChildSubscription[]|ObjectCollection findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
- * @method     ChildSubscription[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
- * @method     ChildSubscription[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
- * @method     ChildSubscription[]|ObjectCollection findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
- * @method     ChildSubscription[]|ObjectCollection findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
- * @method     ChildSubscription[]|ObjectCollection findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
- * @method     ChildSubscription[]|ObjectCollection findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
- * @method     ChildSubscription[]|ObjectCollection findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
- * @method     ChildSubscription[]|ObjectCollection findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
- * @method     ChildSubscription[]|ObjectCollection findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
- * @method     ChildSubscription[]|ObjectCollection findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
- * @method     ChildSubscription[]|ObjectCollection findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildSubscription> findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
- * @method     ChildSubscription[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSubscription> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildSubscription[]|Collection find(?ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildSubscription> find(?ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
+ * @method     ChildSubscription[]|Collection findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
+ * @method     ChildSubscription[]|Collection findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
+ * @method     ChildSubscription[]|Collection findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
+ * @method     ChildSubscription[]|Collection findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
+ * @method     ChildSubscription[]|Collection findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
+ * @method     ChildSubscription[]|Collection findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
+ * @method     ChildSubscription[]|Collection findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
+ * @method     ChildSubscription[]|Collection findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
+ * @method     ChildSubscription[]|Collection findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
+ * @method     ChildSubscription[]|Collection findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
+ * @method     ChildSubscription[]|Collection findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
+ * @method     ChildSubscription[]|Collection findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
+ * @method     ChildSubscription[]|Collection findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
+ * @method     ChildSubscription[]|Collection findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ * @method     ChildSubscription[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSubscription> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SubscriptionQuery extends ModelCriteria
@@ -134,9 +134,9 @@ abstract class SubscriptionQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\SubscriptionQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Subscription', $modelAlias = null)
     {
@@ -146,12 +146,12 @@ abstract class SubscriptionQuery extends ModelCriteria
     /**
      * Returns a new ChildSubscriptionQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildSubscriptionQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildSubscriptionQuery) {
             return $criteria;
@@ -181,7 +181,7 @@ abstract class SubscriptionQuery extends ModelCriteria
      *
      * @return ChildSubscription|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -213,8 +213,8 @@ abstract class SubscriptionQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -246,8 +246,8 @@ abstract class SubscriptionQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildSubscription|array|mixed the result, formatted by the current formatter
      */
@@ -267,12 +267,12 @@ abstract class SubscriptionQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -289,27 +289,31 @@ abstract class SubscriptionQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -322,15 +326,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE subscription_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -350,7 +354,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $id, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -363,15 +369,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -391,7 +397,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -404,15 +412,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -432,7 +440,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -445,15 +455,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -473,7 +483,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -486,15 +498,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -514,7 +526,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -527,15 +541,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $libraryId The value to use as filter.
+     * @param mixed $libraryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLibraryId($libraryId = null, $comparison = null)
+    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
     {
         if (is_array($libraryId)) {
             $useMinMax = false;
@@ -555,7 +569,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -565,14 +581,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE subscription_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE subscription_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE subscription_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -580,7 +597,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_TYPE, $type, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -590,14 +609,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE subscription_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE subscription_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE subscription_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -605,7 +625,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL, $email, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -618,15 +640,15 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByEnds(array('min' => 12)); // WHERE subscription_ends > 12
      * </code>
      *
-     * @param     mixed $ends The value to use as filter.
+     * @param mixed $ends The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEnds($ends = null, $comparison = null)
+    public function filterByEnds($ends = null, ?string $comparison = null)
     {
         if (is_array($ends)) {
             $useMinMax = false;
@@ -646,7 +668,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ENDS, $ends, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_ENDS, $ends, $comparison);
+
+        return $this;
     }
 
     /**
@@ -658,22 +682,24 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByOption('yes'); // WHERE subscription_option = true
      * </code>
      *
-     * @param     boolean|string $option The value to use as filter.
+     * @param bool|string $option The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOption($option = null, $comparison = null)
+    public function filterByOption($option = null, ?string $comparison = null)
     {
         if (is_string($option)) {
             $option = in_array(strtolower($option), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, $option, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, $option, $comparison);
+
+        return $this;
     }
 
     /**
@@ -686,17 +712,17 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE subscription_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -716,7 +742,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_INSERT, $insert, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -729,17 +757,17 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE subscription_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -759,7 +787,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE, $update, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -772,17 +802,17 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE subscription_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -802,7 +832,9 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -815,17 +847,17 @@ abstract class SubscriptionQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE subscription_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -845,15 +877,17 @@ abstract class SubscriptionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildSubscription $subscription Object to remove from the list of results
+     * @param ChildSubscription $subscription Object to remove from the list of results
      *
-     * @return $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($subscription = null)
     {
@@ -870,7 +904,7 @@ abstract class SubscriptionQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SubscriptionTableMap::DATABASE_NAME);
@@ -895,12 +929,12 @@ abstract class SubscriptionQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SubscriptionTableMap::DATABASE_NAME);
@@ -930,65 +964,77 @@ abstract class SubscriptionQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+        $this->addDescendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+        $this->addAscendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+        $this->addDescendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildSubscriptionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+        $this->addAscendingOrderByColumn(SubscriptionTableMap::COL_SUBSCRIPTION_CREATED);
+
+        return $this;
     }
 
-} // SubscriptionQuery
+}

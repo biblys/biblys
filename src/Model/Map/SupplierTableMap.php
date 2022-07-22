@@ -33,135 +33,139 @@ class SupplierTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.SupplierTableMap';
+    public const CLASS_NAME = 'Model.Map.SupplierTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'suppliers';
+    public const TABLE_NAME = 'suppliers';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Supplier';
+    public const OM_CLASS = '\\Model\\Supplier';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Supplier';
+    public const CLASS_DEFAULT = 'Model.Supplier';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    public const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    public const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the supplier_id field
      */
-    const COL_SUPPLIER_ID = 'suppliers.supplier_id';
+    public const COL_SUPPLIER_ID = 'suppliers.supplier_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'suppliers.site_id';
+    public const COL_SITE_ID = 'suppliers.site_id';
 
     /**
      * the column name for the supplier_name field
      */
-    const COL_SUPPLIER_NAME = 'suppliers.supplier_name';
+    public const COL_SUPPLIER_NAME = 'suppliers.supplier_name';
 
     /**
      * the column name for the supplier_gln field
      */
-    const COL_SUPPLIER_GLN = 'suppliers.supplier_gln';
+    public const COL_SUPPLIER_GLN = 'suppliers.supplier_gln';
 
     /**
      * the column name for the supplier_remise field
      */
-    const COL_SUPPLIER_REMISE = 'suppliers.supplier_remise';
+    public const COL_SUPPLIER_REMISE = 'suppliers.supplier_remise';
 
     /**
      * the column name for the supplier_notva field
      */
-    const COL_SUPPLIER_NOTVA = 'suppliers.supplier_notva';
+    public const COL_SUPPLIER_NOTVA = 'suppliers.supplier_notva';
 
     /**
      * the column name for the supplier_on_order field
      */
-    const COL_SUPPLIER_ON_ORDER = 'suppliers.supplier_on_order';
+    public const COL_SUPPLIER_ON_ORDER = 'suppliers.supplier_on_order';
 
     /**
      * the column name for the supplier_insert field
      */
-    const COL_SUPPLIER_INSERT = 'suppliers.supplier_insert';
+    public const COL_SUPPLIER_INSERT = 'suppliers.supplier_insert';
 
     /**
      * the column name for the supplier_update field
      */
-    const COL_SUPPLIER_UPDATE = 'suppliers.supplier_update';
+    public const COL_SUPPLIER_UPDATE = 'suppliers.supplier_update';
 
     /**
      * the column name for the supplier_created field
      */
-    const COL_SUPPLIER_CREATED = 'suppliers.supplier_created';
+    public const COL_SUPPLIER_CREATED = 'suppliers.supplier_created';
 
     /**
      * the column name for the supplier_updated field
      */
-    const COL_SUPPLIER_UPDATED = 'suppliers.supplier_updated';
+    public const COL_SUPPLIER_UPDATED = 'suppliers.supplier_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Gln', 'Remise', 'Notva', 'OnOrder', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'gln', 'remise', 'notva', 'onOrder', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID, SupplierTableMap::COL_SITE_ID, SupplierTableMap::COL_SUPPLIER_NAME, SupplierTableMap::COL_SUPPLIER_GLN, SupplierTableMap::COL_SUPPLIER_REMISE, SupplierTableMap::COL_SUPPLIER_NOTVA, SupplierTableMap::COL_SUPPLIER_ON_ORDER, SupplierTableMap::COL_SUPPLIER_INSERT, SupplierTableMap::COL_SUPPLIER_UPDATE, SupplierTableMap::COL_SUPPLIER_CREATED, SupplierTableMap::COL_SUPPLIER_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('supplier_id', 'site_id', 'supplier_name', 'supplier_gln', 'supplier_remise', 'supplier_notva', 'supplier_on_order', 'supplier_insert', 'supplier_update', 'supplier_created', 'supplier_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Name', 'Gln', 'Remise', 'Notva', 'OnOrder', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'name', 'gln', 'remise', 'notva', 'onOrder', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SupplierTableMap::COL_SUPPLIER_ID, SupplierTableMap::COL_SITE_ID, SupplierTableMap::COL_SUPPLIER_NAME, SupplierTableMap::COL_SUPPLIER_GLN, SupplierTableMap::COL_SUPPLIER_REMISE, SupplierTableMap::COL_SUPPLIER_NOTVA, SupplierTableMap::COL_SUPPLIER_ON_ORDER, SupplierTableMap::COL_SUPPLIER_INSERT, SupplierTableMap::COL_SUPPLIER_UPDATE, SupplierTableMap::COL_SUPPLIER_CREATED, SupplierTableMap::COL_SUPPLIER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['supplier_id', 'site_id', 'supplier_name', 'supplier_gln', 'supplier_remise', 'supplier_notva', 'supplier_on_order', 'supplier_insert', 'supplier_update', 'supplier_created', 'supplier_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Gln' => 3, 'Remise' => 4, 'Notva' => 5, 'OnOrder' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'gln' => 3, 'remise' => 4, 'notva' => 5, 'onOrder' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
-        self::TYPE_COLNAME       => array(SupplierTableMap::COL_SUPPLIER_ID => 0, SupplierTableMap::COL_SITE_ID => 1, SupplierTableMap::COL_SUPPLIER_NAME => 2, SupplierTableMap::COL_SUPPLIER_GLN => 3, SupplierTableMap::COL_SUPPLIER_REMISE => 4, SupplierTableMap::COL_SUPPLIER_NOTVA => 5, SupplierTableMap::COL_SUPPLIER_ON_ORDER => 6, SupplierTableMap::COL_SUPPLIER_INSERT => 7, SupplierTableMap::COL_SUPPLIER_UPDATE => 8, SupplierTableMap::COL_SUPPLIER_CREATED => 9, SupplierTableMap::COL_SUPPLIER_UPDATED => 10, ),
-        self::TYPE_FIELDNAME     => array('supplier_id' => 0, 'site_id' => 1, 'supplier_name' => 2, 'supplier_gln' => 3, 'supplier_remise' => 4, 'supplier_notva' => 5, 'supplier_on_order' => 6, 'supplier_insert' => 7, 'supplier_update' => 8, 'supplier_created' => 9, 'supplier_updated' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Gln' => 3, 'Remise' => 4, 'Notva' => 5, 'OnOrder' => 6, 'Insert' => 7, 'Update' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'name' => 2, 'gln' => 3, 'remise' => 4, 'notva' => 5, 'onOrder' => 6, 'insert' => 7, 'update' => 8, 'createdAt' => 9, 'updatedAt' => 10, ],
+        self::TYPE_COLNAME       => [SupplierTableMap::COL_SUPPLIER_ID => 0, SupplierTableMap::COL_SITE_ID => 1, SupplierTableMap::COL_SUPPLIER_NAME => 2, SupplierTableMap::COL_SUPPLIER_GLN => 3, SupplierTableMap::COL_SUPPLIER_REMISE => 4, SupplierTableMap::COL_SUPPLIER_NOTVA => 5, SupplierTableMap::COL_SUPPLIER_ON_ORDER => 6, SupplierTableMap::COL_SUPPLIER_INSERT => 7, SupplierTableMap::COL_SUPPLIER_UPDATE => 8, SupplierTableMap::COL_SUPPLIER_CREATED => 9, SupplierTableMap::COL_SUPPLIER_UPDATED => 10, ],
+        self::TYPE_FIELDNAME     => ['supplier_id' => 0, 'site_id' => 1, 'supplier_name' => 2, 'supplier_gln' => 3, 'supplier_remise' => 4, 'supplier_notva' => 5, 'supplier_on_order' => 6, 'supplier_insert' => 7, 'supplier_update' => 8, 'supplier_created' => 9, 'supplier_updated' => 10, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'SUPPLIER_ID',
@@ -259,9 +263,9 @@ class SupplierTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('suppliers');
@@ -282,27 +286,29 @@ class SupplierTableMap extends TableMap
         $this->addColumn('supplier_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('supplier_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('supplier_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'supplier_created', 'update_column' => 'supplier_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -310,14 +316,14 @@ class SupplierTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -332,14 +338,14 @@ class SupplierTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -356,10 +362,10 @@ class SupplierTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? SupplierTableMap::CLASS_DEFAULT : SupplierTableMap::OM_CLASS;
     }
@@ -367,17 +373,17 @@ class SupplierTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Supplier object, last column rank)
+     * @return array (Supplier object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = SupplierTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = SupplierTableMap::getInstanceFromPool($key))) {
@@ -401,13 +407,13 @@ class SupplierTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -437,12 +443,13 @@ class SupplierTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(SupplierTableMap::COL_SUPPLIER_ID);
@@ -477,12 +484,13 @@ class SupplierTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(SupplierTableMap::COL_SUPPLIER_ID);
@@ -515,10 +523,10 @@ class SupplierTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(SupplierTableMap::DATABASE_NAME)->getTable(SupplierTableMap::TABLE_NAME);
     }
@@ -526,15 +534,15 @@ class SupplierTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Supplier or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Supplier object or primary key or array of primary keys
+     * @param mixed $values Criteria or Supplier object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SupplierTableMap::DATABASE_NAME);
@@ -570,7 +578,7 @@ class SupplierTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return SupplierQuery::create()->doDeleteAll($con);
     }
@@ -578,13 +586,13 @@ class SupplierTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Supplier or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Supplier object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Supplier object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SupplierTableMap::DATABASE_NAME);
@@ -611,4 +619,4 @@ class SupplierTableMap extends TableMap
         });
     }
 
-} // SupplierTableMap
+}

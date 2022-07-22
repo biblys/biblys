@@ -10,7 +10,7 @@ use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -43,8 +43,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlistQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildWishlistQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildWishlist|null findOne(ConnectionInterface $con = null) Return the first ChildWishlist matching the query
- * @method     ChildWishlist findOneOrCreate(ConnectionInterface $con = null) Return the first ChildWishlist matching the query, or a new ChildWishlist object populated from the query conditions when no match is found
+ * @method     ChildWishlist|null findOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query
+ * @method     ChildWishlist findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query, or a new ChildWishlist object populated from the query conditions when no match is found
  *
  * @method     ChildWishlist|null findOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column
  * @method     ChildWishlist|null findOneByUserId(int $user_id) Return the first ChildWishlist filtered by the user_id column
@@ -54,8 +54,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist|null findOneByCreatedAt(string $wishlist_created) Return the first ChildWishlist filtered by the wishlist_created column
  * @method     ChildWishlist|null findOneByUpdatedAt(string $wishlist_updated) Return the first ChildWishlist filtered by the wishlist_updated column *
 
- * @method     ChildWishlist requirePk($key, ConnectionInterface $con = null) Return the ChildWishlist by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildWishlist requireOne(ConnectionInterface $con = null) Return the first ChildWishlist matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildWishlist requirePk($key, ?ConnectionInterface $con = null) Return the ChildWishlist by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildWishlist requireOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildWishlist requireOneById(int $wishlist_id) Return the first ChildWishlist filtered by the wishlist_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByUserId(int $user_id) Return the first ChildWishlist filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -65,24 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist requireOneByCreatedAt(string $wishlist_created) Return the first ChildWishlist filtered by the wishlist_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOneByUpdatedAt(string $wishlist_updated) Return the first ChildWishlist filtered by the wishlist_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildWishlist[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> find(ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
- * @method     ChildWishlist[]|ObjectCollection findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
- * @method     ChildWishlist[]|ObjectCollection findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
- * @method     ChildWishlist[]|ObjectCollection findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
- * @method     ChildWishlist[]|ObjectCollection findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
- * @method     ChildWishlist[]|ObjectCollection findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
- * @method     ChildWishlist[]|ObjectCollection findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
- * @method     ChildWishlist[]|ObjectCollection findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildWishlist> findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
- * @method     ChildWishlist[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWishlist> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildWishlist[]|Collection find(?ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildWishlist> find(?ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
+ * @method     ChildWishlist[]|Collection findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @method     ChildWishlist[]|Collection findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
+ * @method     ChildWishlist[]|Collection findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
+ * @method     ChildWishlist[]|Collection findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
+ * @method     ChildWishlist[]|Collection findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
+ * @method     ChildWishlist[]|Collection findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
+ * @method     ChildWishlist[]|Collection findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ * @method     ChildWishlist[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWishlist> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class WishlistQuery extends ModelCriteria
@@ -92,9 +92,9 @@ abstract class WishlistQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\WishlistQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Wishlist', $modelAlias = null)
     {
@@ -104,12 +104,12 @@ abstract class WishlistQuery extends ModelCriteria
     /**
      * Returns a new ChildWishlistQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildWishlistQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildWishlistQuery) {
             return $criteria;
@@ -139,7 +139,7 @@ abstract class WishlistQuery extends ModelCriteria
      *
      * @return ChildWishlist|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -171,8 +171,8 @@ abstract class WishlistQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -204,8 +204,8 @@ abstract class WishlistQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildWishlist|array|mixed the result, formatted by the current formatter
      */
@@ -225,12 +225,12 @@ abstract class WishlistQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -247,27 +247,31 @@ abstract class WishlistQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -280,15 +284,15 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE wishlist_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -308,7 +312,9 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $id, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -321,15 +327,15 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -349,7 +355,9 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -359,14 +367,15 @@ abstract class WishlistQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE wishlist_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE wishlist_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE wishlist_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -374,7 +383,9 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_NAME, $name, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -386,22 +397,24 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterByCurrent('yes'); // WHERE wishlist_current = true
      * </code>
      *
-     * @param     boolean|string $current The value to use as filter.
+     * @param bool|string $current The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCurrent($current = null, $comparison = null)
+    public function filterByCurrent($current = null, ?string $comparison = null)
     {
         if (is_string($current)) {
             $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CURRENT, $current, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CURRENT, $current, $comparison);
+
+        return $this;
     }
 
     /**
@@ -413,22 +426,24 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterByPublic('yes'); // WHERE wishlist_public = true
      * </code>
      *
-     * @param     boolean|string $public The value to use as filter.
+     * @param bool|string $public The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublic($public = null, $comparison = null)
+    public function filterByPublic($public = null, ?string $comparison = null)
     {
         if (is_string($public)) {
             $public = in_array(strtolower($public), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_PUBLIC, $public, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_PUBLIC, $public, $comparison);
+
+        return $this;
     }
 
     /**
@@ -441,17 +456,17 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE wishlist_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -471,7 +486,9 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -484,17 +501,17 @@ abstract class WishlistQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE wishlist_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -514,15 +531,17 @@ abstract class WishlistQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildWishlist $wishlist Object to remove from the list of results
+     * @param ChildWishlist $wishlist Object to remove from the list of results
      *
-     * @return $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($wishlist = null)
     {
@@ -539,7 +558,7 @@ abstract class WishlistQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(WishlistTableMap::DATABASE_NAME);
@@ -564,12 +583,12 @@ abstract class WishlistQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(WishlistTableMap::DATABASE_NAME);
@@ -599,65 +618,77 @@ abstract class WishlistQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(WishlistTableMap::COL_WISHLIST_UPDATED);
+        $this->addDescendingOrderByColumn(WishlistTableMap::COL_WISHLIST_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(WishlistTableMap::COL_WISHLIST_UPDATED);
+        $this->addAscendingOrderByColumn(WishlistTableMap::COL_WISHLIST_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(WishlistTableMap::COL_WISHLIST_CREATED);
+        $this->addDescendingOrderByColumn(WishlistTableMap::COL_WISHLIST_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildWishlistQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(WishlistTableMap::COL_WISHLIST_CREATED);
+        $this->addAscendingOrderByColumn(WishlistTableMap::COL_WISHLIST_CREATED);
+
+        return $this;
     }
 
-} // WishlistQuery
+}

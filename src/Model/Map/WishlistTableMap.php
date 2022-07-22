@@ -33,115 +33,119 @@ class WishlistTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.WishlistTableMap';
+    public const CLASS_NAME = 'Model.Map.WishlistTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'wishlist';
+    public const TABLE_NAME = 'wishlist';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Wishlist';
+    public const OM_CLASS = '\\Model\\Wishlist';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Wishlist';
+    public const CLASS_DEFAULT = 'Model.Wishlist';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the wishlist_id field
      */
-    const COL_WISHLIST_ID = 'wishlist.wishlist_id';
+    public const COL_WISHLIST_ID = 'wishlist.wishlist_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'wishlist.user_id';
+    public const COL_USER_ID = 'wishlist.user_id';
 
     /**
      * the column name for the wishlist_name field
      */
-    const COL_WISHLIST_NAME = 'wishlist.wishlist_name';
+    public const COL_WISHLIST_NAME = 'wishlist.wishlist_name';
 
     /**
      * the column name for the wishlist_current field
      */
-    const COL_WISHLIST_CURRENT = 'wishlist.wishlist_current';
+    public const COL_WISHLIST_CURRENT = 'wishlist.wishlist_current';
 
     /**
      * the column name for the wishlist_public field
      */
-    const COL_WISHLIST_PUBLIC = 'wishlist.wishlist_public';
+    public const COL_WISHLIST_PUBLIC = 'wishlist.wishlist_public';
 
     /**
      * the column name for the wishlist_created field
      */
-    const COL_WISHLIST_CREATED = 'wishlist.wishlist_created';
+    public const COL_WISHLIST_CREATED = 'wishlist.wishlist_created';
 
     /**
      * the column name for the wishlist_updated field
      */
-    const COL_WISHLIST_UPDATED = 'wishlist.wishlist_updated';
+    public const COL_WISHLIST_UPDATED = 'wishlist.wishlist_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'UserId', 'Name', 'Current', 'Public', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'userId', 'name', 'current', 'public', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(WishlistTableMap::COL_WISHLIST_ID, WishlistTableMap::COL_USER_ID, WishlistTableMap::COL_WISHLIST_NAME, WishlistTableMap::COL_WISHLIST_CURRENT, WishlistTableMap::COL_WISHLIST_PUBLIC, WishlistTableMap::COL_WISHLIST_CREATED, WishlistTableMap::COL_WISHLIST_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('wishlist_id', 'user_id', 'wishlist_name', 'wishlist_current', 'wishlist_public', 'wishlist_created', 'wishlist_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'UserId', 'Name', 'Current', 'Public', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'userId', 'name', 'current', 'public', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID, WishlistTableMap::COL_USER_ID, WishlistTableMap::COL_WISHLIST_NAME, WishlistTableMap::COL_WISHLIST_CURRENT, WishlistTableMap::COL_WISHLIST_PUBLIC, WishlistTableMap::COL_WISHLIST_CREATED, WishlistTableMap::COL_WISHLIST_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['wishlist_id', 'user_id', 'wishlist_name', 'wishlist_current', 'wishlist_public', 'wishlist_created', 'wishlist_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'UserId' => 1, 'Name' => 2, 'Current' => 3, 'Public' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'userId' => 1, 'name' => 2, 'current' => 3, 'public' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        self::TYPE_COLNAME       => array(WishlistTableMap::COL_WISHLIST_ID => 0, WishlistTableMap::COL_USER_ID => 1, WishlistTableMap::COL_WISHLIST_NAME => 2, WishlistTableMap::COL_WISHLIST_CURRENT => 3, WishlistTableMap::COL_WISHLIST_PUBLIC => 4, WishlistTableMap::COL_WISHLIST_CREATED => 5, WishlistTableMap::COL_WISHLIST_UPDATED => 6, ),
-        self::TYPE_FIELDNAME     => array('wishlist_id' => 0, 'user_id' => 1, 'wishlist_name' => 2, 'wishlist_current' => 3, 'wishlist_public' => 4, 'wishlist_created' => 5, 'wishlist_updated' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'UserId' => 1, 'Name' => 2, 'Current' => 3, 'Public' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'userId' => 1, 'name' => 2, 'current' => 3, 'public' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
+        self::TYPE_COLNAME       => [WishlistTableMap::COL_WISHLIST_ID => 0, WishlistTableMap::COL_USER_ID => 1, WishlistTableMap::COL_WISHLIST_NAME => 2, WishlistTableMap::COL_WISHLIST_CURRENT => 3, WishlistTableMap::COL_WISHLIST_PUBLIC => 4, WishlistTableMap::COL_WISHLIST_CREATED => 5, WishlistTableMap::COL_WISHLIST_UPDATED => 6, ],
+        self::TYPE_FIELDNAME     => ['wishlist_id' => 0, 'user_id' => 1, 'wishlist_name' => 2, 'wishlist_current' => 3, 'wishlist_public' => 4, 'wishlist_created' => 5, 'wishlist_updated' => 6, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'WISHLIST_ID',
@@ -207,9 +211,9 @@ class WishlistTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('wishlist');
@@ -226,27 +230,29 @@ class WishlistTableMap extends TableMap
         $this->addColumn('wishlist_public', 'Public', 'BOOLEAN', false, 1, null);
         $this->addColumn('wishlist_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('wishlist_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'wishlist_created', 'update_column' => 'wishlist_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -254,14 +260,14 @@ class WishlistTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -276,14 +282,14 @@ class WishlistTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -300,10 +306,10 @@ class WishlistTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? WishlistTableMap::CLASS_DEFAULT : WishlistTableMap::OM_CLASS;
     }
@@ -311,17 +317,17 @@ class WishlistTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Wishlist object, last column rank)
+     * @return array (Wishlist object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = WishlistTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = WishlistTableMap::getInstanceFromPool($key))) {
@@ -345,13 +351,13 @@ class WishlistTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -381,12 +387,13 @@ class WishlistTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(WishlistTableMap::COL_WISHLIST_ID);
@@ -413,12 +420,13 @@ class WishlistTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(WishlistTableMap::COL_WISHLIST_ID);
@@ -443,10 +451,10 @@ class WishlistTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(WishlistTableMap::DATABASE_NAME)->getTable(WishlistTableMap::TABLE_NAME);
     }
@@ -454,15 +462,15 @@ class WishlistTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Wishlist or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Wishlist object or primary key or array of primary keys
+     * @param mixed $values Criteria or Wishlist object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(WishlistTableMap::DATABASE_NAME);
@@ -498,7 +506,7 @@ class WishlistTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return WishlistQuery::create()->doDeleteAll($con);
     }
@@ -506,13 +514,13 @@ class WishlistTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Wishlist or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Wishlist object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Wishlist object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(WishlistTableMap::DATABASE_NAME);
@@ -539,4 +547,4 @@ class WishlistTableMap extends TableMap
         });
     }
 
-} // WishlistTableMap
+}

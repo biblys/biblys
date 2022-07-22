@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -62,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\LinkQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildTag|null findOne(ConnectionInterface $con = null) Return the first ChildTag matching the query
- * @method     ChildTag findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTag matching the query, or a new ChildTag object populated from the query conditions when no match is found
+ * @method     ChildTag|null findOne(?ConnectionInterface $con = null) Return the first ChildTag matching the query
+ * @method     ChildTag findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildTag matching the query, or a new ChildTag object populated from the query conditions when no match is found
  *
  * @method     ChildTag|null findOneById(int $tag_id) Return the first ChildTag filtered by the tag_id column
  * @method     ChildTag|null findOneByName(string $tag_name) Return the first ChildTag filtered by the tag_name column
@@ -76,8 +77,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTag|null findOneByCreatedAt(string $tag_created) Return the first ChildTag filtered by the tag_created column
  * @method     ChildTag|null findOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column *
 
- * @method     ChildTag requirePk($key, ConnectionInterface $con = null) Return the ChildTag by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTag requireOne(ConnectionInterface $con = null) Return the first ChildTag matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requirePk($key, ?ConnectionInterface $con = null) Return the ChildTag by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTag requireOne(?ConnectionInterface $con = null) Return the first ChildTag matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTag requireOneById(int $tag_id) Return the first ChildTag filtered by the tag_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByName(string $tag_name) Return the first ChildTag filtered by the tag_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -90,30 +91,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTag requireOneByCreatedAt(string $tag_created) Return the first ChildTag filtered by the tag_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildTag[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildTag> find(ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
- * @method     ChildTag[]|ObjectCollection findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
- * @method     ChildTag[]|ObjectCollection findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
- * @method     ChildTag[]|ObjectCollection findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
- * @method     ChildTag[]|ObjectCollection findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
- * @method     ChildTag[]|ObjectCollection findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
- * @method     ChildTag[]|ObjectCollection findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
- * @method     ChildTag[]|ObjectCollection findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
- * @method     ChildTag[]|ObjectCollection findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
- * @method     ChildTag[]|ObjectCollection findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
- * @method     ChildTag[]|ObjectCollection findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildTag> findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
- * @method     ChildTag[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTag> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildTag[]|Collection find(?ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildTag> find(?ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
+ * @method     ChildTag[]|Collection findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
+ * @psalm-method Collection&\Traversable<ChildTag> findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
+ * @method     ChildTag[]|Collection findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
+ * @psalm-method Collection&\Traversable<ChildTag> findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
+ * @method     ChildTag[]|Collection findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
+ * @method     ChildTag[]|Collection findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
+ * @psalm-method Collection&\Traversable<ChildTag> findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
+ * @method     ChildTag[]|Collection findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
+ * @psalm-method Collection&\Traversable<ChildTag> findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
+ * @method     ChildTag[]|Collection findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
+ * @psalm-method Collection&\Traversable<ChildTag> findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
+ * @method     ChildTag[]|Collection findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
+ * @psalm-method Collection&\Traversable<ChildTag> findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
+ * @method     ChildTag[]|Collection findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
+ * @method     ChildTag[]|Collection findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
+ * @psalm-method Collection&\Traversable<ChildTag> findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
+ * @method     ChildTag[]|Collection findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
+ * @method     ChildTag[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTag> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class TagQuery extends ModelCriteria
@@ -123,9 +124,9 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\TagQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Tag', $modelAlias = null)
     {
@@ -135,12 +136,12 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Returns a new ChildTagQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildTagQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildTagQuery) {
             return $criteria;
@@ -170,7 +171,7 @@ abstract class TagQuery extends ModelCriteria
      *
      * @return ChildTag|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -202,8 +203,8 @@ abstract class TagQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -235,8 +236,8 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildTag|array|mixed the result, formatted by the current formatter
      */
@@ -256,12 +257,12 @@ abstract class TagQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -278,27 +279,31 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(TagTableMap::COL_TAG_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(TagTableMap::COL_TAG_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -311,15 +316,15 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE tag_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -339,7 +344,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_ID, $id, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -349,14 +356,15 @@ abstract class TagQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE tag_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE tag_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE tag_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -364,7 +372,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_NAME, $name, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -374,14 +384,15 @@ abstract class TagQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE tag_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE tag_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE tag_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -389,7 +400,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_URL, $url, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -399,14 +412,15 @@ abstract class TagQuery extends ModelCriteria
      * <code>
      * $query->filterByDescription('fooValue');   // WHERE tag_description = 'fooValue'
      * $query->filterByDescription('%fooValue%', Criteria::LIKE); // WHERE tag_description LIKE '%fooValue%'
+     * $query->filterByDescription(['foo', 'bar']); // WHERE tag_description IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $description The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $description The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDescription($description = null, $comparison = null)
+    public function filterByDescription($description = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($description)) {
@@ -414,7 +428,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_DESCRIPTION, $description, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_DESCRIPTION, $description, $comparison);
+
+        return $this;
     }
 
     /**
@@ -427,17 +443,17 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE tag_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -457,7 +473,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_DATE, $date, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -470,15 +488,15 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByNum(array('min' => 12)); // WHERE tag_num > 12
      * </code>
      *
-     * @param     mixed $num The value to use as filter.
+     * @param mixed $num The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNum($num = null, $comparison = null)
+    public function filterByNum($num = null, ?string $comparison = null)
     {
         if (is_array($num)) {
             $useMinMax = false;
@@ -498,7 +516,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_NUM, $num, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_NUM, $num, $comparison);
+
+        return $this;
     }
 
     /**
@@ -511,17 +531,17 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE tag_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -541,7 +561,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_INSERT, $insert, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -554,17 +576,17 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE tag_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -584,7 +606,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_UPDATE, $update, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -597,17 +621,17 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE tag_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -627,7 +651,9 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -640,17 +666,17 @@ abstract class TagQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE tag_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -670,27 +696,33 @@ abstract class TagQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Link object
      *
      * @param \Model\Link|ObjectCollection $link the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLink($link, $comparison = null)
+    public function filterByLink($link, ?string $comparison = null)
     {
         if ($link instanceof \Model\Link) {
-            return $this
+            $this
                 ->addUsingAlias(TagTableMap::COL_TAG_ID, $link->getTagId(), $comparison);
+
+            return $this;
         } elseif ($link instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useLinkQuery()
                 ->filterByPrimaryKeys($link->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByLink() only accepts arguments of type \Model\Link or Collection');
         }
@@ -699,12 +731,12 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Link relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinLink($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinLink(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Link');
@@ -733,9 +765,9 @@ abstract class TagQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\LinkQuery A secondary query class using the current class as primary query
      */
@@ -804,9 +836,9 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildTag $tag Object to remove from the list of results
+     * @param ChildTag $tag Object to remove from the list of results
      *
-     * @return $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($tag = null)
     {
@@ -823,7 +855,7 @@ abstract class TagQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
@@ -848,12 +880,12 @@ abstract class TagQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
@@ -883,65 +915,77 @@ abstract class TagQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(TagTableMap::COL_TAG_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(TagTableMap::COL_TAG_UPDATED);
+        $this->addDescendingOrderByColumn(TagTableMap::COL_TAG_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(TagTableMap::COL_TAG_UPDATED);
+        $this->addAscendingOrderByColumn(TagTableMap::COL_TAG_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(TagTableMap::COL_TAG_CREATED);
+        $this->addDescendingOrderByColumn(TagTableMap::COL_TAG_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(TagTableMap::COL_TAG_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(TagTableMap::COL_TAG_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildTagQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(TagTableMap::COL_TAG_CREATED);
+        $this->addAscendingOrderByColumn(TagTableMap::COL_TAG_CREATED);
+
+        return $this;
     }
 
-} // TagQuery
+}

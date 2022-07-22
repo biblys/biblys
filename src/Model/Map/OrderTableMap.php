@@ -33,330 +33,334 @@ class OrderTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.OrderTableMap';
+    public const CLASS_NAME = 'Model.Map.OrderTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'orders';
+    public const TABLE_NAME = 'orders';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Order';
+    public const OM_CLASS = '\\Model\\Order';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Order';
+    public const CLASS_DEFAULT = 'Model.Order';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 50;
+    public const NUM_COLUMNS = 50;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 50;
+    public const NUM_HYDRATE_COLUMNS = 50;
 
     /**
      * the column name for the order_id field
      */
-    const COL_ORDER_ID = 'orders.order_id';
+    public const COL_ORDER_ID = 'orders.order_id';
 
     /**
      * the column name for the order_url field
      */
-    const COL_ORDER_URL = 'orders.order_url';
+    public const COL_ORDER_URL = 'orders.order_url';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'orders.site_id';
+    public const COL_SITE_ID = 'orders.site_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'orders.user_id';
+    public const COL_USER_ID = 'orders.user_id';
 
     /**
      * the column name for the customer_id field
      */
-    const COL_CUSTOMER_ID = 'orders.customer_id';
+    public const COL_CUSTOMER_ID = 'orders.customer_id';
 
     /**
      * the column name for the seller_id field
      */
-    const COL_SELLER_ID = 'orders.seller_id';
+    public const COL_SELLER_ID = 'orders.seller_id';
 
     /**
      * the column name for the order_type field
      */
-    const COL_ORDER_TYPE = 'orders.order_type';
+    public const COL_ORDER_TYPE = 'orders.order_type';
 
     /**
      * the column name for the order_as_a_gift field
      */
-    const COL_AS_A_GIFT = 'orders.order_as_a_gift';
+    public const COL_AS_A_GIFT = 'orders.order_as_a_gift';
 
     /**
      * the column name for the order_gift_recipient field
      */
-    const COL_GIFT_RECIPIENT = 'orders.order_gift_recipient';
+    public const COL_GIFT_RECIPIENT = 'orders.order_gift_recipient';
 
     /**
      * the column name for the order_amount field
      */
-    const COL_ORDER_AMOUNT = 'orders.order_amount';
+    public const COL_ORDER_AMOUNT = 'orders.order_amount';
 
     /**
      * the column name for the order_discount field
      */
-    const COL_ORDER_DISCOUNT = 'orders.order_discount';
+    public const COL_ORDER_DISCOUNT = 'orders.order_discount';
 
     /**
      * the column name for the order_amount_tobepaid field
      */
-    const COL_ORDER_AMOUNT_TOBEPAID = 'orders.order_amount_tobepaid';
+    public const COL_ORDER_AMOUNT_TOBEPAID = 'orders.order_amount_tobepaid';
 
     /**
      * the column name for the shipping_id field
      */
-    const COL_SHIPPING_ID = 'orders.shipping_id';
+    public const COL_SHIPPING_ID = 'orders.shipping_id';
 
     /**
      * the column name for the country_id field
      */
-    const COL_COUNTRY_ID = 'orders.country_id';
+    public const COL_COUNTRY_ID = 'orders.country_id';
 
     /**
      * the column name for the order_shipping field
      */
-    const COL_ORDER_SHIPPING = 'orders.order_shipping';
+    public const COL_ORDER_SHIPPING = 'orders.order_shipping';
 
     /**
      * the column name for the order_shipping_mode field
      */
-    const COL_ORDER_SHIPPING_MODE = 'orders.order_shipping_mode';
+    public const COL_ORDER_SHIPPING_MODE = 'orders.order_shipping_mode';
 
     /**
      * the column name for the order_track_number field
      */
-    const COL_ORDER_TRACK_NUMBER = 'orders.order_track_number';
+    public const COL_ORDER_TRACK_NUMBER = 'orders.order_track_number';
 
     /**
      * the column name for the order_payment_mode field
      */
-    const COL_ORDER_PAYMENT_MODE = 'orders.order_payment_mode';
+    public const COL_ORDER_PAYMENT_MODE = 'orders.order_payment_mode';
 
     /**
      * the column name for the order_payment_cash field
      */
-    const COL_ORDER_PAYMENT_CASH = 'orders.order_payment_cash';
+    public const COL_ORDER_PAYMENT_CASH = 'orders.order_payment_cash';
 
     /**
      * the column name for the order_payment_cheque field
      */
-    const COL_ORDER_PAYMENT_CHEQUE = 'orders.order_payment_cheque';
+    public const COL_ORDER_PAYMENT_CHEQUE = 'orders.order_payment_cheque';
 
     /**
      * the column name for the order_payment_transfer field
      */
-    const COL_ORDER_PAYMENT_TRANSFER = 'orders.order_payment_transfer';
+    public const COL_ORDER_PAYMENT_TRANSFER = 'orders.order_payment_transfer';
 
     /**
      * the column name for the order_payment_card field
      */
-    const COL_ORDER_PAYMENT_CARD = 'orders.order_payment_card';
+    public const COL_ORDER_PAYMENT_CARD = 'orders.order_payment_card';
 
     /**
      * the column name for the order_payment_paypal field
      */
-    const COL_ORDER_PAYMENT_PAYPAL = 'orders.order_payment_paypal';
+    public const COL_ORDER_PAYMENT_PAYPAL = 'orders.order_payment_paypal';
 
     /**
      * the column name for the order_payment_payplug field
      */
-    const COL_ORDER_PAYMENT_PAYPLUG = 'orders.order_payment_payplug';
+    public const COL_ORDER_PAYMENT_PAYPLUG = 'orders.order_payment_payplug';
 
     /**
      * the column name for the order_payment_left field
      */
-    const COL_ORDER_PAYMENT_LEFT = 'orders.order_payment_left';
+    public const COL_ORDER_PAYMENT_LEFT = 'orders.order_payment_left';
 
     /**
      * the column name for the order_title field
      */
-    const COL_ORDER_TITLE = 'orders.order_title';
+    public const COL_ORDER_TITLE = 'orders.order_title';
 
     /**
      * the column name for the order_firstname field
      */
-    const COL_ORDER_FIRSTNAME = 'orders.order_firstname';
+    public const COL_ORDER_FIRSTNAME = 'orders.order_firstname';
 
     /**
      * the column name for the order_lastname field
      */
-    const COL_ORDER_LASTNAME = 'orders.order_lastname';
+    public const COL_ORDER_LASTNAME = 'orders.order_lastname';
 
     /**
      * the column name for the order_address1 field
      */
-    const COL_ORDER_ADDRESS1 = 'orders.order_address1';
+    public const COL_ORDER_ADDRESS1 = 'orders.order_address1';
 
     /**
      * the column name for the order_address2 field
      */
-    const COL_ORDER_ADDRESS2 = 'orders.order_address2';
+    public const COL_ORDER_ADDRESS2 = 'orders.order_address2';
 
     /**
      * the column name for the order_postalcode field
      */
-    const COL_ORDER_POSTALCODE = 'orders.order_postalcode';
+    public const COL_ORDER_POSTALCODE = 'orders.order_postalcode';
 
     /**
      * the column name for the order_city field
      */
-    const COL_ORDER_CITY = 'orders.order_city';
+    public const COL_ORDER_CITY = 'orders.order_city';
 
     /**
      * the column name for the order_country field
      */
-    const COL_ORDER_COUNTRY = 'orders.order_country';
+    public const COL_ORDER_COUNTRY = 'orders.order_country';
 
     /**
      * the column name for the order_email field
      */
-    const COL_ORDER_EMAIL = 'orders.order_email';
+    public const COL_ORDER_EMAIL = 'orders.order_email';
 
     /**
      * the column name for the order_phone field
      */
-    const COL_ORDER_PHONE = 'orders.order_phone';
+    public const COL_ORDER_PHONE = 'orders.order_phone';
 
     /**
      * the column name for the order_comment field
      */
-    const COL_ORDER_COMMENT = 'orders.order_comment';
+    public const COL_ORDER_COMMENT = 'orders.order_comment';
 
     /**
      * the column name for the order_utmz field
      */
-    const COL_ORDER_UTMZ = 'orders.order_utmz';
+    public const COL_ORDER_UTMZ = 'orders.order_utmz';
 
     /**
      * the column name for the order_utm_source field
      */
-    const COL_ORDER_UTM_SOURCE = 'orders.order_utm_source';
+    public const COL_ORDER_UTM_SOURCE = 'orders.order_utm_source';
 
     /**
      * the column name for the order_utm_campaign field
      */
-    const COL_ORDER_UTM_CAMPAIGN = 'orders.order_utm_campaign';
+    public const COL_ORDER_UTM_CAMPAIGN = 'orders.order_utm_campaign';
 
     /**
      * the column name for the order_utm_medium field
      */
-    const COL_ORDER_UTM_MEDIUM = 'orders.order_utm_medium';
+    public const COL_ORDER_UTM_MEDIUM = 'orders.order_utm_medium';
 
     /**
      * the column name for the order_referer field
      */
-    const COL_ORDER_REFERER = 'orders.order_referer';
+    public const COL_ORDER_REFERER = 'orders.order_referer';
 
     /**
      * the column name for the order_insert field
      */
-    const COL_ORDER_INSERT = 'orders.order_insert';
+    public const COL_ORDER_INSERT = 'orders.order_insert';
 
     /**
      * the column name for the order_payment_date field
      */
-    const COL_ORDER_PAYMENT_DATE = 'orders.order_payment_date';
+    public const COL_ORDER_PAYMENT_DATE = 'orders.order_payment_date';
 
     /**
      * the column name for the order_shipping_date field
      */
-    const COL_ORDER_SHIPPING_DATE = 'orders.order_shipping_date';
+    public const COL_ORDER_SHIPPING_DATE = 'orders.order_shipping_date';
 
     /**
      * the column name for the order_followup_date field
      */
-    const COL_ORDER_FOLLOWUP_DATE = 'orders.order_followup_date';
+    public const COL_ORDER_FOLLOWUP_DATE = 'orders.order_followup_date';
 
     /**
      * the column name for the order_confirmation_date field
      */
-    const COL_ORDER_CONFIRMATION_DATE = 'orders.order_confirmation_date';
+    public const COL_ORDER_CONFIRMATION_DATE = 'orders.order_confirmation_date';
 
     /**
      * the column name for the order_cancel_date field
      */
-    const COL_ORDER_CANCEL_DATE = 'orders.order_cancel_date';
+    public const COL_ORDER_CANCEL_DATE = 'orders.order_cancel_date';
 
     /**
      * the column name for the order_update field
      */
-    const COL_ORDER_UPDATE = 'orders.order_update';
+    public const COL_ORDER_UPDATE = 'orders.order_update';
 
     /**
      * the column name for the order_created field
      */
-    const COL_ORDER_CREATED = 'orders.order_created';
+    public const COL_ORDER_CREATED = 'orders.order_created';
 
     /**
      * the column name for the order_updated field
      */
-    const COL_ORDER_UPDATED = 'orders.order_updated';
+    public const COL_ORDER_UPDATED = 'orders.order_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Slug', 'SiteId', 'UserId', 'CustomerId', 'SellerId', 'Type', 'AsAGift', 'GiftRecipient', 'Amount', 'Discount', 'AmountTobepaid', 'ShippingId', 'CountryId', 'Shipping', 'ShippingMode', 'TrackNumber', 'PaymentMode', 'PaymentCash', 'PaymentCheque', 'PaymentTransfer', 'PaymentCard', 'PaymentPaypal', 'PaymentPayplug', 'PaymentLeft', 'Title', 'Firstname', 'Lastname', 'Address1', 'Address2', 'Postalcode', 'City', 'Country', 'Email', 'Phone', 'Comment', 'Utmz', 'UtmSource', 'UtmCampaign', 'UtmMedium', 'Referer', 'Insert', 'PaymentDate', 'ShippingDate', 'FollowupDate', 'ConfirmationDate', 'CancelDate', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'slug', 'siteId', 'userId', 'customerId', 'sellerId', 'type', 'asAGift', 'giftRecipient', 'amount', 'discount', 'amountTobepaid', 'shippingId', 'countryId', 'shipping', 'shippingMode', 'trackNumber', 'paymentMode', 'paymentCash', 'paymentCheque', 'paymentTransfer', 'paymentCard', 'paymentPaypal', 'paymentPayplug', 'paymentLeft', 'title', 'firstname', 'lastname', 'address1', 'address2', 'postalcode', 'city', 'country', 'email', 'phone', 'comment', 'utmz', 'utmSource', 'utmCampaign', 'utmMedium', 'referer', 'insert', 'paymentDate', 'shippingDate', 'followupDate', 'confirmationDate', 'cancelDate', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDER_ID, OrderTableMap::COL_ORDER_URL, OrderTableMap::COL_SITE_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_CUSTOMER_ID, OrderTableMap::COL_SELLER_ID, OrderTableMap::COL_ORDER_TYPE, OrderTableMap::COL_AS_A_GIFT, OrderTableMap::COL_GIFT_RECIPIENT, OrderTableMap::COL_ORDER_AMOUNT, OrderTableMap::COL_ORDER_DISCOUNT, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, OrderTableMap::COL_SHIPPING_ID, OrderTableMap::COL_COUNTRY_ID, OrderTableMap::COL_ORDER_SHIPPING, OrderTableMap::COL_ORDER_SHIPPING_MODE, OrderTableMap::COL_ORDER_TRACK_NUMBER, OrderTableMap::COL_ORDER_PAYMENT_MODE, OrderTableMap::COL_ORDER_PAYMENT_CASH, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, OrderTableMap::COL_ORDER_PAYMENT_CARD, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, OrderTableMap::COL_ORDER_PAYMENT_LEFT, OrderTableMap::COL_ORDER_TITLE, OrderTableMap::COL_ORDER_FIRSTNAME, OrderTableMap::COL_ORDER_LASTNAME, OrderTableMap::COL_ORDER_ADDRESS1, OrderTableMap::COL_ORDER_ADDRESS2, OrderTableMap::COL_ORDER_POSTALCODE, OrderTableMap::COL_ORDER_CITY, OrderTableMap::COL_ORDER_COUNTRY, OrderTableMap::COL_ORDER_EMAIL, OrderTableMap::COL_ORDER_PHONE, OrderTableMap::COL_ORDER_COMMENT, OrderTableMap::COL_ORDER_UTMZ, OrderTableMap::COL_ORDER_UTM_SOURCE, OrderTableMap::COL_ORDER_UTM_CAMPAIGN, OrderTableMap::COL_ORDER_UTM_MEDIUM, OrderTableMap::COL_ORDER_REFERER, OrderTableMap::COL_ORDER_INSERT, OrderTableMap::COL_ORDER_PAYMENT_DATE, OrderTableMap::COL_ORDER_SHIPPING_DATE, OrderTableMap::COL_ORDER_FOLLOWUP_DATE, OrderTableMap::COL_ORDER_CONFIRMATION_DATE, OrderTableMap::COL_ORDER_CANCEL_DATE, OrderTableMap::COL_ORDER_UPDATE, OrderTableMap::COL_ORDER_CREATED, OrderTableMap::COL_ORDER_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('order_id', 'order_url', 'site_id', 'user_id', 'customer_id', 'seller_id', 'order_type', 'order_as_a_gift', 'order_gift_recipient', 'order_amount', 'order_discount', 'order_amount_tobepaid', 'shipping_id', 'country_id', 'order_shipping', 'order_shipping_mode', 'order_track_number', 'order_payment_mode', 'order_payment_cash', 'order_payment_cheque', 'order_payment_transfer', 'order_payment_card', 'order_payment_paypal', 'order_payment_payplug', 'order_payment_left', 'order_title', 'order_firstname', 'order_lastname', 'order_address1', 'order_address2', 'order_postalcode', 'order_city', 'order_country', 'order_email', 'order_phone', 'order_comment', 'order_utmz', 'order_utm_source', 'order_utm_campaign', 'order_utm_medium', 'order_referer', 'order_insert', 'order_payment_date', 'order_shipping_date', 'order_followup_date', 'order_confirmation_date', 'order_cancel_date', 'order_update', 'order_created', 'order_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Slug', 'SiteId', 'UserId', 'CustomerId', 'SellerId', 'Type', 'AsAGift', 'GiftRecipient', 'Amount', 'Discount', 'AmountTobepaid', 'ShippingId', 'CountryId', 'Shipping', 'ShippingMode', 'TrackNumber', 'PaymentMode', 'PaymentCash', 'PaymentCheque', 'PaymentTransfer', 'PaymentCard', 'PaymentPaypal', 'PaymentPayplug', 'PaymentLeft', 'Title', 'Firstname', 'Lastname', 'Address1', 'Address2', 'Postalcode', 'City', 'Country', 'Email', 'Phone', 'Comment', 'Utmz', 'UtmSource', 'UtmCampaign', 'UtmMedium', 'Referer', 'Insert', 'PaymentDate', 'ShippingDate', 'FollowupDate', 'ConfirmationDate', 'CancelDate', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'slug', 'siteId', 'userId', 'customerId', 'sellerId', 'type', 'asAGift', 'giftRecipient', 'amount', 'discount', 'amountTobepaid', 'shippingId', 'countryId', 'shipping', 'shippingMode', 'trackNumber', 'paymentMode', 'paymentCash', 'paymentCheque', 'paymentTransfer', 'paymentCard', 'paymentPaypal', 'paymentPayplug', 'paymentLeft', 'title', 'firstname', 'lastname', 'address1', 'address2', 'postalcode', 'city', 'country', 'email', 'phone', 'comment', 'utmz', 'utmSource', 'utmCampaign', 'utmMedium', 'referer', 'insert', 'paymentDate', 'shippingDate', 'followupDate', 'confirmationDate', 'cancelDate', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID, OrderTableMap::COL_ORDER_URL, OrderTableMap::COL_SITE_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_CUSTOMER_ID, OrderTableMap::COL_SELLER_ID, OrderTableMap::COL_ORDER_TYPE, OrderTableMap::COL_AS_A_GIFT, OrderTableMap::COL_GIFT_RECIPIENT, OrderTableMap::COL_ORDER_AMOUNT, OrderTableMap::COL_ORDER_DISCOUNT, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, OrderTableMap::COL_SHIPPING_ID, OrderTableMap::COL_COUNTRY_ID, OrderTableMap::COL_ORDER_SHIPPING, OrderTableMap::COL_ORDER_SHIPPING_MODE, OrderTableMap::COL_ORDER_TRACK_NUMBER, OrderTableMap::COL_ORDER_PAYMENT_MODE, OrderTableMap::COL_ORDER_PAYMENT_CASH, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, OrderTableMap::COL_ORDER_PAYMENT_CARD, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, OrderTableMap::COL_ORDER_PAYMENT_LEFT, OrderTableMap::COL_ORDER_TITLE, OrderTableMap::COL_ORDER_FIRSTNAME, OrderTableMap::COL_ORDER_LASTNAME, OrderTableMap::COL_ORDER_ADDRESS1, OrderTableMap::COL_ORDER_ADDRESS2, OrderTableMap::COL_ORDER_POSTALCODE, OrderTableMap::COL_ORDER_CITY, OrderTableMap::COL_ORDER_COUNTRY, OrderTableMap::COL_ORDER_EMAIL, OrderTableMap::COL_ORDER_PHONE, OrderTableMap::COL_ORDER_COMMENT, OrderTableMap::COL_ORDER_UTMZ, OrderTableMap::COL_ORDER_UTM_SOURCE, OrderTableMap::COL_ORDER_UTM_CAMPAIGN, OrderTableMap::COL_ORDER_UTM_MEDIUM, OrderTableMap::COL_ORDER_REFERER, OrderTableMap::COL_ORDER_INSERT, OrderTableMap::COL_ORDER_PAYMENT_DATE, OrderTableMap::COL_ORDER_SHIPPING_DATE, OrderTableMap::COL_ORDER_FOLLOWUP_DATE, OrderTableMap::COL_ORDER_CONFIRMATION_DATE, OrderTableMap::COL_ORDER_CANCEL_DATE, OrderTableMap::COL_ORDER_UPDATE, OrderTableMap::COL_ORDER_CREATED, OrderTableMap::COL_ORDER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['order_id', 'order_url', 'site_id', 'user_id', 'customer_id', 'seller_id', 'order_type', 'order_as_a_gift', 'order_gift_recipient', 'order_amount', 'order_discount', 'order_amount_tobepaid', 'shipping_id', 'country_id', 'order_shipping', 'order_shipping_mode', 'order_track_number', 'order_payment_mode', 'order_payment_cash', 'order_payment_cheque', 'order_payment_transfer', 'order_payment_card', 'order_payment_paypal', 'order_payment_payplug', 'order_payment_left', 'order_title', 'order_firstname', 'order_lastname', 'order_address1', 'order_address2', 'order_postalcode', 'order_city', 'order_country', 'order_email', 'order_phone', 'order_comment', 'order_utmz', 'order_utm_source', 'order_utm_campaign', 'order_utm_medium', 'order_referer', 'order_insert', 'order_payment_date', 'order_shipping_date', 'order_followup_date', 'order_confirmation_date', 'order_cancel_date', 'order_update', 'order_created', 'order_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Slug' => 1, 'SiteId' => 2, 'UserId' => 3, 'CustomerId' => 4, 'SellerId' => 5, 'Type' => 6, 'AsAGift' => 7, 'GiftRecipient' => 8, 'Amount' => 9, 'Discount' => 10, 'AmountTobepaid' => 11, 'ShippingId' => 12, 'CountryId' => 13, 'Shipping' => 14, 'ShippingMode' => 15, 'TrackNumber' => 16, 'PaymentMode' => 17, 'PaymentCash' => 18, 'PaymentCheque' => 19, 'PaymentTransfer' => 20, 'PaymentCard' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentLeft' => 24, 'Title' => 25, 'Firstname' => 26, 'Lastname' => 27, 'Address1' => 28, 'Address2' => 29, 'Postalcode' => 30, 'City' => 31, 'Country' => 32, 'Email' => 33, 'Phone' => 34, 'Comment' => 35, 'Utmz' => 36, 'UtmSource' => 37, 'UtmCampaign' => 38, 'UtmMedium' => 39, 'Referer' => 40, 'Insert' => 41, 'PaymentDate' => 42, 'ShippingDate' => 43, 'FollowupDate' => 44, 'ConfirmationDate' => 45, 'CancelDate' => 46, 'Update' => 47, 'CreatedAt' => 48, 'UpdatedAt' => 49, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'slug' => 1, 'siteId' => 2, 'userId' => 3, 'customerId' => 4, 'sellerId' => 5, 'type' => 6, 'asAGift' => 7, 'giftRecipient' => 8, 'amount' => 9, 'discount' => 10, 'amountTobepaid' => 11, 'shippingId' => 12, 'countryId' => 13, 'shipping' => 14, 'shippingMode' => 15, 'trackNumber' => 16, 'paymentMode' => 17, 'paymentCash' => 18, 'paymentCheque' => 19, 'paymentTransfer' => 20, 'paymentCard' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentLeft' => 24, 'title' => 25, 'firstname' => 26, 'lastname' => 27, 'address1' => 28, 'address2' => 29, 'postalcode' => 30, 'city' => 31, 'country' => 32, 'email' => 33, 'phone' => 34, 'comment' => 35, 'utmz' => 36, 'utmSource' => 37, 'utmCampaign' => 38, 'utmMedium' => 39, 'referer' => 40, 'insert' => 41, 'paymentDate' => 42, 'shippingDate' => 43, 'followupDate' => 44, 'confirmationDate' => 45, 'cancelDate' => 46, 'update' => 47, 'createdAt' => 48, 'updatedAt' => 49, ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDER_ID => 0, OrderTableMap::COL_ORDER_URL => 1, OrderTableMap::COL_SITE_ID => 2, OrderTableMap::COL_USER_ID => 3, OrderTableMap::COL_CUSTOMER_ID => 4, OrderTableMap::COL_SELLER_ID => 5, OrderTableMap::COL_ORDER_TYPE => 6, OrderTableMap::COL_AS_A_GIFT => 7, OrderTableMap::COL_GIFT_RECIPIENT => 8, OrderTableMap::COL_ORDER_AMOUNT => 9, OrderTableMap::COL_ORDER_DISCOUNT => 10, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID => 11, OrderTableMap::COL_SHIPPING_ID => 12, OrderTableMap::COL_COUNTRY_ID => 13, OrderTableMap::COL_ORDER_SHIPPING => 14, OrderTableMap::COL_ORDER_SHIPPING_MODE => 15, OrderTableMap::COL_ORDER_TRACK_NUMBER => 16, OrderTableMap::COL_ORDER_PAYMENT_MODE => 17, OrderTableMap::COL_ORDER_PAYMENT_CASH => 18, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE => 19, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER => 20, OrderTableMap::COL_ORDER_PAYMENT_CARD => 21, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL => 22, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG => 23, OrderTableMap::COL_ORDER_PAYMENT_LEFT => 24, OrderTableMap::COL_ORDER_TITLE => 25, OrderTableMap::COL_ORDER_FIRSTNAME => 26, OrderTableMap::COL_ORDER_LASTNAME => 27, OrderTableMap::COL_ORDER_ADDRESS1 => 28, OrderTableMap::COL_ORDER_ADDRESS2 => 29, OrderTableMap::COL_ORDER_POSTALCODE => 30, OrderTableMap::COL_ORDER_CITY => 31, OrderTableMap::COL_ORDER_COUNTRY => 32, OrderTableMap::COL_ORDER_EMAIL => 33, OrderTableMap::COL_ORDER_PHONE => 34, OrderTableMap::COL_ORDER_COMMENT => 35, OrderTableMap::COL_ORDER_UTMZ => 36, OrderTableMap::COL_ORDER_UTM_SOURCE => 37, OrderTableMap::COL_ORDER_UTM_CAMPAIGN => 38, OrderTableMap::COL_ORDER_UTM_MEDIUM => 39, OrderTableMap::COL_ORDER_REFERER => 40, OrderTableMap::COL_ORDER_INSERT => 41, OrderTableMap::COL_ORDER_PAYMENT_DATE => 42, OrderTableMap::COL_ORDER_SHIPPING_DATE => 43, OrderTableMap::COL_ORDER_FOLLOWUP_DATE => 44, OrderTableMap::COL_ORDER_CONFIRMATION_DATE => 45, OrderTableMap::COL_ORDER_CANCEL_DATE => 46, OrderTableMap::COL_ORDER_UPDATE => 47, OrderTableMap::COL_ORDER_CREATED => 48, OrderTableMap::COL_ORDER_UPDATED => 49, ),
-        self::TYPE_FIELDNAME     => array('order_id' => 0, 'order_url' => 1, 'site_id' => 2, 'user_id' => 3, 'customer_id' => 4, 'seller_id' => 5, 'order_type' => 6, 'order_as_a_gift' => 7, 'order_gift_recipient' => 8, 'order_amount' => 9, 'order_discount' => 10, 'order_amount_tobepaid' => 11, 'shipping_id' => 12, 'country_id' => 13, 'order_shipping' => 14, 'order_shipping_mode' => 15, 'order_track_number' => 16, 'order_payment_mode' => 17, 'order_payment_cash' => 18, 'order_payment_cheque' => 19, 'order_payment_transfer' => 20, 'order_payment_card' => 21, 'order_payment_paypal' => 22, 'order_payment_payplug' => 23, 'order_payment_left' => 24, 'order_title' => 25, 'order_firstname' => 26, 'order_lastname' => 27, 'order_address1' => 28, 'order_address2' => 29, 'order_postalcode' => 30, 'order_city' => 31, 'order_country' => 32, 'order_email' => 33, 'order_phone' => 34, 'order_comment' => 35, 'order_utmz' => 36, 'order_utm_source' => 37, 'order_utm_campaign' => 38, 'order_utm_medium' => 39, 'order_referer' => 40, 'order_insert' => 41, 'order_payment_date' => 42, 'order_shipping_date' => 43, 'order_followup_date' => 44, 'order_confirmation_date' => 45, 'order_cancel_date' => 46, 'order_update' => 47, 'order_created' => 48, 'order_updated' => 49, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Slug' => 1, 'SiteId' => 2, 'UserId' => 3, 'CustomerId' => 4, 'SellerId' => 5, 'Type' => 6, 'AsAGift' => 7, 'GiftRecipient' => 8, 'Amount' => 9, 'Discount' => 10, 'AmountTobepaid' => 11, 'ShippingId' => 12, 'CountryId' => 13, 'Shipping' => 14, 'ShippingMode' => 15, 'TrackNumber' => 16, 'PaymentMode' => 17, 'PaymentCash' => 18, 'PaymentCheque' => 19, 'PaymentTransfer' => 20, 'PaymentCard' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentLeft' => 24, 'Title' => 25, 'Firstname' => 26, 'Lastname' => 27, 'Address1' => 28, 'Address2' => 29, 'Postalcode' => 30, 'City' => 31, 'Country' => 32, 'Email' => 33, 'Phone' => 34, 'Comment' => 35, 'Utmz' => 36, 'UtmSource' => 37, 'UtmCampaign' => 38, 'UtmMedium' => 39, 'Referer' => 40, 'Insert' => 41, 'PaymentDate' => 42, 'ShippingDate' => 43, 'FollowupDate' => 44, 'ConfirmationDate' => 45, 'CancelDate' => 46, 'Update' => 47, 'CreatedAt' => 48, 'UpdatedAt' => 49, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'slug' => 1, 'siteId' => 2, 'userId' => 3, 'customerId' => 4, 'sellerId' => 5, 'type' => 6, 'asAGift' => 7, 'giftRecipient' => 8, 'amount' => 9, 'discount' => 10, 'amountTobepaid' => 11, 'shippingId' => 12, 'countryId' => 13, 'shipping' => 14, 'shippingMode' => 15, 'trackNumber' => 16, 'paymentMode' => 17, 'paymentCash' => 18, 'paymentCheque' => 19, 'paymentTransfer' => 20, 'paymentCard' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentLeft' => 24, 'title' => 25, 'firstname' => 26, 'lastname' => 27, 'address1' => 28, 'address2' => 29, 'postalcode' => 30, 'city' => 31, 'country' => 32, 'email' => 33, 'phone' => 34, 'comment' => 35, 'utmz' => 36, 'utmSource' => 37, 'utmCampaign' => 38, 'utmMedium' => 39, 'referer' => 40, 'insert' => 41, 'paymentDate' => 42, 'shippingDate' => 43, 'followupDate' => 44, 'confirmationDate' => 45, 'cancelDate' => 46, 'update' => 47, 'createdAt' => 48, 'updatedAt' => 49, ],
+        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID => 0, OrderTableMap::COL_ORDER_URL => 1, OrderTableMap::COL_SITE_ID => 2, OrderTableMap::COL_USER_ID => 3, OrderTableMap::COL_CUSTOMER_ID => 4, OrderTableMap::COL_SELLER_ID => 5, OrderTableMap::COL_ORDER_TYPE => 6, OrderTableMap::COL_AS_A_GIFT => 7, OrderTableMap::COL_GIFT_RECIPIENT => 8, OrderTableMap::COL_ORDER_AMOUNT => 9, OrderTableMap::COL_ORDER_DISCOUNT => 10, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID => 11, OrderTableMap::COL_SHIPPING_ID => 12, OrderTableMap::COL_COUNTRY_ID => 13, OrderTableMap::COL_ORDER_SHIPPING => 14, OrderTableMap::COL_ORDER_SHIPPING_MODE => 15, OrderTableMap::COL_ORDER_TRACK_NUMBER => 16, OrderTableMap::COL_ORDER_PAYMENT_MODE => 17, OrderTableMap::COL_ORDER_PAYMENT_CASH => 18, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE => 19, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER => 20, OrderTableMap::COL_ORDER_PAYMENT_CARD => 21, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL => 22, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG => 23, OrderTableMap::COL_ORDER_PAYMENT_LEFT => 24, OrderTableMap::COL_ORDER_TITLE => 25, OrderTableMap::COL_ORDER_FIRSTNAME => 26, OrderTableMap::COL_ORDER_LASTNAME => 27, OrderTableMap::COL_ORDER_ADDRESS1 => 28, OrderTableMap::COL_ORDER_ADDRESS2 => 29, OrderTableMap::COL_ORDER_POSTALCODE => 30, OrderTableMap::COL_ORDER_CITY => 31, OrderTableMap::COL_ORDER_COUNTRY => 32, OrderTableMap::COL_ORDER_EMAIL => 33, OrderTableMap::COL_ORDER_PHONE => 34, OrderTableMap::COL_ORDER_COMMENT => 35, OrderTableMap::COL_ORDER_UTMZ => 36, OrderTableMap::COL_ORDER_UTM_SOURCE => 37, OrderTableMap::COL_ORDER_UTM_CAMPAIGN => 38, OrderTableMap::COL_ORDER_UTM_MEDIUM => 39, OrderTableMap::COL_ORDER_REFERER => 40, OrderTableMap::COL_ORDER_INSERT => 41, OrderTableMap::COL_ORDER_PAYMENT_DATE => 42, OrderTableMap::COL_ORDER_SHIPPING_DATE => 43, OrderTableMap::COL_ORDER_FOLLOWUP_DATE => 44, OrderTableMap::COL_ORDER_CONFIRMATION_DATE => 45, OrderTableMap::COL_ORDER_CANCEL_DATE => 46, OrderTableMap::COL_ORDER_UPDATE => 47, OrderTableMap::COL_ORDER_CREATED => 48, OrderTableMap::COL_ORDER_UPDATED => 49, ],
+        self::TYPE_FIELDNAME     => ['order_id' => 0, 'order_url' => 1, 'site_id' => 2, 'user_id' => 3, 'customer_id' => 4, 'seller_id' => 5, 'order_type' => 6, 'order_as_a_gift' => 7, 'order_gift_recipient' => 8, 'order_amount' => 9, 'order_discount' => 10, 'order_amount_tobepaid' => 11, 'shipping_id' => 12, 'country_id' => 13, 'order_shipping' => 14, 'order_shipping_mode' => 15, 'order_track_number' => 16, 'order_payment_mode' => 17, 'order_payment_cash' => 18, 'order_payment_cheque' => 19, 'order_payment_transfer' => 20, 'order_payment_card' => 21, 'order_payment_paypal' => 22, 'order_payment_payplug' => 23, 'order_payment_left' => 24, 'order_title' => 25, 'order_firstname' => 26, 'order_lastname' => 27, 'order_address1' => 28, 'order_address2' => 29, 'order_postalcode' => 30, 'order_city' => 31, 'order_country' => 32, 'order_email' => 33, 'order_phone' => 34, 'order_comment' => 35, 'order_utmz' => 36, 'order_utm_source' => 37, 'order_utm_campaign' => 38, 'order_utm_medium' => 39, 'order_referer' => 40, 'order_insert' => 41, 'order_payment_date' => 42, 'order_shipping_date' => 43, 'order_followup_date' => 44, 'order_confirmation_date' => 45, 'order_cancel_date' => 46, 'order_update' => 47, 'order_created' => 48, 'order_updated' => 49, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ORDER_ID',
@@ -766,9 +770,9 @@ class OrderTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('orders');
@@ -828,12 +832,14 @@ class OrderTableMap extends TableMap
         $this->addColumn('order_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('order_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('order_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -849,20 +855,20 @@ class OrderTableMap extends TableMap
     1 => ':order_id',
   ),
 ), null, null, 'Payments', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'order_created', 'update_column' => 'order_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -870,14 +876,14 @@ class OrderTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -892,14 +898,14 @@ class OrderTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -916,10 +922,10 @@ class OrderTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? OrderTableMap::CLASS_DEFAULT : OrderTableMap::OM_CLASS;
     }
@@ -927,17 +933,17 @@ class OrderTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Order object, last column rank)
+     * @return array (Order object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = OrderTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = OrderTableMap::getInstanceFromPool($key))) {
@@ -961,13 +967,13 @@ class OrderTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -997,12 +1003,13 @@ class OrderTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_ID);
@@ -1115,12 +1122,13 @@ class OrderTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_ID);
@@ -1231,10 +1239,10 @@ class OrderTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(OrderTableMap::DATABASE_NAME)->getTable(OrderTableMap::TABLE_NAME);
     }
@@ -1242,15 +1250,15 @@ class OrderTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Order or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Order object or primary key or array of primary keys
+     * @param mixed $values Criteria or Order object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
@@ -1286,7 +1294,7 @@ class OrderTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return OrderQuery::create()->doDeleteAll($con);
     }
@@ -1294,13 +1302,13 @@ class OrderTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Order or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Order object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Order object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
@@ -1327,4 +1335,4 @@ class OrderTableMap extends TableMap
         });
     }
 
-} // OrderTableMap
+}

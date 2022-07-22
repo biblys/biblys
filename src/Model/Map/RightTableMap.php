@@ -33,130 +33,134 @@ class RightTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.RightTableMap';
+    public const CLASS_NAME = 'Model.Map.RightTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'rights';
+    public const TABLE_NAME = 'rights';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Right';
+    public const OM_CLASS = '\\Model\\Right';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Right';
+    public const CLASS_DEFAULT = 'Model.Right';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    public const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    public const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the right_id field
      */
-    const COL_RIGHT_ID = 'rights.right_id';
+    public const COL_RIGHT_ID = 'rights.right_id';
 
     /**
      * the column name for the right_uid field
      */
-    const COL_RIGHT_UID = 'rights.right_uid';
+    public const COL_RIGHT_UID = 'rights.right_uid';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'rights.user_id';
+    public const COL_USER_ID = 'rights.user_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'rights.site_id';
+    public const COL_SITE_ID = 'rights.site_id';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'rights.publisher_id';
+    public const COL_PUBLISHER_ID = 'rights.publisher_id';
 
     /**
      * the column name for the bookshop_id field
      */
-    const COL_BOOKSHOP_ID = 'rights.bookshop_id';
+    public const COL_BOOKSHOP_ID = 'rights.bookshop_id';
 
     /**
      * the column name for the library_id field
      */
-    const COL_LIBRARY_ID = 'rights.library_id';
+    public const COL_LIBRARY_ID = 'rights.library_id';
 
     /**
      * the column name for the right_current field
      */
-    const COL_RIGHT_CURRENT = 'rights.right_current';
+    public const COL_RIGHT_CURRENT = 'rights.right_current';
 
     /**
      * the column name for the right_created field
      */
-    const COL_RIGHT_CREATED = 'rights.right_created';
+    public const COL_RIGHT_CREATED = 'rights.right_created';
 
     /**
      * the column name for the right_updated field
      */
-    const COL_RIGHT_UPDATED = 'rights.right_updated';
+    public const COL_RIGHT_UPDATED = 'rights.right_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Uid', 'UserId', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Current', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'uid', 'userId', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'current', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_BOOKSHOP_ID, RightTableMap::COL_LIBRARY_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('right_id', 'right_uid', 'user_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'right_current', 'right_created', 'right_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Uid', 'UserId', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Current', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'uid', 'userId', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'current', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID, RightTableMap::COL_RIGHT_UID, RightTableMap::COL_USER_ID, RightTableMap::COL_SITE_ID, RightTableMap::COL_PUBLISHER_ID, RightTableMap::COL_BOOKSHOP_ID, RightTableMap::COL_LIBRARY_ID, RightTableMap::COL_RIGHT_CURRENT, RightTableMap::COL_RIGHT_CREATED, RightTableMap::COL_RIGHT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['right_id', 'right_uid', 'user_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'right_current', 'right_created', 'right_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Uid' => 1, 'UserId' => 2, 'SiteId' => 3, 'PublisherId' => 4, 'BookshopId' => 5, 'LibraryId' => 6, 'Current' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'uid' => 1, 'userId' => 2, 'siteId' => 3, 'publisherId' => 4, 'bookshopId' => 5, 'libraryId' => 6, 'current' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
-        self::TYPE_COLNAME       => array(RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_USER_ID => 2, RightTableMap::COL_SITE_ID => 3, RightTableMap::COL_PUBLISHER_ID => 4, RightTableMap::COL_BOOKSHOP_ID => 5, RightTableMap::COL_LIBRARY_ID => 6, RightTableMap::COL_RIGHT_CURRENT => 7, RightTableMap::COL_RIGHT_CREATED => 8, RightTableMap::COL_RIGHT_UPDATED => 9, ),
-        self::TYPE_FIELDNAME     => array('right_id' => 0, 'right_uid' => 1, 'user_id' => 2, 'site_id' => 3, 'publisher_id' => 4, 'bookshop_id' => 5, 'library_id' => 6, 'right_current' => 7, 'right_created' => 8, 'right_updated' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Uid' => 1, 'UserId' => 2, 'SiteId' => 3, 'PublisherId' => 4, 'BookshopId' => 5, 'LibraryId' => 6, 'Current' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'uid' => 1, 'userId' => 2, 'siteId' => 3, 'publisherId' => 4, 'bookshopId' => 5, 'libraryId' => 6, 'current' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
+        self::TYPE_COLNAME       => [RightTableMap::COL_RIGHT_ID => 0, RightTableMap::COL_RIGHT_UID => 1, RightTableMap::COL_USER_ID => 2, RightTableMap::COL_SITE_ID => 3, RightTableMap::COL_PUBLISHER_ID => 4, RightTableMap::COL_BOOKSHOP_ID => 5, RightTableMap::COL_LIBRARY_ID => 6, RightTableMap::COL_RIGHT_CURRENT => 7, RightTableMap::COL_RIGHT_CREATED => 8, RightTableMap::COL_RIGHT_UPDATED => 9, ],
+        self::TYPE_FIELDNAME     => ['right_id' => 0, 'right_uid' => 1, 'user_id' => 2, 'site_id' => 3, 'publisher_id' => 4, 'bookshop_id' => 5, 'library_id' => 6, 'right_current' => 7, 'right_created' => 8, 'right_updated' => 9, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'RIGHT_ID',
@@ -246,9 +250,9 @@ class RightTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('rights');
@@ -268,12 +272,14 @@ class RightTableMap extends TableMap
         $this->addColumn('right_current', 'Current', 'BOOLEAN', false, 1, false);
         $this->addColumn('right_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('right_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -296,20 +302,20 @@ class RightTableMap extends TableMap
     1 => ':publisher_id',
   ),
 ), null, null, null, false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'right_created', 'update_column' => 'right_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -317,14 +323,14 @@ class RightTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -339,14 +345,14 @@ class RightTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -363,10 +369,10 @@ class RightTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? RightTableMap::CLASS_DEFAULT : RightTableMap::OM_CLASS;
     }
@@ -374,17 +380,17 @@ class RightTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Right object, last column rank)
+     * @return array (Right object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = RightTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = RightTableMap::getInstanceFromPool($key))) {
@@ -408,13 +414,13 @@ class RightTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -444,12 +450,13 @@ class RightTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(RightTableMap::COL_RIGHT_ID);
@@ -482,12 +489,13 @@ class RightTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(RightTableMap::COL_RIGHT_ID);
@@ -518,10 +526,10 @@ class RightTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(RightTableMap::DATABASE_NAME)->getTable(RightTableMap::TABLE_NAME);
     }
@@ -529,15 +537,15 @@ class RightTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Right or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Right object or primary key or array of primary keys
+     * @param mixed $values Criteria or Right object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RightTableMap::DATABASE_NAME);
@@ -573,7 +581,7 @@ class RightTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return RightQuery::create()->doDeleteAll($con);
     }
@@ -581,13 +589,13 @@ class RightTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Right or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Right object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Right object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RightTableMap::DATABASE_NAME);
@@ -614,4 +622,4 @@ class RightTableMap extends TableMap
         });
     }
 
-} // RightTableMap
+}

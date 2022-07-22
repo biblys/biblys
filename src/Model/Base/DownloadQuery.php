@@ -10,7 +10,7 @@ use Model\Map\DownloadTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownloadQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildDownloadQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildDownload|null findOne(ConnectionInterface $con = null) Return the first ChildDownload matching the query
- * @method     ChildDownload findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDownload matching the query, or a new ChildDownload object populated from the query conditions when no match is found
+ * @method     ChildDownload|null findOne(?ConnectionInterface $con = null) Return the first ChildDownload matching the query
+ * @method     ChildDownload findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildDownload matching the query, or a new ChildDownload object populated from the query conditions when no match is found
  *
  * @method     ChildDownload|null findOneById(string $download_id) Return the first ChildDownload filtered by the download_id column
  * @method     ChildDownload|null findOneByFileId(int $file_id) Return the first ChildDownload filtered by the file_id column
@@ -66,8 +66,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload|null findOneByCreatedAt(string $download_created) Return the first ChildDownload filtered by the download_created column
  * @method     ChildDownload|null findOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column *
 
- * @method     ChildDownload requirePk($key, ConnectionInterface $con = null) Return the ChildDownload by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDownload requireOne(ConnectionInterface $con = null) Return the first ChildDownload matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDownload requirePk($key, ?ConnectionInterface $con = null) Return the ChildDownload by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildDownload requireOne(?ConnectionInterface $con = null) Return the first ChildDownload matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildDownload requireOneById(string $download_id) Return the first ChildDownload filtered by the download_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByFileId(int $file_id) Return the first ChildDownload filtered by the file_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -81,32 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload requireOneByCreatedAt(string $download_created) Return the first ChildDownload filtered by the download_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDownload[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> find(ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
- * @method     ChildDownload[]|ObjectCollection findById(string $download_id) Return ChildDownload objects filtered by the download_id column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findById(string $download_id) Return ChildDownload objects filtered by the download_id column
- * @method     ChildDownload[]|ObjectCollection findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
- * @method     ChildDownload[]|ObjectCollection findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
- * @method     ChildDownload[]|ObjectCollection findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
- * @method     ChildDownload[]|ObjectCollection findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
- * @method     ChildDownload[]|ObjectCollection findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
- * @method     ChildDownload[]|ObjectCollection findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
- * @method     ChildDownload[]|ObjectCollection findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
- * @method     ChildDownload[]|ObjectCollection findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
- * @method     ChildDownload[]|ObjectCollection findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
- * @method     ChildDownload[]|ObjectCollection findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildDownload> findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
- * @method     ChildDownload[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildDownload> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildDownload[]|Collection find(?ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildDownload> find(?ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
+ * @method     ChildDownload[]|Collection findById(string $download_id) Return ChildDownload objects filtered by the download_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findById(string $download_id) Return ChildDownload objects filtered by the download_id column
+ * @method     ChildDownload[]|Collection findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
+ * @method     ChildDownload[]|Collection findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
+ * @method     ChildDownload[]|Collection findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
+ * @method     ChildDownload[]|Collection findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
+ * @method     ChildDownload[]|Collection findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
+ * @method     ChildDownload[]|Collection findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
+ * @method     ChildDownload[]|Collection findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
+ * @method     ChildDownload[]|Collection findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
+ * @method     ChildDownload[]|Collection findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
+ * @method     ChildDownload[]|Collection findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
+ * @method     ChildDownload[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildDownload> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class DownloadQuery extends ModelCriteria
@@ -116,9 +116,9 @@ abstract class DownloadQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\DownloadQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Download', $modelAlias = null)
     {
@@ -128,12 +128,12 @@ abstract class DownloadQuery extends ModelCriteria
     /**
      * Returns a new ChildDownloadQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildDownloadQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildDownloadQuery) {
             return $criteria;
@@ -163,7 +163,7 @@ abstract class DownloadQuery extends ModelCriteria
      *
      * @return ChildDownload|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -195,8 +195,8 @@ abstract class DownloadQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -228,8 +228,8 @@ abstract class DownloadQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildDownload|array|mixed the result, formatted by the current formatter
      */
@@ -249,12 +249,12 @@ abstract class DownloadQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -271,27 +271,31 @@ abstract class DownloadQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -304,15 +308,15 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE download_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -332,7 +336,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $id, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -345,15 +351,15 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByFileId(array('min' => 12)); // WHERE file_id > 12
      * </code>
      *
-     * @param     mixed $fileId The value to use as filter.
+     * @param mixed $fileId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFileId($fileId = null, $comparison = null)
+    public function filterByFileId($fileId = null, ?string $comparison = null)
     {
         if (is_array($fileId)) {
             $useMinMax = false;
@@ -373,7 +379,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_FILE_ID, $fileId, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_FILE_ID, $fileId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -386,15 +394,15 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -414,7 +422,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -427,15 +437,15 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByBookId(array('min' => 12)); // WHERE book_id > 12
      * </code>
      *
-     * @param     mixed $bookId The value to use as filter.
+     * @param mixed $bookId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookId($bookId = null, $comparison = null)
+    public function filterByBookId($bookId = null, ?string $comparison = null)
     {
         if (is_array($bookId)) {
             $useMinMax = false;
@@ -455,7 +465,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_BOOK_ID, $bookId, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_BOOK_ID, $bookId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -468,15 +480,15 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -496,7 +508,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -506,14 +520,15 @@ abstract class DownloadQuery extends ModelCriteria
      * <code>
      * $query->filterByFiletype('fooValue');   // WHERE download_filetype = 'fooValue'
      * $query->filterByFiletype('%fooValue%', Criteria::LIKE); // WHERE download_filetype LIKE '%fooValue%'
+     * $query->filterByFiletype(['foo', 'bar']); // WHERE download_filetype IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $filetype The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $filetype The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFiletype($filetype = null, $comparison = null)
+    public function filterByFiletype($filetype = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($filetype)) {
@@ -521,7 +536,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_FILETYPE, $filetype, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_FILETYPE, $filetype, $comparison);
+
+        return $this;
     }
 
     /**
@@ -531,14 +548,15 @@ abstract class DownloadQuery extends ModelCriteria
      * <code>
      * $query->filterByVersion('fooValue');   // WHERE download_version = 'fooValue'
      * $query->filterByVersion('%fooValue%', Criteria::LIKE); // WHERE download_version LIKE '%fooValue%'
+     * $query->filterByVersion(['foo', 'bar']); // WHERE download_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $version The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $version The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVersion($version = null, $comparison = null)
+    public function filterByVersion($version = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($version)) {
@@ -546,7 +564,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_VERSION, $version, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_VERSION, $version, $comparison);
+
+        return $this;
     }
 
     /**
@@ -556,14 +576,15 @@ abstract class DownloadQuery extends ModelCriteria
      * <code>
      * $query->filterByIp('fooValue');   // WHERE download_ip = 'fooValue'
      * $query->filterByIp('%fooValue%', Criteria::LIKE); // WHERE download_ip LIKE '%fooValue%'
+     * $query->filterByIp(['foo', 'bar']); // WHERE download_ip IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $ip The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $ip The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIp($ip = null, $comparison = null)
+    public function filterByIp($ip = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($ip)) {
@@ -571,7 +592,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_IP, $ip, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_IP, $ip, $comparison);
+
+        return $this;
     }
 
     /**
@@ -584,17 +607,17 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE download_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -614,7 +637,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_DATE, $date, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -627,17 +652,17 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE download_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -657,7 +682,9 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -670,17 +697,17 @@ abstract class DownloadQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE download_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -700,15 +727,17 @@ abstract class DownloadQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildDownload $download Object to remove from the list of results
+     * @param ChildDownload $download Object to remove from the list of results
      *
-     * @return $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($download = null)
     {
@@ -725,7 +754,7 @@ abstract class DownloadQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(DownloadTableMap::DATABASE_NAME);
@@ -750,12 +779,12 @@ abstract class DownloadQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(DownloadTableMap::DATABASE_NAME);
@@ -785,65 +814,77 @@ abstract class DownloadQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
+        $this->addDescendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
+        $this->addAscendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_CREATED);
+        $this->addDescendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(DownloadTableMap::COL_DOWNLOAD_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildDownloadQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_CREATED);
+        $this->addAscendingOrderByColumn(DownloadTableMap::COL_DOWNLOAD_CREATED);
+
+        return $this;
     }
 
-} // DownloadQuery
+}

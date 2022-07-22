@@ -33,170 +33,174 @@ class BookCollectionTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.BookCollectionTableMap';
+    public const CLASS_NAME = 'Model.Map.BookCollectionTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'collections';
+    public const TABLE_NAME = 'collections';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\BookCollection';
+    public const OM_CLASS = '\\Model\\BookCollection';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.BookCollection';
+    public const CLASS_DEFAULT = 'Model.BookCollection';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 18;
+    public const NUM_COLUMNS = 18;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 18;
+    public const NUM_HYDRATE_COLUMNS = 18;
 
     /**
      * the column name for the collection_id field
      */
-    const COL_COLLECTION_ID = 'collections.collection_id';
+    public const COL_COLLECTION_ID = 'collections.collection_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'collections.site_id';
+    public const COL_SITE_ID = 'collections.site_id';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'collections.publisher_id';
+    public const COL_PUBLISHER_ID = 'collections.publisher_id';
 
     /**
      * the column name for the pricegrid_id field
      */
-    const COL_PRICEGRID_ID = 'collections.pricegrid_id';
+    public const COL_PRICEGRID_ID = 'collections.pricegrid_id';
 
     /**
      * the column name for the collection_name field
      */
-    const COL_COLLECTION_NAME = 'collections.collection_name';
+    public const COL_COLLECTION_NAME = 'collections.collection_name';
 
     /**
      * the column name for the collection_url field
      */
-    const COL_COLLECTION_URL = 'collections.collection_url';
+    public const COL_COLLECTION_URL = 'collections.collection_url';
 
     /**
      * the column name for the collection_publisher field
      */
-    const COL_COLLECTION_PUBLISHER = 'collections.collection_publisher';
+    public const COL_COLLECTION_PUBLISHER = 'collections.collection_publisher';
 
     /**
      * the column name for the collection_desc field
      */
-    const COL_COLLECTION_DESC = 'collections.collection_desc';
+    public const COL_COLLECTION_DESC = 'collections.collection_desc';
 
     /**
      * the column name for the collection_ignorenum field
      */
-    const COL_COLLECTION_IGNORENUM = 'collections.collection_ignorenum';
+    public const COL_COLLECTION_IGNORENUM = 'collections.collection_ignorenum';
 
     /**
      * the column name for the collection_orderby field
      */
-    const COL_COLLECTION_ORDERBY = 'collections.collection_orderby';
+    public const COL_COLLECTION_ORDERBY = 'collections.collection_orderby';
 
     /**
      * the column name for the collection_incorrect_weights field
      */
-    const COL_COLLECTION_INCORRECT_WEIGHTS = 'collections.collection_incorrect_weights';
+    public const COL_COLLECTION_INCORRECT_WEIGHTS = 'collections.collection_incorrect_weights';
 
     /**
      * the column name for the collection_noosfere_id field
      */
-    const COL_COLLECTION_NOOSFERE_ID = 'collections.collection_noosfere_id';
+    public const COL_COLLECTION_NOOSFERE_ID = 'collections.collection_noosfere_id';
 
     /**
      * the column name for the collection_insert field
      */
-    const COL_COLLECTION_INSERT = 'collections.collection_insert';
+    public const COL_COLLECTION_INSERT = 'collections.collection_insert';
 
     /**
      * the column name for the collection_update field
      */
-    const COL_COLLECTION_UPDATE = 'collections.collection_update';
+    public const COL_COLLECTION_UPDATE = 'collections.collection_update';
 
     /**
      * the column name for the collection_hits field
      */
-    const COL_COLLECTION_HITS = 'collections.collection_hits';
+    public const COL_COLLECTION_HITS = 'collections.collection_hits';
 
     /**
      * the column name for the collection_duplicate field
      */
-    const COL_COLLECTION_DUPLICATE = 'collections.collection_duplicate';
+    public const COL_COLLECTION_DUPLICATE = 'collections.collection_duplicate';
 
     /**
      * the column name for the collection_created field
      */
-    const COL_COLLECTION_CREATED = 'collections.collection_created';
+    public const COL_COLLECTION_CREATED = 'collections.collection_created';
 
     /**
      * the column name for the collection_updated field
      */
-    const COL_COLLECTION_UPDATED = 'collections.collection_updated';
+    public const COL_COLLECTION_UPDATED = 'collections.collection_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'Publisher', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisher', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID, BookCollectionTableMap::COL_SITE_ID, BookCollectionTableMap::COL_PUBLISHER_ID, BookCollectionTableMap::COL_PRICEGRID_ID, BookCollectionTableMap::COL_COLLECTION_NAME, BookCollectionTableMap::COL_COLLECTION_URL, BookCollectionTableMap::COL_COLLECTION_PUBLISHER, BookCollectionTableMap::COL_COLLECTION_DESC, BookCollectionTableMap::COL_COLLECTION_IGNORENUM, BookCollectionTableMap::COL_COLLECTION_ORDERBY, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID, BookCollectionTableMap::COL_COLLECTION_INSERT, BookCollectionTableMap::COL_COLLECTION_UPDATE, BookCollectionTableMap::COL_COLLECTION_HITS, BookCollectionTableMap::COL_COLLECTION_DUPLICATE, BookCollectionTableMap::COL_COLLECTION_CREATED, BookCollectionTableMap::COL_COLLECTION_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('collection_id', 'site_id', 'publisher_id', 'pricegrid_id', 'collection_name', 'collection_url', 'collection_publisher', 'collection_desc', 'collection_ignorenum', 'collection_orderby', 'collection_incorrect_weights', 'collection_noosfere_id', 'collection_insert', 'collection_update', 'collection_hits', 'collection_duplicate', 'collection_created', 'collection_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'PricegridId', 'Name', 'Url', 'Publisher', 'Desc', 'Ignorenum', 'Orderby', 'IncorrectWeights', 'NoosfereId', 'Insert', 'Update', 'Hits', 'Duplicate', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'pricegridId', 'name', 'url', 'publisher', 'desc', 'ignorenum', 'orderby', 'incorrectWeights', 'noosfereId', 'insert', 'update', 'hits', 'duplicate', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [BookCollectionTableMap::COL_COLLECTION_ID, BookCollectionTableMap::COL_SITE_ID, BookCollectionTableMap::COL_PUBLISHER_ID, BookCollectionTableMap::COL_PRICEGRID_ID, BookCollectionTableMap::COL_COLLECTION_NAME, BookCollectionTableMap::COL_COLLECTION_URL, BookCollectionTableMap::COL_COLLECTION_PUBLISHER, BookCollectionTableMap::COL_COLLECTION_DESC, BookCollectionTableMap::COL_COLLECTION_IGNORENUM, BookCollectionTableMap::COL_COLLECTION_ORDERBY, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID, BookCollectionTableMap::COL_COLLECTION_INSERT, BookCollectionTableMap::COL_COLLECTION_UPDATE, BookCollectionTableMap::COL_COLLECTION_HITS, BookCollectionTableMap::COL_COLLECTION_DUPLICATE, BookCollectionTableMap::COL_COLLECTION_CREATED, BookCollectionTableMap::COL_COLLECTION_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['collection_id', 'site_id', 'publisher_id', 'pricegrid_id', 'collection_name', 'collection_url', 'collection_publisher', 'collection_desc', 'collection_ignorenum', 'collection_orderby', 'collection_incorrect_weights', 'collection_noosfere_id', 'collection_insert', 'collection_update', 'collection_hits', 'collection_duplicate', 'collection_created', 'collection_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'Publisher' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisher' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, ),
-        self::TYPE_COLNAME       => array(BookCollectionTableMap::COL_COLLECTION_ID => 0, BookCollectionTableMap::COL_SITE_ID => 1, BookCollectionTableMap::COL_PUBLISHER_ID => 2, BookCollectionTableMap::COL_PRICEGRID_ID => 3, BookCollectionTableMap::COL_COLLECTION_NAME => 4, BookCollectionTableMap::COL_COLLECTION_URL => 5, BookCollectionTableMap::COL_COLLECTION_PUBLISHER => 6, BookCollectionTableMap::COL_COLLECTION_DESC => 7, BookCollectionTableMap::COL_COLLECTION_IGNORENUM => 8, BookCollectionTableMap::COL_COLLECTION_ORDERBY => 9, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS => 10, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID => 11, BookCollectionTableMap::COL_COLLECTION_INSERT => 12, BookCollectionTableMap::COL_COLLECTION_UPDATE => 13, BookCollectionTableMap::COL_COLLECTION_HITS => 14, BookCollectionTableMap::COL_COLLECTION_DUPLICATE => 15, BookCollectionTableMap::COL_COLLECTION_CREATED => 16, BookCollectionTableMap::COL_COLLECTION_UPDATED => 17, ),
-        self::TYPE_FIELDNAME     => array('collection_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'pricegrid_id' => 3, 'collection_name' => 4, 'collection_url' => 5, 'collection_publisher' => 6, 'collection_desc' => 7, 'collection_ignorenum' => 8, 'collection_orderby' => 9, 'collection_incorrect_weights' => 10, 'collection_noosfere_id' => 11, 'collection_insert' => 12, 'collection_update' => 13, 'collection_hits' => 14, 'collection_duplicate' => 15, 'collection_created' => 16, 'collection_updated' => 17, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PricegridId' => 3, 'Name' => 4, 'Url' => 5, 'Publisher' => 6, 'Desc' => 7, 'Ignorenum' => 8, 'Orderby' => 9, 'IncorrectWeights' => 10, 'NoosfereId' => 11, 'Insert' => 12, 'Update' => 13, 'Hits' => 14, 'Duplicate' => 15, 'CreatedAt' => 16, 'UpdatedAt' => 17, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'pricegridId' => 3, 'name' => 4, 'url' => 5, 'publisher' => 6, 'desc' => 7, 'ignorenum' => 8, 'orderby' => 9, 'incorrectWeights' => 10, 'noosfereId' => 11, 'insert' => 12, 'update' => 13, 'hits' => 14, 'duplicate' => 15, 'createdAt' => 16, 'updatedAt' => 17, ],
+        self::TYPE_COLNAME       => [BookCollectionTableMap::COL_COLLECTION_ID => 0, BookCollectionTableMap::COL_SITE_ID => 1, BookCollectionTableMap::COL_PUBLISHER_ID => 2, BookCollectionTableMap::COL_PRICEGRID_ID => 3, BookCollectionTableMap::COL_COLLECTION_NAME => 4, BookCollectionTableMap::COL_COLLECTION_URL => 5, BookCollectionTableMap::COL_COLLECTION_PUBLISHER => 6, BookCollectionTableMap::COL_COLLECTION_DESC => 7, BookCollectionTableMap::COL_COLLECTION_IGNORENUM => 8, BookCollectionTableMap::COL_COLLECTION_ORDERBY => 9, BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS => 10, BookCollectionTableMap::COL_COLLECTION_NOOSFERE_ID => 11, BookCollectionTableMap::COL_COLLECTION_INSERT => 12, BookCollectionTableMap::COL_COLLECTION_UPDATE => 13, BookCollectionTableMap::COL_COLLECTION_HITS => 14, BookCollectionTableMap::COL_COLLECTION_DUPLICATE => 15, BookCollectionTableMap::COL_COLLECTION_CREATED => 16, BookCollectionTableMap::COL_COLLECTION_UPDATED => 17, ],
+        self::TYPE_FIELDNAME     => ['collection_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'pricegrid_id' => 3, 'collection_name' => 4, 'collection_url' => 5, 'collection_publisher' => 6, 'collection_desc' => 7, 'collection_ignorenum' => 8, 'collection_orderby' => 9, 'collection_incorrect_weights' => 10, 'collection_noosfere_id' => 11, 'collection_insert' => 12, 'collection_update' => 13, 'collection_hits' => 14, 'collection_duplicate' => 15, 'collection_created' => 16, 'collection_updated' => 17, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'COLLECTION_ID',
@@ -350,9 +354,9 @@ class BookCollectionTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('collections');
@@ -380,12 +384,14 @@ class BookCollectionTableMap extends TableMap
         $this->addColumn('collection_duplicate', 'Duplicate', 'BOOLEAN', false, 1, false);
         $this->addColumn('collection_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('collection_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Article', '\\Model\\Article', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -394,20 +400,20 @@ class BookCollectionTableMap extends TableMap
     1 => ':collection_id',
   ),
 ), null, null, 'Articles', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'collection_created', 'update_column' => 'collection_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -415,14 +421,14 @@ class BookCollectionTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -437,14 +443,14 @@ class BookCollectionTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -461,10 +467,10 @@ class BookCollectionTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? BookCollectionTableMap::CLASS_DEFAULT : BookCollectionTableMap::OM_CLASS;
     }
@@ -472,17 +478,17 @@ class BookCollectionTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (BookCollection object, last column rank)
+     * @return array (BookCollection object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = BookCollectionTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = BookCollectionTableMap::getInstanceFromPool($key))) {
@@ -506,13 +512,13 @@ class BookCollectionTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -542,12 +548,13 @@ class BookCollectionTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(BookCollectionTableMap::COL_COLLECTION_ID);
@@ -596,12 +603,13 @@ class BookCollectionTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(BookCollectionTableMap::COL_COLLECTION_ID);
@@ -648,10 +656,10 @@ class BookCollectionTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(BookCollectionTableMap::DATABASE_NAME)->getTable(BookCollectionTableMap::TABLE_NAME);
     }
@@ -659,15 +667,15 @@ class BookCollectionTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a BookCollection or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or BookCollection object or primary key or array of primary keys
+     * @param mixed $values Criteria or BookCollection object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookCollectionTableMap::DATABASE_NAME);
@@ -703,7 +711,7 @@ class BookCollectionTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return BookCollectionQuery::create()->doDeleteAll($con);
     }
@@ -711,13 +719,13 @@ class BookCollectionTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a BookCollection or Criteria object.
      *
-     * @param mixed               $criteria Criteria or BookCollection object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or BookCollection object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookCollectionTableMap::DATABASE_NAME);
@@ -744,4 +752,4 @@ class BookCollectionTableMap extends TableMap
         });
     }
 
-} // BookCollectionTableMap
+}

@@ -10,7 +10,7 @@ use Model\Map\CustomerTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCustomerQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCustomer|null findOne(ConnectionInterface $con = null) Return the first ChildCustomer matching the query
- * @method     ChildCustomer findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCustomer matching the query, or a new ChildCustomer object populated from the query conditions when no match is found
+ * @method     ChildCustomer|null findOne(?ConnectionInterface $con = null) Return the first ChildCustomer matching the query
+ * @method     ChildCustomer findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCustomer matching the query, or a new ChildCustomer object populated from the query conditions when no match is found
  *
  * @method     ChildCustomer|null findOneById(int $customer_id) Return the first ChildCustomer filtered by the customer_id column
  * @method     ChildCustomer|null findOneBySiteId(int $site_id) Return the first ChildCustomer filtered by the site_id column
@@ -75,8 +75,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer|null findOneByCreatedAt(string $customer_created) Return the first ChildCustomer filtered by the customer_created column
  * @method     ChildCustomer|null findOneByUpdatedAt(string $customer_updated) Return the first ChildCustomer filtered by the customer_updated column *
 
- * @method     ChildCustomer requirePk($key, ConnectionInterface $con = null) Return the ChildCustomer by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCustomer requireOne(ConnectionInterface $con = null) Return the first ChildCustomer matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requirePk($key, ?ConnectionInterface $con = null) Return the ChildCustomer by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOne(?ConnectionInterface $con = null) Return the first ChildCustomer matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCustomer requireOneById(int $customer_id) Return the first ChildCustomer filtered by the customer_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneBySiteId(int $site_id) Return the first ChildCustomer filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -93,38 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer requireOneByCreatedAt(string $customer_created) Return the first ChildCustomer filtered by the customer_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByUpdatedAt(string $customer_updated) Return the first ChildCustomer filtered by the customer_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCustomer[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
- * @method     ChildCustomer[]|ObjectCollection findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
- * @method     ChildCustomer[]|ObjectCollection findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
- * @method     ChildCustomer[]|ObjectCollection findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
- * @method     ChildCustomer[]|ObjectCollection findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
- * @method     ChildCustomer[]|ObjectCollection findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
- * @method     ChildCustomer[]|ObjectCollection findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
- * @method     ChildCustomer[]|ObjectCollection findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
- * @method     ChildCustomer[]|ObjectCollection findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
- * @method     ChildCustomer[]|ObjectCollection findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
- * @method     ChildCustomer[]|ObjectCollection findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
- * @method     ChildCustomer[]|ObjectCollection findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
- * @method     ChildCustomer[]|ObjectCollection findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
- * @method     ChildCustomer[]|ObjectCollection findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
- * @method     ChildCustomer[]|ObjectCollection findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCustomer> findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
- * @method     ChildCustomer[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCustomer> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCustomer[]|Collection find(?ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCustomer> find(?ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
+ * @method     ChildCustomer[]|Collection findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findById(int $customer_id) Return ChildCustomer objects filtered by the customer_id column
+ * @method     ChildCustomer[]|Collection findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findBySiteId(int $site_id) Return ChildCustomer objects filtered by the site_id column
+ * @method     ChildCustomer[]|Collection findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByUserId(int $user_id) Return ChildCustomer objects filtered by the user_id column
+ * @method     ChildCustomer[]|Collection findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByType(string $customer_type) Return ChildCustomer objects filtered by the customer_type column
+ * @method     ChildCustomer[]|Collection findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByFirstName(string $customer_first_name) Return ChildCustomer objects filtered by the customer_first_name column
+ * @method     ChildCustomer[]|Collection findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByLastName(string $customer_last_name) Return ChildCustomer objects filtered by the customer_last_name column
+ * @method     ChildCustomer[]|Collection findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByEmail(string $customer_email) Return ChildCustomer objects filtered by the customer_email column
+ * @method     ChildCustomer[]|Collection findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByPhone(string $customer_phone) Return ChildCustomer objects filtered by the customer_phone column
+ * @method     ChildCustomer[]|Collection findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByCountryId(int $country_id) Return ChildCustomer objects filtered by the country_id column
+ * @method     ChildCustomer[]|Collection findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByPrivatization(string $customer_privatization) Return ChildCustomer objects filtered by the customer_privatization column
+ * @method     ChildCustomer[]|Collection findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByInsert(string $customer_insert) Return ChildCustomer objects filtered by the customer_insert column
+ * @method     ChildCustomer[]|Collection findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByUpdate(string $customer_update) Return ChildCustomer objects filtered by the customer_update column
+ * @method     ChildCustomer[]|Collection findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByCreatedAt(string $customer_created) Return ChildCustomer objects filtered by the customer_created column
+ * @method     ChildCustomer[]|Collection findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
+ * @psalm-method Collection&\Traversable<ChildCustomer> findByUpdatedAt(string $customer_updated) Return ChildCustomer objects filtered by the customer_updated column
+ * @method     ChildCustomer[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCustomer> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CustomerQuery extends ModelCriteria
@@ -134,9 +134,9 @@ abstract class CustomerQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CustomerQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Customer', $modelAlias = null)
     {
@@ -146,12 +146,12 @@ abstract class CustomerQuery extends ModelCriteria
     /**
      * Returns a new ChildCustomerQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCustomerQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCustomerQuery) {
             return $criteria;
@@ -181,7 +181,7 @@ abstract class CustomerQuery extends ModelCriteria
      *
      * @return ChildCustomer|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -213,8 +213,8 @@ abstract class CustomerQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -246,8 +246,8 @@ abstract class CustomerQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCustomer|array|mixed the result, formatted by the current formatter
      */
@@ -267,12 +267,12 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -289,27 +289,31 @@ abstract class CustomerQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -322,15 +326,15 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE customer_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -350,7 +354,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $id, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -363,15 +369,15 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -391,7 +397,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -404,15 +412,15 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -432,7 +440,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -442,14 +452,15 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE customer_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE customer_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE customer_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -457,7 +468,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_TYPE, $type, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -467,14 +480,15 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $query->filterByFirstName('fooValue');   // WHERE customer_first_name = 'fooValue'
      * $query->filterByFirstName('%fooValue%', Criteria::LIKE); // WHERE customer_first_name LIKE '%fooValue%'
+     * $query->filterByFirstName(['foo', 'bar']); // WHERE customer_first_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $firstName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $firstName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFirstName($firstName = null, $comparison = null)
+    public function filterByFirstName($firstName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($firstName)) {
@@ -482,7 +496,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_FIRST_NAME, $firstName, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_FIRST_NAME, $firstName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -492,14 +508,15 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $query->filterByLastName('fooValue');   // WHERE customer_last_name = 'fooValue'
      * $query->filterByLastName('%fooValue%', Criteria::LIKE); // WHERE customer_last_name LIKE '%fooValue%'
+     * $query->filterByLastName(['foo', 'bar']); // WHERE customer_last_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $lastName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $lastName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLastName($lastName = null, $comparison = null)
+    public function filterByLastName($lastName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($lastName)) {
@@ -507,7 +524,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_LAST_NAME, $lastName, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_LAST_NAME, $lastName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -517,14 +536,15 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE customer_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE customer_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE customer_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -532,7 +552,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_EMAIL, $email, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -542,14 +564,15 @@ abstract class CustomerQuery extends ModelCriteria
      * <code>
      * $query->filterByPhone('fooValue');   // WHERE customer_phone = 'fooValue'
      * $query->filterByPhone('%fooValue%', Criteria::LIKE); // WHERE customer_phone LIKE '%fooValue%'
+     * $query->filterByPhone(['foo', 'bar']); // WHERE customer_phone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $phone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $phone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhone($phone = null, $comparison = null)
+    public function filterByPhone($phone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($phone)) {
@@ -557,7 +580,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_PHONE, $phone, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_PHONE, $phone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -570,15 +595,15 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByCountryId(array('min' => 12)); // WHERE country_id > 12
      * </code>
      *
-     * @param     mixed $countryId The value to use as filter.
+     * @param mixed $countryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountryId($countryId = null, $comparison = null)
+    public function filterByCountryId($countryId = null, ?string $comparison = null)
     {
         if (is_array($countryId)) {
             $useMinMax = false;
@@ -598,7 +623,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_COUNTRY_ID, $countryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -611,17 +638,17 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByPrivatization(array('max' => 'yesterday')); // WHERE customer_privatization > '2011-03-13'
      * </code>
      *
-     * @param     mixed $privatization The value to use as filter.
+     * @param mixed $privatization The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPrivatization($privatization = null, $comparison = null)
+    public function filterByPrivatization($privatization = null, ?string $comparison = null)
     {
         if (is_array($privatization)) {
             $useMinMax = false;
@@ -641,7 +668,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, $privatization, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_PRIVATIZATION, $privatization, $comparison);
+
+        return $this;
     }
 
     /**
@@ -654,17 +683,17 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE customer_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -684,7 +713,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_INSERT, $insert, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -697,17 +728,17 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE customer_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -727,7 +758,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -740,17 +773,17 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE customer_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -770,7 +803,9 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -783,17 +818,17 @@ abstract class CustomerQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE customer_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -813,15 +848,17 @@ abstract class CustomerQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCustomer $customer Object to remove from the list of results
+     * @param ChildCustomer $customer Object to remove from the list of results
      *
-     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($customer = null)
     {
@@ -838,7 +875,7 @@ abstract class CustomerQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
@@ -863,12 +900,12 @@ abstract class CustomerQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
@@ -898,65 +935,77 @@ abstract class CustomerQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
+        $this->addDescendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
+        $this->addAscendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
+        $this->addDescendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CustomerTableMap::COL_CUSTOMER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCustomerQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
+        $this->addAscendingOrderByColumn(CustomerTableMap::COL_CUSTOMER_CREATED);
+
+        return $this;
     }
 
-} // CustomerQuery
+}

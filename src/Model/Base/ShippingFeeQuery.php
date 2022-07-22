@@ -10,7 +10,7 @@ use Model\Map\ShippingFeeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -59,8 +59,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFeeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildShippingFeeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildShippingFee|null findOne(ConnectionInterface $con = null) Return the first ChildShippingFee matching the query
- * @method     ChildShippingFee findOneOrCreate(ConnectionInterface $con = null) Return the first ChildShippingFee matching the query, or a new ChildShippingFee object populated from the query conditions when no match is found
+ * @method     ChildShippingFee|null findOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query
+ * @method     ChildShippingFee findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query, or a new ChildShippingFee object populated from the query conditions when no match is found
  *
  * @method     ChildShippingFee|null findOneById(int $shipping_id) Return the first ChildShippingFee filtered by the shipping_id column
  * @method     ChildShippingFee|null findOneBySiteId(int $site_id) Return the first ChildShippingFee filtered by the site_id column
@@ -78,8 +78,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column
  * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column *
 
- * @method     ChildShippingFee requirePk($key, ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildShippingFee requireOne(ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingFee requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildShippingFee requireOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildShippingFee requireOneById(int $shipping_id) Return the first ChildShippingFee filtered by the shipping_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneBySiteId(int $site_id) Return the first ChildShippingFee filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -97,40 +97,40 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee requireOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildShippingFee[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> find(ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
- * @method     ChildShippingFee[]|ObjectCollection findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @method     ChildShippingFee[]|ObjectCollection findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @method     ChildShippingFee[]|ObjectCollection findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @method     ChildShippingFee[]|ObjectCollection findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @method     ChildShippingFee[]|ObjectCollection findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @method     ChildShippingFee[]|ObjectCollection findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @method     ChildShippingFee[]|ObjectCollection findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @method     ChildShippingFee[]|ObjectCollection findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @method     ChildShippingFee[]|ObjectCollection findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @method     ChildShippingFee[]|ObjectCollection findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @method     ChildShippingFee[]|ObjectCollection findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @method     ChildShippingFee[]|ObjectCollection findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @method     ChildShippingFee[]|ObjectCollection findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @method     ChildShippingFee[]|ObjectCollection findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @method     ChildShippingFee[]|ObjectCollection findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildShippingFee> findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildShippingFee[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildShippingFee> find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
+ * @method     ChildShippingFee[]|Collection findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
+ * @method     ChildShippingFee[]|Collection findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
+ * @method     ChildShippingFee[]|Collection findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
+ * @method     ChildShippingFee[]|Collection findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
+ * @method     ChildShippingFee[]|Collection findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
+ * @method     ChildShippingFee[]|Collection findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
+ * @method     ChildShippingFee[]|Collection findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
+ * @method     ChildShippingFee[]|Collection findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
+ * @method     ChildShippingFee[]|Collection findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
+ * @method     ChildShippingFee[]|Collection findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
+ * @method     ChildShippingFee[]|Collection findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
+ * @method     ChildShippingFee[]|Collection findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
+ * @method     ChildShippingFee[]|Collection findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
+ * @method     ChildShippingFee[]|Collection findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
+ * @method     ChildShippingFee[]|Collection findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ShippingFeeQuery extends ModelCriteria
@@ -140,9 +140,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\ShippingFeeQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\ShippingFee', $modelAlias = null)
     {
@@ -152,12 +152,12 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Returns a new ChildShippingFeeQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildShippingFeeQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildShippingFeeQuery) {
             return $criteria;
@@ -187,7 +187,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      *
      * @return ChildShippingFee|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -219,8 +219,8 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -252,8 +252,8 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildShippingFee|array|mixed the result, formatted by the current formatter
      */
@@ -273,12 +273,12 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -295,27 +295,31 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -328,15 +332,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE shipping_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -356,7 +360,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $id, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -369,15 +375,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -397,7 +403,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -410,15 +418,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -438,7 +446,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -448,14 +458,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * <code>
      * $query->filterByMode('fooValue');   // WHERE shipping_mode = 'fooValue'
      * $query->filterByMode('%fooValue%', Criteria::LIKE); // WHERE shipping_mode LIKE '%fooValue%'
+     * $query->filterByMode(['foo', 'bar']); // WHERE shipping_mode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $mode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $mode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMode($mode = null, $comparison = null)
+    public function filterByMode($mode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($mode)) {
@@ -463,7 +474,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MODE, $mode, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MODE, $mode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -473,14 +486,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE shipping_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE shipping_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE shipping_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -488,7 +502,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_TYPE, $type, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -498,14 +514,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * <code>
      * $query->filterByZone('fooValue');   // WHERE shipping_zone = 'fooValue'
      * $query->filterByZone('%fooValue%', Criteria::LIKE); // WHERE shipping_zone LIKE '%fooValue%'
+     * $query->filterByZone(['foo', 'bar']); // WHERE shipping_zone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $zone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $zone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByZone($zone = null, $comparison = null)
+    public function filterByZone($zone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($zone)) {
@@ -513,7 +530,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ZONE, $zone, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_ZONE, $zone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -526,15 +545,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByMinWeight(array('min' => 12)); // WHERE shipping_min_weight > 12
      * </code>
      *
-     * @param     mixed $minWeight The value to use as filter.
+     * @param mixed $minWeight The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMinWeight($minWeight = null, $comparison = null)
+    public function filterByMinWeight($minWeight = null, ?string $comparison = null)
     {
         if (is_array($minWeight)) {
             $useMinMax = false;
@@ -554,7 +573,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_WEIGHT, $minWeight, $comparison);
+
+        return $this;
     }
 
     /**
@@ -567,15 +588,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByMaxWeight(array('min' => 12)); // WHERE shipping_max_weight > 12
      * </code>
      *
-     * @param     mixed $maxWeight The value to use as filter.
+     * @param mixed $maxWeight The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMaxWeight($maxWeight = null, $comparison = null)
+    public function filterByMaxWeight($maxWeight = null, ?string $comparison = null)
     {
         if (is_array($maxWeight)) {
             $useMinMax = false;
@@ -595,7 +616,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_WEIGHT, $maxWeight, $comparison);
+
+        return $this;
     }
 
     /**
@@ -608,15 +631,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByMaxArticles(array('min' => 12)); // WHERE shipping_max_articles > 12
      * </code>
      *
-     * @param     mixed $maxArticles The value to use as filter.
+     * @param mixed $maxArticles The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMaxArticles($maxArticles = null, $comparison = null)
+    public function filterByMaxArticles($maxArticles = null, ?string $comparison = null)
     {
         if (is_array($maxArticles)) {
             $useMinMax = false;
@@ -636,7 +659,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_ARTICLES, $maxArticles, $comparison);
+
+        return $this;
     }
 
     /**
@@ -649,15 +674,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByMinAmount(array('min' => 12)); // WHERE shipping_min_amount > 12
      * </code>
      *
-     * @param     mixed $minAmount The value to use as filter.
+     * @param mixed $minAmount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMinAmount($minAmount = null, $comparison = null)
+    public function filterByMinAmount($minAmount = null, ?string $comparison = null)
     {
         if (is_array($minAmount)) {
             $useMinMax = false;
@@ -677,7 +702,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MIN_AMOUNT, $minAmount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -690,15 +717,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByMaxAmount(array('min' => 12)); // WHERE shipping_max_amount > 12
      * </code>
      *
-     * @param     mixed $maxAmount The value to use as filter.
+     * @param mixed $maxAmount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMaxAmount($maxAmount = null, $comparison = null)
+    public function filterByMaxAmount($maxAmount = null, ?string $comparison = null)
     {
         if (is_array($maxAmount)) {
             $useMinMax = false;
@@ -718,7 +745,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_MAX_AMOUNT, $maxAmount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -731,15 +760,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByFee(array('min' => 12)); // WHERE shipping_fee > 12
      * </code>
      *
-     * @param     mixed $fee The value to use as filter.
+     * @param mixed $fee The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFee($fee = null, $comparison = null)
+    public function filterByFee($fee = null, ?string $comparison = null)
     {
         if (is_array($fee)) {
             $useMinMax = false;
@@ -759,7 +788,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_FEE, $fee, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_FEE, $fee, $comparison);
+
+        return $this;
     }
 
     /**
@@ -769,14 +800,15 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * <code>
      * $query->filterByInfo('fooValue');   // WHERE shipping_info = 'fooValue'
      * $query->filterByInfo('%fooValue%', Criteria::LIKE); // WHERE shipping_info LIKE '%fooValue%'
+     * $query->filterByInfo(['foo', 'bar']); // WHERE shipping_info IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $info The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $info The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInfo($info = null, $comparison = null)
+    public function filterByInfo($info = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($info)) {
@@ -784,7 +816,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_INFO, $info, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_INFO, $info, $comparison);
+
+        return $this;
     }
 
     /**
@@ -797,17 +831,17 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE shipping_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -827,7 +861,9 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -840,17 +876,17 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE shipping_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -870,15 +906,17 @@ abstract class ShippingFeeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildShippingFee $shippingFee Object to remove from the list of results
+     * @param ChildShippingFee $shippingFee Object to remove from the list of results
      *
-     * @return $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($shippingFee = null)
     {
@@ -895,7 +933,7 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
@@ -920,12 +958,12 @@ abstract class ShippingFeeQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ShippingFeeTableMap::DATABASE_NAME);
@@ -955,65 +993,77 @@ abstract class ShippingFeeQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+        $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+        $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+        $this->addDescendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ShippingFeeTableMap::COL_SHIPPING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildShippingFeeQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+        $this->addAscendingOrderByColumn(ShippingFeeTableMap::COL_SHIPPING_CREATED);
+
+        return $this;
     }
 
-} // ShippingFeeQuery
+}

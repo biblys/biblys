@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -72,8 +73,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\SiteQuery|\Model\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPayment|null findOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query
- * @method     ChildPayment findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPayment matching the query, or a new ChildPayment object populated from the query conditions when no match is found
+ * @method     ChildPayment|null findOne(?ConnectionInterface $con = null) Return the first ChildPayment matching the query
+ * @method     ChildPayment findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPayment matching the query, or a new ChildPayment object populated from the query conditions when no match is found
  *
  * @method     ChildPayment|null findOneById(int $payment_id) Return the first ChildPayment filtered by the payment_id column
  * @method     ChildPayment|null findOneBySiteId(int $site_id) Return the first ChildPayment filtered by the site_id column
@@ -86,8 +87,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment|null findOneByExecuted(string $payment_executed) Return the first ChildPayment filtered by the payment_executed column
  * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column *
 
- * @method     ChildPayment requirePk($key, ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPayment requireOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requirePk($key, ?ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOne(?ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPayment requireOneById(int $payment_id) Return the first ChildPayment filtered by the payment_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneBySiteId(int $site_id) Return the first ChildPayment filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -100,30 +101,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByExecuted(string $payment_executed) Return the first ChildPayment filtered by the payment_executed column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPayment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
- * @method     ChildPayment[]|ObjectCollection findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
- * @method     ChildPayment[]|ObjectCollection findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
- * @method     ChildPayment[]|ObjectCollection findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
- * @method     ChildPayment[]|ObjectCollection findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
- * @method     ChildPayment[]|ObjectCollection findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
- * @method     ChildPayment[]|ObjectCollection findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
- * @method     ChildPayment[]|ObjectCollection findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
- * @method     ChildPayment[]|ObjectCollection findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
- * @method     ChildPayment[]|ObjectCollection findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
- * @method     ChildPayment[]|ObjectCollection findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildPayment> findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
- * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPayment[]|Collection find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPayment> find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
+ * @method     ChildPayment[]|Collection findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
+ * @method     ChildPayment[]|Collection findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
+ * @method     ChildPayment[]|Collection findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
+ * @method     ChildPayment[]|Collection findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
+ * @method     ChildPayment[]|Collection findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
+ * @method     ChildPayment[]|Collection findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
+ * @method     ChildPayment[]|Collection findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
+ * @method     ChildPayment[]|Collection findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
+ * @method     ChildPayment[]|Collection findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
+ * @method     ChildPayment[]|Collection findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PaymentQuery extends ModelCriteria
@@ -133,9 +134,9 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PaymentQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Payment', $modelAlias = null)
     {
@@ -145,12 +146,12 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Returns a new ChildPaymentQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPaymentQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPaymentQuery) {
             return $criteria;
@@ -180,7 +181,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return ChildPayment|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -212,8 +213,8 @@ abstract class PaymentQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -245,8 +246,8 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPayment|array|mixed the result, formatted by the current formatter
      */
@@ -266,12 +267,12 @@ abstract class PaymentQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -288,27 +289,31 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -321,15 +326,15 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE payment_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -349,7 +354,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $id, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -364,15 +371,15 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @see       filterBySite()
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -392,7 +399,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -407,15 +416,15 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @see       filterByOrder()
      *
-     * @param     mixed $orderId The value to use as filter.
+     * @param mixed $orderId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrderId($orderId = null, $comparison = null)
+    public function filterByOrderId($orderId = null, ?string $comparison = null)
     {
         if (is_array($orderId)) {
             $useMinMax = false;
@@ -435,7 +444,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_ORDER_ID, $orderId, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_ORDER_ID, $orderId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -448,15 +459,15 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE payment_amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
+     * @param mixed $amount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAmount($amount = null, $comparison = null)
+    public function filterByAmount($amount = null, ?string $comparison = null)
     {
         if (is_array($amount)) {
             $useMinMax = false;
@@ -476,7 +487,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_AMOUNT, $amount, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_AMOUNT, $amount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -486,14 +499,15 @@ abstract class PaymentQuery extends ModelCriteria
      * <code>
      * $query->filterByMode('fooValue');   // WHERE payment_mode = 'fooValue'
      * $query->filterByMode('%fooValue%', Criteria::LIKE); // WHERE payment_mode LIKE '%fooValue%'
+     * $query->filterByMode(['foo', 'bar']); // WHERE payment_mode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $mode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $mode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMode($mode = null, $comparison = null)
+    public function filterByMode($mode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($mode)) {
@@ -501,7 +515,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_MODE, $mode, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_MODE, $mode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -511,14 +527,15 @@ abstract class PaymentQuery extends ModelCriteria
      * <code>
      * $query->filterByProviderId('fooValue');   // WHERE payment_provider_id = 'fooValue'
      * $query->filterByProviderId('%fooValue%', Criteria::LIKE); // WHERE payment_provider_id LIKE '%fooValue%'
+     * $query->filterByProviderId(['foo', 'bar']); // WHERE payment_provider_id IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $providerId The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $providerId The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByProviderId($providerId = null, $comparison = null)
+    public function filterByProviderId($providerId = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($providerId)) {
@@ -526,7 +543,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_PROVIDER_ID, $providerId, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_PROVIDER_ID, $providerId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -536,14 +555,15 @@ abstract class PaymentQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE payment_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE payment_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE payment_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -551,7 +571,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_URL, $url, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -564,17 +586,17 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE payment_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -594,7 +616,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -607,17 +631,17 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterByExecuted(array('max' => 'yesterday')); // WHERE payment_executed > '2011-03-13'
      * </code>
      *
-     * @param     mixed $executed The value to use as filter.
+     * @param mixed $executed The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByExecuted($executed = null, $comparison = null)
+    public function filterByExecuted($executed = null, ?string $comparison = null)
     {
         if (is_array($executed)) {
             $useMinMax = false;
@@ -637,7 +661,9 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_EXECUTED, $executed, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_EXECUTED, $executed, $comparison);
+
+        return $this;
     }
 
     /**
@@ -650,17 +676,17 @@ abstract class PaymentQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE payment_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -680,20 +706,22 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site, $comparison = null)
+    public function filterBySite($site, ?string $comparison = null)
     {
         if ($site instanceof \Model\Site) {
             return $this
@@ -703,8 +731,10 @@ abstract class PaymentQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(PaymentTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
         }
@@ -713,12 +743,12 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Site relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -747,9 +777,9 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
@@ -819,13 +849,13 @@ abstract class PaymentQuery extends ModelCriteria
      * Filter the query by a related \Model\Order object
      *
      * @param \Model\Order|ObjectCollection $order The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order, $comparison = null)
+    public function filterByOrder($order, ?string $comparison = null)
     {
         if ($order instanceof \Model\Order) {
             return $this
@@ -835,8 +865,10 @@ abstract class PaymentQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(PaymentTableMap::COL_ORDER_ID, $order->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
         }
@@ -845,12 +877,12 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Order relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinOrder($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinOrder(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Order');
@@ -879,9 +911,9 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\OrderQuery A secondary query class using the current class as primary query
      */
@@ -950,9 +982,9 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPayment $payment Object to remove from the list of results
+     * @param ChildPayment $payment Object to remove from the list of results
      *
-     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($payment = null)
     {
@@ -969,7 +1001,7 @@ abstract class PaymentQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentTableMap::DATABASE_NAME);
@@ -994,12 +1026,12 @@ abstract class PaymentQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentTableMap::DATABASE_NAME);
@@ -1029,65 +1061,77 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
+        $this->addDescendingOrderByColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
+        $this->addAscendingOrderByColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PaymentTableMap::COL_PAYMENT_CREATED);
+        $this->addDescendingOrderByColumn(PaymentTableMap::COL_PAYMENT_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPaymentQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PaymentTableMap::COL_PAYMENT_CREATED);
+        $this->addAscendingOrderByColumn(PaymentTableMap::COL_PAYMENT_CREATED);
+
+        return $this;
     }
 
-} // PaymentQuery
+}

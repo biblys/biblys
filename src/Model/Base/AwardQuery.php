@@ -10,7 +10,7 @@ use Model\Map\AwardTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAwardQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildAwardQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAward|null findOne(ConnectionInterface $con = null) Return the first ChildAward matching the query
- * @method     ChildAward findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAward matching the query, or a new ChildAward object populated from the query conditions when no match is found
+ * @method     ChildAward|null findOne(?ConnectionInterface $con = null) Return the first ChildAward matching the query
+ * @method     ChildAward findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAward matching the query, or a new ChildAward object populated from the query conditions when no match is found
  *
  * @method     ChildAward|null findOneById(int $award_id) Return the first ChildAward filtered by the award_id column
  * @method     ChildAward|null findOneByArticleId(int $article_id) Return the first ChildAward filtered by the article_id column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAward|null findOneByCreatedAt(string $award_created) Return the first ChildAward filtered by the award_created column
  * @method     ChildAward|null findOneByUpdatedAt(string $award_updated) Return the first ChildAward filtered by the award_updated column *
 
- * @method     ChildAward requirePk($key, ConnectionInterface $con = null) Return the ChildAward by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAward requireOne(ConnectionInterface $con = null) Return the first ChildAward matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAward requirePk($key, ?ConnectionInterface $con = null) Return the ChildAward by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAward requireOne(?ConnectionInterface $con = null) Return the first ChildAward matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAward requireOneById(int $award_id) Return the first ChildAward filtered by the award_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAward requireOneByArticleId(int $article_id) Return the first ChildAward filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAward requireOneByCreatedAt(string $award_created) Return the first ChildAward filtered by the award_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAward requireOneByUpdatedAt(string $award_updated) Return the first ChildAward filtered by the award_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAward[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildAward> find(ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
- * @method     ChildAward[]|ObjectCollection findById(int $award_id) Return ChildAward objects filtered by the award_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findById(int $award_id) Return ChildAward objects filtered by the award_id column
- * @method     ChildAward[]|ObjectCollection findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
- * @method     ChildAward[]|ObjectCollection findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
- * @method     ChildAward[]|ObjectCollection findByName(string $award_name) Return ChildAward objects filtered by the award_name column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByName(string $award_name) Return ChildAward objects filtered by the award_name column
- * @method     ChildAward[]|ObjectCollection findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
- * @method     ChildAward[]|ObjectCollection findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
- * @method     ChildAward[]|ObjectCollection findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
- * @method     ChildAward[]|ObjectCollection findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
- * @method     ChildAward[]|ObjectCollection findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
- * @method     ChildAward[]|ObjectCollection findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildAward> findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
- * @method     ChildAward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAward> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAward[]|Collection find(?ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildAward> find(?ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
+ * @method     ChildAward[]|Collection findById(int $award_id) Return ChildAward objects filtered by the award_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findById(int $award_id) Return ChildAward objects filtered by the award_id column
+ * @method     ChildAward[]|Collection findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
+ * @method     ChildAward[]|Collection findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
+ * @method     ChildAward[]|Collection findByName(string $award_name) Return ChildAward objects filtered by the award_name column
+ * @psalm-method Collection&\Traversable<ChildAward> findByName(string $award_name) Return ChildAward objects filtered by the award_name column
+ * @method     ChildAward[]|Collection findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
+ * @psalm-method Collection&\Traversable<ChildAward> findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
+ * @method     ChildAward[]|Collection findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
+ * @psalm-method Collection&\Traversable<ChildAward> findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
+ * @method     ChildAward[]|Collection findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
+ * @psalm-method Collection&\Traversable<ChildAward> findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
+ * @method     ChildAward[]|Collection findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
+ * @psalm-method Collection&\Traversable<ChildAward> findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
+ * @method     ChildAward[]|Collection findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
+ * @psalm-method Collection&\Traversable<ChildAward> findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
+ * @method     ChildAward[]|Collection findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
+ * @psalm-method Collection&\Traversable<ChildAward> findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
+ * @method     ChildAward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAward> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class AwardQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class AwardQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\AwardQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Award', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class AwardQuery extends ModelCriteria
     /**
      * Returns a new ChildAwardQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildAwardQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildAwardQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class AwardQuery extends ModelCriteria
      *
      * @return ChildAward|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class AwardQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class AwardQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildAward|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class AwardQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class AwardQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE award_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $id, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -339,15 +345,15 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -367,7 +373,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -380,15 +388,15 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterByBookId(array('min' => 12)); // WHERE book_id > 12
      * </code>
      *
-     * @param     mixed $bookId The value to use as filter.
+     * @param mixed $bookId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookId($bookId = null, $comparison = null)
+    public function filterByBookId($bookId = null, ?string $comparison = null)
     {
         if (is_array($bookId)) {
             $useMinMax = false;
@@ -408,7 +416,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_BOOK_ID, $bookId, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_BOOK_ID, $bookId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -418,14 +428,15 @@ abstract class AwardQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE award_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE award_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE award_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -433,7 +444,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_NAME, $name, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -443,14 +456,15 @@ abstract class AwardQuery extends ModelCriteria
      * <code>
      * $query->filterByYear('fooValue');   // WHERE award_year = 'fooValue'
      * $query->filterByYear('%fooValue%', Criteria::LIKE); // WHERE award_year LIKE '%fooValue%'
+     * $query->filterByYear(['foo', 'bar']); // WHERE award_year IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $year The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $year The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByYear($year = null, $comparison = null)
+    public function filterByYear($year = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($year)) {
@@ -458,7 +472,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_YEAR, $year, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_YEAR, $year, $comparison);
+
+        return $this;
     }
 
     /**
@@ -468,14 +484,15 @@ abstract class AwardQuery extends ModelCriteria
      * <code>
      * $query->filterByCategory('fooValue');   // WHERE award_category = 'fooValue'
      * $query->filterByCategory('%fooValue%', Criteria::LIKE); // WHERE award_category LIKE '%fooValue%'
+     * $query->filterByCategory(['foo', 'bar']); // WHERE award_category IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $category The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $category The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCategory($category = null, $comparison = null)
+    public function filterByCategory($category = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($category)) {
@@ -483,7 +500,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_CATEGORY, $category, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_CATEGORY, $category, $comparison);
+
+        return $this;
     }
 
     /**
@@ -493,14 +512,15 @@ abstract class AwardQuery extends ModelCriteria
      * <code>
      * $query->filterByNote('fooValue');   // WHERE award_note = 'fooValue'
      * $query->filterByNote('%fooValue%', Criteria::LIKE); // WHERE award_note LIKE '%fooValue%'
+     * $query->filterByNote(['foo', 'bar']); // WHERE award_note IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $note The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $note The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNote($note = null, $comparison = null)
+    public function filterByNote($note = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($note)) {
@@ -508,7 +528,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_NOTE, $note, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_NOTE, $note, $comparison);
+
+        return $this;
     }
 
     /**
@@ -521,17 +543,17 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE award_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -551,7 +573,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_DATE, $date, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -564,17 +588,17 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE award_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -594,7 +618,9 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -607,17 +633,17 @@ abstract class AwardQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE award_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -637,15 +663,17 @@ abstract class AwardQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildAward $award Object to remove from the list of results
+     * @param ChildAward $award Object to remove from the list of results
      *
-     * @return $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($award = null)
     {
@@ -662,7 +690,7 @@ abstract class AwardQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AwardTableMap::DATABASE_NAME);
@@ -687,12 +715,12 @@ abstract class AwardQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AwardTableMap::DATABASE_NAME);
@@ -722,65 +750,77 @@ abstract class AwardQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AwardTableMap::COL_AWARD_UPDATED);
+        $this->addDescendingOrderByColumn(AwardTableMap::COL_AWARD_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AwardTableMap::COL_AWARD_UPDATED);
+        $this->addAscendingOrderByColumn(AwardTableMap::COL_AWARD_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AwardTableMap::COL_AWARD_CREATED);
+        $this->addDescendingOrderByColumn(AwardTableMap::COL_AWARD_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(AwardTableMap::COL_AWARD_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AwardTableMap::COL_AWARD_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildAwardQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AwardTableMap::COL_AWARD_CREATED);
+        $this->addAscendingOrderByColumn(AwardTableMap::COL_AWARD_CREATED);
+
+        return $this;
     }
 
-} // AwardQuery
+}

@@ -10,7 +10,7 @@ use Model\Map\ImageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -53,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImageQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildImageQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildImage|null findOne(ConnectionInterface $con = null) Return the first ChildImage matching the query
- * @method     ChildImage findOneOrCreate(ConnectionInterface $con = null) Return the first ChildImage matching the query, or a new ChildImage object populated from the query conditions when no match is found
+ * @method     ChildImage|null findOne(?ConnectionInterface $con = null) Return the first ChildImage matching the query
+ * @method     ChildImage findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildImage matching the query, or a new ChildImage object populated from the query conditions when no match is found
  *
  * @method     ChildImage|null findOneById(int $image_id) Return the first ChildImage filtered by the image_id column
  * @method     ChildImage|null findOneBySiteId(int $site_id) Return the first ChildImage filtered by the site_id column
@@ -69,8 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage|null findOneByUploaded(string $image_uploaded) Return the first ChildImage filtered by the image_uploaded column
  * @method     ChildImage|null findOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column *
 
- * @method     ChildImage requirePk($key, ConnectionInterface $con = null) Return the ChildImage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildImage requireOne(ConnectionInterface $con = null) Return the first ChildImage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildImage requirePk($key, ?ConnectionInterface $con = null) Return the ChildImage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildImage requireOne(?ConnectionInterface $con = null) Return the first ChildImage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildImage requireOneById(int $image_id) Return the first ChildImage filtered by the image_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOneBySiteId(int $site_id) Return the first ChildImage filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -85,34 +85,34 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage requireOneByUploaded(string $image_uploaded) Return the first ChildImage filtered by the image_uploaded column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildImage[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildImage> find(ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
- * @method     ChildImage[]|ObjectCollection findById(int $image_id) Return ChildImage objects filtered by the image_id column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findById(int $image_id) Return ChildImage objects filtered by the image_id column
- * @method     ChildImage[]|ObjectCollection findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
- * @method     ChildImage[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
- * @method     ChildImage[]|ObjectCollection findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
- * @method     ChildImage[]|ObjectCollection findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
- * @method     ChildImage[]|ObjectCollection findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
- * @method     ChildImage[]|ObjectCollection findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
- * @method     ChildImage[]|ObjectCollection findByType(string $image_type) Return ChildImage objects filtered by the image_type column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByType(string $image_type) Return ChildImage objects filtered by the image_type column
- * @method     ChildImage[]|ObjectCollection findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
- * @method     ChildImage[]|ObjectCollection findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
- * @method     ChildImage[]|ObjectCollection findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
- * @method     ChildImage[]|ObjectCollection findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildImage> findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
- * @method     ChildImage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildImage> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildImage[]|Collection find(?ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildImage> find(?ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
+ * @method     ChildImage[]|Collection findById(int $image_id) Return ChildImage objects filtered by the image_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findById(int $image_id) Return ChildImage objects filtered by the image_id column
+ * @method     ChildImage[]|Collection findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
+ * @method     ChildImage[]|Collection findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
+ * @method     ChildImage[]|Collection findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
+ * @method     ChildImage[]|Collection findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
+ * @method     ChildImage[]|Collection findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
+ * @psalm-method Collection&\Traversable<ChildImage> findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
+ * @method     ChildImage[]|Collection findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
+ * @psalm-method Collection&\Traversable<ChildImage> findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
+ * @method     ChildImage[]|Collection findByType(string $image_type) Return ChildImage objects filtered by the image_type column
+ * @psalm-method Collection&\Traversable<ChildImage> findByType(string $image_type) Return ChildImage objects filtered by the image_type column
+ * @method     ChildImage[]|Collection findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
+ * @psalm-method Collection&\Traversable<ChildImage> findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
+ * @method     ChildImage[]|Collection findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
+ * @psalm-method Collection&\Traversable<ChildImage> findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
+ * @method     ChildImage[]|Collection findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
+ * @psalm-method Collection&\Traversable<ChildImage> findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
+ * @method     ChildImage[]|Collection findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
+ * @psalm-method Collection&\Traversable<ChildImage> findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
+ * @method     ChildImage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildImage> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ImageQuery extends ModelCriteria
@@ -122,9 +122,9 @@ abstract class ImageQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\ImageQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Image', $modelAlias = null)
     {
@@ -134,12 +134,12 @@ abstract class ImageQuery extends ModelCriteria
     /**
      * Returns a new ChildImageQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildImageQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildImageQuery) {
             return $criteria;
@@ -169,7 +169,7 @@ abstract class ImageQuery extends ModelCriteria
      *
      * @return ChildImage|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -201,8 +201,8 @@ abstract class ImageQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -234,8 +234,8 @@ abstract class ImageQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildImage|array|mixed the result, formatted by the current formatter
      */
@@ -255,12 +255,12 @@ abstract class ImageQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -277,27 +277,31 @@ abstract class ImageQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -310,15 +314,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE image_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -338,7 +342,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $id, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -351,15 +357,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -379,7 +385,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -392,15 +400,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -420,7 +428,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -433,15 +443,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByEventId(array('min' => 12)); // WHERE event_id > 12
      * </code>
      *
-     * @param     mixed $eventId The value to use as filter.
+     * @param mixed $eventId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEventId($eventId = null, $comparison = null)
+    public function filterByEventId($eventId = null, ?string $comparison = null)
     {
         if (is_array($eventId)) {
             $useMinMax = false;
@@ -461,7 +471,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_EVENT_ID, $eventId, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_EVENT_ID, $eventId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -474,15 +486,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $libraryId The value to use as filter.
+     * @param mixed $libraryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLibraryId($libraryId = null, $comparison = null)
+    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
     {
         if (is_array($libraryId)) {
             $useMinMax = false;
@@ -502,7 +514,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -512,14 +526,15 @@ abstract class ImageQuery extends ModelCriteria
      * <code>
      * $query->filterByNature('fooValue');   // WHERE image_nature = 'fooValue'
      * $query->filterByNature('%fooValue%', Criteria::LIKE); // WHERE image_nature LIKE '%fooValue%'
+     * $query->filterByNature(['foo', 'bar']); // WHERE image_nature IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nature The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nature The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNature($nature = null, $comparison = null)
+    public function filterByNature($nature = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nature)) {
@@ -527,7 +542,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_NATURE, $nature, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_NATURE, $nature, $comparison);
+
+        return $this;
     }
 
     /**
@@ -537,14 +554,15 @@ abstract class ImageQuery extends ModelCriteria
      * <code>
      * $query->filterByLegend('fooValue');   // WHERE image_legend = 'fooValue'
      * $query->filterByLegend('%fooValue%', Criteria::LIKE); // WHERE image_legend LIKE '%fooValue%'
+     * $query->filterByLegend(['foo', 'bar']); // WHERE image_legend IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $legend The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $legend The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLegend($legend = null, $comparison = null)
+    public function filterByLegend($legend = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($legend)) {
@@ -552,7 +570,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_LEGEND, $legend, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_LEGEND, $legend, $comparison);
+
+        return $this;
     }
 
     /**
@@ -562,14 +582,15 @@ abstract class ImageQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE image_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE image_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE image_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -577,7 +598,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_TYPE, $type, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -590,15 +613,15 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterBySize(array('min' => 12)); // WHERE image_size > 12
      * </code>
      *
-     * @param     mixed $size The value to use as filter.
+     * @param mixed $size The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySize($size = null, $comparison = null)
+    public function filterBySize($size = null, ?string $comparison = null)
     {
         if (is_array($size)) {
             $useMinMax = false;
@@ -618,7 +641,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_SIZE, $size, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_SIZE, $size, $comparison);
+
+        return $this;
     }
 
     /**
@@ -631,17 +656,17 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByInserted(array('max' => 'yesterday')); // WHERE image_inserted > '2011-03-13'
      * </code>
      *
-     * @param     mixed $inserted The value to use as filter.
+     * @param mixed $inserted The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInserted($inserted = null, $comparison = null)
+    public function filterByInserted($inserted = null, ?string $comparison = null)
     {
         if (is_array($inserted)) {
             $useMinMax = false;
@@ -661,7 +686,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_INSERTED, $inserted, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_INSERTED, $inserted, $comparison);
+
+        return $this;
     }
 
     /**
@@ -674,17 +701,17 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByUploaded(array('max' => 'yesterday')); // WHERE image_uploaded > '2011-03-13'
      * </code>
      *
-     * @param     mixed $uploaded The value to use as filter.
+     * @param mixed $uploaded The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUploaded($uploaded = null, $comparison = null)
+    public function filterByUploaded($uploaded = null, ?string $comparison = null)
     {
         if (is_array($uploaded)) {
             $useMinMax = false;
@@ -704,7 +731,9 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPLOADED, $uploaded, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPLOADED, $uploaded, $comparison);
+
+        return $this;
     }
 
     /**
@@ -717,17 +746,17 @@ abstract class ImageQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE image_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -747,15 +776,17 @@ abstract class ImageQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildImage $image Object to remove from the list of results
+     * @param ChildImage $image Object to remove from the list of results
      *
-     * @return $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($image = null)
     {
@@ -772,7 +803,7 @@ abstract class ImageQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ImageTableMap::DATABASE_NAME);
@@ -797,12 +828,12 @@ abstract class ImageQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ImageTableMap::DATABASE_NAME);
@@ -832,65 +863,77 @@ abstract class ImageQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ImageTableMap::COL_IMAGE_UPDATED);
+        $this->addDescendingOrderByColumn(ImageTableMap::COL_IMAGE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ImageTableMap::COL_IMAGE_UPDATED);
+        $this->addAscendingOrderByColumn(ImageTableMap::COL_IMAGE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ImageTableMap::COL_IMAGE_INSERTED);
+        $this->addDescendingOrderByColumn(ImageTableMap::COL_IMAGE_INSERTED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(ImageTableMap::COL_IMAGE_INSERTED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ImageTableMap::COL_IMAGE_INSERTED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildImageQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ImageTableMap::COL_IMAGE_INSERTED);
+        $this->addAscendingOrderByColumn(ImageTableMap::COL_IMAGE_INSERTED);
+
+        return $this;
     }
 
-} // ImageQuery
+}

@@ -33,120 +33,124 @@ class LangTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.LangTableMap';
+    public const CLASS_NAME = 'Model.Map.LangTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'langs';
+    public const TABLE_NAME = 'langs';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Lang';
+    public const OM_CLASS = '\\Model\\Lang';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Lang';
+    public const CLASS_DEFAULT = 'Model.Lang';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    public const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    public const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the lang_id field
      */
-    const COL_LANG_ID = 'langs.lang_id';
+    public const COL_LANG_ID = 'langs.lang_id';
 
     /**
      * the column name for the lang_iso_639-1 field
      */
-    const COL_ISO639_1 = 'langs.lang_iso_639-1';
+    public const COL_ISO639_1 = 'langs.lang_iso_639-1';
 
     /**
      * the column name for the lang_iso_639-2 field
      */
-    const COL_ISO639_2 = 'langs.lang_iso_639-2';
+    public const COL_ISO639_2 = 'langs.lang_iso_639-2';
 
     /**
      * the column name for the lang_iso_639-3 field
      */
-    const COL_ISO639_3 = 'langs.lang_iso_639-3';
+    public const COL_ISO639_3 = 'langs.lang_iso_639-3';
 
     /**
      * the column name for the lang_name field
      */
-    const COL_LANG_NAME = 'langs.lang_name';
+    public const COL_LANG_NAME = 'langs.lang_name';
 
     /**
      * the column name for the lang_name_original field
      */
-    const COL_LANG_NAME_ORIGINAL = 'langs.lang_name_original';
+    public const COL_LANG_NAME_ORIGINAL = 'langs.lang_name_original';
 
     /**
      * the column name for the lang_created field
      */
-    const COL_LANG_CREATED = 'langs.lang_created';
+    public const COL_LANG_CREATED = 'langs.lang_created';
 
     /**
      * the column name for the lang_updated field
      */
-    const COL_LANG_UPDATED = 'langs.lang_updated';
+    public const COL_LANG_UPDATED = 'langs.lang_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Iso639-1', 'Iso639-2', 'Iso639-3', 'Name', 'NameOriginal', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'iso639-1', 'iso639-2', 'iso639-3', 'name', 'nameOriginal', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID, LangTableMap::COL_ISO639_1, LangTableMap::COL_ISO639_2, LangTableMap::COL_ISO639_3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('lang_id', 'lang_iso_639-1', 'lang_iso_639-2', 'lang_iso_639-3', 'lang_name', 'lang_name_original', 'lang_created', 'lang_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Iso639-1', 'Iso639-2', 'Iso639-3', 'Name', 'NameOriginal', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'iso639-1', 'iso639-2', 'iso639-3', 'name', 'nameOriginal', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [LangTableMap::COL_LANG_ID, LangTableMap::COL_ISO639_1, LangTableMap::COL_ISO639_2, LangTableMap::COL_ISO639_3, LangTableMap::COL_LANG_NAME, LangTableMap::COL_LANG_NAME_ORIGINAL, LangTableMap::COL_LANG_CREATED, LangTableMap::COL_LANG_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['lang_id', 'lang_iso_639-1', 'lang_iso_639-2', 'lang_iso_639-3', 'lang_name', 'lang_name_original', 'lang_created', 'lang_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Iso639-1' => 1, 'Iso639-2' => 2, 'Iso639-3' => 3, 'Name' => 4, 'NameOriginal' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'iso639-1' => 1, 'iso639-2' => 2, 'iso639-3' => 3, 'name' => 4, 'nameOriginal' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
-        self::TYPE_COLNAME       => array(LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_ISO639_1 => 1, LangTableMap::COL_ISO639_2 => 2, LangTableMap::COL_ISO639_3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, ),
-        self::TYPE_FIELDNAME     => array('lang_id' => 0, 'lang_iso_639-1' => 1, 'lang_iso_639-2' => 2, 'lang_iso_639-3' => 3, 'lang_name' => 4, 'lang_name_original' => 5, 'lang_created' => 6, 'lang_updated' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Iso639-1' => 1, 'Iso639-2' => 2, 'Iso639-3' => 3, 'Name' => 4, 'NameOriginal' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'iso639-1' => 1, 'iso639-2' => 2, 'iso639-3' => 3, 'name' => 4, 'nameOriginal' => 5, 'createdAt' => 6, 'updatedAt' => 7, ],
+        self::TYPE_COLNAME       => [LangTableMap::COL_LANG_ID => 0, LangTableMap::COL_ISO639_1 => 1, LangTableMap::COL_ISO639_2 => 2, LangTableMap::COL_ISO639_3 => 3, LangTableMap::COL_LANG_NAME => 4, LangTableMap::COL_LANG_NAME_ORIGINAL => 5, LangTableMap::COL_LANG_CREATED => 6, LangTableMap::COL_LANG_UPDATED => 7, ],
+        self::TYPE_FIELDNAME     => ['lang_id' => 0, 'lang_iso_639-1' => 1, 'lang_iso_639-2' => 2, 'lang_iso_639-3' => 3, 'lang_name' => 4, 'lang_name_original' => 5, 'lang_created' => 6, 'lang_updated' => 7, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'LANG_ID',
@@ -220,9 +224,9 @@ class LangTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('langs');
@@ -240,27 +244,29 @@ class LangTableMap extends TableMap
         $this->addColumn('lang_name_original', 'NameOriginal', 'VARCHAR', false, 35, null);
         $this->addColumn('lang_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('lang_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'lang_created', 'update_column' => 'lang_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -268,14 +274,14 @@ class LangTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -290,14 +296,14 @@ class LangTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -314,10 +320,10 @@ class LangTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? LangTableMap::CLASS_DEFAULT : LangTableMap::OM_CLASS;
     }
@@ -325,17 +331,17 @@ class LangTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Lang object, last column rank)
+     * @return array (Lang object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = LangTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = LangTableMap::getInstanceFromPool($key))) {
@@ -359,13 +365,13 @@ class LangTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -395,12 +401,13 @@ class LangTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(LangTableMap::COL_LANG_ID);
@@ -429,12 +436,13 @@ class LangTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(LangTableMap::COL_LANG_ID);
@@ -461,10 +469,10 @@ class LangTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(LangTableMap::DATABASE_NAME)->getTable(LangTableMap::TABLE_NAME);
     }
@@ -472,15 +480,15 @@ class LangTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Lang or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Lang object or primary key or array of primary keys
+     * @param mixed $values Criteria or Lang object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LangTableMap::DATABASE_NAME);
@@ -516,7 +524,7 @@ class LangTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return LangQuery::create()->doDeleteAll($con);
     }
@@ -524,13 +532,13 @@ class LangTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Lang or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Lang object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Lang object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LangTableMap::DATABASE_NAME);
@@ -557,4 +565,4 @@ class LangTableMap extends TableMap
         });
     }
 
-} // LangTableMap
+}

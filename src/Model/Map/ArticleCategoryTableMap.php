@@ -33,135 +33,139 @@ class ArticleCategoryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.ArticleCategoryTableMap';
+    public const CLASS_NAME = 'Model.Map.ArticleCategoryTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'rayons';
+    public const TABLE_NAME = 'rayons';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\ArticleCategory';
+    public const OM_CLASS = '\\Model\\ArticleCategory';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.ArticleCategory';
+    public const CLASS_DEFAULT = 'Model.ArticleCategory';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    public const NUM_COLUMNS = 11;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    public const NUM_HYDRATE_COLUMNS = 11;
 
     /**
      * the column name for the rayon_id field
      */
-    const COL_RAYON_ID = 'rayons.rayon_id';
+    public const COL_RAYON_ID = 'rayons.rayon_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'rayons.site_id';
+    public const COL_SITE_ID = 'rayons.site_id';
 
     /**
      * the column name for the rayon_name field
      */
-    const COL_RAYON_NAME = 'rayons.rayon_name';
+    public const COL_RAYON_NAME = 'rayons.rayon_name';
 
     /**
      * the column name for the rayon_url field
      */
-    const COL_RAYON_URL = 'rayons.rayon_url';
+    public const COL_RAYON_URL = 'rayons.rayon_url';
 
     /**
      * the column name for the rayon_desc field
      */
-    const COL_RAYON_DESC = 'rayons.rayon_desc';
+    public const COL_RAYON_DESC = 'rayons.rayon_desc';
 
     /**
      * the column name for the rayon_order field
      */
-    const COL_RAYON_ORDER = 'rayons.rayon_order';
+    public const COL_RAYON_ORDER = 'rayons.rayon_order';
 
     /**
      * the column name for the rayon_sort_by field
      */
-    const COL_RAYON_SORT_BY = 'rayons.rayon_sort_by';
+    public const COL_RAYON_SORT_BY = 'rayons.rayon_sort_by';
 
     /**
      * the column name for the rayon_sort_order field
      */
-    const COL_RAYON_SORT_ORDER = 'rayons.rayon_sort_order';
+    public const COL_RAYON_SORT_ORDER = 'rayons.rayon_sort_order';
 
     /**
      * the column name for the rayon_show_upcoming field
      */
-    const COL_RAYON_SHOW_UPCOMING = 'rayons.rayon_show_upcoming';
+    public const COL_RAYON_SHOW_UPCOMING = 'rayons.rayon_show_upcoming';
 
     /**
      * the column name for the rayon_created field
      */
-    const COL_RAYON_CREATED = 'rayons.rayon_created';
+    public const COL_RAYON_CREATED = 'rayons.rayon_created';
 
     /**
      * the column name for the rayon_updated field
      */
-    const COL_RAYON_UPDATED = 'rayons.rayon_updated';
+    public const COL_RAYON_UPDATED = 'rayons.rayon_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'SortBy', 'SortOrder', 'ShowUpcoming', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'name', 'url', 'desc', 'order', 'sortBy', 'sortOrder', 'showUpcoming', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(ArticleCategoryTableMap::COL_RAYON_ID, ArticleCategoryTableMap::COL_SITE_ID, ArticleCategoryTableMap::COL_RAYON_NAME, ArticleCategoryTableMap::COL_RAYON_URL, ArticleCategoryTableMap::COL_RAYON_DESC, ArticleCategoryTableMap::COL_RAYON_ORDER, ArticleCategoryTableMap::COL_RAYON_SORT_BY, ArticleCategoryTableMap::COL_RAYON_SORT_ORDER, ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING, ArticleCategoryTableMap::COL_RAYON_CREATED, ArticleCategoryTableMap::COL_RAYON_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('rayon_id', 'site_id', 'rayon_name', 'rayon_url', 'rayon_desc', 'rayon_order', 'rayon_sort_by', 'rayon_sort_order', 'rayon_show_upcoming', 'rayon_created', 'rayon_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Name', 'Url', 'Desc', 'Order', 'SortBy', 'SortOrder', 'ShowUpcoming', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'name', 'url', 'desc', 'order', 'sortBy', 'sortOrder', 'showUpcoming', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [ArticleCategoryTableMap::COL_RAYON_ID, ArticleCategoryTableMap::COL_SITE_ID, ArticleCategoryTableMap::COL_RAYON_NAME, ArticleCategoryTableMap::COL_RAYON_URL, ArticleCategoryTableMap::COL_RAYON_DESC, ArticleCategoryTableMap::COL_RAYON_ORDER, ArticleCategoryTableMap::COL_RAYON_SORT_BY, ArticleCategoryTableMap::COL_RAYON_SORT_ORDER, ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING, ArticleCategoryTableMap::COL_RAYON_CREATED, ArticleCategoryTableMap::COL_RAYON_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['rayon_id', 'site_id', 'rayon_name', 'rayon_url', 'rayon_desc', 'rayon_order', 'rayon_sort_by', 'rayon_sort_order', 'rayon_show_upcoming', 'rayon_created', 'rayon_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'SortBy' => 6, 'SortOrder' => 7, 'ShowUpcoming' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'sortBy' => 6, 'sortOrder' => 7, 'showUpcoming' => 8, 'createdAt' => 9, 'updatedAt' => 10, ),
-        self::TYPE_COLNAME       => array(ArticleCategoryTableMap::COL_RAYON_ID => 0, ArticleCategoryTableMap::COL_SITE_ID => 1, ArticleCategoryTableMap::COL_RAYON_NAME => 2, ArticleCategoryTableMap::COL_RAYON_URL => 3, ArticleCategoryTableMap::COL_RAYON_DESC => 4, ArticleCategoryTableMap::COL_RAYON_ORDER => 5, ArticleCategoryTableMap::COL_RAYON_SORT_BY => 6, ArticleCategoryTableMap::COL_RAYON_SORT_ORDER => 7, ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING => 8, ArticleCategoryTableMap::COL_RAYON_CREATED => 9, ArticleCategoryTableMap::COL_RAYON_UPDATED => 10, ),
-        self::TYPE_FIELDNAME     => array('rayon_id' => 0, 'site_id' => 1, 'rayon_name' => 2, 'rayon_url' => 3, 'rayon_desc' => 4, 'rayon_order' => 5, 'rayon_sort_by' => 6, 'rayon_sort_order' => 7, 'rayon_show_upcoming' => 8, 'rayon_created' => 9, 'rayon_updated' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Url' => 3, 'Desc' => 4, 'Order' => 5, 'SortBy' => 6, 'SortOrder' => 7, 'ShowUpcoming' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'name' => 2, 'url' => 3, 'desc' => 4, 'order' => 5, 'sortBy' => 6, 'sortOrder' => 7, 'showUpcoming' => 8, 'createdAt' => 9, 'updatedAt' => 10, ],
+        self::TYPE_COLNAME       => [ArticleCategoryTableMap::COL_RAYON_ID => 0, ArticleCategoryTableMap::COL_SITE_ID => 1, ArticleCategoryTableMap::COL_RAYON_NAME => 2, ArticleCategoryTableMap::COL_RAYON_URL => 3, ArticleCategoryTableMap::COL_RAYON_DESC => 4, ArticleCategoryTableMap::COL_RAYON_ORDER => 5, ArticleCategoryTableMap::COL_RAYON_SORT_BY => 6, ArticleCategoryTableMap::COL_RAYON_SORT_ORDER => 7, ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING => 8, ArticleCategoryTableMap::COL_RAYON_CREATED => 9, ArticleCategoryTableMap::COL_RAYON_UPDATED => 10, ],
+        self::TYPE_FIELDNAME     => ['rayon_id' => 0, 'site_id' => 1, 'rayon_name' => 2, 'rayon_url' => 3, 'rayon_desc' => 4, 'rayon_order' => 5, 'rayon_sort_by' => 6, 'rayon_sort_order' => 7, 'rayon_show_upcoming' => 8, 'rayon_created' => 9, 'rayon_updated' => 10, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'RAYON_ID',
@@ -259,9 +263,9 @@ class ArticleCategoryTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('rayons');
@@ -282,28 +286,30 @@ class ArticleCategoryTableMap extends TableMap
         $this->addColumn('rayon_show_upcoming', 'ShowUpcoming', 'BOOLEAN', false, 1, false);
         $this->addColumn('rayon_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('rayon_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'rayon_created', 'update_column' => 'rayon_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
             'sluggable' => ['slug_column' => 'rayon_url', 'slug_pattern' => '{Name}', 'replace_pattern' => '/\\W+/', 'replacement' => '-', 'separator' => '-', 'permanent' => 'false', 'scope_column' => '', 'unique_constraint' => 'true'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -311,14 +317,14 @@ class ArticleCategoryTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -333,14 +339,14 @@ class ArticleCategoryTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (string) $row[
             $indexType == TableMap::TYPE_NUM
@@ -357,10 +363,10 @@ class ArticleCategoryTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? ArticleCategoryTableMap::CLASS_DEFAULT : ArticleCategoryTableMap::OM_CLASS;
     }
@@ -368,17 +374,17 @@ class ArticleCategoryTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (ArticleCategory object, last column rank)
+     * @return array (ArticleCategory object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = ArticleCategoryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = ArticleCategoryTableMap::getInstanceFromPool($key))) {
@@ -402,13 +408,13 @@ class ArticleCategoryTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -438,12 +444,13 @@ class ArticleCategoryTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ArticleCategoryTableMap::COL_RAYON_ID);
@@ -478,12 +485,13 @@ class ArticleCategoryTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(ArticleCategoryTableMap::COL_RAYON_ID);
@@ -516,10 +524,10 @@ class ArticleCategoryTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(ArticleCategoryTableMap::DATABASE_NAME)->getTable(ArticleCategoryTableMap::TABLE_NAME);
     }
@@ -527,15 +535,15 @@ class ArticleCategoryTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a ArticleCategory or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or ArticleCategory object or primary key or array of primary keys
+     * @param mixed $values Criteria or ArticleCategory object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleCategoryTableMap::DATABASE_NAME);
@@ -571,7 +579,7 @@ class ArticleCategoryTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return ArticleCategoryQuery::create()->doDeleteAll($con);
     }
@@ -579,13 +587,13 @@ class ArticleCategoryTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a ArticleCategory or Criteria object.
      *
-     * @param mixed               $criteria Criteria or ArticleCategory object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or ArticleCategory object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleCategoryTableMap::DATABASE_NAME);
@@ -612,4 +620,4 @@ class ArticleCategoryTableMap extends TableMap
         });
     }
 
-} // ArticleCategoryTableMap
+}

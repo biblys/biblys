@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -76,8 +77,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\ArticleQuery|\Model\PeopleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildRole|null findOne(ConnectionInterface $con = null) Return the first ChildRole matching the query
- * @method     ChildRole findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRole matching the query, or a new ChildRole object populated from the query conditions when no match is found
+ * @method     ChildRole|null findOne(?ConnectionInterface $con = null) Return the first ChildRole matching the query
+ * @method     ChildRole findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildRole matching the query, or a new ChildRole object populated from the query conditions when no match is found
  *
  * @method     ChildRole|null findOneById(int $id) Return the first ChildRole filtered by the id column
  * @method     ChildRole|null findOneByArticleId(int $article_id) Return the first ChildRole filtered by the article_id column
@@ -92,8 +93,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole|null findOneByCreatedAt(string $role_created) Return the first ChildRole filtered by the role_created column
  * @method     ChildRole|null findOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column *
 
- * @method     ChildRole requirePk($key, ConnectionInterface $con = null) Return the ChildRole by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRole requireOne(ConnectionInterface $con = null) Return the first ChildRole matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRole requirePk($key, ?ConnectionInterface $con = null) Return the ChildRole by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRole requireOne(?ConnectionInterface $con = null) Return the first ChildRole matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRole requireOneById(int $id) Return the first ChildRole filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByArticleId(int $article_id) Return the first ChildRole filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -108,34 +109,34 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole requireOneByCreatedAt(string $role_created) Return the first ChildRole filtered by the role_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildRole[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildRole> find(ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
- * @method     ChildRole[]|ObjectCollection findById(int $id) Return ChildRole objects filtered by the id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findById(int $id) Return ChildRole objects filtered by the id column
- * @method     ChildRole[]|ObjectCollection findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
- * @method     ChildRole[]|ObjectCollection findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
- * @method     ChildRole[]|ObjectCollection findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
- * @method     ChildRole[]|ObjectCollection findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
- * @method     ChildRole[]|ObjectCollection findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
- * @method     ChildRole[]|ObjectCollection findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
- * @method     ChildRole[]|ObjectCollection findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
- * @method     ChildRole[]|ObjectCollection findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
- * @method     ChildRole[]|ObjectCollection findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
- * @method     ChildRole[]|ObjectCollection findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
- * @method     ChildRole[]|ObjectCollection findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildRole> findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
- * @method     ChildRole[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRole> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildRole[]|Collection find(?ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildRole> find(?ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
+ * @method     ChildRole[]|Collection findById(int $id) Return ChildRole objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildRole> findById(int $id) Return ChildRole objects filtered by the id column
+ * @method     ChildRole[]|Collection findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
+ * @method     ChildRole[]|Collection findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
+ * @method     ChildRole[]|Collection findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
+ * @method     ChildRole[]|Collection findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
+ * @method     ChildRole[]|Collection findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
+ * @method     ChildRole[]|Collection findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
+ * @method     ChildRole[]|Collection findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
+ * @psalm-method Collection&\Traversable<ChildRole> findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
+ * @method     ChildRole[]|Collection findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
+ * @psalm-method Collection&\Traversable<ChildRole> findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
+ * @method     ChildRole[]|Collection findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
+ * @psalm-method Collection&\Traversable<ChildRole> findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
+ * @method     ChildRole[]|Collection findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
+ * @psalm-method Collection&\Traversable<ChildRole> findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
+ * @method     ChildRole[]|Collection findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
+ * @psalm-method Collection&\Traversable<ChildRole> findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
+ * @method     ChildRole[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRole> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RoleQuery extends ModelCriteria
@@ -145,9 +146,9 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\RoleQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Role', $modelAlias = null)
     {
@@ -157,12 +158,12 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Returns a new ChildRoleQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildRoleQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildRoleQuery) {
             return $criteria;
@@ -192,7 +193,7 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @return ChildRole|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -224,8 +225,8 @@ abstract class RoleQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -257,8 +258,8 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildRole|array|mixed the result, formatted by the current formatter
      */
@@ -278,12 +279,12 @@ abstract class RoleQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -300,27 +301,31 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(RoleTableMap::COL_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(RoleTableMap::COL_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(RoleTableMap::COL_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(RoleTableMap::COL_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -333,15 +338,15 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -361,7 +366,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ID, $id, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -376,15 +383,15 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @see       filterByArticle()
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -404,7 +411,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -417,15 +426,15 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByBookId(array('min' => 12)); // WHERE book_id > 12
      * </code>
      *
-     * @param     mixed $bookId The value to use as filter.
+     * @param mixed $bookId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookId($bookId = null, $comparison = null)
+    public function filterByBookId($bookId = null, ?string $comparison = null)
     {
         if (is_array($bookId)) {
             $useMinMax = false;
@@ -445,7 +454,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_BOOK_ID, $bookId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_BOOK_ID, $bookId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -458,15 +469,15 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByEventId(array('min' => 12)); // WHERE event_id > 12
      * </code>
      *
-     * @param     mixed $eventId The value to use as filter.
+     * @param mixed $eventId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEventId($eventId = null, $comparison = null)
+    public function filterByEventId($eventId = null, ?string $comparison = null)
     {
         if (is_array($eventId)) {
             $useMinMax = false;
@@ -486,7 +497,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_EVENT_ID, $eventId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_EVENT_ID, $eventId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -501,15 +514,15 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @see       filterByPeople()
      *
-     * @param     mixed $peopleId The value to use as filter.
+     * @param mixed $peopleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPeopleId($peopleId = null, $comparison = null)
+    public function filterByPeopleId($peopleId = null, ?string $comparison = null)
     {
         if (is_array($peopleId)) {
             $useMinMax = false;
@@ -529,7 +542,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -542,15 +557,15 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByJobId(array('min' => 12)); // WHERE job_id > 12
      * </code>
      *
-     * @param     mixed $jobId The value to use as filter.
+     * @param mixed $jobId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByJobId($jobId = null, $comparison = null)
+    public function filterByJobId($jobId = null, ?string $comparison = null)
     {
         if (is_array($jobId)) {
             $useMinMax = false;
@@ -570,7 +585,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_JOB_ID, $jobId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_JOB_ID, $jobId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -583,15 +600,15 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -611,7 +628,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -623,22 +642,24 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByHide('yes'); // WHERE role_hide = true
      * </code>
      *
-     * @param     boolean|string $hide The value to use as filter.
+     * @param bool|string $hide The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHide($hide = null, $comparison = null)
+    public function filterByHide($hide = null, ?string $comparison = null)
     {
         if (is_string($hide)) {
             $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_HIDE, $hide, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_HIDE, $hide, $comparison);
+
+        return $this;
     }
 
     /**
@@ -648,14 +669,15 @@ abstract class RoleQuery extends ModelCriteria
      * <code>
      * $query->filterByPresence('fooValue');   // WHERE role_presence = 'fooValue'
      * $query->filterByPresence('%fooValue%', Criteria::LIKE); // WHERE role_presence LIKE '%fooValue%'
+     * $query->filterByPresence(['foo', 'bar']); // WHERE role_presence IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $presence The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $presence The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPresence($presence = null, $comparison = null)
+    public function filterByPresence($presence = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($presence)) {
@@ -663,7 +685,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_PRESENCE, $presence, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_PRESENCE, $presence, $comparison);
+
+        return $this;
     }
 
     /**
@@ -676,17 +700,17 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE role_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -706,7 +730,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_DATE, $date, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -719,17 +745,17 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE role_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -749,7 +775,9 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -762,17 +790,17 @@ abstract class RoleQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE role_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -792,20 +820,22 @@ abstract class RoleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Article object
      *
      * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticle($article, $comparison = null)
+    public function filterByArticle($article, ?string $comparison = null)
     {
         if ($article instanceof \Model\Article) {
             return $this
@@ -815,8 +845,10 @@ abstract class RoleQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(RoleTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
         }
@@ -825,12 +857,12 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Article relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinArticle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Article');
@@ -859,9 +891,9 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\ArticleQuery A secondary query class using the current class as primary query
      */
@@ -931,13 +963,13 @@ abstract class RoleQuery extends ModelCriteria
      * Filter the query by a related \Model\People object
      *
      * @param \Model\People|ObjectCollection $people The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPeople($people, $comparison = null)
+    public function filterByPeople($people, ?string $comparison = null)
     {
         if ($people instanceof \Model\People) {
             return $this
@@ -947,8 +979,10 @@ abstract class RoleQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(RoleTableMap::COL_PEOPLE_ID, $people->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByPeople() only accepts arguments of type \Model\People or Collection');
         }
@@ -957,12 +991,12 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the People relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinPeople($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPeople(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('People');
@@ -991,9 +1025,9 @@ abstract class RoleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\PeopleQuery A secondary query class using the current class as primary query
      */
@@ -1062,9 +1096,9 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildRole $role Object to remove from the list of results
+     * @param ChildRole $role Object to remove from the list of results
      *
-     * @return $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($role = null)
     {
@@ -1081,7 +1115,7 @@ abstract class RoleQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RoleTableMap::DATABASE_NAME);
@@ -1106,12 +1140,12 @@ abstract class RoleQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RoleTableMap::DATABASE_NAME);
@@ -1141,65 +1175,77 @@ abstract class RoleQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RoleTableMap::COL_ROLE_UPDATED);
+        $this->addDescendingOrderByColumn(RoleTableMap::COL_ROLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RoleTableMap::COL_ROLE_UPDATED);
+        $this->addAscendingOrderByColumn(RoleTableMap::COL_ROLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RoleTableMap::COL_ROLE_CREATED);
+        $this->addDescendingOrderByColumn(RoleTableMap::COL_ROLE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(RoleTableMap::COL_ROLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RoleTableMap::COL_ROLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildRoleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RoleTableMap::COL_ROLE_CREATED);
+        $this->addAscendingOrderByColumn(RoleTableMap::COL_ROLE_CREATED);
+
+        return $this;
     }
 
-} // RoleQuery
+}

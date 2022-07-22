@@ -33,195 +33,199 @@ class BookshopTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.BookshopTableMap';
+    public const CLASS_NAME = 'Model.Map.BookshopTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'bookshops';
+    public const TABLE_NAME = 'bookshops';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Bookshop';
+    public const OM_CLASS = '\\Model\\Bookshop';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Bookshop';
+    public const CLASS_DEFAULT = 'Model.Bookshop';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 23;
+    public const NUM_COLUMNS = 23;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 23;
+    public const NUM_HYDRATE_COLUMNS = 23;
 
     /**
      * the column name for the bookshop_id field
      */
-    const COL_BOOKSHOP_ID = 'bookshops.bookshop_id';
+    public const COL_BOOKSHOP_ID = 'bookshops.bookshop_id';
 
     /**
      * the column name for the bookshop_name field
      */
-    const COL_BOOKSHOP_NAME = 'bookshops.bookshop_name';
+    public const COL_BOOKSHOP_NAME = 'bookshops.bookshop_name';
 
     /**
      * the column name for the bookshop_name_alphabetic field
      */
-    const COL_BOOKSHOP_NAME_ALPHABETIC = 'bookshops.bookshop_name_alphabetic';
+    public const COL_BOOKSHOP_NAME_ALPHABETIC = 'bookshops.bookshop_name_alphabetic';
 
     /**
      * the column name for the bookshop_url field
      */
-    const COL_BOOKSHOP_URL = 'bookshops.bookshop_url';
+    public const COL_BOOKSHOP_URL = 'bookshops.bookshop_url';
 
     /**
      * the column name for the bookshop_representative field
      */
-    const COL_BOOKSHOP_REPRESENTATIVE = 'bookshops.bookshop_representative';
+    public const COL_BOOKSHOP_REPRESENTATIVE = 'bookshops.bookshop_representative';
 
     /**
      * the column name for the bookshop_address field
      */
-    const COL_BOOKSHOP_ADDRESS = 'bookshops.bookshop_address';
+    public const COL_BOOKSHOP_ADDRESS = 'bookshops.bookshop_address';
 
     /**
      * the column name for the bookshop_postal_code field
      */
-    const COL_BOOKSHOP_POSTAL_CODE = 'bookshops.bookshop_postal_code';
+    public const COL_BOOKSHOP_POSTAL_CODE = 'bookshops.bookshop_postal_code';
 
     /**
      * the column name for the bookshop_city field
      */
-    const COL_BOOKSHOP_CITY = 'bookshops.bookshop_city';
+    public const COL_BOOKSHOP_CITY = 'bookshops.bookshop_city';
 
     /**
      * the column name for the bookshop_country field
      */
-    const COL_BOOKSHOP_COUNTRY = 'bookshops.bookshop_country';
+    public const COL_BOOKSHOP_COUNTRY = 'bookshops.bookshop_country';
 
     /**
      * the column name for the bookshop_phone field
      */
-    const COL_BOOKSHOP_PHONE = 'bookshops.bookshop_phone';
+    public const COL_BOOKSHOP_PHONE = 'bookshops.bookshop_phone';
 
     /**
      * the column name for the bookshop_fax field
      */
-    const COL_BOOKSHOP_FAX = 'bookshops.bookshop_fax';
+    public const COL_BOOKSHOP_FAX = 'bookshops.bookshop_fax';
 
     /**
      * the column name for the bookshop_website field
      */
-    const COL_BOOKSHOP_WEBSITE = 'bookshops.bookshop_website';
+    public const COL_BOOKSHOP_WEBSITE = 'bookshops.bookshop_website';
 
     /**
      * the column name for the bookshop_email field
      */
-    const COL_BOOKSHOP_EMAIL = 'bookshops.bookshop_email';
+    public const COL_BOOKSHOP_EMAIL = 'bookshops.bookshop_email';
 
     /**
      * the column name for the bookshop_facebook field
      */
-    const COL_BOOKSHOP_FACEBOOK = 'bookshops.bookshop_facebook';
+    public const COL_BOOKSHOP_FACEBOOK = 'bookshops.bookshop_facebook';
 
     /**
      * the column name for the bookshop_twitter field
      */
-    const COL_BOOKSHOP_TWITTER = 'bookshops.bookshop_twitter';
+    public const COL_BOOKSHOP_TWITTER = 'bookshops.bookshop_twitter';
 
     /**
      * the column name for the bookshop_legal_form field
      */
-    const COL_BOOKSHOP_LEGAL_FORM = 'bookshops.bookshop_legal_form';
+    public const COL_BOOKSHOP_LEGAL_FORM = 'bookshops.bookshop_legal_form';
 
     /**
      * the column name for the bookshop_creation_year field
      */
-    const COL_BOOKSHOP_CREATION_YEAR = 'bookshops.bookshop_creation_year';
+    public const COL_BOOKSHOP_CREATION_YEAR = 'bookshops.bookshop_creation_year';
 
     /**
      * the column name for the bookshop_specialities field
      */
-    const COL_BOOKSHOP_SPECIALITIES = 'bookshops.bookshop_specialities';
+    public const COL_BOOKSHOP_SPECIALITIES = 'bookshops.bookshop_specialities';
 
     /**
      * the column name for the bookshop_membership field
      */
-    const COL_BOOKSHOP_MEMBERSHIP = 'bookshops.bookshop_membership';
+    public const COL_BOOKSHOP_MEMBERSHIP = 'bookshops.bookshop_membership';
 
     /**
      * the column name for the bookshop_motto field
      */
-    const COL_BOOKSHOP_MOTTO = 'bookshops.bookshop_motto';
+    public const COL_BOOKSHOP_MOTTO = 'bookshops.bookshop_motto';
 
     /**
      * the column name for the bookshop_desc field
      */
-    const COL_BOOKSHOP_DESC = 'bookshops.bookshop_desc';
+    public const COL_BOOKSHOP_DESC = 'bookshops.bookshop_desc';
 
     /**
      * the column name for the bookshop_created field
      */
-    const COL_BOOKSHOP_CREATED = 'bookshops.bookshop_created';
+    public const COL_BOOKSHOP_CREATED = 'bookshops.bookshop_created';
 
     /**
      * the column name for the bookshop_updated field
      */
-    const COL_BOOKSHOP_UPDATED = 'bookshops.bookshop_updated';
+    public const COL_BOOKSHOP_UPDATED = 'bookshops.bookshop_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Specialities', 'Membership', 'Motto', 'Desc', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'specialities', 'membership', 'motto', 'desc', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID, BookshopTableMap::COL_BOOKSHOP_NAME, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, BookshopTableMap::COL_BOOKSHOP_URL, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, BookshopTableMap::COL_BOOKSHOP_ADDRESS, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, BookshopTableMap::COL_BOOKSHOP_CITY, BookshopTableMap::COL_BOOKSHOP_COUNTRY, BookshopTableMap::COL_BOOKSHOP_PHONE, BookshopTableMap::COL_BOOKSHOP_FAX, BookshopTableMap::COL_BOOKSHOP_WEBSITE, BookshopTableMap::COL_BOOKSHOP_EMAIL, BookshopTableMap::COL_BOOKSHOP_FACEBOOK, BookshopTableMap::COL_BOOKSHOP_TWITTER, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, BookshopTableMap::COL_BOOKSHOP_MOTTO, BookshopTableMap::COL_BOOKSHOP_DESC, BookshopTableMap::COL_BOOKSHOP_CREATED, BookshopTableMap::COL_BOOKSHOP_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('bookshop_id', 'bookshop_name', 'bookshop_name_alphabetic', 'bookshop_url', 'bookshop_representative', 'bookshop_address', 'bookshop_postal_code', 'bookshop_city', 'bookshop_country', 'bookshop_phone', 'bookshop_fax', 'bookshop_website', 'bookshop_email', 'bookshop_facebook', 'bookshop_twitter', 'bookshop_legal_form', 'bookshop_creation_year', 'bookshop_specialities', 'bookshop_membership', 'bookshop_motto', 'bookshop_desc', 'bookshop_created', 'bookshop_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Name', 'NameAlphabetic', 'Url', 'Representative', 'Address', 'PostalCode', 'City', 'Country', 'Phone', 'Fax', 'Website', 'Email', 'Facebook', 'Twitter', 'LegalForm', 'CreationYear', 'Specialities', 'Membership', 'Motto', 'Desc', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'name', 'nameAlphabetic', 'url', 'representative', 'address', 'postalCode', 'city', 'country', 'phone', 'fax', 'website', 'email', 'facebook', 'twitter', 'legalForm', 'creationYear', 'specialities', 'membership', 'motto', 'desc', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [BookshopTableMap::COL_BOOKSHOP_ID, BookshopTableMap::COL_BOOKSHOP_NAME, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC, BookshopTableMap::COL_BOOKSHOP_URL, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE, BookshopTableMap::COL_BOOKSHOP_ADDRESS, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE, BookshopTableMap::COL_BOOKSHOP_CITY, BookshopTableMap::COL_BOOKSHOP_COUNTRY, BookshopTableMap::COL_BOOKSHOP_PHONE, BookshopTableMap::COL_BOOKSHOP_FAX, BookshopTableMap::COL_BOOKSHOP_WEBSITE, BookshopTableMap::COL_BOOKSHOP_EMAIL, BookshopTableMap::COL_BOOKSHOP_FACEBOOK, BookshopTableMap::COL_BOOKSHOP_TWITTER, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP, BookshopTableMap::COL_BOOKSHOP_MOTTO, BookshopTableMap::COL_BOOKSHOP_DESC, BookshopTableMap::COL_BOOKSHOP_CREATED, BookshopTableMap::COL_BOOKSHOP_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['bookshop_id', 'bookshop_name', 'bookshop_name_alphabetic', 'bookshop_url', 'bookshop_representative', 'bookshop_address', 'bookshop_postal_code', 'bookshop_city', 'bookshop_country', 'bookshop_phone', 'bookshop_fax', 'bookshop_website', 'bookshop_email', 'bookshop_facebook', 'bookshop_twitter', 'bookshop_legal_form', 'bookshop_creation_year', 'bookshop_specialities', 'bookshop_membership', 'bookshop_motto', 'bookshop_desc', 'bookshop_created', 'bookshop_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'LegalForm' => 15, 'CreationYear' => 16, 'Specialities' => 17, 'Membership' => 18, 'Motto' => 19, 'Desc' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'legalForm' => 15, 'creationYear' => 16, 'specialities' => 17, 'membership' => 18, 'motto' => 19, 'desc' => 20, 'createdAt' => 21, 'updatedAt' => 22, ),
-        self::TYPE_COLNAME       => array(BookshopTableMap::COL_BOOKSHOP_ID => 0, BookshopTableMap::COL_BOOKSHOP_NAME => 1, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC => 2, BookshopTableMap::COL_BOOKSHOP_URL => 3, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE => 4, BookshopTableMap::COL_BOOKSHOP_ADDRESS => 5, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE => 6, BookshopTableMap::COL_BOOKSHOP_CITY => 7, BookshopTableMap::COL_BOOKSHOP_COUNTRY => 8, BookshopTableMap::COL_BOOKSHOP_PHONE => 9, BookshopTableMap::COL_BOOKSHOP_FAX => 10, BookshopTableMap::COL_BOOKSHOP_WEBSITE => 11, BookshopTableMap::COL_BOOKSHOP_EMAIL => 12, BookshopTableMap::COL_BOOKSHOP_FACEBOOK => 13, BookshopTableMap::COL_BOOKSHOP_TWITTER => 14, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM => 15, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR => 16, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES => 17, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP => 18, BookshopTableMap::COL_BOOKSHOP_MOTTO => 19, BookshopTableMap::COL_BOOKSHOP_DESC => 20, BookshopTableMap::COL_BOOKSHOP_CREATED => 21, BookshopTableMap::COL_BOOKSHOP_UPDATED => 22, ),
-        self::TYPE_FIELDNAME     => array('bookshop_id' => 0, 'bookshop_name' => 1, 'bookshop_name_alphabetic' => 2, 'bookshop_url' => 3, 'bookshop_representative' => 4, 'bookshop_address' => 5, 'bookshop_postal_code' => 6, 'bookshop_city' => 7, 'bookshop_country' => 8, 'bookshop_phone' => 9, 'bookshop_fax' => 10, 'bookshop_website' => 11, 'bookshop_email' => 12, 'bookshop_facebook' => 13, 'bookshop_twitter' => 14, 'bookshop_legal_form' => 15, 'bookshop_creation_year' => 16, 'bookshop_specialities' => 17, 'bookshop_membership' => 18, 'bookshop_motto' => 19, 'bookshop_desc' => 20, 'bookshop_created' => 21, 'bookshop_updated' => 22, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'NameAlphabetic' => 2, 'Url' => 3, 'Representative' => 4, 'Address' => 5, 'PostalCode' => 6, 'City' => 7, 'Country' => 8, 'Phone' => 9, 'Fax' => 10, 'Website' => 11, 'Email' => 12, 'Facebook' => 13, 'Twitter' => 14, 'LegalForm' => 15, 'CreationYear' => 16, 'Specialities' => 17, 'Membership' => 18, 'Motto' => 19, 'Desc' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'nameAlphabetic' => 2, 'url' => 3, 'representative' => 4, 'address' => 5, 'postalCode' => 6, 'city' => 7, 'country' => 8, 'phone' => 9, 'fax' => 10, 'website' => 11, 'email' => 12, 'facebook' => 13, 'twitter' => 14, 'legalForm' => 15, 'creationYear' => 16, 'specialities' => 17, 'membership' => 18, 'motto' => 19, 'desc' => 20, 'createdAt' => 21, 'updatedAt' => 22, ],
+        self::TYPE_COLNAME       => [BookshopTableMap::COL_BOOKSHOP_ID => 0, BookshopTableMap::COL_BOOKSHOP_NAME => 1, BookshopTableMap::COL_BOOKSHOP_NAME_ALPHABETIC => 2, BookshopTableMap::COL_BOOKSHOP_URL => 3, BookshopTableMap::COL_BOOKSHOP_REPRESENTATIVE => 4, BookshopTableMap::COL_BOOKSHOP_ADDRESS => 5, BookshopTableMap::COL_BOOKSHOP_POSTAL_CODE => 6, BookshopTableMap::COL_BOOKSHOP_CITY => 7, BookshopTableMap::COL_BOOKSHOP_COUNTRY => 8, BookshopTableMap::COL_BOOKSHOP_PHONE => 9, BookshopTableMap::COL_BOOKSHOP_FAX => 10, BookshopTableMap::COL_BOOKSHOP_WEBSITE => 11, BookshopTableMap::COL_BOOKSHOP_EMAIL => 12, BookshopTableMap::COL_BOOKSHOP_FACEBOOK => 13, BookshopTableMap::COL_BOOKSHOP_TWITTER => 14, BookshopTableMap::COL_BOOKSHOP_LEGAL_FORM => 15, BookshopTableMap::COL_BOOKSHOP_CREATION_YEAR => 16, BookshopTableMap::COL_BOOKSHOP_SPECIALITIES => 17, BookshopTableMap::COL_BOOKSHOP_MEMBERSHIP => 18, BookshopTableMap::COL_BOOKSHOP_MOTTO => 19, BookshopTableMap::COL_BOOKSHOP_DESC => 20, BookshopTableMap::COL_BOOKSHOP_CREATED => 21, BookshopTableMap::COL_BOOKSHOP_UPDATED => 22, ],
+        self::TYPE_FIELDNAME     => ['bookshop_id' => 0, 'bookshop_name' => 1, 'bookshop_name_alphabetic' => 2, 'bookshop_url' => 3, 'bookshop_representative' => 4, 'bookshop_address' => 5, 'bookshop_postal_code' => 6, 'bookshop_city' => 7, 'bookshop_country' => 8, 'bookshop_phone' => 9, 'bookshop_fax' => 10, 'bookshop_website' => 11, 'bookshop_email' => 12, 'bookshop_facebook' => 13, 'bookshop_twitter' => 14, 'bookshop_legal_form' => 15, 'bookshop_creation_year' => 16, 'bookshop_specialities' => 17, 'bookshop_membership' => 18, 'bookshop_motto' => 19, 'bookshop_desc' => 20, 'bookshop_created' => 21, 'bookshop_updated' => 22, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'BOOKSHOP_ID',
@@ -415,9 +419,9 @@ class BookshopTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('bookshops');
@@ -450,27 +454,29 @@ class BookshopTableMap extends TableMap
         $this->addColumn('bookshop_desc', 'Desc', 'LONGVARCHAR', false, null, null);
         $this->addColumn('bookshop_created', 'CreatedAt', 'TIMESTAMP', false, null, 'CURRENT_TIMESTAMP');
         $this->addColumn('bookshop_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'bookshop_created', 'update_column' => 'bookshop_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -478,14 +484,14 @@ class BookshopTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -500,14 +506,14 @@ class BookshopTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -524,10 +530,10 @@ class BookshopTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? BookshopTableMap::CLASS_DEFAULT : BookshopTableMap::OM_CLASS;
     }
@@ -535,17 +541,17 @@ class BookshopTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Bookshop object, last column rank)
+     * @return array (Bookshop object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = BookshopTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = BookshopTableMap::getInstanceFromPool($key))) {
@@ -569,13 +575,13 @@ class BookshopTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -605,12 +611,13 @@ class BookshopTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(BookshopTableMap::COL_BOOKSHOP_ID);
@@ -669,12 +676,13 @@ class BookshopTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(BookshopTableMap::COL_BOOKSHOP_ID);
@@ -731,10 +739,10 @@ class BookshopTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(BookshopTableMap::DATABASE_NAME)->getTable(BookshopTableMap::TABLE_NAME);
     }
@@ -742,15 +750,15 @@ class BookshopTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Bookshop or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Bookshop object or primary key or array of primary keys
+     * @param mixed $values Criteria or Bookshop object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookshopTableMap::DATABASE_NAME);
@@ -786,7 +794,7 @@ class BookshopTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return BookshopQuery::create()->doDeleteAll($con);
     }
@@ -794,13 +802,13 @@ class BookshopTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Bookshop or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Bookshop object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Bookshop object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(BookshopTableMap::DATABASE_NAME);
@@ -827,4 +835,4 @@ class BookshopTableMap extends TableMap
         });
     }
 
-} // BookshopTableMap
+}

@@ -56,11 +56,11 @@ class Connection
                 1 => "vendor",
             ],
         ];
-        $manager = new ConnectionManagerSingle();
+        $manager = new ConnectionManagerSingle("default");
         $manager->setConfiguration($propelConfig);
         $manager->setName("default");
 
-        $serviceContainer->setConnectionManager("default", $manager);
+        $serviceContainer->setConnectionManager($manager);
         $serviceContainer->setDefaultDatasource("default");
 
         $defaultLogger = new Logger("defaultLogger");

@@ -10,7 +10,7 @@ use Model\Map\AlertTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlertQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildAlertQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAlert|null findOne(ConnectionInterface $con = null) Return the first ChildAlert matching the query
- * @method     ChildAlert findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAlert matching the query, or a new ChildAlert object populated from the query conditions when no match is found
+ * @method     ChildAlert|null findOne(?ConnectionInterface $con = null) Return the first ChildAlert matching the query
+ * @method     ChildAlert findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildAlert matching the query, or a new ChildAlert object populated from the query conditions when no match is found
  *
  * @method     ChildAlert|null findOneById(int $alert_id) Return the first ChildAlert filtered by the alert_id column
  * @method     ChildAlert|null findOneByUserId(int $user_id) Return the first ChildAlert filtered by the user_id column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert|null findOneByCreatedAt(string $alert_created) Return the first ChildAlert filtered by the alert_created column
  * @method     ChildAlert|null findOneByUpdatedAt(string $alert_updated) Return the first ChildAlert filtered by the alert_updated column *
 
- * @method     ChildAlert requirePk($key, ConnectionInterface $con = null) Return the ChildAlert by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAlert requireOne(ConnectionInterface $con = null) Return the first ChildAlert matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAlert requirePk($key, ?ConnectionInterface $con = null) Return the ChildAlert by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAlert requireOne(?ConnectionInterface $con = null) Return the first ChildAlert matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAlert requireOneById(int $alert_id) Return the first ChildAlert filtered by the alert_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByUserId(int $user_id) Return the first ChildAlert filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAlert requireOneByCreatedAt(string $alert_created) Return the first ChildAlert filtered by the alert_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAlert requireOneByUpdatedAt(string $alert_updated) Return the first ChildAlert filtered by the alert_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAlert[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> find(ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
- * @method     ChildAlert[]|ObjectCollection findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
- * @method     ChildAlert[]|ObjectCollection findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
- * @method     ChildAlert[]|ObjectCollection findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
- * @method     ChildAlert[]|ObjectCollection findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
- * @method     ChildAlert[]|ObjectCollection findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
- * @method     ChildAlert[]|ObjectCollection findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
- * @method     ChildAlert[]|ObjectCollection findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
- * @method     ChildAlert[]|ObjectCollection findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
- * @method     ChildAlert[]|ObjectCollection findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
- * @method     ChildAlert[]|ObjectCollection findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildAlert> findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
- * @method     ChildAlert[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAlert> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAlert[]|Collection find(?ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildAlert> find(?ConnectionInterface $con = null) Return ChildAlert objects based on current ModelCriteria
+ * @method     ChildAlert[]|Collection findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
+ * @psalm-method Collection&\Traversable<ChildAlert> findById(int $alert_id) Return ChildAlert objects filtered by the alert_id column
+ * @method     ChildAlert[]|Collection findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByUserId(int $user_id) Return ChildAlert objects filtered by the user_id column
+ * @method     ChildAlert[]|Collection findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByArticleId(int $article_id) Return ChildAlert objects filtered by the article_id column
+ * @method     ChildAlert[]|Collection findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByMaxPrice(int $alert_max_price) Return ChildAlert objects filtered by the alert_max_price column
+ * @method     ChildAlert[]|Collection findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByPubYear(int $alert_pub_year) Return ChildAlert objects filtered by the alert_pub_year column
+ * @method     ChildAlert[]|Collection findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByCondition(string $alert_condition) Return ChildAlert objects filtered by the alert_condition column
+ * @method     ChildAlert[]|Collection findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByInsert(string $alert_insert) Return ChildAlert objects filtered by the alert_insert column
+ * @method     ChildAlert[]|Collection findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByUpdate(string $alert_update) Return ChildAlert objects filtered by the alert_update column
+ * @method     ChildAlert[]|Collection findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByCreatedAt(string $alert_created) Return ChildAlert objects filtered by the alert_created column
+ * @method     ChildAlert[]|Collection findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
+ * @psalm-method Collection&\Traversable<ChildAlert> findByUpdatedAt(string $alert_updated) Return ChildAlert objects filtered by the alert_updated column
+ * @method     ChildAlert[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAlert> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class AlertQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class AlertQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\AlertQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Alert', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class AlertQuery extends ModelCriteria
     /**
      * Returns a new ChildAlertQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildAlertQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildAlertQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class AlertQuery extends ModelCriteria
      *
      * @return ChildAlert|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class AlertQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class AlertQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildAlert|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class AlertQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class AlertQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE alert_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $id, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -339,15 +345,15 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -367,7 +373,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -380,15 +388,15 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByArticleId(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -408,7 +416,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -421,15 +431,15 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByMaxPrice(array('min' => 12)); // WHERE alert_max_price > 12
      * </code>
      *
-     * @param     mixed $maxPrice The value to use as filter.
+     * @param mixed $maxPrice The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMaxPrice($maxPrice = null, $comparison = null)
+    public function filterByMaxPrice($maxPrice = null, ?string $comparison = null)
     {
         if (is_array($maxPrice)) {
             $useMinMax = false;
@@ -449,7 +459,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_MAX_PRICE, $maxPrice, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_MAX_PRICE, $maxPrice, $comparison);
+
+        return $this;
     }
 
     /**
@@ -462,15 +474,15 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByPubYear(array('min' => 12)); // WHERE alert_pub_year > 12
      * </code>
      *
-     * @param     mixed $pubYear The value to use as filter.
+     * @param mixed $pubYear The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPubYear($pubYear = null, $comparison = null)
+    public function filterByPubYear($pubYear = null, ?string $comparison = null)
     {
         if (is_array($pubYear)) {
             $useMinMax = false;
@@ -490,7 +502,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_PUB_YEAR, $pubYear, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_PUB_YEAR, $pubYear, $comparison);
+
+        return $this;
     }
 
     /**
@@ -500,14 +514,15 @@ abstract class AlertQuery extends ModelCriteria
      * <code>
      * $query->filterByCondition('fooValue');   // WHERE alert_condition = 'fooValue'
      * $query->filterByCondition('%fooValue%', Criteria::LIKE); // WHERE alert_condition LIKE '%fooValue%'
+     * $query->filterByCondition(['foo', 'bar']); // WHERE alert_condition IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $condition The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $condition The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCondition($condition = null, $comparison = null)
+    public function filterByCondition($condition = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($condition)) {
@@ -515,7 +530,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_CONDITION, $condition, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_CONDITION, $condition, $comparison);
+
+        return $this;
     }
 
     /**
@@ -528,17 +545,17 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE alert_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -558,7 +575,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_INSERT, $insert, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -571,17 +590,17 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE alert_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -601,7 +620,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATE, $update, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -614,17 +635,17 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE alert_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -644,7 +665,9 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -657,17 +680,17 @@ abstract class AlertQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE alert_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -687,15 +710,17 @@ abstract class AlertQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildAlert $alert Object to remove from the list of results
+     * @param ChildAlert $alert Object to remove from the list of results
      *
-     * @return $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($alert = null)
     {
@@ -712,7 +737,7 @@ abstract class AlertQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AlertTableMap::DATABASE_NAME);
@@ -737,12 +762,12 @@ abstract class AlertQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(AlertTableMap::DATABASE_NAME);
@@ -772,65 +797,77 @@ abstract class AlertQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AlertTableMap::COL_ALERT_UPDATED);
+        $this->addDescendingOrderByColumn(AlertTableMap::COL_ALERT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AlertTableMap::COL_ALERT_UPDATED);
+        $this->addAscendingOrderByColumn(AlertTableMap::COL_ALERT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(AlertTableMap::COL_ALERT_CREATED);
+        $this->addDescendingOrderByColumn(AlertTableMap::COL_ALERT_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(AlertTableMap::COL_ALERT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(AlertTableMap::COL_ALERT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildAlertQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(AlertTableMap::COL_ALERT_CREATED);
+        $this->addAscendingOrderByColumn(AlertTableMap::COL_ALERT_CREATED);
+
+        return $this;
     }
 
-} // AlertQuery
+}

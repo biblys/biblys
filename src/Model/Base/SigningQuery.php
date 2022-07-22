@@ -10,7 +10,7 @@ use Model\Map\SigningTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigningQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSigningQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildSigning|null findOne(ConnectionInterface $con = null) Return the first ChildSigning matching the query
- * @method     ChildSigning findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSigning matching the query, or a new ChildSigning object populated from the query conditions when no match is found
+ * @method     ChildSigning|null findOne(?ConnectionInterface $con = null) Return the first ChildSigning matching the query
+ * @method     ChildSigning findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSigning matching the query, or a new ChildSigning object populated from the query conditions when no match is found
  *
  * @method     ChildSigning|null findOneById(int $signing_id) Return the first ChildSigning filtered by the signing_id column
  * @method     ChildSigning|null findOneBySiteId(int $site_id) Return the first ChildSigning filtered by the site_id column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigning|null findOneByCreatedAt(string $signing_created) Return the first ChildSigning filtered by the signing_created column
  * @method     ChildSigning|null findOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column *
 
- * @method     ChildSigning requirePk($key, ConnectionInterface $con = null) Return the ChildSigning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSigning requireOne(ConnectionInterface $con = null) Return the first ChildSigning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSigning requirePk($key, ?ConnectionInterface $con = null) Return the ChildSigning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSigning requireOne(?ConnectionInterface $con = null) Return the first ChildSigning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSigning requireOneById(int $signing_id) Return the first ChildSigning filtered by the signing_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOneBySiteId(int $site_id) Return the first ChildSigning filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigning requireOneByCreatedAt(string $signing_created) Return the first ChildSigning filtered by the signing_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildSigning[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> find(ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
- * @method     ChildSigning[]|ObjectCollection findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
- * @method     ChildSigning[]|ObjectCollection findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
- * @method     ChildSigning[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
- * @method     ChildSigning[]|ObjectCollection findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
- * @method     ChildSigning[]|ObjectCollection findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
- * @method     ChildSigning[]|ObjectCollection findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
- * @method     ChildSigning[]|ObjectCollection findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
- * @method     ChildSigning[]|ObjectCollection findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
- * @method     ChildSigning[]|ObjectCollection findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
- * @method     ChildSigning[]|ObjectCollection findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildSigning> findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
- * @method     ChildSigning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSigning> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildSigning[]|Collection find(?ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildSigning> find(?ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
+ * @method     ChildSigning[]|Collection findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
+ * @method     ChildSigning[]|Collection findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
+ * @method     ChildSigning[]|Collection findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
+ * @method     ChildSigning[]|Collection findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
+ * @method     ChildSigning[]|Collection findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
+ * @method     ChildSigning[]|Collection findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
+ * @method     ChildSigning[]|Collection findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
+ * @method     ChildSigning[]|Collection findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
+ * @method     ChildSigning[]|Collection findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
+ * @method     ChildSigning[]|Collection findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
+ * @method     ChildSigning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSigning> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SigningQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class SigningQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\SigningQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Signing', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class SigningQuery extends ModelCriteria
     /**
      * Returns a new ChildSigningQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildSigningQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildSigningQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class SigningQuery extends ModelCriteria
      *
      * @return ChildSigning|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class SigningQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class SigningQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildSigning|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class SigningQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class SigningQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE signing_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $id, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -339,15 +345,15 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -367,7 +373,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -380,15 +388,15 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -408,7 +416,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -421,15 +431,15 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByPeopleId(array('min' => 12)); // WHERE people_id > 12
      * </code>
      *
-     * @param     mixed $peopleId The value to use as filter.
+     * @param mixed $peopleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPeopleId($peopleId = null, $comparison = null)
+    public function filterByPeopleId($peopleId = null, ?string $comparison = null)
     {
         if (is_array($peopleId)) {
             $useMinMax = false;
@@ -449,7 +459,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -462,17 +474,17 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE signing_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -492,7 +504,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_DATE, $date, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -505,17 +519,17 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByStarts(array('max' => 'yesterday')); // WHERE signing_starts > '2011-03-13'
      * </code>
      *
-     * @param     mixed $starts The value to use as filter.
+     * @param mixed $starts The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStarts($starts = null, $comparison = null)
+    public function filterByStarts($starts = null, ?string $comparison = null)
     {
         if (is_array($starts)) {
             $useMinMax = false;
@@ -535,7 +549,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_STARTS, $starts, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_STARTS, $starts, $comparison);
+
+        return $this;
     }
 
     /**
@@ -548,17 +564,17 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByEnds(array('max' => 'yesterday')); // WHERE signing_ends > '2011-03-13'
      * </code>
      *
-     * @param     mixed $ends The value to use as filter.
+     * @param mixed $ends The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEnds($ends = null, $comparison = null)
+    public function filterByEnds($ends = null, ?string $comparison = null)
     {
         if (is_array($ends)) {
             $useMinMax = false;
@@ -578,7 +594,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_ENDS, $ends, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_ENDS, $ends, $comparison);
+
+        return $this;
     }
 
     /**
@@ -588,14 +606,15 @@ abstract class SigningQuery extends ModelCriteria
      * <code>
      * $query->filterByLocation('fooValue');   // WHERE signing_location = 'fooValue'
      * $query->filterByLocation('%fooValue%', Criteria::LIKE); // WHERE signing_location LIKE '%fooValue%'
+     * $query->filterByLocation(['foo', 'bar']); // WHERE signing_location IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $location The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $location The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLocation($location = null, $comparison = null)
+    public function filterByLocation($location = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($location)) {
@@ -603,7 +622,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_LOCATION, $location, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_LOCATION, $location, $comparison);
+
+        return $this;
     }
 
     /**
@@ -616,17 +637,17 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE signing_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -646,7 +667,9 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -659,17 +682,17 @@ abstract class SigningQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE signing_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -689,15 +712,17 @@ abstract class SigningQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildSigning $signing Object to remove from the list of results
+     * @param ChildSigning $signing Object to remove from the list of results
      *
-     * @return $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($signing = null)
     {
@@ -714,7 +739,7 @@ abstract class SigningQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SigningTableMap::DATABASE_NAME);
@@ -739,12 +764,12 @@ abstract class SigningQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SigningTableMap::DATABASE_NAME);
@@ -774,65 +799,77 @@ abstract class SigningQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SigningTableMap::COL_SIGNING_UPDATED);
+        $this->addDescendingOrderByColumn(SigningTableMap::COL_SIGNING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SigningTableMap::COL_SIGNING_UPDATED);
+        $this->addAscendingOrderByColumn(SigningTableMap::COL_SIGNING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SigningTableMap::COL_SIGNING_CREATED);
+        $this->addDescendingOrderByColumn(SigningTableMap::COL_SIGNING_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(SigningTableMap::COL_SIGNING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SigningTableMap::COL_SIGNING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildSigningQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SigningTableMap::COL_SIGNING_CREATED);
+        $this->addAscendingOrderByColumn(SigningTableMap::COL_SIGNING_CREATED);
+
+        return $this;
     }
 
-} // SigningQuery
+}

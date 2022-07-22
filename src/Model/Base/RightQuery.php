@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -82,8 +83,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\UserQuery|\Model\SiteQuery|\Model\PublisherQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildRight|null findOne(ConnectionInterface $con = null) Return the first ChildRight matching the query
- * @method     ChildRight findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRight matching the query, or a new ChildRight object populated from the query conditions when no match is found
+ * @method     ChildRight|null findOne(?ConnectionInterface $con = null) Return the first ChildRight matching the query
+ * @method     ChildRight findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildRight matching the query, or a new ChildRight object populated from the query conditions when no match is found
  *
  * @method     ChildRight|null findOneById(int $right_id) Return the first ChildRight filtered by the right_id column
  * @method     ChildRight|null findOneByUid(string $right_uid) Return the first ChildRight filtered by the right_uid column
@@ -96,8 +97,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight|null findOneByCreatedAt(string $right_created) Return the first ChildRight filtered by the right_created column
  * @method     ChildRight|null findOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column *
 
- * @method     ChildRight requirePk($key, ConnectionInterface $con = null) Return the ChildRight by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRight requireOne(ConnectionInterface $con = null) Return the first ChildRight matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRight requirePk($key, ?ConnectionInterface $con = null) Return the ChildRight by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRight requireOne(?ConnectionInterface $con = null) Return the first ChildRight matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRight requireOneById(int $right_id) Return the first ChildRight filtered by the right_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByUid(string $right_uid) Return the first ChildRight filtered by the right_uid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -110,30 +111,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight requireOneByCreatedAt(string $right_created) Return the first ChildRight filtered by the right_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildRight[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildRight> find(ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
- * @method     ChildRight[]|ObjectCollection findById(int $right_id) Return ChildRight objects filtered by the right_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findById(int $right_id) Return ChildRight objects filtered by the right_id column
- * @method     ChildRight[]|ObjectCollection findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
- * @method     ChildRight[]|ObjectCollection findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
- * @method     ChildRight[]|ObjectCollection findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
- * @method     ChildRight[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
- * @method     ChildRight[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
- * @method     ChildRight[]|ObjectCollection findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
- * @method     ChildRight[]|ObjectCollection findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
- * @method     ChildRight[]|ObjectCollection findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
- * @method     ChildRight[]|ObjectCollection findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildRight> findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
- * @method     ChildRight[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRight> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildRight[]|Collection find(?ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildRight> find(?ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
+ * @method     ChildRight[]|Collection findById(int $right_id) Return ChildRight objects filtered by the right_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findById(int $right_id) Return ChildRight objects filtered by the right_id column
+ * @method     ChildRight[]|Collection findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
+ * @method     ChildRight[]|Collection findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
+ * @method     ChildRight[]|Collection findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
+ * @method     ChildRight[]|Collection findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
+ * @method     ChildRight[]|Collection findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
+ * @method     ChildRight[]|Collection findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
+ * @method     ChildRight[]|Collection findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
+ * @psalm-method Collection&\Traversable<ChildRight> findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
+ * @method     ChildRight[]|Collection findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
+ * @psalm-method Collection&\Traversable<ChildRight> findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
+ * @method     ChildRight[]|Collection findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
+ * @method     ChildRight[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRight> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RightQuery extends ModelCriteria
@@ -143,9 +144,9 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\RightQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Right', $modelAlias = null)
     {
@@ -155,12 +156,12 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Returns a new ChildRightQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildRightQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildRightQuery) {
             return $criteria;
@@ -190,7 +191,7 @@ abstract class RightQuery extends ModelCriteria
      *
      * @return ChildRight|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -222,8 +223,8 @@ abstract class RightQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -255,8 +256,8 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildRight|array|mixed the result, formatted by the current formatter
      */
@@ -276,12 +277,12 @@ abstract class RightQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -298,27 +299,31 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -331,15 +336,15 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE right_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -359,7 +364,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $id, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -369,14 +376,15 @@ abstract class RightQuery extends ModelCriteria
      * <code>
      * $query->filterByUid('fooValue');   // WHERE right_uid = 'fooValue'
      * $query->filterByUid('%fooValue%', Criteria::LIKE); // WHERE right_uid LIKE '%fooValue%'
+     * $query->filterByUid(['foo', 'bar']); // WHERE right_uid IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $uid The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $uid The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUid($uid = null, $comparison = null)
+    public function filterByUid($uid = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($uid)) {
@@ -384,7 +392,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_UID, $uid, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_UID, $uid, $comparison);
+
+        return $this;
     }
 
     /**
@@ -399,15 +409,15 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see       filterByUser()
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -427,7 +437,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -442,15 +454,15 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see       filterBySite()
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -470,7 +482,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -485,15 +499,15 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see       filterByPublisher()
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -513,7 +527,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -526,15 +542,15 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -554,7 +570,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -567,15 +585,15 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $libraryId The value to use as filter.
+     * @param mixed $libraryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLibraryId($libraryId = null, $comparison = null)
+    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
     {
         if (is_array($libraryId)) {
             $useMinMax = false;
@@ -595,7 +613,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -607,22 +627,24 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterByCurrent('yes'); // WHERE right_current = true
      * </code>
      *
-     * @param     boolean|string $current The value to use as filter.
+     * @param bool|string $current The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCurrent($current = null, $comparison = null)
+    public function filterByCurrent($current = null, ?string $comparison = null)
     {
         if (is_string($current)) {
             $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_CURRENT, $current, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_CURRENT, $current, $comparison);
+
+        return $this;
     }
 
     /**
@@ -635,17 +657,17 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE right_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -665,7 +687,9 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -678,17 +702,17 @@ abstract class RightQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE right_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -708,20 +732,22 @@ abstract class RightQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\User object
      *
      * @param \Model\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUser($user, $comparison = null)
+    public function filterByUser($user, ?string $comparison = null)
     {
         if ($user instanceof \Model\User) {
             return $this
@@ -731,8 +757,10 @@ abstract class RightQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(RightTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
         }
@@ -741,12 +769,12 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -775,9 +803,9 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\UserQuery A secondary query class using the current class as primary query
      */
@@ -847,13 +875,13 @@ abstract class RightQuery extends ModelCriteria
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site, $comparison = null)
+    public function filterBySite($site, ?string $comparison = null)
     {
         if ($site instanceof \Model\Site) {
             return $this
@@ -863,8 +891,10 @@ abstract class RightQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(RightTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
         }
@@ -873,12 +903,12 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Site relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -907,9 +937,9 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
@@ -979,13 +1009,13 @@ abstract class RightQuery extends ModelCriteria
      * Filter the query by a related \Model\Publisher object
      *
      * @param \Model\Publisher|ObjectCollection $publisher The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisher($publisher, $comparison = null)
+    public function filterByPublisher($publisher, ?string $comparison = null)
     {
         if ($publisher instanceof \Model\Publisher) {
             return $this
@@ -995,8 +1025,10 @@ abstract class RightQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(RightTableMap::COL_PUBLISHER_ID, $publisher->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByPublisher() only accepts arguments of type \Model\Publisher or Collection');
         }
@@ -1005,12 +1037,12 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Publisher relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinPublisher($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPublisher(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Publisher');
@@ -1039,9 +1071,9 @@ abstract class RightQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\PublisherQuery A secondary query class using the current class as primary query
      */
@@ -1110,9 +1142,9 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildRight $right Object to remove from the list of results
+     * @param ChildRight $right Object to remove from the list of results
      *
-     * @return $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($right = null)
     {
@@ -1129,7 +1161,7 @@ abstract class RightQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RightTableMap::DATABASE_NAME);
@@ -1154,12 +1186,12 @@ abstract class RightQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RightTableMap::DATABASE_NAME);
@@ -1189,65 +1221,77 @@ abstract class RightQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RightTableMap::COL_RIGHT_UPDATED);
+        $this->addDescendingOrderByColumn(RightTableMap::COL_RIGHT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RightTableMap::COL_RIGHT_UPDATED);
+        $this->addAscendingOrderByColumn(RightTableMap::COL_RIGHT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RightTableMap::COL_RIGHT_CREATED);
+        $this->addDescendingOrderByColumn(RightTableMap::COL_RIGHT_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(RightTableMap::COL_RIGHT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RightTableMap::COL_RIGHT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildRightQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RightTableMap::COL_RIGHT_CREATED);
+        $this->addAscendingOrderByColumn(RightTableMap::COL_RIGHT_CREATED);
+
+        return $this;
     }
 
-} // RightQuery
+}

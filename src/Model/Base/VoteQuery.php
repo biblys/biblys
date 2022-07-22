@@ -10,7 +10,7 @@ use Model\Map\VoteTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -39,8 +39,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVoteQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildVoteQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildVote|null findOne(ConnectionInterface $con = null) Return the first ChildVote matching the query
- * @method     ChildVote findOneOrCreate(ConnectionInterface $con = null) Return the first ChildVote matching the query, or a new ChildVote object populated from the query conditions when no match is found
+ * @method     ChildVote|null findOne(?ConnectionInterface $con = null) Return the first ChildVote matching the query
+ * @method     ChildVote findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildVote matching the query, or a new ChildVote object populated from the query conditions when no match is found
  *
  * @method     ChildVote|null findOneById(int $vote_id) Return the first ChildVote filtered by the vote_id column
  * @method     ChildVote|null findOneByUserId(int $user_id) Return the first ChildVote filtered by the user_id column
@@ -48,8 +48,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote|null findOneByE(int $vote_E) Return the first ChildVote filtered by the vote_E column
  * @method     ChildVote|null findOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column *
 
- * @method     ChildVote requirePk($key, ConnectionInterface $con = null) Return the ChildVote by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildVote requireOne(ConnectionInterface $con = null) Return the first ChildVote matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildVote requirePk($key, ?ConnectionInterface $con = null) Return the ChildVote by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildVote requireOne(?ConnectionInterface $con = null) Return the first ChildVote matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildVote requireOneById(int $vote_id) Return the first ChildVote filtered by the vote_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOneByUserId(int $user_id) Return the first ChildVote filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -57,20 +57,20 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote requireOneByE(int $vote_E) Return the first ChildVote filtered by the vote_E column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildVote[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildVote> find(ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
- * @method     ChildVote[]|ObjectCollection findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
- * @psalm-method ObjectCollection&\Traversable<ChildVote> findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
- * @method     ChildVote[]|ObjectCollection findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildVote> findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
- * @method     ChildVote[]|ObjectCollection findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
- * @psalm-method ObjectCollection&\Traversable<ChildVote> findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
- * @method     ChildVote[]|ObjectCollection findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
- * @psalm-method ObjectCollection&\Traversable<ChildVote> findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
- * @method     ChildVote[]|ObjectCollection findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
- * @psalm-method ObjectCollection&\Traversable<ChildVote> findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
- * @method     ChildVote[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildVote> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildVote[]|Collection find(?ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildVote> find(?ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
+ * @method     ChildVote[]|Collection findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
+ * @psalm-method Collection&\Traversable<ChildVote> findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
+ * @method     ChildVote[]|Collection findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildVote> findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
+ * @method     ChildVote[]|Collection findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
+ * @psalm-method Collection&\Traversable<ChildVote> findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
+ * @method     ChildVote[]|Collection findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
+ * @psalm-method Collection&\Traversable<ChildVote> findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
+ * @method     ChildVote[]|Collection findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
+ * @psalm-method Collection&\Traversable<ChildVote> findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
+ * @method     ChildVote[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildVote> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class VoteQuery extends ModelCriteria
@@ -80,9 +80,9 @@ abstract class VoteQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\VoteQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Vote', $modelAlias = null)
     {
@@ -92,12 +92,12 @@ abstract class VoteQuery extends ModelCriteria
     /**
      * Returns a new ChildVoteQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildVoteQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildVoteQuery) {
             return $criteria;
@@ -127,7 +127,7 @@ abstract class VoteQuery extends ModelCriteria
      *
      * @return ChildVote|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -159,8 +159,8 @@ abstract class VoteQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -192,8 +192,8 @@ abstract class VoteQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildVote|array|mixed the result, formatted by the current formatter
      */
@@ -213,12 +213,12 @@ abstract class VoteQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -235,27 +235,31 @@ abstract class VoteQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -268,15 +272,15 @@ abstract class VoteQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE vote_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -296,7 +300,9 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $id, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -309,15 +315,15 @@ abstract class VoteQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -337,7 +343,9 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VoteTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -350,15 +358,15 @@ abstract class VoteQuery extends ModelCriteria
      * $query->filterByF(array('min' => 12)); // WHERE vote_F > 12
      * </code>
      *
-     * @param     mixed $f The value to use as filter.
+     * @param mixed $f The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByF($f = null, $comparison = null)
+    public function filterByF($f = null, ?string $comparison = null)
     {
         if (is_array($f)) {
             $useMinMax = false;
@@ -378,7 +386,9 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_F, $f, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_F, $f, $comparison);
+
+        return $this;
     }
 
     /**
@@ -391,15 +401,15 @@ abstract class VoteQuery extends ModelCriteria
      * $query->filterByE(array('min' => 12)); // WHERE vote_E > 12
      * </code>
      *
-     * @param     mixed $e The value to use as filter.
+     * @param mixed $e The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByE($e = null, $comparison = null)
+    public function filterByE($e = null, ?string $comparison = null)
     {
         if (is_array($e)) {
             $useMinMax = false;
@@ -419,7 +429,9 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_E, $e, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_E, $e, $comparison);
+
+        return $this;
     }
 
     /**
@@ -432,17 +444,17 @@ abstract class VoteQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE vote_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -462,15 +474,17 @@ abstract class VoteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VoteTableMap::COL_VOTE_DATE, $date, $comparison);
+        $this->addUsingAlias(VoteTableMap::COL_VOTE_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildVote $vote Object to remove from the list of results
+     * @param ChildVote $vote Object to remove from the list of results
      *
-     * @return $this|ChildVoteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($vote = null)
     {
@@ -487,7 +501,7 @@ abstract class VoteQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(VoteTableMap::DATABASE_NAME);
@@ -512,12 +526,12 @@ abstract class VoteQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(VoteTableMap::DATABASE_NAME);
@@ -542,4 +556,4 @@ abstract class VoteQuery extends ModelCriteria
         });
     }
 
-} // VoteQuery
+}

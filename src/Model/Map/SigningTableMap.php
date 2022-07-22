@@ -33,130 +33,134 @@ class SigningTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.SigningTableMap';
+    public const CLASS_NAME = 'Model.Map.SigningTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'signings';
+    public const TABLE_NAME = 'signings';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Signing';
+    public const OM_CLASS = '\\Model\\Signing';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Signing';
+    public const CLASS_DEFAULT = 'Model.Signing';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    public const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    public const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the signing_id field
      */
-    const COL_SIGNING_ID = 'signings.signing_id';
+    public const COL_SIGNING_ID = 'signings.signing_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'signings.site_id';
+    public const COL_SITE_ID = 'signings.site_id';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'signings.publisher_id';
+    public const COL_PUBLISHER_ID = 'signings.publisher_id';
 
     /**
      * the column name for the people_id field
      */
-    const COL_PEOPLE_ID = 'signings.people_id';
+    public const COL_PEOPLE_ID = 'signings.people_id';
 
     /**
      * the column name for the signing_date field
      */
-    const COL_SIGNING_DATE = 'signings.signing_date';
+    public const COL_SIGNING_DATE = 'signings.signing_date';
 
     /**
      * the column name for the signing_starts field
      */
-    const COL_SIGNING_STARTS = 'signings.signing_starts';
+    public const COL_SIGNING_STARTS = 'signings.signing_starts';
 
     /**
      * the column name for the signing_ends field
      */
-    const COL_SIGNING_ENDS = 'signings.signing_ends';
+    public const COL_SIGNING_ENDS = 'signings.signing_ends';
 
     /**
      * the column name for the signing_location field
      */
-    const COL_SIGNING_LOCATION = 'signings.signing_location';
+    public const COL_SIGNING_LOCATION = 'signings.signing_location';
 
     /**
      * the column name for the signing_created field
      */
-    const COL_SIGNING_CREATED = 'signings.signing_created';
+    public const COL_SIGNING_CREATED = 'signings.signing_created';
 
     /**
      * the column name for the signing_updated field
      */
-    const COL_SIGNING_UPDATED = 'signings.signing_updated';
+    public const COL_SIGNING_UPDATED = 'signings.signing_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'PeopleId', 'Date', 'Starts', 'Ends', 'Location', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'peopleId', 'date', 'starts', 'ends', 'location', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID, SigningTableMap::COL_SITE_ID, SigningTableMap::COL_PUBLISHER_ID, SigningTableMap::COL_PEOPLE_ID, SigningTableMap::COL_SIGNING_DATE, SigningTableMap::COL_SIGNING_STARTS, SigningTableMap::COL_SIGNING_ENDS, SigningTableMap::COL_SIGNING_LOCATION, SigningTableMap::COL_SIGNING_CREATED, SigningTableMap::COL_SIGNING_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('signing_id', 'site_id', 'publisher_id', 'people_id', 'signing_date', 'signing_starts', 'signing_ends', 'signing_location', 'signing_created', 'signing_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'PeopleId', 'Date', 'Starts', 'Ends', 'Location', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'peopleId', 'date', 'starts', 'ends', 'location', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SigningTableMap::COL_SIGNING_ID, SigningTableMap::COL_SITE_ID, SigningTableMap::COL_PUBLISHER_ID, SigningTableMap::COL_PEOPLE_ID, SigningTableMap::COL_SIGNING_DATE, SigningTableMap::COL_SIGNING_STARTS, SigningTableMap::COL_SIGNING_ENDS, SigningTableMap::COL_SIGNING_LOCATION, SigningTableMap::COL_SIGNING_CREATED, SigningTableMap::COL_SIGNING_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['signing_id', 'site_id', 'publisher_id', 'people_id', 'signing_date', 'signing_starts', 'signing_ends', 'signing_location', 'signing_created', 'signing_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PeopleId' => 3, 'Date' => 4, 'Starts' => 5, 'Ends' => 6, 'Location' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'peopleId' => 3, 'date' => 4, 'starts' => 5, 'ends' => 6, 'location' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
-        self::TYPE_COLNAME       => array(SigningTableMap::COL_SIGNING_ID => 0, SigningTableMap::COL_SITE_ID => 1, SigningTableMap::COL_PUBLISHER_ID => 2, SigningTableMap::COL_PEOPLE_ID => 3, SigningTableMap::COL_SIGNING_DATE => 4, SigningTableMap::COL_SIGNING_STARTS => 5, SigningTableMap::COL_SIGNING_ENDS => 6, SigningTableMap::COL_SIGNING_LOCATION => 7, SigningTableMap::COL_SIGNING_CREATED => 8, SigningTableMap::COL_SIGNING_UPDATED => 9, ),
-        self::TYPE_FIELDNAME     => array('signing_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'people_id' => 3, 'signing_date' => 4, 'signing_starts' => 5, 'signing_ends' => 6, 'signing_location' => 7, 'signing_created' => 8, 'signing_updated' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'PeopleId' => 3, 'Date' => 4, 'Starts' => 5, 'Ends' => 6, 'Location' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'peopleId' => 3, 'date' => 4, 'starts' => 5, 'ends' => 6, 'location' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
+        self::TYPE_COLNAME       => [SigningTableMap::COL_SIGNING_ID => 0, SigningTableMap::COL_SITE_ID => 1, SigningTableMap::COL_PUBLISHER_ID => 2, SigningTableMap::COL_PEOPLE_ID => 3, SigningTableMap::COL_SIGNING_DATE => 4, SigningTableMap::COL_SIGNING_STARTS => 5, SigningTableMap::COL_SIGNING_ENDS => 6, SigningTableMap::COL_SIGNING_LOCATION => 7, SigningTableMap::COL_SIGNING_CREATED => 8, SigningTableMap::COL_SIGNING_UPDATED => 9, ],
+        self::TYPE_FIELDNAME     => ['signing_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'people_id' => 3, 'signing_date' => 4, 'signing_starts' => 5, 'signing_ends' => 6, 'signing_location' => 7, 'signing_created' => 8, 'signing_updated' => 9, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'SIGNING_ID',
@@ -246,9 +250,9 @@ class SigningTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('signings');
@@ -268,27 +272,29 @@ class SigningTableMap extends TableMap
         $this->addColumn('signing_location', 'Location', 'VARCHAR', false, 255, null);
         $this->addColumn('signing_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('signing_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'signing_created', 'update_column' => 'signing_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -296,14 +302,14 @@ class SigningTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -318,14 +324,14 @@ class SigningTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -342,10 +348,10 @@ class SigningTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? SigningTableMap::CLASS_DEFAULT : SigningTableMap::OM_CLASS;
     }
@@ -353,17 +359,17 @@ class SigningTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Signing object, last column rank)
+     * @return array (Signing object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = SigningTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = SigningTableMap::getInstanceFromPool($key))) {
@@ -387,13 +393,13 @@ class SigningTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -423,12 +429,13 @@ class SigningTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(SigningTableMap::COL_SIGNING_ID);
@@ -461,12 +468,13 @@ class SigningTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(SigningTableMap::COL_SIGNING_ID);
@@ -497,10 +505,10 @@ class SigningTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(SigningTableMap::DATABASE_NAME)->getTable(SigningTableMap::TABLE_NAME);
     }
@@ -508,15 +516,15 @@ class SigningTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Signing or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Signing object or primary key or array of primary keys
+     * @param mixed $values Criteria or Signing object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SigningTableMap::DATABASE_NAME);
@@ -552,7 +560,7 @@ class SigningTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return SigningQuery::create()->doDeleteAll($con);
     }
@@ -560,13 +568,13 @@ class SigningTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Signing or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Signing object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Signing object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SigningTableMap::DATABASE_NAME);
@@ -593,4 +601,4 @@ class SigningTableMap extends TableMap
         });
     }
 
-} // SigningTableMap
+}

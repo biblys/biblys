@@ -10,7 +10,7 @@ use Model\Map\MailingTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -45,8 +45,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailingQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMailingQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMailing|null findOne(ConnectionInterface $con = null) Return the first ChildMailing matching the query
- * @method     ChildMailing findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMailing matching the query, or a new ChildMailing object populated from the query conditions when no match is found
+ * @method     ChildMailing|null findOne(?ConnectionInterface $con = null) Return the first ChildMailing matching the query
+ * @method     ChildMailing findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildMailing matching the query, or a new ChildMailing object populated from the query conditions when no match is found
  *
  * @method     ChildMailing|null findOneById(int $mailing_id) Return the first ChildMailing filtered by the mailing_id column
  * @method     ChildMailing|null findOneBySiteId(int $site_id) Return the first ChildMailing filtered by the site_id column
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing|null findOneByCreatedAt(string $mailing_created) Return the first ChildMailing filtered by the mailing_created column
  * @method     ChildMailing|null findOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column *
 
- * @method     ChildMailing requirePk($key, ConnectionInterface $con = null) Return the ChildMailing by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMailing requireOne(ConnectionInterface $con = null) Return the first ChildMailing matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMailing requirePk($key, ?ConnectionInterface $con = null) Return the ChildMailing by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMailing requireOne(?ConnectionInterface $con = null) Return the first ChildMailing matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMailing requireOneById(int $mailing_id) Return the first ChildMailing filtered by the mailing_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOneBySiteId(int $site_id) Return the first ChildMailing filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -69,26 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing requireOneByCreatedAt(string $mailing_created) Return the first ChildMailing filtered by the mailing_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMailing[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> find(ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
- * @method     ChildMailing[]|ObjectCollection findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
- * @method     ChildMailing[]|ObjectCollection findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
- * @method     ChildMailing[]|ObjectCollection findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
- * @method     ChildMailing[]|ObjectCollection findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
- * @method     ChildMailing[]|ObjectCollection findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
- * @method     ChildMailing[]|ObjectCollection findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
- * @method     ChildMailing[]|ObjectCollection findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
- * @method     ChildMailing[]|ObjectCollection findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildMailing> findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
- * @method     ChildMailing[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMailing> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildMailing[]|Collection find(?ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildMailing> find(?ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
+ * @method     ChildMailing[]|Collection findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
+ * @psalm-method Collection&\Traversable<ChildMailing> findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
+ * @method     ChildMailing[]|Collection findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildMailing> findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
+ * @method     ChildMailing[]|Collection findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
+ * @method     ChildMailing[]|Collection findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
+ * @method     ChildMailing[]|Collection findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
+ * @method     ChildMailing[]|Collection findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
+ * @method     ChildMailing[]|Collection findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
+ * @method     ChildMailing[]|Collection findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ * @method     ChildMailing[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMailing> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class MailingQuery extends ModelCriteria
@@ -98,9 +98,9 @@ abstract class MailingQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\MailingQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Mailing', $modelAlias = null)
     {
@@ -110,12 +110,12 @@ abstract class MailingQuery extends ModelCriteria
     /**
      * Returns a new ChildMailingQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildMailingQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildMailingQuery) {
             return $criteria;
@@ -145,7 +145,7 @@ abstract class MailingQuery extends ModelCriteria
      *
      * @return ChildMailing|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -177,8 +177,8 @@ abstract class MailingQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -210,8 +210,8 @@ abstract class MailingQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildMailing|array|mixed the result, formatted by the current formatter
      */
@@ -231,12 +231,12 @@ abstract class MailingQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -253,27 +253,31 @@ abstract class MailingQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -286,15 +290,15 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE mailing_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -314,7 +318,9 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $id, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -327,15 +333,15 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -355,7 +361,9 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -365,14 +373,15 @@ abstract class MailingQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE mailing_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE mailing_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE mailing_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -380,7 +389,9 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_EMAIL, $email, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -392,22 +403,24 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterByBlock('yes'); // WHERE mailing_block = true
      * </code>
      *
-     * @param     boolean|string $block The value to use as filter.
+     * @param bool|string $block The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBlock($block = null, $comparison = null)
+    public function filterByBlock($block = null, ?string $comparison = null)
     {
         if (is_string($block)) {
             $block = in_array(strtolower($block), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_BLOCK, $block, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_BLOCK, $block, $comparison);
+
+        return $this;
     }
 
     /**
@@ -419,22 +432,24 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterByChecked('yes'); // WHERE mailing_checked = true
      * </code>
      *
-     * @param     boolean|string $checked The value to use as filter.
+     * @param bool|string $checked The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByChecked($checked = null, $comparison = null)
+    public function filterByChecked($checked = null, ?string $comparison = null)
     {
         if (is_string($checked)) {
             $checked = in_array(strtolower($checked), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_CHECKED, $checked, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_CHECKED, $checked, $comparison);
+
+        return $this;
     }
 
     /**
@@ -447,17 +462,17 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE mailing_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -477,7 +492,9 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_DATE, $date, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -490,17 +507,17 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE mailing_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -520,7 +537,9 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -533,17 +552,17 @@ abstract class MailingQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE mailing_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -563,15 +582,17 @@ abstract class MailingQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildMailing $mailing Object to remove from the list of results
+     * @param ChildMailing $mailing Object to remove from the list of results
      *
-     * @return $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($mailing = null)
     {
@@ -588,7 +609,7 @@ abstract class MailingQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MailingTableMap::DATABASE_NAME);
@@ -613,12 +634,12 @@ abstract class MailingQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MailingTableMap::DATABASE_NAME);
@@ -648,65 +669,77 @@ abstract class MailingQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(MailingTableMap::COL_MAILING_UPDATED);
+        $this->addDescendingOrderByColumn(MailingTableMap::COL_MAILING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(MailingTableMap::COL_MAILING_UPDATED);
+        $this->addAscendingOrderByColumn(MailingTableMap::COL_MAILING_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(MailingTableMap::COL_MAILING_CREATED);
+        $this->addDescendingOrderByColumn(MailingTableMap::COL_MAILING_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(MailingTableMap::COL_MAILING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(MailingTableMap::COL_MAILING_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildMailingQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(MailingTableMap::COL_MAILING_CREATED);
+        $this->addAscendingOrderByColumn(MailingTableMap::COL_MAILING_CREATED);
+
+        return $this;
     }
 
-} // MailingQuery
+}

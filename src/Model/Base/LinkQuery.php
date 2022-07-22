@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -100,8 +101,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\ArticleQuery|\Model\TagQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLink|null findOne(ConnectionInterface $con = null) Return the first ChildLink matching the query
- * @method     ChildLink findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLink matching the query, or a new ChildLink object populated from the query conditions when no match is found
+ * @method     ChildLink|null findOne(?ConnectionInterface $con = null) Return the first ChildLink matching the query
+ * @method     ChildLink findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLink matching the query, or a new ChildLink object populated from the query conditions when no match is found
  *
  * @method     ChildLink|null findOneById(int $link_id) Return the first ChildLink filtered by the link_id column
  * @method     ChildLink|null findOneBySiteId(int $site_id) Return the first ChildLink filtered by the site_id column
@@ -128,8 +129,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink|null findOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column
  * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column *
 
- * @method     ChildLink requirePk($key, ConnectionInterface $con = null) Return the ChildLink by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLink requireOne(ConnectionInterface $con = null) Return the first ChildLink matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLink requirePk($key, ?ConnectionInterface $con = null) Return the ChildLink by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLink requireOne(?ConnectionInterface $con = null) Return the first ChildLink matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLink requireOneById(int $link_id) Return the first ChildLink filtered by the link_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneBySiteId(int $site_id) Return the first ChildLink filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -156,58 +157,58 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink requireOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildLink[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildLink> find(ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
- * @method     ChildLink[]|ObjectCollection findById(int $link_id) Return ChildLink objects filtered by the link_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findById(int $link_id) Return ChildLink objects filtered by the link_id column
- * @method     ChildLink[]|ObjectCollection findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
- * @method     ChildLink[]|ObjectCollection findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
- * @method     ChildLink[]|ObjectCollection findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
- * @method     ChildLink[]|ObjectCollection findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
- * @method     ChildLink[]|ObjectCollection findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
- * @method     ChildLink[]|ObjectCollection findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
- * @method     ChildLink[]|ObjectCollection findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
- * @method     ChildLink[]|ObjectCollection findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
- * @method     ChildLink[]|ObjectCollection findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
- * @method     ChildLink[]|ObjectCollection findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
- * @method     ChildLink[]|ObjectCollection findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
- * @method     ChildLink[]|ObjectCollection findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
- * @method     ChildLink[]|ObjectCollection findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
- * @method     ChildLink[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
- * @method     ChildLink[]|ObjectCollection findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
- * @method     ChildLink[]|ObjectCollection findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
- * @method     ChildLink[]|ObjectCollection findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
- * @method     ChildLink[]|ObjectCollection findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
- * @method     ChildLink[]|ObjectCollection findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
- * @method     ChildLink[]|ObjectCollection findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
- * @method     ChildLink[]|ObjectCollection findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
- * @method     ChildLink[]|ObjectCollection findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
- * @method     ChildLink[]|ObjectCollection findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildLink> findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
- * @method     ChildLink[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLink> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildLink[]|Collection find(?ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildLink> find(?ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
+ * @method     ChildLink[]|Collection findById(int $link_id) Return ChildLink objects filtered by the link_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findById(int $link_id) Return ChildLink objects filtered by the link_id column
+ * @method     ChildLink[]|Collection findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
+ * @method     ChildLink[]|Collection findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
+ * @method     ChildLink[]|Collection findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
+ * @method     ChildLink[]|Collection findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
+ * @method     ChildLink[]|Collection findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
+ * @method     ChildLink[]|Collection findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
+ * @method     ChildLink[]|Collection findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
+ * @method     ChildLink[]|Collection findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
+ * @method     ChildLink[]|Collection findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
+ * @method     ChildLink[]|Collection findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
+ * @method     ChildLink[]|Collection findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
+ * @method     ChildLink[]|Collection findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
+ * @method     ChildLink[]|Collection findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
+ * @method     ChildLink[]|Collection findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
+ * @method     ChildLink[]|Collection findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
+ * @method     ChildLink[]|Collection findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
+ * @method     ChildLink[]|Collection findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
+ * @method     ChildLink[]|Collection findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
+ * @psalm-method Collection&\Traversable<ChildLink> findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
+ * @method     ChildLink[]|Collection findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
+ * @psalm-method Collection&\Traversable<ChildLink> findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
+ * @method     ChildLink[]|Collection findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
+ * @method     ChildLink[]|Collection findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
+ * @psalm-method Collection&\Traversable<ChildLink> findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
+ * @method     ChildLink[]|Collection findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
+ * @psalm-method Collection&\Traversable<ChildLink> findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
+ * @method     ChildLink[]|Collection findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
+ * @psalm-method Collection&\Traversable<ChildLink> findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
+ * @method     ChildLink[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLink> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class LinkQuery extends ModelCriteria
@@ -217,9 +218,9 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\LinkQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Link', $modelAlias = null)
     {
@@ -229,12 +230,12 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Returns a new ChildLinkQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildLinkQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildLinkQuery) {
             return $criteria;
@@ -264,7 +265,7 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @return ChildLink|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -296,8 +297,8 @@ abstract class LinkQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -329,8 +330,8 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildLink|array|mixed the result, formatted by the current formatter
      */
@@ -350,12 +351,12 @@ abstract class LinkQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -372,27 +373,31 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -405,15 +410,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE link_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -433,7 +438,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $id, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -446,15 +453,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -474,7 +481,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -487,15 +496,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -515,7 +524,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -530,15 +541,15 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @see       filterByArticle()
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -558,7 +569,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -571,15 +584,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByStockId(array('min' => 12)); // WHERE stock_id > 12
      * </code>
      *
-     * @param     mixed $stockId The value to use as filter.
+     * @param mixed $stockId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStockId($stockId = null, $comparison = null)
+    public function filterByStockId($stockId = null, ?string $comparison = null)
     {
         if (is_array($stockId)) {
             $useMinMax = false;
@@ -599,7 +612,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_STOCK_ID, $stockId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_STOCK_ID, $stockId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -612,15 +627,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByListId(array('min' => 12)); // WHERE list_id > 12
      * </code>
      *
-     * @param     mixed $listId The value to use as filter.
+     * @param mixed $listId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByListId($listId = null, $comparison = null)
+    public function filterByListId($listId = null, ?string $comparison = null)
     {
         if (is_array($listId)) {
             $useMinMax = false;
@@ -640,7 +655,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LIST_ID, $listId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LIST_ID, $listId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -653,15 +670,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByBookId(array('min' => 12)); // WHERE book_id > 12
      * </code>
      *
-     * @param     mixed $bookId The value to use as filter.
+     * @param mixed $bookId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookId($bookId = null, $comparison = null)
+    public function filterByBookId($bookId = null, ?string $comparison = null)
     {
         if (is_array($bookId)) {
             $useMinMax = false;
@@ -681,7 +698,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_BOOK_ID, $bookId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_BOOK_ID, $bookId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -694,15 +713,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByPeopleId(array('min' => 12)); // WHERE people_id > 12
      * </code>
      *
-     * @param     mixed $peopleId The value to use as filter.
+     * @param mixed $peopleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPeopleId($peopleId = null, $comparison = null)
+    public function filterByPeopleId($peopleId = null, ?string $comparison = null)
     {
         if (is_array($peopleId)) {
             $useMinMax = false;
@@ -722,7 +741,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_PEOPLE_ID, $peopleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -735,15 +756,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByJobId(array('min' => 12)); // WHERE job_id > 12
      * </code>
      *
-     * @param     mixed $jobId The value to use as filter.
+     * @param mixed $jobId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByJobId($jobId = null, $comparison = null)
+    public function filterByJobId($jobId = null, ?string $comparison = null)
     {
         if (is_array($jobId)) {
             $useMinMax = false;
@@ -763,7 +784,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_JOB_ID, $jobId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_JOB_ID, $jobId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -776,15 +799,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByRayonId(array('min' => 12)); // WHERE rayon_id > 12
      * </code>
      *
-     * @param     mixed $rayonId The value to use as filter.
+     * @param mixed $rayonId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRayonId($rayonId = null, $comparison = null)
+    public function filterByRayonId($rayonId = null, ?string $comparison = null)
     {
         if (is_array($rayonId)) {
             $useMinMax = false;
@@ -804,7 +827,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_RAYON_ID, $rayonId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_RAYON_ID, $rayonId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -819,15 +844,15 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @see       filterByTag()
      *
-     * @param     mixed $tagId The value to use as filter.
+     * @param mixed $tagId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTagId($tagId = null, $comparison = null)
+    public function filterByTagId($tagId = null, ?string $comparison = null)
     {
         if (is_array($tagId)) {
             $useMinMax = false;
@@ -847,7 +872,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_TAG_ID, $tagId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_TAG_ID, $tagId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -860,15 +887,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByEventId(array('min' => 12)); // WHERE event_id > 12
      * </code>
      *
-     * @param     mixed $eventId The value to use as filter.
+     * @param mixed $eventId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEventId($eventId = null, $comparison = null)
+    public function filterByEventId($eventId = null, ?string $comparison = null)
     {
         if (is_array($eventId)) {
             $useMinMax = false;
@@ -888,7 +915,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_EVENT_ID, $eventId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_EVENT_ID, $eventId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -901,15 +930,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByPostId(array('min' => 12)); // WHERE post_id > 12
      * </code>
      *
-     * @param     mixed $postId The value to use as filter.
+     * @param mixed $postId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPostId($postId = null, $comparison = null)
+    public function filterByPostId($postId = null, ?string $comparison = null)
     {
         if (is_array($postId)) {
             $useMinMax = false;
@@ -929,7 +958,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_POST_ID, $postId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_POST_ID, $postId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -942,15 +973,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByCollectionId(array('min' => 12)); // WHERE collection_id > 12
      * </code>
      *
-     * @param     mixed $collectionId The value to use as filter.
+     * @param mixed $collectionId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCollectionId($collectionId = null, $comparison = null)
+    public function filterByCollectionId($collectionId = null, ?string $comparison = null)
     {
         if (is_array($collectionId)) {
             $useMinMax = false;
@@ -970,7 +1001,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_COLLECTION_ID, $collectionId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_COLLECTION_ID, $collectionId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -983,15 +1016,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -1011,7 +1044,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1024,15 +1059,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterBySupplierId(array('min' => 12)); // WHERE supplier_id > 12
      * </code>
      *
-     * @param     mixed $supplierId The value to use as filter.
+     * @param mixed $supplierId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySupplierId($supplierId = null, $comparison = null)
+    public function filterBySupplierId($supplierId = null, ?string $comparison = null)
     {
         if (is_array($supplierId)) {
             $useMinMax = false;
@@ -1052,7 +1087,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_SUPPLIER_ID, $supplierId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_SUPPLIER_ID, $supplierId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1065,15 +1102,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByMediaId(array('min' => 12)); // WHERE media_id > 12
      * </code>
      *
-     * @param     mixed $mediaId The value to use as filter.
+     * @param mixed $mediaId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMediaId($mediaId = null, $comparison = null)
+    public function filterByMediaId($mediaId = null, ?string $comparison = null)
     {
         if (is_array($mediaId)) {
             $useMinMax = false;
@@ -1093,7 +1130,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_MEDIA_ID, $mediaId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_MEDIA_ID, $mediaId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1106,15 +1145,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByBundleId(array('min' => 12)); // WHERE bundle_id > 12
      * </code>
      *
-     * @param     mixed $bundleId The value to use as filter.
+     * @param mixed $bundleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBundleId($bundleId = null, $comparison = null)
+    public function filterByBundleId($bundleId = null, ?string $comparison = null)
     {
         if (is_array($bundleId)) {
             $useMinMax = false;
@@ -1134,7 +1173,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_BUNDLE_ID, $bundleId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_BUNDLE_ID, $bundleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1146,22 +1187,24 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByHide('yes'); // WHERE link_hide = true
      * </code>
      *
-     * @param     boolean|string $hide The value to use as filter.
+     * @param bool|string $hide The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHide($hide = null, $comparison = null)
+    public function filterByHide($hide = null, ?string $comparison = null)
     {
         if (is_string($hide)) {
             $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_HIDE, $hide, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_HIDE, $hide, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1173,22 +1216,24 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByDoNotReorder('yes'); // WHERE link_do_not_reorder = true
      * </code>
      *
-     * @param     boolean|string $doNotReorder The value to use as filter.
+     * @param bool|string $doNotReorder The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDoNotReorder($doNotReorder = null, $comparison = null)
+    public function filterByDoNotReorder($doNotReorder = null, ?string $comparison = null)
     {
         if (is_string($doNotReorder)) {
             $doNotReorder = in_array(strtolower($doNotReorder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_DO_NOT_REORDER, $doNotReorder, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_DO_NOT_REORDER, $doNotReorder, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1201,15 +1246,15 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterBySponsorUserId(array('min' => 12)); // WHERE link_sponsor_user_id > 12
      * </code>
      *
-     * @param     mixed $sponsorUserId The value to use as filter.
+     * @param mixed $sponsorUserId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySponsorUserId($sponsorUserId = null, $comparison = null)
+    public function filterBySponsorUserId($sponsorUserId = null, ?string $comparison = null)
     {
         if (is_array($sponsorUserId)) {
             $useMinMax = false;
@@ -1229,7 +1274,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_USER_ID, $sponsorUserId, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_SPONSOR_USER_ID, $sponsorUserId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1242,17 +1289,17 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE link_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -1272,7 +1319,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_DATE, $date, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1285,17 +1334,17 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE link_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1315,7 +1364,9 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1328,17 +1379,17 @@ abstract class LinkQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE link_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1358,20 +1409,22 @@ abstract class LinkQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Article object
      *
      * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticle($article, $comparison = null)
+    public function filterByArticle($article, ?string $comparison = null)
     {
         if ($article instanceof \Model\Article) {
             return $this
@@ -1381,8 +1434,10 @@ abstract class LinkQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(LinkTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
         }
@@ -1391,12 +1446,12 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Article relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinArticle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Article');
@@ -1425,9 +1480,9 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\ArticleQuery A secondary query class using the current class as primary query
      */
@@ -1497,13 +1552,13 @@ abstract class LinkQuery extends ModelCriteria
      * Filter the query by a related \Model\Tag object
      *
      * @param \Model\Tag|ObjectCollection $tag The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTag($tag, $comparison = null)
+    public function filterByTag($tag, ?string $comparison = null)
     {
         if ($tag instanceof \Model\Tag) {
             return $this
@@ -1513,8 +1568,10 @@ abstract class LinkQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(LinkTableMap::COL_TAG_ID, $tag->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByTag() only accepts arguments of type \Model\Tag or Collection');
         }
@@ -1523,12 +1580,12 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Tag relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinTag($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinTag(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Tag');
@@ -1557,9 +1614,9 @@ abstract class LinkQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\TagQuery A secondary query class using the current class as primary query
      */
@@ -1628,9 +1685,9 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildLink $link Object to remove from the list of results
+     * @param ChildLink $link Object to remove from the list of results
      *
-     * @return $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($link = null)
     {
@@ -1647,7 +1704,7 @@ abstract class LinkQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LinkTableMap::DATABASE_NAME);
@@ -1672,12 +1729,12 @@ abstract class LinkQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LinkTableMap::DATABASE_NAME);
@@ -1707,65 +1764,77 @@ abstract class LinkQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LinkTableMap::COL_LINK_UPDATED);
+        $this->addDescendingOrderByColumn(LinkTableMap::COL_LINK_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LinkTableMap::COL_LINK_UPDATED);
+        $this->addAscendingOrderByColumn(LinkTableMap::COL_LINK_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LinkTableMap::COL_LINK_CREATED);
+        $this->addDescendingOrderByColumn(LinkTableMap::COL_LINK_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(LinkTableMap::COL_LINK_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LinkTableMap::COL_LINK_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildLinkQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LinkTableMap::COL_LINK_CREATED);
+        $this->addAscendingOrderByColumn(LinkTableMap::COL_LINK_CREATED);
+
+        return $this;
     }
 
-} // LinkQuery
+}

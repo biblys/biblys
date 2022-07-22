@@ -33,150 +33,154 @@ class FileTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.FileTableMap';
+    public const CLASS_NAME = 'Model.Map.FileTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'files';
+    public const TABLE_NAME = 'files';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\File';
+    public const OM_CLASS = '\\Model\\File';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.File';
+    public const CLASS_DEFAULT = 'Model.File';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the file_id field
      */
-    const COL_FILE_ID = 'files.file_id';
+    public const COL_FILE_ID = 'files.file_id';
 
     /**
      * the column name for the article_id field
      */
-    const COL_ARTICLE_ID = 'files.article_id';
+    public const COL_ARTICLE_ID = 'files.article_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'files.user_id';
+    public const COL_USER_ID = 'files.user_id';
 
     /**
      * the column name for the file_title field
      */
-    const COL_FILE_TITLE = 'files.file_title';
+    public const COL_FILE_TITLE = 'files.file_title';
 
     /**
      * the column name for the file_type field
      */
-    const COL_FILE_TYPE = 'files.file_type';
+    public const COL_FILE_TYPE = 'files.file_type';
 
     /**
      * the column name for the file_access field
      */
-    const COL_FILE_ACCESS = 'files.file_access';
+    public const COL_FILE_ACCESS = 'files.file_access';
 
     /**
      * the column name for the file_version field
      */
-    const COL_FILE_VERSION = 'files.file_version';
+    public const COL_FILE_VERSION = 'files.file_version';
 
     /**
      * the column name for the file_hash field
      */
-    const COL_FILE_HASH = 'files.file_hash';
+    public const COL_FILE_HASH = 'files.file_hash';
 
     /**
      * the column name for the file_size field
      */
-    const COL_FILE_SIZE = 'files.file_size';
+    public const COL_FILE_SIZE = 'files.file_size';
 
     /**
      * the column name for the file_ean field
      */
-    const COL_FILE_EAN = 'files.file_ean';
+    public const COL_FILE_EAN = 'files.file_ean';
 
     /**
      * the column name for the file_inserted field
      */
-    const COL_FILE_INSERTED = 'files.file_inserted';
+    public const COL_FILE_INSERTED = 'files.file_inserted';
 
     /**
      * the column name for the file_uploaded field
      */
-    const COL_FILE_UPLOADED = 'files.file_uploaded';
+    public const COL_FILE_UPLOADED = 'files.file_uploaded';
 
     /**
      * the column name for the file_updated field
      */
-    const COL_FILE_UPDATED = 'files.file_updated';
+    public const COL_FILE_UPDATED = 'files.file_updated';
 
     /**
      * the column name for the file_created field
      */
-    const COL_FILE_CREATED = 'files.file_created';
+    public const COL_FILE_CREATED = 'files.file_created';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'ArticleId', 'UserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'CreatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'articleId', 'userId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'createdAt', ),
-        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_CREATED, ),
-        self::TYPE_FIELDNAME     => array('file_id', 'article_id', 'user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_created', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'ArticleId', 'UserId', 'Title', 'Type', 'Access', 'Version', 'Hash', 'Size', 'Ean', 'Inserted', 'Uploaded', 'UpdatedAt', 'CreatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'articleId', 'userId', 'title', 'type', 'access', 'version', 'hash', 'size', 'ean', 'inserted', 'uploaded', 'updatedAt', 'createdAt', ],
+        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID, FileTableMap::COL_ARTICLE_ID, FileTableMap::COL_USER_ID, FileTableMap::COL_FILE_TITLE, FileTableMap::COL_FILE_TYPE, FileTableMap::COL_FILE_ACCESS, FileTableMap::COL_FILE_VERSION, FileTableMap::COL_FILE_HASH, FileTableMap::COL_FILE_SIZE, FileTableMap::COL_FILE_EAN, FileTableMap::COL_FILE_INSERTED, FileTableMap::COL_FILE_UPLOADED, FileTableMap::COL_FILE_UPDATED, FileTableMap::COL_FILE_CREATED, ],
+        self::TYPE_FIELDNAME     => ['file_id', 'article_id', 'user_id', 'file_title', 'file_type', 'file_access', 'file_version', 'file_hash', 'file_size', 'file_ean', 'file_inserted', 'file_uploaded', 'file_updated', 'file_created', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'ArticleId' => 1, 'UserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'CreatedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'articleId' => 1, 'userId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'createdAt' => 13, ),
-        self::TYPE_COLNAME       => array(FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_CREATED => 13, ),
-        self::TYPE_FIELDNAME     => array('file_id' => 0, 'article_id' => 1, 'user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_created' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'ArticleId' => 1, 'UserId' => 2, 'Title' => 3, 'Type' => 4, 'Access' => 5, 'Version' => 6, 'Hash' => 7, 'Size' => 8, 'Ean' => 9, 'Inserted' => 10, 'Uploaded' => 11, 'UpdatedAt' => 12, 'CreatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'articleId' => 1, 'userId' => 2, 'title' => 3, 'type' => 4, 'access' => 5, 'version' => 6, 'hash' => 7, 'size' => 8, 'ean' => 9, 'inserted' => 10, 'uploaded' => 11, 'updatedAt' => 12, 'createdAt' => 13, ],
+        self::TYPE_COLNAME       => [FileTableMap::COL_FILE_ID => 0, FileTableMap::COL_ARTICLE_ID => 1, FileTableMap::COL_USER_ID => 2, FileTableMap::COL_FILE_TITLE => 3, FileTableMap::COL_FILE_TYPE => 4, FileTableMap::COL_FILE_ACCESS => 5, FileTableMap::COL_FILE_VERSION => 6, FileTableMap::COL_FILE_HASH => 7, FileTableMap::COL_FILE_SIZE => 8, FileTableMap::COL_FILE_EAN => 9, FileTableMap::COL_FILE_INSERTED => 10, FileTableMap::COL_FILE_UPLOADED => 11, FileTableMap::COL_FILE_UPDATED => 12, FileTableMap::COL_FILE_CREATED => 13, ],
+        self::TYPE_FIELDNAME     => ['file_id' => 0, 'article_id' => 1, 'user_id' => 2, 'file_title' => 3, 'file_type' => 4, 'file_access' => 5, 'file_version' => 6, 'file_hash' => 7, 'file_size' => 8, 'file_ean' => 9, 'file_inserted' => 10, 'file_uploaded' => 11, 'file_updated' => 12, 'file_created' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'FILE_ID',
@@ -298,9 +302,9 @@ class FileTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('files');
@@ -324,27 +328,29 @@ class FileTableMap extends TableMap
         $this->addColumn('file_uploaded', 'Uploaded', 'TIMESTAMP', false, null, null);
         $this->addColumn('file_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('file_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'file_created', 'update_column' => 'file_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -352,14 +358,14 @@ class FileTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -374,14 +380,14 @@ class FileTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -398,10 +404,10 @@ class FileTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? FileTableMap::CLASS_DEFAULT : FileTableMap::OM_CLASS;
     }
@@ -409,17 +415,17 @@ class FileTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (File object, last column rank)
+     * @return array (File object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = FileTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = FileTableMap::getInstanceFromPool($key))) {
@@ -443,13 +449,13 @@ class FileTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -479,12 +485,13 @@ class FileTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(FileTableMap::COL_FILE_ID);
@@ -525,12 +532,13 @@ class FileTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(FileTableMap::COL_FILE_ID);
@@ -569,10 +577,10 @@ class FileTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(FileTableMap::DATABASE_NAME)->getTable(FileTableMap::TABLE_NAME);
     }
@@ -580,15 +588,15 @@ class FileTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a File or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or File object or primary key or array of primary keys
+     * @param mixed $values Criteria or File object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(FileTableMap::DATABASE_NAME);
@@ -624,7 +632,7 @@ class FileTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return FileQuery::create()->doDeleteAll($con);
     }
@@ -632,13 +640,13 @@ class FileTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a File or Criteria object.
      *
-     * @param mixed               $criteria Criteria or File object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or File object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(FileTableMap::DATABASE_NAME);
@@ -665,4 +673,4 @@ class FileTableMap extends TableMap
         });
     }
 
-} // FileTableMap
+}

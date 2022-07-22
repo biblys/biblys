@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -88,8 +89,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\RoleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPeople|null findOne(ConnectionInterface $con = null) Return the first ChildPeople matching the query
- * @method     ChildPeople findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPeople matching the query, or a new ChildPeople object populated from the query conditions when no match is found
+ * @method     ChildPeople|null findOne(?ConnectionInterface $con = null) Return the first ChildPeople matching the query
+ * @method     ChildPeople findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPeople matching the query, or a new ChildPeople object populated from the query conditions when no match is found
  *
  * @method     ChildPeople|null findOneById(int $people_id) Return the first ChildPeople filtered by the people_id column
  * @method     ChildPeople|null findOneByFirstName(string $people_first_name) Return the first ChildPeople filtered by the people_first_name column
@@ -115,8 +116,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeople|null findOneByCreatedAt(string $people_created) Return the first ChildPeople filtered by the people_created column
  * @method     ChildPeople|null findOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column *
 
- * @method     ChildPeople requirePk($key, ConnectionInterface $con = null) Return the ChildPeople by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPeople requireOne(ConnectionInterface $con = null) Return the first ChildPeople matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPeople requirePk($key, ?ConnectionInterface $con = null) Return the ChildPeople by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPeople requireOne(?ConnectionInterface $con = null) Return the first ChildPeople matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPeople requireOneById(int $people_id) Return the first ChildPeople filtered by the people_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOneByFirstName(string $people_first_name) Return the first ChildPeople filtered by the people_first_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -142,56 +143,56 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeople requireOneByCreatedAt(string $people_created) Return the first ChildPeople filtered by the people_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPeople[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> find(ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
- * @method     ChildPeople[]|ObjectCollection findById(int $people_id) Return ChildPeople objects filtered by the people_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findById(int $people_id) Return ChildPeople objects filtered by the people_id column
- * @method     ChildPeople[]|ObjectCollection findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
- * @method     ChildPeople[]|ObjectCollection findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
- * @method     ChildPeople[]|ObjectCollection findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
- * @method     ChildPeople[]|ObjectCollection findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
- * @method     ChildPeople[]|ObjectCollection findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
- * @method     ChildPeople[]|ObjectCollection findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
- * @method     ChildPeople[]|ObjectCollection findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
- * @method     ChildPeople[]|ObjectCollection findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
- * @method     ChildPeople[]|ObjectCollection findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
- * @method     ChildPeople[]|ObjectCollection findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
- * @method     ChildPeople[]|ObjectCollection findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
- * @method     ChildPeople[]|ObjectCollection findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
- * @method     ChildPeople[]|ObjectCollection findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
- * @method     ChildPeople[]|ObjectCollection findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
- * @method     ChildPeople[]|ObjectCollection findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
- * @method     ChildPeople[]|ObjectCollection findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
- * @method     ChildPeople[]|ObjectCollection findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
- * @method     ChildPeople[]|ObjectCollection findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
- * @method     ChildPeople[]|ObjectCollection findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
- * @method     ChildPeople[]|ObjectCollection findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
- * @method     ChildPeople[]|ObjectCollection findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
- * @method     ChildPeople[]|ObjectCollection findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildPeople> findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
- * @method     ChildPeople[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPeople> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPeople[]|Collection find(?ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPeople> find(?ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
+ * @method     ChildPeople[]|Collection findById(int $people_id) Return ChildPeople objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildPeople> findById(int $people_id) Return ChildPeople objects filtered by the people_id column
+ * @method     ChildPeople[]|Collection findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
+ * @method     ChildPeople[]|Collection findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
+ * @method     ChildPeople[]|Collection findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
+ * @method     ChildPeople[]|Collection findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
+ * @method     ChildPeople[]|Collection findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
+ * @method     ChildPeople[]|Collection findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
+ * @method     ChildPeople[]|Collection findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
+ * @method     ChildPeople[]|Collection findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
+ * @method     ChildPeople[]|Collection findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
+ * @method     ChildPeople[]|Collection findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
+ * @method     ChildPeople[]|Collection findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
+ * @method     ChildPeople[]|Collection findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
+ * @method     ChildPeople[]|Collection findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
+ * @method     ChildPeople[]|Collection findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
+ * @psalm-method Collection&\Traversable<ChildPeople> findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
+ * @method     ChildPeople[]|Collection findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
+ * @method     ChildPeople[]|Collection findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
+ * @method     ChildPeople[]|Collection findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
+ * @method     ChildPeople[]|Collection findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
+ * @method     ChildPeople[]|Collection findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
+ * @method     ChildPeople[]|Collection findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
+ * @method     ChildPeople[]|Collection findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
+ * @method     ChildPeople[]|Collection findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
+ * @method     ChildPeople[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPeople> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PeopleQuery extends ModelCriteria
@@ -201,9 +202,9 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PeopleQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\People', $modelAlias = null)
     {
@@ -213,12 +214,12 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Returns a new ChildPeopleQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPeopleQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPeopleQuery) {
             return $criteria;
@@ -248,7 +249,7 @@ abstract class PeopleQuery extends ModelCriteria
      *
      * @return ChildPeople|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -280,8 +281,8 @@ abstract class PeopleQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -313,8 +314,8 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPeople|array|mixed the result, formatted by the current formatter
      */
@@ -334,12 +335,12 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -356,27 +357,31 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -389,15 +394,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE people_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -417,7 +422,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $id, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -427,14 +434,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByFirstName('fooValue');   // WHERE people_first_name = 'fooValue'
      * $query->filterByFirstName('%fooValue%', Criteria::LIKE); // WHERE people_first_name LIKE '%fooValue%'
+     * $query->filterByFirstName(['foo', 'bar']); // WHERE people_first_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $firstName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $firstName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFirstName($firstName = null, $comparison = null)
+    public function filterByFirstName($firstName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($firstName)) {
@@ -442,7 +450,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_FIRST_NAME, $firstName, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_FIRST_NAME, $firstName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -452,14 +462,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByLastName('fooValue');   // WHERE people_last_name = 'fooValue'
      * $query->filterByLastName('%fooValue%', Criteria::LIKE); // WHERE people_last_name LIKE '%fooValue%'
+     * $query->filterByLastName(['foo', 'bar']); // WHERE people_last_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $lastName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $lastName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLastName($lastName = null, $comparison = null)
+    public function filterByLastName($lastName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($lastName)) {
@@ -467,7 +478,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_LAST_NAME, $lastName, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_LAST_NAME, $lastName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -477,14 +490,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE people_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE people_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE people_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -492,7 +506,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NAME, $name, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -502,14 +518,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByAlpha('fooValue');   // WHERE people_alpha = 'fooValue'
      * $query->filterByAlpha('%fooValue%', Criteria::LIKE); // WHERE people_alpha LIKE '%fooValue%'
+     * $query->filterByAlpha(['foo', 'bar']); // WHERE people_alpha IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $alpha The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $alpha The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAlpha($alpha = null, $comparison = null)
+    public function filterByAlpha($alpha = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($alpha)) {
@@ -517,7 +534,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ALPHA, $alpha, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_ALPHA, $alpha, $comparison);
+
+        return $this;
     }
 
     /**
@@ -527,14 +546,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByUrlOld('fooValue');   // WHERE people_url_old = 'fooValue'
      * $query->filterByUrlOld('%fooValue%', Criteria::LIKE); // WHERE people_url_old LIKE '%fooValue%'
+     * $query->filterByUrlOld(['foo', 'bar']); // WHERE people_url_old IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $urlOld The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $urlOld The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrlOld($urlOld = null, $comparison = null)
+    public function filterByUrlOld($urlOld = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($urlOld)) {
@@ -542,7 +562,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_URL_OLD, $urlOld, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_URL_OLD, $urlOld, $comparison);
+
+        return $this;
     }
 
     /**
@@ -552,14 +574,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE people_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE people_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE people_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -567,7 +590,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_URL, $url, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -580,15 +605,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByPseudo(array('min' => 12)); // WHERE people_pseudo > 12
      * </code>
      *
-     * @param     mixed $pseudo The value to use as filter.
+     * @param mixed $pseudo The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPseudo($pseudo = null, $comparison = null)
+    public function filterByPseudo($pseudo = null, ?string $comparison = null)
     {
         if (is_array($pseudo)) {
             $useMinMax = false;
@@ -608,7 +633,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_PSEUDO, $pseudo, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_PSEUDO, $pseudo, $comparison);
+
+        return $this;
     }
 
     /**
@@ -621,15 +648,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByNoosfereId(array('min' => 12)); // WHERE people_noosfere_id > 12
      * </code>
      *
-     * @param     mixed $noosfereId The value to use as filter.
+     * @param mixed $noosfereId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNoosfereId($noosfereId = null, $comparison = null)
+    public function filterByNoosfereId($noosfereId = null, ?string $comparison = null)
     {
         if (is_array($noosfereId)) {
             $useMinMax = false;
@@ -649,7 +676,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, $noosfereId, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NOOSFERE_ID, $noosfereId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -662,15 +691,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByBirth(array('min' => 12)); // WHERE people_birth > 12
      * </code>
      *
-     * @param     mixed $birth The value to use as filter.
+     * @param mixed $birth The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBirth($birth = null, $comparison = null)
+    public function filterByBirth($birth = null, ?string $comparison = null)
     {
         if (is_array($birth)) {
             $useMinMax = false;
@@ -690,7 +719,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_BIRTH, $birth, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_BIRTH, $birth, $comparison);
+
+        return $this;
     }
 
     /**
@@ -703,15 +734,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByDeath(array('min' => 12)); // WHERE people_death > 12
      * </code>
      *
-     * @param     mixed $death The value to use as filter.
+     * @param mixed $death The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDeath($death = null, $comparison = null)
+    public function filterByDeath($death = null, ?string $comparison = null)
     {
         if (is_array($death)) {
             $useMinMax = false;
@@ -731,7 +762,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DEATH, $death, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DEATH, $death, $comparison);
+
+        return $this;
     }
 
     /**
@@ -741,14 +774,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByGender('fooValue');   // WHERE people_gender = 'fooValue'
      * $query->filterByGender('%fooValue%', Criteria::LIKE); // WHERE people_gender LIKE '%fooValue%'
+     * $query->filterByGender(['foo', 'bar']); // WHERE people_gender IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $gender The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $gender The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByGender($gender = null, $comparison = null)
+    public function filterByGender($gender = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($gender)) {
@@ -756,7 +790,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_GENDER, $gender, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_GENDER, $gender, $comparison);
+
+        return $this;
     }
 
     /**
@@ -766,14 +802,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByNation('fooValue');   // WHERE people_nation = 'fooValue'
      * $query->filterByNation('%fooValue%', Criteria::LIKE); // WHERE people_nation LIKE '%fooValue%'
+     * $query->filterByNation(['foo', 'bar']); // WHERE people_nation IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nation The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nation The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNation($nation = null, $comparison = null)
+    public function filterByNation($nation = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nation)) {
@@ -781,7 +818,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NATION, $nation, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_NATION, $nation, $comparison);
+
+        return $this;
     }
 
     /**
@@ -791,14 +830,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByBio('fooValue');   // WHERE people_bio = 'fooValue'
      * $query->filterByBio('%fooValue%', Criteria::LIKE); // WHERE people_bio LIKE '%fooValue%'
+     * $query->filterByBio(['foo', 'bar']); // WHERE people_bio IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $bio The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $bio The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBio($bio = null, $comparison = null)
+    public function filterByBio($bio = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($bio)) {
@@ -806,7 +846,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_BIO, $bio, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_BIO, $bio, $comparison);
+
+        return $this;
     }
 
     /**
@@ -816,14 +858,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterBySite('fooValue');   // WHERE people_site = 'fooValue'
      * $query->filterBySite('%fooValue%', Criteria::LIKE); // WHERE people_site LIKE '%fooValue%'
+     * $query->filterBySite(['foo', 'bar']); // WHERE people_site IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $site The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $site The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site = null, $comparison = null)
+    public function filterBySite($site = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($site)) {
@@ -831,7 +874,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_SITE, $site, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_SITE, $site, $comparison);
+
+        return $this;
     }
 
     /**
@@ -841,14 +886,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByFacebook('fooValue');   // WHERE people_facebook = 'fooValue'
      * $query->filterByFacebook('%fooValue%', Criteria::LIKE); // WHERE people_facebook LIKE '%fooValue%'
+     * $query->filterByFacebook(['foo', 'bar']); // WHERE people_facebook IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $facebook The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $facebook The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFacebook($facebook = null, $comparison = null)
+    public function filterByFacebook($facebook = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($facebook)) {
@@ -856,7 +902,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_FACEBOOK, $facebook, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_FACEBOOK, $facebook, $comparison);
+
+        return $this;
     }
 
     /**
@@ -866,14 +914,15 @@ abstract class PeopleQuery extends ModelCriteria
      * <code>
      * $query->filterByTwitter('fooValue');   // WHERE people_twitter = 'fooValue'
      * $query->filterByTwitter('%fooValue%', Criteria::LIKE); // WHERE people_twitter LIKE '%fooValue%'
+     * $query->filterByTwitter(['foo', 'bar']); // WHERE people_twitter IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $twitter The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $twitter The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTwitter($twitter = null, $comparison = null)
+    public function filterByTwitter($twitter = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($twitter)) {
@@ -881,7 +930,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_TWITTER, $twitter, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_TWITTER, $twitter, $comparison);
+
+        return $this;
     }
 
     /**
@@ -894,15 +945,15 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByHits(array('min' => 12)); // WHERE people_hits > 12
      * </code>
      *
-     * @param     mixed $hits The value to use as filter.
+     * @param mixed $hits The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHits($hits = null, $comparison = null)
+    public function filterByHits($hits = null, ?string $comparison = null)
     {
         if (is_array($hits)) {
             $useMinMax = false;
@@ -922,7 +973,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_HITS, $hits, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_HITS, $hits, $comparison);
+
+        return $this;
     }
 
     /**
@@ -935,17 +988,17 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE people_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -965,7 +1018,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DATE, $date, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -978,17 +1033,17 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE people_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -1008,7 +1063,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_INSERT, $insert, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1021,17 +1078,17 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE people_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -1051,7 +1108,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATE, $update, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1064,17 +1123,17 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE people_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1094,7 +1153,9 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1107,17 +1168,17 @@ abstract class PeopleQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE people_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1137,27 +1198,33 @@ abstract class PeopleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Role object
      *
      * @param \Model\Role|ObjectCollection $role the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRole($role, $comparison = null)
+    public function filterByRole($role, ?string $comparison = null)
     {
         if ($role instanceof \Model\Role) {
-            return $this
+            $this
                 ->addUsingAlias(PeopleTableMap::COL_PEOPLE_ID, $role->getPeopleId(), $comparison);
+
+            return $this;
         } elseif ($role instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useRoleQuery()
                 ->filterByPrimaryKeys($role->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByRole() only accepts arguments of type \Model\Role or Collection');
         }
@@ -1166,12 +1233,12 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Role relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinRole($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRole(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Role');
@@ -1200,9 +1267,9 @@ abstract class PeopleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\RoleQuery A secondary query class using the current class as primary query
      */
@@ -1271,9 +1338,9 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPeople $people Object to remove from the list of results
+     * @param ChildPeople $people Object to remove from the list of results
      *
-     * @return $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($people = null)
     {
@@ -1290,7 +1357,7 @@ abstract class PeopleQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PeopleTableMap::DATABASE_NAME);
@@ -1315,12 +1382,12 @@ abstract class PeopleQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PeopleTableMap::DATABASE_NAME);
@@ -1350,65 +1417,77 @@ abstract class PeopleQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
+        $this->addDescendingOrderByColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
+        $this->addAscendingOrderByColumn(PeopleTableMap::COL_PEOPLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PeopleTableMap::COL_PEOPLE_CREATED);
+        $this->addDescendingOrderByColumn(PeopleTableMap::COL_PEOPLE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PeopleTableMap::COL_PEOPLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPeopleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PeopleTableMap::COL_PEOPLE_CREATED);
+        $this->addAscendingOrderByColumn(PeopleTableMap::COL_PEOPLE_CREATED);
+
+        return $this;
     }
 
-} // PeopleQuery
+}

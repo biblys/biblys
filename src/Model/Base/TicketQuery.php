@@ -10,7 +10,7 @@ use Model\Map\TicketTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildTicketQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildTicket|null findOne(ConnectionInterface $con = null) Return the first ChildTicket matching the query
- * @method     ChildTicket findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTicket matching the query, or a new ChildTicket object populated from the query conditions when no match is found
+ * @method     ChildTicket|null findOne(?ConnectionInterface $con = null) Return the first ChildTicket matching the query
+ * @method     ChildTicket findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildTicket matching the query, or a new ChildTicket object populated from the query conditions when no match is found
  *
  * @method     ChildTicket|null findOneById(int $ticket_id) Return the first ChildTicket filtered by the ticket_id column
  * @method     ChildTicket|null findOneByUserId(int $user_id) Return the first ChildTicket filtered by the user_id column
@@ -66,8 +66,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicket|null findOneByResolved(string $ticket_resolved) Return the first ChildTicket filtered by the ticket_resolved column
  * @method     ChildTicket|null findOneByClosed(string $ticket_closed) Return the first ChildTicket filtered by the ticket_closed column *
 
- * @method     ChildTicket requirePk($key, ConnectionInterface $con = null) Return the ChildTicket by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildTicket requireOne(ConnectionInterface $con = null) Return the first ChildTicket matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTicket requirePk($key, ?ConnectionInterface $con = null) Return the ChildTicket by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildTicket requireOne(?ConnectionInterface $con = null) Return the first ChildTicket matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildTicket requireOneById(int $ticket_id) Return the first ChildTicket filtered by the ticket_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicket requireOneByUserId(int $user_id) Return the first ChildTicket filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -81,32 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicket requireOneByResolved(string $ticket_resolved) Return the first ChildTicket filtered by the ticket_resolved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicket requireOneByClosed(string $ticket_closed) Return the first ChildTicket filtered by the ticket_closed column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildTicket[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> find(ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
- * @method     ChildTicket[]|ObjectCollection findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
- * @method     ChildTicket[]|ObjectCollection findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
- * @method     ChildTicket[]|ObjectCollection findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
- * @method     ChildTicket[]|ObjectCollection findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
- * @method     ChildTicket[]|ObjectCollection findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
- * @method     ChildTicket[]|ObjectCollection findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
- * @method     ChildTicket[]|ObjectCollection findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
- * @method     ChildTicket[]|ObjectCollection findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
- * @method     ChildTicket[]|ObjectCollection findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
- * @method     ChildTicket[]|ObjectCollection findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
- * @method     ChildTicket[]|ObjectCollection findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
- * @psalm-method ObjectCollection&\Traversable<ChildTicket> findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
- * @method     ChildTicket[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicket> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildTicket[]|Collection find(?ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildTicket> find(?ConnectionInterface $con = null) Return ChildTicket objects based on current ModelCriteria
+ * @method     ChildTicket[]|Collection findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
+ * @psalm-method Collection&\Traversable<ChildTicket> findById(int $ticket_id) Return ChildTicket objects filtered by the ticket_id column
+ * @method     ChildTicket[]|Collection findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByUserId(int $user_id) Return ChildTicket objects filtered by the user_id column
+ * @method     ChildTicket[]|Collection findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildTicket> findBySiteId(int $site_id) Return ChildTicket objects filtered by the site_id column
+ * @method     ChildTicket[]|Collection findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByType(string $ticket_type) Return ChildTicket objects filtered by the ticket_type column
+ * @method     ChildTicket[]|Collection findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByTitle(string $ticket_title) Return ChildTicket objects filtered by the ticket_title column
+ * @method     ChildTicket[]|Collection findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByContent(string $ticket_content) Return ChildTicket objects filtered by the ticket_content column
+ * @method     ChildTicket[]|Collection findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByPriority(int $ticket_priority) Return ChildTicket objects filtered by the ticket_priority column
+ * @method     ChildTicket[]|Collection findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByCreatedAt(string $ticket_created) Return ChildTicket objects filtered by the ticket_created column
+ * @method     ChildTicket[]|Collection findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByUpdatedAt(string $ticket_updated) Return ChildTicket objects filtered by the ticket_updated column
+ * @method     ChildTicket[]|Collection findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByResolved(string $ticket_resolved) Return ChildTicket objects filtered by the ticket_resolved column
+ * @method     ChildTicket[]|Collection findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
+ * @psalm-method Collection&\Traversable<ChildTicket> findByClosed(string $ticket_closed) Return ChildTicket objects filtered by the ticket_closed column
+ * @method     ChildTicket[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicket> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class TicketQuery extends ModelCriteria
@@ -116,9 +116,9 @@ abstract class TicketQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\TicketQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Ticket', $modelAlias = null)
     {
@@ -128,12 +128,12 @@ abstract class TicketQuery extends ModelCriteria
     /**
      * Returns a new ChildTicketQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildTicketQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildTicketQuery) {
             return $criteria;
@@ -163,7 +163,7 @@ abstract class TicketQuery extends ModelCriteria
      *
      * @return ChildTicket|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -195,8 +195,8 @@ abstract class TicketQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -228,8 +228,8 @@ abstract class TicketQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildTicket|array|mixed the result, formatted by the current formatter
      */
@@ -249,12 +249,12 @@ abstract class TicketQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -271,27 +271,31 @@ abstract class TicketQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -304,15 +308,15 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE ticket_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -332,7 +336,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $id, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -345,15 +351,15 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -373,7 +379,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -386,15 +394,15 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -414,7 +422,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -424,14 +434,15 @@ abstract class TicketQuery extends ModelCriteria
      * <code>
      * $query->filterByType('fooValue');   // WHERE ticket_type = 'fooValue'
      * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE ticket_type LIKE '%fooValue%'
+     * $query->filterByType(['foo', 'bar']); // WHERE ticket_type IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $type The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $type The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByType($type = null, $comparison = null)
+    public function filterByType($type = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($type)) {
@@ -439,7 +450,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_TYPE, $type, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_TYPE, $type, $comparison);
+
+        return $this;
     }
 
     /**
@@ -449,14 +462,15 @@ abstract class TicketQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE ticket_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE ticket_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE ticket_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -464,7 +478,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_TITLE, $title, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -474,14 +490,15 @@ abstract class TicketQuery extends ModelCriteria
      * <code>
      * $query->filterByContent('fooValue');   // WHERE ticket_content = 'fooValue'
      * $query->filterByContent('%fooValue%', Criteria::LIKE); // WHERE ticket_content LIKE '%fooValue%'
+     * $query->filterByContent(['foo', 'bar']); // WHERE ticket_content IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $content The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $content The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByContent($content = null, $comparison = null)
+    public function filterByContent($content = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($content)) {
@@ -489,7 +506,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_CONTENT, $content, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_CONTENT, $content, $comparison);
+
+        return $this;
     }
 
     /**
@@ -502,15 +521,15 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByPriority(array('min' => 12)); // WHERE ticket_priority > 12
      * </code>
      *
-     * @param     mixed $priority The value to use as filter.
+     * @param mixed $priority The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPriority($priority = null, $comparison = null)
+    public function filterByPriority($priority = null, ?string $comparison = null)
     {
         if (is_array($priority)) {
             $useMinMax = false;
@@ -530,7 +549,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_PRIORITY, $priority, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_PRIORITY, $priority, $comparison);
+
+        return $this;
     }
 
     /**
@@ -543,17 +564,17 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE ticket_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -573,7 +594,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -586,17 +609,17 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE ticket_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -616,7 +639,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -629,17 +654,17 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByResolved(array('max' => 'yesterday')); // WHERE ticket_resolved > '2011-03-13'
      * </code>
      *
-     * @param     mixed $resolved The value to use as filter.
+     * @param mixed $resolved The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByResolved($resolved = null, $comparison = null)
+    public function filterByResolved($resolved = null, ?string $comparison = null)
     {
         if (is_array($resolved)) {
             $useMinMax = false;
@@ -659,7 +684,9 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_RESOLVED, $resolved, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_RESOLVED, $resolved, $comparison);
+
+        return $this;
     }
 
     /**
@@ -672,17 +699,17 @@ abstract class TicketQuery extends ModelCriteria
      * $query->filterByClosed(array('max' => 'yesterday')); // WHERE ticket_closed > '2011-03-13'
      * </code>
      *
-     * @param     mixed $closed The value to use as filter.
+     * @param mixed $closed The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByClosed($closed = null, $comparison = null)
+    public function filterByClosed($closed = null, ?string $comparison = null)
     {
         if (is_array($closed)) {
             $useMinMax = false;
@@ -702,15 +729,17 @@ abstract class TicketQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_CLOSED, $closed, $comparison);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_CLOSED, $closed, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildTicket $ticket Object to remove from the list of results
+     * @param ChildTicket $ticket Object to remove from the list of results
      *
-     * @return $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($ticket = null)
     {
@@ -727,7 +756,7 @@ abstract class TicketQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TicketTableMap::DATABASE_NAME);
@@ -752,12 +781,12 @@ abstract class TicketQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TicketTableMap::DATABASE_NAME);
@@ -787,65 +816,77 @@ abstract class TicketQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(TicketTableMap::COL_TICKET_UPDATED);
+        $this->addDescendingOrderByColumn(TicketTableMap::COL_TICKET_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(TicketTableMap::COL_TICKET_UPDATED);
+        $this->addAscendingOrderByColumn(TicketTableMap::COL_TICKET_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(TicketTableMap::COL_TICKET_CREATED);
+        $this->addDescendingOrderByColumn(TicketTableMap::COL_TICKET_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(TicketTableMap::COL_TICKET_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(TicketTableMap::COL_TICKET_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildTicketQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(TicketTableMap::COL_TICKET_CREATED);
+        $this->addAscendingOrderByColumn(TicketTableMap::COL_TICKET_CREATED);
+
+        return $this;
     }
 
-} // TicketQuery
+}

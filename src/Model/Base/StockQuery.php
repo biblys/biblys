@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -134,8 +135,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\SiteQuery|\Model\ArticleQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildStock|null findOne(ConnectionInterface $con = null) Return the first ChildStock matching the query
- * @method     ChildStock findOneOrCreate(ConnectionInterface $con = null) Return the first ChildStock matching the query, or a new ChildStock object populated from the query conditions when no match is found
+ * @method     ChildStock|null findOne(?ConnectionInterface $con = null) Return the first ChildStock matching the query
+ * @method     ChildStock findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildStock matching the query, or a new ChildStock object populated from the query conditions when no match is found
  *
  * @method     ChildStock|null findOneById(int $stock_id) Return the first ChildStock filtered by the stock_id column
  * @method     ChildStock|null findOneBySiteId(int $site_id) Return the first ChildStock filtered by the site_id column
@@ -179,8 +180,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock|null findOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column
  * @method     ChildStock|null findOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column *
 
- * @method     ChildStock requirePk($key, ConnectionInterface $con = null) Return the ChildStock by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildStock requireOne(ConnectionInterface $con = null) Return the first ChildStock matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requirePk($key, ?ConnectionInterface $con = null) Return the ChildStock by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildStock requireOne(?ConnectionInterface $con = null) Return the first ChildStock matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildStock requireOneById(int $stock_id) Return the first ChildStock filtered by the stock_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneBySiteId(int $site_id) Return the first ChildStock filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -224,92 +225,92 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStock requireOneByCreatedAt(string $stock_created) Return the first ChildStock filtered by the stock_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStock requireOneByUpdatedAt(string $stock_updated) Return the first ChildStock filtered by the stock_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildStock[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildStock> find(ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
- * @method     ChildStock[]|ObjectCollection findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
- * @method     ChildStock[]|ObjectCollection findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
- * @method     ChildStock[]|ObjectCollection findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
- * @method     ChildStock[]|ObjectCollection findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
- * @method     ChildStock[]|ObjectCollection findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
- * @method     ChildStock[]|ObjectCollection findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
- * @method     ChildStock[]|ObjectCollection findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
- * @method     ChildStock[]|ObjectCollection findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
- * @method     ChildStock[]|ObjectCollection findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
- * @method     ChildStock[]|ObjectCollection findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
- * @method     ChildStock[]|ObjectCollection findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
- * @method     ChildStock[]|ObjectCollection findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
- * @method     ChildStock[]|ObjectCollection findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
- * @method     ChildStock[]|ObjectCollection findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
- * @method     ChildStock[]|ObjectCollection findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
- * @method     ChildStock[]|ObjectCollection findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
- * @method     ChildStock[]|ObjectCollection findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
- * @method     ChildStock[]|ObjectCollection findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
- * @method     ChildStock[]|ObjectCollection findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
- * @method     ChildStock[]|ObjectCollection findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
- * @method     ChildStock[]|ObjectCollection findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
- * @method     ChildStock[]|ObjectCollection findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
- * @method     ChildStock[]|ObjectCollection findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
- * @method     ChildStock[]|ObjectCollection findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
- * @method     ChildStock[]|ObjectCollection findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
- * @method     ChildStock[]|ObjectCollection findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
- * @method     ChildStock[]|ObjectCollection findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
- * @method     ChildStock[]|ObjectCollection findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
- * @method     ChildStock[]|ObjectCollection findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
- * @method     ChildStock[]|ObjectCollection findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
- * @method     ChildStock[]|ObjectCollection findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
- * @method     ChildStock[]|ObjectCollection findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
- * @method     ChildStock[]|ObjectCollection findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
- * @method     ChildStock[]|ObjectCollection findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
- * @method     ChildStock[]|ObjectCollection findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
- * @method     ChildStock[]|ObjectCollection findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
- * @method     ChildStock[]|ObjectCollection findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
- * @method     ChildStock[]|ObjectCollection findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
- * @method     ChildStock[]|ObjectCollection findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
- * @method     ChildStock[]|ObjectCollection findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
- * @method     ChildStock[]|ObjectCollection findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildStock> findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
- * @method     ChildStock[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStock> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildStock[]|Collection find(?ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildStock> find(?ConnectionInterface $con = null) Return ChildStock objects based on current ModelCriteria
+ * @method     ChildStock[]|Collection findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findById(int $stock_id) Return ChildStock objects filtered by the stock_id column
+ * @method     ChildStock[]|Collection findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySiteId(int $site_id) Return ChildStock objects filtered by the site_id column
+ * @method     ChildStock[]|Collection findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByArticleId(int $article_id) Return ChildStock objects filtered by the article_id column
+ * @method     ChildStock[]|Collection findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCampaignId(int $campaign_id) Return ChildStock objects filtered by the campaign_id column
+ * @method     ChildStock[]|Collection findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByRewardId(int $reward_id) Return ChildStock objects filtered by the reward_id column
+ * @method     ChildStock[]|Collection findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByUserId(int $user_id) Return ChildStock objects filtered by the user_id column
+ * @method     ChildStock[]|Collection findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCustomerId(int $customer_id) Return ChildStock objects filtered by the customer_id column
+ * @method     ChildStock[]|Collection findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByWishId(int $wish_id) Return ChildStock objects filtered by the wish_id column
+ * @method     ChildStock[]|Collection findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCartId(int $cart_id) Return ChildStock objects filtered by the cart_id column
+ * @method     ChildStock[]|Collection findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByOrderId(int $order_id) Return ChildStock objects filtered by the order_id column
+ * @method     ChildStock[]|Collection findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCouponId(int $coupon_id) Return ChildStock objects filtered by the coupon_id column
+ * @method     ChildStock[]|Collection findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
+ * @psalm-method Collection&\Traversable<ChildStock> findByShop(int $stock_shop) Return ChildStock objects filtered by the stock_shop column
+ * @method     ChildStock[]|Collection findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
+ * @psalm-method Collection&\Traversable<ChildStock> findByInvoice(string $stock_invoice) Return ChildStock objects filtered by the stock_invoice column
+ * @method     ChildStock[]|Collection findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
+ * @psalm-method Collection&\Traversable<ChildStock> findByDepot(boolean $stock_depot) Return ChildStock objects filtered by the stock_depot column
+ * @method     ChildStock[]|Collection findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
+ * @psalm-method Collection&\Traversable<ChildStock> findByStockage(string $stock_stockage) Return ChildStock objects filtered by the stock_stockage column
+ * @method     ChildStock[]|Collection findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCondition(string $stock_condition) Return ChildStock objects filtered by the stock_condition column
+ * @method     ChildStock[]|Collection findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
+ * @psalm-method Collection&\Traversable<ChildStock> findByConditionDetails(string $stock_condition_details) Return ChildStock objects filtered by the stock_condition_details column
+ * @method     ChildStock[]|Collection findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
+ * @psalm-method Collection&\Traversable<ChildStock> findByPurchasePrice(int $stock_purchase_price) Return ChildStock objects filtered by the stock_purchase_price column
+ * @method     ChildStock[]|Collection findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingPrice(int $stock_selling_price) Return ChildStock objects filtered by the stock_selling_price column
+ * @method     ChildStock[]|Collection findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingPrice2(int $stock_selling_price2) Return ChildStock objects filtered by the stock_selling_price2 column
+ * @method     ChildStock[]|Collection findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingPriceSaved(int $stock_selling_price_saved) Return ChildStock objects filtered by the stock_selling_price_saved column
+ * @method     ChildStock[]|Collection findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingPriceHt(int $stock_selling_price_ht) Return ChildStock objects filtered by the stock_selling_price_ht column
+ * @method     ChildStock[]|Collection findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingPriceTva(int $stock_selling_price_tva) Return ChildStock objects filtered by the stock_selling_price_tva column
+ * @method     ChildStock[]|Collection findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
+ * @psalm-method Collection&\Traversable<ChildStock> findByTvaRate(double $stock_tva_rate) Return ChildStock objects filtered by the stock_tva_rate column
+ * @method     ChildStock[]|Collection findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
+ * @psalm-method Collection&\Traversable<ChildStock> findByWeight(int $stock_weight) Return ChildStock objects filtered by the stock_weight column
+ * @method     ChildStock[]|Collection findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
+ * @psalm-method Collection&\Traversable<ChildStock> findByPubYear(int $stock_pub_year) Return ChildStock objects filtered by the stock_pub_year column
+ * @method     ChildStock[]|Collection findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
+ * @psalm-method Collection&\Traversable<ChildStock> findByAllowPredownload(boolean $stock_allow_predownload) Return ChildStock objects filtered by the stock_allow_predownload column
+ * @method     ChildStock[]|Collection findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
+ * @psalm-method Collection&\Traversable<ChildStock> findByPhotoVersion(int $stock_photo_version) Return ChildStock objects filtered by the stock_photo_version column
+ * @method     ChildStock[]|Collection findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findByPurchaseDate(string $stock_purchase_date) Return ChildStock objects filtered by the stock_purchase_date column
+ * @method     ChildStock[]|Collection findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findByOnsaleDate(string $stock_onsale_date) Return ChildStock objects filtered by the stock_onsale_date column
+ * @method     ChildStock[]|Collection findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCartDate(string $stock_cart_date) Return ChildStock objects filtered by the stock_cart_date column
+ * @method     ChildStock[]|Collection findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findBySellingDate(string $stock_selling_date) Return ChildStock objects filtered by the stock_selling_date column
+ * @method     ChildStock[]|Collection findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findByReturnDate(string $stock_return_date) Return ChildStock objects filtered by the stock_return_date column
+ * @method     ChildStock[]|Collection findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
+ * @psalm-method Collection&\Traversable<ChildStock> findByLostDate(string $stock_lost_date) Return ChildStock objects filtered by the stock_lost_date column
+ * @method     ChildStock[]|Collection findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
+ * @psalm-method Collection&\Traversable<ChildStock> findByMediaOk(boolean $stock_media_ok) Return ChildStock objects filtered by the stock_media_ok column
+ * @method     ChildStock[]|Collection findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
+ * @psalm-method Collection&\Traversable<ChildStock> findByFileUpdated(boolean $stock_file_updated) Return ChildStock objects filtered by the stock_file_updated column
+ * @method     ChildStock[]|Collection findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
+ * @psalm-method Collection&\Traversable<ChildStock> findByInsert(string $stock_insert) Return ChildStock objects filtered by the stock_insert column
+ * @method     ChildStock[]|Collection findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
+ * @psalm-method Collection&\Traversable<ChildStock> findByUpdate(string $stock_update) Return ChildStock objects filtered by the stock_update column
+ * @method     ChildStock[]|Collection findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
+ * @psalm-method Collection&\Traversable<ChildStock> findByDl(boolean $stock_dl) Return ChildStock objects filtered by the stock_dl column
+ * @method     ChildStock[]|Collection findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
+ * @psalm-method Collection&\Traversable<ChildStock> findByCreatedAt(string $stock_created) Return ChildStock objects filtered by the stock_created column
+ * @method     ChildStock[]|Collection findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
+ * @psalm-method Collection&\Traversable<ChildStock> findByUpdatedAt(string $stock_updated) Return ChildStock objects filtered by the stock_updated column
+ * @method     ChildStock[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStock> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class StockQuery extends ModelCriteria
@@ -319,9 +320,9 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\StockQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Stock', $modelAlias = null)
     {
@@ -331,12 +332,12 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Returns a new ChildStockQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildStockQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildStockQuery) {
             return $criteria;
@@ -366,7 +367,7 @@ abstract class StockQuery extends ModelCriteria
      *
      * @return ChildStock|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -398,8 +399,8 @@ abstract class StockQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -431,8 +432,8 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildStock|array|mixed the result, formatted by the current formatter
      */
@@ -452,12 +453,12 @@ abstract class StockQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -474,27 +475,31 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -507,15 +512,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE stock_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -535,7 +540,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $id, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -550,15 +557,15 @@ abstract class StockQuery extends ModelCriteria
      *
      * @see       filterBySite()
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -578,7 +585,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -593,15 +602,15 @@ abstract class StockQuery extends ModelCriteria
      *
      * @see       filterByArticle()
      *
-     * @param     mixed $articleId The value to use as filter.
+     * @param mixed $articleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticleId($articleId = null, $comparison = null)
+    public function filterByArticleId($articleId = null, ?string $comparison = null)
     {
         if (is_array($articleId)) {
             $useMinMax = false;
@@ -621,7 +630,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_ARTICLE_ID, $articleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -634,15 +645,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCampaignId(array('min' => 12)); // WHERE campaign_id > 12
      * </code>
      *
-     * @param     mixed $campaignId The value to use as filter.
+     * @param mixed $campaignId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCampaignId($campaignId = null, $comparison = null)
+    public function filterByCampaignId($campaignId = null, ?string $comparison = null)
     {
         if (is_array($campaignId)) {
             $useMinMax = false;
@@ -662,7 +673,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_CAMPAIGN_ID, $campaignId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_CAMPAIGN_ID, $campaignId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -675,15 +688,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByRewardId(array('min' => 12)); // WHERE reward_id > 12
      * </code>
      *
-     * @param     mixed $rewardId The value to use as filter.
+     * @param mixed $rewardId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRewardId($rewardId = null, $comparison = null)
+    public function filterByRewardId($rewardId = null, ?string $comparison = null)
     {
         if (is_array($rewardId)) {
             $useMinMax = false;
@@ -703,7 +716,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_REWARD_ID, $rewardId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_REWARD_ID, $rewardId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -716,15 +731,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -744,7 +759,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -757,15 +774,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCustomerId(array('min' => 12)); // WHERE customer_id > 12
      * </code>
      *
-     * @param     mixed $customerId The value to use as filter.
+     * @param mixed $customerId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCustomerId($customerId = null, $comparison = null)
+    public function filterByCustomerId($customerId = null, ?string $comparison = null)
     {
         if (is_array($customerId)) {
             $useMinMax = false;
@@ -785,7 +802,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_CUSTOMER_ID, $customerId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_CUSTOMER_ID, $customerId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -798,15 +817,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByWishId(array('min' => 12)); // WHERE wish_id > 12
      * </code>
      *
-     * @param     mixed $wishId The value to use as filter.
+     * @param mixed $wishId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWishId($wishId = null, $comparison = null)
+    public function filterByWishId($wishId = null, ?string $comparison = null)
     {
         if (is_array($wishId)) {
             $useMinMax = false;
@@ -826,7 +845,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_WISH_ID, $wishId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_WISH_ID, $wishId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -839,15 +860,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCartId(array('min' => 12)); // WHERE cart_id > 12
      * </code>
      *
-     * @param     mixed $cartId The value to use as filter.
+     * @param mixed $cartId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCartId($cartId = null, $comparison = null)
+    public function filterByCartId($cartId = null, ?string $comparison = null)
     {
         if (is_array($cartId)) {
             $useMinMax = false;
@@ -867,7 +888,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_CART_ID, $cartId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_CART_ID, $cartId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -880,15 +903,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByOrderId(array('min' => 12)); // WHERE order_id > 12
      * </code>
      *
-     * @param     mixed $orderId The value to use as filter.
+     * @param mixed $orderId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrderId($orderId = null, $comparison = null)
+    public function filterByOrderId($orderId = null, ?string $comparison = null)
     {
         if (is_array($orderId)) {
             $useMinMax = false;
@@ -908,7 +931,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_ORDER_ID, $orderId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_ORDER_ID, $orderId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -921,15 +946,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCouponId(array('min' => 12)); // WHERE coupon_id > 12
      * </code>
      *
-     * @param     mixed $couponId The value to use as filter.
+     * @param mixed $couponId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCouponId($couponId = null, $comparison = null)
+    public function filterByCouponId($couponId = null, ?string $comparison = null)
     {
         if (is_array($couponId)) {
             $useMinMax = false;
@@ -949,7 +974,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_COUPON_ID, $couponId, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_COUPON_ID, $couponId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -962,15 +989,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByShop(array('min' => 12)); // WHERE stock_shop > 12
      * </code>
      *
-     * @param     mixed $shop The value to use as filter.
+     * @param mixed $shop The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShop($shop = null, $comparison = null)
+    public function filterByShop($shop = null, ?string $comparison = null)
     {
         if (is_array($shop)) {
             $useMinMax = false;
@@ -990,7 +1017,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SHOP, $shop, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SHOP, $shop, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1000,14 +1029,15 @@ abstract class StockQuery extends ModelCriteria
      * <code>
      * $query->filterByInvoice('fooValue');   // WHERE stock_invoice = 'fooValue'
      * $query->filterByInvoice('%fooValue%', Criteria::LIKE); // WHERE stock_invoice LIKE '%fooValue%'
+     * $query->filterByInvoice(['foo', 'bar']); // WHERE stock_invoice IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $invoice The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $invoice The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInvoice($invoice = null, $comparison = null)
+    public function filterByInvoice($invoice = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($invoice)) {
@@ -1015,7 +1045,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_INVOICE, $invoice, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_INVOICE, $invoice, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1027,22 +1059,24 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByDepot('yes'); // WHERE stock_depot = true
      * </code>
      *
-     * @param     boolean|string $depot The value to use as filter.
+     * @param bool|string $depot The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDepot($depot = null, $comparison = null)
+    public function filterByDepot($depot = null, ?string $comparison = null)
     {
         if (is_string($depot)) {
             $depot = in_array(strtolower($depot), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_DEPOT, $depot, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_DEPOT, $depot, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1052,14 +1086,15 @@ abstract class StockQuery extends ModelCriteria
      * <code>
      * $query->filterByStockage('fooValue');   // WHERE stock_stockage = 'fooValue'
      * $query->filterByStockage('%fooValue%', Criteria::LIKE); // WHERE stock_stockage LIKE '%fooValue%'
+     * $query->filterByStockage(['foo', 'bar']); // WHERE stock_stockage IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $stockage The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $stockage The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStockage($stockage = null, $comparison = null)
+    public function filterByStockage($stockage = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($stockage)) {
@@ -1067,7 +1102,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_STOCKAGE, $stockage, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_STOCKAGE, $stockage, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1077,14 +1114,15 @@ abstract class StockQuery extends ModelCriteria
      * <code>
      * $query->filterByCondition('fooValue');   // WHERE stock_condition = 'fooValue'
      * $query->filterByCondition('%fooValue%', Criteria::LIKE); // WHERE stock_condition LIKE '%fooValue%'
+     * $query->filterByCondition(['foo', 'bar']); // WHERE stock_condition IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $condition The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $condition The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCondition($condition = null, $comparison = null)
+    public function filterByCondition($condition = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($condition)) {
@@ -1092,7 +1130,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_CONDITION, $condition, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_CONDITION, $condition, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1102,14 +1142,15 @@ abstract class StockQuery extends ModelCriteria
      * <code>
      * $query->filterByConditionDetails('fooValue');   // WHERE stock_condition_details = 'fooValue'
      * $query->filterByConditionDetails('%fooValue%', Criteria::LIKE); // WHERE stock_condition_details LIKE '%fooValue%'
+     * $query->filterByConditionDetails(['foo', 'bar']); // WHERE stock_condition_details IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $conditionDetails The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $conditionDetails The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByConditionDetails($conditionDetails = null, $comparison = null)
+    public function filterByConditionDetails($conditionDetails = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($conditionDetails)) {
@@ -1117,7 +1158,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_CONDITION_DETAILS, $conditionDetails, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_CONDITION_DETAILS, $conditionDetails, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1130,15 +1173,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByPurchasePrice(array('min' => 12)); // WHERE stock_purchase_price > 12
      * </code>
      *
-     * @param     mixed $purchasePrice The value to use as filter.
+     * @param mixed $purchasePrice The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPurchasePrice($purchasePrice = null, $comparison = null)
+    public function filterByPurchasePrice($purchasePrice = null, ?string $comparison = null)
     {
         if (is_array($purchasePrice)) {
             $useMinMax = false;
@@ -1158,7 +1201,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_PURCHASE_PRICE, $purchasePrice, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_PURCHASE_PRICE, $purchasePrice, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1171,15 +1216,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingPrice(array('min' => 12)); // WHERE stock_selling_price > 12
      * </code>
      *
-     * @param     mixed $sellingPrice The value to use as filter.
+     * @param mixed $sellingPrice The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingPrice($sellingPrice = null, $comparison = null)
+    public function filterBySellingPrice($sellingPrice = null, ?string $comparison = null)
     {
         if (is_array($sellingPrice)) {
             $useMinMax = false;
@@ -1199,7 +1244,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE, $sellingPrice, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE, $sellingPrice, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1212,15 +1259,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingPrice2(array('min' => 12)); // WHERE stock_selling_price2 > 12
      * </code>
      *
-     * @param     mixed $sellingPrice2 The value to use as filter.
+     * @param mixed $sellingPrice2 The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingPrice2($sellingPrice2 = null, $comparison = null)
+    public function filterBySellingPrice2($sellingPrice2 = null, ?string $comparison = null)
     {
         if (is_array($sellingPrice2)) {
             $useMinMax = false;
@@ -1240,7 +1287,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE2, $sellingPrice2, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE2, $sellingPrice2, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1253,15 +1302,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingPriceSaved(array('min' => 12)); // WHERE stock_selling_price_saved > 12
      * </code>
      *
-     * @param     mixed $sellingPriceSaved The value to use as filter.
+     * @param mixed $sellingPriceSaved The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingPriceSaved($sellingPriceSaved = null, $comparison = null)
+    public function filterBySellingPriceSaved($sellingPriceSaved = null, ?string $comparison = null)
     {
         if (is_array($sellingPriceSaved)) {
             $useMinMax = false;
@@ -1281,7 +1330,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, $sellingPriceSaved, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, $sellingPriceSaved, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1294,15 +1345,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingPriceHt(array('min' => 12)); // WHERE stock_selling_price_ht > 12
      * </code>
      *
-     * @param     mixed $sellingPriceHt The value to use as filter.
+     * @param mixed $sellingPriceHt The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingPriceHt($sellingPriceHt = null, $comparison = null)
+    public function filterBySellingPriceHt($sellingPriceHt = null, ?string $comparison = null)
     {
         if (is_array($sellingPriceHt)) {
             $useMinMax = false;
@@ -1322,7 +1373,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_HT, $sellingPriceHt, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_HT, $sellingPriceHt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1335,15 +1388,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingPriceTva(array('min' => 12)); // WHERE stock_selling_price_tva > 12
      * </code>
      *
-     * @param     mixed $sellingPriceTva The value to use as filter.
+     * @param mixed $sellingPriceTva The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingPriceTva($sellingPriceTva = null, $comparison = null)
+    public function filterBySellingPriceTva($sellingPriceTva = null, ?string $comparison = null)
     {
         if (is_array($sellingPriceTva)) {
             $useMinMax = false;
@@ -1363,7 +1416,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_TVA, $sellingPriceTva, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_PRICE_TVA, $sellingPriceTva, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1376,15 +1431,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByTvaRate(array('min' => 12)); // WHERE stock_tva_rate > 12
      * </code>
      *
-     * @param     mixed $tvaRate The value to use as filter.
+     * @param mixed $tvaRate The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTvaRate($tvaRate = null, $comparison = null)
+    public function filterByTvaRate($tvaRate = null, ?string $comparison = null)
     {
         if (is_array($tvaRate)) {
             $useMinMax = false;
@@ -1404,7 +1459,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_TVA_RATE, $tvaRate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_TVA_RATE, $tvaRate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1417,15 +1474,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByWeight(array('min' => 12)); // WHERE stock_weight > 12
      * </code>
      *
-     * @param     mixed $weight The value to use as filter.
+     * @param mixed $weight The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWeight($weight = null, $comparison = null)
+    public function filterByWeight($weight = null, ?string $comparison = null)
     {
         if (is_array($weight)) {
             $useMinMax = false;
@@ -1445,7 +1502,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_WEIGHT, $weight, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_WEIGHT, $weight, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1458,15 +1517,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByPubYear(array('min' => 12)); // WHERE stock_pub_year > 12
      * </code>
      *
-     * @param     mixed $pubYear The value to use as filter.
+     * @param mixed $pubYear The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPubYear($pubYear = null, $comparison = null)
+    public function filterByPubYear($pubYear = null, ?string $comparison = null)
     {
         if (is_array($pubYear)) {
             $useMinMax = false;
@@ -1486,7 +1545,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_PUB_YEAR, $pubYear, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_PUB_YEAR, $pubYear, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1498,22 +1559,24 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByAllowPredownload('yes'); // WHERE stock_allow_predownload = true
      * </code>
      *
-     * @param     boolean|string $allowPredownload The value to use as filter.
+     * @param bool|string $allowPredownload The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAllowPredownload($allowPredownload = null, $comparison = null)
+    public function filterByAllowPredownload($allowPredownload = null, ?string $comparison = null)
     {
         if (is_string($allowPredownload)) {
             $allowPredownload = in_array(strtolower($allowPredownload), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, $allowPredownload, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, $allowPredownload, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1526,15 +1589,15 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByPhotoVersion(array('min' => 12)); // WHERE stock_photo_version > 12
      * </code>
      *
-     * @param     mixed $photoVersion The value to use as filter.
+     * @param mixed $photoVersion The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhotoVersion($photoVersion = null, $comparison = null)
+    public function filterByPhotoVersion($photoVersion = null, ?string $comparison = null)
     {
         if (is_array($photoVersion)) {
             $useMinMax = false;
@@ -1554,7 +1617,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_PHOTO_VERSION, $photoVersion, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_PHOTO_VERSION, $photoVersion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1567,17 +1632,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByPurchaseDate(array('max' => 'yesterday')); // WHERE stock_purchase_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $purchaseDate The value to use as filter.
+     * @param mixed $purchaseDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPurchaseDate($purchaseDate = null, $comparison = null)
+    public function filterByPurchaseDate($purchaseDate = null, ?string $comparison = null)
     {
         if (is_array($purchaseDate)) {
             $useMinMax = false;
@@ -1597,7 +1662,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_PURCHASE_DATE, $purchaseDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_PURCHASE_DATE, $purchaseDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1610,17 +1677,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByOnsaleDate(array('max' => 'yesterday')); // WHERE stock_onsale_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $onsaleDate The value to use as filter.
+     * @param mixed $onsaleDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOnsaleDate($onsaleDate = null, $comparison = null)
+    public function filterByOnsaleDate($onsaleDate = null, ?string $comparison = null)
     {
         if (is_array($onsaleDate)) {
             $useMinMax = false;
@@ -1640,7 +1707,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_ONSALE_DATE, $onsaleDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_ONSALE_DATE, $onsaleDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1653,17 +1722,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCartDate(array('max' => 'yesterday')); // WHERE stock_cart_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $cartDate The value to use as filter.
+     * @param mixed $cartDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCartDate($cartDate = null, $comparison = null)
+    public function filterByCartDate($cartDate = null, ?string $comparison = null)
     {
         if (is_array($cartDate)) {
             $useMinMax = false;
@@ -1683,7 +1752,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_CART_DATE, $cartDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_CART_DATE, $cartDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1696,17 +1767,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterBySellingDate(array('max' => 'yesterday')); // WHERE stock_selling_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $sellingDate The value to use as filter.
+     * @param mixed $sellingDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySellingDate($sellingDate = null, $comparison = null)
+    public function filterBySellingDate($sellingDate = null, ?string $comparison = null)
     {
         if (is_array($sellingDate)) {
             $useMinMax = false;
@@ -1726,7 +1797,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_DATE, $sellingDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_SELLING_DATE, $sellingDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1739,17 +1812,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByReturnDate(array('max' => 'yesterday')); // WHERE stock_return_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $returnDate The value to use as filter.
+     * @param mixed $returnDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByReturnDate($returnDate = null, $comparison = null)
+    public function filterByReturnDate($returnDate = null, ?string $comparison = null)
     {
         if (is_array($returnDate)) {
             $useMinMax = false;
@@ -1769,7 +1842,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_RETURN_DATE, $returnDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_RETURN_DATE, $returnDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1782,17 +1857,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByLostDate(array('max' => 'yesterday')); // WHERE stock_lost_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $lostDate The value to use as filter.
+     * @param mixed $lostDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLostDate($lostDate = null, $comparison = null)
+    public function filterByLostDate($lostDate = null, ?string $comparison = null)
     {
         if (is_array($lostDate)) {
             $useMinMax = false;
@@ -1812,7 +1887,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_LOST_DATE, $lostDate, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_LOST_DATE, $lostDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1824,22 +1901,24 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByMediaOk('yes'); // WHERE stock_media_ok = true
      * </code>
      *
-     * @param     boolean|string $mediaOk The value to use as filter.
+     * @param bool|string $mediaOk The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMediaOk($mediaOk = null, $comparison = null)
+    public function filterByMediaOk($mediaOk = null, ?string $comparison = null)
     {
         if (is_string($mediaOk)) {
             $mediaOk = in_array(strtolower($mediaOk), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_MEDIA_OK, $mediaOk, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_MEDIA_OK, $mediaOk, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1851,22 +1930,24 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByFileUpdated('yes'); // WHERE stock_file_updated = true
      * </code>
      *
-     * @param     boolean|string $fileUpdated The value to use as filter.
+     * @param bool|string $fileUpdated The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFileUpdated($fileUpdated = null, $comparison = null)
+    public function filterByFileUpdated($fileUpdated = null, ?string $comparison = null)
     {
         if (is_string($fileUpdated)) {
             $fileUpdated = in_array(strtolower($fileUpdated), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_FILE_UPDATED, $fileUpdated, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_FILE_UPDATED, $fileUpdated, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1879,17 +1960,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE stock_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -1909,7 +1990,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_INSERT, $insert, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1922,17 +2005,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE stock_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -1952,7 +2035,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATE, $update, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1964,22 +2049,24 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByDl('yes'); // WHERE stock_dl = true
      * </code>
      *
-     * @param     boolean|string $dl The value to use as filter.
+     * @param bool|string $dl The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDl($dl = null, $comparison = null)
+    public function filterByDl($dl = null, ?string $comparison = null)
     {
         if (is_string($dl)) {
             $dl = in_array(strtolower($dl), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_DL, $dl, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_DL, $dl, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1992,17 +2079,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE stock_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -2022,7 +2109,9 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2035,17 +2124,17 @@ abstract class StockQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE stock_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -2065,20 +2154,22 @@ abstract class StockQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySite($site, $comparison = null)
+    public function filterBySite($site, ?string $comparison = null)
     {
         if ($site instanceof \Model\Site) {
             return $this
@@ -2088,8 +2179,10 @@ abstract class StockQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(StockTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
         }
@@ -2098,12 +2191,12 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Site relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSite($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -2132,9 +2225,9 @@ abstract class StockQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
@@ -2204,13 +2297,13 @@ abstract class StockQuery extends ModelCriteria
      * Filter the query by a related \Model\Article object
      *
      * @param \Model\Article|ObjectCollection $article The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticle($article, $comparison = null)
+    public function filterByArticle($article, ?string $comparison = null)
     {
         if ($article instanceof \Model\Article) {
             return $this
@@ -2220,8 +2313,10 @@ abstract class StockQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(StockTableMap::COL_ARTICLE_ID, $article->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
         }
@@ -2230,12 +2325,12 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Article relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinArticle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Article');
@@ -2264,9 +2359,9 @@ abstract class StockQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\ArticleQuery A secondary query class using the current class as primary query
      */
@@ -2335,9 +2430,9 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildStock $stock Object to remove from the list of results
+     * @param ChildStock $stock Object to remove from the list of results
      *
-     * @return $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($stock = null)
     {
@@ -2354,7 +2449,7 @@ abstract class StockQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(StockTableMap::DATABASE_NAME);
@@ -2379,12 +2474,12 @@ abstract class StockQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(StockTableMap::DATABASE_NAME);
@@ -2414,65 +2509,77 @@ abstract class StockQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(StockTableMap::COL_STOCK_UPDATED);
+        $this->addDescendingOrderByColumn(StockTableMap::COL_STOCK_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(StockTableMap::COL_STOCK_UPDATED);
+        $this->addAscendingOrderByColumn(StockTableMap::COL_STOCK_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(StockTableMap::COL_STOCK_CREATED);
+        $this->addDescendingOrderByColumn(StockTableMap::COL_STOCK_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(StockTableMap::COL_STOCK_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(StockTableMap::COL_STOCK_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildStockQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(StockTableMap::COL_STOCK_CREATED);
+        $this->addAscendingOrderByColumn(StockTableMap::COL_STOCK_CREATED);
+
+        return $this;
     }
 
-} // StockQuery
+}

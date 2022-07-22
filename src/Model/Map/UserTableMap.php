@@ -33,265 +33,269 @@ class UserTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.UserTableMap';
+    public const CLASS_NAME = 'Model.Map.UserTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'users';
+    public const TABLE_NAME = 'users';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\User';
+    public const OM_CLASS = '\\Model\\User';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.User';
+    public const CLASS_DEFAULT = 'Model.User';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 37;
+    public const NUM_COLUMNS = 37;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 37;
+    public const NUM_HYDRATE_COLUMNS = 37;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'users.id';
+    public const COL_ID = 'users.id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'users.site_id';
+    public const COL_SITE_ID = 'users.site_id';
 
     /**
      * the column name for the Email field
      */
-    const COL_EMAIL = 'users.Email';
+    public const COL_EMAIL = 'users.Email';
 
     /**
      * the column name for the user_password field
      */
-    const COL_USER_PASSWORD = 'users.user_password';
+    public const COL_USER_PASSWORD = 'users.user_password';
 
     /**
      * the column name for the user_key field
      */
-    const COL_USER_KEY = 'users.user_key';
+    public const COL_USER_KEY = 'users.user_key';
 
     /**
      * the column name for the email_key field
      */
-    const COL_EMAIL_KEY = 'users.email_key';
+    public const COL_EMAIL_KEY = 'users.email_key';
 
     /**
      * the column name for the facebook_uid field
      */
-    const COL_FACEBOOK_UID = 'users.facebook_uid';
+    public const COL_FACEBOOK_UID = 'users.facebook_uid';
 
     /**
      * the column name for the user_screen_name field
      */
-    const COL_USER_SCREEN_NAME = 'users.user_screen_name';
+    public const COL_USER_SCREEN_NAME = 'users.user_screen_name';
 
     /**
      * the column name for the user_slug field
      */
-    const COL_USER_SLUG = 'users.user_slug';
+    public const COL_USER_SLUG = 'users.user_slug';
 
     /**
      * the column name for the user_wishlist_ship field
      */
-    const COL_USER_WISHLIST_SHIP = 'users.user_wishlist_ship';
+    public const COL_USER_WISHLIST_SHIP = 'users.user_wishlist_ship';
 
     /**
      * the column name for the user_top field
      */
-    const COL_USER_TOP = 'users.user_top';
+    public const COL_USER_TOP = 'users.user_top';
 
     /**
      * the column name for the user_biblio field
      */
-    const COL_USER_BIBLIO = 'users.user_biblio';
+    public const COL_USER_BIBLIO = 'users.user_biblio';
 
     /**
      * the column name for the adresse_ip field
      */
-    const COL_ADRESSE_IP = 'users.adresse_ip';
+    public const COL_ADRESSE_IP = 'users.adresse_ip';
 
     /**
      * the column name for the recaptcha_score field
      */
-    const COL_RECAPTCHA_SCORE = 'users.recaptcha_score';
+    public const COL_RECAPTCHA_SCORE = 'users.recaptcha_score';
 
     /**
      * the column name for the DateInscription field
      */
-    const COL_DATEINSCRIPTION = 'users.DateInscription';
+    public const COL_DATEINSCRIPTION = 'users.DateInscription';
 
     /**
      * the column name for the DateConnexion field
      */
-    const COL_DATECONNEXION = 'users.DateConnexion';
+    public const COL_DATECONNEXION = 'users.DateConnexion';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'users.publisher_id';
+    public const COL_PUBLISHER_ID = 'users.publisher_id';
 
     /**
      * the column name for the bookshop_id field
      */
-    const COL_BOOKSHOP_ID = 'users.bookshop_id';
+    public const COL_BOOKSHOP_ID = 'users.bookshop_id';
 
     /**
      * the column name for the library_id field
      */
-    const COL_LIBRARY_ID = 'users.library_id';
+    public const COL_LIBRARY_ID = 'users.library_id';
 
     /**
      * the column name for the user_civilite field
      */
-    const COL_USER_CIVILITE = 'users.user_civilite';
+    public const COL_USER_CIVILITE = 'users.user_civilite';
 
     /**
      * the column name for the user_nom field
      */
-    const COL_USER_NOM = 'users.user_nom';
+    public const COL_USER_NOM = 'users.user_nom';
 
     /**
      * the column name for the user_prenom field
      */
-    const COL_USER_PRENOM = 'users.user_prenom';
+    public const COL_USER_PRENOM = 'users.user_prenom';
 
     /**
      * the column name for the user_adresse1 field
      */
-    const COL_USER_ADRESSE1 = 'users.user_adresse1';
+    public const COL_USER_ADRESSE1 = 'users.user_adresse1';
 
     /**
      * the column name for the user_adresse2 field
      */
-    const COL_USER_ADRESSE2 = 'users.user_adresse2';
+    public const COL_USER_ADRESSE2 = 'users.user_adresse2';
 
     /**
      * the column name for the user_codepostal field
      */
-    const COL_USER_CODEPOSTAL = 'users.user_codepostal';
+    public const COL_USER_CODEPOSTAL = 'users.user_codepostal';
 
     /**
      * the column name for the user_ville field
      */
-    const COL_USER_VILLE = 'users.user_ville';
+    public const COL_USER_VILLE = 'users.user_ville';
 
     /**
      * the column name for the user_pays field
      */
-    const COL_USER_PAYS = 'users.user_pays';
+    public const COL_USER_PAYS = 'users.user_pays';
 
     /**
      * the column name for the user_telephone field
      */
-    const COL_USER_TELEPHONE = 'users.user_telephone';
+    public const COL_USER_TELEPHONE = 'users.user_telephone';
 
     /**
      * the column name for the user_pref_articles_show field
      */
-    const COL_USER_PREF_ARTICLES_SHOW = 'users.user_pref_articles_show';
+    public const COL_USER_PREF_ARTICLES_SHOW = 'users.user_pref_articles_show';
 
     /**
      * the column name for the user_fb_id field
      */
-    const COL_USER_FB_ID = 'users.user_fb_id';
+    public const COL_USER_FB_ID = 'users.user_fb_id';
 
     /**
      * the column name for the user_fb_token field
      */
-    const COL_USER_FB_TOKEN = 'users.user_fb_token';
+    public const COL_USER_FB_TOKEN = 'users.user_fb_token';
 
     /**
      * the column name for the country_id field
      */
-    const COL_COUNTRY_ID = 'users.country_id';
+    public const COL_COUNTRY_ID = 'users.country_id';
 
     /**
      * the column name for the user_password_reset_token field
      */
-    const COL_USER_PASSWORD_RESET_TOKEN = 'users.user_password_reset_token';
+    public const COL_USER_PASSWORD_RESET_TOKEN = 'users.user_password_reset_token';
 
     /**
      * the column name for the user_password_reset_token_created field
      */
-    const COL_USER_PASSWORD_RESET_TOKEN_CREATED = 'users.user_password_reset_token_created';
+    public const COL_USER_PASSWORD_RESET_TOKEN_CREATED = 'users.user_password_reset_token_created';
 
     /**
      * the column name for the user_update field
      */
-    const COL_USER_UPDATE = 'users.user_update';
+    public const COL_USER_UPDATE = 'users.user_update';
 
     /**
      * the column name for the user_created field
      */
-    const COL_USER_CREATED = 'users.user_created';
+    public const COL_USER_CREATED = 'users.user_created';
 
     /**
      * the column name for the user_updated field
      */
-    const COL_USER_UPDATED = 'users.user_updated';
+    public const COL_USER_UPDATED = 'users.user_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'FacebookUid', 'Username', 'Slug', 'WishlistShip', 'Top', 'Biblio', 'AdresseIp', 'RecaptchaScore', 'Dateinscription', 'Dateconnexion', 'PublisherId', 'BookshopId', 'LibraryId', 'Civilite', 'Nom', 'Prenom', 'Adresse1', 'Adresse2', 'Codepostal', 'Ville', 'Pays', 'Telephone', 'PrefArticlesShow', 'FbId', 'FbToken', 'CountryId', 'PasswordResetToken', 'PasswordResetTokenCreated', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'email', 'password', 'key', 'emailKey', 'facebookUid', 'username', 'slug', 'wishlistShip', 'top', 'biblio', 'adresseIp', 'recaptchaScore', 'dateinscription', 'dateconnexion', 'publisherId', 'bookshopId', 'libraryId', 'civilite', 'nom', 'prenom', 'adresse1', 'adresse2', 'codepostal', 'ville', 'pays', 'telephone', 'prefArticlesShow', 'fbId', 'fbToken', 'countryId', 'passwordResetToken', 'passwordResetTokenCreated', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USER_PASSWORD, UserTableMap::COL_USER_KEY, UserTableMap::COL_EMAIL_KEY, UserTableMap::COL_FACEBOOK_UID, UserTableMap::COL_USER_SCREEN_NAME, UserTableMap::COL_USER_SLUG, UserTableMap::COL_USER_WISHLIST_SHIP, UserTableMap::COL_USER_TOP, UserTableMap::COL_USER_BIBLIO, UserTableMap::COL_ADRESSE_IP, UserTableMap::COL_RECAPTCHA_SCORE, UserTableMap::COL_DATEINSCRIPTION, UserTableMap::COL_DATECONNEXION, UserTableMap::COL_PUBLISHER_ID, UserTableMap::COL_BOOKSHOP_ID, UserTableMap::COL_LIBRARY_ID, UserTableMap::COL_USER_CIVILITE, UserTableMap::COL_USER_NOM, UserTableMap::COL_USER_PRENOM, UserTableMap::COL_USER_ADRESSE1, UserTableMap::COL_USER_ADRESSE2, UserTableMap::COL_USER_CODEPOSTAL, UserTableMap::COL_USER_VILLE, UserTableMap::COL_USER_PAYS, UserTableMap::COL_USER_TELEPHONE, UserTableMap::COL_USER_PREF_ARTICLES_SHOW, UserTableMap::COL_USER_FB_ID, UserTableMap::COL_USER_FB_TOKEN, UserTableMap::COL_COUNTRY_ID, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, UserTableMap::COL_USER_UPDATE, UserTableMap::COL_USER_CREATED, UserTableMap::COL_USER_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'facebook_uid', 'user_screen_name', 'user_slug', 'user_wishlist_ship', 'user_top', 'user_biblio', 'adresse_ip', 'recaptcha_score', 'DateInscription', 'DateConnexion', 'publisher_id', 'bookshop_id', 'library_id', 'user_civilite', 'user_nom', 'user_prenom', 'user_adresse1', 'user_adresse2', 'user_codepostal', 'user_ville', 'user_pays', 'user_telephone', 'user_pref_articles_show', 'user_fb_id', 'user_fb_token', 'country_id', 'user_password_reset_token', 'user_password_reset_token_created', 'user_update', 'user_created', 'user_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Email', 'Password', 'Key', 'EmailKey', 'FacebookUid', 'Username', 'Slug', 'WishlistShip', 'Top', 'Biblio', 'AdresseIp', 'RecaptchaScore', 'Dateinscription', 'Dateconnexion', 'PublisherId', 'BookshopId', 'LibraryId', 'Civilite', 'Nom', 'Prenom', 'Adresse1', 'Adresse2', 'Codepostal', 'Ville', 'Pays', 'Telephone', 'PrefArticlesShow', 'FbId', 'FbToken', 'CountryId', 'PasswordResetToken', 'PasswordResetTokenCreated', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'email', 'password', 'key', 'emailKey', 'facebookUid', 'username', 'slug', 'wishlistShip', 'top', 'biblio', 'adresseIp', 'recaptchaScore', 'dateinscription', 'dateconnexion', 'publisherId', 'bookshopId', 'libraryId', 'civilite', 'nom', 'prenom', 'adresse1', 'adresse2', 'codepostal', 'ville', 'pays', 'telephone', 'prefArticlesShow', 'fbId', 'fbToken', 'countryId', 'passwordResetToken', 'passwordResetTokenCreated', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID, UserTableMap::COL_SITE_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USER_PASSWORD, UserTableMap::COL_USER_KEY, UserTableMap::COL_EMAIL_KEY, UserTableMap::COL_FACEBOOK_UID, UserTableMap::COL_USER_SCREEN_NAME, UserTableMap::COL_USER_SLUG, UserTableMap::COL_USER_WISHLIST_SHIP, UserTableMap::COL_USER_TOP, UserTableMap::COL_USER_BIBLIO, UserTableMap::COL_ADRESSE_IP, UserTableMap::COL_RECAPTCHA_SCORE, UserTableMap::COL_DATEINSCRIPTION, UserTableMap::COL_DATECONNEXION, UserTableMap::COL_PUBLISHER_ID, UserTableMap::COL_BOOKSHOP_ID, UserTableMap::COL_LIBRARY_ID, UserTableMap::COL_USER_CIVILITE, UserTableMap::COL_USER_NOM, UserTableMap::COL_USER_PRENOM, UserTableMap::COL_USER_ADRESSE1, UserTableMap::COL_USER_ADRESSE2, UserTableMap::COL_USER_CODEPOSTAL, UserTableMap::COL_USER_VILLE, UserTableMap::COL_USER_PAYS, UserTableMap::COL_USER_TELEPHONE, UserTableMap::COL_USER_PREF_ARTICLES_SHOW, UserTableMap::COL_USER_FB_ID, UserTableMap::COL_USER_FB_TOKEN, UserTableMap::COL_COUNTRY_ID, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED, UserTableMap::COL_USER_UPDATE, UserTableMap::COL_USER_CREATED, UserTableMap::COL_USER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'Email', 'user_password', 'user_key', 'email_key', 'facebook_uid', 'user_screen_name', 'user_slug', 'user_wishlist_ship', 'user_top', 'user_biblio', 'adresse_ip', 'recaptcha_score', 'DateInscription', 'DateConnexion', 'publisher_id', 'bookshop_id', 'library_id', 'user_civilite', 'user_nom', 'user_prenom', 'user_adresse1', 'user_adresse2', 'user_codepostal', 'user_ville', 'user_pays', 'user_telephone', 'user_pref_articles_show', 'user_fb_id', 'user_fb_token', 'country_id', 'user_password_reset_token', 'user_password_reset_token_created', 'user_update', 'user_created', 'user_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'FacebookUid' => 6, 'Username' => 7, 'Slug' => 8, 'WishlistShip' => 9, 'Top' => 10, 'Biblio' => 11, 'AdresseIp' => 12, 'RecaptchaScore' => 13, 'Dateinscription' => 14, 'Dateconnexion' => 15, 'PublisherId' => 16, 'BookshopId' => 17, 'LibraryId' => 18, 'Civilite' => 19, 'Nom' => 20, 'Prenom' => 21, 'Adresse1' => 22, 'Adresse2' => 23, 'Codepostal' => 24, 'Ville' => 25, 'Pays' => 26, 'Telephone' => 27, 'PrefArticlesShow' => 28, 'FbId' => 29, 'FbToken' => 30, 'CountryId' => 31, 'PasswordResetToken' => 32, 'PasswordResetTokenCreated' => 33, 'Update' => 34, 'CreatedAt' => 35, 'UpdatedAt' => 36, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'facebookUid' => 6, 'username' => 7, 'slug' => 8, 'wishlistShip' => 9, 'top' => 10, 'biblio' => 11, 'adresseIp' => 12, 'recaptchaScore' => 13, 'dateinscription' => 14, 'dateconnexion' => 15, 'publisherId' => 16, 'bookshopId' => 17, 'libraryId' => 18, 'civilite' => 19, 'nom' => 20, 'prenom' => 21, 'adresse1' => 22, 'adresse2' => 23, 'codepostal' => 24, 'ville' => 25, 'pays' => 26, 'telephone' => 27, 'prefArticlesShow' => 28, 'fbId' => 29, 'fbToken' => 30, 'countryId' => 31, 'passwordResetToken' => 32, 'passwordResetTokenCreated' => 33, 'update' => 34, 'createdAt' => 35, 'updatedAt' => 36, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_USER_PASSWORD => 3, UserTableMap::COL_USER_KEY => 4, UserTableMap::COL_EMAIL_KEY => 5, UserTableMap::COL_FACEBOOK_UID => 6, UserTableMap::COL_USER_SCREEN_NAME => 7, UserTableMap::COL_USER_SLUG => 8, UserTableMap::COL_USER_WISHLIST_SHIP => 9, UserTableMap::COL_USER_TOP => 10, UserTableMap::COL_USER_BIBLIO => 11, UserTableMap::COL_ADRESSE_IP => 12, UserTableMap::COL_RECAPTCHA_SCORE => 13, UserTableMap::COL_DATEINSCRIPTION => 14, UserTableMap::COL_DATECONNEXION => 15, UserTableMap::COL_PUBLISHER_ID => 16, UserTableMap::COL_BOOKSHOP_ID => 17, UserTableMap::COL_LIBRARY_ID => 18, UserTableMap::COL_USER_CIVILITE => 19, UserTableMap::COL_USER_NOM => 20, UserTableMap::COL_USER_PRENOM => 21, UserTableMap::COL_USER_ADRESSE1 => 22, UserTableMap::COL_USER_ADRESSE2 => 23, UserTableMap::COL_USER_CODEPOSTAL => 24, UserTableMap::COL_USER_VILLE => 25, UserTableMap::COL_USER_PAYS => 26, UserTableMap::COL_USER_TELEPHONE => 27, UserTableMap::COL_USER_PREF_ARTICLES_SHOW => 28, UserTableMap::COL_USER_FB_ID => 29, UserTableMap::COL_USER_FB_TOKEN => 30, UserTableMap::COL_COUNTRY_ID => 31, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN => 32, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED => 33, UserTableMap::COL_USER_UPDATE => 34, UserTableMap::COL_USER_CREATED => 35, UserTableMap::COL_USER_UPDATED => 36, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'facebook_uid' => 6, 'user_screen_name' => 7, 'user_slug' => 8, 'user_wishlist_ship' => 9, 'user_top' => 10, 'user_biblio' => 11, 'adresse_ip' => 12, 'recaptcha_score' => 13, 'DateInscription' => 14, 'DateConnexion' => 15, 'publisher_id' => 16, 'bookshop_id' => 17, 'library_id' => 18, 'user_civilite' => 19, 'user_nom' => 20, 'user_prenom' => 21, 'user_adresse1' => 22, 'user_adresse2' => 23, 'user_codepostal' => 24, 'user_ville' => 25, 'user_pays' => 26, 'user_telephone' => 27, 'user_pref_articles_show' => 28, 'user_fb_id' => 29, 'user_fb_token' => 30, 'country_id' => 31, 'user_password_reset_token' => 32, 'user_password_reset_token_created' => 33, 'user_update' => 34, 'user_created' => 35, 'user_updated' => 36, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Email' => 2, 'Password' => 3, 'Key' => 4, 'EmailKey' => 5, 'FacebookUid' => 6, 'Username' => 7, 'Slug' => 8, 'WishlistShip' => 9, 'Top' => 10, 'Biblio' => 11, 'AdresseIp' => 12, 'RecaptchaScore' => 13, 'Dateinscription' => 14, 'Dateconnexion' => 15, 'PublisherId' => 16, 'BookshopId' => 17, 'LibraryId' => 18, 'Civilite' => 19, 'Nom' => 20, 'Prenom' => 21, 'Adresse1' => 22, 'Adresse2' => 23, 'Codepostal' => 24, 'Ville' => 25, 'Pays' => 26, 'Telephone' => 27, 'PrefArticlesShow' => 28, 'FbId' => 29, 'FbToken' => 30, 'CountryId' => 31, 'PasswordResetToken' => 32, 'PasswordResetTokenCreated' => 33, 'Update' => 34, 'CreatedAt' => 35, 'UpdatedAt' => 36, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'email' => 2, 'password' => 3, 'key' => 4, 'emailKey' => 5, 'facebookUid' => 6, 'username' => 7, 'slug' => 8, 'wishlistShip' => 9, 'top' => 10, 'biblio' => 11, 'adresseIp' => 12, 'recaptchaScore' => 13, 'dateinscription' => 14, 'dateconnexion' => 15, 'publisherId' => 16, 'bookshopId' => 17, 'libraryId' => 18, 'civilite' => 19, 'nom' => 20, 'prenom' => 21, 'adresse1' => 22, 'adresse2' => 23, 'codepostal' => 24, 'ville' => 25, 'pays' => 26, 'telephone' => 27, 'prefArticlesShow' => 28, 'fbId' => 29, 'fbToken' => 30, 'countryId' => 31, 'passwordResetToken' => 32, 'passwordResetTokenCreated' => 33, 'update' => 34, 'createdAt' => 35, 'updatedAt' => 36, ],
+        self::TYPE_COLNAME       => [UserTableMap::COL_ID => 0, UserTableMap::COL_SITE_ID => 1, UserTableMap::COL_EMAIL => 2, UserTableMap::COL_USER_PASSWORD => 3, UserTableMap::COL_USER_KEY => 4, UserTableMap::COL_EMAIL_KEY => 5, UserTableMap::COL_FACEBOOK_UID => 6, UserTableMap::COL_USER_SCREEN_NAME => 7, UserTableMap::COL_USER_SLUG => 8, UserTableMap::COL_USER_WISHLIST_SHIP => 9, UserTableMap::COL_USER_TOP => 10, UserTableMap::COL_USER_BIBLIO => 11, UserTableMap::COL_ADRESSE_IP => 12, UserTableMap::COL_RECAPTCHA_SCORE => 13, UserTableMap::COL_DATEINSCRIPTION => 14, UserTableMap::COL_DATECONNEXION => 15, UserTableMap::COL_PUBLISHER_ID => 16, UserTableMap::COL_BOOKSHOP_ID => 17, UserTableMap::COL_LIBRARY_ID => 18, UserTableMap::COL_USER_CIVILITE => 19, UserTableMap::COL_USER_NOM => 20, UserTableMap::COL_USER_PRENOM => 21, UserTableMap::COL_USER_ADRESSE1 => 22, UserTableMap::COL_USER_ADRESSE2 => 23, UserTableMap::COL_USER_CODEPOSTAL => 24, UserTableMap::COL_USER_VILLE => 25, UserTableMap::COL_USER_PAYS => 26, UserTableMap::COL_USER_TELEPHONE => 27, UserTableMap::COL_USER_PREF_ARTICLES_SHOW => 28, UserTableMap::COL_USER_FB_ID => 29, UserTableMap::COL_USER_FB_TOKEN => 30, UserTableMap::COL_COUNTRY_ID => 31, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN => 32, UserTableMap::COL_USER_PASSWORD_RESET_TOKEN_CREATED => 33, UserTableMap::COL_USER_UPDATE => 34, UserTableMap::COL_USER_CREATED => 35, UserTableMap::COL_USER_UPDATED => 36, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'Email' => 2, 'user_password' => 3, 'user_key' => 4, 'email_key' => 5, 'facebook_uid' => 6, 'user_screen_name' => 7, 'user_slug' => 8, 'user_wishlist_ship' => 9, 'user_top' => 10, 'user_biblio' => 11, 'adresse_ip' => 12, 'recaptcha_score' => 13, 'DateInscription' => 14, 'DateConnexion' => 15, 'publisher_id' => 16, 'bookshop_id' => 17, 'library_id' => 18, 'user_civilite' => 19, 'user_nom' => 20, 'user_prenom' => 21, 'user_adresse1' => 22, 'user_adresse2' => 23, 'user_codepostal' => 24, 'user_ville' => 25, 'user_pays' => 26, 'user_telephone' => 27, 'user_pref_articles_show' => 28, 'user_fb_id' => 29, 'user_fb_token' => 30, 'country_id' => 31, 'user_password_reset_token' => 32, 'user_password_reset_token_created' => 33, 'user_update' => 34, 'user_created' => 35, 'user_updated' => 36, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
@@ -595,9 +599,9 @@ class UserTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('users');
@@ -644,12 +648,14 @@ class UserTableMap extends TableMap
         $this->addColumn('user_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('user_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('user_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -686,21 +692,21 @@ class UserTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'Sessions', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'user_created', 'update_column' => 'user_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
             'validate' => ['rule1' => ['column' => 'email', 'validator' => 'Email']],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -708,14 +714,14 @@ class UserTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -730,14 +736,14 @@ class UserTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -754,10 +760,10 @@ class UserTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? UserTableMap::CLASS_DEFAULT : UserTableMap::OM_CLASS;
     }
@@ -765,17 +771,17 @@ class UserTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (User object, last column rank)
+     * @return array (User object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = UserTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
@@ -799,13 +805,13 @@ class UserTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -835,12 +841,13 @@ class UserTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(UserTableMap::COL_ID);
@@ -927,12 +934,13 @@ class UserTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(UserTableMap::COL_ID);
@@ -1017,10 +1025,10 @@ class UserTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME)->getTable(UserTableMap::TABLE_NAME);
     }
@@ -1028,15 +1036,15 @@ class UserTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or User object or primary key or array of primary keys
+     * @param mixed $values Criteria or User object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
@@ -1072,7 +1080,7 @@ class UserTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return UserQuery::create()->doDeleteAll($con);
     }
@@ -1080,13 +1088,13 @@ class UserTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a User or Criteria object.
      *
-     * @param mixed               $criteria Criteria or User object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or User object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
@@ -1113,4 +1121,4 @@ class UserTableMap extends TableMap
         });
     }
 
-} // UserTableMap
+}

@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -190,8 +191,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\CartQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PaymentQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildSite|null findOne(ConnectionInterface $con = null) Return the first ChildSite matching the query
- * @method     ChildSite findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
+ * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
+ * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
  *
  * @method     ChildSite|null findOneById(int $site_id) Return the first ChildSite filtered by the site_id column
  * @method     ChildSite|null findOneByName(string $site_name) Return the first ChildSite filtered by the site_name column
@@ -233,8 +234,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneByCreatedAt(string $site_created) Return the first ChildSite filtered by the site_created column
  * @method     ChildSite|null findOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column *
 
- * @method     ChildSite requirePk($key, ConnectionInterface $con = null) Return the ChildSite by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSite requireOne(ConnectionInterface $con = null) Return the first ChildSite matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSite requirePk($key, ?ConnectionInterface $con = null) Return the ChildSite by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSite requireOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSite requireOneById(int $site_id) Return the first ChildSite filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByName(string $site_name) Return the first ChildSite filtered by the site_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -276,88 +277,88 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite requireOneByCreatedAt(string $site_created) Return the first ChildSite filtered by the site_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildSite[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildSite> find(ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
- * @method     ChildSite[]|ObjectCollection findById(int $site_id) Return ChildSite objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findById(int $site_id) Return ChildSite objects filtered by the site_id column
- * @method     ChildSite[]|ObjectCollection findByName(string $site_name) Return ChildSite objects filtered by the site_name column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByName(string $site_name) Return ChildSite objects filtered by the site_name column
- * @method     ChildSite[]|ObjectCollection findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
- * @method     ChildSite[]|ObjectCollection findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
- * @method     ChildSite[]|ObjectCollection findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
- * @method     ChildSite[]|ObjectCollection findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
- * @method     ChildSite[]|ObjectCollection findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
- * @method     ChildSite[]|ObjectCollection findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
- * @method     ChildSite[]|ObjectCollection findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
- * @method     ChildSite[]|ObjectCollection findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
- * @method     ChildSite[]|ObjectCollection findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
- * @method     ChildSite[]|ObjectCollection findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
- * @method     ChildSite[]|ObjectCollection findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
- * @method     ChildSite[]|ObjectCollection findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
- * @method     ChildSite[]|ObjectCollection findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
- * @method     ChildSite[]|ObjectCollection findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
- * @method     ChildSite[]|ObjectCollection findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
- * @method     ChildSite[]|ObjectCollection findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
- * @method     ChildSite[]|ObjectCollection findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
- * @method     ChildSite[]|ObjectCollection findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @method     ChildSite[]|ObjectCollection findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
- * @method     ChildSite[]|ObjectCollection findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
- * @method     ChildSite[]|ObjectCollection findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
- * @method     ChildSite[]|ObjectCollection findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
- * @method     ChildSite[]|ObjectCollection findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
- * @method     ChildSite[]|ObjectCollection findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @method     ChildSite[]|ObjectCollection findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
- * @method     ChildSite[]|ObjectCollection findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
- * @method     ChildSite[]|ObjectCollection findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
- * @method     ChildSite[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
- * @method     ChildSite[]|ObjectCollection findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
- * @method     ChildSite[]|ObjectCollection findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
- * @method     ChildSite[]|ObjectCollection findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
- * @method     ChildSite[]|ObjectCollection findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
- * @method     ChildSite[]|ObjectCollection findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
- * @method     ChildSite[]|ObjectCollection findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
- * @method     ChildSite[]|ObjectCollection findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
- * @method     ChildSite[]|ObjectCollection findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
- * @method     ChildSite[]|ObjectCollection findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildSite> findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
- * @method     ChildSite[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSite> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildSite[]|Collection find(?ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildSite> find(?ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
+ * @method     ChildSite[]|Collection findById(int $site_id) Return ChildSite objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findById(int $site_id) Return ChildSite objects filtered by the site_id column
+ * @method     ChildSite[]|Collection findByName(string $site_name) Return ChildSite objects filtered by the site_name column
+ * @psalm-method Collection&\Traversable<ChildSite> findByName(string $site_name) Return ChildSite objects filtered by the site_name column
+ * @method     ChildSite[]|Collection findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
+ * @method     ChildSite[]|Collection findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
+ * @method     ChildSite[]|Collection findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
+ * @psalm-method Collection&\Traversable<ChildSite> findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
+ * @method     ChildSite[]|Collection findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
+ * @psalm-method Collection&\Traversable<ChildSite> findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
+ * @method     ChildSite[]|Collection findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
+ * @method     ChildSite[]|Collection findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
+ * @method     ChildSite[]|Collection findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
+ * @psalm-method Collection&\Traversable<ChildSite> findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
+ * @method     ChildSite[]|Collection findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
+ * @method     ChildSite[]|Collection findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
+ * @method     ChildSite[]|Collection findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
+ * @psalm-method Collection&\Traversable<ChildSite> findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
+ * @method     ChildSite[]|Collection findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
+ * @method     ChildSite[]|Collection findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
+ * @psalm-method Collection&\Traversable<ChildSite> findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
+ * @method     ChildSite[]|Collection findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
+ * @method     ChildSite[]|Collection findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
+ * @method     ChildSite[]|Collection findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
+ * @method     ChildSite[]|Collection findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
+ * @psalm-method Collection&\Traversable<ChildSite> findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
+ * @method     ChildSite[]|Collection findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
+ * @psalm-method Collection&\Traversable<ChildSite> findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
+ * @method     ChildSite[]|Collection findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildSite> findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
+ * @method     ChildSite[]|Collection findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
+ * @psalm-method Collection&\Traversable<ChildSite> findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
+ * @method     ChildSite[]|Collection findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
+ * @method     ChildSite[]|Collection findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
+ * @method     ChildSite[]|Collection findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
+ * @method     ChildSite[]|Collection findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
+ * @method     ChildSite[]|Collection findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
+ * @psalm-method Collection&\Traversable<ChildSite> findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
+ * @method     ChildSite[]|Collection findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
+ * @method     ChildSite[]|Collection findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
+ * @method     ChildSite[]|Collection findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
+ * @method     ChildSite[]|Collection findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
+ * @method     ChildSite[]|Collection findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
+ * @method     ChildSite[]|Collection findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
+ * @method     ChildSite[]|Collection findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
+ * @method     ChildSite[]|Collection findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
+ * @method     ChildSite[]|Collection findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
+ * @method     ChildSite[]|Collection findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
+ * @psalm-method Collection&\Traversable<ChildSite> findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
+ * @method     ChildSite[]|Collection findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
+ * @psalm-method Collection&\Traversable<ChildSite> findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
+ * @method     ChildSite[]|Collection findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
+ * @psalm-method Collection&\Traversable<ChildSite> findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
+ * @method     ChildSite[]|Collection findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
+ * @psalm-method Collection&\Traversable<ChildSite> findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
+ * @method     ChildSite[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSite> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SiteQuery extends ModelCriteria
@@ -367,9 +368,9 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\SiteQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Site', $modelAlias = null)
     {
@@ -379,12 +380,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Returns a new ChildSiteQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildSiteQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildSiteQuery) {
             return $criteria;
@@ -414,7 +415,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return ChildSite|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -446,8 +447,8 @@ abstract class SiteQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -479,8 +480,8 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildSite|array|mixed the result, formatted by the current formatter
      */
@@ -500,12 +501,12 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -522,27 +523,31 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -555,15 +560,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -583,7 +588,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $id, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -593,14 +600,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE site_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE site_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE site_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -608,7 +616,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_NAME, $name, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -618,14 +628,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByPass('fooValue');   // WHERE site_pass = 'fooValue'
      * $query->filterByPass('%fooValue%', Criteria::LIKE); // WHERE site_pass LIKE '%fooValue%'
+     * $query->filterByPass(['foo', 'bar']); // WHERE site_pass IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $pass The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $pass The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPass($pass = null, $comparison = null)
+    public function filterByPass($pass = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($pass)) {
@@ -633,7 +644,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PASS, $pass, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PASS, $pass, $comparison);
+
+        return $this;
     }
 
     /**
@@ -643,14 +656,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE site_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE site_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE site_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -658,7 +672,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_TITLE, $title, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -668,14 +684,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByDomain('fooValue');   // WHERE site_domain = 'fooValue'
      * $query->filterByDomain('%fooValue%', Criteria::LIKE); // WHERE site_domain LIKE '%fooValue%'
+     * $query->filterByDomain(['foo', 'bar']); // WHERE site_domain IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $domain The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $domain The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDomain($domain = null, $comparison = null)
+    public function filterByDomain($domain = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($domain)) {
@@ -683,7 +700,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_DOMAIN, $domain, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_DOMAIN, $domain, $comparison);
+
+        return $this;
     }
 
     /**
@@ -693,14 +712,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByVersion('fooValue');   // WHERE site_version = 'fooValue'
      * $query->filterByVersion('%fooValue%', Criteria::LIKE); // WHERE site_version LIKE '%fooValue%'
+     * $query->filterByVersion(['foo', 'bar']); // WHERE site_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $version The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $version The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVersion($version = null, $comparison = null)
+    public function filterByVersion($version = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($version)) {
@@ -708,7 +728,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_VERSION, $version, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_VERSION, $version, $comparison);
+
+        return $this;
     }
 
     /**
@@ -718,14 +740,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByTag('fooValue');   // WHERE site_tag = 'fooValue'
      * $query->filterByTag('%fooValue%', Criteria::LIKE); // WHERE site_tag LIKE '%fooValue%'
+     * $query->filterByTag(['foo', 'bar']); // WHERE site_tag IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $tag The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $tag The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTag($tag = null, $comparison = null)
+    public function filterByTag($tag = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($tag)) {
@@ -733,7 +756,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_TAG, $tag, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_TAG, $tag, $comparison);
+
+        return $this;
     }
 
     /**
@@ -743,14 +768,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByFlag('fooValue');   // WHERE site_flag = 'fooValue'
      * $query->filterByFlag('%fooValue%', Criteria::LIKE); // WHERE site_flag LIKE '%fooValue%'
+     * $query->filterByFlag(['foo', 'bar']); // WHERE site_flag IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $flag The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $flag The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFlag($flag = null, $comparison = null)
+    public function filterByFlag($flag = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($flag)) {
@@ -758,7 +784,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_FLAG, $flag, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_FLAG, $flag, $comparison);
+
+        return $this;
     }
 
     /**
@@ -768,14 +796,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByContact('fooValue');   // WHERE site_contact = 'fooValue'
      * $query->filterByContact('%fooValue%', Criteria::LIKE); // WHERE site_contact LIKE '%fooValue%'
+     * $query->filterByContact(['foo', 'bar']); // WHERE site_contact IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $contact The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $contact The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByContact($contact = null, $comparison = null)
+    public function filterByContact($contact = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($contact)) {
@@ -783,7 +812,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_CONTACT, $contact, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_CONTACT, $contact, $comparison);
+
+        return $this;
     }
 
     /**
@@ -793,14 +824,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress('fooValue');   // WHERE site_address = 'fooValue'
      * $query->filterByAddress('%fooValue%', Criteria::LIKE); // WHERE site_address LIKE '%fooValue%'
+     * $query->filterByAddress(['foo', 'bar']); // WHERE site_address IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress($address = null, $comparison = null)
+    public function filterByAddress($address = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address)) {
@@ -808,7 +840,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ADDRESS, $address, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_ADDRESS, $address, $comparison);
+
+        return $this;
     }
 
     /**
@@ -818,14 +852,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByTva('fooValue');   // WHERE site_tva = 'fooValue'
      * $query->filterByTva('%fooValue%', Criteria::LIKE); // WHERE site_tva LIKE '%fooValue%'
+     * $query->filterByTva(['foo', 'bar']); // WHERE site_tva IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $tva The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $tva The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTva($tva = null, $comparison = null)
+    public function filterByTva($tva = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($tva)) {
@@ -833,7 +868,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_TVA, $tva, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_TVA, $tva, $comparison);
+
+        return $this;
     }
 
     /**
@@ -845,22 +882,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByHtmlRenderer('yes'); // WHERE site_html_renderer = true
      * </code>
      *
-     * @param     boolean|string $htmlRenderer The value to use as filter.
+     * @param bool|string $htmlRenderer The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHtmlRenderer($htmlRenderer = null, $comparison = null)
+    public function filterByHtmlRenderer($htmlRenderer = null, ?string $comparison = null)
     {
         if (is_string($htmlRenderer)) {
             $htmlRenderer = in_array(strtolower($htmlRenderer), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_HTML_RENDERER, $htmlRenderer, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_HTML_RENDERER, $htmlRenderer, $comparison);
+
+        return $this;
     }
 
     /**
@@ -872,22 +911,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByAxys('yes'); // WHERE site_axys = true
      * </code>
      *
-     * @param     boolean|string $axys The value to use as filter.
+     * @param bool|string $axys The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAxys($axys = null, $comparison = null)
+    public function filterByAxys($axys = null, ?string $comparison = null)
     {
         if (is_string($axys)) {
             $axys = in_array(strtolower($axys), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_AXYS, $axys, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_AXYS, $axys, $comparison);
+
+        return $this;
     }
 
     /**
@@ -899,22 +940,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByNoosfere('yes'); // WHERE site_noosfere = true
      * </code>
      *
-     * @param     boolean|string $noosfere The value to use as filter.
+     * @param bool|string $noosfere The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNoosfere($noosfere = null, $comparison = null)
+    public function filterByNoosfere($noosfere = null, ?string $comparison = null)
     {
         if (is_string($noosfere)) {
             $noosfere = in_array(strtolower($noosfere), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_NOOSFERE, $noosfere, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_NOOSFERE, $noosfere, $comparison);
+
+        return $this;
     }
 
     /**
@@ -926,22 +969,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByAmazon('yes'); // WHERE site_amazon = true
      * </code>
      *
-     * @param     boolean|string $amazon The value to use as filter.
+     * @param bool|string $amazon The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAmazon($amazon = null, $comparison = null)
+    public function filterByAmazon($amazon = null, ?string $comparison = null)
     {
         if (is_string($amazon)) {
             $amazon = in_array(strtolower($amazon), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_AMAZON, $amazon, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_AMAZON, $amazon, $comparison);
+
+        return $this;
     }
 
     /**
@@ -954,15 +999,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByEventId(array('min' => 12)); // WHERE site_event_id > 12
      * </code>
      *
-     * @param     mixed $eventId The value to use as filter.
+     * @param mixed $eventId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEventId($eventId = null, $comparison = null)
+    public function filterByEventId($eventId = null, ?string $comparison = null)
     {
         if (is_array($eventId)) {
             $useMinMax = false;
@@ -982,7 +1027,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_EVENT_ID, $eventId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_EVENT_ID, $eventId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -995,15 +1042,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByEventDate(array('min' => 12)); // WHERE site_event_date > 12
      * </code>
      *
-     * @param     mixed $eventDate The value to use as filter.
+     * @param mixed $eventDate The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEventDate($eventDate = null, $comparison = null)
+    public function filterByEventDate($eventDate = null, ?string $comparison = null)
     {
         if (is_array($eventDate)) {
             $useMinMax = false;
@@ -1023,7 +1070,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_EVENT_DATE, $eventDate, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_EVENT_DATE, $eventDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1035,22 +1084,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByShop('yes'); // WHERE site_shop = true
      * </code>
      *
-     * @param     boolean|string $shop The value to use as filter.
+     * @param bool|string $shop The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShop($shop = null, $comparison = null)
+    public function filterByShop($shop = null, ?string $comparison = null)
     {
         if (is_string($shop)) {
             $shop = in_array(strtolower($shop), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_SHOP, $shop, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_SHOP, $shop, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1062,22 +1113,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByVpc('yes'); // WHERE site_vpc = true
      * </code>
      *
-     * @param     boolean|string $vpc The value to use as filter.
+     * @param bool|string $vpc The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVpc($vpc = null, $comparison = null)
+    public function filterByVpc($vpc = null, ?string $comparison = null)
     {
         if (is_string($vpc)) {
             $vpc = in_array(strtolower($vpc), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_VPC, $vpc, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_VPC, $vpc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1087,14 +1140,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByShippingFee('fooValue');   // WHERE site_shipping_fee = 'fooValue'
      * $query->filterByShippingFee('%fooValue%', Criteria::LIKE); // WHERE site_shipping_fee LIKE '%fooValue%'
+     * $query->filterByShippingFee(['foo', 'bar']); // WHERE site_shipping_fee IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $shippingFee The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $shippingFee The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingFee($shippingFee = null, $comparison = null)
+    public function filterByShippingFee($shippingFee = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($shippingFee)) {
@@ -1102,7 +1156,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_SHIPPING_FEE, $shippingFee, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_SHIPPING_FEE, $shippingFee, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1114,22 +1170,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByWishlist('yes'); // WHERE site_wishlist = true
      * </code>
      *
-     * @param     boolean|string $wishlist The value to use as filter.
+     * @param bool|string $wishlist The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWishlist($wishlist = null, $comparison = null)
+    public function filterByWishlist($wishlist = null, ?string $comparison = null)
     {
         if (is_string($wishlist)) {
             $wishlist = in_array(strtolower($wishlist), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_WISHLIST, $wishlist, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_WISHLIST, $wishlist, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1141,22 +1199,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPaymentCheque('yes'); // WHERE site_payment_cheque = true
      * </code>
      *
-     * @param     boolean|string $paymentCheque The value to use as filter.
+     * @param bool|string $paymentCheque The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentCheque($paymentCheque = null, $comparison = null)
+    public function filterByPaymentCheque($paymentCheque = null, ?string $comparison = null)
     {
         if (is_string($paymentCheque)) {
             $paymentCheque = in_array(strtolower($paymentCheque), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_CHEQUE, $paymentCheque, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_CHEQUE, $paymentCheque, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1166,14 +1226,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByPaymentPaypal('fooValue');   // WHERE site_payment_paypal = 'fooValue'
      * $query->filterByPaymentPaypal('%fooValue%', Criteria::LIKE); // WHERE site_payment_paypal LIKE '%fooValue%'
+     * $query->filterByPaymentPaypal(['foo', 'bar']); // WHERE site_payment_paypal IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $paymentPaypal The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $paymentPaypal The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentPaypal($paymentPaypal = null, $comparison = null)
+    public function filterByPaymentPaypal($paymentPaypal = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($paymentPaypal)) {
@@ -1181,7 +1242,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_PAYPAL, $paymentPaypal, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_PAYPAL, $paymentPaypal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1193,22 +1256,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPaymentPayplug('yes'); // WHERE site_payment_payplug = true
      * </code>
      *
-     * @param     boolean|string $paymentPayplug The value to use as filter.
+     * @param bool|string $paymentPayplug The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentPayplug($paymentPayplug = null, $comparison = null)
+    public function filterByPaymentPayplug($paymentPayplug = null, ?string $comparison = null)
     {
         if (is_string($paymentPayplug)) {
             $paymentPayplug = in_array(strtolower($paymentPayplug), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, $paymentPayplug, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, $paymentPayplug, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1220,22 +1285,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPaymentTransfer('yes'); // WHERE site_payment_transfer = true
      * </code>
      *
-     * @param     boolean|string $paymentTransfer The value to use as filter.
+     * @param bool|string $paymentTransfer The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaymentTransfer($paymentTransfer = null, $comparison = null)
+    public function filterByPaymentTransfer($paymentTransfer = null, ?string $comparison = null)
     {
         if (is_string($paymentTransfer)) {
             $paymentTransfer = in_array(strtolower($paymentTransfer), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1247,22 +1314,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByBookshop('yes'); // WHERE site_bookshop = true
      * </code>
      *
-     * @param     boolean|string $bookshop The value to use as filter.
+     * @param bool|string $bookshop The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshop($bookshop = null, $comparison = null)
+    public function filterByBookshop($bookshop = null, ?string $comparison = null)
     {
         if (is_string($bookshop)) {
             $bookshop = in_array(strtolower($bookshop), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP, $bookshop, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP, $bookshop, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1275,15 +1344,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE site_bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -1303,7 +1372,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1315,22 +1386,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPublisher('yes'); // WHERE site_publisher = true
      * </code>
      *
-     * @param     boolean|string $publisher The value to use as filter.
+     * @param bool|string $publisher The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisher($publisher = null, $comparison = null)
+    public function filterByPublisher($publisher = null, ?string $comparison = null)
     {
         if (is_string($publisher)) {
             $publisher = in_array(strtolower($publisher), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER, $publisher, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER, $publisher, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1342,22 +1415,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPublisherStock('yes'); // WHERE site_publisher_stock = true
      * </code>
      *
-     * @param     boolean|string $publisherStock The value to use as filter.
+     * @param bool|string $publisherStock The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherStock($publisherStock = null, $comparison = null)
+    public function filterByPublisherStock($publisherStock = null, ?string $comparison = null)
     {
         if (is_string($publisherStock)) {
             $publisherStock = in_array(strtolower($publisherStock), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER_STOCK, $publisherStock, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER_STOCK, $publisherStock, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1370,15 +1445,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -1398,7 +1473,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1411,15 +1488,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByEbookBundle(array('min' => 12)); // WHERE site_ebook_bundle > 12
      * </code>
      *
-     * @param     mixed $ebookBundle The value to use as filter.
+     * @param mixed $ebookBundle The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEbookBundle($ebookBundle = null, $comparison = null)
+    public function filterByEbookBundle($ebookBundle = null, ?string $comparison = null)
     {
         if (is_array($ebookBundle)) {
             $useMinMax = false;
@@ -1439,7 +1516,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_EBOOK_BUNDLE, $ebookBundle, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_EBOOK_BUNDLE, $ebookBundle, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1452,15 +1531,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByFbPageId(array('min' => 12)); // WHERE site_fb_page_id > 12
      * </code>
      *
-     * @param     mixed $fbPageId The value to use as filter.
+     * @param mixed $fbPageId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFbPageId($fbPageId = null, $comparison = null)
+    public function filterByFbPageId($fbPageId = null, ?string $comparison = null)
     {
         if (is_array($fbPageId)) {
             $useMinMax = false;
@@ -1480,7 +1559,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_FB_PAGE_ID, $fbPageId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_FB_PAGE_ID, $fbPageId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1490,14 +1571,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByFbPageToken('fooValue');   // WHERE site_fb_page_token = 'fooValue'
      * $query->filterByFbPageToken('%fooValue%', Criteria::LIKE); // WHERE site_fb_page_token LIKE '%fooValue%'
+     * $query->filterByFbPageToken(['foo', 'bar']); // WHERE site_fb_page_token IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $fbPageToken The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $fbPageToken The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFbPageToken($fbPageToken = null, $comparison = null)
+    public function filterByFbPageToken($fbPageToken = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($fbPageToken)) {
@@ -1505,7 +1587,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_FB_PAGE_TOKEN, $fbPageToken, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_FB_PAGE_TOKEN, $fbPageToken, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1515,14 +1599,15 @@ abstract class SiteQuery extends ModelCriteria
      * <code>
      * $query->filterByAnalyticsId('fooValue');   // WHERE site_analytics_id = 'fooValue'
      * $query->filterByAnalyticsId('%fooValue%', Criteria::LIKE); // WHERE site_analytics_id LIKE '%fooValue%'
+     * $query->filterByAnalyticsId(['foo', 'bar']); // WHERE site_analytics_id IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $analyticsId The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $analyticsId The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAnalyticsId($analyticsId = null, $comparison = null)
+    public function filterByAnalyticsId($analyticsId = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($analyticsId)) {
@@ -1530,7 +1615,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_ANALYTICS_ID, $analyticsId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_ANALYTICS_ID, $analyticsId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1543,15 +1630,15 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByPiwikId(array('min' => 12)); // WHERE site_piwik_id > 12
      * </code>
      *
-     * @param     mixed $piwikId The value to use as filter.
+     * @param mixed $piwikId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPiwikId($piwikId = null, $comparison = null)
+    public function filterByPiwikId($piwikId = null, ?string $comparison = null)
     {
         if (is_array($piwikId)) {
             $useMinMax = false;
@@ -1571,7 +1658,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_PIWIK_ID, $piwikId, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_PIWIK_ID, $piwikId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1584,17 +1673,17 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterBySitemapUpdated(array('max' => 'yesterday')); // WHERE site_sitemap_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $sitemapUpdated The value to use as filter.
+     * @param mixed $sitemapUpdated The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySitemapUpdated($sitemapUpdated = null, $comparison = null)
+    public function filterBySitemapUpdated($sitemapUpdated = null, ?string $comparison = null)
     {
         if (is_array($sitemapUpdated)) {
             $useMinMax = false;
@@ -1614,7 +1703,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_SITEMAP_UPDATED, $sitemapUpdated, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_SITEMAP_UPDATED, $sitemapUpdated, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1626,22 +1717,24 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByMonitoring('yes'); // WHERE site_monitoring = true
      * </code>
      *
-     * @param     boolean|string $monitoring The value to use as filter.
+     * @param bool|string $monitoring The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMonitoring($monitoring = null, $comparison = null)
+    public function filterByMonitoring($monitoring = null, ?string $comparison = null)
     {
         if (is_string($monitoring)) {
             $monitoring = in_array(strtolower($monitoring), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_MONITORING, $monitoring, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_MONITORING, $monitoring, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1654,17 +1747,17 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE site_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1684,7 +1777,9 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1697,17 +1792,17 @@ abstract class SiteQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE site_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1727,27 +1822,33 @@ abstract class SiteQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Cart object
      *
      * @param \Model\Cart|ObjectCollection $cart the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCart($cart, $comparison = null)
+    public function filterByCart($cart, ?string $comparison = null)
     {
         if ($cart instanceof \Model\Cart) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $cart->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($cart instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useCartQuery()
                 ->filterByPrimaryKeys($cart->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByCart() only accepts arguments of type \Model\Cart or Collection');
         }
@@ -1756,12 +1857,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Cart relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinCart($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinCart(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Cart');
@@ -1790,9 +1891,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\CartQuery A secondary query class using the current class as primary query
      */
@@ -1862,20 +1963,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Option object
      *
      * @param \Model\Option|ObjectCollection $option the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOption($option, $comparison = null)
+    public function filterByOption($option, ?string $comparison = null)
     {
         if ($option instanceof \Model\Option) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $option->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($option instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useOptionQuery()
                 ->filterByPrimaryKeys($option->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByOption() only accepts arguments of type \Model\Option or Collection');
         }
@@ -1884,12 +1989,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Option relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinOption($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinOption(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Option');
@@ -1918,9 +2023,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\OptionQuery A secondary query class using the current class as primary query
      */
@@ -1990,20 +2095,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Order object
      *
      * @param \Model\Order|ObjectCollection $order the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order, $comparison = null)
+    public function filterByOrder($order, ?string $comparison = null)
     {
         if ($order instanceof \Model\Order) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $order->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($order instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useOrderQuery()
                 ->filterByPrimaryKeys($order->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByOrder() only accepts arguments of type \Model\Order or Collection');
         }
@@ -2012,12 +2121,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Order relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinOrder($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinOrder(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Order');
@@ -2046,9 +2155,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\OrderQuery A secondary query class using the current class as primary query
      */
@@ -2118,20 +2227,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Payment object
      *
      * @param \Model\Payment|ObjectCollection $payment the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPayment($payment, $comparison = null)
+    public function filterByPayment($payment, ?string $comparison = null)
     {
         if ($payment instanceof \Model\Payment) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $payment->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($payment instanceof ObjectCollection) {
-            return $this
+            $this
                 ->usePaymentQuery()
                 ->filterByPrimaryKeys($payment->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByPayment() only accepts arguments of type \Model\Payment or Collection');
         }
@@ -2140,12 +2253,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Payment relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinPayment($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPayment(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Payment');
@@ -2174,9 +2287,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\PaymentQuery A secondary query class using the current class as primary query
      */
@@ -2246,20 +2359,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Right object
      *
      * @param \Model\Right|ObjectCollection $right the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRight($right, $comparison = null)
+    public function filterByRight($right, ?string $comparison = null)
     {
         if ($right instanceof \Model\Right) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $right->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($right instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useRightQuery()
                 ->filterByPrimaryKeys($right->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByRight() only accepts arguments of type \Model\Right or Collection');
         }
@@ -2268,12 +2385,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Right relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinRight($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRight(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Right');
@@ -2302,9 +2419,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\RightQuery A secondary query class using the current class as primary query
      */
@@ -2374,20 +2491,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Session object
      *
      * @param \Model\Session|ObjectCollection $session the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySession($session, $comparison = null)
+    public function filterBySession($session, ?string $comparison = null)
     {
         if ($session instanceof \Model\Session) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $session->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($session instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useSessionQuery()
                 ->filterByPrimaryKeys($session->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterBySession() only accepts arguments of type \Model\Session or Collection');
         }
@@ -2396,12 +2517,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Session relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinSession($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinSession(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Session');
@@ -2430,9 +2551,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\SessionQuery A secondary query class using the current class as primary query
      */
@@ -2502,20 +2623,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\Stock object
      *
      * @param \Model\Stock|ObjectCollection $stock the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStock($stock, $comparison = null)
+    public function filterByStock($stock, ?string $comparison = null)
     {
         if ($stock instanceof \Model\Stock) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $stock->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($stock instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useStockQuery()
                 ->filterByPrimaryKeys($stock->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByStock() only accepts arguments of type \Model\Stock or Collection');
         }
@@ -2524,12 +2649,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Stock relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinStock($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinStock(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Stock');
@@ -2558,9 +2683,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\StockQuery A secondary query class using the current class as primary query
      */
@@ -2630,20 +2755,24 @@ abstract class SiteQuery extends ModelCriteria
      * Filter the query by a related \Model\User object
      *
      * @param \Model\User|ObjectCollection $user the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUser($user, $comparison = null)
+    public function filterByUser($user, ?string $comparison = null)
     {
         if ($user instanceof \Model\User) {
-            return $this
+            $this
                 ->addUsingAlias(SiteTableMap::COL_SITE_ID, $user->getSiteId(), $comparison);
+
+            return $this;
         } elseif ($user instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useUserQuery()
                 ->filterByPrimaryKeys($user->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByUser() only accepts arguments of type \Model\User or Collection');
         }
@@ -2652,12 +2781,12 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -2686,9 +2815,9 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\UserQuery A secondary query class using the current class as primary query
      */
@@ -2757,9 +2886,9 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildSite $site Object to remove from the list of results
+     * @param ChildSite $site Object to remove from the list of results
      *
-     * @return $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($site = null)
     {
@@ -2776,7 +2905,7 @@ abstract class SiteQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SiteTableMap::DATABASE_NAME);
@@ -2801,12 +2930,12 @@ abstract class SiteQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SiteTableMap::DATABASE_NAME);
@@ -2836,65 +2965,77 @@ abstract class SiteQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SiteTableMap::COL_SITE_UPDATED);
+        $this->addDescendingOrderByColumn(SiteTableMap::COL_SITE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SiteTableMap::COL_SITE_UPDATED);
+        $this->addAscendingOrderByColumn(SiteTableMap::COL_SITE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SiteTableMap::COL_SITE_CREATED);
+        $this->addDescendingOrderByColumn(SiteTableMap::COL_SITE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(SiteTableMap::COL_SITE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SiteTableMap::COL_SITE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildSiteQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SiteTableMap::COL_SITE_CREATED);
+        $this->addAscendingOrderByColumn(SiteTableMap::COL_SITE_CREATED);
+
+        return $this;
     }
 
-} // SiteQuery
+}

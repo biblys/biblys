@@ -33,180 +33,184 @@ class EventTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.EventTableMap';
+    public const CLASS_NAME = 'Model.Map.EventTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'events';
+    public const TABLE_NAME = 'events';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Event';
+    public const OM_CLASS = '\\Model\\Event';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Event';
+    public const CLASS_DEFAULT = 'Model.Event';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 20;
+    public const NUM_COLUMNS = 20;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 20;
+    public const NUM_HYDRATE_COLUMNS = 20;
 
     /**
      * the column name for the event_id field
      */
-    const COL_EVENT_ID = 'events.event_id';
+    public const COL_EVENT_ID = 'events.event_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'events.site_id';
+    public const COL_SITE_ID = 'events.site_id';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'events.publisher_id';
+    public const COL_PUBLISHER_ID = 'events.publisher_id';
 
     /**
      * the column name for the bookshop_id field
      */
-    const COL_BOOKSHOP_ID = 'events.bookshop_id';
+    public const COL_BOOKSHOP_ID = 'events.bookshop_id';
 
     /**
      * the column name for the library_id field
      */
-    const COL_LIBRARY_ID = 'events.library_id';
+    public const COL_LIBRARY_ID = 'events.library_id';
 
     /**
      * the column name for the event_url field
      */
-    const COL_EVENT_URL = 'events.event_url';
+    public const COL_EVENT_URL = 'events.event_url';
 
     /**
      * the column name for the event_title field
      */
-    const COL_EVENT_TITLE = 'events.event_title';
+    public const COL_EVENT_TITLE = 'events.event_title';
 
     /**
      * the column name for the event_subtitle field
      */
-    const COL_EVENT_SUBTITLE = 'events.event_subtitle';
+    public const COL_EVENT_SUBTITLE = 'events.event_subtitle';
 
     /**
      * the column name for the event_desc field
      */
-    const COL_EVENT_DESC = 'events.event_desc';
+    public const COL_EVENT_DESC = 'events.event_desc';
 
     /**
      * the column name for the event_location field
      */
-    const COL_EVENT_LOCATION = 'events.event_location';
+    public const COL_EVENT_LOCATION = 'events.event_location';
 
     /**
      * the column name for the event_illustration_legend field
      */
-    const COL_EVENT_ILLUSTRATION_LEGEND = 'events.event_illustration_legend';
+    public const COL_EVENT_ILLUSTRATION_LEGEND = 'events.event_illustration_legend';
 
     /**
      * the column name for the event_highlighted field
      */
-    const COL_EVENT_HIGHLIGHTED = 'events.event_highlighted';
+    public const COL_EVENT_HIGHLIGHTED = 'events.event_highlighted';
 
     /**
      * the column name for the event_start field
      */
-    const COL_EVENT_START = 'events.event_start';
+    public const COL_EVENT_START = 'events.event_start';
 
     /**
      * the column name for the event_end field
      */
-    const COL_EVENT_END = 'events.event_end';
+    public const COL_EVENT_END = 'events.event_end';
 
     /**
      * the column name for the event_date field
      */
-    const COL_EVENT_DATE = 'events.event_date';
+    public const COL_EVENT_DATE = 'events.event_date';
 
     /**
      * the column name for the event_status field
      */
-    const COL_EVENT_STATUS = 'events.event_status';
+    public const COL_EVENT_STATUS = 'events.event_status';
 
     /**
      * the column name for the event_insert_ field
      */
-    const COL_EVENT_INSERT_ = 'events.event_insert_';
+    public const COL_EVENT_INSERT_ = 'events.event_insert_';
 
     /**
      * the column name for the event_update_ field
      */
-    const COL_EVENT_UPDATE_ = 'events.event_update_';
+    public const COL_EVENT_UPDATE_ = 'events.event_update_';
 
     /**
      * the column name for the event_created field
      */
-    const COL_EVENT_CREATED = 'events.event_created';
+    public const COL_EVENT_CREATED = 'events.event_created';
 
     /**
      * the column name for the event_updated field
      */
-    const COL_EVENT_UPDATED = 'events.event_updated';
+    public const COL_EVENT_UPDATED = 'events.event_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_BOOKSHOP_ID, EventTableMap::COL_LIBRARY_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('event_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'PublisherId', 'BookshopId', 'LibraryId', 'Url', 'Title', 'Subtitle', 'Desc', 'Location', 'IllustrationLegend', 'Highlighted', 'Start', 'End', 'Date', 'Status', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'publisherId', 'bookshopId', 'libraryId', 'url', 'title', 'subtitle', 'desc', 'location', 'illustrationLegend', 'highlighted', 'start', 'end', 'date', 'status', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID, EventTableMap::COL_SITE_ID, EventTableMap::COL_PUBLISHER_ID, EventTableMap::COL_BOOKSHOP_ID, EventTableMap::COL_LIBRARY_ID, EventTableMap::COL_EVENT_URL, EventTableMap::COL_EVENT_TITLE, EventTableMap::COL_EVENT_SUBTITLE, EventTableMap::COL_EVENT_DESC, EventTableMap::COL_EVENT_LOCATION, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, EventTableMap::COL_EVENT_HIGHLIGHTED, EventTableMap::COL_EVENT_START, EventTableMap::COL_EVENT_END, EventTableMap::COL_EVENT_DATE, EventTableMap::COL_EVENT_STATUS, EventTableMap::COL_EVENT_INSERT_, EventTableMap::COL_EVENT_UPDATE_, EventTableMap::COL_EVENT_CREATED, EventTableMap::COL_EVENT_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['event_id', 'site_id', 'publisher_id', 'bookshop_id', 'library_id', 'event_url', 'event_title', 'event_subtitle', 'event_desc', 'event_location', 'event_illustration_legend', 'event_highlighted', 'event_start', 'event_end', 'event_date', 'event_status', 'event_insert_', 'event_update_', 'event_created', 'event_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'BookshopId' => 3, 'LibraryId' => 4, 'Url' => 5, 'Title' => 6, 'Subtitle' => 7, 'Desc' => 8, 'Location' => 9, 'IllustrationLegend' => 10, 'Highlighted' => 11, 'Start' => 12, 'End' => 13, 'Date' => 14, 'Status' => 15, 'Insert' => 16, 'Update' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'publisherId' => 2, 'bookshopId' => 3, 'libraryId' => 4, 'url' => 5, 'title' => 6, 'subtitle' => 7, 'desc' => 8, 'location' => 9, 'illustrationLegend' => 10, 'highlighted' => 11, 'start' => 12, 'end' => 13, 'date' => 14, 'status' => 15, 'insert' => 16, 'update' => 17, 'createdAt' => 18, 'updatedAt' => 19, ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_BOOKSHOP_ID => 3, EventTableMap::COL_LIBRARY_ID => 4, EventTableMap::COL_EVENT_URL => 5, EventTableMap::COL_EVENT_TITLE => 6, EventTableMap::COL_EVENT_SUBTITLE => 7, EventTableMap::COL_EVENT_DESC => 8, EventTableMap::COL_EVENT_LOCATION => 9, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 10, EventTableMap::COL_EVENT_HIGHLIGHTED => 11, EventTableMap::COL_EVENT_START => 12, EventTableMap::COL_EVENT_END => 13, EventTableMap::COL_EVENT_DATE => 14, EventTableMap::COL_EVENT_STATUS => 15, EventTableMap::COL_EVENT_INSERT_ => 16, EventTableMap::COL_EVENT_UPDATE_ => 17, EventTableMap::COL_EVENT_CREATED => 18, EventTableMap::COL_EVENT_UPDATED => 19, ),
-        self::TYPE_FIELDNAME     => array('event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'bookshop_id' => 3, 'library_id' => 4, 'event_url' => 5, 'event_title' => 6, 'event_subtitle' => 7, 'event_desc' => 8, 'event_location' => 9, 'event_illustration_legend' => 10, 'event_highlighted' => 11, 'event_start' => 12, 'event_end' => 13, 'event_date' => 14, 'event_status' => 15, 'event_insert_' => 16, 'event_update_' => 17, 'event_created' => 18, 'event_updated' => 19, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'PublisherId' => 2, 'BookshopId' => 3, 'LibraryId' => 4, 'Url' => 5, 'Title' => 6, 'Subtitle' => 7, 'Desc' => 8, 'Location' => 9, 'IllustrationLegend' => 10, 'Highlighted' => 11, 'Start' => 12, 'End' => 13, 'Date' => 14, 'Status' => 15, 'Insert' => 16, 'Update' => 17, 'CreatedAt' => 18, 'UpdatedAt' => 19, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'publisherId' => 2, 'bookshopId' => 3, 'libraryId' => 4, 'url' => 5, 'title' => 6, 'subtitle' => 7, 'desc' => 8, 'location' => 9, 'illustrationLegend' => 10, 'highlighted' => 11, 'start' => 12, 'end' => 13, 'date' => 14, 'status' => 15, 'insert' => 16, 'update' => 17, 'createdAt' => 18, 'updatedAt' => 19, ],
+        self::TYPE_COLNAME       => [EventTableMap::COL_EVENT_ID => 0, EventTableMap::COL_SITE_ID => 1, EventTableMap::COL_PUBLISHER_ID => 2, EventTableMap::COL_BOOKSHOP_ID => 3, EventTableMap::COL_LIBRARY_ID => 4, EventTableMap::COL_EVENT_URL => 5, EventTableMap::COL_EVENT_TITLE => 6, EventTableMap::COL_EVENT_SUBTITLE => 7, EventTableMap::COL_EVENT_DESC => 8, EventTableMap::COL_EVENT_LOCATION => 9, EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND => 10, EventTableMap::COL_EVENT_HIGHLIGHTED => 11, EventTableMap::COL_EVENT_START => 12, EventTableMap::COL_EVENT_END => 13, EventTableMap::COL_EVENT_DATE => 14, EventTableMap::COL_EVENT_STATUS => 15, EventTableMap::COL_EVENT_INSERT_ => 16, EventTableMap::COL_EVENT_UPDATE_ => 17, EventTableMap::COL_EVENT_CREATED => 18, EventTableMap::COL_EVENT_UPDATED => 19, ],
+        self::TYPE_FIELDNAME     => ['event_id' => 0, 'site_id' => 1, 'publisher_id' => 2, 'bookshop_id' => 3, 'library_id' => 4, 'event_url' => 5, 'event_title' => 6, 'event_subtitle' => 7, 'event_desc' => 8, 'event_location' => 9, 'event_illustration_legend' => 10, 'event_highlighted' => 11, 'event_start' => 12, 'event_end' => 13, 'event_date' => 14, 'event_status' => 15, 'event_insert_' => 16, 'event_update_' => 17, 'event_created' => 18, 'event_updated' => 19, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'EVENT_ID',
@@ -376,9 +380,9 @@ class EventTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('events');
@@ -408,27 +412,29 @@ class EventTableMap extends TableMap
         $this->addColumn('event_update_', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('event_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('event_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'event_created', 'update_column' => 'event_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -436,14 +442,14 @@ class EventTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -458,14 +464,14 @@ class EventTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -482,10 +488,10 @@ class EventTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? EventTableMap::CLASS_DEFAULT : EventTableMap::OM_CLASS;
     }
@@ -493,17 +499,17 @@ class EventTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Event object, last column rank)
+     * @return array (Event object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = EventTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = EventTableMap::getInstanceFromPool($key))) {
@@ -527,13 +533,13 @@ class EventTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -563,12 +569,13 @@ class EventTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(EventTableMap::COL_EVENT_ID);
@@ -621,12 +628,13 @@ class EventTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(EventTableMap::COL_EVENT_ID);
@@ -677,10 +685,10 @@ class EventTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(EventTableMap::DATABASE_NAME)->getTable(EventTableMap::TABLE_NAME);
     }
@@ -688,15 +696,15 @@ class EventTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Event or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Event object or primary key or array of primary keys
+     * @param mixed $values Criteria or Event object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
@@ -732,7 +740,7 @@ class EventTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return EventQuery::create()->doDeleteAll($con);
     }
@@ -740,13 +748,13 @@ class EventTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Event or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Event object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Event object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
@@ -773,4 +781,4 @@ class EventTableMap extends TableMap
         });
     }
 
-} // EventTableMap
+}

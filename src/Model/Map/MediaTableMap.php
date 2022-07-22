@@ -33,150 +33,154 @@ class MediaTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.MediaTableMap';
+    public const CLASS_NAME = 'Model.Map.MediaTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'medias';
+    public const TABLE_NAME = 'medias';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Media';
+    public const OM_CLASS = '\\Model\\Media';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Media';
+    public const CLASS_DEFAULT = 'Model.Media';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the media_id field
      */
-    const COL_MEDIA_ID = 'medias.media_id';
+    public const COL_MEDIA_ID = 'medias.media_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'medias.site_id';
+    public const COL_SITE_ID = 'medias.site_id';
 
     /**
      * the column name for the category_id field
      */
-    const COL_CATEGORY_ID = 'medias.category_id';
+    public const COL_CATEGORY_ID = 'medias.category_id';
 
     /**
      * the column name for the media_dir field
      */
-    const COL_MEDIA_DIR = 'medias.media_dir';
+    public const COL_MEDIA_DIR = 'medias.media_dir';
 
     /**
      * the column name for the media_file field
      */
-    const COL_MEDIA_FILE = 'medias.media_file';
+    public const COL_MEDIA_FILE = 'medias.media_file';
 
     /**
      * the column name for the media_ext field
      */
-    const COL_MEDIA_EXT = 'medias.media_ext';
+    public const COL_MEDIA_EXT = 'medias.media_ext';
 
     /**
      * the column name for the media_title field
      */
-    const COL_MEDIA_TITLE = 'medias.media_title';
+    public const COL_MEDIA_TITLE = 'medias.media_title';
 
     /**
      * the column name for the media_desc field
      */
-    const COL_MEDIA_DESC = 'medias.media_desc';
+    public const COL_MEDIA_DESC = 'medias.media_desc';
 
     /**
      * the column name for the media_link field
      */
-    const COL_MEDIA_LINK = 'medias.media_link';
+    public const COL_MEDIA_LINK = 'medias.media_link';
 
     /**
      * the column name for the media_headline field
      */
-    const COL_MEDIA_HEADLINE = 'medias.media_headline';
+    public const COL_MEDIA_HEADLINE = 'medias.media_headline';
 
     /**
      * the column name for the media_insert field
      */
-    const COL_MEDIA_INSERT = 'medias.media_insert';
+    public const COL_MEDIA_INSERT = 'medias.media_insert';
 
     /**
      * the column name for the media_update field
      */
-    const COL_MEDIA_UPDATE = 'medias.media_update';
+    public const COL_MEDIA_UPDATE = 'medias.media_update';
 
     /**
      * the column name for the media_created field
      */
-    const COL_MEDIA_CREATED = 'medias.media_created';
+    public const COL_MEDIA_CREATED = 'medias.media_created';
 
     /**
      * the column name for the media_updated field
      */
-    const COL_MEDIA_UPDATED = 'medias.media_updated';
+    public const COL_MEDIA_UPDATED = 'medias.media_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID, MediaTableMap::COL_SITE_ID, MediaTableMap::COL_CATEGORY_ID, MediaTableMap::COL_MEDIA_DIR, MediaTableMap::COL_MEDIA_FILE, MediaTableMap::COL_MEDIA_EXT, MediaTableMap::COL_MEDIA_TITLE, MediaTableMap::COL_MEDIA_DESC, MediaTableMap::COL_MEDIA_LINK, MediaTableMap::COL_MEDIA_HEADLINE, MediaTableMap::COL_MEDIA_INSERT, MediaTableMap::COL_MEDIA_UPDATE, MediaTableMap::COL_MEDIA_CREATED, MediaTableMap::COL_MEDIA_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'CategoryId', 'Dir', 'File', 'Ext', 'Title', 'Desc', 'Link', 'Headline', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'categoryId', 'dir', 'file', 'ext', 'title', 'desc', 'link', 'headline', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [MediaTableMap::COL_MEDIA_ID, MediaTableMap::COL_SITE_ID, MediaTableMap::COL_CATEGORY_ID, MediaTableMap::COL_MEDIA_DIR, MediaTableMap::COL_MEDIA_FILE, MediaTableMap::COL_MEDIA_EXT, MediaTableMap::COL_MEDIA_TITLE, MediaTableMap::COL_MEDIA_DESC, MediaTableMap::COL_MEDIA_LINK, MediaTableMap::COL_MEDIA_HEADLINE, MediaTableMap::COL_MEDIA_INSERT, MediaTableMap::COL_MEDIA_UPDATE, MediaTableMap::COL_MEDIA_CREATED, MediaTableMap::COL_MEDIA_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['media_id', 'site_id', 'category_id', 'media_dir', 'media_file', 'media_ext', 'media_title', 'media_desc', 'media_link', 'media_headline', 'media_insert', 'media_update', 'media_created', 'media_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'Title' => 6, 'Desc' => 7, 'Link' => 8, 'Headline' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'title' => 6, 'desc' => 7, 'link' => 8, 'headline' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
-        self::TYPE_COLNAME       => array(MediaTableMap::COL_MEDIA_ID => 0, MediaTableMap::COL_SITE_ID => 1, MediaTableMap::COL_CATEGORY_ID => 2, MediaTableMap::COL_MEDIA_DIR => 3, MediaTableMap::COL_MEDIA_FILE => 4, MediaTableMap::COL_MEDIA_EXT => 5, MediaTableMap::COL_MEDIA_TITLE => 6, MediaTableMap::COL_MEDIA_DESC => 7, MediaTableMap::COL_MEDIA_LINK => 8, MediaTableMap::COL_MEDIA_HEADLINE => 9, MediaTableMap::COL_MEDIA_INSERT => 10, MediaTableMap::COL_MEDIA_UPDATE => 11, MediaTableMap::COL_MEDIA_CREATED => 12, MediaTableMap::COL_MEDIA_UPDATED => 13, ),
-        self::TYPE_FIELDNAME     => array('media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_title' => 6, 'media_desc' => 7, 'media_link' => 8, 'media_headline' => 9, 'media_insert' => 10, 'media_update' => 11, 'media_created' => 12, 'media_updated' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'CategoryId' => 2, 'Dir' => 3, 'File' => 4, 'Ext' => 5, 'Title' => 6, 'Desc' => 7, 'Link' => 8, 'Headline' => 9, 'Insert' => 10, 'Update' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'categoryId' => 2, 'dir' => 3, 'file' => 4, 'ext' => 5, 'title' => 6, 'desc' => 7, 'link' => 8, 'headline' => 9, 'insert' => 10, 'update' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
+        self::TYPE_COLNAME       => [MediaTableMap::COL_MEDIA_ID => 0, MediaTableMap::COL_SITE_ID => 1, MediaTableMap::COL_CATEGORY_ID => 2, MediaTableMap::COL_MEDIA_DIR => 3, MediaTableMap::COL_MEDIA_FILE => 4, MediaTableMap::COL_MEDIA_EXT => 5, MediaTableMap::COL_MEDIA_TITLE => 6, MediaTableMap::COL_MEDIA_DESC => 7, MediaTableMap::COL_MEDIA_LINK => 8, MediaTableMap::COL_MEDIA_HEADLINE => 9, MediaTableMap::COL_MEDIA_INSERT => 10, MediaTableMap::COL_MEDIA_UPDATE => 11, MediaTableMap::COL_MEDIA_CREATED => 12, MediaTableMap::COL_MEDIA_UPDATED => 13, ],
+        self::TYPE_FIELDNAME     => ['media_id' => 0, 'site_id' => 1, 'category_id' => 2, 'media_dir' => 3, 'media_file' => 4, 'media_ext' => 5, 'media_title' => 6, 'media_desc' => 7, 'media_link' => 8, 'media_headline' => 9, 'media_insert' => 10, 'media_update' => 11, 'media_created' => 12, 'media_updated' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'MEDIA_ID',
@@ -298,9 +302,9 @@ class MediaTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('medias');
@@ -324,27 +328,29 @@ class MediaTableMap extends TableMap
         $this->addColumn('media_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('media_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('media_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'media_created', 'update_column' => 'media_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -352,14 +358,14 @@ class MediaTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -374,14 +380,14 @@ class MediaTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -398,10 +404,10 @@ class MediaTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? MediaTableMap::CLASS_DEFAULT : MediaTableMap::OM_CLASS;
     }
@@ -409,17 +415,17 @@ class MediaTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Media object, last column rank)
+     * @return array (Media object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = MediaTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = MediaTableMap::getInstanceFromPool($key))) {
@@ -443,13 +449,13 @@ class MediaTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -479,12 +485,13 @@ class MediaTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(MediaTableMap::COL_MEDIA_ID);
@@ -525,12 +532,13 @@ class MediaTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(MediaTableMap::COL_MEDIA_ID);
@@ -569,10 +577,10 @@ class MediaTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(MediaTableMap::DATABASE_NAME)->getTable(MediaTableMap::TABLE_NAME);
     }
@@ -580,15 +588,15 @@ class MediaTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Media or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Media object or primary key or array of primary keys
+     * @param mixed $values Criteria or Media object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
@@ -624,7 +632,7 @@ class MediaTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return MediaQuery::create()->doDeleteAll($con);
     }
@@ -632,13 +640,13 @@ class MediaTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Media or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Media object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Media object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MediaTableMap::DATABASE_NAME);
@@ -665,4 +673,4 @@ class MediaTableMap extends TableMap
         });
     }
 
-} // MediaTableMap
+}

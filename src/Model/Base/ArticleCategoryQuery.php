@@ -10,7 +10,7 @@ use Model\Map\ArticleCategoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleCategoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildArticleCategoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildArticleCategory|null findOne(ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query
- * @method     ChildArticleCategory findOneOrCreate(ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query, or a new ChildArticleCategory object populated from the query conditions when no match is found
+ * @method     ChildArticleCategory|null findOne(?ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query
+ * @method     ChildArticleCategory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query, or a new ChildArticleCategory object populated from the query conditions when no match is found
  *
  * @method     ChildArticleCategory|null findOneById(string $rayon_id) Return the first ChildArticleCategory filtered by the rayon_id column
  * @method     ChildArticleCategory|null findOneBySiteId(int $site_id) Return the first ChildArticleCategory filtered by the site_id column
@@ -66,8 +66,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleCategory|null findOneByCreatedAt(string $rayon_created) Return the first ChildArticleCategory filtered by the rayon_created column
  * @method     ChildArticleCategory|null findOneByUpdatedAt(string $rayon_updated) Return the first ChildArticleCategory filtered by the rayon_updated column *
 
- * @method     ChildArticleCategory requirePk($key, ConnectionInterface $con = null) Return the ChildArticleCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticleCategory requireOne(ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticleCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildArticleCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticleCategory requireOne(?ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildArticleCategory requireOneById(string $rayon_id) Return the first ChildArticleCategory filtered by the rayon_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticleCategory requireOneBySiteId(int $site_id) Return the first ChildArticleCategory filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -81,32 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleCategory requireOneByCreatedAt(string $rayon_created) Return the first ChildArticleCategory filtered by the rayon_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticleCategory requireOneByUpdatedAt(string $rayon_updated) Return the first ChildArticleCategory filtered by the rayon_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildArticleCategory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> find(ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
- * @method     ChildArticleCategory[]|ObjectCollection findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
- * @method     ChildArticleCategory[]|ObjectCollection findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
- * @method     ChildArticleCategory[]|ObjectCollection findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
- * @method     ChildArticleCategory[]|ObjectCollection findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
- * @method     ChildArticleCategory[]|ObjectCollection findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
- * @method     ChildArticleCategory[]|ObjectCollection findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
- * @method     ChildArticleCategory[]|ObjectCollection findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
- * @method     ChildArticleCategory[]|ObjectCollection findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
- * @method     ChildArticleCategory[]|ObjectCollection findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
- * @method     ChildArticleCategory[]|ObjectCollection findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
- * @method     ChildArticleCategory[]|ObjectCollection findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildArticleCategory> findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
- * @method     ChildArticleCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticleCategory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildArticleCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> find(?ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
+ * @method     ChildArticleCategory[]|Collection findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
+ * @method     ChildArticleCategory[]|Collection findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
+ * @method     ChildArticleCategory[]|Collection findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
+ * @method     ChildArticleCategory[]|Collection findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
+ * @method     ChildArticleCategory[]|Collection findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
+ * @method     ChildArticleCategory[]|Collection findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
+ * @method     ChildArticleCategory[]|Collection findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
+ * @method     ChildArticleCategory[]|Collection findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
+ * @method     ChildArticleCategory[]|Collection findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
+ * @method     ChildArticleCategory[]|Collection findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
+ * @method     ChildArticleCategory[]|Collection findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
+ * @method     ChildArticleCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticleCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ArticleCategoryQuery extends ModelCriteria
@@ -116,9 +116,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\ArticleCategoryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\ArticleCategory', $modelAlias = null)
     {
@@ -128,12 +128,12 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Returns a new ChildArticleCategoryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildArticleCategoryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildArticleCategoryQuery) {
             return $criteria;
@@ -163,7 +163,7 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      *
      * @return ChildArticleCategory|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -195,8 +195,8 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -228,8 +228,8 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildArticleCategory|array|mixed the result, formatted by the current formatter
      */
@@ -249,12 +249,12 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -271,27 +271,31 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -304,15 +308,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE rayon_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -332,7 +336,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $id, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -345,15 +351,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -373,7 +379,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -383,14 +391,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE rayon_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE rayon_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE rayon_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -398,7 +407,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_NAME, $name, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -408,14 +419,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE rayon_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE rayon_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE rayon_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -423,7 +435,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_URL, $url, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -433,14 +447,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE rayon_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE rayon_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE rayon_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -448,7 +463,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_DESC, $desc, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -461,15 +478,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterByOrder(array('min' => 12)); // WHERE rayon_order > 12
      * </code>
      *
-     * @param     mixed $order The value to use as filter.
+     * @param mixed $order The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order = null, $comparison = null)
+    public function filterByOrder($order = null, ?string $comparison = null)
     {
         if (is_array($order)) {
             $useMinMax = false;
@@ -489,7 +506,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ORDER, $order, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_ORDER, $order, $comparison);
+
+        return $this;
     }
 
     /**
@@ -499,14 +518,15 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * <code>
      * $query->filterBySortBy('fooValue');   // WHERE rayon_sort_by = 'fooValue'
      * $query->filterBySortBy('%fooValue%', Criteria::LIKE); // WHERE rayon_sort_by LIKE '%fooValue%'
+     * $query->filterBySortBy(['foo', 'bar']); // WHERE rayon_sort_by IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $sortBy The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $sortBy The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySortBy($sortBy = null, $comparison = null)
+    public function filterBySortBy($sortBy = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($sortBy)) {
@@ -514,7 +534,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SORT_BY, $sortBy, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SORT_BY, $sortBy, $comparison);
+
+        return $this;
     }
 
     /**
@@ -526,22 +548,24 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterBySortOrder('yes'); // WHERE rayon_sort_order = true
      * </code>
      *
-     * @param     boolean|string $sortOrder The value to use as filter.
+     * @param bool|string $sortOrder The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySortOrder($sortOrder = null, $comparison = null)
+    public function filterBySortOrder($sortOrder = null, ?string $comparison = null)
     {
         if (is_string($sortOrder)) {
             $sortOrder = in_array(strtolower($sortOrder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SORT_ORDER, $sortOrder, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SORT_ORDER, $sortOrder, $comparison);
+
+        return $this;
     }
 
     /**
@@ -553,22 +577,24 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterByShowUpcoming('yes'); // WHERE rayon_show_upcoming = true
      * </code>
      *
-     * @param     boolean|string $showUpcoming The value to use as filter.
+     * @param bool|string $showUpcoming The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShowUpcoming($showUpcoming = null, $comparison = null)
+    public function filterByShowUpcoming($showUpcoming = null, ?string $comparison = null)
     {
         if (is_string($showUpcoming)) {
             $showUpcoming = in_array(strtolower($showUpcoming), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING, $showUpcoming, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING, $showUpcoming, $comparison);
+
+        return $this;
     }
 
     /**
@@ -581,17 +607,17 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE rayon_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -611,7 +637,9 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -624,17 +652,17 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE rayon_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -654,15 +682,17 @@ abstract class ArticleCategoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildArticleCategory $articleCategory Object to remove from the list of results
+     * @param ChildArticleCategory $articleCategory Object to remove from the list of results
      *
-     * @return $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($articleCategory = null)
     {
@@ -679,7 +709,7 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleCategoryTableMap::DATABASE_NAME);
@@ -704,12 +734,12 @@ abstract class ArticleCategoryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleCategoryTableMap::DATABASE_NAME);
@@ -739,65 +769,77 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_UPDATED);
+        $this->addDescendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_UPDATED);
+        $this->addAscendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_CREATED);
+        $this->addDescendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_CREATED);
+        $this->addAscendingOrderByColumn(ArticleCategoryTableMap::COL_RAYON_CREATED);
+
+        return $this;
     }
 
     // sluggable behavior
@@ -805,26 +847,28 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     /**
      * Filter the query on the slug column
      *
-     * @param     string $slug The value to use as filter.
+     * @param string $slug The value to use as filter.
      *
-     * @return    $this|ChildArticleCategoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySlug($slug)
+    public function filterBySlug(string $slug)
     {
-        return $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_URL, $slug, Criteria::EQUAL);
+        $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_URL, $slug, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Find one object based on its slug
      *
-     * @param     string $slug The value to use as filter.
-     * @param     ConnectionInterface $con The optional connection object
+     * @param string $slug The value to use as filter.
+     * @param ConnectionInterface $con The optional connection object
      *
-     * @return    ChildArticleCategory the result, formatted by the current formatter
+     * @return ChildArticleCategory the result, formatted by the current formatter
      */
-    public function findOneBySlug($slug, $con = null)
+    public function findOneBySlug(string $slug, ?ConnectionInterface $con = null)
     {
         return $this->filterBySlug($slug)->findOne($con);
     }
 
-} // ArticleCategoryQuery
+}

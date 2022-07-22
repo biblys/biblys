@@ -10,7 +10,7 @@ use Model\Map\RedirectionTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -45,8 +45,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirectionQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildRedirectionQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildRedirection|null findOne(ConnectionInterface $con = null) Return the first ChildRedirection matching the query
- * @method     ChildRedirection findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRedirection matching the query, or a new ChildRedirection object populated from the query conditions when no match is found
+ * @method     ChildRedirection|null findOne(?ConnectionInterface $con = null) Return the first ChildRedirection matching the query
+ * @method     ChildRedirection findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildRedirection matching the query, or a new ChildRedirection object populated from the query conditions when no match is found
  *
  * @method     ChildRedirection|null findOneById(int $redirection_id) Return the first ChildRedirection filtered by the redirection_id column
  * @method     ChildRedirection|null findOneBySiteId(int $site_id) Return the first ChildRedirection filtered by the site_id column
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection|null findOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column
  * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column *
 
- * @method     ChildRedirection requirePk($key, ConnectionInterface $con = null) Return the ChildRedirection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRedirection requireOne(ConnectionInterface $con = null) Return the first ChildRedirection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRedirection requirePk($key, ?ConnectionInterface $con = null) Return the ChildRedirection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRedirection requireOne(?ConnectionInterface $con = null) Return the first ChildRedirection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRedirection requireOneById(int $redirection_id) Return the first ChildRedirection filtered by the redirection_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneBySiteId(int $site_id) Return the first ChildRedirection filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -69,26 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection requireOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildRedirection[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> find(ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
- * @method     ChildRedirection[]|ObjectCollection findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
- * @method     ChildRedirection[]|ObjectCollection findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
- * @method     ChildRedirection[]|ObjectCollection findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @method     ChildRedirection[]|ObjectCollection findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
- * @method     ChildRedirection[]|ObjectCollection findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
- * @method     ChildRedirection[]|ObjectCollection findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
- * @method     ChildRedirection[]|ObjectCollection findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
- * @method     ChildRedirection[]|ObjectCollection findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildRedirection> findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
- * @method     ChildRedirection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRedirection> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildRedirection[]|Collection find(?ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildRedirection> find(?ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
+ * @method     ChildRedirection[]|Collection findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
+ * @method     ChildRedirection[]|Collection findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
+ * @method     ChildRedirection[]|Collection findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @method     ChildRedirection[]|Collection findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @method     ChildRedirection[]|Collection findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
+ * @method     ChildRedirection[]|Collection findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @method     ChildRedirection[]|Collection findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
+ * @method     ChildRedirection[]|Collection findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ * @method     ChildRedirection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRedirection> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class RedirectionQuery extends ModelCriteria
@@ -98,9 +98,9 @@ abstract class RedirectionQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\RedirectionQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Redirection', $modelAlias = null)
     {
@@ -110,12 +110,12 @@ abstract class RedirectionQuery extends ModelCriteria
     /**
      * Returns a new ChildRedirectionQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildRedirectionQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildRedirectionQuery) {
             return $criteria;
@@ -145,7 +145,7 @@ abstract class RedirectionQuery extends ModelCriteria
      *
      * @return ChildRedirection|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -177,8 +177,8 @@ abstract class RedirectionQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -210,8 +210,8 @@ abstract class RedirectionQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildRedirection|array|mixed the result, formatted by the current formatter
      */
@@ -231,12 +231,12 @@ abstract class RedirectionQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -253,27 +253,31 @@ abstract class RedirectionQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -286,15 +290,15 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE redirection_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -314,7 +318,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $id, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -327,15 +333,15 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -355,7 +361,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -365,14 +373,15 @@ abstract class RedirectionQuery extends ModelCriteria
      * <code>
      * $query->filterByOld('fooValue');   // WHERE redirection_old = 'fooValue'
      * $query->filterByOld('%fooValue%', Criteria::LIKE); // WHERE redirection_old LIKE '%fooValue%'
+     * $query->filterByOld(['foo', 'bar']); // WHERE redirection_old IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $old The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $old The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOld($old = null, $comparison = null)
+    public function filterByOld($old = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($old)) {
@@ -380,7 +389,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_OLD, $old, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_OLD, $old, $comparison);
+
+        return $this;
     }
 
     /**
@@ -390,14 +401,15 @@ abstract class RedirectionQuery extends ModelCriteria
      * <code>
      * $query->filterByNew('fooValue');   // WHERE redirection_new = 'fooValue'
      * $query->filterByNew('%fooValue%', Criteria::LIKE); // WHERE redirection_new LIKE '%fooValue%'
+     * $query->filterByNew(['foo', 'bar']); // WHERE redirection_new IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $new The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $new The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNew($new = null, $comparison = null)
+    public function filterByNew($new = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($new)) {
@@ -405,7 +417,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_NEW, $new, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_NEW, $new, $comparison);
+
+        return $this;
     }
 
     /**
@@ -418,15 +432,15 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterByHits(array('min' => 12)); // WHERE redirection_hits > 12
      * </code>
      *
-     * @param     mixed $hits The value to use as filter.
+     * @param mixed $hits The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHits($hits = null, $comparison = null)
+    public function filterByHits($hits = null, ?string $comparison = null)
     {
         if (is_array($hits)) {
             $useMinMax = false;
@@ -446,7 +460,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_HITS, $hits, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_HITS, $hits, $comparison);
+
+        return $this;
     }
 
     /**
@@ -459,17 +475,17 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE redirection_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -489,7 +505,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DATE, $date, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -502,17 +520,17 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE redirection_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -532,7 +550,9 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -545,17 +565,17 @@ abstract class RedirectionQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE redirection_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -575,15 +595,17 @@ abstract class RedirectionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildRedirection $redirection Object to remove from the list of results
+     * @param ChildRedirection $redirection Object to remove from the list of results
      *
-     * @return $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($redirection = null)
     {
@@ -600,7 +622,7 @@ abstract class RedirectionQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RedirectionTableMap::DATABASE_NAME);
@@ -625,12 +647,12 @@ abstract class RedirectionQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(RedirectionTableMap::DATABASE_NAME);
@@ -660,65 +682,77 @@ abstract class RedirectionQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
+        $this->addDescendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
+        $this->addAscendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
+        $this->addDescendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(RedirectionTableMap::COL_REDIRECTION_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildRedirectionQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
+        $this->addAscendingOrderByColumn(RedirectionTableMap::COL_REDIRECTION_CREATED);
+
+        return $this;
     }
 
-} // RedirectionQuery
+}

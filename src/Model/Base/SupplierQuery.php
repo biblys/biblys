@@ -10,7 +10,7 @@ use Model\Map\SupplierTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -51,8 +51,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplierQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSupplierQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildSupplier|null findOne(ConnectionInterface $con = null) Return the first ChildSupplier matching the query
- * @method     ChildSupplier findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSupplier matching the query, or a new ChildSupplier object populated from the query conditions when no match is found
+ * @method     ChildSupplier|null findOne(?ConnectionInterface $con = null) Return the first ChildSupplier matching the query
+ * @method     ChildSupplier findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSupplier matching the query, or a new ChildSupplier object populated from the query conditions when no match is found
  *
  * @method     ChildSupplier|null findOneById(int $supplier_id) Return the first ChildSupplier filtered by the supplier_id column
  * @method     ChildSupplier|null findOneBySiteId(int $site_id) Return the first ChildSupplier filtered by the site_id column
@@ -66,8 +66,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier|null findOneByCreatedAt(string $supplier_created) Return the first ChildSupplier filtered by the supplier_created column
  * @method     ChildSupplier|null findOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column *
 
- * @method     ChildSupplier requirePk($key, ConnectionInterface $con = null) Return the ChildSupplier by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildSupplier requireOne(ConnectionInterface $con = null) Return the first ChildSupplier matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSupplier requirePk($key, ?ConnectionInterface $con = null) Return the ChildSupplier by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildSupplier requireOne(?ConnectionInterface $con = null) Return the first ChildSupplier matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildSupplier requireOneById(int $supplier_id) Return the first ChildSupplier filtered by the supplier_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOneBySiteId(int $site_id) Return the first ChildSupplier filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -81,32 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier requireOneByCreatedAt(string $supplier_created) Return the first ChildSupplier filtered by the supplier_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildSupplier[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> find(ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
- * @method     ChildSupplier[]|ObjectCollection findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
- * @method     ChildSupplier[]|ObjectCollection findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
- * @method     ChildSupplier[]|ObjectCollection findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
- * @method     ChildSupplier[]|ObjectCollection findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
- * @method     ChildSupplier[]|ObjectCollection findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
- * @method     ChildSupplier[]|ObjectCollection findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
- * @method     ChildSupplier[]|ObjectCollection findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
- * @method     ChildSupplier[]|ObjectCollection findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
- * @method     ChildSupplier[]|ObjectCollection findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
- * @method     ChildSupplier[]|ObjectCollection findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
- * @method     ChildSupplier[]|ObjectCollection findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildSupplier> findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
- * @method     ChildSupplier[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSupplier> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildSupplier[]|Collection find(?ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildSupplier> find(?ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
+ * @method     ChildSupplier[]|Collection findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
+ * @method     ChildSupplier[]|Collection findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
+ * @method     ChildSupplier[]|Collection findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
+ * @method     ChildSupplier[]|Collection findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
+ * @method     ChildSupplier[]|Collection findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
+ * @method     ChildSupplier[]|Collection findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
+ * @method     ChildSupplier[]|Collection findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
+ * @method     ChildSupplier[]|Collection findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
+ * @method     ChildSupplier[]|Collection findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
+ * @method     ChildSupplier[]|Collection findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
+ * @method     ChildSupplier[]|Collection findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ * @method     ChildSupplier[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSupplier> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class SupplierQuery extends ModelCriteria
@@ -116,9 +116,9 @@ abstract class SupplierQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\SupplierQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Supplier', $modelAlias = null)
     {
@@ -128,12 +128,12 @@ abstract class SupplierQuery extends ModelCriteria
     /**
      * Returns a new ChildSupplierQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildSupplierQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildSupplierQuery) {
             return $criteria;
@@ -163,7 +163,7 @@ abstract class SupplierQuery extends ModelCriteria
      *
      * @return ChildSupplier|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -195,8 +195,8 @@ abstract class SupplierQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -228,8 +228,8 @@ abstract class SupplierQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildSupplier|array|mixed the result, formatted by the current formatter
      */
@@ -249,12 +249,12 @@ abstract class SupplierQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -271,27 +271,31 @@ abstract class SupplierQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -304,15 +308,15 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE supplier_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -332,7 +336,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $id, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -345,15 +351,15 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -373,7 +379,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -383,14 +391,15 @@ abstract class SupplierQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE supplier_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE supplier_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE supplier_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -398,7 +407,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_NAME, $name, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -411,15 +422,15 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByGln(array('min' => 12)); // WHERE supplier_gln > 12
      * </code>
      *
-     * @param     mixed $gln The value to use as filter.
+     * @param mixed $gln The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByGln($gln = null, $comparison = null)
+    public function filterByGln($gln = null, ?string $comparison = null)
     {
         if (is_array($gln)) {
             $useMinMax = false;
@@ -439,7 +450,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_GLN, $gln, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_GLN, $gln, $comparison);
+
+        return $this;
     }
 
     /**
@@ -452,15 +465,15 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByRemise(array('min' => 12)); // WHERE supplier_remise > 12
      * </code>
      *
-     * @param     mixed $remise The value to use as filter.
+     * @param mixed $remise The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRemise($remise = null, $comparison = null)
+    public function filterByRemise($remise = null, ?string $comparison = null)
     {
         if (is_array($remise)) {
             $useMinMax = false;
@@ -480,7 +493,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_REMISE, $remise, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_REMISE, $remise, $comparison);
+
+        return $this;
     }
 
     /**
@@ -492,22 +507,24 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByNotva('yes'); // WHERE supplier_notva = true
      * </code>
      *
-     * @param     boolean|string $notva The value to use as filter.
+     * @param bool|string $notva The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNotva($notva = null, $comparison = null)
+    public function filterByNotva($notva = null, ?string $comparison = null)
     {
         if (is_string($notva)) {
             $notva = in_array(strtolower($notva), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_NOTVA, $notva, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_NOTVA, $notva, $comparison);
+
+        return $this;
     }
 
     /**
@@ -519,22 +536,24 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByOnOrder('yes'); // WHERE supplier_on_order = true
      * </code>
      *
-     * @param     boolean|string $onOrder The value to use as filter.
+     * @param bool|string $onOrder The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOnOrder($onOrder = null, $comparison = null)
+    public function filterByOnOrder($onOrder = null, ?string $comparison = null)
     {
         if (is_string($onOrder)) {
             $onOrder = in_array(strtolower($onOrder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ON_ORDER, $onOrder, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ON_ORDER, $onOrder, $comparison);
+
+        return $this;
     }
 
     /**
@@ -547,17 +566,17 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE supplier_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -577,7 +596,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_INSERT, $insert, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -590,17 +611,17 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE supplier_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -620,7 +641,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -633,17 +656,17 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE supplier_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -663,7 +686,9 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -676,17 +701,17 @@ abstract class SupplierQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE supplier_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -706,15 +731,17 @@ abstract class SupplierQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildSupplier $supplier Object to remove from the list of results
+     * @param ChildSupplier $supplier Object to remove from the list of results
      *
-     * @return $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($supplier = null)
     {
@@ -731,7 +758,7 @@ abstract class SupplierQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SupplierTableMap::DATABASE_NAME);
@@ -756,12 +783,12 @@ abstract class SupplierQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SupplierTableMap::DATABASE_NAME);
@@ -791,65 +818,77 @@ abstract class SupplierQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
+        $this->addDescendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
+        $this->addAscendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
+        $this->addDescendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildSupplierQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
+        $this->addAscendingOrderByColumn(SupplierTableMap::COL_SUPPLIER_CREATED);
+
+        return $this;
     }
 
-} // SupplierQuery
+}

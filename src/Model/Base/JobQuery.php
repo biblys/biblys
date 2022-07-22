@@ -10,7 +10,7 @@ use Model\Map\JobTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -49,8 +49,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJobQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildJobQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildJob|null findOne(ConnectionInterface $con = null) Return the first ChildJob matching the query
- * @method     ChildJob findOneOrCreate(ConnectionInterface $con = null) Return the first ChildJob matching the query, or a new ChildJob object populated from the query conditions when no match is found
+ * @method     ChildJob|null findOne(?ConnectionInterface $con = null) Return the first ChildJob matching the query
+ * @method     ChildJob findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildJob matching the query, or a new ChildJob object populated from the query conditions when no match is found
  *
  * @method     ChildJob|null findOneById(int $job_id) Return the first ChildJob filtered by the job_id column
  * @method     ChildJob|null findOneByName(string $job_name) Return the first ChildJob filtered by the job_name column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob|null findOneByCreatedAt(string $job_created) Return the first ChildJob filtered by the job_created column
  * @method     ChildJob|null findOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column *
 
- * @method     ChildJob requirePk($key, ConnectionInterface $con = null) Return the ChildJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildJob requireOne(ConnectionInterface $con = null) Return the first ChildJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildJob requirePk($key, ?ConnectionInterface $con = null) Return the ChildJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildJob requireOne(?ConnectionInterface $con = null) Return the first ChildJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildJob requireOneById(int $job_id) Return the first ChildJob filtered by the job_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOneByName(string $job_name) Return the first ChildJob filtered by the job_name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -77,30 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob requireOneByCreatedAt(string $job_created) Return the first ChildJob filtered by the job_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildJob[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildJob> find(ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
- * @method     ChildJob[]|ObjectCollection findById(int $job_id) Return ChildJob objects filtered by the job_id column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findById(int $job_id) Return ChildJob objects filtered by the job_id column
- * @method     ChildJob[]|ObjectCollection findByName(string $job_name) Return ChildJob objects filtered by the job_name column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByName(string $job_name) Return ChildJob objects filtered by the job_name column
- * @method     ChildJob[]|ObjectCollection findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
- * @method     ChildJob[]|ObjectCollection findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
- * @method     ChildJob[]|ObjectCollection findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
- * @method     ChildJob[]|ObjectCollection findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
- * @method     ChildJob[]|ObjectCollection findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
- * @method     ChildJob[]|ObjectCollection findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
- * @method     ChildJob[]|ObjectCollection findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
- * @method     ChildJob[]|ObjectCollection findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildJob> findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
- * @method     ChildJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildJob> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildJob[]|Collection find(?ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildJob> find(?ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
+ * @method     ChildJob[]|Collection findById(int $job_id) Return ChildJob objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildJob> findById(int $job_id) Return ChildJob objects filtered by the job_id column
+ * @method     ChildJob[]|Collection findByName(string $job_name) Return ChildJob objects filtered by the job_name column
+ * @psalm-method Collection&\Traversable<ChildJob> findByName(string $job_name) Return ChildJob objects filtered by the job_name column
+ * @method     ChildJob[]|Collection findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
+ * @psalm-method Collection&\Traversable<ChildJob> findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
+ * @method     ChildJob[]|Collection findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
+ * @method     ChildJob[]|Collection findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
+ * @psalm-method Collection&\Traversable<ChildJob> findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
+ * @method     ChildJob[]|Collection findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
+ * @method     ChildJob[]|Collection findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
+ * @method     ChildJob[]|Collection findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
+ * @psalm-method Collection&\Traversable<ChildJob> findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
+ * @method     ChildJob[]|Collection findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
+ * @psalm-method Collection&\Traversable<ChildJob> findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
+ * @method     ChildJob[]|Collection findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
+ * @psalm-method Collection&\Traversable<ChildJob> findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
+ * @method     ChildJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildJob> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class JobQuery extends ModelCriteria
@@ -110,9 +110,9 @@ abstract class JobQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\JobQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Job', $modelAlias = null)
     {
@@ -122,12 +122,12 @@ abstract class JobQuery extends ModelCriteria
     /**
      * Returns a new ChildJobQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildJobQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildJobQuery) {
             return $criteria;
@@ -157,7 +157,7 @@ abstract class JobQuery extends ModelCriteria
      *
      * @return ChildJob|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -189,8 +189,8 @@ abstract class JobQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,8 +222,8 @@ abstract class JobQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildJob|array|mixed the result, formatted by the current formatter
      */
@@ -243,12 +243,12 @@ abstract class JobQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -265,27 +265,31 @@ abstract class JobQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(JobTableMap::COL_JOB_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(JobTableMap::COL_JOB_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -298,15 +302,15 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE job_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -326,7 +330,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_ID, $id, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -336,14 +342,15 @@ abstract class JobQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE job_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE job_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE job_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -351,7 +358,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_NAME, $name, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -361,14 +370,15 @@ abstract class JobQuery extends ModelCriteria
      * <code>
      * $query->filterByNameF('fooValue');   // WHERE job_name_f = 'fooValue'
      * $query->filterByNameF('%fooValue%', Criteria::LIKE); // WHERE job_name_f LIKE '%fooValue%'
+     * $query->filterByNameF(['foo', 'bar']); // WHERE job_name_f IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nameF The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nameF The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNameF($nameF = null, $comparison = null)
+    public function filterByNameF($nameF = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nameF)) {
@@ -376,7 +386,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_NAME_F, $nameF, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_NAME_F, $nameF, $comparison);
+
+        return $this;
     }
 
     /**
@@ -386,14 +398,15 @@ abstract class JobQuery extends ModelCriteria
      * <code>
      * $query->filterByOtherNames('fooValue');   // WHERE job_other_names = 'fooValue'
      * $query->filterByOtherNames('%fooValue%', Criteria::LIKE); // WHERE job_other_names LIKE '%fooValue%'
+     * $query->filterByOtherNames(['foo', 'bar']); // WHERE job_other_names IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $otherNames The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $otherNames The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOtherNames($otherNames = null, $comparison = null)
+    public function filterByOtherNames($otherNames = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($otherNames)) {
@@ -401,7 +414,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_OTHER_NAMES, $otherNames, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_OTHER_NAMES, $otherNames, $comparison);
+
+        return $this;
     }
 
     /**
@@ -413,22 +428,24 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterByEvent('yes'); // WHERE job_event = true
      * </code>
      *
-     * @param     boolean|string $event The value to use as filter.
+     * @param bool|string $event The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEvent($event = null, $comparison = null)
+    public function filterByEvent($event = null, ?string $comparison = null)
     {
         if (is_string($event)) {
             $event = in_array(strtolower($event), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_EVENT, $event, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_EVENT, $event, $comparison);
+
+        return $this;
     }
 
     /**
@@ -441,15 +458,15 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterByOrder(array('min' => 12)); // WHERE job_order > 12
      * </code>
      *
-     * @param     mixed $order The value to use as filter.
+     * @param mixed $order The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrder($order = null, $comparison = null)
+    public function filterByOrder($order = null, ?string $comparison = null)
     {
         if (is_array($order)) {
             $useMinMax = false;
@@ -469,7 +486,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_ORDER, $order, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_ORDER, $order, $comparison);
+
+        return $this;
     }
 
     /**
@@ -479,14 +498,15 @@ abstract class JobQuery extends ModelCriteria
      * <code>
      * $query->filterByOnix('fooValue');   // WHERE job_onix = 'fooValue'
      * $query->filterByOnix('%fooValue%', Criteria::LIKE); // WHERE job_onix LIKE '%fooValue%'
+     * $query->filterByOnix(['foo', 'bar']); // WHERE job_onix IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $onix The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $onix The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOnix($onix = null, $comparison = null)
+    public function filterByOnix($onix = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($onix)) {
@@ -494,7 +514,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_ONIX, $onix, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_ONIX, $onix, $comparison);
+
+        return $this;
     }
 
     /**
@@ -507,17 +529,17 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE job_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -537,7 +559,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_DATE, $date, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -550,17 +574,17 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE job_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -580,7 +604,9 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -593,17 +619,17 @@ abstract class JobQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE job_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -623,15 +649,17 @@ abstract class JobQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(JobTableMap::COL_JOB_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(JobTableMap::COL_JOB_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildJob $job Object to remove from the list of results
+     * @param ChildJob $job Object to remove from the list of results
      *
-     * @return $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($job = null)
     {
@@ -648,7 +676,7 @@ abstract class JobQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(JobTableMap::DATABASE_NAME);
@@ -673,12 +701,12 @@ abstract class JobQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(JobTableMap::DATABASE_NAME);
@@ -708,65 +736,77 @@ abstract class JobQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(JobTableMap::COL_JOB_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(JobTableMap::COL_JOB_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(JobTableMap::COL_JOB_UPDATED);
+        $this->addDescendingOrderByColumn(JobTableMap::COL_JOB_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(JobTableMap::COL_JOB_UPDATED);
+        $this->addAscendingOrderByColumn(JobTableMap::COL_JOB_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(JobTableMap::COL_JOB_CREATED);
+        $this->addDescendingOrderByColumn(JobTableMap::COL_JOB_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(JobTableMap::COL_JOB_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(JobTableMap::COL_JOB_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildJobQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(JobTableMap::COL_JOB_CREATED);
+        $this->addAscendingOrderByColumn(JobTableMap::COL_JOB_CREATED);
+
+        return $this;
     }
 
-} // JobQuery
+}

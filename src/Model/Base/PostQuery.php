@@ -10,7 +10,7 @@ use Model\Map\PostTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -73,8 +73,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildPostQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPost|null findOne(ConnectionInterface $con = null) Return the first ChildPost matching the query
- * @method     ChildPost findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPost matching the query, or a new ChildPost object populated from the query conditions when no match is found
+ * @method     ChildPost|null findOne(?ConnectionInterface $con = null) Return the first ChildPost matching the query
+ * @method     ChildPost findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPost matching the query, or a new ChildPost object populated from the query conditions when no match is found
  *
  * @method     ChildPost|null findOneById(int $post_id) Return the first ChildPost filtered by the post_id column
  * @method     ChildPost|null findOneByUserId(int $user_id) Return the first ChildPost filtered by the user_id column
@@ -99,8 +99,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost|null findOneByCreatedAt(string $post_created) Return the first ChildPost filtered by the post_created column
  * @method     ChildPost|null findOneByUpdatedAt(string $post_updated) Return the first ChildPost filtered by the post_updated column *
 
- * @method     ChildPost requirePk($key, ConnectionInterface $con = null) Return the ChildPost by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPost requireOne(ConnectionInterface $con = null) Return the first ChildPost matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPost requirePk($key, ?ConnectionInterface $con = null) Return the ChildPost by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPost requireOne(?ConnectionInterface $con = null) Return the first ChildPost matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPost requireOneById(int $post_id) Return the first ChildPost filtered by the post_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByUserId(int $user_id) Return the first ChildPost filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -125,54 +125,54 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOneByCreatedAt(string $post_created) Return the first ChildPost filtered by the post_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByUpdatedAt(string $post_updated) Return the first ChildPost filtered by the post_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPost[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPost> find(ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
- * @method     ChildPost[]|ObjectCollection findById(int $post_id) Return ChildPost objects filtered by the post_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findById(int $post_id) Return ChildPost objects filtered by the post_id column
- * @method     ChildPost[]|ObjectCollection findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
- * @method     ChildPost[]|ObjectCollection findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
- * @method     ChildPost[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
- * @method     ChildPost[]|ObjectCollection findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
- * @method     ChildPost[]|ObjectCollection findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
- * @method     ChildPost[]|ObjectCollection findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
- * @method     ChildPost[]|ObjectCollection findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
- * @method     ChildPost[]|ObjectCollection findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
- * @method     ChildPost[]|ObjectCollection findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
- * @method     ChildPost[]|ObjectCollection findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
- * @method     ChildPost[]|ObjectCollection findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
- * @method     ChildPost[]|ObjectCollection findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
- * @method     ChildPost[]|ObjectCollection findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
- * @method     ChildPost[]|ObjectCollection findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
- * @method     ChildPost[]|ObjectCollection findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
- * @method     ChildPost[]|ObjectCollection findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
- * @method     ChildPost[]|ObjectCollection findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
- * @method     ChildPost[]|ObjectCollection findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
- * @method     ChildPost[]|ObjectCollection findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
- * @method     ChildPost[]|ObjectCollection findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
- * @method     ChildPost[]|ObjectCollection findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildPost> findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
- * @method     ChildPost[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPost> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPost[]|Collection find(?ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPost> find(?ConnectionInterface $con = null) Return ChildPost objects based on current ModelCriteria
+ * @method     ChildPost[]|Collection findById(int $post_id) Return ChildPost objects filtered by the post_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findById(int $post_id) Return ChildPost objects filtered by the post_id column
+ * @method     ChildPost[]|Collection findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findByUserId(int $user_id) Return ChildPost objects filtered by the user_id column
+ * @method     ChildPost[]|Collection findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findBySiteId(int $site_id) Return ChildPost objects filtered by the site_id column
+ * @method     ChildPost[]|Collection findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findByPublisherId(int $publisher_id) Return ChildPost objects filtered by the publisher_id column
+ * @method     ChildPost[]|Collection findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findByCategoryId(int $category_id) Return ChildPost objects filtered by the category_id column
+ * @method     ChildPost[]|Collection findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
+ * @psalm-method Collection&\Traversable<ChildPost> findByUrl(string $post_url) Return ChildPost objects filtered by the post_url column
+ * @method     ChildPost[]|Collection findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
+ * @psalm-method Collection&\Traversable<ChildPost> findByTitle(string $post_title) Return ChildPost objects filtered by the post_title column
+ * @method     ChildPost[]|Collection findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
+ * @psalm-method Collection&\Traversable<ChildPost> findByContent(string $post_content) Return ChildPost objects filtered by the post_content column
+ * @method     ChildPost[]|Collection findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
+ * @psalm-method Collection&\Traversable<ChildPost> findByIllustrationLegend(string $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
+ * @method     ChildPost[]|Collection findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
+ * @psalm-method Collection&\Traversable<ChildPost> findBySelected(boolean $post_selected) Return ChildPost objects filtered by the post_selected column
+ * @method     ChildPost[]|Collection findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
+ * @psalm-method Collection&\Traversable<ChildPost> findByLink(string $post_link) Return ChildPost objects filtered by the post_link column
+ * @method     ChildPost[]|Collection findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
+ * @psalm-method Collection&\Traversable<ChildPost> findByStatus(boolean $post_status) Return ChildPost objects filtered by the post_status column
+ * @method     ChildPost[]|Collection findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
+ * @psalm-method Collection&\Traversable<ChildPost> findByKeywords(string $post_keywords) Return ChildPost objects filtered by the post_keywords column
+ * @method     ChildPost[]|Collection findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
+ * @psalm-method Collection&\Traversable<ChildPost> findByLinks(string $post_links) Return ChildPost objects filtered by the post_links column
+ * @method     ChildPost[]|Collection findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
+ * @psalm-method Collection&\Traversable<ChildPost> findByKeywordsGenerated(string $post_keywords_generated) Return ChildPost objects filtered by the post_keywords_generated column
+ * @method     ChildPost[]|Collection findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
+ * @psalm-method Collection&\Traversable<ChildPost> findByFbId(string $post_fb_id) Return ChildPost objects filtered by the post_fb_id column
+ * @method     ChildPost[]|Collection findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
+ * @psalm-method Collection&\Traversable<ChildPost> findByDate(string $post_date) Return ChildPost objects filtered by the post_date column
+ * @method     ChildPost[]|Collection findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
+ * @psalm-method Collection&\Traversable<ChildPost> findByHits(int $post_hits) Return ChildPost objects filtered by the post_hits column
+ * @method     ChildPost[]|Collection findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
+ * @psalm-method Collection&\Traversable<ChildPost> findByInsert(string $post_insert) Return ChildPost objects filtered by the post_insert column
+ * @method     ChildPost[]|Collection findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
+ * @psalm-method Collection&\Traversable<ChildPost> findByUpdate(string $post_update) Return ChildPost objects filtered by the post_update column
+ * @method     ChildPost[]|Collection findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
+ * @psalm-method Collection&\Traversable<ChildPost> findByCreatedAt(string $post_created) Return ChildPost objects filtered by the post_created column
+ * @method     ChildPost[]|Collection findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
+ * @psalm-method Collection&\Traversable<ChildPost> findByUpdatedAt(string $post_updated) Return ChildPost objects filtered by the post_updated column
+ * @method     ChildPost[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPost> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PostQuery extends ModelCriteria
@@ -182,9 +182,9 @@ abstract class PostQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PostQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Post', $modelAlias = null)
     {
@@ -194,12 +194,12 @@ abstract class PostQuery extends ModelCriteria
     /**
      * Returns a new ChildPostQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPostQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPostQuery) {
             return $criteria;
@@ -229,7 +229,7 @@ abstract class PostQuery extends ModelCriteria
      *
      * @return ChildPost|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -261,8 +261,8 @@ abstract class PostQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -294,8 +294,8 @@ abstract class PostQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPost|array|mixed the result, formatted by the current formatter
      */
@@ -315,12 +315,12 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -337,27 +337,31 @@ abstract class PostQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PostTableMap::COL_POST_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PostTableMap::COL_POST_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -370,15 +374,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE post_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -398,7 +402,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_ID, $id, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -411,15 +417,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserId($userId = null, ?string $comparison = null)
     {
         if (is_array($userId)) {
             $useMinMax = false;
@@ -439,7 +445,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_USER_ID, $userId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_USER_ID, $userId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -452,15 +460,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -480,7 +488,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -493,15 +503,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -521,7 +531,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -534,15 +546,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByCategoryId(array('min' => 12)); // WHERE category_id > 12
      * </code>
      *
-     * @param     mixed $categoryId The value to use as filter.
+     * @param mixed $categoryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCategoryId($categoryId = null, $comparison = null)
+    public function filterByCategoryId($categoryId = null, ?string $comparison = null)
     {
         if (is_array($categoryId)) {
             $useMinMax = false;
@@ -562,7 +574,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_CATEGORY_ID, $categoryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -572,14 +586,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE post_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE post_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE post_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -587,7 +602,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_URL, $url, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -597,14 +614,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE post_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE post_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE post_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -612,7 +630,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_TITLE, $title, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -622,14 +642,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByContent('fooValue');   // WHERE post_content = 'fooValue'
      * $query->filterByContent('%fooValue%', Criteria::LIKE); // WHERE post_content LIKE '%fooValue%'
+     * $query->filterByContent(['foo', 'bar']); // WHERE post_content IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $content The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $content The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByContent($content = null, $comparison = null)
+    public function filterByContent($content = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($content)) {
@@ -637,7 +658,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_CONTENT, $content, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_CONTENT, $content, $comparison);
+
+        return $this;
     }
 
     /**
@@ -647,14 +670,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByIllustrationLegend('fooValue');   // WHERE post_illustration_legend = 'fooValue'
      * $query->filterByIllustrationLegend('%fooValue%', Criteria::LIKE); // WHERE post_illustration_legend LIKE '%fooValue%'
+     * $query->filterByIllustrationLegend(['foo', 'bar']); // WHERE post_illustration_legend IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $illustrationLegend The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $illustrationLegend The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIllustrationLegend($illustrationLegend = null, $comparison = null)
+    public function filterByIllustrationLegend($illustrationLegend = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($illustrationLegend)) {
@@ -662,7 +686,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_ILLUSTRATION_LEGEND, $illustrationLegend, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_ILLUSTRATION_LEGEND, $illustrationLegend, $comparison);
+
+        return $this;
     }
 
     /**
@@ -674,22 +700,24 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterBySelected('yes'); // WHERE post_selected = true
      * </code>
      *
-     * @param     boolean|string $selected The value to use as filter.
+     * @param bool|string $selected The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySelected($selected = null, $comparison = null)
+    public function filterBySelected($selected = null, ?string $comparison = null)
     {
         if (is_string($selected)) {
             $selected = in_array(strtolower($selected), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_SELECTED, $selected, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_SELECTED, $selected, $comparison);
+
+        return $this;
     }
 
     /**
@@ -699,14 +727,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByLink('fooValue');   // WHERE post_link = 'fooValue'
      * $query->filterByLink('%fooValue%', Criteria::LIKE); // WHERE post_link LIKE '%fooValue%'
+     * $query->filterByLink(['foo', 'bar']); // WHERE post_link IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $link The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $link The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLink($link = null, $comparison = null)
+    public function filterByLink($link = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($link)) {
@@ -714,7 +743,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_LINK, $link, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_LINK, $link, $comparison);
+
+        return $this;
     }
 
     /**
@@ -726,22 +757,24 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByStatus('yes'); // WHERE post_status = true
      * </code>
      *
-     * @param     boolean|string $status The value to use as filter.
+     * @param bool|string $status The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStatus($status = null, $comparison = null)
+    public function filterByStatus($status = null, ?string $comparison = null)
     {
         if (is_string($status)) {
             $status = in_array(strtolower($status), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_STATUS, $status, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_STATUS, $status, $comparison);
+
+        return $this;
     }
 
     /**
@@ -751,14 +784,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByKeywords('fooValue');   // WHERE post_keywords = 'fooValue'
      * $query->filterByKeywords('%fooValue%', Criteria::LIKE); // WHERE post_keywords LIKE '%fooValue%'
+     * $query->filterByKeywords(['foo', 'bar']); // WHERE post_keywords IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $keywords The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $keywords The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByKeywords($keywords = null, $comparison = null)
+    public function filterByKeywords($keywords = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($keywords)) {
@@ -766,7 +800,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_KEYWORDS, $keywords, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_KEYWORDS, $keywords, $comparison);
+
+        return $this;
     }
 
     /**
@@ -776,14 +812,15 @@ abstract class PostQuery extends ModelCriteria
      * <code>
      * $query->filterByLinks('fooValue');   // WHERE post_links = 'fooValue'
      * $query->filterByLinks('%fooValue%', Criteria::LIKE); // WHERE post_links LIKE '%fooValue%'
+     * $query->filterByLinks(['foo', 'bar']); // WHERE post_links IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $links The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $links The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLinks($links = null, $comparison = null)
+    public function filterByLinks($links = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($links)) {
@@ -791,7 +828,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_LINKS, $links, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_LINKS, $links, $comparison);
+
+        return $this;
     }
 
     /**
@@ -804,17 +843,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByKeywordsGenerated(array('max' => 'yesterday')); // WHERE post_keywords_generated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $keywordsGenerated The value to use as filter.
+     * @param mixed $keywordsGenerated The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByKeywordsGenerated($keywordsGenerated = null, $comparison = null)
+    public function filterByKeywordsGenerated($keywordsGenerated = null, ?string $comparison = null)
     {
         if (is_array($keywordsGenerated)) {
             $useMinMax = false;
@@ -834,7 +873,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_KEYWORDS_GENERATED, $keywordsGenerated, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_KEYWORDS_GENERATED, $keywordsGenerated, $comparison);
+
+        return $this;
     }
 
     /**
@@ -847,15 +888,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByFbId(array('min' => 12)); // WHERE post_fb_id > 12
      * </code>
      *
-     * @param     mixed $fbId The value to use as filter.
+     * @param mixed $fbId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFbId($fbId = null, $comparison = null)
+    public function filterByFbId($fbId = null, ?string $comparison = null)
     {
         if (is_array($fbId)) {
             $useMinMax = false;
@@ -875,7 +916,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_FB_ID, $fbId, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_FB_ID, $fbId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -888,17 +931,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE post_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -918,7 +961,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_DATE, $date, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -931,15 +976,15 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByHits(array('min' => 12)); // WHERE post_hits > 12
      * </code>
      *
-     * @param     mixed $hits The value to use as filter.
+     * @param mixed $hits The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHits($hits = null, $comparison = null)
+    public function filterByHits($hits = null, ?string $comparison = null)
     {
         if (is_array($hits)) {
             $useMinMax = false;
@@ -959,7 +1004,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_HITS, $hits, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_HITS, $hits, $comparison);
+
+        return $this;
     }
 
     /**
@@ -972,17 +1019,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE post_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -1002,7 +1049,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_INSERT, $insert, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1015,17 +1064,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE post_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -1045,7 +1094,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_UPDATE, $update, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1058,17 +1109,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE post_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1088,7 +1139,9 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1101,17 +1154,17 @@ abstract class PostQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE post_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1131,15 +1184,17 @@ abstract class PostQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PostTableMap::COL_POST_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(PostTableMap::COL_POST_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildPost $post Object to remove from the list of results
+     * @param ChildPost $post Object to remove from the list of results
      *
-     * @return $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($post = null)
     {
@@ -1156,7 +1211,7 @@ abstract class PostQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PostTableMap::DATABASE_NAME);
@@ -1181,12 +1236,12 @@ abstract class PostQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PostTableMap::DATABASE_NAME);
@@ -1216,65 +1271,77 @@ abstract class PostQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PostTableMap::COL_POST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PostTableMap::COL_POST_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PostTableMap::COL_POST_UPDATED);
+        $this->addDescendingOrderByColumn(PostTableMap::COL_POST_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PostTableMap::COL_POST_UPDATED);
+        $this->addAscendingOrderByColumn(PostTableMap::COL_POST_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PostTableMap::COL_POST_CREATED);
+        $this->addDescendingOrderByColumn(PostTableMap::COL_POST_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PostTableMap::COL_POST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PostTableMap::COL_POST_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPostQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PostTableMap::COL_POST_CREATED);
+        $this->addAscendingOrderByColumn(PostTableMap::COL_POST_CREATED);
+
+        return $this;
     }
 
-} // PostQuery
+}

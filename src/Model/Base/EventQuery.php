@@ -10,7 +10,7 @@ use Model\Map\EventTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -69,8 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildEventQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildEvent|null findOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query
- * @method     ChildEvent findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
+ * @method     ChildEvent|null findOne(?ConnectionInterface $con = null) Return the first ChildEvent matching the query
+ * @method     ChildEvent findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
  *
  * @method     ChildEvent|null findOneById(int $event_id) Return the first ChildEvent filtered by the event_id column
  * @method     ChildEvent|null findOneBySiteId(int $site_id) Return the first ChildEvent filtered by the site_id column
@@ -93,8 +93,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent|null findOneByCreatedAt(string $event_created) Return the first ChildEvent filtered by the event_created column
  * @method     ChildEvent|null findOneByUpdatedAt(string $event_updated) Return the first ChildEvent filtered by the event_updated column *
 
- * @method     ChildEvent requirePk($key, ConnectionInterface $con = null) Return the ChildEvent by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEvent requireOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEvent requirePk($key, ?ConnectionInterface $con = null) Return the ChildEvent by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEvent requireOne(?ConnectionInterface $con = null) Return the first ChildEvent matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvent requireOneById(int $event_id) Return the first ChildEvent filtered by the event_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneBySiteId(int $site_id) Return the first ChildEvent filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -117,50 +117,50 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent requireOneByCreatedAt(string $event_created) Return the first ChildEvent filtered by the event_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByUpdatedAt(string $event_updated) Return the first ChildEvent filtered by the event_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEvent[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
- * @method     ChildEvent[]|ObjectCollection findById(int $event_id) Return ChildEvent objects filtered by the event_id column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findById(int $event_id) Return ChildEvent objects filtered by the event_id column
- * @method     ChildEvent[]|ObjectCollection findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
- * @method     ChildEvent[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
- * @method     ChildEvent[]|ObjectCollection findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
- * @method     ChildEvent[]|ObjectCollection findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
- * @method     ChildEvent[]|ObjectCollection findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
- * @method     ChildEvent[]|ObjectCollection findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
- * @method     ChildEvent[]|ObjectCollection findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
- * @method     ChildEvent[]|ObjectCollection findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
- * @method     ChildEvent[]|ObjectCollection findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
- * @method     ChildEvent[]|ObjectCollection findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
- * @method     ChildEvent[]|ObjectCollection findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
- * @method     ChildEvent[]|ObjectCollection findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
- * @method     ChildEvent[]|ObjectCollection findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
- * @method     ChildEvent[]|ObjectCollection findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
- * @method     ChildEvent[]|ObjectCollection findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
- * @method     ChildEvent[]|ObjectCollection findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
- * @method     ChildEvent[]|ObjectCollection findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
- * @method     ChildEvent[]|ObjectCollection findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
- * @method     ChildEvent[]|ObjectCollection findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildEvent> findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
- * @method     ChildEvent[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildEvent> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildEvent[]|Collection find(?ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildEvent> find(?ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
+ * @method     ChildEvent[]|Collection findById(int $event_id) Return ChildEvent objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildEvent> findById(int $event_id) Return ChildEvent objects filtered by the event_id column
+ * @method     ChildEvent[]|Collection findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildEvent> findBySiteId(int $site_id) Return ChildEvent objects filtered by the site_id column
+ * @method     ChildEvent[]|Collection findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByPublisherId(int $publisher_id) Return ChildEvent objects filtered by the publisher_id column
+ * @method     ChildEvent[]|Collection findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByBookshopId(int $bookshop_id) Return ChildEvent objects filtered by the bookshop_id column
+ * @method     ChildEvent[]|Collection findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByLibraryId(int $library_id) Return ChildEvent objects filtered by the library_id column
+ * @method     ChildEvent[]|Collection findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByUrl(string $event_url) Return ChildEvent objects filtered by the event_url column
+ * @method     ChildEvent[]|Collection findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByTitle(string $event_title) Return ChildEvent objects filtered by the event_title column
+ * @method     ChildEvent[]|Collection findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
+ * @psalm-method Collection&\Traversable<ChildEvent> findBySubtitle(string $event_subtitle) Return ChildEvent objects filtered by the event_subtitle column
+ * @method     ChildEvent[]|Collection findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByDesc(string $event_desc) Return ChildEvent objects filtered by the event_desc column
+ * @method     ChildEvent[]|Collection findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByLocation(string $event_location) Return ChildEvent objects filtered by the event_location column
+ * @method     ChildEvent[]|Collection findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByIllustrationLegend(string $event_illustration_legend) Return ChildEvent objects filtered by the event_illustration_legend column
+ * @method     ChildEvent[]|Collection findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByHighlighted(boolean $event_highlighted) Return ChildEvent objects filtered by the event_highlighted column
+ * @method     ChildEvent[]|Collection findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByStart(string $event_start) Return ChildEvent objects filtered by the event_start column
+ * @method     ChildEvent[]|Collection findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByEnd(string $event_end) Return ChildEvent objects filtered by the event_end column
+ * @method     ChildEvent[]|Collection findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByDate(string $event_date) Return ChildEvent objects filtered by the event_date column
+ * @method     ChildEvent[]|Collection findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByStatus(boolean $event_status) Return ChildEvent objects filtered by the event_status column
+ * @method     ChildEvent[]|Collection findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByInsert(string $event_insert_) Return ChildEvent objects filtered by the event_insert_ column
+ * @method     ChildEvent[]|Collection findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByUpdate(string $event_update_) Return ChildEvent objects filtered by the event_update_ column
+ * @method     ChildEvent[]|Collection findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByCreatedAt(string $event_created) Return ChildEvent objects filtered by the event_created column
+ * @method     ChildEvent[]|Collection findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
+ * @psalm-method Collection&\Traversable<ChildEvent> findByUpdatedAt(string $event_updated) Return ChildEvent objects filtered by the event_updated column
+ * @method     ChildEvent[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildEvent> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class EventQuery extends ModelCriteria
@@ -170,9 +170,9 @@ abstract class EventQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\EventQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Event', $modelAlias = null)
     {
@@ -182,12 +182,12 @@ abstract class EventQuery extends ModelCriteria
     /**
      * Returns a new ChildEventQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildEventQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildEventQuery) {
             return $criteria;
@@ -217,7 +217,7 @@ abstract class EventQuery extends ModelCriteria
      *
      * @return ChildEvent|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -249,8 +249,8 @@ abstract class EventQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -282,8 +282,8 @@ abstract class EventQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildEvent|array|mixed the result, formatted by the current formatter
      */
@@ -303,12 +303,12 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -325,27 +325,31 @@ abstract class EventQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -358,15 +362,15 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE event_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -386,7 +390,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $id, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -399,15 +405,15 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -427,7 +433,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -440,15 +448,15 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByPublisherId(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -468,7 +476,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -481,15 +491,15 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByBookshopId(array('min' => 12)); // WHERE bookshop_id > 12
      * </code>
      *
-     * @param     mixed $bookshopId The value to use as filter.
+     * @param mixed $bookshopId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookshopId($bookshopId = null, $comparison = null)
+    public function filterByBookshopId($bookshopId = null, ?string $comparison = null)
     {
         if (is_array($bookshopId)) {
             $useMinMax = false;
@@ -509,7 +519,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_BOOKSHOP_ID, $bookshopId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -522,15 +534,15 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByLibraryId(array('min' => 12)); // WHERE library_id > 12
      * </code>
      *
-     * @param     mixed $libraryId The value to use as filter.
+     * @param mixed $libraryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLibraryId($libraryId = null, $comparison = null)
+    public function filterByLibraryId($libraryId = null, ?string $comparison = null)
     {
         if (is_array($libraryId)) {
             $useMinMax = false;
@@ -550,7 +562,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_LIBRARY_ID, $libraryId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -560,14 +574,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE event_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE event_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE event_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -575,7 +590,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_URL, $url, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -585,14 +602,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE event_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE event_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE event_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -600,7 +618,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_TITLE, $title, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -610,14 +630,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterBySubtitle('fooValue');   // WHERE event_subtitle = 'fooValue'
      * $query->filterBySubtitle('%fooValue%', Criteria::LIKE); // WHERE event_subtitle LIKE '%fooValue%'
+     * $query->filterBySubtitle(['foo', 'bar']); // WHERE event_subtitle IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $subtitle The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $subtitle The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySubtitle($subtitle = null, $comparison = null)
+    public function filterBySubtitle($subtitle = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($subtitle)) {
@@ -625,7 +646,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_SUBTITLE, $subtitle, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_SUBTITLE, $subtitle, $comparison);
+
+        return $this;
     }
 
     /**
@@ -635,14 +658,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE event_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE event_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE event_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -650,7 +674,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_DESC, $desc, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -660,14 +686,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterByLocation('fooValue');   // WHERE event_location = 'fooValue'
      * $query->filterByLocation('%fooValue%', Criteria::LIKE); // WHERE event_location LIKE '%fooValue%'
+     * $query->filterByLocation(['foo', 'bar']); // WHERE event_location IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $location The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $location The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLocation($location = null, $comparison = null)
+    public function filterByLocation($location = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($location)) {
@@ -675,7 +702,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_LOCATION, $location, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_LOCATION, $location, $comparison);
+
+        return $this;
     }
 
     /**
@@ -685,14 +714,15 @@ abstract class EventQuery extends ModelCriteria
      * <code>
      * $query->filterByIllustrationLegend('fooValue');   // WHERE event_illustration_legend = 'fooValue'
      * $query->filterByIllustrationLegend('%fooValue%', Criteria::LIKE); // WHERE event_illustration_legend LIKE '%fooValue%'
+     * $query->filterByIllustrationLegend(['foo', 'bar']); // WHERE event_illustration_legend IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $illustrationLegend The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $illustrationLegend The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIllustrationLegend($illustrationLegend = null, $comparison = null)
+    public function filterByIllustrationLegend($illustrationLegend = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($illustrationLegend)) {
@@ -700,7 +730,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, $illustrationLegend, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_ILLUSTRATION_LEGEND, $illustrationLegend, $comparison);
+
+        return $this;
     }
 
     /**
@@ -712,22 +744,24 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByHighlighted('yes'); // WHERE event_highlighted = true
      * </code>
      *
-     * @param     boolean|string $highlighted The value to use as filter.
+     * @param bool|string $highlighted The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHighlighted($highlighted = null, $comparison = null)
+    public function filterByHighlighted($highlighted = null, ?string $comparison = null)
     {
         if (is_string($highlighted)) {
             $highlighted = in_array(strtolower($highlighted), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_HIGHLIGHTED, $highlighted, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_HIGHLIGHTED, $highlighted, $comparison);
+
+        return $this;
     }
 
     /**
@@ -740,17 +774,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByStart(array('max' => 'yesterday')); // WHERE event_start > '2011-03-13'
      * </code>
      *
-     * @param     mixed $start The value to use as filter.
+     * @param mixed $start The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStart($start = null, $comparison = null)
+    public function filterByStart($start = null, ?string $comparison = null)
     {
         if (is_array($start)) {
             $useMinMax = false;
@@ -770,7 +804,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_START, $start, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_START, $start, $comparison);
+
+        return $this;
     }
 
     /**
@@ -783,17 +819,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByEnd(array('max' => 'yesterday')); // WHERE event_end > '2011-03-13'
      * </code>
      *
-     * @param     mixed $end The value to use as filter.
+     * @param mixed $end The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEnd($end = null, $comparison = null)
+    public function filterByEnd($end = null, ?string $comparison = null)
     {
         if (is_array($end)) {
             $useMinMax = false;
@@ -813,7 +849,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_END, $end, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_END, $end, $comparison);
+
+        return $this;
     }
 
     /**
@@ -826,17 +864,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE event_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param mixed $date The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByDate($date = null, ?string $comparison = null)
     {
         if (is_array($date)) {
             $useMinMax = false;
@@ -856,7 +894,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_DATE, $date, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_DATE, $date, $comparison);
+
+        return $this;
     }
 
     /**
@@ -868,22 +908,24 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByStatus('yes'); // WHERE event_status = true
      * </code>
      *
-     * @param     boolean|string $status The value to use as filter.
+     * @param bool|string $status The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStatus($status = null, $comparison = null)
+    public function filterByStatus($status = null, ?string $comparison = null)
     {
         if (is_string($status)) {
             $status = in_array(strtolower($status), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_STATUS, $status, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_STATUS, $status, $comparison);
+
+        return $this;
     }
 
     /**
@@ -896,17 +938,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE event_insert_ > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -926,7 +968,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_INSERT_, $insert, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_INSERT_, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -939,17 +983,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE event_update_ > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -969,7 +1013,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATE_, $update, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATE_, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -982,17 +1028,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE event_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1012,7 +1058,9 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1025,17 +1073,17 @@ abstract class EventQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE event_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1055,15 +1103,17 @@ abstract class EventQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildEvent $event Object to remove from the list of results
+     * @param ChildEvent $event Object to remove from the list of results
      *
-     * @return $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($event = null)
     {
@@ -1080,7 +1130,7 @@ abstract class EventQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
@@ -1105,12 +1155,12 @@ abstract class EventQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
@@ -1140,65 +1190,77 @@ abstract class EventQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(EventTableMap::COL_EVENT_UPDATED);
+        $this->addDescendingOrderByColumn(EventTableMap::COL_EVENT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(EventTableMap::COL_EVENT_UPDATED);
+        $this->addAscendingOrderByColumn(EventTableMap::COL_EVENT_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(EventTableMap::COL_EVENT_CREATED);
+        $this->addDescendingOrderByColumn(EventTableMap::COL_EVENT_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(EventTableMap::COL_EVENT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(EventTableMap::COL_EVENT_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildEventQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(EventTableMap::COL_EVENT_CREATED);
+        $this->addAscendingOrderByColumn(EventTableMap::COL_EVENT_CREATED);
+
+        return $this;
     }
 
-} // EventQuery
+}

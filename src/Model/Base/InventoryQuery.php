@@ -10,7 +10,7 @@ use Model\Map\InventoryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -39,8 +39,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventoryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildInventoryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildInventory|null findOne(ConnectionInterface $con = null) Return the first ChildInventory matching the query
- * @method     ChildInventory findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInventory matching the query, or a new ChildInventory object populated from the query conditions when no match is found
+ * @method     ChildInventory|null findOne(?ConnectionInterface $con = null) Return the first ChildInventory matching the query
+ * @method     ChildInventory findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildInventory matching the query, or a new ChildInventory object populated from the query conditions when no match is found
  *
  * @method     ChildInventory|null findOneById(int $inventory_id) Return the first ChildInventory filtered by the inventory_id column
  * @method     ChildInventory|null findOneBySiteId(int $site_id) Return the first ChildInventory filtered by the site_id column
@@ -48,8 +48,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventory|null findOneByCreatedAt(string $inventory_created) Return the first ChildInventory filtered by the inventory_created column
  * @method     ChildInventory|null findOneByUpdatedAt(string $inventory_updated) Return the first ChildInventory filtered by the inventory_updated column *
 
- * @method     ChildInventory requirePk($key, ConnectionInterface $con = null) Return the ChildInventory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInventory requireOne(ConnectionInterface $con = null) Return the first ChildInventory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInventory requirePk($key, ?ConnectionInterface $con = null) Return the ChildInventory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInventory requireOne(?ConnectionInterface $con = null) Return the first ChildInventory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInventory requireOneById(int $inventory_id) Return the first ChildInventory filtered by the inventory_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventory requireOneBySiteId(int $site_id) Return the first ChildInventory filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -57,20 +57,20 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventory requireOneByCreatedAt(string $inventory_created) Return the first ChildInventory filtered by the inventory_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventory requireOneByUpdatedAt(string $inventory_updated) Return the first ChildInventory filtered by the inventory_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInventory[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> find(ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
- * @method     ChildInventory[]|ObjectCollection findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
- * @method     ChildInventory[]|ObjectCollection findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
- * @method     ChildInventory[]|ObjectCollection findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
- * @method     ChildInventory[]|ObjectCollection findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
- * @method     ChildInventory[]|ObjectCollection findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildInventory> findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
- * @method     ChildInventory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildInventory> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildInventory[]|Collection find(?ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildInventory> find(?ConnectionInterface $con = null) Return ChildInventory objects based on current ModelCriteria
+ * @method     ChildInventory[]|Collection findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
+ * @psalm-method Collection&\Traversable<ChildInventory> findById(int $inventory_id) Return ChildInventory objects filtered by the inventory_id column
+ * @method     ChildInventory[]|Collection findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildInventory> findBySiteId(int $site_id) Return ChildInventory objects filtered by the site_id column
+ * @method     ChildInventory[]|Collection findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
+ * @psalm-method Collection&\Traversable<ChildInventory> findByTitle(string $inventory_title) Return ChildInventory objects filtered by the inventory_title column
+ * @method     ChildInventory[]|Collection findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
+ * @psalm-method Collection&\Traversable<ChildInventory> findByCreatedAt(string $inventory_created) Return ChildInventory objects filtered by the inventory_created column
+ * @method     ChildInventory[]|Collection findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
+ * @psalm-method Collection&\Traversable<ChildInventory> findByUpdatedAt(string $inventory_updated) Return ChildInventory objects filtered by the inventory_updated column
+ * @method     ChildInventory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildInventory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class InventoryQuery extends ModelCriteria
@@ -80,9 +80,9 @@ abstract class InventoryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\InventoryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Inventory', $modelAlias = null)
     {
@@ -92,12 +92,12 @@ abstract class InventoryQuery extends ModelCriteria
     /**
      * Returns a new ChildInventoryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildInventoryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildInventoryQuery) {
             return $criteria;
@@ -127,7 +127,7 @@ abstract class InventoryQuery extends ModelCriteria
      *
      * @return ChildInventory|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -159,8 +159,8 @@ abstract class InventoryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -192,8 +192,8 @@ abstract class InventoryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildInventory|array|mixed the result, formatted by the current formatter
      */
@@ -213,12 +213,12 @@ abstract class InventoryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -235,27 +235,31 @@ abstract class InventoryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -268,15 +272,15 @@ abstract class InventoryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE inventory_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -296,7 +300,9 @@ abstract class InventoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $id, $comparison);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -309,15 +315,15 @@ abstract class InventoryQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -337,7 +343,9 @@ abstract class InventoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventoryTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(InventoryTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -347,14 +355,15 @@ abstract class InventoryQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE inventory_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE inventory_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE inventory_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -362,7 +371,9 @@ abstract class InventoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_TITLE, $title, $comparison);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -375,17 +386,17 @@ abstract class InventoryQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE inventory_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -405,7 +416,9 @@ abstract class InventoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -418,17 +431,17 @@ abstract class InventoryQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE inventory_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -448,15 +461,17 @@ abstract class InventoryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildInventory $inventory Object to remove from the list of results
+     * @param ChildInventory $inventory Object to remove from the list of results
      *
-     * @return $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($inventory = null)
     {
@@ -473,7 +488,7 @@ abstract class InventoryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(InventoryTableMap::DATABASE_NAME);
@@ -498,12 +513,12 @@ abstract class InventoryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(InventoryTableMap::DATABASE_NAME);
@@ -533,65 +548,77 @@ abstract class InventoryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(InventoryTableMap::COL_INVENTORY_UPDATED);
+        $this->addDescendingOrderByColumn(InventoryTableMap::COL_INVENTORY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(InventoryTableMap::COL_INVENTORY_UPDATED);
+        $this->addAscendingOrderByColumn(InventoryTableMap::COL_INVENTORY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(InventoryTableMap::COL_INVENTORY_CREATED);
+        $this->addDescendingOrderByColumn(InventoryTableMap::COL_INVENTORY_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(InventoryTableMap::COL_INVENTORY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildInventoryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(InventoryTableMap::COL_INVENTORY_CREATED);
+        $this->addAscendingOrderByColumn(InventoryTableMap::COL_INVENTORY_CREATED);
+
+        return $this;
     }
 
-} // InventoryQuery
+}

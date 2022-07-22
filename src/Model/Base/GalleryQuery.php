@@ -10,7 +10,7 @@ use Model\Map\GalleryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -45,8 +45,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGalleryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildGalleryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildGallery|null findOne(ConnectionInterface $con = null) Return the first ChildGallery matching the query
- * @method     ChildGallery findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGallery matching the query, or a new ChildGallery object populated from the query conditions when no match is found
+ * @method     ChildGallery|null findOne(?ConnectionInterface $con = null) Return the first ChildGallery matching the query
+ * @method     ChildGallery findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildGallery matching the query, or a new ChildGallery object populated from the query conditions when no match is found
  *
  * @method     ChildGallery|null findOneById(int $gallery_id) Return the first ChildGallery filtered by the gallery_id column
  * @method     ChildGallery|null findOneBySiteId(int $site_id) Return the first ChildGallery filtered by the site_id column
@@ -57,8 +57,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGallery|null findOneByCreated(string $gallery_created) Return the first ChildGallery filtered by the gallery_created column
  * @method     ChildGallery|null findOneByUpdated(string $gallery_updated) Return the first ChildGallery filtered by the gallery_updated column *
 
- * @method     ChildGallery requirePk($key, ConnectionInterface $con = null) Return the ChildGallery by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGallery requireOne(ConnectionInterface $con = null) Return the first ChildGallery matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGallery requirePk($key, ?ConnectionInterface $con = null) Return the ChildGallery by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGallery requireOne(?ConnectionInterface $con = null) Return the first ChildGallery matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGallery requireOneById(int $gallery_id) Return the first ChildGallery filtered by the gallery_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGallery requireOneBySiteId(int $site_id) Return the first ChildGallery filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -69,26 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGallery requireOneByCreated(string $gallery_created) Return the first ChildGallery filtered by the gallery_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGallery requireOneByUpdated(string $gallery_updated) Return the first ChildGallery filtered by the gallery_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGallery[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> find(ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
- * @method     ChildGallery[]|ObjectCollection findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
- * @method     ChildGallery[]|ObjectCollection findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
- * @method     ChildGallery[]|ObjectCollection findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
- * @method     ChildGallery[]|ObjectCollection findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
- * @method     ChildGallery[]|ObjectCollection findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
- * @method     ChildGallery[]|ObjectCollection findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
- * @method     ChildGallery[]|ObjectCollection findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
- * @method     ChildGallery[]|ObjectCollection findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildGallery> findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
- * @method     ChildGallery[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildGallery> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildGallery[]|Collection find(?ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildGallery> find(?ConnectionInterface $con = null) Return ChildGallery objects based on current ModelCriteria
+ * @method     ChildGallery[]|Collection findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
+ * @psalm-method Collection&\Traversable<ChildGallery> findById(int $gallery_id) Return ChildGallery objects filtered by the gallery_id column
+ * @method     ChildGallery[]|Collection findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildGallery> findBySiteId(int $site_id) Return ChildGallery objects filtered by the site_id column
+ * @method     ChildGallery[]|Collection findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByTitle(string $gallery_title) Return ChildGallery objects filtered by the gallery_title column
+ * @method     ChildGallery[]|Collection findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByMediaDir(string $media_dir) Return ChildGallery objects filtered by the media_dir column
+ * @method     ChildGallery[]|Collection findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByInsert(string $gallery_insert) Return ChildGallery objects filtered by the gallery_insert column
+ * @method     ChildGallery[]|Collection findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByUpdate(string $gallery_update) Return ChildGallery objects filtered by the gallery_update column
+ * @method     ChildGallery[]|Collection findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByCreated(string $gallery_created) Return ChildGallery objects filtered by the gallery_created column
+ * @method     ChildGallery[]|Collection findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
+ * @psalm-method Collection&\Traversable<ChildGallery> findByUpdated(string $gallery_updated) Return ChildGallery objects filtered by the gallery_updated column
+ * @method     ChildGallery[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildGallery> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class GalleryQuery extends ModelCriteria
@@ -98,9 +98,9 @@ abstract class GalleryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\GalleryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Gallery', $modelAlias = null)
     {
@@ -110,12 +110,12 @@ abstract class GalleryQuery extends ModelCriteria
     /**
      * Returns a new ChildGalleryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildGalleryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildGalleryQuery) {
             return $criteria;
@@ -145,7 +145,7 @@ abstract class GalleryQuery extends ModelCriteria
      *
      * @return ChildGallery|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -177,8 +177,8 @@ abstract class GalleryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -210,8 +210,8 @@ abstract class GalleryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildGallery|array|mixed the result, formatted by the current formatter
      */
@@ -231,12 +231,12 @@ abstract class GalleryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -253,27 +253,31 @@ abstract class GalleryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -286,15 +290,15 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE gallery_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -314,7 +318,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $id, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -327,15 +333,15 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -355,7 +361,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -365,14 +373,15 @@ abstract class GalleryQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE gallery_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE gallery_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE gallery_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -380,7 +389,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_TITLE, $title, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -390,14 +401,15 @@ abstract class GalleryQuery extends ModelCriteria
      * <code>
      * $query->filterByMediaDir('fooValue');   // WHERE media_dir = 'fooValue'
      * $query->filterByMediaDir('%fooValue%', Criteria::LIKE); // WHERE media_dir LIKE '%fooValue%'
+     * $query->filterByMediaDir(['foo', 'bar']); // WHERE media_dir IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $mediaDir The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $mediaDir The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMediaDir($mediaDir = null, $comparison = null)
+    public function filterByMediaDir($mediaDir = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($mediaDir)) {
@@ -405,7 +417,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_MEDIA_DIR, $mediaDir, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_MEDIA_DIR, $mediaDir, $comparison);
+
+        return $this;
     }
 
     /**
@@ -418,17 +432,17 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE gallery_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -448,7 +462,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_INSERT, $insert, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -461,17 +477,17 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE gallery_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -491,7 +507,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATE, $update, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -504,17 +522,17 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterByCreated(array('max' => 'yesterday')); // WHERE gallery_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $created The value to use as filter.
+     * @param mixed $created The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreated($created = null, $comparison = null)
+    public function filterByCreated($created = null, ?string $comparison = null)
     {
         if (is_array($created)) {
             $useMinMax = false;
@@ -534,7 +552,9 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_CREATED, $created, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_CREATED, $created, $comparison);
+
+        return $this;
     }
 
     /**
@@ -547,17 +567,17 @@ abstract class GalleryQuery extends ModelCriteria
      * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE gallery_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updated The value to use as filter.
+     * @param mixed $updated The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdated($updated = null, $comparison = null)
+    public function filterByUpdated($updated = null, ?string $comparison = null)
     {
         if (is_array($updated)) {
             $useMinMax = false;
@@ -577,15 +597,17 @@ abstract class GalleryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, $updated, $comparison);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, $updated, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildGallery $gallery Object to remove from the list of results
+     * @param ChildGallery $gallery Object to remove from the list of results
      *
-     * @return $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($gallery = null)
     {
@@ -602,7 +624,7 @@ abstract class GalleryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(GalleryTableMap::DATABASE_NAME);
@@ -627,12 +649,12 @@ abstract class GalleryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(GalleryTableMap::DATABASE_NAME);
@@ -662,65 +684,77 @@ abstract class GalleryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+        $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+        $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+        $this->addDescendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(GalleryTableMap::COL_GALLERY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(GalleryTableMap::COL_GALLERY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildGalleryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+        $this->addAscendingOrderByColumn(GalleryTableMap::COL_GALLERY_CREATED);
+
+        return $this;
     }
 
-} // GalleryQuery
+}

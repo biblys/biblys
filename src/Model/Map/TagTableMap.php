@@ -33,130 +33,134 @@ class TagTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.TagTableMap';
+    public const CLASS_NAME = 'Model.Map.TagTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'tags';
+    public const TABLE_NAME = 'tags';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Tag';
+    public const OM_CLASS = '\\Model\\Tag';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Tag';
+    public const CLASS_DEFAULT = 'Model.Tag';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    public const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    public const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the tag_id field
      */
-    const COL_TAG_ID = 'tags.tag_id';
+    public const COL_TAG_ID = 'tags.tag_id';
 
     /**
      * the column name for the tag_name field
      */
-    const COL_TAG_NAME = 'tags.tag_name';
+    public const COL_TAG_NAME = 'tags.tag_name';
 
     /**
      * the column name for the tag_url field
      */
-    const COL_TAG_URL = 'tags.tag_url';
+    public const COL_TAG_URL = 'tags.tag_url';
 
     /**
      * the column name for the tag_description field
      */
-    const COL_TAG_DESCRIPTION = 'tags.tag_description';
+    public const COL_TAG_DESCRIPTION = 'tags.tag_description';
 
     /**
      * the column name for the tag_date field
      */
-    const COL_TAG_DATE = 'tags.tag_date';
+    public const COL_TAG_DATE = 'tags.tag_date';
 
     /**
      * the column name for the tag_num field
      */
-    const COL_TAG_NUM = 'tags.tag_num';
+    public const COL_TAG_NUM = 'tags.tag_num';
 
     /**
      * the column name for the tag_insert field
      */
-    const COL_TAG_INSERT = 'tags.tag_insert';
+    public const COL_TAG_INSERT = 'tags.tag_insert';
 
     /**
      * the column name for the tag_update field
      */
-    const COL_TAG_UPDATE = 'tags.tag_update';
+    public const COL_TAG_UPDATE = 'tags.tag_update';
 
     /**
      * the column name for the tag_created field
      */
-    const COL_TAG_CREATED = 'tags.tag_created';
+    public const COL_TAG_CREATED = 'tags.tag_created';
 
     /**
      * the column name for the tag_updated field
      */
-    const COL_TAG_UPDATED = 'tags.tag_updated';
+    public const COL_TAG_UPDATED = 'tags.tag_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Url', 'Description', 'Date', 'Num', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'url', 'description', 'date', 'num', 'insert', 'update', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID, TagTableMap::COL_TAG_NAME, TagTableMap::COL_TAG_URL, TagTableMap::COL_TAG_DESCRIPTION, TagTableMap::COL_TAG_DATE, TagTableMap::COL_TAG_NUM, TagTableMap::COL_TAG_INSERT, TagTableMap::COL_TAG_UPDATE, TagTableMap::COL_TAG_CREATED, TagTableMap::COL_TAG_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('tag_id', 'tag_name', 'tag_url', 'tag_description', 'tag_date', 'tag_num', 'tag_insert', 'tag_update', 'tag_created', 'tag_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Name', 'Url', 'Description', 'Date', 'Num', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'name', 'url', 'description', 'date', 'num', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [TagTableMap::COL_TAG_ID, TagTableMap::COL_TAG_NAME, TagTableMap::COL_TAG_URL, TagTableMap::COL_TAG_DESCRIPTION, TagTableMap::COL_TAG_DATE, TagTableMap::COL_TAG_NUM, TagTableMap::COL_TAG_INSERT, TagTableMap::COL_TAG_UPDATE, TagTableMap::COL_TAG_CREATED, TagTableMap::COL_TAG_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['tag_id', 'tag_name', 'tag_url', 'tag_description', 'tag_date', 'tag_num', 'tag_insert', 'tag_update', 'tag_created', 'tag_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Url' => 2, 'Description' => 3, 'Date' => 4, 'Num' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'url' => 2, 'description' => 3, 'date' => 4, 'num' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ),
-        self::TYPE_COLNAME       => array(TagTableMap::COL_TAG_ID => 0, TagTableMap::COL_TAG_NAME => 1, TagTableMap::COL_TAG_URL => 2, TagTableMap::COL_TAG_DESCRIPTION => 3, TagTableMap::COL_TAG_DATE => 4, TagTableMap::COL_TAG_NUM => 5, TagTableMap::COL_TAG_INSERT => 6, TagTableMap::COL_TAG_UPDATE => 7, TagTableMap::COL_TAG_CREATED => 8, TagTableMap::COL_TAG_UPDATED => 9, ),
-        self::TYPE_FIELDNAME     => array('tag_id' => 0, 'tag_name' => 1, 'tag_url' => 2, 'tag_description' => 3, 'tag_date' => 4, 'tag_num' => 5, 'tag_insert' => 6, 'tag_update' => 7, 'tag_created' => 8, 'tag_updated' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'Url' => 2, 'Description' => 3, 'Date' => 4, 'Num' => 5, 'Insert' => 6, 'Update' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'url' => 2, 'description' => 3, 'date' => 4, 'num' => 5, 'insert' => 6, 'update' => 7, 'createdAt' => 8, 'updatedAt' => 9, ],
+        self::TYPE_COLNAME       => [TagTableMap::COL_TAG_ID => 0, TagTableMap::COL_TAG_NAME => 1, TagTableMap::COL_TAG_URL => 2, TagTableMap::COL_TAG_DESCRIPTION => 3, TagTableMap::COL_TAG_DATE => 4, TagTableMap::COL_TAG_NUM => 5, TagTableMap::COL_TAG_INSERT => 6, TagTableMap::COL_TAG_UPDATE => 7, TagTableMap::COL_TAG_CREATED => 8, TagTableMap::COL_TAG_UPDATED => 9, ],
+        self::TYPE_FIELDNAME     => ['tag_id' => 0, 'tag_name' => 1, 'tag_url' => 2, 'tag_description' => 3, 'tag_date' => 4, 'tag_num' => 5, 'tag_insert' => 6, 'tag_update' => 7, 'tag_created' => 8, 'tag_updated' => 9, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'TAG_ID',
@@ -246,9 +250,9 @@ class TagTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('tags');
@@ -268,12 +272,14 @@ class TagTableMap extends TableMap
         $this->addColumn('tag_update', 'Update', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('tag_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -282,20 +288,20 @@ class TagTableMap extends TableMap
     1 => ':tag_id',
   ),
 ), null, null, 'Links', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'tag_created', 'update_column' => 'tag_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -303,14 +309,14 @@ class TagTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -325,14 +331,14 @@ class TagTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -349,10 +355,10 @@ class TagTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? TagTableMap::CLASS_DEFAULT : TagTableMap::OM_CLASS;
     }
@@ -360,17 +366,17 @@ class TagTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Tag object, last column rank)
+     * @return array (Tag object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = TagTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = TagTableMap::getInstanceFromPool($key))) {
@@ -394,13 +400,13 @@ class TagTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -430,12 +436,13 @@ class TagTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(TagTableMap::COL_TAG_ID);
@@ -468,12 +475,13 @@ class TagTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(TagTableMap::COL_TAG_ID);
@@ -504,10 +512,10 @@ class TagTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(TagTableMap::DATABASE_NAME)->getTable(TagTableMap::TABLE_NAME);
     }
@@ -515,15 +523,15 @@ class TagTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Tag or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Tag object or primary key or array of primary keys
+     * @param mixed $values Criteria or Tag object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
@@ -559,7 +567,7 @@ class TagTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return TagQuery::create()->doDeleteAll($con);
     }
@@ -567,13 +575,13 @@ class TagTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Tag or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Tag object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Tag object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TagTableMap::DATABASE_NAME);
@@ -600,4 +608,4 @@ class TagTableMap extends TableMap
         });
     }
 
-} // TagTableMap
+}

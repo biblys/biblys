@@ -33,275 +33,279 @@ class SiteTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.SiteTableMap';
+    public const CLASS_NAME = 'Model.Map.SiteTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'sites';
+    public const TABLE_NAME = 'sites';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Site';
+    public const OM_CLASS = '\\Model\\Site';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Site';
+    public const CLASS_DEFAULT = 'Model.Site';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 39;
+    public const NUM_COLUMNS = 39;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 39;
+    public const NUM_HYDRATE_COLUMNS = 39;
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'sites.site_id';
+    public const COL_SITE_ID = 'sites.site_id';
 
     /**
      * the column name for the site_name field
      */
-    const COL_SITE_NAME = 'sites.site_name';
+    public const COL_SITE_NAME = 'sites.site_name';
 
     /**
      * the column name for the site_pass field
      */
-    const COL_SITE_PASS = 'sites.site_pass';
+    public const COL_SITE_PASS = 'sites.site_pass';
 
     /**
      * the column name for the site_title field
      */
-    const COL_SITE_TITLE = 'sites.site_title';
+    public const COL_SITE_TITLE = 'sites.site_title';
 
     /**
      * the column name for the site_domain field
      */
-    const COL_SITE_DOMAIN = 'sites.site_domain';
+    public const COL_SITE_DOMAIN = 'sites.site_domain';
 
     /**
      * the column name for the site_version field
      */
-    const COL_SITE_VERSION = 'sites.site_version';
+    public const COL_SITE_VERSION = 'sites.site_version';
 
     /**
      * the column name for the site_tag field
      */
-    const COL_SITE_TAG = 'sites.site_tag';
+    public const COL_SITE_TAG = 'sites.site_tag';
 
     /**
      * the column name for the site_flag field
      */
-    const COL_SITE_FLAG = 'sites.site_flag';
+    public const COL_SITE_FLAG = 'sites.site_flag';
 
     /**
      * the column name for the site_contact field
      */
-    const COL_SITE_CONTACT = 'sites.site_contact';
+    public const COL_SITE_CONTACT = 'sites.site_contact';
 
     /**
      * the column name for the site_address field
      */
-    const COL_SITE_ADDRESS = 'sites.site_address';
+    public const COL_SITE_ADDRESS = 'sites.site_address';
 
     /**
      * the column name for the site_tva field
      */
-    const COL_SITE_TVA = 'sites.site_tva';
+    public const COL_SITE_TVA = 'sites.site_tva';
 
     /**
      * the column name for the site_html_renderer field
      */
-    const COL_SITE_HTML_RENDERER = 'sites.site_html_renderer';
+    public const COL_SITE_HTML_RENDERER = 'sites.site_html_renderer';
 
     /**
      * the column name for the site_axys field
      */
-    const COL_SITE_AXYS = 'sites.site_axys';
+    public const COL_SITE_AXYS = 'sites.site_axys';
 
     /**
      * the column name for the site_noosfere field
      */
-    const COL_SITE_NOOSFERE = 'sites.site_noosfere';
+    public const COL_SITE_NOOSFERE = 'sites.site_noosfere';
 
     /**
      * the column name for the site_amazon field
      */
-    const COL_SITE_AMAZON = 'sites.site_amazon';
+    public const COL_SITE_AMAZON = 'sites.site_amazon';
 
     /**
      * the column name for the site_event_id field
      */
-    const COL_SITE_EVENT_ID = 'sites.site_event_id';
+    public const COL_SITE_EVENT_ID = 'sites.site_event_id';
 
     /**
      * the column name for the site_event_date field
      */
-    const COL_SITE_EVENT_DATE = 'sites.site_event_date';
+    public const COL_SITE_EVENT_DATE = 'sites.site_event_date';
 
     /**
      * the column name for the site_shop field
      */
-    const COL_SITE_SHOP = 'sites.site_shop';
+    public const COL_SITE_SHOP = 'sites.site_shop';
 
     /**
      * the column name for the site_vpc field
      */
-    const COL_SITE_VPC = 'sites.site_vpc';
+    public const COL_SITE_VPC = 'sites.site_vpc';
 
     /**
      * the column name for the site_shipping_fee field
      */
-    const COL_SITE_SHIPPING_FEE = 'sites.site_shipping_fee';
+    public const COL_SITE_SHIPPING_FEE = 'sites.site_shipping_fee';
 
     /**
      * the column name for the site_wishlist field
      */
-    const COL_SITE_WISHLIST = 'sites.site_wishlist';
+    public const COL_SITE_WISHLIST = 'sites.site_wishlist';
 
     /**
      * the column name for the site_payment_cheque field
      */
-    const COL_SITE_PAYMENT_CHEQUE = 'sites.site_payment_cheque';
+    public const COL_SITE_PAYMENT_CHEQUE = 'sites.site_payment_cheque';
 
     /**
      * the column name for the site_payment_paypal field
      */
-    const COL_SITE_PAYMENT_PAYPAL = 'sites.site_payment_paypal';
+    public const COL_SITE_PAYMENT_PAYPAL = 'sites.site_payment_paypal';
 
     /**
      * the column name for the site_payment_payplug field
      */
-    const COL_SITE_PAYMENT_PAYPLUG = 'sites.site_payment_payplug';
+    public const COL_SITE_PAYMENT_PAYPLUG = 'sites.site_payment_payplug';
 
     /**
      * the column name for the site_payment_transfer field
      */
-    const COL_SITE_PAYMENT_TRANSFER = 'sites.site_payment_transfer';
+    public const COL_SITE_PAYMENT_TRANSFER = 'sites.site_payment_transfer';
 
     /**
      * the column name for the site_bookshop field
      */
-    const COL_SITE_BOOKSHOP = 'sites.site_bookshop';
+    public const COL_SITE_BOOKSHOP = 'sites.site_bookshop';
 
     /**
      * the column name for the site_bookshop_id field
      */
-    const COL_SITE_BOOKSHOP_ID = 'sites.site_bookshop_id';
+    public const COL_SITE_BOOKSHOP_ID = 'sites.site_bookshop_id';
 
     /**
      * the column name for the site_publisher field
      */
-    const COL_SITE_PUBLISHER = 'sites.site_publisher';
+    public const COL_SITE_PUBLISHER = 'sites.site_publisher';
 
     /**
      * the column name for the site_publisher_stock field
      */
-    const COL_SITE_PUBLISHER_STOCK = 'sites.site_publisher_stock';
+    public const COL_SITE_PUBLISHER_STOCK = 'sites.site_publisher_stock';
 
     /**
      * the column name for the publisher_id field
      */
-    const COL_PUBLISHER_ID = 'sites.publisher_id';
+    public const COL_PUBLISHER_ID = 'sites.publisher_id';
 
     /**
      * the column name for the site_ebook_bundle field
      */
-    const COL_SITE_EBOOK_BUNDLE = 'sites.site_ebook_bundle';
+    public const COL_SITE_EBOOK_BUNDLE = 'sites.site_ebook_bundle';
 
     /**
      * the column name for the site_fb_page_id field
      */
-    const COL_SITE_FB_PAGE_ID = 'sites.site_fb_page_id';
+    public const COL_SITE_FB_PAGE_ID = 'sites.site_fb_page_id';
 
     /**
      * the column name for the site_fb_page_token field
      */
-    const COL_SITE_FB_PAGE_TOKEN = 'sites.site_fb_page_token';
+    public const COL_SITE_FB_PAGE_TOKEN = 'sites.site_fb_page_token';
 
     /**
      * the column name for the site_analytics_id field
      */
-    const COL_SITE_ANALYTICS_ID = 'sites.site_analytics_id';
+    public const COL_SITE_ANALYTICS_ID = 'sites.site_analytics_id';
 
     /**
      * the column name for the site_piwik_id field
      */
-    const COL_SITE_PIWIK_ID = 'sites.site_piwik_id';
+    public const COL_SITE_PIWIK_ID = 'sites.site_piwik_id';
 
     /**
      * the column name for the site_sitemap_updated field
      */
-    const COL_SITE_SITEMAP_UPDATED = 'sites.site_sitemap_updated';
+    public const COL_SITE_SITEMAP_UPDATED = 'sites.site_sitemap_updated';
 
     /**
      * the column name for the site_monitoring field
      */
-    const COL_SITE_MONITORING = 'sites.site_monitoring';
+    public const COL_SITE_MONITORING = 'sites.site_monitoring';
 
     /**
      * the column name for the site_created field
      */
-    const COL_SITE_CREATED = 'sites.site_created';
+    public const COL_SITE_CREATED = 'sites.site_created';
 
     /**
      * the column name for the site_updated field
      */
-    const COL_SITE_UPDATED = 'sites.site_updated';
+    public const COL_SITE_UPDATED = 'sites.site_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Name', 'Pass', 'Title', 'Domain', 'Version', 'Tag', 'Flag', 'Contact', 'Address', 'Tva', 'HtmlRenderer', 'Axys', 'Noosfere', 'Amazon', 'EventId', 'EventDate', 'Shop', 'Vpc', 'ShippingFee', 'Wishlist', 'PaymentCheque', 'PaymentPaypal', 'PaymentPayplug', 'PaymentTransfer', 'Bookshop', 'BookshopId', 'Publisher', 'PublisherStock', 'PublisherId', 'EbookBundle', 'FbPageId', 'FbPageToken', 'AnalyticsId', 'PiwikId', 'SitemapUpdated', 'Monitoring', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'name', 'pass', 'title', 'domain', 'version', 'tag', 'flag', 'contact', 'address', 'tva', 'htmlRenderer', 'axys', 'noosfere', 'amazon', 'eventId', 'eventDate', 'shop', 'vpc', 'shippingFee', 'wishlist', 'paymentCheque', 'paymentPaypal', 'paymentPayplug', 'paymentTransfer', 'bookshop', 'bookshopId', 'publisher', 'publisherStock', 'publisherId', 'ebookBundle', 'fbPageId', 'fbPageToken', 'analyticsId', 'piwikId', 'sitemapUpdated', 'monitoring', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(SiteTableMap::COL_SITE_ID, SiteTableMap::COL_SITE_NAME, SiteTableMap::COL_SITE_PASS, SiteTableMap::COL_SITE_TITLE, SiteTableMap::COL_SITE_DOMAIN, SiteTableMap::COL_SITE_VERSION, SiteTableMap::COL_SITE_TAG, SiteTableMap::COL_SITE_FLAG, SiteTableMap::COL_SITE_CONTACT, SiteTableMap::COL_SITE_ADDRESS, SiteTableMap::COL_SITE_TVA, SiteTableMap::COL_SITE_HTML_RENDERER, SiteTableMap::COL_SITE_AXYS, SiteTableMap::COL_SITE_NOOSFERE, SiteTableMap::COL_SITE_AMAZON, SiteTableMap::COL_SITE_EVENT_ID, SiteTableMap::COL_SITE_EVENT_DATE, SiteTableMap::COL_SITE_SHOP, SiteTableMap::COL_SITE_VPC, SiteTableMap::COL_SITE_SHIPPING_FEE, SiteTableMap::COL_SITE_WISHLIST, SiteTableMap::COL_SITE_PAYMENT_CHEQUE, SiteTableMap::COL_SITE_PAYMENT_PAYPAL, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, SiteTableMap::COL_SITE_PAYMENT_TRANSFER, SiteTableMap::COL_SITE_BOOKSHOP, SiteTableMap::COL_SITE_BOOKSHOP_ID, SiteTableMap::COL_SITE_PUBLISHER, SiteTableMap::COL_SITE_PUBLISHER_STOCK, SiteTableMap::COL_PUBLISHER_ID, SiteTableMap::COL_SITE_EBOOK_BUNDLE, SiteTableMap::COL_SITE_FB_PAGE_ID, SiteTableMap::COL_SITE_FB_PAGE_TOKEN, SiteTableMap::COL_SITE_ANALYTICS_ID, SiteTableMap::COL_SITE_PIWIK_ID, SiteTableMap::COL_SITE_SITEMAP_UPDATED, SiteTableMap::COL_SITE_MONITORING, SiteTableMap::COL_SITE_CREATED, SiteTableMap::COL_SITE_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('site_id', 'site_name', 'site_pass', 'site_title', 'site_domain', 'site_version', 'site_tag', 'site_flag', 'site_contact', 'site_address', 'site_tva', 'site_html_renderer', 'site_axys', 'site_noosfere', 'site_amazon', 'site_event_id', 'site_event_date', 'site_shop', 'site_vpc', 'site_shipping_fee', 'site_wishlist', 'site_payment_cheque', 'site_payment_paypal', 'site_payment_payplug', 'site_payment_transfer', 'site_bookshop', 'site_bookshop_id', 'site_publisher', 'site_publisher_stock', 'publisher_id', 'site_ebook_bundle', 'site_fb_page_id', 'site_fb_page_token', 'site_analytics_id', 'site_piwik_id', 'site_sitemap_updated', 'site_monitoring', 'site_created', 'site_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'Name', 'Pass', 'Title', 'Domain', 'Version', 'Tag', 'Flag', 'Contact', 'Address', 'Tva', 'HtmlRenderer', 'Axys', 'Noosfere', 'Amazon', 'EventId', 'EventDate', 'Shop', 'Vpc', 'ShippingFee', 'Wishlist', 'PaymentCheque', 'PaymentPaypal', 'PaymentPayplug', 'PaymentTransfer', 'Bookshop', 'BookshopId', 'Publisher', 'PublisherStock', 'PublisherId', 'EbookBundle', 'FbPageId', 'FbPageToken', 'AnalyticsId', 'PiwikId', 'SitemapUpdated', 'Monitoring', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'name', 'pass', 'title', 'domain', 'version', 'tag', 'flag', 'contact', 'address', 'tva', 'htmlRenderer', 'axys', 'noosfere', 'amazon', 'eventId', 'eventDate', 'shop', 'vpc', 'shippingFee', 'wishlist', 'paymentCheque', 'paymentPaypal', 'paymentPayplug', 'paymentTransfer', 'bookshop', 'bookshopId', 'publisher', 'publisherStock', 'publisherId', 'ebookBundle', 'fbPageId', 'fbPageToken', 'analyticsId', 'piwikId', 'sitemapUpdated', 'monitoring', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID, SiteTableMap::COL_SITE_NAME, SiteTableMap::COL_SITE_PASS, SiteTableMap::COL_SITE_TITLE, SiteTableMap::COL_SITE_DOMAIN, SiteTableMap::COL_SITE_VERSION, SiteTableMap::COL_SITE_TAG, SiteTableMap::COL_SITE_FLAG, SiteTableMap::COL_SITE_CONTACT, SiteTableMap::COL_SITE_ADDRESS, SiteTableMap::COL_SITE_TVA, SiteTableMap::COL_SITE_HTML_RENDERER, SiteTableMap::COL_SITE_AXYS, SiteTableMap::COL_SITE_NOOSFERE, SiteTableMap::COL_SITE_AMAZON, SiteTableMap::COL_SITE_EVENT_ID, SiteTableMap::COL_SITE_EVENT_DATE, SiteTableMap::COL_SITE_SHOP, SiteTableMap::COL_SITE_VPC, SiteTableMap::COL_SITE_SHIPPING_FEE, SiteTableMap::COL_SITE_WISHLIST, SiteTableMap::COL_SITE_PAYMENT_CHEQUE, SiteTableMap::COL_SITE_PAYMENT_PAYPAL, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, SiteTableMap::COL_SITE_PAYMENT_TRANSFER, SiteTableMap::COL_SITE_BOOKSHOP, SiteTableMap::COL_SITE_BOOKSHOP_ID, SiteTableMap::COL_SITE_PUBLISHER, SiteTableMap::COL_SITE_PUBLISHER_STOCK, SiteTableMap::COL_PUBLISHER_ID, SiteTableMap::COL_SITE_EBOOK_BUNDLE, SiteTableMap::COL_SITE_FB_PAGE_ID, SiteTableMap::COL_SITE_FB_PAGE_TOKEN, SiteTableMap::COL_SITE_ANALYTICS_ID, SiteTableMap::COL_SITE_PIWIK_ID, SiteTableMap::COL_SITE_SITEMAP_UPDATED, SiteTableMap::COL_SITE_MONITORING, SiteTableMap::COL_SITE_CREATED, SiteTableMap::COL_SITE_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['site_id', 'site_name', 'site_pass', 'site_title', 'site_domain', 'site_version', 'site_tag', 'site_flag', 'site_contact', 'site_address', 'site_tva', 'site_html_renderer', 'site_axys', 'site_noosfere', 'site_amazon', 'site_event_id', 'site_event_date', 'site_shop', 'site_vpc', 'site_shipping_fee', 'site_wishlist', 'site_payment_cheque', 'site_payment_paypal', 'site_payment_payplug', 'site_payment_transfer', 'site_bookshop', 'site_bookshop_id', 'site_publisher', 'site_publisher_stock', 'publisher_id', 'site_ebook_bundle', 'site_fb_page_id', 'site_fb_page_token', 'site_analytics_id', 'site_piwik_id', 'site_sitemap_updated', 'site_monitoring', 'site_created', 'site_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Name' => 1, 'Pass' => 2, 'Title' => 3, 'Domain' => 4, 'Version' => 5, 'Tag' => 6, 'Flag' => 7, 'Contact' => 8, 'Address' => 9, 'Tva' => 10, 'HtmlRenderer' => 11, 'Axys' => 12, 'Noosfere' => 13, 'Amazon' => 14, 'EventId' => 15, 'EventDate' => 16, 'Shop' => 17, 'Vpc' => 18, 'ShippingFee' => 19, 'Wishlist' => 20, 'PaymentCheque' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentTransfer' => 24, 'Bookshop' => 25, 'BookshopId' => 26, 'Publisher' => 27, 'PublisherStock' => 28, 'PublisherId' => 29, 'EbookBundle' => 30, 'FbPageId' => 31, 'FbPageToken' => 32, 'AnalyticsId' => 33, 'PiwikId' => 34, 'SitemapUpdated' => 35, 'Monitoring' => 36, 'CreatedAt' => 37, 'UpdatedAt' => 38, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'name' => 1, 'pass' => 2, 'title' => 3, 'domain' => 4, 'version' => 5, 'tag' => 6, 'flag' => 7, 'contact' => 8, 'address' => 9, 'tva' => 10, 'htmlRenderer' => 11, 'axys' => 12, 'noosfere' => 13, 'amazon' => 14, 'eventId' => 15, 'eventDate' => 16, 'shop' => 17, 'vpc' => 18, 'shippingFee' => 19, 'wishlist' => 20, 'paymentCheque' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentTransfer' => 24, 'bookshop' => 25, 'bookshopId' => 26, 'publisher' => 27, 'publisherStock' => 28, 'publisherId' => 29, 'ebookBundle' => 30, 'fbPageId' => 31, 'fbPageToken' => 32, 'analyticsId' => 33, 'piwikId' => 34, 'sitemapUpdated' => 35, 'monitoring' => 36, 'createdAt' => 37, 'updatedAt' => 38, ),
-        self::TYPE_COLNAME       => array(SiteTableMap::COL_SITE_ID => 0, SiteTableMap::COL_SITE_NAME => 1, SiteTableMap::COL_SITE_PASS => 2, SiteTableMap::COL_SITE_TITLE => 3, SiteTableMap::COL_SITE_DOMAIN => 4, SiteTableMap::COL_SITE_VERSION => 5, SiteTableMap::COL_SITE_TAG => 6, SiteTableMap::COL_SITE_FLAG => 7, SiteTableMap::COL_SITE_CONTACT => 8, SiteTableMap::COL_SITE_ADDRESS => 9, SiteTableMap::COL_SITE_TVA => 10, SiteTableMap::COL_SITE_HTML_RENDERER => 11, SiteTableMap::COL_SITE_AXYS => 12, SiteTableMap::COL_SITE_NOOSFERE => 13, SiteTableMap::COL_SITE_AMAZON => 14, SiteTableMap::COL_SITE_EVENT_ID => 15, SiteTableMap::COL_SITE_EVENT_DATE => 16, SiteTableMap::COL_SITE_SHOP => 17, SiteTableMap::COL_SITE_VPC => 18, SiteTableMap::COL_SITE_SHIPPING_FEE => 19, SiteTableMap::COL_SITE_WISHLIST => 20, SiteTableMap::COL_SITE_PAYMENT_CHEQUE => 21, SiteTableMap::COL_SITE_PAYMENT_PAYPAL => 22, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG => 23, SiteTableMap::COL_SITE_PAYMENT_TRANSFER => 24, SiteTableMap::COL_SITE_BOOKSHOP => 25, SiteTableMap::COL_SITE_BOOKSHOP_ID => 26, SiteTableMap::COL_SITE_PUBLISHER => 27, SiteTableMap::COL_SITE_PUBLISHER_STOCK => 28, SiteTableMap::COL_PUBLISHER_ID => 29, SiteTableMap::COL_SITE_EBOOK_BUNDLE => 30, SiteTableMap::COL_SITE_FB_PAGE_ID => 31, SiteTableMap::COL_SITE_FB_PAGE_TOKEN => 32, SiteTableMap::COL_SITE_ANALYTICS_ID => 33, SiteTableMap::COL_SITE_PIWIK_ID => 34, SiteTableMap::COL_SITE_SITEMAP_UPDATED => 35, SiteTableMap::COL_SITE_MONITORING => 36, SiteTableMap::COL_SITE_CREATED => 37, SiteTableMap::COL_SITE_UPDATED => 38, ),
-        self::TYPE_FIELDNAME     => array('site_id' => 0, 'site_name' => 1, 'site_pass' => 2, 'site_title' => 3, 'site_domain' => 4, 'site_version' => 5, 'site_tag' => 6, 'site_flag' => 7, 'site_contact' => 8, 'site_address' => 9, 'site_tva' => 10, 'site_html_renderer' => 11, 'site_axys' => 12, 'site_noosfere' => 13, 'site_amazon' => 14, 'site_event_id' => 15, 'site_event_date' => 16, 'site_shop' => 17, 'site_vpc' => 18, 'site_shipping_fee' => 19, 'site_wishlist' => 20, 'site_payment_cheque' => 21, 'site_payment_paypal' => 22, 'site_payment_payplug' => 23, 'site_payment_transfer' => 24, 'site_bookshop' => 25, 'site_bookshop_id' => 26, 'site_publisher' => 27, 'site_publisher_stock' => 28, 'publisher_id' => 29, 'site_ebook_bundle' => 30, 'site_fb_page_id' => 31, 'site_fb_page_token' => 32, 'site_analytics_id' => 33, 'site_piwik_id' => 34, 'site_sitemap_updated' => 35, 'site_monitoring' => 36, 'site_created' => 37, 'site_updated' => 38, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Name' => 1, 'Pass' => 2, 'Title' => 3, 'Domain' => 4, 'Version' => 5, 'Tag' => 6, 'Flag' => 7, 'Contact' => 8, 'Address' => 9, 'Tva' => 10, 'HtmlRenderer' => 11, 'Axys' => 12, 'Noosfere' => 13, 'Amazon' => 14, 'EventId' => 15, 'EventDate' => 16, 'Shop' => 17, 'Vpc' => 18, 'ShippingFee' => 19, 'Wishlist' => 20, 'PaymentCheque' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentTransfer' => 24, 'Bookshop' => 25, 'BookshopId' => 26, 'Publisher' => 27, 'PublisherStock' => 28, 'PublisherId' => 29, 'EbookBundle' => 30, 'FbPageId' => 31, 'FbPageToken' => 32, 'AnalyticsId' => 33, 'PiwikId' => 34, 'SitemapUpdated' => 35, 'Monitoring' => 36, 'CreatedAt' => 37, 'UpdatedAt' => 38, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'name' => 1, 'pass' => 2, 'title' => 3, 'domain' => 4, 'version' => 5, 'tag' => 6, 'flag' => 7, 'contact' => 8, 'address' => 9, 'tva' => 10, 'htmlRenderer' => 11, 'axys' => 12, 'noosfere' => 13, 'amazon' => 14, 'eventId' => 15, 'eventDate' => 16, 'shop' => 17, 'vpc' => 18, 'shippingFee' => 19, 'wishlist' => 20, 'paymentCheque' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentTransfer' => 24, 'bookshop' => 25, 'bookshopId' => 26, 'publisher' => 27, 'publisherStock' => 28, 'publisherId' => 29, 'ebookBundle' => 30, 'fbPageId' => 31, 'fbPageToken' => 32, 'analyticsId' => 33, 'piwikId' => 34, 'sitemapUpdated' => 35, 'monitoring' => 36, 'createdAt' => 37, 'updatedAt' => 38, ],
+        self::TYPE_COLNAME       => [SiteTableMap::COL_SITE_ID => 0, SiteTableMap::COL_SITE_NAME => 1, SiteTableMap::COL_SITE_PASS => 2, SiteTableMap::COL_SITE_TITLE => 3, SiteTableMap::COL_SITE_DOMAIN => 4, SiteTableMap::COL_SITE_VERSION => 5, SiteTableMap::COL_SITE_TAG => 6, SiteTableMap::COL_SITE_FLAG => 7, SiteTableMap::COL_SITE_CONTACT => 8, SiteTableMap::COL_SITE_ADDRESS => 9, SiteTableMap::COL_SITE_TVA => 10, SiteTableMap::COL_SITE_HTML_RENDERER => 11, SiteTableMap::COL_SITE_AXYS => 12, SiteTableMap::COL_SITE_NOOSFERE => 13, SiteTableMap::COL_SITE_AMAZON => 14, SiteTableMap::COL_SITE_EVENT_ID => 15, SiteTableMap::COL_SITE_EVENT_DATE => 16, SiteTableMap::COL_SITE_SHOP => 17, SiteTableMap::COL_SITE_VPC => 18, SiteTableMap::COL_SITE_SHIPPING_FEE => 19, SiteTableMap::COL_SITE_WISHLIST => 20, SiteTableMap::COL_SITE_PAYMENT_CHEQUE => 21, SiteTableMap::COL_SITE_PAYMENT_PAYPAL => 22, SiteTableMap::COL_SITE_PAYMENT_PAYPLUG => 23, SiteTableMap::COL_SITE_PAYMENT_TRANSFER => 24, SiteTableMap::COL_SITE_BOOKSHOP => 25, SiteTableMap::COL_SITE_BOOKSHOP_ID => 26, SiteTableMap::COL_SITE_PUBLISHER => 27, SiteTableMap::COL_SITE_PUBLISHER_STOCK => 28, SiteTableMap::COL_PUBLISHER_ID => 29, SiteTableMap::COL_SITE_EBOOK_BUNDLE => 30, SiteTableMap::COL_SITE_FB_PAGE_ID => 31, SiteTableMap::COL_SITE_FB_PAGE_TOKEN => 32, SiteTableMap::COL_SITE_ANALYTICS_ID => 33, SiteTableMap::COL_SITE_PIWIK_ID => 34, SiteTableMap::COL_SITE_SITEMAP_UPDATED => 35, SiteTableMap::COL_SITE_MONITORING => 36, SiteTableMap::COL_SITE_CREATED => 37, SiteTableMap::COL_SITE_UPDATED => 38, ],
+        self::TYPE_FIELDNAME     => ['site_id' => 0, 'site_name' => 1, 'site_pass' => 2, 'site_title' => 3, 'site_domain' => 4, 'site_version' => 5, 'site_tag' => 6, 'site_flag' => 7, 'site_contact' => 8, 'site_address' => 9, 'site_tva' => 10, 'site_html_renderer' => 11, 'site_axys' => 12, 'site_noosfere' => 13, 'site_amazon' => 14, 'site_event_id' => 15, 'site_event_date' => 16, 'site_shop' => 17, 'site_vpc' => 18, 'site_shipping_fee' => 19, 'site_wishlist' => 20, 'site_payment_cheque' => 21, 'site_payment_paypal' => 22, 'site_payment_payplug' => 23, 'site_payment_transfer' => 24, 'site_bookshop' => 25, 'site_bookshop_id' => 26, 'site_publisher' => 27, 'site_publisher_stock' => 28, 'publisher_id' => 29, 'site_ebook_bundle' => 30, 'site_fb_page_id' => 31, 'site_fb_page_token' => 32, 'site_analytics_id' => 33, 'site_piwik_id' => 34, 'site_sitemap_updated' => 35, 'site_monitoring' => 36, 'site_created' => 37, 'site_updated' => 38, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'SITE_ID',
@@ -623,9 +627,9 @@ class SiteTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('sites');
@@ -674,12 +678,14 @@ class SiteTableMap extends TableMap
         $this->addColumn('site_monitoring', 'Monitoring', 'BOOLEAN', false, 1, true);
         $this->addColumn('site_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('site_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -737,20 +743,20 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Users', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'site_created', 'update_column' => 'site_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -758,14 +764,14 @@ class SiteTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -780,14 +786,14 @@ class SiteTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -804,10 +810,10 @@ class SiteTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? SiteTableMap::CLASS_DEFAULT : SiteTableMap::OM_CLASS;
     }
@@ -815,17 +821,17 @@ class SiteTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Site object, last column rank)
+     * @return array (Site object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = SiteTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = SiteTableMap::getInstanceFromPool($key))) {
@@ -849,13 +855,13 @@ class SiteTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -885,12 +891,13 @@ class SiteTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(SiteTableMap::COL_SITE_ID);
@@ -981,12 +988,13 @@ class SiteTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(SiteTableMap::COL_SITE_ID);
@@ -1075,10 +1083,10 @@ class SiteTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(SiteTableMap::DATABASE_NAME)->getTable(SiteTableMap::TABLE_NAME);
     }
@@ -1086,15 +1094,15 @@ class SiteTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Site or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Site object or primary key or array of primary keys
+     * @param mixed $values Criteria or Site object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SiteTableMap::DATABASE_NAME);
@@ -1130,7 +1138,7 @@ class SiteTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return SiteQuery::create()->doDeleteAll($con);
     }
@@ -1138,13 +1146,13 @@ class SiteTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Site or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Site object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Site object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(SiteTableMap::DATABASE_NAME);
@@ -1171,4 +1179,4 @@ class SiteTableMap extends TableMap
         });
     }
 
-} // SiteTableMap
+}

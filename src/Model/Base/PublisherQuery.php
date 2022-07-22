@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -128,8 +129,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\ArticleQuery|\Model\RightQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPublisher|null findOne(ConnectionInterface $con = null) Return the first ChildPublisher matching the query
- * @method     ChildPublisher findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPublisher matching the query, or a new ChildPublisher object populated from the query conditions when no match is found
+ * @method     ChildPublisher|null findOne(?ConnectionInterface $con = null) Return the first ChildPublisher matching the query
+ * @method     ChildPublisher findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildPublisher matching the query, or a new ChildPublisher object populated from the query conditions when no match is found
  *
  * @method     ChildPublisher|null findOneById(int $publisher_id) Return the first ChildPublisher filtered by the publisher_id column
  * @method     ChildPublisher|null findOneBySiteId(int $site_id) Return the first ChildPublisher filtered by the site_id column
@@ -170,8 +171,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisher|null findOneByCreatedAt(string $publisher_created) Return the first ChildPublisher filtered by the publisher_created column
  * @method     ChildPublisher|null findOneByUpdatedAt(string $publisher_updated) Return the first ChildPublisher filtered by the publisher_updated column *
 
- * @method     ChildPublisher requirePk($key, ConnectionInterface $con = null) Return the ChildPublisher by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPublisher requireOne(ConnectionInterface $con = null) Return the first ChildPublisher matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPublisher requirePk($key, ?ConnectionInterface $con = null) Return the ChildPublisher by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPublisher requireOne(?ConnectionInterface $con = null) Return the first ChildPublisher matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPublisher requireOneById(int $publisher_id) Return the first ChildPublisher filtered by the publisher_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPublisher requireOneBySiteId(int $site_id) Return the first ChildPublisher filtered by the site_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -212,86 +213,86 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPublisher requireOneByCreatedAt(string $publisher_created) Return the first ChildPublisher filtered by the publisher_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPublisher requireOneByUpdatedAt(string $publisher_updated) Return the first ChildPublisher filtered by the publisher_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPublisher[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> find(ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
- * @method     ChildPublisher[]|ObjectCollection findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
- * @method     ChildPublisher[]|ObjectCollection findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
- * @method     ChildPublisher[]|ObjectCollection findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
- * @method     ChildPublisher[]|ObjectCollection findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
- * @method     ChildPublisher[]|ObjectCollection findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
- * @method     ChildPublisher[]|ObjectCollection findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
- * @method     ChildPublisher[]|ObjectCollection findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
- * @method     ChildPublisher[]|ObjectCollection findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
- * @method     ChildPublisher[]|ObjectCollection findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
- * @method     ChildPublisher[]|ObjectCollection findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
- * @method     ChildPublisher[]|ObjectCollection findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
- * @method     ChildPublisher[]|ObjectCollection findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
- * @method     ChildPublisher[]|ObjectCollection findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
- * @method     ChildPublisher[]|ObjectCollection findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
- * @method     ChildPublisher[]|ObjectCollection findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
- * @method     ChildPublisher[]|ObjectCollection findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
- * @method     ChildPublisher[]|ObjectCollection findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
- * @method     ChildPublisher[]|ObjectCollection findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
- * @method     ChildPublisher[]|ObjectCollection findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
- * @method     ChildPublisher[]|ObjectCollection findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
- * @method     ChildPublisher[]|ObjectCollection findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
- * @method     ChildPublisher[]|ObjectCollection findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
- * @method     ChildPublisher[]|ObjectCollection findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
- * @method     ChildPublisher[]|ObjectCollection findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
- * @method     ChildPublisher[]|ObjectCollection findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
- * @method     ChildPublisher[]|ObjectCollection findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
- * @method     ChildPublisher[]|ObjectCollection findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
- * @method     ChildPublisher[]|ObjectCollection findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
- * @method     ChildPublisher[]|ObjectCollection findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
- * @method     ChildPublisher[]|ObjectCollection findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
- * @method     ChildPublisher[]|ObjectCollection findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
- * @method     ChildPublisher[]|ObjectCollection findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
- * @method     ChildPublisher[]|ObjectCollection findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
- * @method     ChildPublisher[]|ObjectCollection findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
- * @method     ChildPublisher[]|ObjectCollection findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
- * @method     ChildPublisher[]|ObjectCollection findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
- * @method     ChildPublisher[]|ObjectCollection findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
- * @method     ChildPublisher[]|ObjectCollection findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildPublisher> findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
- * @method     ChildPublisher[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPublisher> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildPublisher[]|Collection find(?ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildPublisher> find(?ConnectionInterface $con = null) Return ChildPublisher objects based on current ModelCriteria
+ * @method     ChildPublisher[]|Collection findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findById(int $publisher_id) Return ChildPublisher objects filtered by the publisher_id column
+ * @method     ChildPublisher[]|Collection findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findBySiteId(int $site_id) Return ChildPublisher objects filtered by the site_id column
+ * @method     ChildPublisher[]|Collection findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByName(string $publisher_name) Return ChildPublisher objects filtered by the publisher_name column
+ * @method     ChildPublisher[]|Collection findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByNameAlphabetic(string $publisher_name_alphabetic) Return ChildPublisher objects filtered by the publisher_name_alphabetic column
+ * @method     ChildPublisher[]|Collection findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByUrl(string $publisher_url) Return ChildPublisher objects filtered by the publisher_url column
+ * @method     ChildPublisher[]|Collection findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByNoosfereId(int $publisher_noosfere_id) Return ChildPublisher objects filtered by the publisher_noosfere_id column
+ * @method     ChildPublisher[]|Collection findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByRepresentative(string $publisher_representative) Return ChildPublisher objects filtered by the publisher_representative column
+ * @method     ChildPublisher[]|Collection findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByAddress(string $publisher_address) Return ChildPublisher objects filtered by the publisher_address column
+ * @method     ChildPublisher[]|Collection findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByPostalCode(string $publisher_postal_code) Return ChildPublisher objects filtered by the publisher_postal_code column
+ * @method     ChildPublisher[]|Collection findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByCity(string $publisher_city) Return ChildPublisher objects filtered by the publisher_city column
+ * @method     ChildPublisher[]|Collection findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByCountry(string $publisher_country) Return ChildPublisher objects filtered by the publisher_country column
+ * @method     ChildPublisher[]|Collection findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByPhone(string $publisher_phone) Return ChildPublisher objects filtered by the publisher_phone column
+ * @method     ChildPublisher[]|Collection findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByFax(string $publisher_fax) Return ChildPublisher objects filtered by the publisher_fax column
+ * @method     ChildPublisher[]|Collection findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByWebsite(string $publisher_website) Return ChildPublisher objects filtered by the publisher_website column
+ * @method     ChildPublisher[]|Collection findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByBuyLink(string $publisher_buy_link) Return ChildPublisher objects filtered by the publisher_buy_link column
+ * @method     ChildPublisher[]|Collection findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByEmail(string $publisher_email) Return ChildPublisher objects filtered by the publisher_email column
+ * @method     ChildPublisher[]|Collection findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByFacebook(string $publisher_facebook) Return ChildPublisher objects filtered by the publisher_facebook column
+ * @method     ChildPublisher[]|Collection findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByTwitter(string $publisher_twitter) Return ChildPublisher objects filtered by the publisher_twitter column
+ * @method     ChildPublisher[]|Collection findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByLegalForm(string $publisher_legal_form) Return ChildPublisher objects filtered by the publisher_legal_form column
+ * @method     ChildPublisher[]|Collection findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByCreationYear(string $publisher_creation_year) Return ChildPublisher objects filtered by the publisher_creation_year column
+ * @method     ChildPublisher[]|Collection findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByIsbn(string $publisher_isbn) Return ChildPublisher objects filtered by the publisher_isbn column
+ * @method     ChildPublisher[]|Collection findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByVolumes(int $publisher_volumes) Return ChildPublisher objects filtered by the publisher_volumes column
+ * @method     ChildPublisher[]|Collection findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByAverageRun(int $publisher_average_run) Return ChildPublisher objects filtered by the publisher_average_run column
+ * @method     ChildPublisher[]|Collection findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findBySpecialities(string $publisher_specialities) Return ChildPublisher objects filtered by the publisher_specialities column
+ * @method     ChildPublisher[]|Collection findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByDiffuseur(string $publisher_diffuseur) Return ChildPublisher objects filtered by the publisher_diffuseur column
+ * @method     ChildPublisher[]|Collection findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByDistributeur(string $publisher_distributeur) Return ChildPublisher objects filtered by the publisher_distributeur column
+ * @method     ChildPublisher[]|Collection findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByVpc(boolean $publisher_vpc) Return ChildPublisher objects filtered by the publisher_vpc column
+ * @method     ChildPublisher[]|Collection findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByPaypal(string $publisher_paypal) Return ChildPublisher objects filtered by the publisher_paypal column
+ * @method     ChildPublisher[]|Collection findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByShippingMode(string $publisher_shipping_mode) Return ChildPublisher objects filtered by the publisher_shipping_mode column
+ * @method     ChildPublisher[]|Collection findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByShippingFee(int $publisher_shipping_fee) Return ChildPublisher objects filtered by the publisher_shipping_fee column
+ * @method     ChildPublisher[]|Collection findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByGln(string $publisher_gln) Return ChildPublisher objects filtered by the publisher_gln column
+ * @method     ChildPublisher[]|Collection findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByDesc(string $publisher_desc) Return ChildPublisher objects filtered by the publisher_desc column
+ * @method     ChildPublisher[]|Collection findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByDescShort(string $publisher_desc_short) Return ChildPublisher objects filtered by the publisher_desc_short column
+ * @method     ChildPublisher[]|Collection findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByOrderBy(string $publisher_order_by) Return ChildPublisher objects filtered by the publisher_order_by column
+ * @method     ChildPublisher[]|Collection findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByInsert(string $publisher_insert) Return ChildPublisher objects filtered by the publisher_insert column
+ * @method     ChildPublisher[]|Collection findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByUpdate(string $publisher_update) Return ChildPublisher objects filtered by the publisher_update column
+ * @method     ChildPublisher[]|Collection findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByCreatedAt(string $publisher_created) Return ChildPublisher objects filtered by the publisher_created column
+ * @method     ChildPublisher[]|Collection findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
+ * @psalm-method Collection&\Traversable<ChildPublisher> findByUpdatedAt(string $publisher_updated) Return ChildPublisher objects filtered by the publisher_updated column
+ * @method     ChildPublisher[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPublisher> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class PublisherQuery extends ModelCriteria
@@ -301,9 +302,9 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\PublisherQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Publisher', $modelAlias = null)
     {
@@ -313,12 +314,12 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Returns a new ChildPublisherQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildPublisherQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildPublisherQuery) {
             return $criteria;
@@ -348,7 +349,7 @@ abstract class PublisherQuery extends ModelCriteria
      *
      * @return ChildPublisher|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -380,8 +381,8 @@ abstract class PublisherQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -413,8 +414,8 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPublisher|array|mixed the result, formatted by the current formatter
      */
@@ -434,12 +435,12 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -456,27 +457,31 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -489,15 +494,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE publisher_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -517,7 +522,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $id, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -530,15 +537,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
      *
-     * @param     mixed $siteId The value to use as filter.
+     * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySiteId($siteId = null, $comparison = null)
+    public function filterBySiteId($siteId = null, ?string $comparison = null)
     {
         if (is_array($siteId)) {
             $useMinMax = false;
@@ -558,7 +565,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_SITE_ID, $siteId, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_SITE_ID, $siteId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -568,14 +577,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE publisher_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE publisher_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE publisher_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -583,7 +593,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NAME, $name, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -593,14 +605,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByNameAlphabetic('fooValue');   // WHERE publisher_name_alphabetic = 'fooValue'
      * $query->filterByNameAlphabetic('%fooValue%', Criteria::LIKE); // WHERE publisher_name_alphabetic LIKE '%fooValue%'
+     * $query->filterByNameAlphabetic(['foo', 'bar']); // WHERE publisher_name_alphabetic IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nameAlphabetic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nameAlphabetic The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNameAlphabetic($nameAlphabetic = null, $comparison = null)
+    public function filterByNameAlphabetic($nameAlphabetic = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nameAlphabetic)) {
@@ -608,7 +621,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NAME_ALPHABETIC, $nameAlphabetic, $comparison);
+
+        return $this;
     }
 
     /**
@@ -618,14 +633,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE publisher_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE publisher_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE publisher_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -633,7 +649,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_URL, $url, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -646,15 +664,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByNoosfereId(array('min' => 12)); // WHERE publisher_noosfere_id > 12
      * </code>
      *
-     * @param     mixed $noosfereId The value to use as filter.
+     * @param mixed $noosfereId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNoosfereId($noosfereId = null, $comparison = null)
+    public function filterByNoosfereId($noosfereId = null, ?string $comparison = null)
     {
         if (is_array($noosfereId)) {
             $useMinMax = false;
@@ -674,7 +692,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID, $noosfereId, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_NOOSFERE_ID, $noosfereId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -684,14 +704,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByRepresentative('fooValue');   // WHERE publisher_representative = 'fooValue'
      * $query->filterByRepresentative('%fooValue%', Criteria::LIKE); // WHERE publisher_representative LIKE '%fooValue%'
+     * $query->filterByRepresentative(['foo', 'bar']); // WHERE publisher_representative IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $representative The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $representative The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRepresentative($representative = null, $comparison = null)
+    public function filterByRepresentative($representative = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($representative)) {
@@ -699,7 +720,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE, $representative, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_REPRESENTATIVE, $representative, $comparison);
+
+        return $this;
     }
 
     /**
@@ -709,14 +732,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByAddress('fooValue');   // WHERE publisher_address = 'fooValue'
      * $query->filterByAddress('%fooValue%', Criteria::LIKE); // WHERE publisher_address LIKE '%fooValue%'
+     * $query->filterByAddress(['foo', 'bar']); // WHERE publisher_address IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $address The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $address The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAddress($address = null, $comparison = null)
+    public function filterByAddress($address = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($address)) {
@@ -724,7 +748,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ADDRESS, $address, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ADDRESS, $address, $comparison);
+
+        return $this;
     }
 
     /**
@@ -734,14 +760,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByPostalCode('fooValue');   // WHERE publisher_postal_code = 'fooValue'
      * $query->filterByPostalCode('%fooValue%', Criteria::LIKE); // WHERE publisher_postal_code LIKE '%fooValue%'
+     * $query->filterByPostalCode(['foo', 'bar']); // WHERE publisher_postal_code IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $postalCode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $postalCode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPostalCode($postalCode = null, $comparison = null)
+    public function filterByPostalCode($postalCode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($postalCode)) {
@@ -749,7 +776,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_POSTAL_CODE, $postalCode, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_POSTAL_CODE, $postalCode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -759,14 +788,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByCity('fooValue');   // WHERE publisher_city = 'fooValue'
      * $query->filterByCity('%fooValue%', Criteria::LIKE); // WHERE publisher_city LIKE '%fooValue%'
+     * $query->filterByCity(['foo', 'bar']); // WHERE publisher_city IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $city The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $city The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCity($city = null, $comparison = null)
+    public function filterByCity($city = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($city)) {
@@ -774,7 +804,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CITY, $city, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CITY, $city, $comparison);
+
+        return $this;
     }
 
     /**
@@ -784,14 +816,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByCountry('fooValue');   // WHERE publisher_country = 'fooValue'
      * $query->filterByCountry('%fooValue%', Criteria::LIKE); // WHERE publisher_country LIKE '%fooValue%'
+     * $query->filterByCountry(['foo', 'bar']); // WHERE publisher_country IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $country The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $country The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCountry($country = null, $comparison = null)
+    public function filterByCountry($country = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($country)) {
@@ -799,7 +832,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_COUNTRY, $country, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_COUNTRY, $country, $comparison);
+
+        return $this;
     }
 
     /**
@@ -809,14 +844,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByPhone('fooValue');   // WHERE publisher_phone = 'fooValue'
      * $query->filterByPhone('%fooValue%', Criteria::LIKE); // WHERE publisher_phone LIKE '%fooValue%'
+     * $query->filterByPhone(['foo', 'bar']); // WHERE publisher_phone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $phone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $phone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPhone($phone = null, $comparison = null)
+    public function filterByPhone($phone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($phone)) {
@@ -824,7 +860,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_PHONE, $phone, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_PHONE, $phone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -834,14 +872,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByFax('fooValue');   // WHERE publisher_fax = 'fooValue'
      * $query->filterByFax('%fooValue%', Criteria::LIKE); // WHERE publisher_fax LIKE '%fooValue%'
+     * $query->filterByFax(['foo', 'bar']); // WHERE publisher_fax IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $fax The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $fax The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFax($fax = null, $comparison = null)
+    public function filterByFax($fax = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($fax)) {
@@ -849,7 +888,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_FAX, $fax, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_FAX, $fax, $comparison);
+
+        return $this;
     }
 
     /**
@@ -859,14 +900,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByWebsite('fooValue');   // WHERE publisher_website = 'fooValue'
      * $query->filterByWebsite('%fooValue%', Criteria::LIKE); // WHERE publisher_website LIKE '%fooValue%'
+     * $query->filterByWebsite(['foo', 'bar']); // WHERE publisher_website IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $website The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $website The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWebsite($website = null, $comparison = null)
+    public function filterByWebsite($website = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($website)) {
@@ -874,7 +916,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_WEBSITE, $website, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_WEBSITE, $website, $comparison);
+
+        return $this;
     }
 
     /**
@@ -884,14 +928,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByBuyLink('fooValue');   // WHERE publisher_buy_link = 'fooValue'
      * $query->filterByBuyLink('%fooValue%', Criteria::LIKE); // WHERE publisher_buy_link LIKE '%fooValue%'
+     * $query->filterByBuyLink(['foo', 'bar']); // WHERE publisher_buy_link IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $buyLink The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $buyLink The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBuyLink($buyLink = null, $comparison = null)
+    public function filterByBuyLink($buyLink = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($buyLink)) {
@@ -899,7 +944,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_BUY_LINK, $buyLink, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_BUY_LINK, $buyLink, $comparison);
+
+        return $this;
     }
 
     /**
@@ -909,14 +956,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByEmail('fooValue');   // WHERE publisher_email = 'fooValue'
      * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE publisher_email LIKE '%fooValue%'
+     * $query->filterByEmail(['foo', 'bar']); // WHERE publisher_email IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $email The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $email The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEmail($email = null, $comparison = null)
+    public function filterByEmail($email = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($email)) {
@@ -924,7 +972,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_EMAIL, $email, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_EMAIL, $email, $comparison);
+
+        return $this;
     }
 
     /**
@@ -934,14 +984,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByFacebook('fooValue');   // WHERE publisher_facebook = 'fooValue'
      * $query->filterByFacebook('%fooValue%', Criteria::LIKE); // WHERE publisher_facebook LIKE '%fooValue%'
+     * $query->filterByFacebook(['foo', 'bar']); // WHERE publisher_facebook IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $facebook The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $facebook The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFacebook($facebook = null, $comparison = null)
+    public function filterByFacebook($facebook = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($facebook)) {
@@ -949,7 +1000,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_FACEBOOK, $facebook, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_FACEBOOK, $facebook, $comparison);
+
+        return $this;
     }
 
     /**
@@ -959,14 +1012,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByTwitter('fooValue');   // WHERE publisher_twitter = 'fooValue'
      * $query->filterByTwitter('%fooValue%', Criteria::LIKE); // WHERE publisher_twitter LIKE '%fooValue%'
+     * $query->filterByTwitter(['foo', 'bar']); // WHERE publisher_twitter IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $twitter The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $twitter The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTwitter($twitter = null, $comparison = null)
+    public function filterByTwitter($twitter = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($twitter)) {
@@ -974,7 +1028,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_TWITTER, $twitter, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_TWITTER, $twitter, $comparison);
+
+        return $this;
     }
 
     /**
@@ -984,14 +1040,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByLegalForm('fooValue');   // WHERE publisher_legal_form = 'fooValue'
      * $query->filterByLegalForm('%fooValue%', Criteria::LIKE); // WHERE publisher_legal_form LIKE '%fooValue%'
+     * $query->filterByLegalForm(['foo', 'bar']); // WHERE publisher_legal_form IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $legalForm The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $legalForm The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLegalForm($legalForm = null, $comparison = null)
+    public function filterByLegalForm($legalForm = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($legalForm)) {
@@ -999,7 +1056,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_LEGAL_FORM, $legalForm, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_LEGAL_FORM, $legalForm, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1009,14 +1068,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByCreationYear('fooValue');   // WHERE publisher_creation_year = 'fooValue'
      * $query->filterByCreationYear('%fooValue%', Criteria::LIKE); // WHERE publisher_creation_year LIKE '%fooValue%'
+     * $query->filterByCreationYear(['foo', 'bar']); // WHERE publisher_creation_year IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $creationYear The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $creationYear The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreationYear($creationYear = null, $comparison = null)
+    public function filterByCreationYear($creationYear = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($creationYear)) {
@@ -1024,7 +1084,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATION_YEAR, $creationYear, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATION_YEAR, $creationYear, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1034,14 +1096,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByIsbn('fooValue');   // WHERE publisher_isbn = 'fooValue'
      * $query->filterByIsbn('%fooValue%', Criteria::LIKE); // WHERE publisher_isbn LIKE '%fooValue%'
+     * $query->filterByIsbn(['foo', 'bar']); // WHERE publisher_isbn IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $isbn The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $isbn The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIsbn($isbn = null, $comparison = null)
+    public function filterByIsbn($isbn = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($isbn)) {
@@ -1049,7 +1112,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ISBN, $isbn, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ISBN, $isbn, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1062,15 +1127,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByVolumes(array('min' => 12)); // WHERE publisher_volumes > 12
      * </code>
      *
-     * @param     mixed $volumes The value to use as filter.
+     * @param mixed $volumes The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVolumes($volumes = null, $comparison = null)
+    public function filterByVolumes($volumes = null, ?string $comparison = null)
     {
         if (is_array($volumes)) {
             $useMinMax = false;
@@ -1090,7 +1155,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_VOLUMES, $volumes, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_VOLUMES, $volumes, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1103,15 +1170,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByAverageRun(array('min' => 12)); // WHERE publisher_average_run > 12
      * </code>
      *
-     * @param     mixed $averageRun The value to use as filter.
+     * @param mixed $averageRun The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAverageRun($averageRun = null, $comparison = null)
+    public function filterByAverageRun($averageRun = null, ?string $comparison = null)
     {
         if (is_array($averageRun)) {
             $useMinMax = false;
@@ -1131,7 +1198,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN, $averageRun, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_AVERAGE_RUN, $averageRun, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1141,14 +1210,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterBySpecialities('fooValue');   // WHERE publisher_specialities = 'fooValue'
      * $query->filterBySpecialities('%fooValue%', Criteria::LIKE); // WHERE publisher_specialities LIKE '%fooValue%'
+     * $query->filterBySpecialities(['foo', 'bar']); // WHERE publisher_specialities IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $specialities The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $specialities The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySpecialities($specialities = null, $comparison = null)
+    public function filterBySpecialities($specialities = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($specialities)) {
@@ -1156,7 +1226,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SPECIALITIES, $specialities, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SPECIALITIES, $specialities, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1166,14 +1238,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByDiffuseur('fooValue');   // WHERE publisher_diffuseur = 'fooValue'
      * $query->filterByDiffuseur('%fooValue%', Criteria::LIKE); // WHERE publisher_diffuseur LIKE '%fooValue%'
+     * $query->filterByDiffuseur(['foo', 'bar']); // WHERE publisher_diffuseur IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $diffuseur The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $diffuseur The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDiffuseur($diffuseur = null, $comparison = null)
+    public function filterByDiffuseur($diffuseur = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($diffuseur)) {
@@ -1181,7 +1254,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DIFFUSEUR, $diffuseur, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DIFFUSEUR, $diffuseur, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1191,14 +1266,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByDistributeur('fooValue');   // WHERE publisher_distributeur = 'fooValue'
      * $query->filterByDistributeur('%fooValue%', Criteria::LIKE); // WHERE publisher_distributeur LIKE '%fooValue%'
+     * $query->filterByDistributeur(['foo', 'bar']); // WHERE publisher_distributeur IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $distributeur The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $distributeur The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDistributeur($distributeur = null, $comparison = null)
+    public function filterByDistributeur($distributeur = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($distributeur)) {
@@ -1206,7 +1282,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR, $distributeur, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DISTRIBUTEUR, $distributeur, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1218,22 +1296,24 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByVpc('yes'); // WHERE publisher_vpc = true
      * </code>
      *
-     * @param     boolean|string $vpc The value to use as filter.
+     * @param bool|string $vpc The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByVpc($vpc = null, $comparison = null)
+    public function filterByVpc($vpc = null, ?string $comparison = null)
     {
         if (is_string($vpc)) {
             $vpc = in_array(strtolower($vpc), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_VPC, $vpc, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_VPC, $vpc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1243,14 +1323,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByPaypal('fooValue');   // WHERE publisher_paypal = 'fooValue'
      * $query->filterByPaypal('%fooValue%', Criteria::LIKE); // WHERE publisher_paypal LIKE '%fooValue%'
+     * $query->filterByPaypal(['foo', 'bar']); // WHERE publisher_paypal IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $paypal The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $paypal The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPaypal($paypal = null, $comparison = null)
+    public function filterByPaypal($paypal = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($paypal)) {
@@ -1258,7 +1339,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_PAYPAL, $paypal, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_PAYPAL, $paypal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1268,14 +1351,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByShippingMode('fooValue');   // WHERE publisher_shipping_mode = 'fooValue'
      * $query->filterByShippingMode('%fooValue%', Criteria::LIKE); // WHERE publisher_shipping_mode LIKE '%fooValue%'
+     * $query->filterByShippingMode(['foo', 'bar']); // WHERE publisher_shipping_mode IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $shippingMode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $shippingMode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingMode($shippingMode = null, $comparison = null)
+    public function filterByShippingMode($shippingMode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($shippingMode)) {
@@ -1283,7 +1367,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE, $shippingMode, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SHIPPING_MODE, $shippingMode, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1296,15 +1382,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByShippingFee(array('min' => 12)); // WHERE publisher_shipping_fee > 12
      * </code>
      *
-     * @param     mixed $shippingFee The value to use as filter.
+     * @param mixed $shippingFee The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingFee($shippingFee = null, $comparison = null)
+    public function filterByShippingFee($shippingFee = null, ?string $comparison = null)
     {
         if (is_array($shippingFee)) {
             $useMinMax = false;
@@ -1324,7 +1410,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE, $shippingFee, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_SHIPPING_FEE, $shippingFee, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1337,15 +1425,15 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByGln(array('min' => 12)); // WHERE publisher_gln > 12
      * </code>
      *
-     * @param     mixed $gln The value to use as filter.
+     * @param mixed $gln The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByGln($gln = null, $comparison = null)
+    public function filterByGln($gln = null, ?string $comparison = null)
     {
         if (is_array($gln)) {
             $useMinMax = false;
@@ -1365,7 +1453,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_GLN, $gln, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_GLN, $gln, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1375,14 +1465,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByDesc('fooValue');   // WHERE publisher_desc = 'fooValue'
      * $query->filterByDesc('%fooValue%', Criteria::LIKE); // WHERE publisher_desc LIKE '%fooValue%'
+     * $query->filterByDesc(['foo', 'bar']); // WHERE publisher_desc IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $desc The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $desc The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDesc($desc = null, $comparison = null)
+    public function filterByDesc($desc = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($desc)) {
@@ -1390,7 +1481,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DESC, $desc, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DESC, $desc, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1400,14 +1493,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByDescShort('fooValue');   // WHERE publisher_desc_short = 'fooValue'
      * $query->filterByDescShort('%fooValue%', Criteria::LIKE); // WHERE publisher_desc_short LIKE '%fooValue%'
+     * $query->filterByDescShort(['foo', 'bar']); // WHERE publisher_desc_short IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $descShort The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $descShort The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDescShort($descShort = null, $comparison = null)
+    public function filterByDescShort($descShort = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($descShort)) {
@@ -1415,7 +1509,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DESC_SHORT, $descShort, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_DESC_SHORT, $descShort, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1425,14 +1521,15 @@ abstract class PublisherQuery extends ModelCriteria
      * <code>
      * $query->filterByOrderBy('fooValue');   // WHERE publisher_order_by = 'fooValue'
      * $query->filterByOrderBy('%fooValue%', Criteria::LIKE); // WHERE publisher_order_by LIKE '%fooValue%'
+     * $query->filterByOrderBy(['foo', 'bar']); // WHERE publisher_order_by IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $orderBy The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $orderBy The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOrderBy($orderBy = null, $comparison = null)
+    public function filterByOrderBy($orderBy = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($orderBy)) {
@@ -1440,7 +1537,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ORDER_BY, $orderBy, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ORDER_BY, $orderBy, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1453,17 +1552,17 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE publisher_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -1483,7 +1582,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_INSERT, $insert, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1496,17 +1597,17 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE publisher_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -1526,7 +1627,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATE, $update, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1539,17 +1642,17 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE publisher_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -1569,7 +1672,9 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1582,17 +1687,17 @@ abstract class PublisherQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE publisher_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -1612,27 +1717,33 @@ abstract class PublisherQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Article object
      *
      * @param \Model\Article|ObjectCollection $article the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByArticle($article, $comparison = null)
+    public function filterByArticle($article, ?string $comparison = null)
     {
         if ($article instanceof \Model\Article) {
-            return $this
+            $this
                 ->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $article->getPublisherId(), $comparison);
+
+            return $this;
         } elseif ($article instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useArticleQuery()
                 ->filterByPrimaryKeys($article->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByArticle() only accepts arguments of type \Model\Article or Collection');
         }
@@ -1641,12 +1752,12 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Article relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinArticle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinArticle(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Article');
@@ -1675,9 +1786,9 @@ abstract class PublisherQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\ArticleQuery A secondary query class using the current class as primary query
      */
@@ -1747,20 +1858,24 @@ abstract class PublisherQuery extends ModelCriteria
      * Filter the query by a related \Model\Right object
      *
      * @param \Model\Right|ObjectCollection $right the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRight($right, $comparison = null)
+    public function filterByRight($right, ?string $comparison = null)
     {
         if ($right instanceof \Model\Right) {
-            return $this
+            $this
                 ->addUsingAlias(PublisherTableMap::COL_PUBLISHER_ID, $right->getPublisherId(), $comparison);
+
+            return $this;
         } elseif ($right instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useRightQuery()
                 ->filterByPrimaryKeys($right->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByRight() only accepts arguments of type \Model\Right or Collection');
         }
@@ -1769,12 +1884,12 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Right relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinRight($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRight(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Right');
@@ -1803,9 +1918,9 @@ abstract class PublisherQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\RightQuery A secondary query class using the current class as primary query
      */
@@ -1874,9 +1989,9 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPublisher $publisher Object to remove from the list of results
+     * @param ChildPublisher $publisher Object to remove from the list of results
      *
-     * @return $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($publisher = null)
     {
@@ -1893,7 +2008,7 @@ abstract class PublisherQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PublisherTableMap::DATABASE_NAME);
@@ -1918,12 +2033,12 @@ abstract class PublisherQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PublisherTableMap::DATABASE_NAME);
@@ -1953,65 +2068,77 @@ abstract class PublisherQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
+        $this->addDescendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
+        $this->addAscendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
+        $this->addDescendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(PublisherTableMap::COL_PUBLISHER_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildPublisherQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
+        $this->addAscendingOrderByColumn(PublisherTableMap::COL_PUBLISHER_CREATED);
+
+        return $this;
     }
 
-} // PublisherQuery
+}

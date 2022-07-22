@@ -11,6 +11,7 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -238,8 +239,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \Model\PublisherQuery|\Model\BookCollectionQuery|\Model\LinkQuery|\Model\RoleQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildArticle|null findOne(ConnectionInterface $con = null) Return the first ChildArticle matching the query
- * @method     ChildArticle findOneOrCreate(ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
+ * @method     ChildArticle|null findOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query
+ * @method     ChildArticle findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildArticle matching the query, or a new ChildArticle object populated from the query conditions when no match is found
  *
  * @method     ChildArticle|null findOneById(int $article_id) Return the first ChildArticle filtered by the article_id column
  * @method     ChildArticle|null findOneByItem(int $article_item) Return the first ChildArticle filtered by the article_item column
@@ -320,8 +321,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle|null findOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column
  * @method     ChildArticle|null findOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column *
 
- * @method     ChildArticle requirePk($key, ConnectionInterface $con = null) Return the ChildArticle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildArticle requireOne(ConnectionInterface $con = null) Return the first ChildArticle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requirePk($key, ?ConnectionInterface $con = null) Return the ChildArticle by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildArticle requireOne(?ConnectionInterface $con = null) Return the first ChildArticle matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildArticle requireOneById(int $article_id) Return the first ChildArticle filtered by the article_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByItem(int $article_item) Return the first ChildArticle filtered by the article_item column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -402,166 +403,166 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticle requireOneByDeletionDate(string $article_deletion_date) Return the first ChildArticle filtered by the article_deletion_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticle requireOneByDeletionReason(string $article_deletion_reason) Return the first ChildArticle filtered by the article_deletion_reason column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildArticle[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> find(ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
- * @method     ChildArticle[]|ObjectCollection findById(int $article_id) Return ChildArticle objects filtered by the article_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findById(int $article_id) Return ChildArticle objects filtered by the article_id column
- * @method     ChildArticle[]|ObjectCollection findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
- * @method     ChildArticle[]|ObjectCollection findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
- * @method     ChildArticle[]|ObjectCollection findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
- * @method     ChildArticle[]|ObjectCollection findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
- * @method     ChildArticle[]|ObjectCollection findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
- * @method     ChildArticle[]|ObjectCollection findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
- * @method     ChildArticle[]|ObjectCollection findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
- * @method     ChildArticle[]|ObjectCollection findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
- * @method     ChildArticle[]|ObjectCollection findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
- * @method     ChildArticle[]|ObjectCollection findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
- * @method     ChildArticle[]|ObjectCollection findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
- * @method     ChildArticle[]|ObjectCollection findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
- * @method     ChildArticle[]|ObjectCollection findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
- * @method     ChildArticle[]|ObjectCollection findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
- * @method     ChildArticle[]|ObjectCollection findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
- * @method     ChildArticle[]|ObjectCollection findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
- * @method     ChildArticle[]|ObjectCollection findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
- * @method     ChildArticle[]|ObjectCollection findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
- * @method     ChildArticle[]|ObjectCollection findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
- * @method     ChildArticle[]|ObjectCollection findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
- * @method     ChildArticle[]|ObjectCollection findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
- * @method     ChildArticle[]|ObjectCollection findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
- * @method     ChildArticle[]|ObjectCollection findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
- * @method     ChildArticle[]|ObjectCollection findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
- * @method     ChildArticle[]|ObjectCollection findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
- * @method     ChildArticle[]|ObjectCollection findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
- * @method     ChildArticle[]|ObjectCollection findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
- * @method     ChildArticle[]|ObjectCollection findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
- * @method     ChildArticle[]|ObjectCollection findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
- * @method     ChildArticle[]|ObjectCollection findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
- * @method     ChildArticle[]|ObjectCollection findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
- * @method     ChildArticle[]|ObjectCollection findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
- * @method     ChildArticle[]|ObjectCollection findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
- * @method     ChildArticle[]|ObjectCollection findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
- * @method     ChildArticle[]|ObjectCollection findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
- * @method     ChildArticle[]|ObjectCollection findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
- * @method     ChildArticle[]|ObjectCollection findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
- * @method     ChildArticle[]|ObjectCollection findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
- * @method     ChildArticle[]|ObjectCollection findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
- * @method     ChildArticle[]|ObjectCollection findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
- * @method     ChildArticle[]|ObjectCollection findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
- * @method     ChildArticle[]|ObjectCollection findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
- * @method     ChildArticle[]|ObjectCollection findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
- * @method     ChildArticle[]|ObjectCollection findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
- * @method     ChildArticle[]|ObjectCollection findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
- * @method     ChildArticle[]|ObjectCollection findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
- * @method     ChildArticle[]|ObjectCollection findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
- * @method     ChildArticle[]|ObjectCollection findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
- * @method     ChildArticle[]|ObjectCollection findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
- * @method     ChildArticle[]|ObjectCollection findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
- * @method     ChildArticle[]|ObjectCollection findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
- * @method     ChildArticle[]|ObjectCollection findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
- * @method     ChildArticle[]|ObjectCollection findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
- * @method     ChildArticle[]|ObjectCollection findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
- * @method     ChildArticle[]|ObjectCollection findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
- * @method     ChildArticle[]|ObjectCollection findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
- * @method     ChildArticle[]|ObjectCollection findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
- * @method     ChildArticle[]|ObjectCollection findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
- * @method     ChildArticle[]|ObjectCollection findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
- * @method     ChildArticle[]|ObjectCollection findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
- * @method     ChildArticle[]|ObjectCollection findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
- * @method     ChildArticle[]|ObjectCollection findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
- * @method     ChildArticle[]|ObjectCollection findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
- * @method     ChildArticle[]|ObjectCollection findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
- * @method     ChildArticle[]|ObjectCollection findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
- * @method     ChildArticle[]|ObjectCollection findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
- * @method     ChildArticle[]|ObjectCollection findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
- * @method     ChildArticle[]|ObjectCollection findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
- * @method     ChildArticle[]|ObjectCollection findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
- * @method     ChildArticle[]|ObjectCollection findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
- * @method     ChildArticle[]|ObjectCollection findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
- * @method     ChildArticle[]|ObjectCollection findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
- * @method     ChildArticle[]|ObjectCollection findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
- * @method     ChildArticle[]|ObjectCollection findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
- * @method     ChildArticle[]|ObjectCollection findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
- * @method     ChildArticle[]|ObjectCollection findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
- * @method     ChildArticle[]|ObjectCollection findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
- * @psalm-method ObjectCollection&\Traversable<ChildArticle> findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
- * @method     ChildArticle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticle> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildArticle[]|Collection find(?ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildArticle> find(?ConnectionInterface $con = null) Return ChildArticle objects based on current ModelCriteria
+ * @method     ChildArticle[]|Collection findById(int $article_id) Return ChildArticle objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findById(int $article_id) Return ChildArticle objects filtered by the article_id column
+ * @method     ChildArticle[]|Collection findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByItem(int $article_item) Return ChildArticle objects filtered by the article_item column
+ * @method     ChildArticle[]|Collection findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTextid(string $article_textid) Return ChildArticle objects filtered by the article_textid column
+ * @method     ChildArticle[]|Collection findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByEan(string $article_ean) Return ChildArticle objects filtered by the article_ean column
+ * @method     ChildArticle[]|Collection findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByEanOthers(string $article_ean_others) Return ChildArticle objects filtered by the article_ean_others column
+ * @method     ChildArticle[]|Collection findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAsin(string $article_asin) Return ChildArticle objects filtered by the article_asin column
+ * @method     ChildArticle[]|Collection findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByNoosfereId(int $article_noosfere_id) Return ChildArticle objects filtered by the article_noosfere_id column
+ * @method     ChildArticle[]|Collection findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByUrl(string $article_url) Return ChildArticle objects filtered by the article_url column
+ * @method     ChildArticle[]|Collection findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTypeId(int $type_id) Return ChildArticle objects filtered by the type_id column
+ * @method     ChildArticle[]|Collection findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTitle(string $article_title) Return ChildArticle objects filtered by the article_title column
+ * @method     ChildArticle[]|Collection findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTitleAlphabetic(string $article_title_alphabetic) Return ChildArticle objects filtered by the article_title_alphabetic column
+ * @method     ChildArticle[]|Collection findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTitleOriginal(string $article_title_original) Return ChildArticle objects filtered by the article_title_original column
+ * @method     ChildArticle[]|Collection findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTitleOthers(string $article_title_others) Return ChildArticle objects filtered by the article_title_others column
+ * @method     ChildArticle[]|Collection findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
+ * @psalm-method Collection&\Traversable<ChildArticle> findBySubtitle(string $article_subtitle) Return ChildArticle objects filtered by the article_subtitle column
+ * @method     ChildArticle[]|Collection findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByLangCurrent(int $article_lang_current) Return ChildArticle objects filtered by the article_lang_current column
+ * @method     ChildArticle[]|Collection findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByLangOriginal(int $article_lang_original) Return ChildArticle objects filtered by the article_lang_original column
+ * @method     ChildArticle[]|Collection findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByOriginCountry(int $article_origin_country) Return ChildArticle objects filtered by the article_origin_country column
+ * @method     ChildArticle[]|Collection findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByThemeBisac(string $article_theme_bisac) Return ChildArticle objects filtered by the article_theme_bisac column
+ * @method     ChildArticle[]|Collection findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByThemeClil(string $article_theme_clil) Return ChildArticle objects filtered by the article_theme_clil column
+ * @method     ChildArticle[]|Collection findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByThemeDewey(string $article_theme_dewey) Return ChildArticle objects filtered by the article_theme_dewey column
+ * @method     ChildArticle[]|Collection findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByThemeElectre(string $article_theme_electre) Return ChildArticle objects filtered by the article_theme_electre column
+ * @method     ChildArticle[]|Collection findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findBySourceId(int $article_source_id) Return ChildArticle objects filtered by the article_source_id column
+ * @method     ChildArticle[]|Collection findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAuthors(string $article_authors) Return ChildArticle objects filtered by the article_authors column
+ * @method     ChildArticle[]|Collection findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAuthorsAlphabetic(string $article_authors_alphabetic) Return ChildArticle objects filtered by the article_authors_alphabetic column
+ * @method     ChildArticle[]|Collection findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCollectionId(int $collection_id) Return ChildArticle objects filtered by the collection_id column
+ * @method     ChildArticle[]|Collection findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCollectionName(string $article_collection) Return ChildArticle objects filtered by the article_collection column
+ * @method     ChildArticle[]|Collection findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByNumber(string $article_number) Return ChildArticle objects filtered by the article_number column
+ * @method     ChildArticle[]|Collection findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPublisherId(int $publisher_id) Return ChildArticle objects filtered by the publisher_id column
+ * @method     ChildArticle[]|Collection findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPublisherName(string $article_publisher) Return ChildArticle objects filtered by the article_publisher column
+ * @method     ChildArticle[]|Collection findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCycleId(int $cycle_id) Return ChildArticle objects filtered by the cycle_id column
+ * @method     ChildArticle[]|Collection findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCycle(string $article_cycle) Return ChildArticle objects filtered by the article_cycle column
+ * @method     ChildArticle[]|Collection findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTome(string $article_tome) Return ChildArticle objects filtered by the article_tome column
+ * @method     ChildArticle[]|Collection findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCoverVersion(int $article_cover_version) Return ChildArticle objects filtered by the article_cover_version column
+ * @method     ChildArticle[]|Collection findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAvailability(int $article_availability) Return ChildArticle objects filtered by the article_availability column
+ * @method     ChildArticle[]|Collection findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAvailabilityDilicom(int $article_availability_dilicom) Return ChildArticle objects filtered by the article_availability_dilicom column
+ * @method     ChildArticle[]|Collection findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPreorder(boolean $article_preorder) Return ChildArticle objects filtered by the article_preorder column
+ * @method     ChildArticle[]|Collection findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPrice(int $article_price) Return ChildArticle objects filtered by the article_price column
+ * @method     ChildArticle[]|Collection findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPriceEditable(boolean $article_price_editable) Return ChildArticle objects filtered by the article_price_editable column
+ * @method     ChildArticle[]|Collection findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByNewPrice(int $article_new_price) Return ChildArticle objects filtered by the article_new_price column
+ * @method     ChildArticle[]|Collection findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCategory(string $article_category) Return ChildArticle objects filtered by the article_category column
+ * @method     ChildArticle[]|Collection findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByTva(int $article_tva) Return ChildArticle objects filtered by the article_tva column
+ * @method     ChildArticle[]|Collection findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPdfEan(string $article_pdf_ean) Return ChildArticle objects filtered by the article_pdf_ean column
+ * @method     ChildArticle[]|Collection findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPdfVersion(string $article_pdf_version) Return ChildArticle objects filtered by the article_pdf_version column
+ * @method     ChildArticle[]|Collection findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByEpubEan(string $article_epub_ean) Return ChildArticle objects filtered by the article_epub_ean column
+ * @method     ChildArticle[]|Collection findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByEpubVersion(string $article_epub_version) Return ChildArticle objects filtered by the article_epub_version column
+ * @method     ChildArticle[]|Collection findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAzwEan(string $article_azw_ean) Return ChildArticle objects filtered by the article_azw_ean column
+ * @method     ChildArticle[]|Collection findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAzwVersion(string $article_azw_version) Return ChildArticle objects filtered by the article_azw_version column
+ * @method     ChildArticle[]|Collection findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPages(int $article_pages) Return ChildArticle objects filtered by the article_pages column
+ * @method     ChildArticle[]|Collection findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByWeight(int $article_weight) Return ChildArticle objects filtered by the article_weight column
+ * @method     ChildArticle[]|Collection findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByShaping(string $article_shaping) Return ChildArticle objects filtered by the article_shaping column
+ * @method     ChildArticle[]|Collection findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByFormat(string $article_format) Return ChildArticle objects filtered by the article_format column
+ * @method     ChildArticle[]|Collection findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPrintingProcess(string $article_printing_process) Return ChildArticle objects filtered by the article_printing_process column
+ * @method     ChildArticle[]|Collection findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAgeMin(int $article_age_min) Return ChildArticle objects filtered by the article_age_min column
+ * @method     ChildArticle[]|Collection findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByAgeMax(int $article_age_max) Return ChildArticle objects filtered by the article_age_max column
+ * @method     ChildArticle[]|Collection findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
+ * @psalm-method Collection&\Traversable<ChildArticle> findBySummary(string $article_summary) Return ChildArticle objects filtered by the article_summary column
+ * @method     ChildArticle[]|Collection findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByContents(string $article_contents) Return ChildArticle objects filtered by the article_contents column
+ * @method     ChildArticle[]|Collection findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByBonus(string $article_bonus) Return ChildArticle objects filtered by the article_bonus column
+ * @method     ChildArticle[]|Collection findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCatchline(string $article_catchline) Return ChildArticle objects filtered by the article_catchline column
+ * @method     ChildArticle[]|Collection findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByBiography(string $article_biography) Return ChildArticle objects filtered by the article_biography column
+ * @method     ChildArticle[]|Collection findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByMotsv(string $article_motsv) Return ChildArticle objects filtered by the article_motsv column
+ * @method     ChildArticle[]|Collection findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCopyright(int $article_copyright) Return ChildArticle objects filtered by the article_copyright column
+ * @method     ChildArticle[]|Collection findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPubdate(string $article_pubdate) Return ChildArticle objects filtered by the article_pubdate column
+ * @method     ChildArticle[]|Collection findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByKeywords(string $article_keywords) Return ChildArticle objects filtered by the article_keywords column
+ * @method     ChildArticle[]|Collection findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByComputedLinks(string $article_links) Return ChildArticle objects filtered by the article_links column
+ * @method     ChildArticle[]|Collection findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByKeywordsGenerated(string $article_keywords_generated) Return ChildArticle objects filtered by the article_keywords_generated column
+ * @method     ChildArticle[]|Collection findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPublisherStock(int $article_publisher_stock) Return ChildArticle objects filtered by the article_publisher_stock column
+ * @method     ChildArticle[]|Collection findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByHits(int $article_hits) Return ChildArticle objects filtered by the article_hits column
+ * @method     ChildArticle[]|Collection findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByEditingUser(int $article_editing_user) Return ChildArticle objects filtered by the article_editing_user column
+ * @method     ChildArticle[]|Collection findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByInsert(string $article_insert) Return ChildArticle objects filtered by the article_insert column
+ * @method     ChildArticle[]|Collection findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByUpdate(string $article_update) Return ChildArticle objects filtered by the article_update column
+ * @method     ChildArticle[]|Collection findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByCreatedAt(string $article_created) Return ChildArticle objects filtered by the article_created column
+ * @method     ChildArticle[]|Collection findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByUpdatedAt(string $article_updated) Return ChildArticle objects filtered by the article_updated column
+ * @method     ChildArticle[]|Collection findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByDone(boolean $article_done) Return ChildArticle objects filtered by the article_done column
+ * @method     ChildArticle[]|Collection findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByToCheck(boolean $article_to_check) Return ChildArticle objects filtered by the article_to_check column
+ * @method     ChildArticle[]|Collection findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByPushedToData(string $article_pushed_to_data) Return ChildArticle objects filtered by the article_pushed_to_data column
+ * @method     ChildArticle[]|Collection findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionBy(int $article_deletion_by) Return ChildArticle objects filtered by the article_deletion_by column
+ * @method     ChildArticle[]|Collection findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionDate(string $article_deletion_date) Return ChildArticle objects filtered by the article_deletion_date column
+ * @method     ChildArticle[]|Collection findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
+ * @psalm-method Collection&\Traversable<ChildArticle> findByDeletionReason(string $article_deletion_reason) Return ChildArticle objects filtered by the article_deletion_reason column
+ * @method     ChildArticle[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticle> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class ArticleQuery extends ModelCriteria
@@ -571,9 +572,9 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\ArticleQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Article', $modelAlias = null)
     {
@@ -583,12 +584,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Returns a new ChildArticleQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildArticleQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildArticleQuery) {
             return $criteria;
@@ -618,7 +619,7 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @return ChildArticle|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -650,8 +651,8 @@ abstract class ArticleQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -683,8 +684,8 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildArticle|array|mixed the result, formatted by the current formatter
      */
@@ -704,12 +705,12 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -726,27 +727,31 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -759,15 +764,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE article_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -787,7 +792,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $id, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -800,15 +807,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByItem(array('min' => 12)); // WHERE article_item > 12
      * </code>
      *
-     * @param     mixed $item The value to use as filter.
+     * @param mixed $item The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByItem($item = null, $comparison = null)
+    public function filterByItem($item = null, ?string $comparison = null)
     {
         if (is_array($item)) {
             $useMinMax = false;
@@ -828,7 +835,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ITEM, $item, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ITEM, $item, $comparison);
+
+        return $this;
     }
 
     /**
@@ -838,14 +847,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTextid('fooValue');   // WHERE article_textid = 'fooValue'
      * $query->filterByTextid('%fooValue%', Criteria::LIKE); // WHERE article_textid LIKE '%fooValue%'
+     * $query->filterByTextid(['foo', 'bar']); // WHERE article_textid IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $textid The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $textid The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTextid($textid = null, $comparison = null)
+    public function filterByTextid($textid = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($textid)) {
@@ -853,7 +863,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TEXTID, $textid, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TEXTID, $textid, $comparison);
+
+        return $this;
     }
 
     /**
@@ -866,15 +878,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByEan(array('min' => 12)); // WHERE article_ean > 12
      * </code>
      *
-     * @param     mixed $ean The value to use as filter.
+     * @param mixed $ean The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEan($ean = null, $comparison = null)
+    public function filterByEan($ean = null, ?string $comparison = null)
     {
         if (is_array($ean)) {
             $useMinMax = false;
@@ -894,7 +906,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EAN, $ean, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EAN, $ean, $comparison);
+
+        return $this;
     }
 
     /**
@@ -904,14 +918,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByEanOthers('fooValue');   // WHERE article_ean_others = 'fooValue'
      * $query->filterByEanOthers('%fooValue%', Criteria::LIKE); // WHERE article_ean_others LIKE '%fooValue%'
+     * $query->filterByEanOthers(['foo', 'bar']); // WHERE article_ean_others IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $eanOthers The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $eanOthers The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEanOthers($eanOthers = null, $comparison = null)
+    public function filterByEanOthers($eanOthers = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($eanOthers)) {
@@ -919,7 +934,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EAN_OTHERS, $eanOthers, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EAN_OTHERS, $eanOthers, $comparison);
+
+        return $this;
     }
 
     /**
@@ -929,14 +946,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByAsin('fooValue');   // WHERE article_asin = 'fooValue'
      * $query->filterByAsin('%fooValue%', Criteria::LIKE); // WHERE article_asin LIKE '%fooValue%'
+     * $query->filterByAsin(['foo', 'bar']); // WHERE article_asin IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $asin The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $asin The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAsin($asin = null, $comparison = null)
+    public function filterByAsin($asin = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($asin)) {
@@ -944,7 +962,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ASIN, $asin, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ASIN, $asin, $comparison);
+
+        return $this;
     }
 
     /**
@@ -957,15 +977,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByNoosfereId(array('min' => 12)); // WHERE article_noosfere_id > 12
      * </code>
      *
-     * @param     mixed $noosfereId The value to use as filter.
+     * @param mixed $noosfereId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNoosfereId($noosfereId = null, $comparison = null)
+    public function filterByNoosfereId($noosfereId = null, ?string $comparison = null)
     {
         if (is_array($noosfereId)) {
             $useMinMax = false;
@@ -985,7 +1005,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NOOSFERE_ID, $noosfereId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NOOSFERE_ID, $noosfereId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -995,14 +1017,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByUrl('fooValue');   // WHERE article_url = 'fooValue'
      * $query->filterByUrl('%fooValue%', Criteria::LIKE); // WHERE article_url LIKE '%fooValue%'
+     * $query->filterByUrl(['foo', 'bar']); // WHERE article_url IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $url The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $url The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUrl($url = null, $comparison = null)
+    public function filterByUrl($url = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($url)) {
@@ -1010,7 +1033,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_URL, $url, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_URL, $url, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1023,15 +1048,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByTypeId(array('min' => 12)); // WHERE type_id > 12
      * </code>
      *
-     * @param     mixed $typeId The value to use as filter.
+     * @param mixed $typeId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTypeId($typeId = null, $comparison = null)
+    public function filterByTypeId($typeId = null, ?string $comparison = null)
     {
         if (is_array($typeId)) {
             $useMinMax = false;
@@ -1051,7 +1076,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_TYPE_ID, $typeId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_TYPE_ID, $typeId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1061,14 +1088,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTitle('fooValue');   // WHERE article_title = 'fooValue'
      * $query->filterByTitle('%fooValue%', Criteria::LIKE); // WHERE article_title LIKE '%fooValue%'
+     * $query->filterByTitle(['foo', 'bar']); // WHERE article_title IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $title The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $title The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitle($title = null, $comparison = null)
+    public function filterByTitle($title = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($title)) {
@@ -1076,7 +1104,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE, $title, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE, $title, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1086,14 +1116,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTitleAlphabetic('fooValue');   // WHERE article_title_alphabetic = 'fooValue'
      * $query->filterByTitleAlphabetic('%fooValue%', Criteria::LIKE); // WHERE article_title_alphabetic LIKE '%fooValue%'
+     * $query->filterByTitleAlphabetic(['foo', 'bar']); // WHERE article_title_alphabetic IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $titleAlphabetic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $titleAlphabetic The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitleAlphabetic($titleAlphabetic = null, $comparison = null)
+    public function filterByTitleAlphabetic($titleAlphabetic = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($titleAlphabetic)) {
@@ -1101,7 +1132,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_ALPHABETIC, $titleAlphabetic, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_ALPHABETIC, $titleAlphabetic, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1111,14 +1144,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTitleOriginal('fooValue');   // WHERE article_title_original = 'fooValue'
      * $query->filterByTitleOriginal('%fooValue%', Criteria::LIKE); // WHERE article_title_original LIKE '%fooValue%'
+     * $query->filterByTitleOriginal(['foo', 'bar']); // WHERE article_title_original IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $titleOriginal The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $titleOriginal The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitleOriginal($titleOriginal = null, $comparison = null)
+    public function filterByTitleOriginal($titleOriginal = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($titleOriginal)) {
@@ -1126,7 +1160,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_ORIGINAL, $titleOriginal, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_ORIGINAL, $titleOriginal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1136,14 +1172,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTitleOthers('fooValue');   // WHERE article_title_others = 'fooValue'
      * $query->filterByTitleOthers('%fooValue%', Criteria::LIKE); // WHERE article_title_others LIKE '%fooValue%'
+     * $query->filterByTitleOthers(['foo', 'bar']); // WHERE article_title_others IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $titleOthers The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $titleOthers The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTitleOthers($titleOthers = null, $comparison = null)
+    public function filterByTitleOthers($titleOthers = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($titleOthers)) {
@@ -1151,7 +1188,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_OTHERS, $titleOthers, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TITLE_OTHERS, $titleOthers, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1161,14 +1200,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterBySubtitle('fooValue');   // WHERE article_subtitle = 'fooValue'
      * $query->filterBySubtitle('%fooValue%', Criteria::LIKE); // WHERE article_subtitle LIKE '%fooValue%'
+     * $query->filterBySubtitle(['foo', 'bar']); // WHERE article_subtitle IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $subtitle The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $subtitle The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySubtitle($subtitle = null, $comparison = null)
+    public function filterBySubtitle($subtitle = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($subtitle)) {
@@ -1176,7 +1216,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SUBTITLE, $subtitle, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SUBTITLE, $subtitle, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1189,15 +1231,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByLangCurrent(array('min' => 12)); // WHERE article_lang_current > 12
      * </code>
      *
-     * @param     mixed $langCurrent The value to use as filter.
+     * @param mixed $langCurrent The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLangCurrent($langCurrent = null, $comparison = null)
+    public function filterByLangCurrent($langCurrent = null, ?string $comparison = null)
     {
         if (is_array($langCurrent)) {
             $useMinMax = false;
@@ -1217,7 +1259,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LANG_CURRENT, $langCurrent, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LANG_CURRENT, $langCurrent, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1230,15 +1274,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByLangOriginal(array('min' => 12)); // WHERE article_lang_original > 12
      * </code>
      *
-     * @param     mixed $langOriginal The value to use as filter.
+     * @param mixed $langOriginal The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLangOriginal($langOriginal = null, $comparison = null)
+    public function filterByLangOriginal($langOriginal = null, ?string $comparison = null)
     {
         if (is_array($langOriginal)) {
             $useMinMax = false;
@@ -1258,7 +1302,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LANG_ORIGINAL, $langOriginal, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LANG_ORIGINAL, $langOriginal, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1271,15 +1317,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByOriginCountry(array('min' => 12)); // WHERE article_origin_country > 12
      * </code>
      *
-     * @param     mixed $originCountry The value to use as filter.
+     * @param mixed $originCountry The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByOriginCountry($originCountry = null, $comparison = null)
+    public function filterByOriginCountry($originCountry = null, ?string $comparison = null)
     {
         if (is_array($originCountry)) {
             $useMinMax = false;
@@ -1299,7 +1345,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ORIGIN_COUNTRY, $originCountry, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_ORIGIN_COUNTRY, $originCountry, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1309,14 +1357,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByThemeBisac('fooValue');   // WHERE article_theme_bisac = 'fooValue'
      * $query->filterByThemeBisac('%fooValue%', Criteria::LIKE); // WHERE article_theme_bisac LIKE '%fooValue%'
+     * $query->filterByThemeBisac(['foo', 'bar']); // WHERE article_theme_bisac IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $themeBisac The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $themeBisac The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByThemeBisac($themeBisac = null, $comparison = null)
+    public function filterByThemeBisac($themeBisac = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($themeBisac)) {
@@ -1324,7 +1373,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_BISAC, $themeBisac, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_BISAC, $themeBisac, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1334,14 +1385,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByThemeClil('fooValue');   // WHERE article_theme_clil = 'fooValue'
      * $query->filterByThemeClil('%fooValue%', Criteria::LIKE); // WHERE article_theme_clil LIKE '%fooValue%'
+     * $query->filterByThemeClil(['foo', 'bar']); // WHERE article_theme_clil IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $themeClil The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $themeClil The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByThemeClil($themeClil = null, $comparison = null)
+    public function filterByThemeClil($themeClil = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($themeClil)) {
@@ -1349,7 +1401,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_CLIL, $themeClil, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_CLIL, $themeClil, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1359,14 +1413,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByThemeDewey('fooValue');   // WHERE article_theme_dewey = 'fooValue'
      * $query->filterByThemeDewey('%fooValue%', Criteria::LIKE); // WHERE article_theme_dewey LIKE '%fooValue%'
+     * $query->filterByThemeDewey(['foo', 'bar']); // WHERE article_theme_dewey IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $themeDewey The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $themeDewey The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByThemeDewey($themeDewey = null, $comparison = null)
+    public function filterByThemeDewey($themeDewey = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($themeDewey)) {
@@ -1374,7 +1429,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_DEWEY, $themeDewey, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_DEWEY, $themeDewey, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1384,14 +1441,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByThemeElectre('fooValue');   // WHERE article_theme_electre = 'fooValue'
      * $query->filterByThemeElectre('%fooValue%', Criteria::LIKE); // WHERE article_theme_electre LIKE '%fooValue%'
+     * $query->filterByThemeElectre(['foo', 'bar']); // WHERE article_theme_electre IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $themeElectre The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $themeElectre The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByThemeElectre($themeElectre = null, $comparison = null)
+    public function filterByThemeElectre($themeElectre = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($themeElectre)) {
@@ -1399,7 +1457,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_ELECTRE, $themeElectre, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_THEME_ELECTRE, $themeElectre, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1412,15 +1472,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterBySourceId(array('min' => 12)); // WHERE article_source_id > 12
      * </code>
      *
-     * @param     mixed $sourceId The value to use as filter.
+     * @param mixed $sourceId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySourceId($sourceId = null, $comparison = null)
+    public function filterBySourceId($sourceId = null, ?string $comparison = null)
     {
         if (is_array($sourceId)) {
             $useMinMax = false;
@@ -1440,7 +1500,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SOURCE_ID, $sourceId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SOURCE_ID, $sourceId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1450,14 +1512,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByAuthors('fooValue');   // WHERE article_authors = 'fooValue'
      * $query->filterByAuthors('%fooValue%', Criteria::LIKE); // WHERE article_authors LIKE '%fooValue%'
+     * $query->filterByAuthors(['foo', 'bar']); // WHERE article_authors IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $authors The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $authors The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAuthors($authors = null, $comparison = null)
+    public function filterByAuthors($authors = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($authors)) {
@@ -1465,7 +1528,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AUTHORS, $authors, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AUTHORS, $authors, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1475,14 +1540,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByAuthorsAlphabetic('fooValue');   // WHERE article_authors_alphabetic = 'fooValue'
      * $query->filterByAuthorsAlphabetic('%fooValue%', Criteria::LIKE); // WHERE article_authors_alphabetic LIKE '%fooValue%'
+     * $query->filterByAuthorsAlphabetic(['foo', 'bar']); // WHERE article_authors_alphabetic IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $authorsAlphabetic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $authorsAlphabetic The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAuthorsAlphabetic($authorsAlphabetic = null, $comparison = null)
+    public function filterByAuthorsAlphabetic($authorsAlphabetic = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($authorsAlphabetic)) {
@@ -1490,7 +1556,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AUTHORS_ALPHABETIC, $authorsAlphabetic, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AUTHORS_ALPHABETIC, $authorsAlphabetic, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1505,15 +1573,15 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see       filterByBookCollection()
      *
-     * @param     mixed $collectionId The value to use as filter.
+     * @param mixed $collectionId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCollectionId($collectionId = null, $comparison = null)
+    public function filterByCollectionId($collectionId = null, ?string $comparison = null)
     {
         if (is_array($collectionId)) {
             $useMinMax = false;
@@ -1533,7 +1601,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_COLLECTION_ID, $collectionId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_COLLECTION_ID, $collectionId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1543,14 +1613,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByCollectionName('fooValue');   // WHERE article_collection = 'fooValue'
      * $query->filterByCollectionName('%fooValue%', Criteria::LIKE); // WHERE article_collection LIKE '%fooValue%'
+     * $query->filterByCollectionName(['foo', 'bar']); // WHERE article_collection IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $collectionName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $collectionName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCollectionName($collectionName = null, $comparison = null)
+    public function filterByCollectionName($collectionName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($collectionName)) {
@@ -1558,7 +1629,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COLLECTION, $collectionName, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COLLECTION, $collectionName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1568,14 +1641,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByNumber('fooValue');   // WHERE article_number = 'fooValue'
      * $query->filterByNumber('%fooValue%', Criteria::LIKE); // WHERE article_number LIKE '%fooValue%'
+     * $query->filterByNumber(['foo', 'bar']); // WHERE article_number IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $number The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $number The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNumber($number = null, $comparison = null)
+    public function filterByNumber($number = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($number)) {
@@ -1583,7 +1657,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NUMBER, $number, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NUMBER, $number, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1598,15 +1674,15 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see       filterByPublisher()
      *
-     * @param     mixed $publisherId The value to use as filter.
+     * @param mixed $publisherId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherId($publisherId = null, $comparison = null)
+    public function filterByPublisherId($publisherId = null, ?string $comparison = null)
     {
         if (is_array($publisherId)) {
             $useMinMax = false;
@@ -1626,7 +1702,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_PUBLISHER_ID, $publisherId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1636,14 +1714,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByPublisherName('fooValue');   // WHERE article_publisher = 'fooValue'
      * $query->filterByPublisherName('%fooValue%', Criteria::LIKE); // WHERE article_publisher LIKE '%fooValue%'
+     * $query->filterByPublisherName(['foo', 'bar']); // WHERE article_publisher IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $publisherName The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $publisherName The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherName($publisherName = null, $comparison = null)
+    public function filterByPublisherName($publisherName = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($publisherName)) {
@@ -1651,7 +1730,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER, $publisherName, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER, $publisherName, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1664,15 +1745,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCycleId(array('min' => 12)); // WHERE cycle_id > 12
      * </code>
      *
-     * @param     mixed $cycleId The value to use as filter.
+     * @param mixed $cycleId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCycleId($cycleId = null, $comparison = null)
+    public function filterByCycleId($cycleId = null, ?string $comparison = null)
     {
         if (is_array($cycleId)) {
             $useMinMax = false;
@@ -1692,7 +1773,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_CYCLE_ID, $cycleId, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_CYCLE_ID, $cycleId, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1702,14 +1785,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByCycle('fooValue');   // WHERE article_cycle = 'fooValue'
      * $query->filterByCycle('%fooValue%', Criteria::LIKE); // WHERE article_cycle LIKE '%fooValue%'
+     * $query->filterByCycle(['foo', 'bar']); // WHERE article_cycle IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $cycle The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $cycle The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCycle($cycle = null, $comparison = null)
+    public function filterByCycle($cycle = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($cycle)) {
@@ -1717,7 +1801,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CYCLE, $cycle, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CYCLE, $cycle, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1727,14 +1813,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByTome('fooValue');   // WHERE article_tome = 'fooValue'
      * $query->filterByTome('%fooValue%', Criteria::LIKE); // WHERE article_tome LIKE '%fooValue%'
+     * $query->filterByTome(['foo', 'bar']); // WHERE article_tome IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $tome The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $tome The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTome($tome = null, $comparison = null)
+    public function filterByTome($tome = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($tome)) {
@@ -1742,7 +1829,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TOME, $tome, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TOME, $tome, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1755,15 +1844,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCoverVersion(array('min' => 12)); // WHERE article_cover_version > 12
      * </code>
      *
-     * @param     mixed $coverVersion The value to use as filter.
+     * @param mixed $coverVersion The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCoverVersion($coverVersion = null, $comparison = null)
+    public function filterByCoverVersion($coverVersion = null, ?string $comparison = null)
     {
         if (is_array($coverVersion)) {
             $useMinMax = false;
@@ -1783,7 +1872,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COVER_VERSION, $coverVersion, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COVER_VERSION, $coverVersion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1796,15 +1887,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByAvailability(array('min' => 12)); // WHERE article_availability > 12
      * </code>
      *
-     * @param     mixed $availability The value to use as filter.
+     * @param mixed $availability The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAvailability($availability = null, $comparison = null)
+    public function filterByAvailability($availability = null, ?string $comparison = null)
     {
         if (is_array($availability)) {
             $useMinMax = false;
@@ -1824,7 +1915,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AVAILABILITY, $availability, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AVAILABILITY, $availability, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1837,15 +1930,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByAvailabilityDilicom(array('min' => 12)); // WHERE article_availability_dilicom > 12
      * </code>
      *
-     * @param     mixed $availabilityDilicom The value to use as filter.
+     * @param mixed $availabilityDilicom The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAvailabilityDilicom($availabilityDilicom = null, $comparison = null)
+    public function filterByAvailabilityDilicom($availabilityDilicom = null, ?string $comparison = null)
     {
         if (is_array($availabilityDilicom)) {
             $useMinMax = false;
@@ -1865,7 +1958,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AVAILABILITY_DILICOM, $availabilityDilicom, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AVAILABILITY_DILICOM, $availabilityDilicom, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1877,22 +1972,24 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPreorder('yes'); // WHERE article_preorder = true
      * </code>
      *
-     * @param     boolean|string $preorder The value to use as filter.
+     * @param bool|string $preorder The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPreorder($preorder = null, $comparison = null)
+    public function filterByPreorder($preorder = null, ?string $comparison = null)
     {
         if (is_string($preorder)) {
             $preorder = in_array(strtolower($preorder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PREORDER, $preorder, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PREORDER, $preorder, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1905,15 +2002,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPrice(array('min' => 12)); // WHERE article_price > 12
      * </code>
      *
-     * @param     mixed $price The value to use as filter.
+     * @param mixed $price The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPrice($price = null, $comparison = null)
+    public function filterByPrice($price = null, ?string $comparison = null)
     {
         if (is_array($price)) {
             $useMinMax = false;
@@ -1933,7 +2030,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRICE, $price, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRICE, $price, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1945,22 +2044,24 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPriceEditable('yes'); // WHERE article_price_editable = true
      * </code>
      *
-     * @param     boolean|string $priceEditable The value to use as filter.
+     * @param bool|string $priceEditable The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPriceEditable($priceEditable = null, $comparison = null)
+    public function filterByPriceEditable($priceEditable = null, ?string $comparison = null)
     {
         if (is_string($priceEditable)) {
             $priceEditable = in_array(strtolower($priceEditable), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRICE_EDITABLE, $priceEditable, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRICE_EDITABLE, $priceEditable, $comparison);
+
+        return $this;
     }
 
     /**
@@ -1973,15 +2074,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByNewPrice(array('min' => 12)); // WHERE article_new_price > 12
      * </code>
      *
-     * @param     mixed $newPrice The value to use as filter.
+     * @param mixed $newPrice The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNewPrice($newPrice = null, $comparison = null)
+    public function filterByNewPrice($newPrice = null, ?string $comparison = null)
     {
         if (is_array($newPrice)) {
             $useMinMax = false;
@@ -2001,7 +2102,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NEW_PRICE, $newPrice, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_NEW_PRICE, $newPrice, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2011,14 +2114,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByCategory('fooValue');   // WHERE article_category = 'fooValue'
      * $query->filterByCategory('%fooValue%', Criteria::LIKE); // WHERE article_category LIKE '%fooValue%'
+     * $query->filterByCategory(['foo', 'bar']); // WHERE article_category IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $category The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $category The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCategory($category = null, $comparison = null)
+    public function filterByCategory($category = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($category)) {
@@ -2026,7 +2130,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CATEGORY, $category, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CATEGORY, $category, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2039,15 +2145,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByTva(array('min' => 12)); // WHERE article_tva > 12
      * </code>
      *
-     * @param     mixed $tva The value to use as filter.
+     * @param mixed $tva The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByTva($tva = null, $comparison = null)
+    public function filterByTva($tva = null, ?string $comparison = null)
     {
         if (is_array($tva)) {
             $useMinMax = false;
@@ -2067,7 +2173,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TVA, $tva, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TVA, $tva, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2080,15 +2188,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPdfEan(array('min' => 12)); // WHERE article_pdf_ean > 12
      * </code>
      *
-     * @param     mixed $pdfEan The value to use as filter.
+     * @param mixed $pdfEan The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPdfEan($pdfEan = null, $comparison = null)
+    public function filterByPdfEan($pdfEan = null, ?string $comparison = null)
     {
         if (is_array($pdfEan)) {
             $useMinMax = false;
@@ -2108,7 +2216,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PDF_EAN, $pdfEan, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PDF_EAN, $pdfEan, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2118,14 +2228,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByPdfVersion('fooValue');   // WHERE article_pdf_version = 'fooValue'
      * $query->filterByPdfVersion('%fooValue%', Criteria::LIKE); // WHERE article_pdf_version LIKE '%fooValue%'
+     * $query->filterByPdfVersion(['foo', 'bar']); // WHERE article_pdf_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $pdfVersion The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $pdfVersion The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPdfVersion($pdfVersion = null, $comparison = null)
+    public function filterByPdfVersion($pdfVersion = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($pdfVersion)) {
@@ -2133,7 +2244,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PDF_VERSION, $pdfVersion, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PDF_VERSION, $pdfVersion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2146,15 +2259,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByEpubEan(array('min' => 12)); // WHERE article_epub_ean > 12
      * </code>
      *
-     * @param     mixed $epubEan The value to use as filter.
+     * @param mixed $epubEan The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEpubEan($epubEan = null, $comparison = null)
+    public function filterByEpubEan($epubEan = null, ?string $comparison = null)
     {
         if (is_array($epubEan)) {
             $useMinMax = false;
@@ -2174,7 +2287,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EPUB_EAN, $epubEan, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EPUB_EAN, $epubEan, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2184,14 +2299,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByEpubVersion('fooValue');   // WHERE article_epub_version = 'fooValue'
      * $query->filterByEpubVersion('%fooValue%', Criteria::LIKE); // WHERE article_epub_version LIKE '%fooValue%'
+     * $query->filterByEpubVersion(['foo', 'bar']); // WHERE article_epub_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $epubVersion The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $epubVersion The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEpubVersion($epubVersion = null, $comparison = null)
+    public function filterByEpubVersion($epubVersion = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($epubVersion)) {
@@ -2199,7 +2315,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EPUB_VERSION, $epubVersion, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EPUB_VERSION, $epubVersion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2212,15 +2330,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByAzwEan(array('min' => 12)); // WHERE article_azw_ean > 12
      * </code>
      *
-     * @param     mixed $azwEan The value to use as filter.
+     * @param mixed $azwEan The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAzwEan($azwEan = null, $comparison = null)
+    public function filterByAzwEan($azwEan = null, ?string $comparison = null)
     {
         if (is_array($azwEan)) {
             $useMinMax = false;
@@ -2240,7 +2358,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AZW_EAN, $azwEan, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AZW_EAN, $azwEan, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2250,14 +2370,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByAzwVersion('fooValue');   // WHERE article_azw_version = 'fooValue'
      * $query->filterByAzwVersion('%fooValue%', Criteria::LIKE); // WHERE article_azw_version LIKE '%fooValue%'
+     * $query->filterByAzwVersion(['foo', 'bar']); // WHERE article_azw_version IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $azwVersion The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $azwVersion The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAzwVersion($azwVersion = null, $comparison = null)
+    public function filterByAzwVersion($azwVersion = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($azwVersion)) {
@@ -2265,7 +2386,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AZW_VERSION, $azwVersion, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AZW_VERSION, $azwVersion, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2278,15 +2401,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPages(array('min' => 12)); // WHERE article_pages > 12
      * </code>
      *
-     * @param     mixed $pages The value to use as filter.
+     * @param mixed $pages The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPages($pages = null, $comparison = null)
+    public function filterByPages($pages = null, ?string $comparison = null)
     {
         if (is_array($pages)) {
             $useMinMax = false;
@@ -2306,7 +2429,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PAGES, $pages, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PAGES, $pages, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2319,15 +2444,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByWeight(array('min' => 12)); // WHERE article_weight > 12
      * </code>
      *
-     * @param     mixed $weight The value to use as filter.
+     * @param mixed $weight The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByWeight($weight = null, $comparison = null)
+    public function filterByWeight($weight = null, ?string $comparison = null)
     {
         if (is_array($weight)) {
             $useMinMax = false;
@@ -2347,7 +2472,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_WEIGHT, $weight, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_WEIGHT, $weight, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2357,14 +2484,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByShaping('fooValue');   // WHERE article_shaping = 'fooValue'
      * $query->filterByShaping('%fooValue%', Criteria::LIKE); // WHERE article_shaping LIKE '%fooValue%'
+     * $query->filterByShaping(['foo', 'bar']); // WHERE article_shaping IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $shaping The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $shaping The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShaping($shaping = null, $comparison = null)
+    public function filterByShaping($shaping = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($shaping)) {
@@ -2372,7 +2500,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SHAPING, $shaping, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SHAPING, $shaping, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2382,14 +2512,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByFormat('fooValue');   // WHERE article_format = 'fooValue'
      * $query->filterByFormat('%fooValue%', Criteria::LIKE); // WHERE article_format LIKE '%fooValue%'
+     * $query->filterByFormat(['foo', 'bar']); // WHERE article_format IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $format The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $format The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByFormat($format = null, $comparison = null)
+    public function filterByFormat($format = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($format)) {
@@ -2397,7 +2528,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_FORMAT, $format, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_FORMAT, $format, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2407,14 +2540,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByPrintingProcess('fooValue');   // WHERE article_printing_process = 'fooValue'
      * $query->filterByPrintingProcess('%fooValue%', Criteria::LIKE); // WHERE article_printing_process LIKE '%fooValue%'
+     * $query->filterByPrintingProcess(['foo', 'bar']); // WHERE article_printing_process IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $printingProcess The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $printingProcess The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPrintingProcess($printingProcess = null, $comparison = null)
+    public function filterByPrintingProcess($printingProcess = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($printingProcess)) {
@@ -2422,7 +2556,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRINTING_PROCESS, $printingProcess, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PRINTING_PROCESS, $printingProcess, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2435,15 +2571,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByAgeMin(array('min' => 12)); // WHERE article_age_min > 12
      * </code>
      *
-     * @param     mixed $ageMin The value to use as filter.
+     * @param mixed $ageMin The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAgeMin($ageMin = null, $comparison = null)
+    public function filterByAgeMin($ageMin = null, ?string $comparison = null)
     {
         if (is_array($ageMin)) {
             $useMinMax = false;
@@ -2463,7 +2599,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AGE_MIN, $ageMin, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AGE_MIN, $ageMin, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2476,15 +2614,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByAgeMax(array('min' => 12)); // WHERE article_age_max > 12
      * </code>
      *
-     * @param     mixed $ageMax The value to use as filter.
+     * @param mixed $ageMax The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAgeMax($ageMax = null, $comparison = null)
+    public function filterByAgeMax($ageMax = null, ?string $comparison = null)
     {
         if (is_array($ageMax)) {
             $useMinMax = false;
@@ -2504,7 +2642,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AGE_MAX, $ageMax, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_AGE_MAX, $ageMax, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2514,14 +2654,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterBySummary('fooValue');   // WHERE article_summary = 'fooValue'
      * $query->filterBySummary('%fooValue%', Criteria::LIKE); // WHERE article_summary LIKE '%fooValue%'
+     * $query->filterBySummary(['foo', 'bar']); // WHERE article_summary IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $summary The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $summary The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySummary($summary = null, $comparison = null)
+    public function filterBySummary($summary = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($summary)) {
@@ -2529,7 +2670,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SUMMARY, $summary, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_SUMMARY, $summary, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2539,14 +2682,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByContents('fooValue');   // WHERE article_contents = 'fooValue'
      * $query->filterByContents('%fooValue%', Criteria::LIKE); // WHERE article_contents LIKE '%fooValue%'
+     * $query->filterByContents(['foo', 'bar']); // WHERE article_contents IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $contents The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $contents The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByContents($contents = null, $comparison = null)
+    public function filterByContents($contents = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($contents)) {
@@ -2554,7 +2698,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CONTENTS, $contents, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CONTENTS, $contents, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2564,14 +2710,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByBonus('fooValue');   // WHERE article_bonus = 'fooValue'
      * $query->filterByBonus('%fooValue%', Criteria::LIKE); // WHERE article_bonus LIKE '%fooValue%'
+     * $query->filterByBonus(['foo', 'bar']); // WHERE article_bonus IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $bonus The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $bonus The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBonus($bonus = null, $comparison = null)
+    public function filterByBonus($bonus = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($bonus)) {
@@ -2579,7 +2726,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_BONUS, $bonus, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_BONUS, $bonus, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2589,14 +2738,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByCatchline('fooValue');   // WHERE article_catchline = 'fooValue'
      * $query->filterByCatchline('%fooValue%', Criteria::LIKE); // WHERE article_catchline LIKE '%fooValue%'
+     * $query->filterByCatchline(['foo', 'bar']); // WHERE article_catchline IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $catchline The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $catchline The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCatchline($catchline = null, $comparison = null)
+    public function filterByCatchline($catchline = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($catchline)) {
@@ -2604,7 +2754,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CATCHLINE, $catchline, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CATCHLINE, $catchline, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2614,14 +2766,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByBiography('fooValue');   // WHERE article_biography = 'fooValue'
      * $query->filterByBiography('%fooValue%', Criteria::LIKE); // WHERE article_biography LIKE '%fooValue%'
+     * $query->filterByBiography(['foo', 'bar']); // WHERE article_biography IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $biography The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $biography The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBiography($biography = null, $comparison = null)
+    public function filterByBiography($biography = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($biography)) {
@@ -2629,7 +2782,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_BIOGRAPHY, $biography, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_BIOGRAPHY, $biography, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2639,14 +2794,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByMotsv('fooValue');   // WHERE article_motsv = 'fooValue'
      * $query->filterByMotsv('%fooValue%', Criteria::LIKE); // WHERE article_motsv LIKE '%fooValue%'
+     * $query->filterByMotsv(['foo', 'bar']); // WHERE article_motsv IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $motsv The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $motsv The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByMotsv($motsv = null, $comparison = null)
+    public function filterByMotsv($motsv = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($motsv)) {
@@ -2654,7 +2810,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_MOTSV, $motsv, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_MOTSV, $motsv, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2667,15 +2825,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCopyright(array('min' => 12)); // WHERE article_copyright > 12
      * </code>
      *
-     * @param     mixed $copyright The value to use as filter.
+     * @param mixed $copyright The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCopyright($copyright = null, $comparison = null)
+    public function filterByCopyright($copyright = null, ?string $comparison = null)
     {
         if (is_array($copyright)) {
             $useMinMax = false;
@@ -2695,7 +2853,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COPYRIGHT, $copyright, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_COPYRIGHT, $copyright, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2708,17 +2868,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPubdate(array('max' => 'yesterday')); // WHERE article_pubdate > '2011-03-13'
      * </code>
      *
-     * @param     mixed $pubdate The value to use as filter.
+     * @param mixed $pubdate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPubdate($pubdate = null, $comparison = null)
+    public function filterByPubdate($pubdate = null, ?string $comparison = null)
     {
         if (is_array($pubdate)) {
             $useMinMax = false;
@@ -2738,7 +2898,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBDATE, $pubdate, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBDATE, $pubdate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2748,14 +2910,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByKeywords('fooValue');   // WHERE article_keywords = 'fooValue'
      * $query->filterByKeywords('%fooValue%', Criteria::LIKE); // WHERE article_keywords LIKE '%fooValue%'
+     * $query->filterByKeywords(['foo', 'bar']); // WHERE article_keywords IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $keywords The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $keywords The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByKeywords($keywords = null, $comparison = null)
+    public function filterByKeywords($keywords = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($keywords)) {
@@ -2763,7 +2926,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_KEYWORDS, $keywords, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_KEYWORDS, $keywords, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2773,14 +2938,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByComputedLinks('fooValue');   // WHERE article_links = 'fooValue'
      * $query->filterByComputedLinks('%fooValue%', Criteria::LIKE); // WHERE article_links LIKE '%fooValue%'
+     * $query->filterByComputedLinks(['foo', 'bar']); // WHERE article_links IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $computedLinks The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $computedLinks The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByComputedLinks($computedLinks = null, $comparison = null)
+    public function filterByComputedLinks($computedLinks = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($computedLinks)) {
@@ -2788,7 +2954,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LINKS, $computedLinks, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_LINKS, $computedLinks, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2801,17 +2969,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByKeywordsGenerated(array('max' => 'yesterday')); // WHERE article_keywords_generated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $keywordsGenerated The value to use as filter.
+     * @param mixed $keywordsGenerated The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByKeywordsGenerated($keywordsGenerated = null, $comparison = null)
+    public function filterByKeywordsGenerated($keywordsGenerated = null, ?string $comparison = null)
     {
         if (is_array($keywordsGenerated)) {
             $useMinMax = false;
@@ -2831,7 +2999,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_KEYWORDS_GENERATED, $keywordsGenerated, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_KEYWORDS_GENERATED, $keywordsGenerated, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2844,15 +3014,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPublisherStock(array('min' => 12)); // WHERE article_publisher_stock > 12
      * </code>
      *
-     * @param     mixed $publisherStock The value to use as filter.
+     * @param mixed $publisherStock The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisherStock($publisherStock = null, $comparison = null)
+    public function filterByPublisherStock($publisherStock = null, ?string $comparison = null)
     {
         if (is_array($publisherStock)) {
             $useMinMax = false;
@@ -2872,7 +3042,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER_STOCK, $publisherStock, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUBLISHER_STOCK, $publisherStock, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2885,15 +3057,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByHits(array('min' => 12)); // WHERE article_hits > 12
      * </code>
      *
-     * @param     mixed $hits The value to use as filter.
+     * @param mixed $hits The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByHits($hits = null, $comparison = null)
+    public function filterByHits($hits = null, ?string $comparison = null)
     {
         if (is_array($hits)) {
             $useMinMax = false;
@@ -2913,7 +3085,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_HITS, $hits, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_HITS, $hits, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2926,15 +3100,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByEditingUser(array('min' => 12)); // WHERE article_editing_user > 12
      * </code>
      *
-     * @param     mixed $editingUser The value to use as filter.
+     * @param mixed $editingUser The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByEditingUser($editingUser = null, $comparison = null)
+    public function filterByEditingUser($editingUser = null, ?string $comparison = null)
     {
         if (is_array($editingUser)) {
             $useMinMax = false;
@@ -2954,7 +3128,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EDITING_USER, $editingUser, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_EDITING_USER, $editingUser, $comparison);
+
+        return $this;
     }
 
     /**
@@ -2967,17 +3143,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByInsert(array('max' => 'yesterday')); // WHERE article_insert > '2011-03-13'
      * </code>
      *
-     * @param     mixed $insert The value to use as filter.
+     * @param mixed $insert The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByInsert($insert = null, $comparison = null)
+    public function filterByInsert($insert = null, ?string $comparison = null)
     {
         if (is_array($insert)) {
             $useMinMax = false;
@@ -2997,7 +3173,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_INSERT, $insert, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_INSERT, $insert, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3010,17 +3188,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByUpdate(array('max' => 'yesterday')); // WHERE article_update > '2011-03-13'
      * </code>
      *
-     * @param     mixed $update The value to use as filter.
+     * @param mixed $update The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdate($update = null, $comparison = null)
+    public function filterByUpdate($update = null, ?string $comparison = null)
     {
         if (is_array($update)) {
             $useMinMax = false;
@@ -3040,7 +3218,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATE, $update, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATE, $update, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3053,17 +3233,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE article_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -3083,7 +3263,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3096,17 +3278,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE article_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -3126,7 +3308,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3138,22 +3322,24 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByDone('yes'); // WHERE article_done = true
      * </code>
      *
-     * @param     boolean|string $done The value to use as filter.
+     * @param bool|string $done The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDone($done = null, $comparison = null)
+    public function filterByDone($done = null, ?string $comparison = null)
     {
         if (is_string($done)) {
             $done = in_array(strtolower($done), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DONE, $done, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DONE, $done, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3165,22 +3351,24 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByToCheck('yes'); // WHERE article_to_check = true
      * </code>
      *
-     * @param     boolean|string $toCheck The value to use as filter.
+     * @param bool|string $toCheck The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByToCheck($toCheck = null, $comparison = null)
+    public function filterByToCheck($toCheck = null, ?string $comparison = null)
     {
         if (is_string($toCheck)) {
             $toCheck = in_array(strtolower($toCheck), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TO_CHECK, $toCheck, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_TO_CHECK, $toCheck, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3193,17 +3381,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByPushedToData(array('max' => 'yesterday')); // WHERE article_pushed_to_data > '2011-03-13'
      * </code>
      *
-     * @param     mixed $pushedToData The value to use as filter.
+     * @param mixed $pushedToData The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPushedToData($pushedToData = null, $comparison = null)
+    public function filterByPushedToData($pushedToData = null, ?string $comparison = null)
     {
         if (is_array($pushedToData)) {
             $useMinMax = false;
@@ -3223,7 +3411,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $pushedToData, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_PUSHED_TO_DATA, $pushedToData, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3236,15 +3426,15 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByDeletionBy(array('min' => 12)); // WHERE article_deletion_by > 12
      * </code>
      *
-     * @param     mixed $deletionBy The value to use as filter.
+     * @param mixed $deletionBy The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDeletionBy($deletionBy = null, $comparison = null)
+    public function filterByDeletionBy($deletionBy = null, ?string $comparison = null)
     {
         if (is_array($deletionBy)) {
             $useMinMax = false;
@@ -3264,7 +3454,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_BY, $deletionBy, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_BY, $deletionBy, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3277,17 +3469,17 @@ abstract class ArticleQuery extends ModelCriteria
      * $query->filterByDeletionDate(array('max' => 'yesterday')); // WHERE article_deletion_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $deletionDate The value to use as filter.
+     * @param mixed $deletionDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDeletionDate($deletionDate = null, $comparison = null)
+    public function filterByDeletionDate($deletionDate = null, ?string $comparison = null)
     {
         if (is_array($deletionDate)) {
             $useMinMax = false;
@@ -3307,7 +3499,9 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_DATE, $deletionDate, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_DATE, $deletionDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -3317,14 +3511,15 @@ abstract class ArticleQuery extends ModelCriteria
      * <code>
      * $query->filterByDeletionReason('fooValue');   // WHERE article_deletion_reason = 'fooValue'
      * $query->filterByDeletionReason('%fooValue%', Criteria::LIKE); // WHERE article_deletion_reason LIKE '%fooValue%'
+     * $query->filterByDeletionReason(['foo', 'bar']); // WHERE article_deletion_reason IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $deletionReason The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $deletionReason The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDeletionReason($deletionReason = null, $comparison = null)
+    public function filterByDeletionReason($deletionReason = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($deletionReason)) {
@@ -3332,20 +3527,22 @@ abstract class ArticleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $deletionReason, $comparison);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_DELETION_REASON, $deletionReason, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \Model\Publisher object
      *
      * @param \Model\Publisher|ObjectCollection $publisher The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByPublisher($publisher, $comparison = null)
+    public function filterByPublisher($publisher, ?string $comparison = null)
     {
         if ($publisher instanceof \Model\Publisher) {
             return $this
@@ -3355,8 +3552,10 @@ abstract class ArticleQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(ArticleTableMap::COL_PUBLISHER_ID, $publisher->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByPublisher() only accepts arguments of type \Model\Publisher or Collection');
         }
@@ -3365,12 +3564,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Publisher relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinPublisher($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinPublisher(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Publisher');
@@ -3399,9 +3598,9 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\PublisherQuery A secondary query class using the current class as primary query
      */
@@ -3471,13 +3670,13 @@ abstract class ArticleQuery extends ModelCriteria
      * Filter the query by a related \Model\BookCollection object
      *
      * @param \Model\BookCollection|ObjectCollection $bookCollection The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByBookCollection($bookCollection, $comparison = null)
+    public function filterByBookCollection($bookCollection, ?string $comparison = null)
     {
         if ($bookCollection instanceof \Model\BookCollection) {
             return $this
@@ -3487,8 +3686,10 @@ abstract class ArticleQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(ArticleTableMap::COL_COLLECTION_ID, $bookCollection->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByBookCollection() only accepts arguments of type \Model\BookCollection or Collection');
         }
@@ -3497,12 +3698,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the BookCollection relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinBookCollection($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinBookCollection(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('BookCollection');
@@ -3531,9 +3732,9 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\BookCollectionQuery A secondary query class using the current class as primary query
      */
@@ -3603,20 +3804,24 @@ abstract class ArticleQuery extends ModelCriteria
      * Filter the query by a related \Model\Link object
      *
      * @param \Model\Link|ObjectCollection $link the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLink($link, $comparison = null)
+    public function filterByLink($link, ?string $comparison = null)
     {
         if ($link instanceof \Model\Link) {
-            return $this
+            $this
                 ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $link->getArticleId(), $comparison);
+
+            return $this;
         } elseif ($link instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useLinkQuery()
                 ->filterByPrimaryKeys($link->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByLink() only accepts arguments of type \Model\Link or Collection');
         }
@@ -3625,12 +3830,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Link relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinLink($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinLink(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Link');
@@ -3659,9 +3864,9 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\LinkQuery A secondary query class using the current class as primary query
      */
@@ -3731,20 +3936,24 @@ abstract class ArticleQuery extends ModelCriteria
      * Filter the query by a related \Model\Role object
      *
      * @param \Model\Role|ObjectCollection $role the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByRole($role, $comparison = null)
+    public function filterByRole($role, ?string $comparison = null)
     {
         if ($role instanceof \Model\Role) {
-            return $this
+            $this
                 ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $role->getArticleId(), $comparison);
+
+            return $this;
         } elseif ($role instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useRoleQuery()
                 ->filterByPrimaryKeys($role->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByRole() only accepts arguments of type \Model\Role or Collection');
         }
@@ -3753,12 +3962,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Role relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinRole($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRole(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Role');
@@ -3787,9 +3996,9 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\RoleQuery A secondary query class using the current class as primary query
      */
@@ -3859,20 +4068,24 @@ abstract class ArticleQuery extends ModelCriteria
      * Filter the query by a related \Model\Stock object
      *
      * @param \Model\Stock|ObjectCollection $stock the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByStock($stock, $comparison = null)
+    public function filterByStock($stock, ?string $comparison = null)
     {
         if ($stock instanceof \Model\Stock) {
-            return $this
+            $this
                 ->addUsingAlias(ArticleTableMap::COL_ARTICLE_ID, $stock->getArticleId(), $comparison);
+
+            return $this;
         } elseif ($stock instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useStockQuery()
                 ->filterByPrimaryKeys($stock->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByStock() only accepts arguments of type \Model\Stock or Collection');
         }
@@ -3881,12 +4094,12 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Stock relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinStock($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinStock(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Stock');
@@ -3915,9 +4128,9 @@ abstract class ArticleQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \Model\StockQuery A secondary query class using the current class as primary query
      */
@@ -3986,9 +4199,9 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildArticle $article Object to remove from the list of results
+     * @param ChildArticle $article Object to remove from the list of results
      *
-     * @return $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($article = null)
     {
@@ -4005,7 +4218,7 @@ abstract class ArticleQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleTableMap::DATABASE_NAME);
@@ -4030,12 +4243,12 @@ abstract class ArticleQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(ArticleTableMap::DATABASE_NAME);
@@ -4065,65 +4278,77 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ArticleTableMap::COL_ARTICLE_UPDATED);
+        $this->addDescendingOrderByColumn(ArticleTableMap::COL_ARTICLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ArticleTableMap::COL_ARTICLE_UPDATED);
+        $this->addAscendingOrderByColumn(ArticleTableMap::COL_ARTICLE_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(ArticleTableMap::COL_ARTICLE_CREATED);
+        $this->addDescendingOrderByColumn(ArticleTableMap::COL_ARTICLE_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(ArticleTableMap::COL_ARTICLE_CREATED);
+        $this->addAscendingOrderByColumn(ArticleTableMap::COL_ARTICLE_CREATED);
+
+        return $this;
     }
 
     // sluggable behavior
@@ -4131,26 +4356,28 @@ abstract class ArticleQuery extends ModelCriteria
     /**
      * Filter the query on the slug column
      *
-     * @param     string $slug The value to use as filter.
+     * @param string $slug The value to use as filter.
      *
-     * @return    $this|ChildArticleQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySlug($slug)
+    public function filterBySlug(string $slug)
     {
-        return $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_URL, $slug, Criteria::EQUAL);
+        $this->addUsingAlias(ArticleTableMap::COL_ARTICLE_URL, $slug, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Find one object based on its slug
      *
-     * @param     string $slug The value to use as filter.
-     * @param     ConnectionInterface $con The optional connection object
+     * @param string $slug The value to use as filter.
+     * @param ConnectionInterface $con The optional connection object
      *
-     * @return    ChildArticle the result, formatted by the current formatter
+     * @return ChildArticle the result, formatted by the current formatter
      */
-    public function findOneBySlug($slug, $con = null)
+    public function findOneBySlug(string $slug, ?ConnectionInterface $con = null)
     {
         return $this->filterBySlug($slug)->findOne($con);
     }
 
-} // ArticleQuery
+}

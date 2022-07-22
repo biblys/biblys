@@ -10,7 +10,7 @@ use Model\Map\CountryTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -43,8 +43,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountryQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCountryQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCountry|null findOne(ConnectionInterface $con = null) Return the first ChildCountry matching the query
- * @method     ChildCountry findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCountry matching the query, or a new ChildCountry object populated from the query conditions when no match is found
+ * @method     ChildCountry|null findOne(?ConnectionInterface $con = null) Return the first ChildCountry matching the query
+ * @method     ChildCountry findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCountry matching the query, or a new ChildCountry object populated from the query conditions when no match is found
  *
  * @method     ChildCountry|null findOneById(int $country_id) Return the first ChildCountry filtered by the country_id column
  * @method     ChildCountry|null findOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column
@@ -54,8 +54,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry|null findOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column
  * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column *
 
- * @method     ChildCountry requirePk($key, ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCountry requireOne(ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCountry requirePk($key, ?ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCountry requireOne(?ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCountry requireOneById(int $country_id) Return the first ChildCountry filtered by the country_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByCode(string $country_code) Return the first ChildCountry filtered by the country_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -65,24 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry requireOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCountry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> find(ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
- * @method     ChildCountry[]|ObjectCollection findById(int $country_id) Return ChildCountry objects filtered by the country_id column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findById(int $country_id) Return ChildCountry objects filtered by the country_id column
- * @method     ChildCountry[]|ObjectCollection findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
- * @method     ChildCountry[]|ObjectCollection findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
- * @method     ChildCountry[]|ObjectCollection findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @method     ChildCountry[]|ObjectCollection findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @method     ChildCountry[]|ObjectCollection findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
- * @method     ChildCountry[]|ObjectCollection findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
- * @psalm-method ObjectCollection&\Traversable<ChildCountry> findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
- * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildCountry[]|Collection find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildCountry> find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
+ * @method     ChildCountry[]|Collection findById(int $country_id) Return ChildCountry objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildCountry> findById(int $country_id) Return ChildCountry objects filtered by the country_id column
+ * @method     ChildCountry[]|Collection findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
+ * @method     ChildCountry[]|Collection findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
+ * @method     ChildCountry[]|Collection findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
+ * @method     ChildCountry[]|Collection findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
+ * @method     ChildCountry[]|Collection findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
+ * @method     ChildCountry[]|Collection findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
+ * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
 abstract class CountryQuery extends ModelCriteria
@@ -92,9 +92,9 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Initializes internal state of \Model\Base\CountryQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\Model\\Country', $modelAlias = null)
     {
@@ -104,12 +104,12 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Returns a new ChildCountryQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildCountryQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildCountryQuery) {
             return $criteria;
@@ -139,7 +139,7 @@ abstract class CountryQuery extends ModelCriteria
      *
      * @return ChildCountry|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -171,8 +171,8 @@ abstract class CountryQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -204,8 +204,8 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCountry|array|mixed the result, formatted by the current formatter
      */
@@ -225,12 +225,12 @@ abstract class CountryQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -247,27 +247,31 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $key, Criteria::EQUAL);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $keys, Criteria::IN);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -280,15 +284,15 @@ abstract class CountryQuery extends ModelCriteria
      * $query->filterById(array('min' => 12)); // WHERE country_id > 12
      * </code>
      *
-     * @param     mixed $id The value to use as filter.
+     * @param mixed $id The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterById($id = null, $comparison = null)
+    public function filterById($id = null, ?string $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
@@ -308,7 +312,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $id, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_ID, $id, $comparison);
+
+        return $this;
     }
 
     /**
@@ -318,14 +324,15 @@ abstract class CountryQuery extends ModelCriteria
      * <code>
      * $query->filterByCode('fooValue');   // WHERE country_code = 'fooValue'
      * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE country_code LIKE '%fooValue%'
+     * $query->filterByCode(['foo', 'bar']); // WHERE country_code IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $code The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $code The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCode($code = null, $comparison = null)
+    public function filterByCode($code = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($code)) {
@@ -333,7 +340,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CODE, $code, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CODE, $code, $comparison);
+
+        return $this;
     }
 
     /**
@@ -343,14 +352,15 @@ abstract class CountryQuery extends ModelCriteria
      * <code>
      * $query->filterByName('fooValue');   // WHERE country_name = 'fooValue'
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE country_name LIKE '%fooValue%'
+     * $query->filterByName(['foo', 'bar']); // WHERE country_name IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $name The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($name)) {
@@ -358,7 +368,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME, $name, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -368,14 +380,15 @@ abstract class CountryQuery extends ModelCriteria
      * <code>
      * $query->filterByNameEn('fooValue');   // WHERE country_name_en = 'fooValue'
      * $query->filterByNameEn('%fooValue%', Criteria::LIKE); // WHERE country_name_en LIKE '%fooValue%'
+     * $query->filterByNameEn(['foo', 'bar']); // WHERE country_name_en IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $nameEn The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $nameEn The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByNameEn($nameEn = null, $comparison = null)
+    public function filterByNameEn($nameEn = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($nameEn)) {
@@ -383,7 +396,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME_EN, $nameEn, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_NAME_EN, $nameEn, $comparison);
+
+        return $this;
     }
 
     /**
@@ -393,14 +408,15 @@ abstract class CountryQuery extends ModelCriteria
      * <code>
      * $query->filterByShippingZone('fooValue');   // WHERE shipping_zone = 'fooValue'
      * $query->filterByShippingZone('%fooValue%', Criteria::LIKE); // WHERE shipping_zone LIKE '%fooValue%'
+     * $query->filterByShippingZone(['foo', 'bar']); // WHERE shipping_zone IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $shippingZone The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $shippingZone The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByShippingZone($shippingZone = null, $comparison = null)
+    public function filterByShippingZone($shippingZone = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($shippingZone)) {
@@ -408,7 +424,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_SHIPPING_ZONE, $shippingZone, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_SHIPPING_ZONE, $shippingZone, $comparison);
+
+        return $this;
     }
 
     /**
@@ -421,17 +439,17 @@ abstract class CountryQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE country_created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -451,7 +469,9 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, $createdAt, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -464,17 +484,17 @@ abstract class CountryQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE country_updated > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -494,15 +514,17 @@ abstract class CountryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt, $comparison);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildCountry $country Object to remove from the list of results
+     * @param ChildCountry $country Object to remove from the list of results
      *
-     * @return $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($country = null)
     {
@@ -519,7 +541,7 @@ abstract class CountryQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
@@ -544,12 +566,12 @@ abstract class CountryQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CountryTableMap::DATABASE_NAME);
@@ -579,65 +601,77 @@ abstract class CountryQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_UPDATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+        $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+        $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_UPDATED);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+        $this->addDescendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(CountryTableMap::COL_COUNTRY_CREATED, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildCountryQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+        $this->addAscendingOrderByColumn(CountryTableMap::COL_COUNTRY_CREATED);
+
+        return $this;
     }
 
-} // CountryQuery
+}

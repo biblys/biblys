@@ -33,285 +33,289 @@ class StockTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Model.Map.StockTableMap';
+    public const CLASS_NAME = 'Model.Map.StockTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'default';
+    public const DATABASE_NAME = 'default';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'stock';
+    public const TABLE_NAME = 'stock';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Model\\Stock';
+    public const OM_CLASS = '\\Model\\Stock';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Model.Stock';
+    public const CLASS_DEFAULT = 'Model.Stock';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 41;
+    public const NUM_COLUMNS = 41;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 41;
+    public const NUM_HYDRATE_COLUMNS = 41;
 
     /**
      * the column name for the stock_id field
      */
-    const COL_STOCK_ID = 'stock.stock_id';
+    public const COL_STOCK_ID = 'stock.stock_id';
 
     /**
      * the column name for the site_id field
      */
-    const COL_SITE_ID = 'stock.site_id';
+    public const COL_SITE_ID = 'stock.site_id';
 
     /**
      * the column name for the article_id field
      */
-    const COL_ARTICLE_ID = 'stock.article_id';
+    public const COL_ARTICLE_ID = 'stock.article_id';
 
     /**
      * the column name for the campaign_id field
      */
-    const COL_CAMPAIGN_ID = 'stock.campaign_id';
+    public const COL_CAMPAIGN_ID = 'stock.campaign_id';
 
     /**
      * the column name for the reward_id field
      */
-    const COL_REWARD_ID = 'stock.reward_id';
+    public const COL_REWARD_ID = 'stock.reward_id';
 
     /**
      * the column name for the user_id field
      */
-    const COL_USER_ID = 'stock.user_id';
+    public const COL_USER_ID = 'stock.user_id';
 
     /**
      * the column name for the customer_id field
      */
-    const COL_CUSTOMER_ID = 'stock.customer_id';
+    public const COL_CUSTOMER_ID = 'stock.customer_id';
 
     /**
      * the column name for the wish_id field
      */
-    const COL_WISH_ID = 'stock.wish_id';
+    public const COL_WISH_ID = 'stock.wish_id';
 
     /**
      * the column name for the cart_id field
      */
-    const COL_CART_ID = 'stock.cart_id';
+    public const COL_CART_ID = 'stock.cart_id';
 
     /**
      * the column name for the order_id field
      */
-    const COL_ORDER_ID = 'stock.order_id';
+    public const COL_ORDER_ID = 'stock.order_id';
 
     /**
      * the column name for the coupon_id field
      */
-    const COL_COUPON_ID = 'stock.coupon_id';
+    public const COL_COUPON_ID = 'stock.coupon_id';
 
     /**
      * the column name for the stock_shop field
      */
-    const COL_STOCK_SHOP = 'stock.stock_shop';
+    public const COL_STOCK_SHOP = 'stock.stock_shop';
 
     /**
      * the column name for the stock_invoice field
      */
-    const COL_STOCK_INVOICE = 'stock.stock_invoice';
+    public const COL_STOCK_INVOICE = 'stock.stock_invoice';
 
     /**
      * the column name for the stock_depot field
      */
-    const COL_STOCK_DEPOT = 'stock.stock_depot';
+    public const COL_STOCK_DEPOT = 'stock.stock_depot';
 
     /**
      * the column name for the stock_stockage field
      */
-    const COL_STOCK_STOCKAGE = 'stock.stock_stockage';
+    public const COL_STOCK_STOCKAGE = 'stock.stock_stockage';
 
     /**
      * the column name for the stock_condition field
      */
-    const COL_STOCK_CONDITION = 'stock.stock_condition';
+    public const COL_STOCK_CONDITION = 'stock.stock_condition';
 
     /**
      * the column name for the stock_condition_details field
      */
-    const COL_STOCK_CONDITION_DETAILS = 'stock.stock_condition_details';
+    public const COL_STOCK_CONDITION_DETAILS = 'stock.stock_condition_details';
 
     /**
      * the column name for the stock_purchase_price field
      */
-    const COL_STOCK_PURCHASE_PRICE = 'stock.stock_purchase_price';
+    public const COL_STOCK_PURCHASE_PRICE = 'stock.stock_purchase_price';
 
     /**
      * the column name for the stock_selling_price field
      */
-    const COL_STOCK_SELLING_PRICE = 'stock.stock_selling_price';
+    public const COL_STOCK_SELLING_PRICE = 'stock.stock_selling_price';
 
     /**
      * the column name for the stock_selling_price2 field
      */
-    const COL_STOCK_SELLING_PRICE2 = 'stock.stock_selling_price2';
+    public const COL_STOCK_SELLING_PRICE2 = 'stock.stock_selling_price2';
 
     /**
      * the column name for the stock_selling_price_saved field
      */
-    const COL_STOCK_SELLING_PRICE_SAVED = 'stock.stock_selling_price_saved';
+    public const COL_STOCK_SELLING_PRICE_SAVED = 'stock.stock_selling_price_saved';
 
     /**
      * the column name for the stock_selling_price_ht field
      */
-    const COL_STOCK_SELLING_PRICE_HT = 'stock.stock_selling_price_ht';
+    public const COL_STOCK_SELLING_PRICE_HT = 'stock.stock_selling_price_ht';
 
     /**
      * the column name for the stock_selling_price_tva field
      */
-    const COL_STOCK_SELLING_PRICE_TVA = 'stock.stock_selling_price_tva';
+    public const COL_STOCK_SELLING_PRICE_TVA = 'stock.stock_selling_price_tva';
 
     /**
      * the column name for the stock_tva_rate field
      */
-    const COL_STOCK_TVA_RATE = 'stock.stock_tva_rate';
+    public const COL_STOCK_TVA_RATE = 'stock.stock_tva_rate';
 
     /**
      * the column name for the stock_weight field
      */
-    const COL_STOCK_WEIGHT = 'stock.stock_weight';
+    public const COL_STOCK_WEIGHT = 'stock.stock_weight';
 
     /**
      * the column name for the stock_pub_year field
      */
-    const COL_STOCK_PUB_YEAR = 'stock.stock_pub_year';
+    public const COL_STOCK_PUB_YEAR = 'stock.stock_pub_year';
 
     /**
      * the column name for the stock_allow_predownload field
      */
-    const COL_STOCK_ALLOW_PREDOWNLOAD = 'stock.stock_allow_predownload';
+    public const COL_STOCK_ALLOW_PREDOWNLOAD = 'stock.stock_allow_predownload';
 
     /**
      * the column name for the stock_photo_version field
      */
-    const COL_STOCK_PHOTO_VERSION = 'stock.stock_photo_version';
+    public const COL_STOCK_PHOTO_VERSION = 'stock.stock_photo_version';
 
     /**
      * the column name for the stock_purchase_date field
      */
-    const COL_STOCK_PURCHASE_DATE = 'stock.stock_purchase_date';
+    public const COL_STOCK_PURCHASE_DATE = 'stock.stock_purchase_date';
 
     /**
      * the column name for the stock_onsale_date field
      */
-    const COL_STOCK_ONSALE_DATE = 'stock.stock_onsale_date';
+    public const COL_STOCK_ONSALE_DATE = 'stock.stock_onsale_date';
 
     /**
      * the column name for the stock_cart_date field
      */
-    const COL_STOCK_CART_DATE = 'stock.stock_cart_date';
+    public const COL_STOCK_CART_DATE = 'stock.stock_cart_date';
 
     /**
      * the column name for the stock_selling_date field
      */
-    const COL_STOCK_SELLING_DATE = 'stock.stock_selling_date';
+    public const COL_STOCK_SELLING_DATE = 'stock.stock_selling_date';
 
     /**
      * the column name for the stock_return_date field
      */
-    const COL_STOCK_RETURN_DATE = 'stock.stock_return_date';
+    public const COL_STOCK_RETURN_DATE = 'stock.stock_return_date';
 
     /**
      * the column name for the stock_lost_date field
      */
-    const COL_STOCK_LOST_DATE = 'stock.stock_lost_date';
+    public const COL_STOCK_LOST_DATE = 'stock.stock_lost_date';
 
     /**
      * the column name for the stock_media_ok field
      */
-    const COL_STOCK_MEDIA_OK = 'stock.stock_media_ok';
+    public const COL_STOCK_MEDIA_OK = 'stock.stock_media_ok';
 
     /**
      * the column name for the stock_file_updated field
      */
-    const COL_STOCK_FILE_UPDATED = 'stock.stock_file_updated';
+    public const COL_STOCK_FILE_UPDATED = 'stock.stock_file_updated';
 
     /**
      * the column name for the stock_insert field
      */
-    const COL_STOCK_INSERT = 'stock.stock_insert';
+    public const COL_STOCK_INSERT = 'stock.stock_insert';
 
     /**
      * the column name for the stock_update field
      */
-    const COL_STOCK_UPDATE = 'stock.stock_update';
+    public const COL_STOCK_UPDATE = 'stock.stock_update';
 
     /**
      * the column name for the stock_dl field
      */
-    const COL_STOCK_DL = 'stock.stock_dl';
+    public const COL_STOCK_DL = 'stock.stock_dl';
 
     /**
      * the column name for the stock_created field
      */
-    const COL_STOCK_CREATED = 'stock.stock_created';
+    public const COL_STOCK_CREATED = 'stock.stock_created';
 
     /**
      * the column name for the stock_updated field
      */
-    const COL_STOCK_UPDATED = 'stock.stock_updated';
+    public const COL_STOCK_UPDATED = 'stock.stock_updated';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'UserId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'userId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_USER_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, ),
-        self::TYPE_FIELDNAME     => array('stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'user_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'ArticleId', 'CampaignId', 'RewardId', 'UserId', 'CustomerId', 'WishId', 'CartId', 'OrderId', 'CouponId', 'Shop', 'Invoice', 'Depot', 'Stockage', 'Condition', 'ConditionDetails', 'PurchasePrice', 'SellingPrice', 'SellingPrice2', 'SellingPriceSaved', 'SellingPriceHt', 'SellingPriceTva', 'TvaRate', 'Weight', 'PubYear', 'AllowPredownload', 'PhotoVersion', 'PurchaseDate', 'OnsaleDate', 'CartDate', 'SellingDate', 'ReturnDate', 'LostDate', 'MediaOk', 'FileUpdated', 'Insert', 'Update', 'Dl', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'articleId', 'campaignId', 'rewardId', 'userId', 'customerId', 'wishId', 'cartId', 'orderId', 'couponId', 'shop', 'invoice', 'depot', 'stockage', 'condition', 'conditionDetails', 'purchasePrice', 'sellingPrice', 'sellingPrice2', 'sellingPriceSaved', 'sellingPriceHt', 'sellingPriceTva', 'tvaRate', 'weight', 'pubYear', 'allowPredownload', 'photoVersion', 'purchaseDate', 'onsaleDate', 'cartDate', 'sellingDate', 'returnDate', 'lostDate', 'mediaOk', 'fileUpdated', 'insert', 'update', 'dl', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID, StockTableMap::COL_SITE_ID, StockTableMap::COL_ARTICLE_ID, StockTableMap::COL_CAMPAIGN_ID, StockTableMap::COL_REWARD_ID, StockTableMap::COL_USER_ID, StockTableMap::COL_CUSTOMER_ID, StockTableMap::COL_WISH_ID, StockTableMap::COL_CART_ID, StockTableMap::COL_ORDER_ID, StockTableMap::COL_COUPON_ID, StockTableMap::COL_STOCK_SHOP, StockTableMap::COL_STOCK_INVOICE, StockTableMap::COL_STOCK_DEPOT, StockTableMap::COL_STOCK_STOCKAGE, StockTableMap::COL_STOCK_CONDITION, StockTableMap::COL_STOCK_CONDITION_DETAILS, StockTableMap::COL_STOCK_PURCHASE_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE, StockTableMap::COL_STOCK_SELLING_PRICE2, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED, StockTableMap::COL_STOCK_SELLING_PRICE_HT, StockTableMap::COL_STOCK_SELLING_PRICE_TVA, StockTableMap::COL_STOCK_TVA_RATE, StockTableMap::COL_STOCK_WEIGHT, StockTableMap::COL_STOCK_PUB_YEAR, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD, StockTableMap::COL_STOCK_PHOTO_VERSION, StockTableMap::COL_STOCK_PURCHASE_DATE, StockTableMap::COL_STOCK_ONSALE_DATE, StockTableMap::COL_STOCK_CART_DATE, StockTableMap::COL_STOCK_SELLING_DATE, StockTableMap::COL_STOCK_RETURN_DATE, StockTableMap::COL_STOCK_LOST_DATE, StockTableMap::COL_STOCK_MEDIA_OK, StockTableMap::COL_STOCK_FILE_UPDATED, StockTableMap::COL_STOCK_INSERT, StockTableMap::COL_STOCK_UPDATE, StockTableMap::COL_STOCK_DL, StockTableMap::COL_STOCK_CREATED, StockTableMap::COL_STOCK_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['stock_id', 'site_id', 'article_id', 'campaign_id', 'reward_id', 'user_id', 'customer_id', 'wish_id', 'cart_id', 'order_id', 'coupon_id', 'stock_shop', 'stock_invoice', 'stock_depot', 'stock_stockage', 'stock_condition', 'stock_condition_details', 'stock_purchase_price', 'stock_selling_price', 'stock_selling_price2', 'stock_selling_price_saved', 'stock_selling_price_ht', 'stock_selling_price_tva', 'stock_tva_rate', 'stock_weight', 'stock_pub_year', 'stock_allow_predownload', 'stock_photo_version', 'stock_purchase_date', 'stock_onsale_date', 'stock_cart_date', 'stock_selling_date', 'stock_return_date', 'stock_lost_date', 'stock_media_ok', 'stock_file_updated', 'stock_insert', 'stock_update', 'stock_dl', 'stock_created', 'stock_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'UserId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'userId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, ),
-        self::TYPE_COLNAME       => array(StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_USER_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, ),
-        self::TYPE_FIELDNAME     => array('stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'user_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'ArticleId' => 2, 'CampaignId' => 3, 'RewardId' => 4, 'UserId' => 5, 'CustomerId' => 6, 'WishId' => 7, 'CartId' => 8, 'OrderId' => 9, 'CouponId' => 10, 'Shop' => 11, 'Invoice' => 12, 'Depot' => 13, 'Stockage' => 14, 'Condition' => 15, 'ConditionDetails' => 16, 'PurchasePrice' => 17, 'SellingPrice' => 18, 'SellingPrice2' => 19, 'SellingPriceSaved' => 20, 'SellingPriceHt' => 21, 'SellingPriceTva' => 22, 'TvaRate' => 23, 'Weight' => 24, 'PubYear' => 25, 'AllowPredownload' => 26, 'PhotoVersion' => 27, 'PurchaseDate' => 28, 'OnsaleDate' => 29, 'CartDate' => 30, 'SellingDate' => 31, 'ReturnDate' => 32, 'LostDate' => 33, 'MediaOk' => 34, 'FileUpdated' => 35, 'Insert' => 36, 'Update' => 37, 'Dl' => 38, 'CreatedAt' => 39, 'UpdatedAt' => 40, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'articleId' => 2, 'campaignId' => 3, 'rewardId' => 4, 'userId' => 5, 'customerId' => 6, 'wishId' => 7, 'cartId' => 8, 'orderId' => 9, 'couponId' => 10, 'shop' => 11, 'invoice' => 12, 'depot' => 13, 'stockage' => 14, 'condition' => 15, 'conditionDetails' => 16, 'purchasePrice' => 17, 'sellingPrice' => 18, 'sellingPrice2' => 19, 'sellingPriceSaved' => 20, 'sellingPriceHt' => 21, 'sellingPriceTva' => 22, 'tvaRate' => 23, 'weight' => 24, 'pubYear' => 25, 'allowPredownload' => 26, 'photoVersion' => 27, 'purchaseDate' => 28, 'onsaleDate' => 29, 'cartDate' => 30, 'sellingDate' => 31, 'returnDate' => 32, 'lostDate' => 33, 'mediaOk' => 34, 'fileUpdated' => 35, 'insert' => 36, 'update' => 37, 'dl' => 38, 'createdAt' => 39, 'updatedAt' => 40, ],
+        self::TYPE_COLNAME       => [StockTableMap::COL_STOCK_ID => 0, StockTableMap::COL_SITE_ID => 1, StockTableMap::COL_ARTICLE_ID => 2, StockTableMap::COL_CAMPAIGN_ID => 3, StockTableMap::COL_REWARD_ID => 4, StockTableMap::COL_USER_ID => 5, StockTableMap::COL_CUSTOMER_ID => 6, StockTableMap::COL_WISH_ID => 7, StockTableMap::COL_CART_ID => 8, StockTableMap::COL_ORDER_ID => 9, StockTableMap::COL_COUPON_ID => 10, StockTableMap::COL_STOCK_SHOP => 11, StockTableMap::COL_STOCK_INVOICE => 12, StockTableMap::COL_STOCK_DEPOT => 13, StockTableMap::COL_STOCK_STOCKAGE => 14, StockTableMap::COL_STOCK_CONDITION => 15, StockTableMap::COL_STOCK_CONDITION_DETAILS => 16, StockTableMap::COL_STOCK_PURCHASE_PRICE => 17, StockTableMap::COL_STOCK_SELLING_PRICE => 18, StockTableMap::COL_STOCK_SELLING_PRICE2 => 19, StockTableMap::COL_STOCK_SELLING_PRICE_SAVED => 20, StockTableMap::COL_STOCK_SELLING_PRICE_HT => 21, StockTableMap::COL_STOCK_SELLING_PRICE_TVA => 22, StockTableMap::COL_STOCK_TVA_RATE => 23, StockTableMap::COL_STOCK_WEIGHT => 24, StockTableMap::COL_STOCK_PUB_YEAR => 25, StockTableMap::COL_STOCK_ALLOW_PREDOWNLOAD => 26, StockTableMap::COL_STOCK_PHOTO_VERSION => 27, StockTableMap::COL_STOCK_PURCHASE_DATE => 28, StockTableMap::COL_STOCK_ONSALE_DATE => 29, StockTableMap::COL_STOCK_CART_DATE => 30, StockTableMap::COL_STOCK_SELLING_DATE => 31, StockTableMap::COL_STOCK_RETURN_DATE => 32, StockTableMap::COL_STOCK_LOST_DATE => 33, StockTableMap::COL_STOCK_MEDIA_OK => 34, StockTableMap::COL_STOCK_FILE_UPDATED => 35, StockTableMap::COL_STOCK_INSERT => 36, StockTableMap::COL_STOCK_UPDATE => 37, StockTableMap::COL_STOCK_DL => 38, StockTableMap::COL_STOCK_CREATED => 39, StockTableMap::COL_STOCK_UPDATED => 40, ],
+        self::TYPE_FIELDNAME     => ['stock_id' => 0, 'site_id' => 1, 'article_id' => 2, 'campaign_id' => 3, 'reward_id' => 4, 'user_id' => 5, 'customer_id' => 6, 'wish_id' => 7, 'cart_id' => 8, 'order_id' => 9, 'coupon_id' => 10, 'stock_shop' => 11, 'stock_invoice' => 12, 'stock_depot' => 13, 'stock_stockage' => 14, 'stock_condition' => 15, 'stock_condition_details' => 16, 'stock_purchase_price' => 17, 'stock_selling_price' => 18, 'stock_selling_price2' => 19, 'stock_selling_price_saved' => 20, 'stock_selling_price_ht' => 21, 'stock_selling_price_tva' => 22, 'stock_tva_rate' => 23, 'stock_weight' => 24, 'stock_pub_year' => 25, 'stock_allow_predownload' => 26, 'stock_photo_version' => 27, 'stock_purchase_date' => 28, 'stock_onsale_date' => 29, 'stock_cart_date' => 30, 'stock_selling_date' => 31, 'stock_return_date' => 32, 'stock_lost_date' => 33, 'stock_media_ok' => 34, 'stock_file_updated' => 35, 'stock_insert' => 36, 'stock_update' => 37, 'stock_dl' => 38, 'stock_created' => 39, 'stock_updated' => 40, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'STOCK_ID',
@@ -649,9 +653,9 @@ class StockTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('stock');
@@ -702,12 +706,14 @@ class StockTableMap extends TableMap
         $this->addColumn('stock_dl', 'Dl', 'BOOLEAN', false, 1, false);
         $this->addColumn('stock_created', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('stock_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -723,20 +729,20 @@ class StockTableMap extends TableMap
     1 => ':article_id',
   ),
 ), null, null, null, false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
+        return [
             'timestampable' => ['create_column' => 'stock_created', 'update_column' => 'stock_updated', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
-        );
-    } // getBehaviors()
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -744,14 +750,14 @@ class StockTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -766,14 +772,14 @@ class StockTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -790,10 +796,10 @@ class StockTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? StockTableMap::CLASS_DEFAULT : StockTableMap::OM_CLASS;
     }
@@ -801,17 +807,17 @@ class StockTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Stock object, last column rank)
+     * @return array (Stock object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = StockTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = StockTableMap::getInstanceFromPool($key))) {
@@ -835,13 +841,13 @@ class StockTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -871,12 +877,13 @@ class StockTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(StockTableMap::COL_STOCK_ID);
@@ -971,12 +978,13 @@ class StockTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(StockTableMap::COL_STOCK_ID);
@@ -1069,10 +1077,10 @@ class StockTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(StockTableMap::DATABASE_NAME)->getTable(StockTableMap::TABLE_NAME);
     }
@@ -1080,15 +1088,15 @@ class StockTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Stock or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Stock object or primary key or array of primary keys
+     * @param mixed $values Criteria or Stock object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(StockTableMap::DATABASE_NAME);
@@ -1124,7 +1132,7 @@ class StockTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return StockQuery::create()->doDeleteAll($con);
     }
@@ -1132,13 +1140,13 @@ class StockTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Stock or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Stock object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or Stock object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(StockTableMap::DATABASE_NAME);
@@ -1165,4 +1173,4 @@ class StockTableMap extends TableMap
         });
     }
 
-} // StockTableMap
+}
