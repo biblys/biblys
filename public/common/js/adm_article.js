@@ -800,6 +800,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (!_isOnArticleEditorPage()) {
+    return;
+  }
+
   _loadContributions();
   document.querySelectorAll('.contribution-role-selector').forEach(element => {
     element.addEventListener('change', _changeContributionRole);
@@ -808,6 +812,14 @@ document.addEventListener('DOMContentLoaded', function() {
     element.addEventListener('click', _removeContribution);
   });
 });
+
+function _isOnArticleEditorPage() {
+  const articleEditor = document.querySelector('.article-editor');
+  if (articleEditor) {
+    return true;
+  }
+  return false;
+}
 
 function _loadContributions() {
   const articleId = document.querySelector('#article_id')?.value;
