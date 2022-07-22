@@ -55,7 +55,7 @@
     "symfony/webpack-encore-bundle": "^1.7",
     "jasonlewis/resource-watcher": "^1.2",
     "stripe/stripe-php": "^7.39",
-    "egulias/email-validator": "3.1.2",
+    "egulias/email-validator": "3.2.1",
     "symfony/mime": "^5.2",
     "rollbar/rollbar": "~2.1",
     "propel/propel": "^2.0.0-beta2",
