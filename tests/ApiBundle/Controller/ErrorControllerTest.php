@@ -6,6 +6,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -31,6 +32,30 @@ class ErrorControllerTest extends TestCase
         );
         $this->assertEquals(
             "That request is bad, man.",
+            $json->error->message,
+            "it should display error message"
+        );
+    }
+
+    /** 401 */
+    public function testUnauthorizedException()
+    {
+        // given
+        $controller = new ErrorController();
+        $exception = new UnauthorizedHttpException("","Who ARE you ?");
+
+        // when
+        $response = $controller->exception($exception);
+
+        // then
+        $json = json_decode($response->getContent());
+        $this->assertEquals(
+            401,
+            $response->getStatusCode(),
+            "it should response with HTTP status 401"
+        );
+        $this->assertEquals(
+            "Who ARE you ?",
             $json->error->message,
             "it should display error message"
         );

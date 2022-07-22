@@ -5,6 +5,7 @@ namespace ApiBundle\Controller;
 use Exception;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ErrorController extends Controller
 {
@@ -25,6 +26,10 @@ class ErrorController extends Controller
     {
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\BadRequestHttpException")) {
             return 400;
+        }
+
+        if (is_a($exception, UnauthorizedHttpException::class)) {
+            return 401;
         }
 
         if (
