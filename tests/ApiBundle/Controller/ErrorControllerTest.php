@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -56,6 +57,30 @@ class ErrorControllerTest extends TestCase
         );
         $this->assertEquals(
             "Who ARE you ?",
+            $json->error->message,
+            "it should display error message"
+        );
+    }
+
+    /** 403 */
+    public function testForbiddenException()
+    {
+        // given
+        $controller = new ErrorController();
+        $exception = new AccessDeniedHttpException("Can't touch this");
+
+        // when
+        $response = $controller->exception($exception);
+
+        // then
+        $json = json_decode($response->getContent());
+        $this->assertEquals(
+            403,
+            $response->getStatusCode(),
+            "it should response with HTTP status 403"
+        );
+        $this->assertEquals(
+            "Can't touch this",
             $json->error->message,
             "it should display error message"
         );
