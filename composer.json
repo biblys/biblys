@@ -23,7 +23,7 @@
     "db:seed": "bin/console db:seed"
   },
   "require": {
-    "php": "^7.3",
+    "php": "^7.4",
     "ext-json": "*",
     "ext-pdo": "*",
     "biblys/eurotax": "1.*",
@@ -79,6 +79,9 @@
     }
   },
   "config": {
-    "process-timeout": 0
+    "process-timeout": 0,
+    "allow-plugins": {
+      "kylekatarnls/update-helper": true
+    }
   }
 }

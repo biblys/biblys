@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.63.0 (DEV)
+
+Améliorations
+
+- Biblys ne supporte plus PHP 7.3. La nouvelle version minimale requise est 7.4.
+
 ### 2.62.2 (22 juillet 2022)
 
 Corrections
