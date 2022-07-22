@@ -11,6 +11,7 @@ use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -72,8 +73,8 @@ class AuthControllerTest extends TestCase
     public function testAuthActionWithUnknownUser()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
-        $this->expectErrorMessage("Bad credentials");
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Bad credentials");
 
         // given
         $controller = new AuthController();
@@ -92,8 +93,8 @@ class AuthControllerTest extends TestCase
     public function testAuthActionWithWrongPassword()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
-        $this->expectErrorMessage("Bad credentials");
+        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectExceptionMessage("Bad credentials");
         ModelFactory::createUser([
             "email" => "login@biblys.fr",
             "username" => "validUser",

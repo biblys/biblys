@@ -12,6 +12,7 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class AuthController extends Controller
 {
@@ -36,12 +37,12 @@ class AuthController extends Controller
 
         if (!$user) {
             Log::security("ERROR", "User unknown for login $login");
-            throw new AuthException("Bad credentials");
+            throw new UnauthorizedHttpException("", "Bad credentials");
         }
 
         if (!password_verify($password, $user->getPassword())) {
             Log::security("ERROR", "Wrong password for login $login");
-            throw new AuthException("Bad credentials");
+            throw new UnauthorizedHttpException("", "Bad credentials");
         }
 
         if ($user->getEmailKey() !== null) {
