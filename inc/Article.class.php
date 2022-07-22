@@ -1435,7 +1435,7 @@ class ArticleManager extends EntityManager
             $article = $articles[0];
 
             // If found article has articleId, return true
-            if ($articleId === $article->get('id')) {
+            if ($articleId === (int) $article->get('id')) {
                 return true;
             }
 

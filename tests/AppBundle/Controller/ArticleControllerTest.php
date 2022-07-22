@@ -304,4 +304,46 @@ class ArticleControllerTest extends TestCase
             "return article with matching title"
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCheckIsbn()
+    {
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Cet ISBN est déjà utilisé par un autre article");
+
+        // given
+        ModelFactory::createArticle(["ean" => 9781234567897, "keywords" => "9781234567897"]);
+        $otherArticle = ModelFactory::createArticle();
+        $requestBody = json_encode(["article_id" => $otherArticle->getId(), "article_ean" => "9781234567897"]);
+        $request = new Request([], [], [], [], [], [], $requestBody);
+        $controller = new ArticleController();
+
+        // when
+        $controller->checkIsbn($request);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCheckIsbnIgnoresSameArticle()
+    {
+        // given
+        $article = ModelFactory::createArticle(["ean" => 9781234567880, "keywords" => "9781234567880"]);
+        $requestBody = json_encode(["article_id" => (string) $article->getId(), "article_ean" => "9781234567880"]);
+        $request = new Request([], [], [], [], [], [], $requestBody);
+        $controller = new ArticleController();
+
+        // when
+        $response = $controller->checkIsbn($request);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "should respond with 200"
+        );
+    }
 }

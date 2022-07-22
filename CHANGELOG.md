@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.62.2 (22 juillet 2022)
+
+Corrections
+
+- L'erreur "Cet ISBN est déjà utilisé par un autre article" pouvait 
+  apparaître lors de la création d'un article pour de mauvaises raisons. 
+  C'est corrigé. 
+
 ### 2.62.1 (12 juillet 2022)
 
 Corrections
