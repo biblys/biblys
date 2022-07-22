@@ -6,7 +6,9 @@ Corrections
 
 - L'erreur "Cet ISBN est déjà utilisé par un autre article" pouvait 
   apparaître lors de la création d'un article pour de mauvaises raisons. 
-  C'est corrigé. 
+  C'est corrigé.
+- Certains boutons et fonctionnalités de la page de gestion des stocks 
+  étaient parfois ignorées. C'est réparé.
 
 ### 2.62.1 (12 juillet 2022)
 
