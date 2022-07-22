@@ -11,6 +11,7 @@ use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -46,7 +47,7 @@ class AuthController extends Controller
         }
 
         if ($user->getEmailKey() !== null) {
-            throw new AuthException("Email address has not been validated");
+            throw new AccessDeniedHttpException("Email address has not been validated");
         }
 
         $session = Session::buildForUser($user);
