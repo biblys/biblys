@@ -167,76 +167,69 @@ class CronsController extends Controller
 
         $cjm = new CronJobManager();
 
-        try {
-            $ftpServer = 'ftp.titelive.com';
-            $shopId = $pdl['shop_id'];
-            $login = $pdl['login'];
-            $password = $pdl['password'];
+        $ftpServer = 'ftp.titelive.com';
+        $shopId = $pdl['shop_id'];
+        $login = $pdl['login'];
+        $password = $pdl['password'];
 
-            $active_stock_query = null;
-            $active_stock = $site->getOpt('active_stock');
-            if ($active_stock) {
-                $active_stock = "'".implode("','", explode(',', $active_stock))."'";
-                $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
-            }
-
-            $query = "
-                SELECT 
-                    MAX(`article_ean`) AS `ean`, 
-                    COUNT(`stock_id`) AS `qty`,
-                    MAX(`stock_selling_price`) `price`
-                FROM `stock` 
-                JOIN articles USING(`article_id`)
-                WHERE `site_id` = :site_id
-                    AND `article_ean` IS NOT NULL
-                    AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
-                    AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
-                    ".$active_stock_query.'
-                GROUP BY `article_ean`';
-            $stock = EntityManager::prepareAndExecute(
-                $query,
-                ['site_id' => $site->get('id')]
-            );
-
-            $title = 'EXTRACTION STOCK DU '.date('d/m/Y');
-            $stockCount = 0;
-            $articleCount = 0;
-
-            $lines = [];
-            while ($item = $stock->fetch(PDO::FETCH_ASSOC)) {
-                $ean = $item['ean'];
-                $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
-                $price = str_pad($item['price'], 10, '0', STR_PAD_LEFT);
-
-                $line = $shopId.$ean.$qty.$price;
-
-                if (strlen($line) !== 31) {
-                    throw new Exception("Line for $ean is not 31 chars long: $line");
-                }
-
-                $stockCount += $item['qty'];
-                ++$articleCount;
-
-                $lines[] = $line;
-            }
-
-            $file = $title."\r\n".join($lines, "\r\n");
-
-            $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
-            $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';
-
-            if (getenv("PHP_ENV") !== "test") {
-                file_put_contents($ftp, $file, 0, $stream);
-            }
-
-            $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
-            $result = "success";
-
-        } catch (Exception $exception) {
-            $response->setStatusCode(500);
-            $message = $exception->getMessage();
-            $result = "error";
+        $active_stock_query = null;
+        $active_stock = $site->getOpt('active_stock');
+        if ($active_stock) {
+            $active_stock = "'".implode("','", explode(',', $active_stock))."'";
+            $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
         }
+
+        $query = "
+            SELECT 
+                MAX(`article_ean`) AS `ean`, 
+                COUNT(`stock_id`) AS `qty`,
+                MAX(`stock_selling_price`) `price`
+            FROM `stock` 
+            JOIN articles USING(`article_id`)
+            WHERE `site_id` = :site_id
+                AND `article_ean` IS NOT NULL
+                AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL
+                AND `stock_lost_date` IS NULL AND `stock_condition` = 'Neuf'
+                ".$active_stock_query.'
+            GROUP BY `article_ean`';
+        $stock = EntityManager::prepareAndExecute(
+            $query,
+            ['site_id' => $site->get('id')]
+        );
+
+        $title = 'EXTRACTION STOCK DU '.date('d/m/Y');
+        $stockCount = 0;
+        $articleCount = 0;
+
+        $lines = [];
+        while ($item = $stock->fetch(PDO::FETCH_ASSOC)) {
+            $ean = $item['ean'];
+            $qty = str_pad($item['qty'], 4, '0', STR_PAD_LEFT);
+            $price = str_pad($item['price'], 10, '0', STR_PAD_LEFT);
+
+            $line = $shopId.$ean.$qty.$price;
+
+            if (strlen($line) !== 31) {
+                throw new Exception("Line for $ean is not 31 chars long: $line");
+            }
+
+            $stockCount += $item['qty'];
+            ++$articleCount;
+
+            $lines[] = $line;
+        }
+
+        $file = $title."\r\n".join($lines, "\r\n");
+
+        $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
+        $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';
+
+        if (getenv("PHP_ENV") !== "test") {
+            file_put_contents($ftp, $file, 0, $stream);
+        }
+
+        $message = "Export Place des Libraires réussi ($articleCount articles, $stockCount exemplaires).";
+        $result = "success";
 
         $job = $cjm->create([
             'cron_job_task' => 'export-pdl',
