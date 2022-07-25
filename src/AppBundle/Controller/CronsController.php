@@ -219,7 +219,7 @@ class CronsController extends Controller
             $lines[] = $line;
         }
 
-        $file = $title."\r\n".join($lines, "\r\n");
+        $file = $title."\r\n".join("\r\n", $lines);
 
         $stream = stream_context_create(['ftp' => ['overwrite' => true]]);
         $ftp = "ftp://$login:$password@$ftpServer/".$shopId.'_ART.asc';

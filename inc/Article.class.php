@@ -802,7 +802,7 @@ class Article extends Entity
         $rayonNames = array_map(function ($rayon) {
             return '"' . $rayon->get('name') . '"';
         }, $rayons);
-        return "[" . join($rayonNames, ",") . "]";
+        return "[" . join(",", $rayonNames) . "]";
     }
 
     /**
