@@ -247,11 +247,11 @@ class RayonController extends Controller
             if ($article_ean) {
                 $articleWhere['article_ean'] = Isbn::convertToEan13($article_ean);
             } elseif ($article_id) {
-                $articleWhere['article_id'] = $_POST['article_id'];
+                $articleWhere['article_id'] = $article_id;
             } elseif ($collection_id) {
-                $articleWhere['collection_id'] = $_POST['collection_id'];
+                $articleWhere['collection_id'] = $collection_id;
             } elseif ($article_type) {
-                $articleWhere['type_id'] = $_POST['article_type'];
+                $articleWhere['type_id'] = $article_type;
             }
 
             $articles = $am->getAll($articleWhere, [], false);
