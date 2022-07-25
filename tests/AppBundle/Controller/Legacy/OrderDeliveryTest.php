@@ -42,8 +42,12 @@ class OrderDeliveryTest extends TestCase
         $cm->addArticle($cart, $article);
         $shm = new ShippingManager();
         $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
-        $site = new Site(["site_contact" => "merchant@biblys.fr"]);
-        $_POST = ["order_email" => "customer@biblys.fr"];
+        $site = new Site(["site_contact" => "merchant@biblys.fr", "site_tva" => "FR"]);
+        $_POST = [
+            "order_email" => "customer@biblys.fr",
+            "order_firstname" => "Barnabé",
+            "order_lastname" => "Famagouste"
+        ];
         $_SITE = $site;
         $country = ModelFactory::createCountry();
 
@@ -108,7 +112,11 @@ class OrderDeliveryTest extends TestCase
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
         $site = new Site(["site_contact" => "merchant@biblys.fr"]);
-        $_POST = ["order_email" => "e-customer@biblys.fr"];
+        $_POST = [
+            "order_email" => "e-customer@biblys.fr",
+            "order_firstname" => "Barnabé",
+            "order_lastname" => "Famagouste"
+        ];
         $_SITE = $site;
 
         $request = new Request();
@@ -169,7 +177,11 @@ class OrderDeliveryTest extends TestCase
         $shm = new ShippingManager();
         $shipping = $shm->create([]);
         $site = new Site(["site_contact" => "merchant@biblys.fr"]);
-        $_POST = ["order_email" => "customer@biblys.fr"];
+        $_POST = [
+            "order_email" => "customer@biblys.fr",
+            "order_firstname" => "Barnabé",
+            "order_lastname" => "Famagouste"
+        ];
         $_SITE = $site;
 
         $request = new Request();
@@ -239,7 +251,11 @@ class OrderDeliveryTest extends TestCase
         $cm = new CartManager();
         $cm->addArticle($cart, $article);
         $shipping = ModelFactory::createShippingFee(["type" => "suivi"]);
-        $_POST = ["order_email" => "customer@biblys.fr"];
+        $_POST = [
+            "order_email" => "customer@biblys.fr",
+            "order_firstname" => "Barnabé",
+            "order_lastname" => "Famagouste"
+        ];
 
         $request = new Request();
         $request->setMethod("POST");

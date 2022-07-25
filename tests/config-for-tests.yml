@@ -21,5 +21,7 @@ cron:
 
 placedeslibraires:
   shop_id: xxx
+  login: bookshop
+  password: password
 
 composer_home: ~/.composer

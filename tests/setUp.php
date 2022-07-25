@@ -12,7 +12,7 @@ $_SERVER["HTTP_HOST"] = "www.biblys.fr";
 $_SERVER["REQUEST_URI"] = "/";
 $_SERVER["SERVER_NAME"] = "localhost";
 $_SERVER["SCRIPT_NAME"] = "index.php";
-
+$_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
 $config = new Config();
 setUpTestDatabase($config->get("db"));
@@ -25,7 +25,7 @@ $config->set("environment", "test");
 function createFixtures(): void
 {
     $site = new \Model\Site();
-    $site->setTva(1);
+    $site->setTva("FR");
     $site->setTitle("Librairie Ys");
     $site->setContact("contact@biblys.fr");
     $site->setTag("YS");

@@ -161,7 +161,9 @@ class ModelFactory
         $reward->setLimited($attributes["limited"] ?? 1);
 
         if (!isset($attributes["campaign_id"])) {
-            $campaign = ModelFactory::createCrowdfundingCampaign(["site_id" => $attributes["site_id"]]);
+            $campaign = ModelFactory::createCrowdfundingCampaign(
+                ["site_id" => $attributes["site_id"] ?? 1]
+            );
             $attributes["campaign_id"] = $campaign->getId();
         }
         $reward->setCampaignId($attributes["campaign_id"]);
