@@ -8,6 +8,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
+use Lcobucci\JWT\Claim\Basic;
 use Lcobucci\JWT\Token;
 use Model\SessionQuery;
 use OpenIDConnectClient\AccessToken;
@@ -51,7 +52,8 @@ class OpenIDConnectControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
 
-        $idToken = new Token(["alg" => "RS256"], ["sub" => $user->getId()]);
+        $subClaim = new Basic("sub", $user->getId());
+        $idToken = new Token(["alg" => "RS256"], ["sub" => $subClaim]);
         $accessToken = $this->createMock(AccessToken::class);
         $accessToken->method("getIdToken")->willReturn($idToken);
 

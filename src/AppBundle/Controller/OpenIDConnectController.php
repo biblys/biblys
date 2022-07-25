@@ -42,7 +42,7 @@ class OpenIDConnectController extends Controller
 
         $response->headers->setCookie(Cookie::create("id_token")->withValue($idToken));
 
-        $userId = $idToken->claims()->get("sub");
+        $userId = $idToken->getClaim("sub");
         $user = UserQuery::create()->findPk($userId);
         $sessionExpiresAt = new DateTime("+1 day");
         $session = Session::buildForUserAndCurrentSite($user, $currentSite, $sessionExpiresAt);
