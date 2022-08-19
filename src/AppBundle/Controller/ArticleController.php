@@ -116,11 +116,12 @@ class ArticleController extends Controller
         $query = $request->query->get("q");
         $inStockFilter = $request->query->get("in-stock");
 
-        $sort = $request->query->get("sort", "publication_date|desc");
+        $sort = $request->query->get("sort", "article_pubdate|desc");
         list($sortCriteria, $sortOrder) = explode("|", $sort);
 
         $sortOptions = [
-            ["criteria" => "publication_date", "order" => "desc", "label" => "date de publication (décroissant)"],
+            ["criteria" => "article_pubdate", "order" => "asc", "label" => "date de publication (△)"],
+            ["criteria" => "article_pubdate", "order" => "desc", "label" => "date de publication (▽)"],
         ];
 
         $articles = [];
@@ -138,8 +139,8 @@ class ArticleController extends Controller
                 $pagination = new Pagination($page, $count);
                 $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
                 $articles = $am->searchWithAvailableStock($query, $currentSite, [
-                    'order' => 'article_pubdate',
-                    'sort' => 'desc',
+                    'order' => $sortCriteria,
+                    'sort' => $sortOrder,
                     'limit' => $pagination->getLimit(),
                     'offset' => $pagination->getOffset(),
                 ]);
@@ -148,8 +149,8 @@ class ArticleController extends Controller
                 $pagination = new Pagination($page, $count);
                 $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
                 $articles = $am->search($query, [
-                    'order' => 'article_pubdate',
-                    'sort' => 'desc',
+                    'order' => $sortCriteria,
+                    'sort' => $sortOrder,
                     'limit' => $pagination->getLimit(),
                     'offset' => $pagination->getOffset(),
                 ]);

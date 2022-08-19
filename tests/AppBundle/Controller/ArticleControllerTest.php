@@ -267,6 +267,48 @@ class ArticleControllerTest extends TestCase
      * @throws LoaderError
      * @throws PropelException
      */
+    public function testSearchActionWithSortOption()
+    {
+        // given
+        ModelFactory::createArticle(
+            ["title" => "Résultat de recherche trié"],
+            null,
+            null,
+            [ModelFactory::createPeople()]
+        );
+        $controller = new ArticleController();
+        $request = new Request();
+        $request->query->set("q", "Résultat de recherche trié");
+        $request->query->set("sort", "article_pubdate|desc");
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        // when
+        $response = $controller->searchAction($request, $currentSite);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "1 résultat",
+            $response->getContent(),
+            "return correct number of results"
+        );
+        $this->assertStringContainsString(
+            "Résultat de recherche",
+            $response->getContent(),
+            "return article with matching title"
+        );
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testSearchActionWithAvailableStock()
     {
         // given
@@ -282,6 +324,51 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche avec stock");
+        $request->query->set("in-stock", "1");
+
+        // when
+        $response = $controller->searchAction($request, $currentSite);
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "returns HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "1 résultat",
+            $response->getContent(),
+            "return correct number of results"
+        );
+        $this->assertStringContainsString(
+            "Résultat de recherche",
+            $response->getContent(),
+            "return article with matching title"
+        );
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testSearchActionWithAvailableStockAndSortOption()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $article = ModelFactory::createArticle(
+            ["title" => "Résultat de recherche trié avec stock"],
+            null,
+            null,
+            [ModelFactory::createPeople()]
+        );
+        ModelFactory::createStockItem([], $site, $article);
+        $controller = new ArticleController();
+        $request = new Request();
+        $request->query->set("q", "Résultat de recherche trié avec stock");
+        $request->query->set("sort", "article_pubdate|asc");
         $request->query->set("in-stock", "1");
 
         // when
