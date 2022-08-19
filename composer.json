@@ -37,7 +37,7 @@
     "monolog/monolog": "^2.0",
     "google/recaptcha": "^1.1",
     "paypal/rest-api-sdk-php": "*",
-    "guzzlehttp/guzzle": "~6.0",
+    "guzzlehttp/guzzle": "~7.4",
     "biblys/isbn": "^2.0",
     "symfony/form": "^5.1",
     "symfony/security-csrf": "^5.3",
