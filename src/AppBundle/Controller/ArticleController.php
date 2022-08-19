@@ -116,14 +116,14 @@ class ArticleController extends Controller
         $query = $request->query->get("q");
         $inStockFilter = $request->query->get("in-stock");
 
-        $error = false;
         $articles = [];
         $count = 0;
         $pagination = null;
 
-        if ($query !== null && strlen($query) < 3) {
-            $error = "Le terme de recherche est trop court (trois caractères minimum).";
-        } elseif ($query !== null) {
+        $request->attributes->set("page_title", "Recherche");
+
+        if ($query) {
+            $request->attributes->set("page_title", "Recherche de ".$query);
             $page = (int) $request->query->get("p", 0);
 
             if ($inStockFilter) {
@@ -149,16 +149,10 @@ class ArticleController extends Controller
             }
         }
 
-        $request->attributes->set("page_title", "Recherche");
-        if ($query) {
-            $request->attributes->set("page_title", "Recherche de ".$query);
-        }
-
         return $this->render('AppBundle:Article:search.html.twig', [
             'articles' => $articles,
             'pages' => $pagination,
             'count' => $count,
-            'error' => $error,
             'query' => $query,
             'inStockFilterChecked' => $inStockFilter ? "checked" : "",
         ]);

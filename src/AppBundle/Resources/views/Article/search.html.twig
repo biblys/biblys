@@ -7,55 +7,48 @@
 {% block main %}
   <h1>Recherche</h1>
 
-  {% if error %}
-    <p class="alert alert-warning">
-      {{ error }}
-    </p>
+  {% if not query %}
+    <form class="search-form">
+      <div class="form-group">
+        <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
+      </div>
+    </form>
   {% else %}
+    <p>
+      {% if count == 0 %}
+        Aucun résultat
+      {% elseif count == 1 %}
+        1 résultat
+      {% else %}
+        {{ count }} résultats
+      {% endif %}
+      pour &laquo; {{ query }} &raquo;
+    </p>
 
-    {% if not query %}
-      <form class="search-form">
-        <div class="form-group">
-          <input type="search" class="form-control search-form-input" name="q" value="{{ query }}" placeholder="Titre, auteur, mot-clé, ISBN...">
-        </div>
-        <div class="form-group text-center">
-          <button type="submit" class="btn btn-primary search-form-button">Rechercher</button>
-        </div>
-      </form>
-    {% else %}
-      <p>
-        {% if count == 0 %}
-          Aucun résultat
-        {% elseif count == 1 %}
-          1 résultat
-        {% else %}
-          {{ count }} résultats
-        {% endif %}
-        pour &laquo; {{ query }} &raquo;
-      </p>
+    <form>
+      <div>
+        Trier par
+        <select name="sort">
+          <option value="publication_date|desc">date de parution (décroissante)</option>
+        </select>
+      </div>
 
-      <form>
+      {% if app.site.getOpt("virtual_stock") != 1 %}
         <div>
-          Trier par
-          <select name="sort">
-            <option value="publication_date|desc">date de parution (décroissante)</option>
-          </select>
+          <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
+          <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
         </div>
+      {% endif %}
 
-        {% if app.site.getOpt("virtual_stock") != 1 %}
-          <div>
-            <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
-            <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
-          </div>
-        {% endif %}
+      <input type="hidden" name="q" value="{{ query }}" />
 
-        <input type="hidden" name="q" value="{{ query }}" />
+      <button class="btn btn-sm btn-primary" type="submit">Actualiser</button>
+    </form>
 
-        <button class="btn btn-sm btn-primary" type="submit">Actualiser</button>
-      </form>
-
-      {% include 'AppBundle:Article:_list.html.twig' %}
-    {% endif %}
-
+    {% include 'AppBundle:Article:_list.html.twig' %}
   {% endif %}
+
 {% endblock %}
