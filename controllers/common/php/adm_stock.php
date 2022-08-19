@@ -549,7 +549,7 @@ if ($article) {
     // TVA d'après article
     $tva = null;
     $s['stock_tva'] = 0;
-    if (!$su['supplier_notva'] && !$site['default_notva']) {
+    if ($su && !$su['supplier_notva'] && !$site['default_notva']) {
         $s['stock_tva'] = $article->getTaxRate();
         $tva = '
             <label for="stock_tva" class="disabled">TVA :</label>
