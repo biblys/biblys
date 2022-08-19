@@ -116,6 +116,13 @@ class ArticleController extends Controller
         $query = $request->query->get("q");
         $inStockFilter = $request->query->get("in-stock");
 
+        $sort = $request->query->get("sort", "publication_date|desc");
+        list($sortCriteria, $sortOrder) = explode("|", $sort);
+
+        $sortOptions = [
+            ["criteria" => "publication_date", "order" => "desc", "label" => "date de publication (décroissant)"],
+        ];
+
         $articles = [];
         $count = 0;
         $pagination = null;
@@ -155,6 +162,9 @@ class ArticleController extends Controller
             'count' => $count,
             'query' => $query,
             'inStockFilterChecked' => $inStockFilter ? "checked" : "",
+            "sortOptions" => $sortOptions,
+            "sortCriteria" => $sortCriteria,
+            "sortOrder" => $sortOrder,
         ]);
     }
 

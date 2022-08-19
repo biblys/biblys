@@ -32,7 +32,16 @@
       <div>
         Trier par
         <select name="sort">
-          <option value="publication_date|desc">date de parution (décroissante)</option>
+          {%  for option in sortOptions %}
+            <option
+              value="{{ option.criteria }}|{{ option.order }}"
+              {% if option.criteria == sortCriteria and option.order == sortOrder %}
+                selected
+              {% endif %}
+            >
+              {{ option.label }}
+            </option>
+          {% endfor %}
         </select>
       </div>
 
