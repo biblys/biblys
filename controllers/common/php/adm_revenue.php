@@ -1,6 +1,10 @@
 <?php
 
-$_PAGE_TITLE = 'Chiffre d\'affaires';
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/** @var Request $request */
+$request->attributes->set("page_title", "Chiffre d'affaires");
 
 // FILTRES
 
@@ -52,7 +56,8 @@ if ($condition) {
     }
 }
 
-$query = $_SQL->prepare('SELECT
+/** @var PDO $_SQL */
+$query = EntityManager::prepareAndExecute('SELECT
     `s`.`stock_id`, `stock_selling_price`, `stock_selling_price_ht`, `stock_selling_price_tva`, `stock_tva_rate`, `stock_condition`, `stock_selling_date`,
     `o`.`order_id`, `order_payment_date`, `order_shipping`, `order_type`,
     `a`.`article_id`, `article_tva`, `type_id`, `article_pubdate`, `article_links`,
@@ -62,9 +67,8 @@ $query = $_SQL->prepare('SELECT
     JOIN `articles` AS `a` ON `s`.`article_id` = `a`.`article_id`
     LEFT JOIN `customers` AS `c` ON `c`.`customer_id` = `o`.`customer_id`
     WHERE `s`.`site_id` = :site_id AND `o`.`site_id` = :site_id AND `o`.`order_payment_date` IS NOT NULL AND `stock_selling_date` IS NOT NULL '.$_QUERY.'
-    ');
-$params['site_id'] = $_SITE["site_id"];
-$query->execute($params) or error($query->errorInfo());
+    ', array_merge($params, ["site_id" => $site->get("id")])
+);
 
 $sales = $query->fetchAll();
 
@@ -87,6 +91,7 @@ if (!empty($rates)) {
 }
 
 // Types d'articles
+$ty = [];
 $types = Biblys\Article\Type::getAll();
 $type_r = array();
 foreach ($types as $t) {
@@ -97,7 +102,8 @@ foreach ($types as $t) {
 }
 
 // Rayons
-$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '.$_SITE['site_id'].' ORDER BY `rayon_order`');
+$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '
+    .$site->get("id").' ORDER BY `rayon_order`');
 $rayons = $rayons->fetchAll(PDO::FETCH_ASSOC);
 $ra = array();
 foreach ($rayons as $r) {
@@ -154,7 +160,7 @@ $ukc_sales = array();
 foreach ($sales as $s) {
 
     // Prix HT
-    if ($_SITE['site_tva']) {
+    if ($site->get("tva")) {
         $rate = $s['stock_tva_rate'] * 10;
 
         if ($rate) {
@@ -178,7 +184,7 @@ foreach ($sales as $s) {
 
     // Par rayon
     $s['rayons'] = 0;
-    if (preg_match_all('/\[rayon:([0-9]*)\]/', $s['article_links'], $matches)) {
+    if (preg_match_all('/\[rayon:(\d*)]/', $s['article_links'], $matches)) {
 
         foreach ($matches as $m) // Tous les rayons trouvés
         {
@@ -370,7 +376,7 @@ if (isset($ra))
     }
 }
 
-$_ECHO .= '
+$content = '
 
         <h1><span class="fa fa-money"></span> '.$_PAGE_TITLE.'</h1>
 
@@ -714,3 +720,5 @@ function _getDatesOptions(
     }, $datesQuery->fetchAll());
     return $datesOptions;
 }
+
+return new Response($content);

@@ -9,6 +9,11 @@ Améliorations
 - Le moteur de recherche accepte désormais des mots-clés à partir d'un
   caractère (contre trois auparavant).
 
+Corrections
+
+- La page "Chiffre d'affaires" de l'administration ne s'affichait pas 
+  correctement. C'est corrigé.
+
 Déploiement
 
 - Biblys ne supporte plus PHP 7.3. La nouvelle version minimale requise est 7.4.
