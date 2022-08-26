@@ -5,26 +5,10 @@ $_PAGE_TITLE = 'Chiffre d\'affaires';
 // FILTRES
 
 // Raccourci 30 derniers jours
-$dates = null;
-$days = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".$_SITE["site_id"]."' AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND `order_cancel_date` IS NULL GROUP BY `date` ORDER BY `date` DESC");
-while ($o = $days->fetch()) {
-    $dates .= '<option value="?d='.$o["date"].'">'._date($o["date"],"l j F").'</option>';
-}
-
-// Raccourci mois
-$months = null;
-$mois = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, DATE_FORMAT(`order_payment_date`, '%Y') as `year`, `order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".$_SITE["site_id"]."' AND `order_cancel_date` IS NULL GROUP BY `date` ORDER BY `date` DESC");
-while ($m = $mois->fetch()) {
-    if (!empty($m["date"])) $months .= '<option value="?m='.$m["date"].'">'._date($m["date"].'-01',"F Y").'</option>';
-    if (!empty($m['year']) && $m['year'] != '0000') $year = $m['year'];
-}
-
-// Raccourcis années
-$years = null;
-while ($year <= date('Y')) {
-    $years .= '<option value="?y='.$year.'">'.$year.'</option>';
-    $year++;
-}
+/** @var Site $site */
+$dates = _getDatesOptions($site->get("id"), "%Y-%m-%d", "l j f", "d");
+$months = _getDatesOptions($site->get("id"), "%Y-%m", "F Y", "m");
+$years = _getDatesOptions($site->get("id"), "%Y", "Y", "y");
 
 // Affichage par défaut : ventes du jour courant
 if (empty($_GET["date1"]) && empty($_GET["d"]) && empty($_GET["m"]) && empty($_GET['y'])) $_GET["m"] = date("Y-m");
@@ -394,17 +378,17 @@ $_ECHO .= '
             <label for="d">Raccourcis :</label>
             <select name="d" class="goto">
                 <option>30 derniers jours...</option>
-                '.$dates.'
+                '.join($dates).'
             </select>
 
             <select name="m" class="goto">
                 <option>Mois de...</option>
-                '.$months.'
+                '.join($months).'
             </select>
 
             <select name="y" class="goto">
                 <option>Année...</option>
-                '.$years.'
+                '.join($years).'
             </select>
         </p>
 
@@ -696,3 +680,37 @@ $_ECHO .= '
 
 
     ';
+
+/**
+ * @param int $siteId
+ * @param string $queryFormat
+ * @param string $displayFormat
+ * @param string $parameter
+ * @return string[]
+ * @throws Exception
+ */
+function _getDatesOptions(
+    int $siteId,
+    string $queryFormat,
+    string $displayFormat,
+    string $parameter
+): array
+{
+    $datesQuery = EntityManager::prepareAndExecute("
+    SELECT 
+        DATE_FORMAT(`order_payment_date`, :format) AS `date`
+    FROM `orders` 
+    WHERE `orders`.`site_id` = :site_id 
+        AND `order_cancel_date` IS null
+        AND `order_payment_date` != '0000-00-00 00:00:00'
+    GROUP BY `date`
+    ORDER BY `date` DESC
+    LIMIT 30
+", ["format" => $queryFormat, "site_id" => $siteId]);
+    $datesOptions = array_map(function ($date) use ($displayFormat, $parameter) {
+        return '<option value="?'.$parameter.'='.$date["date"].'">'
+            ._date($date["date"], $displayFormat).
+            '</option>';
+    }, $datesQuery->fetchAll());
+    return $datesOptions;
+}
