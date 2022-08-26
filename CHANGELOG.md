@@ -4,9 +4,14 @@
 
 Améliorations
 
-- Biblys ne supporte plus PHP 7.3. La nouvelle version minimale requise est 7.4.
+- Les résultats de recherche peuvent désormais être triés par date de 
+  parution croissante ou décroissante.
 - Le moteur de recherche accepte désormais des mots-clés à partir d'un
   caractère (contre trois auparavant).
+
+Déploiement
+
+- Biblys ne supporte plus PHP 7.3. La nouvelle version minimale requise est 7.4.
 
 ### 2.62.2 (22 juillet 2022)
 
