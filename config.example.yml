@@ -12,6 +12,10 @@ site: 1
 logs:
     sql: false
 
+# maintenance:
+#  enabled: true
+#  message: Une opération de maintenance est en cours. Merci de réessayer d'ici quelques instants.
+
 # cloud:
 #  cdn: false
 #  public_key: cus_abcd1234

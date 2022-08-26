@@ -4,7 +4,6 @@ use AppBundle\Controller\ErrorController;
 use Biblys\Legacy\LayoutBuilder;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Framework\Exception\ServiceUnavailableException;
 use Framework\Framework;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -35,24 +34,6 @@ $request = Request::createFromGlobals();
 list($_JS_CALLS, $_CSS_CALLS) = LayoutBuilder::loadAssets($config, $_V, $site, $request);
 
 $exceptionController = new ErrorController();
-
-// Site closed
-$closed = $site->getOpt('closed');
-if ($closed) {
-    if (!$_V->isAdmin()) {
-        throw new ServiceUnavailableException($closed);
-    }
-
-    trigger_error(
-        "
-            Biblys est en mode maintenance (raison : $closed).<br />
-            Durant la période de maintenance, le site est accessible uniquement<br />
-            aux administrateurs mais son utilisation est déconseillée<br />
-            et peut conduire à la perte de données.
-        ",
-        E_USER_WARNING
-    );
-}
 
 $routes = RouteLoader::load();
 $GLOBALS["urlgenerator"] = new UrlGenerator($routes, new RequestContext());

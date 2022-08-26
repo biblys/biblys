@@ -2,6 +2,7 @@
 
 use AppBundle\Controller\ErrorController;
 use Biblys\Service\Config;
+use Framework\Exception\ServiceUnavailableException;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -257,6 +258,15 @@ if ('dev' == $config->get('environment')) {
 } else {
     error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
     set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED ^ E_NOTICE);
+}
+
+/* MAINTENANCE MODE */
+
+$maintenanceMode = $config->get("maintenance");
+if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
+    $response = new Response($maintenanceMode["message"]);
+    $response->send();
+    die();
 }
 
 /* DATABASE */

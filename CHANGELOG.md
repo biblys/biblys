@@ -8,6 +8,8 @@ Améliorations
   parution croissante ou décroissante.
 - Le moteur de recherche accepte désormais des mots-clés à partir d'un
   caractère (contre trois auparavant).
+- Une option de configuration permettant l'activation du mode maintenance 
+  avec un message a été ajoutée, elle remplace l'option de site équivalente.
 
 Corrections
 
