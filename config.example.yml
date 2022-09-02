@@ -68,12 +68,12 @@ logs:
 #   client_secret: paypal_secret_key
 
 # payplug:
-#   secret: sk_test_38b04992dec25ea3728585520f9cc011
+#   secret: sk_test_abcd1234
 
 # stripe:
-#   public_key: pk_test_eZmHmQJGthg1u4SaD70tj9JL
-#   secret_key: sk_test_4kveWtXiWclDNqqiSZrgekdC
-#   endpoint_secret: whsec_ZPyZqxI7GaUyGplp1LP3lyveOCRPngjg
+#   public_key: pk_test_abcd1234
+#   secret_key: sk_test_abcd1234
+#   endpoint_secret: whsec_abcd1234
 
 # recaptcha:
 #   sitekey: recaptcha_sitekey
