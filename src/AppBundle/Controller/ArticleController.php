@@ -120,6 +120,20 @@ class ArticleController extends Controller
         list($sortCriteria, $sortOrder) = explode("|", $sort);
 
         $sortOptions = [
+            ["criteria" => "article_title_alphabetic", "order" => "asc", "label" => "titre (△)"],
+            ["criteria" => "article_title_alphabetic", "order" => "desc", "label" => "titre (▽)"],
+            ["criteria" => "article_authors_alphabetic", "order" => "asc", "label" => "auteur·trice (△)"],
+            ["criteria" => "article_authors_alphabetic", "order" => "desc", "label" => "auteur·trice (▽)"],
+            ["criteria" => "article_collection", "order" => "asc", "label" => "collection (△)"],
+            ["criteria" => "article_collection", "order" => "desc", "label" => "collection (▽)"],
+            ["criteria" => "article_number", "order" => "asc", "label" => "numéro de collection (△)"],
+            ["criteria" => "article_number", "order" => "desc", "label" => "numéro de collection (▽)"],
+            ["criteria" => "article_cycle", "order" => "asc", "label" => "série (△)"],
+            ["criteria" => "article_cycle", "order" => "desc", "label" => "série (▽)"],
+            ["criteria" => "article_tome", "order" => "asc", "label" => "numéro de volume (△)"],
+            ["criteria" => "article_tome", "order" => "desc", "label" => "numéro de volume (▽)"],
+            ["criteria" => "article_publisher", "order" => "asc", "label" => "éditeur (△)"],
+            ["criteria" => "article_publisher", "order" => "desc", "label" => "éditeur (▽)"],
             ["criteria" => "article_pubdate", "order" => "asc", "label" => "date de publication (△)"],
             ["criteria" => "article_pubdate", "order" => "desc", "label" => "date de publication (▽)"],
         ];
