@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use ArticleManager;
 use Biblys\Admin\Entry;
 use Biblys\Exception\ContactPageException;
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -17,7 +18,6 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use GuzzleHttp\Exception\GuzzleException;
-use InvalidArgumentException;
 use Model\OptionQuery;
 use Model\PageQuery;
 use OrderManager;
@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -173,6 +174,7 @@ class MainController extends Controller
      * @throws SyntaxError
      * @throws LoaderError
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function contactAction(Request $request): Response
     {
@@ -226,7 +228,7 @@ class MainController extends Controller
                     ['reply-to' => $email]
                 );
                 $success = true;
-            } catch(ContactPageException | InvalidArgumentException $exception) {
+            } catch(ContactPageException | InvalidEmailAddressException $exception) {
                 $error = $exception->getMessage();
             }
         }
