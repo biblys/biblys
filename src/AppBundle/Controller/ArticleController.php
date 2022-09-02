@@ -133,11 +133,12 @@ class ArticleController extends Controller
         if ($query) {
             $request->attributes->set("page_title", "Recherche de ".$query);
             $page = (int) $request->query->get("p", 0);
+            $queryParams = ["q" => $query, "in-stock" => $inStockFilter, "sort" => $sort];
 
             if ($inStockFilter) {
                 $count = $am->countSearchResultsForAvailableStock($query, $currentSite);
                 $pagination = new Pagination($page, $count);
-                $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
+                $pagination->setQueryParams($queryParams);
                 $articles = $am->searchWithAvailableStock($query, $currentSite, [
                     'order' => $sortCriteria,
                     'sort' => $sortOrder,
@@ -147,7 +148,7 @@ class ArticleController extends Controller
             } else {
                 $count = $am->countSearchResults($query);
                 $pagination = new Pagination($page, $count);
-                $pagination->setQueryParams(["q" => $query, "in-stock" => $inStockFilter]);
+                $pagination->setQueryParams($queryParams);
                 $articles = $am->search($query, [
                     'order' => $sortCriteria,
                     'sort' => $sortOrder,
