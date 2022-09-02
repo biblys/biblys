@@ -10,6 +10,9 @@ Améliorations
   caractère (contre trois auparavant).
 - Une option de configuration permettant l'activation du mode maintenance 
   avec un message a été ajoutée, elle remplace l'option de site équivalente.
+- Lorsqu'une alerte est envoyée à une adresse e-mail invalide, l'erreur 
+  affichée est désormais plus clair et n'empêche plus l'envoi des autres 
+  alertes.
 
 Corrections
 

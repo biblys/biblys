@@ -2,6 +2,7 @@
 
 /** @var CurrentSite $currentSite */
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -9,6 +10,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $sm = new StockManager();
 $am = new ArticleManager();
@@ -28,6 +31,9 @@ foreach ($session->getFlashBag()->get('success', []) as $message) {
 }
 foreach ($session->getFlashBag()->get('info', []) as $message) {
     $content .= "<p class='alert alert-info'>$message</p>";
+}
+foreach ($session->getFlashBag()->get('warning', []) as $message) {
+    $content .= "<p class='alert alert-warning'>$message</p>";
 }
 
 $div_admin = null;
@@ -257,9 +263,22 @@ if ($request->getMethod() === 'POST') {
         /** @var Mailer $mailer */
         $copyYear = $request->request->get("stock_pub_year");
         $copyPrice = $request->request->get("stock_selling_price");
-        $sentAlerts = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $site);
-        if ($sentAlerts) {
-            $session->getFlashBag()->add('info', '<strong>'.$sentAlerts.' alerte'.s($sentAlerts).'</strong> '.s($sentAlerts, 'a', 'ont').' été envoyée'.s($sentAlerts).'.');
+        $result = _sendAlertsForArticle($article, $copyYear, $copyPrice, $copyCondition, $mailer, $site);
+        if ($result["sent"] > 0) {
+            $session->getFlashBag()->add(
+                "info",
+                "<strong>".$result["sent"].' alerte'.s($result["sent"]).'</strong> '.s
+                ($result["sent"], 'a', 'ont')
+                .' été envoyée'.s($result["sent"]).'.');
+        }
+        if (count($result["errors"]) > 0) {
+            foreach($result["errors"] as $error) {
+                $session->getFlashBag()->add(
+                    "warning",
+                    "L'alerte pour <strong>".$error["email"]."</strong> n'a pas pu être envoyée : "
+                    .$error["reason"]
+                );
+            }
         }
     }
 
@@ -377,7 +396,7 @@ if ($addParam) {
 $article = $stock->getArticle();
 if ($article) {
     $a = $article;
-    /** @var \Symfony\Component\Routing\Generator\UrlGenerator $urlgenerator */
+    /** @var UrlGenerator $urlgenerator */
     $articleUrl = $urlgenerator->generate(
         'article_show',
         ['slug' => $article->get('url')]
@@ -944,6 +963,9 @@ function _shouldAlertsBeSent(string $mode, string $copyCondition, CurrentSite $c
     return $currentSite->hasOptionEnabled("alerts") && $mode === "insert" && $copyCondition !== "Neuf";
 }
 
+/**
+ * @throws TransportExceptionInterface
+ */
 function _sendAlertsForArticle(
     Article $article,
     string $copyYear,
@@ -951,7 +973,7 @@ function _sendAlertsForArticle(
     string $copyCondition,
     Mailer  $mailer,
     Site    $currentSite
-): int
+): array
 {
     $am = new AlertManager();
     $um = new UserManager();
@@ -959,6 +981,7 @@ function _sendAlertsForArticle(
     $alerts = $am->getAll(["article_id" => $article->get("id")]);
 
     $sentAlerts = 0;
+    $errors = [];
     foreach ($alerts as $alert) {
         $subject = "Alerte : {$article->get("title")} est disponible !";
 
@@ -1004,10 +1027,20 @@ function _sendAlertsForArticle(
         ';
 
         $user = $um->getById($alert->get("user_id"));
-        $mailer->send($user->get("email"), $subject, $message);
-        $sentAlerts++;
+        try {
+            $mailer->send($user->get("email"), $subject, $message);
+            $sentAlerts++;
+        } catch(InvalidEmailAddressException $exception) {
+            $errors[] = [
+                "email" => $user->get("email"),
+                "reason" => $exception->getMessage(),
+            ];
+        }
     }
 
-    return $sentAlerts;
+    return [
+        "sent" => $sentAlerts,
+        "errors" => $errors
+    ];
 }
 
