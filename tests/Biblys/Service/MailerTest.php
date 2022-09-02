@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -14,7 +15,7 @@ class MailerTest extends TestCase
      */
     public function testInvalidToEmail()
     {
-        $this->expectException("InvalidArgumentException");
+        $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage("L'adresse customer.4.@biblys.fr est invalide.");
 
         // given
@@ -34,7 +35,7 @@ class MailerTest extends TestCase
     public function testInvalidFromEmail()
     {
         // then
-        $this->expectException("InvalidArgumentException");
+        $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage("L'adresse vendor.4.@biblys.fr est invalide.");
 
         // given
@@ -54,7 +55,7 @@ class MailerTest extends TestCase
      */
     public function testInvalidReplyToEmail()
     {
-        $this->expectException("InvalidArgumentException");
+        $this->expectException(InvalidEmailAddressException::class);
         $this->expectExceptionMessage("L'adresse yes-reply.4.@biblys.fr est invalide.");
 
         // given

@@ -2,12 +2,12 @@
 
 namespace Biblys\Service;
 
+use Biblys\Exception\InvalidEmailAddressException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
-use InvalidArgumentException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\SendmailTransport;
@@ -121,6 +121,9 @@ class Mailer
         return true;
     }
 
+    /**
+     * @throws InvalidEmailAddressException
+     */
     public function validateEmail($email)
     {
         $validator = new EmailValidator();
@@ -129,7 +132,7 @@ class Mailer
             new DNSCheckValidation()
         ]);
         if ($validator->isValid($email, $multipleValidations) === false) {
-            throw new InvalidArgumentException("L'adresse $email est invalide.");
+            throw new InvalidEmailAddressException("L'adresse $email est invalide.");
         }
     }
 }
