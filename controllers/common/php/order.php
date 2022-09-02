@@ -1,9 +1,16 @@
-<?php
+<?php /** @noinspection CommaExpressionJS */
 
+/** @var Site $site */
+
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
-use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
 $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
@@ -11,6 +18,7 @@ $_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
 $om = new OrderManager();
 $am = new ArticleManager();
 
+/** @var Request $request */
 $order_url = $request->query->get("url");
 $order = $om->get(["order_url" => $order_url]);
 
@@ -35,18 +43,19 @@ function _orderBelongsToVisitor(Order $order, Visitor $visitor): bool
     return $order->get("user_id") === $visitor->get("user_id");
 }
 
+/** @var Visitor $_V */
 if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isAdmin()) {
 
     $buttons = NULL;
 
-    $_PAGE_TITLE = 'Commande n° ' . $o["order_id"];
+    $request->attributes->set("page_title", "Commande n° {$o["order_id"]}");
 
-    $content .= '<h2>Commande n&deg; ' . $o["order_id"] . '</h2>';
+    $content .= '<h2>Commande n° ' . $o["order_id"] . '</h2>';
 
     if (auth('admin')) {
         $content .= '
             <div class="admin">
-                <p>Commande n&deg; ' . $o["order_id"] . '</p>
+                <p>Commande n° ' . $o["order_id"] . '</p>
                 <p><a href="/pages/adm_order?order_id=' . $o["order_id"] . '">modifier</a></p>
                 <p><a href="/invoice/' . $o["order_url"] . '">facture</a></p>
             </div>
@@ -56,8 +65,8 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     // Etat de la commande
     $content .= '
         <div class="floatR">
-            <h4 class="text-right">&Eacute;tat de la commande</h4>
-            <p class="right">Valid&eacute;e le ' . _date($o["order_insert"], 'j f Y') . '</p>
+            <h4 class="text-right">état de la commande</h4>
+            <p class="right">Validée le ' . _date($o["order_insert"], 'j f Y') . '</p>
     ';
 
     if ($o["order_followup_date"]) {
@@ -74,7 +83,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         }
     }
     if ($o["order_cancel_date"]) {
-        $content .= '<p class="right">Annul&eacute;e le ' . _date($o["order_cancel_date"], 'j f Y') . '</p>';
+        $content .= '<p class="right">Annulée le ' . _date($o["order_cancel_date"], 'j f Y') . '</p>';
     }
 
     $content .= '
@@ -82,14 +91,13 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     ';
 
     $country = $order->get('country');
-    if ($country instanceof \Country) {
+    if ($country instanceof Country) {
         $country = $country->get('name');
     }
 
-    // Coordonn&eacute;es clients
     if (!empty($o["order_address2"])) $o["order_address2"] = $o["order_address2"] . '<br />';
     $content .= '
-        <h4>Coordonn&eacute;es</h4>
+        <h4>Coordonnées</h4>
         <p>
             ' . $o["order_title"] . ' ' . $o["order_firstname"] . ' ' . $o["order_lastname"] . '<br />
             ' . $o["order_address1"] . '<br />
@@ -102,6 +110,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
     // Ref client
     if (!empty($o["user_id"]) and auth("admin")) {
+        /** @var PDO $_SQL */
         $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `user_id` = :user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         $stock->execute([
             'user_id' => $o['user_id'],
@@ -122,26 +131,26 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
     // Creation de la commande
     if (isset($_GET["created"])) {
-        $content .= '<br /><p class="success">Votre commande a bien &eacute;t&eacute; enregistr&eacute;e sous le num&eacute;ro ' . $o["order_id"] . '.</p><p class="center">Vous pouvez la r&eacute;gler en utilisant le bouton ci-dessous.</p><br />';
+        $content .= '<br /><p class="success">Votre commande a bien été enregistrée sous le numéro ' . $o["order_id"] . '.</p><p class="center">Vous pouvez la régler en utilisant le bouton ci-dessous.</p><br />';
     }
 
     // MAJ de la commande
-    if (isset($_GET["updated"])) $content .= '<p class="success">La commande a &eacute;t&eacute; mise &agrave; jour.</p><br />';
+    if (isset($_GET["updated"])) $content .= '<p class="success">La commande a été mise à jour.</p><br />';
 
     // Paiement de la commande
-    if (isset($_GET["payed"])) $content .= '<p class="success">La commande a &eacute;t&eacute; pay&eacute;e.</p><br />';
+    if (isset($_GET["payed"])) $content .= '<p class="success">La commande a été payée.</p><br />';
 
     // Confirmation
     if (isset($_GET["confirm"])) {
         $order->set('order_confirmation_date', date('Y-m-d H:i:s'));
         $om->update($order);
-        redirect('/order/' . $o["order_url"] . '?confirmed=1');
+        return new RedirectResponse("/order/{$o["order_url"]}?confirmed=1");
     } elseif (isset($_GET["confirmed"])) {
-        $content .= '<p class="success">Merci d\'avoir confirm&eacute; la réception de votre commande.</p><br />';
+        $content .= '<p class="success">Merci d\'avoir confirmé la réception de votre commande.</p><br />';
     }
 
     // Signaler un incident
-    if (isset($_GET["flagged"])) $content .= '<p class="success">L\'incident a bien &eacute;t&eacute; enregistr&eacute;.</p><br />';
+    if (isset($_GET["flagged"])) $content .= '<p class="success">L\'incident a bien été enregistré.</p><br />';
 
     // Paiement
     if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa fa-money"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
@@ -150,24 +159,25 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     // Suivi et confirmation
     if ($o["order_shipping_date"]) {
         if ($o["order_track_number"]) {
-            $content .= '<p class="center">Num&eacute;ro de suivi : <a href="http://www.coliposte.net/particulier/suivi_particulier.jsp?colispart=' . $o["order_track_number"] . '">' . $o["order_track_number"] . '</a></p><br />';
+            $content .= '<p class="center">Numéro de suivi : <a href="https://www.coliposte.net/particulier/suivi_particulier.jsp?colispart=' . $o["order_track_number"] . '">' . $o["order_track_number"] . '</a></p><br />';
         }
         if (!$o["order_confirmation_date"]) {
             $buttons .= '
-                <a href="/order/' . $o["order_url"] . '?confirm=1" class="btn btn-success"><i class="fa fa-check-circle"></i> Confirmer la r&eacute;ception</a>
+                <a href="/order/' . $o["order_url"] . '?confirm=1" class="btn btn-success"><i class="fa fa-check-circle"></i> Confirmer la réception</a>
                 <button id="dialog_incident" class="dialogThis btn btn-warning"><i class="fa fa-warning"></i>&nbsp; Signaler un incident</button>
             ';
 
             // Incident
             if (!empty($_POST["incident"])) {
                 // Envoi du mail
+                /** @var Site $_SITE */
                 $content = '
-                    <html>
+                    <html lang="fr">
                         <head>
-                            <title>' . $_SITE["site_tag"] . ' | Commande n&deg; ' . $o["order_id"] . ' : incident</title>
+                            <title>' . $_SITE["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
                         </head>
                         <body>
-                            <p>Le client souhaite retourner la commande n&deg;&nbsp;<a href="http://' . $_SERVER["HTTP_HOST"] . '/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></p>
+                            <p>Le client souhaite retourner la commande n°&nbsp;<a href="https://' . $_SERVER["HTTP_HOST"] . '/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></p>
                             <p>---</p>
                             <p>Commentaire du client :</p>
                             <p>' . nl2br($_POST["incident"]) . '</p>
@@ -185,7 +195,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
                 $order->set('order_confirmation_date', date('Y-m-d H:i:s'));
                 $om->update($order);
-                redirect('/order/' . $o["order_url"] . '?flagged=1');
+                return new RedirectResponse("/order/{$o["order_url"]}?flagged=1");
             }
 
             $content .= '
@@ -196,7 +206,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                             problème, vous pouvez la renvoyer intégralement ou en partie à l\'adresse ci-dessous sous 7
                             jours. Le montant des livres retournés vous sera remboursés intégralement.
                         </p>
-                        <p class="center"><strong>' . $_SITE["site_title"] . '<br />' . str_replace("|", "<br />", $_SITE["site_address"]) . '</strong></p>
+                        <p class="center"><strong>' . $site->get("title") . '<br />' . str_replace("|", "<br />", $site->get("address")) . '</strong></p>
                         <p>Merci d\'indiquer les raisons pour lesquelles vous souhaitez renvoyer votre commande :</p>
                         <textarea name="incident"></textarea>
                         <br />
@@ -240,12 +250,12 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         }
 
         // Precommande
-        if ($a["article_pubdate"] > $o["order_insert"]) $a["article_title"] .= ' (pr&eacute;commande)';
+        if ($a["article_pubdate"] > $o["order_insert"]) $a["article_title"] .= ' (précommande)';
 
         // Livres numeriques
         $a['dl_links'] = NULL;
         if ($a["type_id"] == 2) {
-            $a["article_title"] .= ' (num&eacute;rique)';
+            $a["article_title"] .= ' (numérique)';
             $numerique++;
         }
 
@@ -256,6 +266,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                 $files = $fm->getAll(['article_id' => $a['article_id'], 'file_access' => 1]);
                 if ($files) {
                     foreach ($files as $f) {
+                        /** @var User $_LOG */
                         $a['dl_links'] .= ' <a href="' . $f->getUrl($_LOG['user_key']) . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"><img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->get('title') . '</a> &nbsp;';
                     }
                     $a['dl_links'] = '<div class="btn btn-default"><i class="fa fa-cloud-download"></i> &nbsp; ' . $a['dl_links'] . '</a>';
@@ -284,7 +295,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                     coll. ' . $a["article_collection"] . ' ' . numero($a["article_number"]) . '<br />
                     ' . $a["dl_links"] . '
         ';
-        if (!empty($a["stock_condition"])) $books .= '&Eacute;tat : ' . $a["stock_condition"] . '<br />';
+        if (!empty($a["stock_condition"])) $books .= 'état : ' . $a["stock_condition"] . '<br />';
         if (!empty($a["stock_weight"]) && !empty($_GET["weight"])) $books .= $a["stock_weight"] . 'g<br />';
         $books .= '
                 </td>
@@ -318,7 +329,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
             </tr>
     ';
 
-    if (isset($o["order_weight"]) && $_SITE["site_shipping_fee"]) {
+    if (isset($o["order_weight"]) && $site->get("shipping_fee")) {
         $content .= '
                     <tr>
                         <th colspan="3" class="right">Poids :</th>
@@ -360,6 +371,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         </table>
     ';
 
+    /** @var Config $config */
     $matomo = $config->get("matomo");
     if ($matomo && $order->isPayed()) {
 
@@ -381,7 +393,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                         " . price($group["unit_price"]) . ",
                          // (optional, default to 1) Product quantity
                         " . $group["quantity"] . "
-                    ]);
+                    ])
                 </script>
             ";
         }
@@ -395,13 +407,14 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                     0, // (optional) Tax amount
                     " . price($order->get("shipping")) . ", // (optional) Shipping amount
                     // false // (optional) Discount offered (set to false for unspecified parameter)
-                ]);
+                ])
 
             </script>
         ";
     }
 
     if ($_V->isAdmin()) {
+        /** @var UrlGenerator $urlgenerator */
         $content .= '
             <h3 class="text-center">Origine de la commande</h3>
             <p class="text-center">
@@ -412,9 +425,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         ';
     }
 } elseif (!auth()) {
-    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
+    throw new UnauthorizedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 } else {
-    $content .= '<p class="error">Vous n\'avez pas le droit d\'accéder à cette page.</p>';
+    throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
 return new Response($content);

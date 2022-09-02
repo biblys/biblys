@@ -51,7 +51,7 @@ elseif ($order) {
             }
 
             else {
-                $om->setCustomer($order, null);
+                $om->setCustomer($order);
             }
         }
 
@@ -94,7 +94,7 @@ elseif ($order) {
     }
     elseif (isset($_GET["stock_added"]))
     {
-        $message = '<p class="success">L\'exemplaire n&deg;&nbsp;'.$_GET["stock_added"].' a bien été ajouté à la commande.</p>';
+        $message = '<p class="success">L\'exemplaire n°&nbsp;'.$_GET["stock_added"].' a bien été ajouté à la commande.</p>';
     }
 
     // Retirer un exemplaire
@@ -117,7 +117,7 @@ elseif ($order) {
     }
 
     elseif (isset($_GET["stock_removed"])) {
-        $message = '<p class="success">L\'exemplaire n&deg;&nbsp;'.$_GET["stock_removed"].' a bien été retiré de la commande.</p>';
+        $message = '<p class="success">L\'exemplaire n°&nbsp;'.$_GET["stock_removed"].' a bien été retiré de la commande.</p>';
     }
 
     $new_shipping_fee_id = $request->query->get('shipping_fee');
@@ -153,8 +153,8 @@ elseif ($order) {
 
     // Articles de la commande
     /** @var PDO $_SQL */
-    $articles = $_SQL->prepare("SELECT `stock_id`, `article_title`, `stock_selling_price` FROM `stock` JOIN `articles` USING(`article_id`) WHERE `order_id` = :order_id ORDER BY `article_title_alphabetic`");
-    $articles->bindValue("order_id",$o["order_id"],PDO::PARAM_STR);
+    $articles = $_SQL->prepare("SELECT `stock_id`, `article_title`, `stock_selling_price` FROM `stock` JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id` WHERE `order_id` = :order_id ORDER BY `article_title_alphabetic`");
+    $articles->bindValue("order_id",$o["order_id"]);
     $articles->execute();
     $article_list = NULL;
     while ($a = $articles->fetch())
@@ -163,6 +163,7 @@ elseif ($order) {
     }
 
     // Customer
+    /** @noinspection HtmlUnknownAnchorTarget */
     $customer = '
         <fieldset>
             <legend>Client</legend>
@@ -210,16 +211,17 @@ elseif ($order) {
         }, $fees);
     }
 
-    $_PAGE_TITLE = $order_type.' n&deg; <a href="/order/'.$o['order_url'].'">'.$o["order_id"].'</a>';
+    $pageTitle = $order_type.' n° <a href="/order/'.$o['order_url'].'">'.$o["order_id"].'</a>';
+    $request->attributes->set("page_title", "$order_type n° {$o["order_id"]}");
     $content .= '
-        <h2>'.$_PAGE_TITLE.'</h2>
+        <h2>'.$pageTitle.'</h2>
 
         <p class="buttonset">
             '.$buttons.'
         </p>
 
         <div class="admin">
-            <p>'.$order_type.' n&deg;'.$o["order_id"].'</p>
+            <p>'.$order_type.' n°'.$o["order_id"].'</p>
             <p><a href="/order/'.$o["order_url"].'">voir</a></p>
         </div>
 
@@ -231,7 +233,7 @@ elseif ($order) {
                 <input type="hidden" name="order_url" value="'.$o["order_url"].'" />
 
                 <legend>Général</legend>
-                <label for="order" class="disabled">'.$order_type.' n&deg;</label>
+                <label for="order" class="disabled">'.$order_type.' n°</label>
                 <input type="number" name="order_id" id="order_id" value= "'.$o["order_id"].'" class="short" readonly />
                 <br />
                 <label for="order_insert">Date :</label>
@@ -249,7 +251,7 @@ elseif ($order) {
                 <label for="order_amount">Montant :</label>
                 <input type="number" name="order_amount" id="order_amount" value="'.$o["order_amount"].'" class="mini" /> centimes
                 <br />
-                <label for="order_amount_tobepaid">Montant &agrave; payer :</label>
+                <label for="order_amount_tobepaid">Montant à payer :</label>
                 <input type="number" name="order_amount_tobepaid" id="order_amount_tobepaid" value="'.$o["order_amount_tobepaid"].'" class="mini" /> centimes
                 <br />
                 <label for="order_discount">Remise :</label>
@@ -261,7 +263,7 @@ elseif ($order) {
             <fieldset>
                 <legend>Coordonnées</legend>
 
-                <label for="order_firstname">Pr&eacute;nom :</label>
+                <label for="order_firstname">Prénom :</label>
                 <input type="text" name="order_firstname" id="order_firstname" value="'.$o["order_firstname"].'" />
                 <br />
                 <label for="order_lastname">Nom :</label>
@@ -285,7 +287,7 @@ elseif ($order) {
                     '.implode($countries).'
                 </select>
                 <br /><br>
-                <label for="order_phone">T&eacute;l&eacute;phone :</label>
+                <label for="order_phone">Téléphone :</label>
                 <input type="text" name="order_phone" id="order_phone" value="'.$o["order_phone"].'" />
                 <br />
                 <label for="order_email">E-mail :</label>
@@ -302,10 +304,10 @@ elseif ($order) {
                 <label for="order_payment_date">Date :</label>
                 <input type="text" name="order_payment_date" id="order_payment_date" value="'.$o["order_payment_date"].'" class="datetime" />
                 <br />
-                <label for="order_payment_cash">Esp&egrave;ces :</label>
+                <label for="order_payment_cash">Espèces :</label>
                 <input type="number" name="order_payment_cash" id="order_payment_cash" value="'.$o["order_payment_cash"].'" class="mini" /> centimes
                 <br />
-                <label for="order_payment_cheque">Ch&egrave;que :</label>
+                <label for="order_payment_cheque">Chèque :</label>
                 <input type="number" name="order_payment_cheque" id="order_payment_cheque" value="'.$o["order_payment_cheque"].'" class="mini" /> centimes
                 <br />
                 <label for="order_payment_transfer">Virement :</label>
@@ -333,7 +335,7 @@ elseif ($order) {
             </fieldset>
 
             <fieldset>
-                <legend>Exp&eacute;dition</legend>
+                <legend>Expédition</legend>
                 <label for="order_shipping_mode">Mode :</label>
                 <input type="text" name="order_shipping_mode" id="order_shipping_mode" value="'.$o["order_shipping_mode"].'" class="medium" />
                 <br />
@@ -343,7 +345,7 @@ elseif ($order) {
                 <label for="order_shipping_date">Date :</label>
                 <input type="text" name="order_shipping_date" id="order_shipping_date" value="'.$o["order_shipping_date"].'" class="datetime" />
                 <br />
-                <label for="order_track_number">N&deg; de suivi :</label>
+                <label for="order_track_number">N° de suivi :</label>
                 <input type="text" name="order_track_number" id="order_track_number" value="'.$o["order_track_number"].'" class="datetime" />
                 <br />
             </fieldset>
@@ -374,7 +376,7 @@ elseif ($order) {
                 <legend>Associer un client</legend>
                 <input type="hidden" name="action" value="customer">
                 <p>
-                    <label for="customer_id">Client n&deg;&nbsp;:</label>
+                    <label for="customer_id">Client n°&nbsp;:</label>
                     <input name="customer_id" id="customer_id" value="'.$order->get("customer_id").'">
                     <button type="submit" class="btn btn-success btn-sm">Associer</button>
                 </p>
@@ -413,7 +415,7 @@ elseif ($order) {
                 <legend>Ajouter un article</legend>
                 <input type="hidden" name="order_id" value="'.$o["order_id"].'">
                 <p>
-                    <label for="stock_add">Exemplaire n&deg;&nbsp;:</label>
+                    <label for="stock_add">Exemplaire n°&nbsp;:</label>
                     <input name="stock_add" id="stock_add">
                     <button type="submit" class="btn btn-success btn-sm">Ajouter</button>
                 </p>
