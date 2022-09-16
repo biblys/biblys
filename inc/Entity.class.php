@@ -450,10 +450,8 @@ class EntityManager
 
     /**
      * Filter entities with query.
-     *
-     * @param $filter the search terms
      */
-    public function filter($filter, $where = [])
+    public function filter(string $filter, $where = [])
     {
         $query = null;
         $keywords = explode(' ', $filter);
