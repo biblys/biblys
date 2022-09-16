@@ -2,21 +2,31 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
+use Biblys\Service\Pagination;
+use CollectionManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-// Forms
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CollectionController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
-        $cm = $this->entityManager('Collection');
+        $cm = new CollectionManager();
 
         // If there is a filter
         $filter = $request->query->get('filter');
@@ -39,18 +49,22 @@ class CollectionController extends Controller
 
     /**
      * Show a Collection's page and related articles
-     * /collection/{slug}.
      *
-     * @param  $slug the collection's slug
-     *
-     * @return Response the rendered templated
+     * @route GET /collection/{slug}.
+     * @param Request $request
+     * @param string $slug
+     * @return RedirectResponse|Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(Request $request, string $slug)
     {
         global $site;
 
-        $cm = $this->entityManager('Collection');
-        $am = $this->entityManager('Article');
+        $cm = new CollectionManager();
+        $am = new ArticleManager();
 
         $collection = $cm->get(['collection_url' => $slug]);
         if (!$collection) {
@@ -62,12 +76,10 @@ class CollectionController extends Controller
             return new RedirectResponse('/o/collection/'.$slug);
         }
 
-        $this->setPageTitle($collection->get('name'));
-
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['collection_id' => $collection->get('id')]);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+        $pagination = new Pagination($page, $totalCount);
 
         $articles = $am->getAll(['collection_id' => $collection->get('id')], [
             'order' => 'article_pubdate',
@@ -85,26 +97,28 @@ class CollectionController extends Controller
 
     /**
      * Edit a collection
-     * /admin/collection/{id}/edit.
      *
+     * @route GET /admin/collection/{id}/edit.
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
      * @param int $id
-     *
      * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, UrlGenerator $urlGenerator, int $id): Response
     {
-        global $site;
+        Controller::authAdmin($request);
 
-        $this->auth('admin');
-
-        $cm = $this->entityManager('Collection');
+        $cm = new CollectionManager();
 
         $collection = $cm->get(['collection_id' => $id]);
         if (!$collection) {
             throw new NotFoundException("Collection $id not found.");
         }
-
-        $this->setPageTitle('Modifier la collection '.$collection->get('name'));
 
         $formFactory = $this->getFormFactory();
 
@@ -129,12 +143,13 @@ class CollectionController extends Controller
 
             try {
                 $updated = $cm->update($updated);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
-                return new RedirectResponse($this->generateUrl('collection_show', ['slug' => $updated->get('url')]));
+                return new RedirectResponse($urlGenerator->generate('collection_show', ['slug' =>
+                    $updated->get('url')]));
             }
         }
 
@@ -147,24 +162,29 @@ class CollectionController extends Controller
 
     /**
      * Delete a collection
-     * /admin/collection/{id}/delete.
+     * @route GET /admin/collection/{id}/delete.
      *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
      * @param int $id
      *
      * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, UrlGenerator $urlGenerator, int $id)
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $cm = $this->entityManager('Collection');
+        $cm = new CollectionManager();
 
         $collection = $cm->get(['collection_id' => $id]);
         if (!$collection) {
             throw new NotFoundException("Collection $id not found.");
         }
-
-        $this->setPageTitle('Supprimer la collection '.$collection->get('name'));
 
         $error = false;
         if ($request->getMethod() == 'POST') {
@@ -172,12 +192,13 @@ class CollectionController extends Controller
 
             try {
                 $cm->delete($collection);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
-                return new RedirectResponse($this->generateUrl('publisher_show', ['slug' => $publisher->get('url')]));
+                return new RedirectResponse($urlGenerator->generate('publisher_show', ['slug' =>
+                    $publisher->get('url')]));
             }
         }
 
