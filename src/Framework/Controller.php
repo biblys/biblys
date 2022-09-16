@@ -324,7 +324,8 @@ class Controller
      *
      * @param string $title page title
      * @deprecated Calling Controller->setPageTitle is deprecated,
-     *             use $request->attributes->set("page_title") instead.
+     *             use {% block title %} in template
+     *             or $request->attributes->set("page_title") instead.
      */
     public function setPageTitle(string $title)
     {
@@ -333,7 +334,7 @@ class Controller
         trigger_deprecation(
             "biblys/biblys",
             "2.53.1",
-            "Calling Controller->setPageTitle is deprecated, use \$request->attributes->set(\"page_title\") instead."
+            "Calling Controller->setPageTitle is deprecated, use {% block title %} in template or \$request->attributes->set(\"page_title\") instead."
         );
 
         $request->attributes->set('page_title', $title);
