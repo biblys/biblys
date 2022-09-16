@@ -10,7 +10,7 @@ Améliorations
 - Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir 
   choisir d'activer le mode "sandbox" ou le mode "live"
 
-## 2.63.1 (23 septembre 2022)
+### 2.63.1 (23 septembre 2022)
 
 Corrections
 
