@@ -74,96 +74,96 @@ class People extends Entity
         }
     }
 
-    class PeopleManager extends EntityManager
+class PeopleManager extends EntityManager
+{
+    protected $prefix = 'people',
+        $table = 'people',
+        $object = 'People';
+
+    /**
+     * Get all people related to articles from a publisher
+     * @return Contributor[]
+     */
+    public function getAllFromCatalog(): array
     {
-        protected $prefix = 'people',
-            $table = 'people',
-            $object = 'People';
+        $am = new ArticleManager();
+        $articles = $am->getAll([], [], false);
 
-        /**
-         * Get all people related to articles from a publisher
-         * @return Contributor[]
-         */
-        public function getAllFromCatalog(): array
-        {
-            $am = new ArticleManager();
-            $articles = $am->getAll([], [], false);
-
-            $contributors = [];
-            foreach ($articles as $article) {
-                $contributors = array_merge($contributors, $article->getContributors());
-            }
-
-            // Remove duplicate
-            $contributorIds = [];
-            $uniqueContributors = array_filter($contributors, function($contributor) use
-            (&$contributorIds) {
-                if (in_array($contributor->getId(), $contributorIds)) {
-                    return false;
-                }
-                $contributorIds[] = $contributor->getId();
-                return true;
-            });
-
-            usort($uniqueContributors, function($a, $b) {
-                return strcmp($a->getLastName(), $b->getLastName());
-            });
-
-            return $uniqueContributors;
+        $contributors = [];
+        foreach ($articles as $article) {
+            $contributors = array_merge($contributors, $article->getContributors());
         }
 
-        public function preprocess($people)
-        {
-            $last_name = $people->get('last_name');
-
-            // Uppercase last name
-            $people->set('people_last_name', mb_strtoupper($last_name, 'UTF-8'));
-
-            // Full name
-            $full_name = trim($people->get('first_name').' '.$people->get('last_name'));
-            $people->set('people_name', $full_name);
-
-            // Alphabetical name
-            $alpha_name = trim($people->get('last_name').' '.$people->get('first_name'));
-            $people->set('people_alpha', $alpha_name);
-
-            // Create slug
-            $people->set('people_url', makeurl($full_name));
-
-            return $people;
-        }
-
-        public function validate($people)
-        {
-            if (!$people->has('last_name')) {
-                throw new Exception('Le contributeur doit avoir un nom.');
+        // Remove duplicate
+        $contributorIds = [];
+        $uniqueContributors = array_filter($contributors, function($contributor) use
+        (&$contributorIds) {
+            if (in_array($contributor->getId(), $contributorIds)) {
+                return false;
             }
-
-            if ($people->has('site') && filter_var($people->get('site'), FILTER_VALIDATE_URL) === false) {
-                throw new Exception('L\'adresse du site est invalide.');
-            }
-
-            if ($people->has('facebook') && !preg_match('/^https:\/\/www.facebook.com\/(.*)/', $people->get('facebook'))) {
-                throw new Exception('L\'adresse de la page Facebook doit commencer par https://www.facebook.com/.');
-            }
-
-            if ($people->has('twitter') && !preg_match('/^@(\w){1,15}$/', $people->get('twitter'))) {
-                throw new Exception('Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.');
-            }
-
-            if (!$people->has('url')) {
-                throw new Exception('Le contributeur doit avoir une url.');
-            }
-
-            $otherPeopleWithTheSameName = $this->get([
-                'people_url' => $people->get('url'),
-                'people_id' => '!= '.$people->get('id')
-            ]);
-            if ($otherPeopleWithTheSameName) {
-                $peopleName = $people->getName();
-                throw new ConflictHttpException("Il existe déjà un contributeur avec le nom $peopleName.");
-            }
-
+            $contributorIds[] = $contributor->getId();
             return true;
-        }
+        });
+
+        usort($uniqueContributors, function($a, $b) {
+            return strcmp($a->getLastName(), $b->getLastName());
+        });
+
+        return $uniqueContributors;
     }
+
+    public function preprocess($people)
+    {
+        $last_name = $people->get('last_name');
+
+        // Uppercase last name
+        $people->set('people_last_name', mb_strtoupper($last_name, 'UTF-8'));
+
+        // Full name
+        $full_name = trim($people->get('first_name').' '.$people->get('last_name'));
+        $people->set('people_name', $full_name);
+
+        // Alphabetical name
+        $alpha_name = trim($people->get('last_name').' '.$people->get('first_name'));
+        $people->set('people_alpha', $alpha_name);
+
+        // Create slug
+        $people->set('people_url', makeurl($full_name));
+
+        return $people;
+    }
+
+    public function validate($people)
+    {
+        if (!$people->has('last_name')) {
+            throw new Exception('Le contributeur doit avoir un nom.');
+        }
+
+        if ($people->has('site') && filter_var($people->get('site'), FILTER_VALIDATE_URL) === false) {
+            throw new Exception('L\'adresse du site est invalide.');
+        }
+
+        if ($people->has('facebook') && !preg_match('/^https:\/\/www.facebook.com\/(.*)/', $people->get('facebook'))) {
+            throw new Exception('L\'adresse de la page Facebook doit commencer par https://www.facebook.com/.');
+        }
+
+        if ($people->has('twitter') && !preg_match('/^@(\w){1,15}$/', $people->get('twitter'))) {
+            throw new Exception('Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.');
+        }
+
+        if (!$people->has('url')) {
+            throw new Exception('Le contributeur doit avoir une url.');
+        }
+
+        $otherPeopleWithTheSameName = $this->get([
+            'people_url' => $people->get('url'),
+            'people_id' => '!= '.$people->get('id')
+        ]);
+        if ($otherPeopleWithTheSameName) {
+            $peopleName = $people->getName();
+            throw new ConflictHttpException("Il existe déjà un contributeur avec le nom $peopleName.");
+        }
+
+        return true;
+    }
+}
