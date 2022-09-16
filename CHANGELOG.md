@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.64.0 (DEV)
+
+Améliorations
+
+- La page Contributeur·trice affiche désormais la photo si elle est disponible.
+
 ## 2.63.1 (23 septembre 2022)
 
 Corrections

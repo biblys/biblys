@@ -5,33 +5,39 @@
 {% endblock %}
 
 {% block main %}
+  <div class="contributor">
+    <h1>{{ people.name }}</h1>
 
-  <h1>{{ people.name }}</h1>
+    <div>
+      {% if people.has('facebook') %}
+        <a href="{{ people.facebook }}" target="_blank" rel="noopener noreferer">
+          <span class="fa fa-facebook-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
+        </a>
+      {% endif %}
+      {% if people.has('twitter') %}
+        <a href="https://twitter.com/{{ people.twitter }}" target="_blank" rel="noopener noreferer">
+          <span class="fa fa-twitter-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
+        </a>
+      {% endif %}
+    </div>
 
-  <div>
-    {% if people.has('facebook') %}
-      <a href="{{ people.facebook }}" target="_blank" rel="noopener noreferer">
-        <span class="fa fa-facebook-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
-      </a>
-    {% endif %}
-    {% if people.has('twitter') %}
-      <a href="https://twitter.com/{{ people.twitter }}" target="_blank" rel="noopener noreferer">
-        <span class="fa fa-twitter-square fa-lg" alt="Page Facebook de {{ people.name }}"/>
-      </a>
+    <div class="contributor__informations">
+      {% if people.hasPhoto %}
+        <img src="{{ people.photo.url }}" alt="Photo de {{ people.name }}" class="contributor__photo" />
+      {% endif %}
+
+      {% if people.has('bio') %}
+        {{ people.bio|raw }}
+      {% endif %}
+    </div>
+
+    {% include 'AppBundle:Article:_list.html.twig' %}
+
+    {% if app.user.isAdmin() %}
+      <div class="admin">
+        <p>Contributeur·trice n° {{ people.id }}</p>
+        <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>
+      </div>
     {% endif %}
   </div>
-
-  {% if people.has('bio') %}
-    {{ people.bio|raw }}
-  {% endif %}
-
-  {% include 'AppBundle:Article:_list.html.twig' %}
-
-  {% if app.user.isAdmin() %}
-    <div class="admin">
-      <p>Contributeur n° {{ people.id }}</p>
-      <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>
-    </div>
-  {% endif %}
-
 {% endblock %}
