@@ -66,14 +66,14 @@ class PaginationTest extends TestCase
     public function testGetPreviousQueryForFirstPage()
     {
         $pagination = new Pagination(1, 25, 10);
-        $this->assertEquals(null, $pagination->getPreviousQuery());
+        $this->assertEquals("?p=0", $pagination->getPreviousQuery());
     }
 
     public function testGetPreviousQueryForFirstPageWithParams()
     {
         $pagination = new Pagination(1, 25, 10);
         $pagination->setQueryParams(["date" => "2013-05-22"]);
-        $this->assertEquals("?date=2013-05-22", $pagination->getPreviousQuery());
+        $this->assertEquals("?date=2013-05-22&p=0", $pagination->getPreviousQuery());
     }
 
     public function testGetPreviousQuery()
@@ -110,13 +110,13 @@ class PaginationTest extends TestCase
     public function testGetNextQueryForLastPage()
     {
         $pagination = new Pagination(3, 25, 10);
-        $this->assertEquals(null, $pagination->getNextQuery());
+        $this->assertEquals("?p=0", $pagination->getNextQuery());
     }
 
     public function testGetNextQueryForLastPageWithParams()
     {
         $pagination = new Pagination(3, 25, 10);
         $pagination->setQueryParams(["date" => "2013-05-22"]);
-        $this->assertEquals("?date=2013-05-22", $pagination->getNextQuery());
+        $this->assertEquals("?date=2013-05-22&p=0", $pagination->getNextQuery());
     }
 }

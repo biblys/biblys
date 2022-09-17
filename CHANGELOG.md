@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.63.1 (23 septembre 2022)
+
+Corrections
+
+- Sur certaines pages avec pagination, le retour à la page précédente ne 
+  fonctionnait plus. C'est corrigé.
+
 ## 2.63.0 (2 septembre 2022)
 
 Améliorations
@@ -11,7 +18,7 @@ Améliorations
 - Une option de configuration permettant l'activation du mode maintenance 
   avec un message a été ajoutée, elle remplace l'option de site équivalente.
 - Lorsqu'une alerte est envoyée à une adresse e-mail invalide, l'erreur 
-  affichée est désormais plus clair et n'empêche plus l'envoi des autres 
+  affichée est désormais plus claire et n'empêche plus l'envoi des autres 
   alertes.
 
 Corrections

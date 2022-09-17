@@ -96,11 +96,11 @@ class Pagination
         return $this->getQueryForPageIndex($pageIndex);
     }
 
-    public function getQueryForPageIndex(?int $pageIndex): ?string
+    public function getQueryForPageIndex(?int $pageIndex = null): ?string
     {
         $params = $this->getQueryParams();
 
-        if ($pageIndex) {
+        if ($pageIndex !== null) {
             $params['p'] = $pageIndex;
         }
 
