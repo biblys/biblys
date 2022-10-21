@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // Check user rights
@@ -10,7 +11,8 @@ elseif ($_V->isBookshop()) $mode = 'bookshop';
 elseif ($_V->isLibrary()) $mode = 'library';
 else trigger_error('Accès non autorisé pour '.$_V->get('user_email'));
 
-$_PAGE_TITLE = 'Gestion des évènements';
+/** @var Request $request */
+$request->attributes->set("page_title", "Gestion des évènements");
 
 $em = new EventManager();
 
@@ -40,9 +42,10 @@ foreach ($events as $e)
 {
     $author = null;
     if ($e->has('publisher_name')) $author = $e->get('publisher_name');
+    $statusAlt = $e->get('event_status') ? "En ligne" : "Hors ligne";
 
     $table .= '<tr>'
-                . '<td class="right"><img src="/common/img/square_'.($e->get('event_status') ? 'green' : 'red').'.png"></td>'
+                . '<td class="right"><img src="/common/img/square_'.($e->get('event_status') ? 'green' : 'red').'.png" alt="'.$statusAlt.'"></td>'
                 . '<td><a href="/evenements/'.$e->get('url').'">'.$e->get('title').'</a></td>'
                 . '<td>'.$author.'</td>'
                 . '<td class="nowrap">'._date($e->get('start'), 'd/m/Y H:i').'</td>'
@@ -56,7 +59,7 @@ $alert = null;
 if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</p><br>';
 
 $content = '
-    <h1><span class="fa fa-calendar"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-calendar"></span>Gestion des évènements</h1>
     <p class="buttonset">
         <a href="/pages/event_edit" class="btn btn-primary"><i class="fa fa-calendar-o"></i> Nouveau</a>
     </p>

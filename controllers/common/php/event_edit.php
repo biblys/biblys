@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var Visitor $_V */
@@ -26,7 +27,7 @@ if (isset($_GET['id']))
 {
     if ($e = $em->get(array('event_id' => $_GET['id'], 'site_id' => $site->get("id"))))
     {
-        $_PAGE_TITLE = 'Modifier <a href="/evenements/'.$e['event_url'].'">'.$e['event_title'].'</a>';
+        $pageTitle = 'Modifier <a href="/evenements/'.$e['event_url'].'">'.$e['event_title'].'</a>';
         $buttons .= ' <button type="submit" form="event" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment supprimer cet évènement ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
     }
     else trigger_error('Cet évènement n\'existe pas.', E_USER_ERROR);
@@ -35,9 +36,12 @@ if (isset($_GET['id']))
 // Create a new event
 else
 {
-    $_PAGE_TITLE = 'Créer un nouvel évènement';
+    $pageTitle = 'Créer un nouvel évènement';
     $e = new Event(array());
 }
+
+/** @var Request $request */
+$request->attributes->set("page_title", $pageTitle);
 
 $content = null;
 
@@ -111,7 +115,7 @@ else
     $im = new ImagesManager($_SQL);
 
     $content = '
-        <h1><i class="fa fa-calendar"></i> '.$_PAGE_TITLE.'</h1>
+        <h1><i class="fa fa-calendar"></i> '.$pageTitle.'</h1>
         <p>'.$buttons.'</p>
 
         <form id="event" method="post" class="fieldset">
