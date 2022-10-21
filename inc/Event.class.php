@@ -94,4 +94,17 @@ class EventManager extends EntityManager
 
         return parent::getAll($where, $options);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function update($entity, $reason = null)
+    {
+        $entity->remove("event_start_date");
+        $entity->remove("event_start_time");
+        $entity->remove("event_end_date");
+        $entity->remove("event_end_time");
+
+        return parent::update($entity, $reason);
+    }
 }
