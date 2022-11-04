@@ -1,8 +1,8 @@
 <?php
 
-use Framework\Exception\AuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var UrlGenerator $urlgenerator */
@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var Visitor $_V */
 if (!isset($rank)) {
-    throw new AuthException("Accès réservé aux administrateurs.");
+    throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
 }
 
 $pm = new PostManager();
@@ -47,7 +47,7 @@ if ($request->getMethod() === 'POST') {
 
     $fields = $request->request->all();
     foreach ($fields as $field => $val) {
-        if ($field == 'post_id' || $field == 'post_url') {
+        if (in_array($field, ["post_id", "post_url", "post_url_old", "post_time"])) {
             continue;
         }
         $post->set($field, $val);
@@ -61,6 +61,8 @@ if ($request->getMethod() === 'POST') {
     // Selected checkbox
     $selected = $request->request->get("post_selected") ? 1 : 0;
     $post->set('post_selected', $selected);
+
+    $post->remove("author_id");
 
     $pm->update($post);
 
@@ -115,10 +117,10 @@ elseif ($_V->isPublisher()) {
 
 if ($post) {
     $p = $post;
-    $pageTitle = 'Modifier &laquo; <a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a> &raquo';
+    $pageTitle = 'Modifier « <a href="/blog/'.$p["post_url"].'">'.$p["post_title"].'</a> »';
     $content .= '
         <div class="admin">
-            <p>Billet n&deg; '.$p["post_id"].'</p>
+            <p>Billet n° '.$p["post_id"].'</p>
             <p><a href="/blog/'.$p["post_url"].'">voir</a></p>
             <p><a href="/pages/links?post_id='.$p["post_id"].'">lier</a></p>
             <p><a href="'.$urlgenerator->generate('post_delete', ['id' => $p['post_id']]).'" data-confirm="Voulez-vous vraiment SUPPRIMER ce billet ?">supprimer</a></p>
@@ -131,7 +133,10 @@ if ($post) {
     $p["post_time"] = substr($date[1],0,5);
 
     // Illustration
-    if(media_exists('post',$p["post_id"])) $post_illustration_upload = '<input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" hidden /> <label class="after button" for="post_illustration_upload">Remplacer</label> <input type="checkbox" id="post_illustration_delete" name="post_illustration_delete" value="1" /> <label for="post_illustration_delete" class="after">Supprimer</label>';
+    $postIllustration = new Media("Post", $post->get("id"));
+    if($postIllustration->exists()) {
+        $post_illustration_upload = '<input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" hidden /> <label class="after button" for="post_illustration_upload">Remplacer</label> <input type="checkbox" id="post_illustration_delete" name="post_illustration_delete" value="1" /> <label for="post_illustration_delete" class="after">Supprimer</label>';
+    }
 
     if ($p['post_status']) $status_online = ' selected';
     if ($p['post_selected']) $post_selected = ' checked';
@@ -164,11 +169,10 @@ $content .= '
 if($_V->isAdmin()) {
     $content .= '
             <p>
-                <label for="category_id">Cat&eacute;gorie :</label>
+                <label for="category_id">Catégorie :</label>
                 <select name="category_id">
                     <option />
     ';
-    if (isset($p['category_id'])) $selected[$p['category_id']] = ' selected'; else $selected = NULL;
     $cm = new CategoryManager();
     $categories = $cm->getAll();
     foreach ($categories as $category) {
@@ -191,7 +195,7 @@ $content .= '
             <br>
 
             <p>
-                <label for="post_status">&Eacute;tat :</label>
+                <label for="post_status">État :</label>
                 <select name="post_status">
                     <option value="0">Hors-ligne</option>
                     <option value="1" '.$status_online.'>En ligne</option>
@@ -218,7 +222,7 @@ if (auth("admin"))
             />
             <br /><br />
 
-            <label for="post_selected">&Agrave; la une :</label>
+            <label for="post_selected">À la une :</label>
             <input type="checkbox" name="post_selected" id="post_selected" value="1"'.$post_selected.' />
             <br /><br />
     ';
@@ -233,10 +237,10 @@ $content .= '
                 '.($post_illustration_upload).'
             </p>
             <p>
-                <label for="post_illustration_legend">L&eacute;gende :</label>
+                <label for="post_illustration_legend">Légende :</label>
                 <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="'.($p['post_illustration_legend'] ?? null).'" maxlength=64 class="long" />
             </p>
-            <p>Cette image (au format JPEG) sera utilis&eacute;e comme vignette pour les aperçus du billet sur le site ou sur les r&eacute;seaux sociaux. Taille minimale conseillée pour Facebook : 1200 x 627 pixels.</p>
+            <p>Cette image (au format JPEG) sera utilisée comme vignette pour les aperçus du billet sur le site ou sur les réseaux sociaux. Taille minimale conseillée pour Facebook : 1200 x 627 pixels.</p>
         </fieldset>
         <fieldset>
             <legend>Contenu</legend>
@@ -264,10 +268,10 @@ $content .= '
     </fieldset>
 
     <fieldset>
-        <legend>Base de donn&eacute;es</legend>
+        <legend>Base de données</legend>
 
         <p>
-            <label for="post_id" class="disabled">Billet n&deg;</label>
+            <label for="post_id" class="disabled">Billet n°</label>
             <input type="text" name="post_id" id="post_id" value="'.($p['post_id'] ?? null).'" readonly>
         </p>
 
@@ -279,11 +283,11 @@ $content .= '
         <br>
 
         <p>
-            <label for="post_insert" class="readonly">Billet cr&eacute;&eacute; le :</label>
+            <label for="post_insert" class="readonly">Billet créé le :</label>
             <input type="text" name="post_insert" id="post_insert" value="'.($p['post_insert'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
         <p>
-            <label for="post_update" class="readonly">Billet modifi&eacute; le :</label>
+            <label for="post_update" class="readonly">Billet modifié le :</label>
             <input type="text" name="post_update" id="post_update" value="'.($p['post_update'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
     </fieldset>
