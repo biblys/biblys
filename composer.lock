@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c545e2c6b9720e304d4a9d61c0289c74",
+    "content-hash": "2449b2d4ea028cec330acd05a6c49e1d",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -55,24 +55,26 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "2.1.2",
+            "version": "dev-next",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "130d3e5a5cb8f43018504b16e9f23c067b4ebdd1"
+                "reference": "3256bff07275011b7b7fe05c846f5543819015c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/130d3e5a5cb8f43018504b16e9f23c067b4ebdd1",
-                "reference": "130d3e5a5cb8f43018504b16e9f23c067b4ebdd1",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/3256bff07275011b7b7fe05c846f5543819015c1",
+                "reference": "3256bff07275011b7b7fe05c846f5543819015c1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.0"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
+                "ext-json": "*",
+                "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.2",
-                "phpunit/phpunit": "^7.1 || ^8.3"
+                "phpunit/phpunit": "^6 || ^7 || ^8"
             },
             "type": "library",
             "autoload": {
@@ -87,21 +89,22 @@
             "authors": [
                 {
                     "name": "Clement Bourgoin",
-                    "email": "cb@nokto.net"
+                    "email": "c@iwzr.fr"
                 }
             ],
-            "description": "A PHP library to convert and validate ISBNs & EANs",
+            "description": "A PHP library to convert and validate ISBNs",
             "homepage": "https://github.com/biblys/isbn",
             "keywords": [
                 "ISBN",
                 "book",
-                "ean"
+                "ean",
+                "gtin"
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/2.1.2"
+                "source": "https://github.com/biblys/isbn/tree/next"
             },
-            "time": "2019-10-13T00:00:00+00:00"
+            "time": "2022-11-26T00:00:00+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -8862,6 +8865,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "biblys/isbn": 20,
         "propel/propel": 10,
         "roave/security-advisories": 20
     },

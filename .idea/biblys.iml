@@ -6,10 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jflight/gacookie" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/support" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/filesystem" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/justinrainbow/json-schema" />
@@ -18,7 +15,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/var-dumper" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />
@@ -46,7 +42,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-grapheme" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dependency-injection" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-core" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
@@ -87,14 +82,12 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/asset" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/seld/phar-utils" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paypal/rest-api-sdk-php" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/nesbot/carbon" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/biblys/eurotax" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/biblys/isbn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/seld/jsonlint" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/stripe/stripe-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/jasonlewis/resource-watcher" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/version" />
