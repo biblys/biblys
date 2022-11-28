@@ -55,24 +55,26 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "49de9e67628e54a0af39d3d0e99f5f55a98d7b30"
+                "reference": "f5253b5346bda5f5ae29c30bcc2660d8f116f1fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/49de9e67628e54a0af39d3d0e99f5f55a98d7b30",
-                "reference": "49de9e67628e54a0af39d3d0e99f5f55a98d7b30",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/f5253b5346bda5f5ae29c30bcc2660d8f116f1fa",
+                "reference": "f5253b5346bda5f5ae29c30bcc2660d8f116f1fa",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": "^7.2"
             },
             "require-dev": {
+                "ext-json": "*",
+                "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.2",
-                "phpunit/phpunit": "^6 || ^7 || ^8"
+                "phpunit/phpunit": "^6 || ^7"
             },
             "type": "library",
             "autoload": {
@@ -100,9 +102,9 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/2.5.0"
+                "source": "https://github.com/biblys/isbn/tree/2.6.0"
             },
-            "time": "2022-01-10T00:00:00+00:00"
+            "time": "2022-11-26T00:00:00+00:00"
         },
         {
             "name": "composer/ca-bundle",
