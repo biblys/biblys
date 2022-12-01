@@ -13,9 +13,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 $om = new OrderManager();
 $sm = new StockManager();
 
-$_PAGE_TITLE = 'Commande » Paiement';
+$request->attributes->set("page_title", "Commande » Paiement");
 
-$content = '<h2 class="noprint">'.$_PAGE_TITLE.'</h2>';
+$content = '<h2 class="noprint">Commande » Paiement</h2>';
 
 $numerique = 0;
 $paypal = null;
@@ -141,7 +141,7 @@ if ($request->getMethod() === "POST") {
                 <p class="noprint">Pour régler votre commande par chèque&nbsp;:</p>
                 <ol class="noprint">
                     <li>Établissez un chèque d\'un montant de <strong>'.currency($order->getTotal() / 100).'</strong> à l\'ordre de <strong>'.$site->getNameForCheckPayment().'</strong>.</li>
-                    <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> ('.$order->get('id').') ou imprimez cette page et joignez-là 
+                    <li>Inscrivez au dos du chèque <strong>votre nom</strong> et <strong>votre numéro de commande</strong> ('.$order->get('id').') ou imprimez cette page et joignez-la 
                      votre envoi.</li>
                     <li>Envoyez votre chèque à l\'adresse :</li>
                 </ol>
