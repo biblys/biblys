@@ -224,7 +224,9 @@ class Order extends Entity
             )
         );
 
-        $apiContext->setConfig(["mode" => "live"]);
+        $mode = $paypal_config["mode"] ?? "live";
+
+        $apiContext->setConfig(["mode" => $mode]);
 
         return $apiContext;
     }
