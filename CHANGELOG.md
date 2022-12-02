@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.64.0 (DEV)
+## 2.64.0 (2 décembre 2022)
 
 Améliorations
 
@@ -8,7 +8,7 @@ Améliorations
 - Le message d'erreur lors de l'échec d'un paiement via Paypal est désormais 
   plus explicite.
 - Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir 
-  choisir d'activer le mode "sandbox" ou le mode "live"
+  choisir d'activer le mode "sandbox" ou le mode "live" (par défaut)
 
 ### 2.63.1 (23 septembre 2022)
 
