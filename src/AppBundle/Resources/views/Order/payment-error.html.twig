@@ -1,0 +1,23 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Erreur de paiement
+{% endblock %}
+
+{% block main %}
+  <h1>Erreur de paiement</h1>
+  <p>
+    Une erreur est survenue lors de la tentative de paiement de la commande n° {{ order.id }}.<br />
+    Le moyen de paiement n'a pas été débité.<br />
+    Le prestataire de paiement a retourné le message suivant :
+  </p>
+  <div class="alert alert-danger">
+    {{ code }}<br />
+    {{ message }}
+  </div>
+  <p>
+    Si le message ci-dessus ne vous éclaire pas,
+    merci de vous rapprocher de votre banque afin de connaître la raison de l'échec du paiement.
+  </p>
+  <a href="/order/{{ order.url }}" class="btn btn-primary">Réessayer</a>
+{% endblock %}

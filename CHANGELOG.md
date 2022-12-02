@@ -5,6 +5,8 @@
 Améliorations
 
 - La page Contributeur·trice affiche désormais la photo si elle est disponible.
+- Le message d'erreur lors de l'échec d'un paiement via Paypal est désormais 
+  plus explicite.
 - Une option "mode" a été ajoutée à la configuration Paypal pour pouvoir 
   choisir d'activer le mode "sandbox" ou le mode "live"
 

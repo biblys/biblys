@@ -11,6 +11,7 @@ use Framework\Exception\AuthException;
 use Model\OrderQuery;
 use Order;
 use OrderManager;
+use PayPal\Exception\PayPalConnectionException;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
 use Payplug\Notification;
@@ -177,7 +178,26 @@ class OrderController extends Controller
         // Execute payment
         try {
             $payment = $order->executePaypalPayment($paymentId, $payerId);
-        } catch (Exception $e) {
+        }
+        catch (PayPalConnectionException $exception) {
+            Log::paypal(
+                "ERROR",
+                $exception->getMessage(),
+                ['order_id' => $order->get('id'), 'paymentId' => $paymentId]
+            );
+            $data = json_decode($exception->getData());
+
+            return $this->render(
+                "AppBundle:Order:payment-error.html.twig",
+                [
+                    "order" => $order,
+                    "code" => $data->name,
+                    "message" => $data->message
+                ]
+            );
+        }
+        catch (Exception $e) {
+            dump($e);
             Log::paypal("ERROR", $e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new Exception('Une erreur est survenue pendant l\'execution du paiement PayPal. Merci de nous contacter.');
         }

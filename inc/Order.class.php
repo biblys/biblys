@@ -187,18 +187,12 @@ class Order extends Entity
         $execution = new PaymentExecution();
         $execution->setPayerId($payerId);
 
-        try {
-            $payment->execute($execution, $apiContext);
+        $payment->execute($execution, $apiContext);
 
-            try {
-                $payment = Payment::get($paymentId, $apiContext);
-            } catch (Exception $ex) {
-                throw new Exception("There was an error while fetching the payment after execution: ".$ex->getMessage());
-            }
-        } catch (PayPal\Exception\PayPalConnectionException $e) {
-            throw new Exception('PayPal error '.$e->getCode().': '.$e->getData());
+        try {
+            $payment = Payment::get($paymentId, $apiContext);
         } catch (Exception $ex) {
-            throw new Exception("There was an error while executing the payment: ".$ex->getMessage());
+            throw new Exception("There was an error while fetching the payment after execution: ".$ex->getMessage());
         }
 
         return $payment;
