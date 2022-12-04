@@ -4,7 +4,7 @@
 
 Améliorations
 
-- Biblys supporte désormais PHP 8.0.
+- Biblys ne supporte plus PHP 7.4. La version minimale requise est PHP 8.0.
 
 ### 2.64.3 (23 décembre 2022)
 
