@@ -106,10 +106,6 @@ class LegacyClient
 
     public function getLoginUrl(): string
     {
-        if ($this->version === 2) {
-            return "/openid/axys";
-        }
-
         global $config;
 
         $protocol = 'http';
@@ -119,6 +115,10 @@ class LegacyClient
         }
 
         $returnUrl = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+        if ($this->version === 2) {
+            return "/openid/axys?return_url=$returnUrl";
+        }
 
         return $this->base_url.'/login/?return_url='.$returnUrl;
     }

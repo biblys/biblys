@@ -35,7 +35,7 @@ class LegacyClientTest extends TestCase
 
         // then
         $this->assertEquals(
-            "/openid/axys",
+            "/openid/axys?return_url=https://www.biblys.fr/",
             $loginUrl
         );
     }
