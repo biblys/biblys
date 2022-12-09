@@ -20,4 +20,9 @@ class Axys
     {
         return new AxysOpenIDConnectProvider($this->config);
     }
+
+    public function getClientSecret()
+    {
+        return $this->config["client_secret"];
+    }
 }
