@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -47,15 +48,15 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, UnauthorizedHttpException::class)) {
-            return $this->handleUnauthorized($request, $exception);
+            return self::_customTemplateHandler(401, $request, $exception);
         }
 
         if (is_a($exception, AccessDeniedHttpException::class)) {
-            return $this->handleAccessDenied($request, $exception);
+            return self::_customTemplateHandler(403, $request, $exception);
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
-            return $this->handleLegacyAuthException($request, $exception);
+            return self::_customTemplateHandler(401, $request, $exception);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
@@ -122,96 +123,6 @@ class ErrorController extends Controller
             "message" => $exception->getMessage(),
         ]);
         $response->setStatusCode(400);
-
-        return $response;
-    }
-
-    /**
-     * HTTP 401 Unauthorized
-     *
-     * @param Request $request
-     * @param UnauthorizedHttpException $exception
-     * @return Response
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    private function handleUnauthorized(Request $request, UnauthorizedHttpException $exception): Response
-    {
-        if (
-            $request->isXmlHttpRequest()
-            || $request->headers->get('Accept') == 'application/json'
-        ) {
-            $response = new JsonResponse(['error' => $exception->getMessage()]);
-            $response->setStatusCode(401);
-            return $response;
-        }
-
-        $response = $this->render("AppBundle:Error:401.html.twig", [
-            "message" => $exception->getMessage(),
-        ]);
-        $response->setStatusCode(401);
-
-        return $response;
-    }
-
-    /**
-     * HTTP 401 Unauthorized
-     *
-     * @param Request $request
-     * @param AccessDeniedHttpException $exception
-     * @return Response
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    private function handleAccessDenied(Request $request, AccessDeniedHttpException $exception): Response
-    {
-        if (
-            $request->isXmlHttpRequest()
-            || $request->headers->get('Accept') == 'application/json'
-        ) {
-            $response = new JsonResponse(['error' => $exception->getMessage()]);
-            $response->setStatusCode(403);
-            return $response;
-        }
-
-        $response = $this->render("AppBundle:Error:403.html.twig", [
-            "message" => $exception->getMessage(),
-        ]);
-        $response->setStatusCode(403);
-
-        return $response;
-    }
-
-    /**
-     * HTTP 401/403 (legacy AuthException)
-     *
-     * @param Request $request
-     * @param AuthException $exception
-     * @return Response
-     * @throws PropelException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    private function handleLegacyAuthException(Request $request, AuthException $exception): Response
-    {
-        if (
-            $request->isXmlHttpRequest()
-            || $request->headers->get('Accept') == 'application/json'
-        ) {
-            $response = new JsonResponse(['error' => $exception->getMessage()]);
-            $response->setStatusCode(401);
-            return $response;
-        }
-
-        $response = $this->render("AppBundle:Error:401.html.twig", [
-            "message" => $exception->getMessage(),
-        ]);
-        $response->setStatusCode(401);
 
         return $response;
     }
@@ -366,5 +277,34 @@ class ErrorController extends Controller
                 <p>' . $exception->getMessage() . '</p>
             </div>
         ', $statusCode);
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    private function _customTemplateHandler(
+        int $statusCode,
+        Request $request,
+        HttpException|AuthException $exception
+    ): Response
+    {
+        if (
+            $request->isXmlHttpRequest()
+            || $request->headers->get('Accept') == 'application/json'
+        ) {
+            $response = new JsonResponse(['error' => $exception->getMessage()]);
+            $response->setStatusCode($statusCode);
+            return $response;
+        }
+
+        $response = $this->render("AppBundle:Error:$statusCode.html.twig", [
+            "message" => $exception->getMessage(),
+        ]);
+        $response->setStatusCode($statusCode);
+
+        return $response;
     }
 }
