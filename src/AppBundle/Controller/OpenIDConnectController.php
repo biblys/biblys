@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Axys;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\TokenService;
 use DateTime;
 use Framework\Controller;
 use Framework\Exception\AuthException;

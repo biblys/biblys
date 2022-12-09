@@ -8,8 +8,9 @@ use Framework\ArgumentResolver\BiblysCloudValueResolver;
 use Framework\ArgumentResolver\ConfigValueResolver;
 use Framework\ArgumentResolver\CurrentSiteValueResolver;
 use Framework\ArgumentResolver\CurrentUserValueResolver;
-use Framework\ArgumentResolver\SessionValueResolver;
 use Framework\ArgumentResolver\MailerValueResolver;
+use Framework\ArgumentResolver\SessionValueResolver;
+use Framework\ArgumentResolver\TokenServiceValueResolver;
 use Framework\ArgumentResolver\AxysValueResolver;
 use Framework\ArgumentResolver\UpdaterValueResolver;
 use Framework\ArgumentResolver\UrlGeneratorValueResolver;
@@ -45,6 +46,7 @@ $argumentResolvers[] = new CurrentSiteValueResolver();
 $argumentResolvers[] = new CurrentUserValueResolver();
 $argumentResolvers[] = new MailerValueResolver();
 $argumentResolvers[] = new SessionValueResolver();
+$argumentResolvers[] = new TokenServiceValueResolver();
 $argumentResolvers[] = new UpdaterValueResolver();
 $argumentResolvers[] = new UrlGeneratorValueResolver();
 $container->register("argument_resolver", ArgumentResolver::class)
