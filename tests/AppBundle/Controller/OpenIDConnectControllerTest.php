@@ -59,8 +59,10 @@ class OpenIDConnectControllerTest extends TestCase
     public function testCallback()
     {
         // given
+        $stateToken = JWT::encode(["return_url" => "/my-account"], "secret_key", "HS256");
         $request = new Request();
         $request->query->set("code", "authorization_code");
+        $request->query->set("state", $stateToken);
         $controller = new OpenIDConnectController();
         $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
@@ -78,13 +80,14 @@ class OpenIDConnectControllerTest extends TestCase
 
         $axys = $this->createMock(Axys::class);
         $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
+        $axys->method("getClientSecret")->willReturn("secret_key");
 
         // when
         $response = $controller->callback($request, $axys, $currentSite);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/", $response->getTargetUrl());
+        $this->assertEquals("/my-account", $response->getTargetUrl());
 
         $cookies = $response->headers->getCookies();
         $this->assertCount(2, $cookies);

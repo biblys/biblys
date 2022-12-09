@@ -50,7 +50,14 @@ class OpenIDConnectController extends Controller
         $token = $provider->getAccessToken("authorization_code", ["code" => $code]);
         $idToken = $token->getIdToken();
 
-        $response = new RedirectResponse("/");
+        $returnUrl = "/";
+        $stateToken = $request->query->get("state");
+        $decodedState = JWT::decode($stateToken, new Key($axys->getClientSecret(), "HS256"));
+        if (isset($decodedState->return_url)) {
+            $returnUrl = $decodedState->return_url;
+        }
+
+        $response = new RedirectResponse($returnUrl);
 
         $response->headers->setCookie(Cookie::create("id_token")->withValue($idToken));
 
