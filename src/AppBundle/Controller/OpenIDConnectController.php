@@ -6,6 +6,8 @@ use Biblys\Service\Axys;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\TokenService;
 use DateTime;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Model\Session;
@@ -20,12 +22,21 @@ use Symfony\Component\HttpFoundation\Request;
 class OpenIDConnectController extends Controller
 {
 
-    public function axys(Axys $axys): RedirectResponse
+    public function axys(Request $request, Axys $axys, TokenService $tokenService): RedirectResponse
     {
         $provider = $axys->getOpenIDConnectProvider();
+        $clientSecret = $axys->getClientSecret();
 
-        $options = ["scope" => ["openid", "email"]];
-        return new RedirectResponse($provider->getAuthorizationUrl($options));
+        $stateToken = $tokenService->createOIDCStateToken(
+            $request->query->get("return_url"),
+            $clientSecret
+        );
+        $options = [
+            "scope" => ["openid", "email"],
+            "state" => $stateToken,
+        ];
+        $authorizationUrl = $provider->getAuthorizationUrl($options);
+        return new RedirectResponse($authorizationUrl);
     }
 
     /**

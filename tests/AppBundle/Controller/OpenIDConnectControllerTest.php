@@ -5,8 +5,10 @@ namespace AppBundle\Controller;
 use Axys\AxysOpenIDConnectProvider;
 use Biblys\Service\Axys;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Firebase\JWT\JWT;
 use Framework\Exception\AuthException;
 use Lcobucci\JWT\Claim\Basic;
 use Lcobucci\JWT\Token;
@@ -25,13 +27,25 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $oidcProvider = $this->createMock(AxysOpenIDConnectProvider::class);
-        $oidcProvider->method("getAuthorizationUrl")->willReturn("https://axys.me/authorize");
+        $oidcProvider->method("getAuthorizationUrl")
+            ->with([
+                "scope" => ["openid", "email"],
+                "state" => "oidc-state-token",
+            ])
+            ->willReturn("https://axys.me/authorize");
         $axys = $this->createMock(Axys::class);
         $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
+        $axys->method("getClientSecret")->willReturn("secret_key");
+        $request = new Request();
+        $request->query->add(["return_url" => "/my-account"]);
+        $tokenService = $this->createMock(TokenService::class);
+        $tokenService->method("createOIDCStateToken")
+            ->with("/my-account", "secret_key")
+            ->willReturn("oidc-state-token");
         $controller = new OpenIDConnectController();
 
         // when
-        $response = $controller->axys($axys);
+        $response = $controller->axys($request, $axys, $tokenService);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
