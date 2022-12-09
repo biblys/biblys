@@ -83,7 +83,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
-    public function testHandleUnauthorizedAccess()
+    public function testHandleLegacyAuthException()
     {
         // given
         $controller = new ErrorController();

@@ -45,7 +45,7 @@ class ErrorController extends Controller
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
-            return $this->handleUnauthorizedAccess($request, $exception);
+            return $this->handleLegacyAuthException($request, $exception);
         }
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException")) {
@@ -128,7 +128,7 @@ class ErrorController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function handleUnauthorizedAccess(Request $request, AuthException $exception): Response
+    private function handleLegacyAuthException(Request $request, AuthException $exception): Response
     {
         if (
             $request->isXmlHttpRequest()
