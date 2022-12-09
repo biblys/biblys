@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__ . "/../../setUp.php";
@@ -80,6 +81,30 @@ class ErrorControllerTest extends TestCase
             "Requête invalid",
             $response->getContent(),
             "it should response with HTTP status 400"
+        );
+    }
+
+    public function testHandleUnauthorized()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new UnauthorizedHttpException("User should login.");
+        $axys = new LegacyClient();
+
+        // when
+        $response = $controller->exception($request, $exception, $axys);
+
+        // then
+        $this->assertEquals(
+            401,
+            $response->getStatusCode(),
+            "it should response with HTTP status 401"
+        );
+        $this->assertStringContainsString(
+            "Erreur d'authentification",
+            $response->getContent(),
+            "it should return the error message"
         );
     }
 
