@@ -1,0 +1,14 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Accès refusé
+{% endblock %}
+
+{% block main %}
+  <h1>Accès refusé</h1>
+  <p>{{ message }}</p>
+  <p>
+    Vous n'êtes pas autorisé à accéder à cette page.
+    <a href="{{ path('user_login') }}">Essayer avec un autre compte</a>
+  </p>
+{% endblock %}

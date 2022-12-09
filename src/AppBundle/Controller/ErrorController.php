@@ -157,6 +157,37 @@ class ErrorController extends Controller
     }
 
     /**
+     * HTTP 401 Unauthorized
+     *
+     * @param Request $request
+     * @param AccessDeniedHttpException $exception
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function handleAccessDenied(Request $request, AccessDeniedHttpException $exception): Response
+    {
+        if (
+            $request->isXmlHttpRequest()
+            || $request->headers->get('Accept') == 'application/json'
+        ) {
+            $response = new JsonResponse(['error' => $exception->getMessage()]);
+            $response->setStatusCode(403);
+            return $response;
+        }
+
+        $response = $this->render("AppBundle:Error:403.html.twig", [
+            "message" => $exception->getMessage(),
+        ]);
+        $response->setStatusCode(403);
+
+        return $response;
+    }
+
+    /**
+     * HTTP 401/403 (legacy AuthException)
      *
      * @param Request $request
      * @param AuthException $exception

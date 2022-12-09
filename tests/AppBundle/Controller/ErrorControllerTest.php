@@ -7,13 +7,18 @@ use Exception;
 use Framework\Exception\AuthException;
 use Framework\Exception\ServiceUnavailableException;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -103,6 +108,41 @@ class ErrorControllerTest extends TestCase
         );
         $this->assertStringContainsString(
             "Erreur d'authentification",
+            $response->getContent(),
+            "it should return the error message"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testHandleAccessDenied()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new AccessDeniedHttpException("Access if forbidden for user.");
+        $axys = new LegacyClient();
+
+        // when
+        $response = $controller->exception($request, $exception, $axys);
+
+        // then
+        $this->assertEquals(
+            403,
+            $response->getStatusCode(),
+            "it should response with HTTP status 403"
+        );
+        $this->assertStringContainsString(
+            "Accès refusé",
+            $response->getContent(),
+            "it should return the error title"
+        );
+        $this->assertStringContainsString(
+            "Vous n'êtes pas autorisé à accéder à cette page.",
             $response->getContent(),
             "it should return the error message"
         );
