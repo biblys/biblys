@@ -116,7 +116,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
             'site_id' => $site->get('id')
         ]);
         $s = $stock->fetch(PDO::FETCH_ASSOC);
-        $content .= '<p>Ref. Client : ' . $o["user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
+        if ($s) {
+            $content .= '<p>Ref. Client : ' . $o["user_id"] . '-' . round($s["num"]) . '-' . round($s["CA"] / 100) . '</p>';
+        }
     }
 
     if ($order->has('comment') && $_V->isAdmin()) {
