@@ -4,11 +4,10 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
+use Framework\Exception\AuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -425,9 +424,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         ';
     }
 } elseif (!auth()) {
-    throw new UnauthorizedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
+    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
 } else {
-    throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
+    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
 return new Response($content);
