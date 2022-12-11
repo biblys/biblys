@@ -133,7 +133,7 @@ if ($post) {
     $p["post_time"] = substr($date[1],0,5);
 
     // Illustration
-    $postIllustration = new Media("Post", $post->get("id"));
+    $postIllustration = new Media("post", $post->get("id"));
     if($postIllustration->exists()) {
         $post_illustration_upload = '<input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" hidden /> <label class="after button" for="post_illustration_upload">Remplacer</label> <input type="checkbox" id="post_illustration_delete" name="post_illustration_delete" value="1" /> <label for="post_illustration_delete" class="after">Supprimer</label>';
     }

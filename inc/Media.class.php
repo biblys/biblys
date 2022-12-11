@@ -167,10 +167,12 @@ class Media
         $this->_id = (int) $id;
     }
 
+    /**
+     * @throws Exception
+     */
     private function setType($type)
     {
 
-        //if ($type == "book") $type == "article";
         if ($type == "article") {
             $type = "book";
         }
@@ -204,7 +206,7 @@ class Media
         if (in_array($type, $types)) {
             $this->_type = (string) $type;
         } else {
-            error('Type '.$type.' inconnu');
+            throw new Exception('Type '.$type.' inconnu');
         }
     }
 

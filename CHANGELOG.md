@@ -7,6 +7,8 @@ Corrections
 - Lors de l'accès non-authentifié à la page d'une commande associée à un 
   utilisateur, une erreur pouvait s'afficher. Désormais, c'est la page 
   invitant à la connexion.
+- L'accès à la page d'édition d'un billet pouvait provoquer une erreur 
+  "Type Post inconnu". C'est corrigé.
 
 ## 2.64.0 (2 décembre 2022)
 
