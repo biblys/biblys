@@ -51,7 +51,7 @@
     "symfony/console": "^4.4",
     "symfony/intl": "^5.1",
     "symfony/twig-bridge": "^4.4",
-    "symfony/options-resolver": "^5.1",
+    "symfony/options-resolver": "^6.0",
     "symfony/webpack-encore-bundle": "^1.7",
     "stripe/stripe-php": "^10.0",
     "egulias/email-validator": "3.2.1",
