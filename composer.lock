@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6777bea82452ac54f3e451e10a9e53a",
+    "content-hash": "08838cab8e3563015d31a5e0008e2d6d",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -2499,34 +2499,33 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v2.1.0",
+            "version": "v3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "ff3db5739dd635740caed02ddad43e671b5a37e5"
+                "reference": "169cee9ef78139558d6a3e5f680afb5853f4228e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/ff3db5739dd635740caed02ddad43e671b5a37e5",
-                "reference": "ff3db5739dd635740caed02ddad43e671b5a37e5",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/169cee9ef78139558d6a3e5f680afb5853f4228e",
+                "reference": "169cee9ef78139558d6a3e5f680afb5853f4228e",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "monolog/monolog": "^1 || ^2",
-                "psr/log": "^1"
+                "monolog/monolog": "^2",
+                "php": ">=8.0.0 <9.0",
+                "psr/log": "^1 || ^2"
             },
             "require-dev": {
-                "codeclimate/php-test-reporter": "dev-master",
-                "mockery/mockery": "1.*",
-                "packfire/php5.3-compat": "*",
-                "phpmd/phpmd": "@stable",
-                "phpunit/phpunit": "4.8.* || 5.7.* || ^8",
-                "squizlabs/php_codesniffer": "2.*"
+                "mockery/mockery": "^1",
+                "phpmd/phpmd": "^2",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.6 || 3.x-dev",
+                "vimeo/psalm": "^4.13"
             },
             "suggest": {
-                "fluent/logger": "Needed to use the 'fluent' handler for fluentd support",
-                "packfire/php5.3-compat": "for backward compatibility with PHP 5.3"
+                "fluent/logger": "Needed to use the 'fluent' handler for fluentd support"
             },
             "type": "library",
             "autoload": {
@@ -2546,7 +2545,7 @@
                 }
             ],
             "description": "Monitors errors and exceptions and reports them to Rollbar",
-            "homepage": "http://github.com/rollbar/rollbar-php",
+            "homepage": "https://github.com/rollbar/rollbar-php",
             "keywords": [
                 "debugging",
                 "errors",
@@ -2557,9 +2556,9 @@
             "support": {
                 "email": "support@rollbar.com",
                 "issues": "https://github.com/rollbar/rollbar-php/issues",
-                "source": "https://github.com/rollbar/rollbar-php/tree/v2.1.0"
+                "source": "https://github.com/rollbar/rollbar-php/tree/v3.1.4"
             },
-            "time": "2020-07-01T23:21:01+00:00"
+            "time": "2022-10-31T21:23:43+00:00"
         },
         {
             "name": "seld/jsonlint",
