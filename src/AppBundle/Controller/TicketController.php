@@ -3,16 +3,29 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Mailer;
+use Exception;
 use Framework\Controller;
-
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Ticket;
+use TicketCommentManager;
+use TicketManager;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class TicketController extends Controller
 {
+
+    /**
+     * @var false|mixed
+     */
+    private mixed $site;
 
     public function __construct()
     {
@@ -21,18 +34,24 @@ class TicketController extends Controller
         $this->site = $_SITE;
         $this->url = $urlgenerator;
 
-        $this->tm = new \TicketManager();
-        $this->tcm = new \TicketCommentManager();
+        $this->tm = new TicketManager();
+        $this->tcm = new TicketCommentManager();
 
         $this->support_email = 'contact@biblys.fr';
 
         parent::__construct();
     }
 
-    public function indexAction()
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function indexAction(Request $request): Response
     {
-        $this->setPageTitle("Support Biblys");
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
         $open = $this->tm->getAll(array("site_id" => $this->site["site_id"], "ticket_closed" => "NULL", "ticket_resolved" => "NULL"), ['order' => 'ticket_priority', 'sort' => 'desc']);
         $resolved = $this->tm->getAll(array("site_id" => $this->site["site_id"], "ticket_closed" => "NULL", "ticket_resolved" => "NOT NULL"), ['order' => 'ticket_priority', 'sort' => 'desc']);
@@ -46,12 +65,16 @@ class TicketController extends Controller
         ]);
     }
 
-    public function rootAction()
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function rootAction(): Response
     {
-        $this->setPageTitle("Support Biblys");
         $this->auth("root");
-
-        $response = null;
 
         $tickets = $this->tm->getAll(array("ticket_closed" => "NULL", "ticket_resolved" => "NULL"), ['order' => 'ticket_created']);
         $tickets = $this->tm->sort($tickets);
@@ -60,20 +83,22 @@ class TicketController extends Controller
         return $this->render('AppBundle:Ticket:root.html.twig', ['tickets' => $tickets]);
     }
 
-    private function renderTicketTable($tickets)
+    private function renderTicketTable($tickets): bool|string
     {
         if (empty($tickets)) {
             return false;
         }
 
-        $tickets = array_map( function($ticket) {
+        $tickets = array_map(/**
+         * @throws Exception
+         */ function($ticket) {
             $site = $ticket->getRelated('site');
             $user = $ticket->getRelated('user');
             return '
                 <tr>
                     <td>'.$this->tm->getPriority($ticket->get('priority')).'</td>
                     <td>'.$ticket->get('type').'</td>
-                    <td><a href="http://'.$site->get('domain').$this->url->generate('ticket_show', array("id" => $ticket->get('id'))).'">#'.$ticket->get('id').' '.$ticket->get('title').'</td>
+                    <td><a href="https://'.$site->get('domain').$this->url->generate('ticket_show', array("id" => $ticket->get('id'))).'">#'.$ticket->get('id').' '.$ticket->get('title').'</td>
                     <td>'.$user->get('screen_name').'</td>
                     <td>'._date($ticket->get('created'), 'd/m/Y').'</td>
                 </tr>
@@ -97,19 +122,27 @@ class TicketController extends Controller
         </table>';
     }
 
-    public function showAction($id)
+    /**
+     * @throws SyntaxError
+     * @throws AuthException
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function showAction(Request $request, int $id): Response
     {
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
         $ticket = $this->tm->getById($id);
         if (!$ticket) {
-            throw new \Exception("Ticket $id not found.");
+            throw new Exception("Ticket $id not found.");
         }
 
-        $this->setPageTitle('Ticket #'.$ticket->get('id').' : '.$ticket->get('title'));
-
         $comments = $this->tcm->getAll(["ticket_id" => $ticket->get('id')]);
-        $comments = array_map( function($comment) {
+        $comments = array_map(/**
+         * @throws Exception
+         */ function($comment) {
             $user = $comment->getRelated('user');
             return '<h3>'.$user->get('screen_name').', le '._date($comment->get('created'), 'l j f à Hhi').'</h3><p>'.nl2br($comment->get('content')).'</p>';
         }, $comments);
@@ -128,14 +161,22 @@ class TicketController extends Controller
 
     /**
      * Create a new Ticket
+     *
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws Exception
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request): RedirectResponse|Response
     {
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
-        $this->setPageTitle("Nouveau ticket");
-
-        $ticket = new \Ticket(array('ticket_priority' => 1));
+        $ticket = new Ticket(array('ticket_priority' => 1));
 
         if ($request->getMethod() == "POST") {
             $request->request->add([
@@ -184,17 +225,25 @@ class TicketController extends Controller
 
     /**
      * Edit a Ticket
+     *
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse|Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, $id): RedirectResponse|Response
     {
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
         $ticket = $this->tm->getById($id);
         if (!$ticket) {
-            throw new \Exception("Ticket $id not found.");
+            throw new Exception("Ticket $id not found.");
         }
-
-        $this->setPageTitle('Éditer le ticket #'.$ticket->get('id'));
 
         if ($request->getMethod() == "POST") {
 
@@ -212,14 +261,21 @@ class TicketController extends Controller
 
     /**
      * Close a Ticket
+     *
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
      */
-    public function closeAction($id)
+    public function closeAction(Request $request, int $id): RedirectResponse
     {
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
         $ticket = $this->tm->getById($id);
         if (!$ticket) {
-            throw new \Exception("Ticket $id not found.");
+            throw new Exception("Ticket $id not found.");
         }
 
         $ticket->set('ticket_closed', date('Y-m-d H:i:s'));
@@ -230,14 +286,16 @@ class TicketController extends Controller
 
     /**
      * Mark a ticket as resolved
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
-    public function resolveAction($id)
+    public function resolveAction($id): RedirectResponse
     {
         $this->auth("root");
 
         $ticket = $this->tm->getById($id);
         if (!$ticket) {
-            throw new \Exception("Ticket $id not found.");
+            throw new Exception("Ticket $id not found.");
         }
 
         $ticket->set('ticket_resolved', date('Y-m-d H:i:s'));
@@ -286,61 +344,67 @@ class TicketController extends Controller
 
     /**
      * Create a new TicketComment
+     *
+     * @param Request $request
+     * @param $ticket_id
+     * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws Exception
      */
-    public function newCommentAction(Request $request, $ticket_id)
+    public function newCommentAction(Request $request, $ticket_id): RedirectResponse
     {
-        $this->auth("admin");
+        Controller::authAdmin($request);
 
-        if ($request->getMethod() == "POST") {
 
-            $ticket = $this->tm->getById($ticket_id);
-            if (!$ticket) {
-                throw new \Exception("Ticket $ticket_id not found.");
-            }
-
-            $request->request->add([
-                'ticket_id' => $ticket_id,
-                'user_id' => $this->user->get('id')
-            ]);
-
-            $comment = $this->tcm->create($request->request->all());
-
-            $url = $this->url->generate('ticket_show', ["id" => $ticket->get('id')], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $mail = '
-                <p>
-                    '.$this->user->get('screen_name').' a commenté le ticket <a href="'.$url.'">#'.$ticket->get('id').'</a> :<br>
-                </p>
-                <p>
-                    '.$comment->get('content').'
-                </p>
-                <p>
-                    <a href="'.$url.'">Répondre ou clore le ticket</a>
-                </p>
-            ';
-
-            // If comment by root, send notification to ticket creator, else to root
-            if ($this->user->isRoot()) {
-                $dest = $ticket->getRelated('user')->get('email');
-            } else {
-                $dest = $this->support_email;
-            }
-
-            $mailer = new Mailer();
-            $mailer->send(
-                $dest,
-                'Ticket Biblys #'.$ticket->get('id').' : '.$ticket->get('title'),
-                $mail,
-                []
-            );
-
-            // Re-open ticket if it was resolved
-            if ($ticket->has('resolved')) {
-                $ticket->set('ticket_resolved', null);
-                $this->tm->update($ticket);
-            }
-
-            return new RedirectResponse($this->url->generate('ticket_show', ["id" => $ticket->get('id')]));
+        $ticket = $this->tm->getById($ticket_id);
+        if (!$ticket) {
+            throw new Exception("Ticket $ticket_id not found.");
         }
+
+        $request->request->add([
+            'ticket_id' => $ticket_id,
+            'user_id' => $this->user->get('id')
+        ]);
+
+        $comment = $this->tcm->create($request->request->all());
+
+        $url = $this->url->generate('ticket_show', ["id" => $ticket->get('id')], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $mail = '
+            <p>
+                '.$this->user->get('screen_name').' a commenté le ticket <a href="'.$url.'">#'.$ticket->get('id').'</a> :<br>
+            </p>
+            <p>
+                '.$comment->get('content').'
+            </p>
+            <p>
+                <a href="'.$url.'">Répondre ou clore le ticket</a>
+            </p>
+        ';
+
+        // If comment by root, send notification to ticket creator, else to root
+        if ($this->user->isRoot()) {
+            $dest = $ticket->getRelated('user')->get('email');
+        } else {
+            $dest = $this->support_email;
+        }
+
+        $mailer = new Mailer();
+        $mailer->send(
+            $dest,
+            'Ticket Biblys #'.$ticket->get('id').' : '.$ticket->get('title'),
+            $mail,
+            []
+        );
+
+        // Re-open ticket if it was resolved
+        if ($ticket->has('resolved')) {
+            $ticket->set('ticket_resolved', null);
+            $this->tm->update($ticket);
+        }
+
+        return new RedirectResponse($this->url->generate('ticket_show', ["id" => $ticket->get('id')]));
     }
 }

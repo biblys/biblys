@@ -2,7 +2,15 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
+use Biblys\Service\Pagination;
+use CollectionManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use Propel\Runtime\Exception\PropelException;
+use PublisherManager;
+use SupplierManager;
 use InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -11,21 +19,31 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use UserManager;
 
 class PublisherController extends Controller
 {
     /**
-     * 
+     * @route GET /publishers/
+     * @param Request $request
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
         global $site;
         
-        $request->attributes->set("page_title", "Éditeurs");
-
-        $pm = new \PublisherManager();
+        $pm = new PublisherManager();
 
         $pageNumber = (int) $request->query->get("p", 0);
         if ($pageNumber < 0) {
@@ -34,7 +52,7 @@ class PublisherController extends Controller
 
         $totalCount = $pm->count([]);
         $limit = $site->getOpt('publisher_per_page') ? $site->getOpt('publisher_per_page') : 100;
-        $pagination = new \Biblys\Service\Pagination($pageNumber, $totalCount, $limit);
+        $pagination = new Pagination($pageNumber, $totalCount, $limit);
 
         $publishers = $pm->getAll([], [
             'order' => 'publisher_name_alphabetic',
@@ -50,18 +68,21 @@ class PublisherController extends Controller
 
     /**
      * Show a Publisher's page and related articles
-     * /editeur/{slug}.
-     *
-     * @param  $slug the publisher's slug
-     *
-     * @return Response the rendered templated
+     * @route /editeur/{slug}.
+     * @param Request $request
+     * @param $slug
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(Request $request, $slug): Response
     {
         global $site;
 
-        $pm = $this->entityManager('Publisher');
-        $am = $this->entityManager('Article');
+        $pm = new PublisherManager();
+        $am = new ArticleManager();
 
         $publisher = $pm->get(['publisher_url' => $slug]);
         if (!$publisher) {
@@ -81,9 +102,7 @@ class PublisherController extends Controller
             }
         }
 
-        $this->setPageTitle($publisher->get('name'));
-
-        $cm = $this->entityManager('Collection');
+        $cm = new CollectionManager();
         $collections = $cm->getAll(['publisher_id' => $publisher->get('id')], ['order' => 'collection_name']);
 
         // Pagination
@@ -91,7 +110,7 @@ class PublisherController extends Controller
         $totalCount = $am->count(['publisher_id' => $publisher->get('id')]);
 
         try {
-            $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+            $pagination = new Pagination($page, $totalCount);
         } catch (InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
@@ -115,24 +134,31 @@ class PublisherController extends Controller
      * Edit a publisher
      * /admin/publisher/{id}/edit.
      *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
      * @param int $id
      *
      * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function editAction(Request $request, $id)
+    public function editAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        int $id
+    ): Response
     {
-        global $site;
+        Controller::authAdmin($request);
 
-        $this->auth('admin');
-
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
-
-        $this->setPageTitle('Modifier l\'éditeur '.$publisher->get('name'));
 
         $formFactory = $this->getFormFactory();
 
@@ -165,12 +191,13 @@ class PublisherController extends Controller
                 if ($data['logo'] !== null) {
                     $updated->addLogo($data['logo']);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
-                return new RedirectResponse($this->generateUrl('publisher_show', ['slug' => $updated->get('url')]));
+                $url = $urlGenerator->generate('publisher_show', ['slug' => $updated->get('url')]);
+                return new RedirectResponse($url);
             }
         }
 
@@ -185,48 +212,56 @@ class PublisherController extends Controller
      * Delete a publisher.
      *
      * @route GET /admin/publisher/{id}/delete
+     * @param int $id
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function deleteAction(int $id, Request $request)
+    public function deleteAction(
+        int $id,
+        Request $request,
+        UrlGenerator $urlGenerator
+    ): Response
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
         $publisher = $pm->getById($id);
 
         if (!$publisher) {
             throw new NotFoundException("Cannot find a publisher for $id");
         }
 
-        $cm = $this->entityManager('Collection');
+        $cm = new CollectionManager();
         $collections = $cm->getAll(['publisher_id' => $publisher->get('id')]);
 
-        $am = $this->entityManager('Article');
+        $am = new ArticleManager();
         $articles = $am->getAll(['publisher_id' => $publisher->get('id')]);
 
         // Id deletion is confirmed
         $error = null;
         if ($request->getMethod() === 'POST') {
-            try {
-                foreach ($articles as $article) {
-                    $am->delete($article);
-                }
-
-                foreach ($collections as $collection) {
-                    $cm->delete($collection);
-                }
-
-                $pm->delete($publisher);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'publisher_deleted',
-                        ['name' => $publisher->get('name')]
-                    )
-                );
-            } catch (\Exception $exception) {
-                throw $exception;
-                $error = $exception->getMessage();
+            foreach ($articles as $article) {
+                $am->delete($article);
             }
+
+            foreach ($collections as $collection) {
+                $cm->delete($collection);
+            }
+
+            $pm->delete($publisher);
+
+            $url = $urlGenerator->generate(
+                'publisher_deleted',
+                ['name' => $publisher->get('name')]
+            );
+            return new RedirectResponse($url);
         }
 
         return $this->render(
@@ -243,8 +278,14 @@ class PublisherController extends Controller
      * Publisher deletion confirm page.
      *
      * @route GET /admin/publisher/deleted
+     * @param Request $request
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function deletedAction(Request $request)
+    public function deletedAction(Request $request): Response
     {
         $name = $request->query->get('name');
 
@@ -259,22 +300,25 @@ class PublisherController extends Controller
      * /admin/publisher/{id}/rights.
      *
      * @param Request $request
-     * @param int     $id
+     * @param int $id
      *
      * @return Response
+     * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function rightsAction($id)
+    public function rightsAction(Request $request, int $id): Response
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
-
-        $this->setPageTitle(("Permissions pour l'éditeur ".$publisher->get('name')));
 
         return $this->render('AppBundle:Publisher:rights.html.twig', [
             'publisher' => $publisher,
@@ -284,57 +328,76 @@ class PublisherController extends Controller
     /**
      * Give a user the right to manage a publisher.
      *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
      * @param $id publisher's id
      *
      * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
+     * @throws Exception
      */
-    public function rightsAddAction(Request $request, $id)
+    public function rightsAddAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $id
+    ): RedirectResponse
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $um = $this->entityManager('User');
+        $um = new UserManager();
         $userEmail = $request->request->get('user_email');
         $user = $um->get(['Email' => $userEmail]);
         if (!$user) {
-            throw new \Exception("Cannot find a user with e-mail $userEmail");
+            throw new Exception("Cannot find a user with e-mail $userEmail");
         }
 
         if (!$user->hasRight('publisher', $id)) {
             $user->giveRight('publisher', $id);
         }
 
-        return $this->redirect($this->generateUrl(
-            'publisher_rights', 
-            ['id' => $publisher->get('id')])
+        $publisherRightsUrl = $urlGenerator->generate(
+            'publisher_rights',
+            ['id' => $publisher->get('id')]
         );
+        return new RedirectResponse($publisherRightsUrl);
     }
 
     /**
      * Remove rights from a user to manager a publisher.
      *
-     * @param  $rightId      id of right to delete
-     * @param  $publisherId  id of publisher to remove right from
      *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @param $publisherId
+     * @param $userId
      * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function rightsRemoveAction($publisherId, $userId)
+    public function rightsRemoveAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $publisherId,
+        $userId
+    ): RedirectResponse
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
         $publisher = $pm->get(['publisher_id' => $publisherId]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $publisherId not found.");
         }
 
-        $um = $this->entityManager('User');
+        $um = new UserManager();
         $user = $um->getById($userId);
         if (!$user) {
             throw new NotFoundException("User $userId not found.");
@@ -342,9 +405,11 @@ class PublisherController extends Controller
 
         $user->removeRight('publisher', $publisher->get('id'));
 
-        return $this->redirect(
-            $this->generateUrl('publisher_rights', ['id' => $publisher->get('id')])
+        $publisherRightsUrl = $urlGenerator->generate(
+            'publisher_rights',
+            ['id' => $publisher->get('id')]
         );
+        return new RedirectResponse($publisherRightsUrl);
     }
 
     /**
@@ -352,15 +417,20 @@ class PublisherController extends Controller
      * /admin/publisher/{id}/suppliers.
      *
      * @param Request $request
-     * @param int     $id
+     * @param int $id
      *
      * @return Response
+     * @throws AuthException
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function suppliersAction($id)
+    public function suppliersAction(Request $request, int $id): Response
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
@@ -368,7 +438,7 @@ class PublisherController extends Controller
         }
 
         // All suppliers
-        $sm = $this->entityManager('Supplier');
+        $sm = new SupplierManager();
         $suppliers = $sm->getAll([], ['order' => 'supplier_name']);
 
         return $this->render('AppBundle:Publisher:suppliers.html.twig', [
@@ -380,22 +450,26 @@ class PublisherController extends Controller
     /**
      * Add a publisher's supplier.
      *
-     * @param  $id     supplier's id
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @param  $id supplier's id
      *
      * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function suppliersAddAction(Request $request, $id)
+    public function suppliersAddAction(Request $request, UrlGenerator $urlGenerator, $id): RedirectResponse
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $sm = $this->entityManager('Supplier');
+        $sm = new SupplierManager();
 
         $supplier = $sm->get(['supplier_id' => $request->request->get('supplier_id')]);
         if (!$supplier) {
@@ -404,28 +478,38 @@ class PublisherController extends Controller
 
         $publisher->addSupplier($supplier);
 
-        return $this->redirect($this->generateUrl('publisher_suppliers', ['id' => $publisher->get('id')]));
+        $suppliersUrl = $urlGenerator->generate('publisher_suppliers', ['id' => $publisher->get('id')]);
+        return new RedirectResponse($suppliersUrl);
     }
 
     /**
      * Add a publisher's supplier.
      *
-     * @param  $id     supplier's id
-     *
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @param  $id supplier's id
+     * @param $supplier_id
      * @return RedirectResponse
+     * @throws AuthException
+     * @throws PropelException
      */
-    public function suppliersRemoveAction(Request $request, $id, $supplier_id)
+    public function suppliersRemoveAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $id,
+        $supplier_id
+    ): RedirectResponse
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
-        $pm = $this->entityManager('Publisher');
+        $pm = new PublisherManager();
 
         $publisher = $pm->get(['publisher_id' => $id]);
         if (!$publisher) {
             throw new NotFoundException("Publisher $id not found.");
         }
 
-        $sm = $this->entityManager('Supplier');
+        $sm = new SupplierManager();
 
         $supplier = $sm->get(['supplier_id' => $supplier_id]);
         if (!$supplier) {
@@ -434,6 +518,7 @@ class PublisherController extends Controller
 
         $publisher->removeSupplier($supplier);
 
-        return $this->redirect($this->generateUrl('publisher_suppliers', ['id' => $publisher->get('id')]));
+        $suppliersUrl = $urlGenerator->generate('publisher_suppliers', ['id' => $publisher->get('id')]);
+        return new RedirectResponse($suppliersUrl);
     }
 }

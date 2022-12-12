@@ -49,9 +49,9 @@ if (auth("admin")) {
     ';
 }
 
-$_PAGE_TITLE = $p["people_name"];
+$request->attributes->set("page_title", $people->get("name"));
 $content .= '
-    <h2>'.$_PAGE_TITLE.'</h2>
+    <h2>'.$people->get("name").'</h2>
 ';
 
 $p = $people;
@@ -62,7 +62,7 @@ $aliases = array_map(function ($alias) {
     return '<a href="/'.$alias->get('url').'/">'.$alias->get('name').'</a>';
 }, $aliases);
 if (count($aliases)) {
-    $content .= '<p>Ses pseudonymes : '.join($aliases, ', ').'</p>';
+    $content .= '<p>Ses pseudonymes : '.join(', ', $aliases).'</p>';
 }
 
 // Pseudonyme de...
