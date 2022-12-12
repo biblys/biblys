@@ -9,11 +9,6 @@ RewriteRule ^api/(.*)$  /api.php [QSA,L]
 RewriteRule ^mobile/(.*)$  /$1 [R=301,L]
 RewriteRule ^m/(.*)$  /$1 [R=301,L]
 
-# Redirections symfony/routing
-RewriteRule ^tickets/$  /index.php [QSA,L]
-RewriteRule ^ticket/1$  /index.php [QSA,L]
-RewriteRule ^editeur/1$  /index.php [QSA,L]
-
 # Redirection /x
 RewriteRule ^x/(.*)$  /x.php?page=$1 [QSA,L]
 
