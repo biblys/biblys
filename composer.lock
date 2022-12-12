@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e75ee74c0e7840c266fc0c61b986e4f8",
+    "content-hash": "c5a7d27021ae26b54e7e0ba23629aed3",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -4172,38 +4172,36 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v5.4.16",
+            "version": "v6.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "46eeedb08f0832b1b61a84c612d945fc85ee4734"
+                "reference": "ad9878bede5707cdf5ff7f5c86d82a921bbbfe1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/46eeedb08f0832b1b61a84c612d945fc85ee4734",
-                "reference": "46eeedb08f0832b1b61a84c612d945fc85ee4734",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/ad9878bede5707cdf5ff7f5c86d82a921bbbfe1c",
+                "reference": "ad9878bede5707cdf5ff7f5c86d82a921bbbfe1c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
+                "php": ">=8.0.2",
                 "symfony/polyfill-intl-idn": "^1.10",
-                "symfony/polyfill-mbstring": "^1.0",
-                "symfony/polyfill-php80": "^1.16"
+                "symfony/polyfill-mbstring": "^1.0"
             },
             "conflict": {
                 "egulias/email-validator": "~3.0.0",
                 "phpdocumentor/reflection-docblock": "<3.2.2",
                 "phpdocumentor/type-resolver": "<1.4.0",
-                "symfony/mailer": "<4.4",
+                "symfony/mailer": "<5.4",
                 "symfony/serializer": "<5.4.14|>=6.0,<6.0.14|>=6.1,<6.1.6"
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10|^3.1",
                 "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
-                "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/property-access": "^4.4|^5.1|^6.0",
-                "symfony/property-info": "^4.4|^5.1|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/property-access": "^5.4|^6.0",
+                "symfony/property-info": "^5.4|^6.0",
                 "symfony/serializer": "^5.4.14|~6.0.14|^6.1.6"
             },
             "type": "library",
@@ -4236,7 +4234,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v5.4.16"
+                "source": "https://github.com/symfony/mime/tree/v6.0.16"
             },
             "funding": [
                 {
@@ -4252,7 +4250,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-26T16:45:22+00:00"
+            "time": "2022-11-28T12:25:56+00:00"
         },
         {
             "name": "symfony/options-resolver",
