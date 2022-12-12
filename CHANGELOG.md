@@ -5,6 +5,8 @@
 Améliorations
 
 - Biblys ne supporte plus PHP 7.4. La version minimale requise est PHP 8.0.
+- Les urls des pages articles et contributeurs dépréciées sont désormais 
+  préfixées par /legacy/a/ et /legacy/p/
 
 ### 2.64.3 (23 décembre 2022)
 

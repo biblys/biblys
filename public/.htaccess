@@ -74,12 +74,15 @@ RewriteRule ^ys/(.*)$  /$1 [R=301,L]
 RewriteRule ^catalogue/(.*)/(.*)$  /$1/$2 [R=301,L]
 RewriteRule ^catalogue/(.*)$  /$1/ [R=301,L]
 
+# Redirection people
+RewriteRule ^legacy/p/(.*)/$ /index.php?page=people&url=michael-mcdowell [QSA,L]
+
 # Redirection article
 RewriteRule ^legacy/a/(.*)$  /index.php?page=article&url=$1 [QSA,L]
 
 # Redirection people
 RewriteCond %{REQUEST_URI} !/common/
-RewriteRule ^(.*)/$  /index.php?page=people&url=$1 [QSA,L]
+RewriteRule ^(.*)/$  /index.php?page=legacy-people&url=$1 [QSA,L]
 
 # Redirection article
 RewriteCond %{REQUEST_FILENAME} !-f
