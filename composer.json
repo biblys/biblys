@@ -49,7 +49,7 @@
     "symfony/debug": "^4.4",
     "symfony/event-dispatcher": "^4.4",
     "symfony/console": "^4.4",
-    "symfony/intl": "^5.1",
+    "symfony/intl": "^6.0",
     "symfony/twig-bridge": "^4.4",
     "symfony/options-resolver": "^6.0",
     "symfony/webpack-encore-bundle": "^1.7",
