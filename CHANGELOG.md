@@ -1,6 +1,13 @@
 # Historique des modifications
 
-## 2.64.1 (11 décembre 2022)
+### 2.64.2 (16 décembre 2022)
+
+Corrections
+
+- Les erreurs "Requête invalide" (HTTP 400) étaient mal prises en compte. 
+  C'est réparé.
+
+### 2.64.1 (11 décembre 2022)
 
 Corrections
 

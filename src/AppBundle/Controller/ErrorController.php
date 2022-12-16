@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -39,8 +40,8 @@ class ErrorController extends Controller
             return $this->handlePageNotFound($request, $exception);
         }
 
-        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\BadRequestHttpException")) {
-            return self::_defaultHandler(400, $exception, $request);
+        if (is_a($exception, BadRequestHttpException::class)) {
+            return $this->handleBadRequest($request, $exception);
         }
 
         if (is_a($exception, "Framework\Exception\AuthException")) {
@@ -83,6 +84,36 @@ class ErrorController extends Controller
         }
 
         return $this->handleServerError($request, $exception);
+    }
+
+    /**
+     * HTTP 400
+     *
+     * @param Request $request
+     * @param BadRequestHttpException $exception
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function handleBadRequest(Request $request, BadRequestHttpException $exception): Response
+    {
+        if (
+            $request->isXmlHttpRequest()
+            || $request->headers->get('Accept') == 'application/json'
+        ) {
+            $response = new JsonResponse(['error' => $exception->getMessage()]);
+            $response->setStatusCode(400);
+            return $response;
+        }
+
+        $response = $this->render("AppBundle:Error:400.html.twig", [
+            "message" => $exception->getMessage(),
+        ]);
+        $response->setStatusCode(400);
+
+        return $response;
     }
 
     /**

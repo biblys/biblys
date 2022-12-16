@@ -76,6 +76,11 @@ class ErrorControllerTest extends TestCase
             $response->getStatusCode(),
             "it should response with HTTP status 400"
         );
+        $this->assertStringContainsString(
+            "Requête invalid",
+            $response->getContent(),
+            "it should response with HTTP status 400"
+        );
     }
 
     public function testHandleUnauthorizedAccess()
