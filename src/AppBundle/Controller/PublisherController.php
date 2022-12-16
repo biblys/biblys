@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Framework\Controller;
+use InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -88,7 +89,12 @@ class PublisherController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['publisher_id' => $publisher->get('id')]);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+
+        try {
+            $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        }
 
         $articles = $am->getAll(['publisher_id' => $publisher->get('id')], [
             'order' => 'article_pubdate',
