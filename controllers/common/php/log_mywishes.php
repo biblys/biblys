@@ -85,7 +85,7 @@ else {
 
     // Is user name set ?
     if ($_V->has('screen_name')) {
-        $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="' . $axys->getLoginUrl() . '">choisir un nom d\'utilisateur</a>.</p>';
+        $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="https://axys.me/#Profil">choisir un nom d\'utilisateur</a>.</p>';
     }
 
     // Is wishlist public ?

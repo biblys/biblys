@@ -1,10 +1,11 @@
 <?php
 
-use Axys\LegacyClient;
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Framework\Exception\AuthException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $am  = new ArticleManager();
 
@@ -19,7 +20,11 @@ $um = new UserManager();
 $content = null;
 
 $config = new Config();
-$axys = new LegacyClient($config->get("axys"));
+
+/** @var Request $request */
+/** @var UrlGenerator $urlgenerator */
+$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$loginUrl = $urlgenerator->generate("user_login", ["return_url" => $currentUrl]);
 
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {
@@ -214,9 +219,8 @@ if (isset($Articles) && $Articles > 0) {
             <p class="warning">
                 Attention : vous n\'&ecirc;tes pas connect&eacute;. Si vous quittez le site, votre
                 panier ne sera pas sauvegard&eacute;.
-                <a href="' . $axys->getLoginUrl() . '">Connectez-vous</a> ou
-                <a href="' . $axys->getSignupUrl() . '">cr&eacute;ez un compte</a> pour sauvegarder
-                votre panier.
+                <a href="'.$loginUrl.'">Connectez-vous</a> 
+                pour sauvegarder votre panier.
             </p><br />';
     }
 
@@ -516,7 +520,7 @@ if (isset($Articles) && $Articles > 0) {
     if ($downloadable && !$_V->isLogged()) {
         $content .= '<br />'
         . '<div class="center">'
-        . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+        . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
         . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
         . '</div>';
 
@@ -524,7 +528,7 @@ if (isset($Articles) && $Articles > 0) {
     } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
         $content .= '<br>'
         . '<div class="center">'
-        . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$axys->getLoginUrl().'">identifier</a> pour continuer.</p>'
+        . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
         . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
         . '</div>';
     } else {

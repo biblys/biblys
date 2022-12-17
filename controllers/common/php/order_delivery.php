@@ -9,14 +9,17 @@ use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var Request $request */
+/** @var Visitor $_V */
+/** @var UrlGenerator $urlgenerator */
 
 $config = new Config();
 $axys = new LegacyClient($config->get("axys"));
 
-/** @var Request $request */
 $request->attributes->set("page_title", "Commande » Validation");
 
-/** @var Visitor $_V */
 $cart = $_V->getCart();
 if (!$cart) {
     return new Response('<p class="error">Le panier n\'existe pas</p>');
@@ -36,6 +39,9 @@ $numberOfCopiesInCart = 0;
 $totalWeight = 0;
 $totalPrice = 0;
 $total = 0;
+
+$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$loginUrl = $urlgenerator->generate("user_login", ["return_url" => $currentUrl]);
 
 $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($_V);
 if ($orderInProgress) {
@@ -279,7 +285,7 @@ $form_class = null;
 if (!auth()) {
     $content .= '
         <h3>Vos coordonn&eacute;es</h3>
-        <h4>Vous avez un compte Axys ?</h4> <p><a href="' . $axys->getLoginUrl() . '" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonn&eacute;es.</p>
+        <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$loginUrl.'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonn&eacute;es.</p>
         <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="' . $axys->getSignupUrl() . '" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonn&eacute;es pour une prochaine commande.</p>
         <br />
         <button id="show_orderForm" class="showThis btn btn-warning">Je souhaite commander sans utiliser un compte Axys</button>

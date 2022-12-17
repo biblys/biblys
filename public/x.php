@@ -1,8 +1,12 @@
 <?php
 
+use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Axys\LegacyClient as AxysClient;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\RequestContext;
 
 // INCLUDES
 if (file_exists('../inc/functions.php')) {
@@ -29,12 +33,17 @@ $_PAGE = explode('?', $_PAGE);
 $_PAGE = $_PAGE[0];
 
 // Verification page utilisateur et admin
+$request = Request::createFromGlobals();
+$routes = RouteLoader::load();
+$urlGenerator = new UrlGenerator($routes, new RequestContext());
+$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $_PAGE_TYPE = substr($_PAGE, 0, 4);
 if ($_PAGE_TYPE == "adm_" && !$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
-    json_error(0, "Cette action est réservée aux administrateurs (".$_PAGE."). Veuillez vous <a href='".$axys->getLoginUrl()."'>identifier</a> ou <a href='".$axys->getSignupUrl()."'>créer un compte Axys</a>.");
+    json_error(0, "Cette action est réservée aux administrateurs (".$_PAGE."). Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
 if ($_PAGE_TYPE == "log_" and !$_V->isLogged()) {
-    json_error(0, "Action impossible. Veuillez vous <a href='".$axys->getLoginUrl()."'>identifier</a> ou <a href='".$axys->getSignupUrl()."'>créer un compte Axys</a>.");
+    json_error(0, "Action impossible. Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
 
 $_RESULT = null;

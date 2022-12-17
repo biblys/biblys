@@ -403,12 +403,6 @@ class UserManager extends EntityManager
     // Create a new User
     public function create(array $defaults = [], $text = null)
     {
-        global $axys;
-
-        if (!$axys) {
-            $axys = new AxysClient();
-        }
-
         // Check if there is already a user with that e-mail address
         if ($this->get(['user_email' => $defaults['user_email']])) {
             throw new Exception('Cette adresse e-mail est déjà utilisée !');
@@ -448,7 +442,7 @@ class UserManager extends EntityManager
     Mot de passe : ' . $user_password . '
 </p>
 
-<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="' . $axys->getLoginUrl() . '">axys.me</a>.</a></p>
+<p>Grâce à votre compte, vous pourrez désormais vous identifier en un clic sur tous les sites du réseau Axys sans avoir à créer à chaque fois un nouveau compte. Retrouvez la liste sites du réseau sur <a href="https://axys.me"Z>axys.me</a>.</a></p>
 
 <p>A très bientôt sur les sites du réseau Axys !</p>
 ';
