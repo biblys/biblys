@@ -11,13 +11,9 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LegacyClient
 {
-    private $options;
-    private $base_url;
-
-    /**
-     * @var string
-     */
-    private $userToken;
+    private array $options;
+    private string $baseUrl;
+    private ?string $userToken;
 
     public function __construct(array $options = [], string $userToken = null)
     {
@@ -40,7 +36,7 @@ class LegacyClient
             $port = ':'.$this->options['port'];
         }
 
-        $this->base_url = $this->options['protocol'].'://'.$this->options['host'].$port;
+        $this->baseUrl = $this->options['protocol'].'://'.$this->options['host'].$port;
 
         $this->userToken = $userToken;
     }
@@ -114,12 +110,12 @@ class LegacyClient
 
     public function getSignupUrl(): string
     {
-        return $this->base_url.'/#Inscription';
+        return $this->baseUrl.'/#Inscription';
     }
 
     public function getWidgetUrl(): string
     {
-        $url = $this->base_url."/widget.php";
+        $url = $this->baseUrl."/widget.php";
 
         if ($this->userToken) {
             $url .= '?UID='.$this->userToken;
