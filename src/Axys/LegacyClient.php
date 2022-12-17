@@ -133,7 +133,7 @@ class LegacyClient
         $url = $this->base_url."/widget.php?version={$this->version}";
 
         if ($this->userToken) {
-            $url .= '&UID='.$this->userToken;
+            $url .= '?UID='.$this->userToken;
         }
 
         return $url;

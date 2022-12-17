@@ -25,20 +25,4 @@ class RequestListener
         $response = new RedirectResponse($httpsUrl, 302);
         $event->setResponse($response);
     }
-
-    public function onReturningFromAxysRequest(RequestEvent $event): void
-    {
-        $request = $event->getRequest();
-        if (!$request->query->has("UID")) {
-            return;
-        }
-
-        $url = $request->getRequestUri();
-        $url = preg_replace('/([?&]UID=[^&]*)/', '', $url);
-        $axysUid = $request->query->get("UID");
-        $cookie = Cookie::create("user_uid")->withValue($axysUid);
-        $response = new RedirectResponse($url, 302);
-        $response->headers->setCookie($cookie);
-        $event->setResponse($response);
-    }
 }

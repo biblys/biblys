@@ -59,7 +59,6 @@ $container->register("listener.request", RequestListener::class);
 $container->register("dispatcher", EventDispatcher::class)
     ->addMethodCall("addSubscriber", [new Reference("listener.router")])
     ->addMethodCall("addListener", [KernelEvents::REQUEST, [new Reference("listener.request"), "onUnsecureRequest"], 1])
-    ->addMethodCall("addListener", [KernelEvents::REQUEST, [new Reference("listener.request"), "onReturningFromAxysRequest"], 1]);
 
 $container->register("framework", HttpKernel::class)
     ->setArguments([

@@ -25,13 +25,13 @@ class ClientTest extends TestCase
 
         // then
         $this->assertEquals(
-            "https://axys.me/widget.php?version=1",
+            "https://axys.me/widget.php",
             $widgetUrl,
             "it returns widget url"
         );
     }
 
-    public function testGetWidgetUrlWithTokenAsInstanceProperty()
+    public function testGetWidgetUrlWithUserToken()
     {
         // given
         $axys = new LegacyClient([], "userToken12345");
@@ -41,7 +41,7 @@ class ClientTest extends TestCase
 
         // then
         $this->assertEquals(
-            "https://axys.me/widget.php?version=1&UID=userToken12345",
+            "https://axys.me/widget.php?UID=userToken12345",
             $widgetUrl,
             "it returns widget url with uid"
         );

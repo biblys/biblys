@@ -39,36 +39,7 @@ class RequestListenerTest extends TestCase
         );
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals(
-            "https://www.example.org/admin/?id=1&UID=abcd1234",
-            $response->headers->get("Location")
-        );
-    }
-
-    public function testOnReturningFromAxysRequest()
-    {
-        // given
-        $_GET = ["id" => 1, "UID" => "abcd1234"];
-        $_SERVER = [
-            "HTTPS" => "1",
-            "HTTP_HOST" => "example.org",
-            "REQUEST_URI" => "/admin/?id=1&UID=abcd1234",
-            "REQUEST_TIME" => 1616700639,
-        ];
-        $request = Request::createFromGlobals();
-        $container = include __DIR__."/../../src/container.php";
-        $container->setParameter("routes", $routes);
-
-        // when
-        $response = $container->get("framework")->handle($request);
-
-        // then
-        $this->assertInstanceOf(
-            "Symfony\Component\HttpFoundation\RedirectResponse",
-            $response
-        );
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals(
-            "/admin/?id=1",
+            "https://www.example.org/admin/?id=1&view=full",
             $response->headers->get("Location")
         );
     }
