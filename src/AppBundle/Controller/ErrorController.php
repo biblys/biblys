@@ -300,8 +300,10 @@ class ErrorController extends Controller
             return $response;
         }
 
+        $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
         $response = $this->render("AppBundle:Error:$statusCode.html.twig", [
             "message" => $exception->getMessage(),
+            "return_url" => $currentUrl,
         ]);
         $response->setStatusCode($statusCode);
 

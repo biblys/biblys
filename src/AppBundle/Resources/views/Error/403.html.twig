@@ -9,6 +9,6 @@
   <p>{{ message }}</p>
   <p>
     Vous n'êtes pas autorisé à accéder à cette page.
-    <a href="{{ path('user_login') }}">Essayer avec un autre compte</a>
+    <a href="{{ path('user_login', { return_url: return_url }) }}">Essayer avec un autre compte</a>
   </p>
 {% endblock %}
