@@ -19,16 +19,9 @@ class LegacyClient
      */
     private $userToken;
 
-    /**
-     * @var int
-     */
-    private $version;
-
     public function __construct(array $options = [], string $userToken = null)
     {
         $this->options = $options;
-
-        $this->version = $options["version"] ?? 1;
 
         if (!isset($this->options['host'])) {
             $this->options['host'] = 'axys.me';
@@ -116,11 +109,7 @@ class LegacyClient
 
         $returnUrl = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
-        if ($this->version === 2) {
-            return "/openid/axys?return_url=$returnUrl";
-        }
-
-        return $this->base_url.'/login/?return_url='.$returnUrl;
+        return "/openid/axys?return_url=$returnUrl";
     }
 
     public function getSignupUrl(): string
@@ -130,17 +119,12 @@ class LegacyClient
 
     public function getWidgetUrl(): string
     {
-        $url = $this->base_url."/widget.php?version={$this->version}";
+        $url = $this->base_url."/widget.php";
 
         if ($this->userToken) {
             $url .= '?UID='.$this->userToken;
         }
 
         return $url;
-    }
-
-    public function getVersion(): int
-    {
-        return $this->version;
     }
 }

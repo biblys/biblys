@@ -21,7 +21,7 @@ class RequestListenerTest extends TestCase
 
         $_SERVER = [
             "HTTP_HOST" => "www.example.org",
-            "REQUEST_URI" => "/admin/?id=1&UID=abcd1234",
+            "REQUEST_URI" => "/admin/?id=1&view=full",
             "REQUEST_TIME" => 1616700639,
         ];
         $request = Request::createFromGlobals();

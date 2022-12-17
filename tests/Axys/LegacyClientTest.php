@@ -9,26 +9,10 @@ require_once __DIR__."/../setUp.php";
 
 class LegacyClientTest extends TestCase
 {
-
     public function testGetLoginUrl()
     {
         // given
         $client = new LegacyClient();
-
-        // when
-        $loginUrl = $client->getLoginUrl();
-
-        // then
-        $this->assertEquals(
-            "https://axys.me/login/?return_url=https://www.biblys.fr/",
-            $loginUrl
-        );
-    }
-
-    public function testGetLoginUrlForV2()
-    {
-        // given
-        $client = new LegacyClient(["version" => 2]);
 
         // when
         $loginUrl = $client->getLoginUrl();
@@ -65,53 +49,8 @@ class LegacyClientTest extends TestCase
 
         // then
         $this->assertEquals(
-            "https://axys.me/widget.php?version=1",
+            "https://axys.me/widget.php",
             $widgetUrl
-        );
-    }
-
-    public function testGetWidgetUrlForVersion2()
-    {
-        // given
-        $client = new LegacyClient(["version" => 2]);
-
-        // when
-        $widgetUrl = $client->getWidgetUrl();
-
-        // then
-        $this->assertEquals(
-            "https://axys.me/widget.php?version=2",
-            $widgetUrl
-        );
-    }
-
-    public function testGetVersion()
-    {
-        // given
-        $client = new LegacyClient();
-
-        // when
-        $version = $client->getVersion();
-
-        // then
-        $this->assertEquals(
-            1,
-            $version
-        );
-    }
-
-    public function testGetVersionForVersion2()
-    {
-        // given
-        $client = new LegacyClient(["version" => 2]);
-
-        // when
-        $version = $client->getVersion();
-
-        // then
-        $this->assertEquals(
-            2,
-            $version
         );
     }
 }
