@@ -93,11 +93,6 @@ class LegacyClient
         return '<ul id="addToAxysMenu" class="hidden">' . join($menuEntries) . '</ul>';
     }
 
-    public function getSignupUrl(): string
-    {
-        return $this->baseUrl.'/#Inscription';
-    }
-
     public function getWidgetUrl(): string
     {
         $url = $this->baseUrl."/widget.php";

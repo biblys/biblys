@@ -9,21 +9,6 @@ require_once __DIR__."/../setUp.php";
 
 class LegacyClientTest extends TestCase
 {
-    public function testGetSignUpUrl()
-    {
-        // given
-        $client = new LegacyClient();
-
-        // when
-        $signUpUrl = $client->getSignUpUrl();
-
-        // then
-        $this->assertEquals(
-            "https://axys.me/#Inscription",
-            $signUpUrl
-        );
-    }
-
     public function testGetWidgetUrl()
     {
         // given
