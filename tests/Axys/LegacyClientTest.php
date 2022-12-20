@@ -9,21 +9,6 @@ require_once __DIR__."/../setUp.php";
 
 class LegacyClientTest extends TestCase
 {
-    public function testGetLoginUrl()
-    {
-        // given
-        $client = new LegacyClient();
-
-        // when
-        $loginUrl = $client->getLoginUrl();
-
-        // then
-        $this->assertEquals(
-            "/openid/axys?return_url=https://www.biblys.fr/",
-            $loginUrl
-        );
-    }
-
     public function testGetSignUpUrl()
     {
         // given

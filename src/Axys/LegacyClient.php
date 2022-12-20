@@ -93,21 +93,6 @@ class LegacyClient
         return '<ul id="addToAxysMenu" class="hidden">' . join($menuEntries) . '</ul>';
     }
 
-    public function getLoginUrl(): string
-    {
-        global $config;
-
-        $protocol = 'http';
-        $https = $config->get('https');
-        if ($https) {
-            $protocol = 'https';
-        }
-
-        $returnUrl = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-
-        return "/openid/axys?return_url=$returnUrl";
-    }
-
     public function getSignupUrl(): string
     {
         return $this->baseUrl.'/#Inscription';
