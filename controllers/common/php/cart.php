@@ -22,9 +22,9 @@ $content = null;
 $config = new Config();
 
 /** @var Request $request */
-/** @var UrlGenerator $urlgenerator */
+/** @var UrlGenerator $urlGenerator */
 $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
-$loginUrl = $urlgenerator->generate("user_login", ["return_url" => $currentUrl]);
+$loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {

@@ -52,7 +52,8 @@ class MainController extends Controller
         Session $session,
         Mailer $mailer,
         Config $config,
-        CurrentSite $currentSite
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
     ): Response
     {
         global $site;
@@ -156,12 +157,26 @@ class MainController extends Controller
                 $request->attributes->set('page', $page->getUrl());
 
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+                return $legacyController->defaultAction(
+                    $request,
+                    $session,
+                    $mailer,
+                    $config,
+                    $currentSite,
+                    $urlGenerator
+                );
 
             // Old controller
             } elseif ($behavior == 'old_controller') {
                 $legacyController = new LegacyController();
-                return $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+                return $legacyController->defaultAction(
+                    $request,
+                    $session,
+                    $mailer,
+                    $config,
+                    $currentSite,
+                    $urlGenerator
+                );
             }
         }
 

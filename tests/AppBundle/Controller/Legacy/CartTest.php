@@ -1,27 +1,20 @@
 <?php
 
-namespace Legacy;
+namespace AppBundle\Controller\Legacy;
 
 use AppBundle\Controller\LegacyController;
-use ArticleManager;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use CartManager;
-use CollectionManager;
 use Exception;
 use Framework\Exception\AuthException;
-use OrderManager;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
-use PublisherManager;
-use ShippingManager;
-use Site;
-use StockManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Visitor;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -58,14 +51,20 @@ class CartTest extends TestCase
         $mailer = new Mailer();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
         $legacyController = new LegacyController();
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
-        $om = new OrderManager();
-        $order = $om->get(["order_email" => "customer@biblys.fr"]);
         $this->assertEquals(
             200,
             $response->getStatusCode(),

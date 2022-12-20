@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LegacyController extends Controller
 {
@@ -31,7 +32,8 @@ class LegacyController extends Controller
         Session $session,
         Mailer $mailer,
         Config $config,
-        CurrentSite $currentSite
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
     ): Response
     {
         global $site,

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var Request $request */
 /** @var Visitor $_V */
-/** @var UrlGenerator $urlgenerator */
+/** @var UrlGenerator $urlGenerator */
 
 $config = new Config();
 $axys = new LegacyClient($config->get("axys"));
@@ -41,7 +41,8 @@ $totalPrice = 0;
 $total = 0;
 
 $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
-$loginUrl = $urlgenerator->generate("user_login", ["return_url" => $currentUrl]);
+$loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
+$signupUrl = $urlGenerator->generate("user_signup");
 
 $orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor($_V);
 if ($orderInProgress) {
@@ -286,7 +287,7 @@ if (!auth()) {
     $content .= '
         <h3>Vos coordonn&eacute;es</h3>
         <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$loginUrl.'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonn&eacute;es.</p>
-        <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="' . $axys->getSignupUrl() . '" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonn&eacute;es pour une prochaine commande.</p>
+        <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="'.$signupUrl.'" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonn&eacute;es pour une prochaine commande.</p>
         <br />
         <button id="show_orderForm" class="showThis btn btn-warning">Je souhaite commander sans utiliser un compte Axys</button>
         <br /><br />

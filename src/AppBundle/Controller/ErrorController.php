@@ -9,6 +9,7 @@ use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Framework\RouteLoader;
 use PDO;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\RequestContext;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -80,9 +83,18 @@ class ErrorController extends Controller
             $mailer = new Mailer();
             $config = new Config();
             $currentSite = CurrentSite::buildFromConfig($config);
+            $routes = RouteLoader::load();
+            $urlgenerator = new UrlGenerator($routes, new RequestContext());
             try {
                 global $originalRequest;
-                $response = $legacyController->defaultAction($originalRequest, $session, $mailer, $config, $currentSite);
+                $response = $legacyController->defaultAction(
+                    $originalRequest,
+                    $session,
+                    $mailer,
+                    $config,
+                    $currentSite,
+                    $urlgenerator
+                );
                 $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
                 return $response;
             } catch (Exception $exception) {

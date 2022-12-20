@@ -20,6 +20,7 @@ use Site;
 use StockManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -70,9 +71,17 @@ class OrderDeliveryTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
         $om = new OrderManager();
@@ -137,9 +146,17 @@ class OrderDeliveryTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
         $om = new OrderManager();
@@ -213,9 +230,17 @@ class OrderDeliveryTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
         $this->assertInstanceOf(
@@ -275,6 +300,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $legacyController = new LegacyController();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->exactly(2))
@@ -294,7 +320,14 @@ class OrderDeliveryTest extends TestCase
             ->willReturn(true);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
         $this->assertInstanceOf(

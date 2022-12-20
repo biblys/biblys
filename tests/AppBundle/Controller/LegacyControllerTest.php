@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once(__DIR__."/../../setUp.php");
 
@@ -30,9 +31,17 @@ class LegacyControllerTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
 
         // then
         $this->assertEquals(
@@ -60,9 +69,17 @@ class LegacyControllerTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
     }
 
     /**
@@ -83,9 +100,17 @@ class LegacyControllerTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
     }
 
     /**
@@ -106,8 +131,16 @@ class LegacyControllerTest extends TestCase
         $legacyController = new LegacyController();
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $legacyController->defaultAction($request, $session, $mailer, $config, $currentSite);
+        $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
     }
 }

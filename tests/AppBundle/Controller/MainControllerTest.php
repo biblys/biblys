@@ -89,9 +89,17 @@ class MainControllerTest extends TestCase
         $mailer = new Mailer();
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $controller->homeAction($request, $session, $mailer, $config, $currentSite);
+        $response = $controller->homeAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator
+        );
 
         // then
         $this->assertEquals(
