@@ -14,4 +14,9 @@ class UserController extends Controller
         $loginRoute = $urlGenerator->generate("openid_axys");
         return new RedirectResponse($loginRoute);
     }
+
+    public function signup(): Response
+    {
+        return new RedirectResponse("https://axys.me");
+    }
 }

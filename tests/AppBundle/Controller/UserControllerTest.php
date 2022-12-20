@@ -24,4 +24,17 @@ class UserControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/openid/axys", $response->getTargetUrl());
     }
+
+    public function testSignup()
+    {
+        // given
+        $userController = new UserController();
+
+        // when
+        $response = $userController->signup();
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("https://axys.me", $response->getTargetUrl());
+    }
 }

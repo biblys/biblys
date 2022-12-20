@@ -667,6 +667,10 @@ user_login:
   path: /user/login
   controller: AppBundle\Controller\UserController::login
 
+user_signup:
+  path: /user/signup
+  controller: AppBundle\Controller\UserController::signup
+
 # Old controllers
 
 contact:
