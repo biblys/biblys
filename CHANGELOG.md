@@ -4,6 +4,8 @@
 
 Corrections
 
+- L'édition d'un modèle du thème pouvait renvoyer une erreur. Ce n'est plus 
+  le cas.
 - Sur la page des stocks éditeur, le nombre de livre en stock n'était plus 
   mis à jour lorsque le champ était déselectionné. C'est corrigé.
 

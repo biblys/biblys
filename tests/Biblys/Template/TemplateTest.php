@@ -25,7 +25,7 @@ class TemplateTest extends TestCase
         $fileSystemStub->expects($this->exactly(1))
             ->method("dumpFile")
             ->with(
-                $this->stringEndsWith("app/Resources/AppBundle/views/Main/home.html.twig"),
+                $this->stringEndsWith("app/views/Main/home.html.twig"),
                 "body { background-color: black; }"
             );
 

@@ -33,7 +33,7 @@ class Template
         $global->setName('Modèle principal');
         $global->setSlug('layout');
         $global->setType('HTML');
-        $global->setFileName('layout.html');
+        $global->setFileName('base.html.twig');
         $templates[] = $global;
 
         $articleShow = new Template();
@@ -180,10 +180,10 @@ class Template
             return __DIR__.'/../../../app/public/theme/';
         }
         if ($this->getSlug() === 'layout') {
-            return BIBLYS_PATH.'/app/Resources/views/';
+            return BIBLYS_PATH.'/app/layout/';
         }
 
-        return BIBLYS_PATH.'/app/Resources/AppBundle/views/'.$this->getDirPath().'/';
+        return BIBLYS_PATH.'/app/views/'.$this->getDirPath().'/';
     }
 
     /**
@@ -193,6 +193,10 @@ class Template
     {
         if ($this->getSlug() === 'global') {
             return BIBLYS_PATH.'/src/AppBundle/Resources/views/';
+        }
+
+        if ($this->getSlug() === 'layout') {
+            return BIBLYS_PATH.'/src/AppBundle/Resources/layout/';
         }
 
         return BIBLYS_PATH.'src/AppBundle/Resources/views/'.$this->getDirPath().'/';
