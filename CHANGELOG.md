@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.64.3 (DEV)
+
+Corrections
+
+- Sur la page des stocks éditeur, le nombre de livre en stock n'était plus 
+  mis à jour lorsque le champ était déselectionné. C'est corrigé.
+
 ### 2.64.2 (16 décembre 2022)
 
 Corrections
