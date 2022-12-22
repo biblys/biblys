@@ -1,11 +1,12 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$_JS_CALLS[] = "/common/js/adm_publisher_stock.js";
-$_JS_CALLS[] = "/common/js/sorttable.js";
+/** @var Request $request */
+/** @var Site $site */
 
-$_PAGE_TITLE = 'Gestion du stock';
+$request->attributes->set("page_title", "Gestion du stock");
 
 $am = new ArticleManager();
 $articles = $am->getAll([], [
@@ -35,7 +36,7 @@ foreach ($articles as $article) {
         continue;
     }
 
-    $collection = $article->get("collection")->get("name");
+    $collection = "COLLECTION";
     if (!array_key_exists($collection, $collections)) {
         $collections[$collection] = null;
     }
@@ -69,12 +70,12 @@ foreach ($articles as $article) {
         ';
 }
 
-$content = '<h2>' . $_PAGE_TITLE . '</h2>';
+$content = "<h2>Gestion du stock</h2>";
 
 foreach ($collections as $collection => $articles) {
     $content .= '
             <h3>' . $collection . '</h3>
-            <table class="sortable admin-table publisher_stock" cellpadding=0 cellspacing=0>
+            <table class="sortable admin-table publisher_stock">
                 <thead class="pointer">
                     <tr>
                         <th>Titre</th>
@@ -88,5 +89,6 @@ foreach ($collections as $collection => $articles) {
             </table>
         ';
 }
+
 
 return new Response($content);
