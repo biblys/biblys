@@ -7,7 +7,9 @@ use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use PeopleManager;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -17,6 +19,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class PeopleController extends Controller
 {
@@ -25,6 +30,10 @@ class PeopleController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function authorsAction(Request $request): Response
     {
@@ -38,6 +47,12 @@ class PeopleController extends Controller
         ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
     public function showAction(Request $request, $slug)
     {
         global $site;
@@ -89,10 +104,14 @@ class PeopleController extends Controller
      * @param int $id
      * @return RedirectResponse|Response
      * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function editAction(Request $request, int $id)
+    public function editAction(Request $request, int $id, UrlGenerator $urlGenerator)
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
         $pm = new PeopleManager();
         $people = $pm->get(['people_id' => $id]);
@@ -160,7 +179,9 @@ class PeopleController extends Controller
             }
 
             if (!$error) {
-                return new RedirectResponse($this->generateUrl('people_show', ['slug' => $updated->get('url')]));
+                return new RedirectResponse(
+                    $urlGenerator->generate('people_show', ['slug' => $updated->get('url')])
+                );
             }
         }
 
