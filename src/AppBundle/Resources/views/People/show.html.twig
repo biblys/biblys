@@ -27,7 +27,9 @@
       {% endif %}
 
       {% if people.has('bio') %}
-        {{ people.bio|raw }}
+        <div class="contributor__biography">
+          {{ people.bio|raw }}
+        </div>
       {% endif %}
     </div>
 
