@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
+/** @var UrlGenerator $urlgenerator */
+
 $content = "";
 
 $pm = new PeopleManager();
@@ -29,18 +31,18 @@ $p = $people;
 $_OPENGRAPH = '
     <meta property="og:title" content="'.$p["people_name"].'"/>
     <meta property="og:type" content="author"/>
-    <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
+    <meta property="og:url" content="https://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
     <meta property="og:description" content="'.truncate($p["people_bio"], '500', '...', true).'"/>
     <meta property="og:locale" content="fr_FR"/>
     <meta property="og:site_name" content="'.$_SITE["site_name"].'"/>
 ';
 
-if (media_exists('people', $p["people_id"])) {
-    $_OPENGRAPH .= '<meta property="og:image" content="'.media_url('people', $p["people_id"]).'" />';
+$photo = new Media("people", $p["people_id"]);
+if ($photo->exists()) {
+    $_OPENGRAPH .= '<meta property="og:image" content="'.$photo->getUrl().'" />';
 }
 
 if (auth("admin")) {
-    /** @var UrlGenerator $urlgenerator */
     $content .= '
         <div class="admin">
             <p>Intervenant n° '.$p["people_id"].'</p>
@@ -50,11 +52,7 @@ if (auth("admin")) {
 }
 
 $request->attributes->set("page_title", $people->get("name"));
-$content .= '
-    <h2>'.$people->get("name").'</h2>
-';
-
-$p = $people;
+$content .= '<h2>'.$people->get("name").'</h2>';
 
 // Aliases
 $aliases = $pm->getAll(['people_pseudo' => $people->get('id')]);
@@ -102,8 +100,9 @@ $content .= '
     <div id="people" class="clearfix">
         <div id="people-photo">
 ';
-if (media_exists('people', $p["people_id"])) {
-    $content .= '<img src="'.media_url('people', $p["people_id"], "w200").'" alt="'.$p["people_name"].'" class="frame" />';
+$photo = new Media("people", $p["people_id"]);
+if ($photo->exists()) {
+    $content .= '<img src="'.$photo->getUrl(["size" => "w200"]).'" alt="'.$p["people_name"].'" class="frame" />';
 }
 $content .= '<p class="center">'.$flag.' '.$dates.'</p>';
 if (!empty($p["people_site"])) {
