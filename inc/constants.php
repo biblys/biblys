@@ -1,6 +1,6 @@
 <?php
 
-const BIBLYS_VERSION = "2.65.0-dev";
+const BIBLYS_VERSION = "2.65.0";
 const BIBLYS_PATH = __DIR__."/../";
 const DL_PATH = BIBLYS_PATH . "/../../dl";
 const DL_URL = "http://dl.biblys.fr";
