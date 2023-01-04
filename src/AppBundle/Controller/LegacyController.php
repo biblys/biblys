@@ -98,7 +98,7 @@ class LegacyController extends Controller
 
             if (!$response instanceof Response && isset($_ECHO)) {
                 trigger_error("Using \$_ECHO in $_INCLUDE. Legacy controllers should return a Response.", E_USER_DEPRECATED);
-                return new Response($_ECHO);
+                $response = new Response($_ECHO);
             }
 
             // Is this still used?
