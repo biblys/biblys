@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection SqlCheckUsingColumns */
 
 namespace AppBundle\Controller;
 
@@ -9,17 +9,21 @@ use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use PDO;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CronsController extends Controller
 {
     /**
      * @param Config $config
      * @param Request $request
-     * @throws AuthException
      * @throws Exception
      */
     private static function _authenticateCronRequest(Config $config, Request $request): void
@@ -34,23 +38,27 @@ class CronsController extends Controller
 
         $requestCronKey = $request->headers->get('X-CRON-KEY');
         if (!$requestCronKey) {
-            throw new AuthException('Request lacks X-CRON-KEY header');
+            throw new UnauthorizedHttpException('Request lacks X-CRON-KEY header');
         }
 
         if ($requestCronKey !== $siteCron['key']) {
-            throw new AuthException('Wrong cron key');
+            throw new UnauthorizedHttpException('Wrong cron key');
         }
     }
 
     /**
      * GET /crons/.
+     * @param Request $request
+     * @return Response
      * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function tasksAction(): Response
+    public function tasksAction(Request $request): Response
     {
-        $this->auth('admin');
-
-        $this->setPageTitle('Journal des tâches planifiées');
+        Controller::authAdmin($request);
 
         $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
@@ -69,21 +77,24 @@ class CronsController extends Controller
     /**
      * GET /crons/{slug}/jobs
      * Generic controller to display job logs of a cron task.
-     * @param $slug
+     * @param Request $request
+     * @param string $slug
      * @return Response
      * @throws AuthException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function jobsAction(string $slug): Response
+    public function jobsAction(Request $request, string $slug): Response
     {
-        $this->auth('admin');
+        Controller::authAdmin($request);
 
         global $config;
 
         if (!in_array($slug, ['test', 'export-pdl'])) {
             throw new ResourceNotFoundException('Unknown cron task '.htmlentities($slug));
         }
-
-        $this->setPageTitle("Journal de la tâche planifiée $slug");
 
         $cjm = new CronJobManager();
         $jobs = $cjm->getAll(
