@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.65.2 (DEV)
+
+Corrections
+
+- L'option d'affichage d'un rayon sur la page d'accueil provoquait un 
+  dédoublement de l'en-tête du site. C'est corrigé.
+
 ### 2.65.1 (11 janvier 2023)
 
 Corrections
