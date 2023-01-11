@@ -7,6 +7,7 @@ use Framework\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 class PostCategoryController extends Controller
@@ -40,9 +41,13 @@ class PostCategoryController extends Controller
         $pm = $this->entityManager("Post");
 
         // Pagination
-        $page = (int) $request->query->get('p', 0);
+        $pageNumber = (int) $request->query->get("p", 0);
+        if ($pageNumber < 0) {
+            throw new BadRequestHttpException("Page number must be a positive integer");
+        }
+
         $totalPostCount = $pm->count($queryParams);
-        $pagination = new Pagination($page, $totalPostCount, 10);
+        $pagination = new Pagination($pageNumber, $totalPostCount, 10);
 
         $posts = $pm->getAll($queryParams, [
             "order" => "post_date",
