@@ -2,6 +2,7 @@
 
 namespace Biblys\Test;
 
+use Biblys\Article\Type;
 use Biblys\Service\Config;
 use DateTime;
 use Model\Article;
@@ -67,6 +68,7 @@ class ModelFactory
         $article->setEan($attributes["ean"] ?? "9781234567890");
         $article->setPrice($attributes["price"] ?? 999);
         $article->setKeywords($attributes["keywords"] ?? $attributes["title"] ?? "Article");
+        $article->setTypeId($attributes["type_id"] ?? Type::BOOK);
 
         $publisher = $publisher ?? self::createPublisher();
         $article->setPublisherId($publisher->getId());
