@@ -4,77 +4,73 @@ namespace Biblys\Article;
 
 class Type
 {
-    private $_id,
-        $_name,
-        $_slug,
-        $_tax,
-        $_isDownloadable = false,
-        $_isPhysical = false;
-
-    public function __construct()
-    {
-    }
+    private int $_id;
+    private string $_name;
+    private string $_slug;
+    private string $_tax;
+    private bool $_isDownloadable = false;
+    private bool $_isPhysical = false;
 
     public const BOOK = 1;
     public const EBOOK = 2;
 
-    public function setId($id)
+    public function setId($id): void
     {
         $this->_id = $id;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->_id;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->_name = $name;
         $this->setSlug(makeurl($name));
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
 
-    public function setSlug($slug)
+    public function setSlug($slug): void
     {
         $this->_slug = $slug;
     }
 
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->_slug;
     }
 
-    public function setTax($tax)
+    public function setTax($tax): void
     {
         $this->_tax = $tax;
     }
 
-    public function getTax()
+    public function getTax(): string
     {
         return $this->_tax;
     }
 
-    public function setDownloadable($isDownloadable)
+    public function setDownloadable($isDownloadable): void
     {
         $this->_isDownloadable = $isDownloadable;
     }
 
-    public function isDownloadable()
+    public function isDownloadable(): bool
     {
         return $this->_isDownloadable;
     }
 
-    public function setPhysical($isPhysical)
+    public function setPhysical($isPhysical): void
     {
         $this->_isPhysical = $isPhysical;
     }
 
-    public function isPhysical()
+    public function isPhysical(): bool
     {
         return $this->_isPhysical;
     }
@@ -227,9 +223,9 @@ class Type
 
     /**
      * Get only physical types
-     * @return [array] a filtered array of Types
+     * @return array a filtered array of Types
      */
-    public static function getAllDownloadableTypes()
+    public static function getAllDownloadableTypes(): array
     {
         $types = self::getAll();
 
@@ -240,7 +236,7 @@ class Type
         });
     }
 
-    public static function getById($id)
+    public static function getById($id): bool|Type
     {
         $types = self::getAll();
 
@@ -253,7 +249,7 @@ class Type
         return false;
     }
 
-    public static function getBySlug($slug)
+    public static function getBySlug($slug): bool|Type
     {
         $types = self::getAll();
 
@@ -266,7 +262,7 @@ class Type
         return false;
     }
 
-    public static function getOptions($selected_id = 0)
+    public static function getOptions($selected_id = 0): array
     {
         $types = self::getAll();
 
