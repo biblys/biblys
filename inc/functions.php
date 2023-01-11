@@ -110,6 +110,7 @@ function biblys_error($level, $message, $file, $line, $trace = null): void
             return;
         }
 
+        $exception = new Exception($message);
         $errorController = new ErrorController();
         $response = $errorController->exception($request, $exception);
         $response->send();
