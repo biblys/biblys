@@ -3,6 +3,7 @@
 use AppBundle\Controller\ErrorController;
 use Biblys\Service\Config;
 use Framework\Exception\ServiceUnavailableException;
+use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -10,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Biblys\Service\Log;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 // Default error level
 ini_set('display_errors', 'On');
@@ -19,21 +23,14 @@ error_reporting(E_ALL);
 require_once 'constants.php';
 
 /**
- * Calls biblys_error with the correct arguments for an Exception
+ * @param $level
+ * @param $message
+ * @param $file
+ * @param $line
+ * @param null $trace
+ * @throws Exception
  */
-function biblys_exception($exception)
-{
-    biblys_error(
-        E_ERROR,
-        $exception->getMessage(),
-        $exception->getFile(),
-        $exception->getLine(),
-        null,
-        $exception
-    );
-}
-
-function biblys_error($level, $message, $file, $line, $trace = null, Throwable $exception = null)
+function biblys_error($level, $message, $file, $line, $trace = null): void
 {
     global $request, $config, $site;
 
@@ -75,21 +72,17 @@ function biblys_error($level, $message, $file, $line, $trace = null, Throwable $
     }
 
     $stackTrace = '';
-    if ($exception) {
-        $stackTrace = $exception->getTraceAsString();
-    } else {
 
-        $debugBacktrace = debug_backtrace();
-        $i = 0;
-        foreach ($debugBacktrace as $b) {
+    $debugBacktrace = debug_backtrace();
+    $i = 0;
+    foreach ($debugBacktrace as $b) {
 
-            if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
-                continue;
-            }
-
-            $stackTrace .= '#' . $i . ' ' . $b['file'] . '(' . $b['line'] . '): ' . $b['function'] . "\n";
-            $i++;
+        if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
+            continue;
         }
+
+        $stackTrace .= '#' . $i . ' ' . $b['file'] . '(' . $b['line'] . '): ' . $b['function'] . "\n";
+        $i++;
     }
 
     // Errors.log

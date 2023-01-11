@@ -59,7 +59,14 @@ try {
         die('ERROR > Page introuvable');
     }
 } catch (Throwable $exception) {
-    biblys_exception($exception);
+    biblys_error(
+        E_ERROR,
+        $exception->getMessage(),
+        $exception->getFile(),
+        $exception->getLine(),
+        null,
+        $exception
+    );
 }
 
 // Close MySQL connection
