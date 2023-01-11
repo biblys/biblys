@@ -15,6 +15,9 @@ class Type
     {
     }
 
+    public const BOOK = 1;
+    public const EBOOK = 2;
+
     public function setId($id)
     {
         $this->_id = $id;
@@ -85,7 +88,7 @@ class Type
         $types = [];
 
         $livre = new Type();
-        $livre->setId(1);
+        $livre->setId(self::BOOK);
         $livre->setName('Livre papier');
         $livre->setTax('BOOK');
         $livre->setPhysical(true);
@@ -93,7 +96,7 @@ class Type
         $types[] = $livre;
 
         $type = new Type();
-        $type->setId(2);
+        $type->setId(self::EBOOK);
         $type->setName('Livre numérique');
         $type->setTax('EBOOK');
         $type->setPhysical(false);
