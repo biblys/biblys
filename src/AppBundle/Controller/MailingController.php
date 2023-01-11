@@ -55,7 +55,7 @@ class MailingController extends Controller
                     $check = $recaptcha->verify($answer, $request->getClientIp());
 
                     if (!$check->isSuccess()) {
-                        $errorCodes = join($check->getErrorCodes(), ", ");
+                        $errorCodes = join(", ", $check->getErrorCodes());
                         throw new CaptchaValidationException(
                             "Vous n'avez pas correctement complété le test anti-spam ($errorCodes)."
                         );

@@ -6,6 +6,8 @@ Corrections
 
 - L'invite à la connexion lors du téléchargement d'un livre numérique 
   gratuit déclenchait une erreur. C'est corrigé.
+- Le message d'échec du test captcha lors de l'inscription à la newsletter 
+  ne s'affichait pas correctement. C'est mieux.
 
 ## 2.65.0 (4 janvier 2023)
 
