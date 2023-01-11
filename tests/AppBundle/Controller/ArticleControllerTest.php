@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Article\Type;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -432,5 +433,50 @@ class ArticleControllerTest extends TestCase
             $response->getStatusCode(),
             "should respond with 200"
         );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testFreeDownloadAction()
+    {
+        // given
+        $request = RequestFactory::createAuthRequest();
+        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $controller = new ArticleController();
+
+        // when
+        $response = $controller->freeDownloadAction($request, $article->getId());
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testFreeDownloadActionForAnonymousUser()
+    {
+        // then
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage("Identification requise");
+
+        // given
+        $request = new Request();
+        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $controller = new ArticleController();
+
+        // when
+        $controller->freeDownloadAction($request, $article->getId());
     }
 }

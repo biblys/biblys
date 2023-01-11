@@ -9,22 +9,18 @@
 
     <p><strong>{{ article.title }}</strong> sera ajouté à votre <a href="/pages/log_myebooks">bibliothèque numérique</a> d'où vous pourrez le télécharger à volonté et dans tous les formats disponibles.</p>
 
-    {% if not app.user.isLogged() %}
-        <p><a href="{{ app.axys.loginUrl }}">Connectez-vous</a> ou <a href="{{ app.axys.signupUrl }}">inscrivez-vous</a> pour continuer.</p>
-    {% else %}
-        <form method="post">
+    <form method="post">
 
-            {% if newsletter %}
-                <p class="checkbox">
-                    <label class="after">
-                        <input type="checkbox" name="newsletter" value="1"{{ newsletter_checked ? 'checked' }}>
-                        Je souhaite recevoir la newsletter pour être tenu-e
-                        au courant de l'actualité du site (facultatif).
-                    </label>
-                </p>
-            {% endif %}
+        {% if newsletter %}
+            <p class="checkbox">
+                <label class="after">
+                    <input type="checkbox" name="newsletter" value="1"{{ newsletter_checked ? 'checked' }}>
+                    Je souhaite recevoir la newsletter pour être tenu-e
+                    au courant de l'actualité du site (facultatif).
+                </label>
+            </p>
+        {% endif %}
 
-            <button type="submit" class="btn btn-primary">Continuer</button>
-        </form>
-    {% endif %}
+        <button type="submit" class="btn btn-primary">Continuer</button>
+    </form>
 {% endblock %}

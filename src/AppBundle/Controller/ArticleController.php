@@ -190,9 +190,11 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function freeDownloadAction(Request $request, $id)
+    public function freeDownloadAction(Request $request, $id): RedirectResponse|Response
     {
         global $_V, $site;
+
+        Controller::authUser($request);
 
         $am = new ArticleManager();
         $article = $am->getById($id);

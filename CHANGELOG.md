@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.65.1 (11 janvier 2023)
+
+Corrections
+
+- L'invite à la connexion lors du téléchargement d'un livre numérique 
+  gratuit déclenchait une erreur. C'est corrigé.
+
 ## 2.65.0 (4 janvier 2023)
 
 Améliorations
