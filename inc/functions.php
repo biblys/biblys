@@ -148,8 +148,8 @@ Merci de ne rien changer sous cette ligne
 
 
         if ($level === 'WARNING' || $level === 'DEPRECATED') {
-            // Ignore deprecated warnings if not in dev mode
-            if ($level === 'DEPRECATED' && $config->get('environment') !== 'dev') {
+            // Ignore deprecations and warnings if not in dev mode
+            if ($config->get('environment') !== 'dev') {
                 return;
             }
 

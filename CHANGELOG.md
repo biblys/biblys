@@ -1,11 +1,13 @@
 # Historique des modifications
 
-### 2.65.2 (DEV)
+### 2.65.2 (20 janvier 2023)
 
 Corrections
 
 - L'option d'affichage d'un rayon sur la page d'accueil provoquait un 
   dédoublement de l'en-tête du site. C'est corrigé.
+- Une erreur "WARNING" du mode développement pouvait parfois apparaître en 
+  mode production. Ça n'arrivera plus.
 
 ### 2.65.1 (11 janvier 2023)
 
