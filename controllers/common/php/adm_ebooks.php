@@ -1,11 +1,14 @@
-<?php
+<?php /** @noinspection SqlCheckUsingColumns */
 
 use Biblys\Service\Config;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$_JS_CALLS[] = "/common/js/sorttable.js";
+/** @var Site $site */
+/** @var PDO $_SQL */
+/** @var Request $request */
 
-$_PAGE_TITLE = "Ventes numériques";
+$request->attributes->set("page_title", "Ventes numériques");
 
 if (!$site->getOpt('downloadable_publishers')) {
     throw new Exception("L'option de site `downloadable_publishers` doit être définie.");
@@ -56,6 +59,8 @@ if ($peopleId) {
     $reqPeople = " AND `article_links` LIKE :people_id";
     $reqPeopleParams['people_id'] = '%[people:' . $peopleId . ']%';
 }
+
+biblys_error(E_USER_WARNING, "Warning!", "error.php", 45);
 
 // Ventes numériques
 $ventes = EntityManager::prepareAndExecute("
@@ -159,14 +164,14 @@ $content .= '
                 <div class="form-group">
                     <label for="date1" class="col-sm-3 control-label">Du :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="date" id="date1" name="date1" value="' . (isset($_GET["date1"]) ? $_GET["date1"] : null) . '">
+                        <input type="date" class="date" id="date1" name="date1" value="' . ($_GET["date1"] ?? null) . '">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="date2" class="col-sm-3 control-label">Au :</label>
                     <div class="col-sm-9">
-                        <input type="date" class="date" id="date2" name="date2" value="' . (isset($_GET["date2"]) ? $_GET["date2"] : null) . '">
+                        <input type="date" class="date" id="date2" name="date2" value="' . ($_GET["date2"] ?? null) . '">
                     </div>
                 </div>
 
@@ -252,7 +257,7 @@ $content .= '<br />
         <tbody>
 ';
 
-//$customers = array('0' => NULL);
+$customers = [];
 while ($a = $achats->fetch(PDO::FETCH_ASSOC)) {
     $content .= '
         <tr>
