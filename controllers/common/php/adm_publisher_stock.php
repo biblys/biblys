@@ -36,7 +36,7 @@ foreach ($articles as $article) {
         continue;
     }
 
-    $collection = "COLLECTION";
+    $collection = $article->get("collection")?->get("name");
     if (!array_key_exists($collection, $collections)) {
         $collections[$collection] = null;
     }
