@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.65.3 (DEV)
+
+Corrections
+
+- Le lien pour le suivi Colissimo ne fonctionnait plus. C'est corrigé.
+
 ### 2.65.2 (21 janvier 2023)
 
 Corrections

@@ -160,7 +160,14 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     // Suivi et confirmation
     if ($o["order_shipping_date"]) {
         if ($o["order_track_number"]) {
-            $content .= '<p class="center">Numéro de suivi : <a href="https://www.coliposte.net/particulier/suivi_particulier.jsp?colispart=' . $o["order_track_number"] . '">' . $o["order_track_number"] . '</a></p><br />';
+            $content .= '
+                <p class="center">
+                    Numéro de suivi : 
+                    <a href="https://www.laposte.fr/outils/suivre-vos-envois?code='.$o["order_track_number"].'">
+                        '.$o["order_track_number"].'
+                    </a>
+                </p><br />
+            ';
         }
         if (!$o["order_confirmation_date"]) {
             $buttons .= '
