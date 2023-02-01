@@ -5,19 +5,19 @@ namespace Biblys\Service;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
-use Framework\Exception\AuthException;
 use Model\Option;
 use Model\SiteQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
 class CurrentUserTest extends TestCase
 {
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithCookie()
@@ -38,7 +38,7 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithHeader()
@@ -59,13 +59,13 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithoutToken()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given
@@ -77,13 +77,13 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithInvalidToken()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given
@@ -96,13 +96,13 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithExpiredSession()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given
@@ -118,13 +118,13 @@ class CurrentUserTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws UnauthorizedHttpException
      * @throws PropelException
      */
     public function testBuildFromRequestWithDeletedUser()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given

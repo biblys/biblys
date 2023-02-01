@@ -6,7 +6,6 @@ namespace Biblys\Service;
 
 use DateTime;
 use Exception;
-use Framework\Exception\AuthException;
 use Model\Cart;
 use Model\CartQuery;
 use Model\Option;
@@ -17,23 +16,13 @@ use Model\Site;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CurrentUser
 {
-    /**
-     * @var User|null
-     */
-    private $user;
-
-    /**
-     * @var string|null;
-     */
-    private $token;
-
-    /**
-     * @var CurrentSite
-     */
-    private $currentSite;
+    private ?User $user;
+    private ?string $token;
+    private ?CurrentSite $currentSite;
 
     public function __construct(?User $user, ?string $token)
     {
@@ -107,12 +96,12 @@ class CurrentUser
     }
 
     /**
-     * @throws AuthException
+     * @return User
      */
     public function getUser(): User
     {
         if ($this->user === null) {
-            throw new AuthException("Identification requise.");
+            throw new UnauthorizedHttpException("","Identification requise.");
         }
 
         return $this->user;
@@ -156,17 +145,14 @@ class CurrentUser
             ->filterByKey($key)
             ->findOne();
 
-        if (!$option) {
-            return null;
-        }
+        return $option?->getValue();
 
-        return $option->getValue();
     }
 
     /**
      * @throws PropelException
      */
-    public function setOption(string $key, string $value)
+    public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
             ->filterByUser($this->user)
@@ -204,7 +190,7 @@ class CurrentUser
             ->findOne();
     }
 
-    private function injectCurrentSite(CurrentSite $currentSite)
+    private function injectCurrentSite(CurrentSite $currentSite): void
     {
         $this->currentSite = $currentSite;
     }
