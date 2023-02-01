@@ -8,11 +8,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Template
 {
-    private $_name;
-    private $_type = 'Twig';
-    private $_slug;
-    private $_dirPath;
-    private $_fileName;
+    private string $_name;
+    private string $_type = 'Twig';
+    private string $_slug;
+    private string $_dirPath;
+    private string $_fileName;
 
     /**
      * Static: return the template list as an array of templates.
@@ -107,7 +107,7 @@ class Template
     /**
      * Returns the custom (if it exists) or default template content.
      */
-    public function getContent()
+    public function getContent(): bool|string
     {
         if ($this->customFileExists()) {
             $path = $this->getCustomDirPath();
@@ -220,27 +220,27 @@ class Template
 
     // Properties getters and setters
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->_name = $name;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
 
-    public function setSlug($slug)
+    public function setSlug($slug): void
     {
         $this->_slug = $slug;
     }
 
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->_slug;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->_type = $type;
     }
@@ -250,22 +250,22 @@ class Template
         return $this->_type;
     }
 
-    public function setDirPath($dirPath)
+    public function setDirPath($dirPath): void
     {
         $this->_dirPath = $dirPath;
     }
 
-    public function getDirPath()
+    public function getDirPath(): string
     {
         return $this->_dirPath;
     }
 
-    public function setFileName($fileName)
+    public function setFileName($fileName): void
     {
         $this->_fileName = $fileName;
     }
 
-    public function getFileName()
+    public function getFileName(): string
     {
         return $this->_fileName;
     }
