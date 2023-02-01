@@ -6,6 +6,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -86,7 +87,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
-    /** 404 */
+    /** 404 (Routing) */
     public function testResourceNotFoundException()
     {
         // given
@@ -110,7 +111,7 @@ class ErrorControllerTest extends TestCase
         );
     }
 
-    /** 404 */
+    /** 404 (HttpKernel) */
     public function testNotFoundHttpException()
     {
         // given
@@ -129,6 +130,30 @@ class ErrorControllerTest extends TestCase
         );
         $this->assertEquals(
             "Not found HTTP",
+            $json->error->message,
+            "it should display error message"
+        );
+    }
+
+    /** 409 */
+    public function testConflictException()
+    {
+        // given
+        $controller = new ErrorController();
+        $exception = new ConflictHttpException("Entity already exists.");
+
+        // when
+        $response = $controller->exception($exception);
+
+        // then
+        $json = json_decode($response->getContent());
+        $this->assertEquals(
+            409,
+            $response->getStatusCode(),
+            "it should response with HTTP status 409"
+        );
+        $this->assertEquals(
+            "Entity already exists.",
             $json->error->message,
             "it should display error message"
         );

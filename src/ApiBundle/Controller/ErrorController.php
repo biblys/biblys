@@ -6,6 +6,7 @@ use Exception;
 use Framework\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ErrorController extends Controller
@@ -42,6 +43,10 @@ class ErrorController extends Controller
             is_a($exception, "Symfony\Component\HttpKernel\Exception\NotFoundHttpException")
         ) {
             return 404;
+        }
+
+        if (is_a($exception, ConflictHttpException::class)) {
+            return 409;
         }
 
         return 500;
