@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 require_once __DIR__."/../setUp.php";
 
@@ -74,7 +75,7 @@ class ControllerTest extends TestCase
     public function testAuthAdminForSimpleUser()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Accès réservé aux administrateurs.");
 
         // given

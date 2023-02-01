@@ -8,6 +8,7 @@ use Biblys\Test\RequestFactory;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -26,7 +27,7 @@ class OrderControllerTest extends TestCase
 
 
         // then
-        $this->expectException(AuthException::class);
+        $this->expectException(AccessDeniedHttpException::class);
 
         // when
         $controller->show($request, $currentSite, 1);

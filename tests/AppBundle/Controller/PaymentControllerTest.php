@@ -9,6 +9,7 @@ use DateTime;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -31,7 +32,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // then
-        $this->expectException(AuthException::class);
+        $this->expectException(AccessDeniedHttpException::class);
 
         // when
         $controller->index($request, $currentSite);
