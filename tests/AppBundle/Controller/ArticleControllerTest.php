@@ -13,6 +13,7 @@ use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -119,7 +120,7 @@ class ArticleControllerTest extends TestCase
         $request = new Request();
 
         // then
-        $this->expectException(AuthException::class);
+        $this->expectException(UnauthorizedHttpException::class);
 
         // when
         $controller->addTagsAction($request, 1);
@@ -158,7 +159,7 @@ class ArticleControllerTest extends TestCase
         $request = new Request();
 
         // then
-        $this->expectException(AuthException::class);
+        $this->expectException(UnauthorizedHttpException::class);
 
         // when
         $controller->addRayonsAction($request, 1);
@@ -468,7 +469,7 @@ class ArticleControllerTest extends TestCase
     public function testFreeDownloadActionForAnonymousUser()
     {
         // then
-        $this->expectException(AuthException::class);
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise");
 
         // given

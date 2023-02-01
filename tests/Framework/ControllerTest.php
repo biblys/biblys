@@ -12,6 +12,7 @@ use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 require_once __DIR__."/../setUp.php";
 
@@ -23,7 +24,7 @@ class ControllerTest extends TestCase
     public function testAuthUserForAnonymousUser()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given
@@ -57,7 +58,7 @@ class ControllerTest extends TestCase
     public function testAuthAdminForAnonymousUser()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise.");
 
         // given

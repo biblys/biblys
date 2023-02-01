@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -405,7 +406,6 @@ class Controller
     /**
      * @param Request $request
      * @return CurrentUser
-     * @throws AuthException
      * @throws PropelException
      */
     protected static function authUser(Request $request): CurrentUser
@@ -413,8 +413,7 @@ class Controller
         $currentUser = CurrentUser::buildFromRequest($request);
 
         if (!$currentUser->isAuthentified()) {
-            // TODO: throw unauthentified exception (401)
-            throw new AuthException("Identification requise.");
+            throw new UnauthorizedHttpException("","Identification requise.");
         }
 
         return $currentUser;

@@ -12,6 +12,7 @@ use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once(__DIR__."/../../setUp.php");
@@ -59,7 +60,7 @@ class LegacyControllerTest extends TestCase
     public function testDefaultActionRequiringLogin()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(UnauthorizedHttpException::class);
         $this->expectExceptionMessage("Identification requise");
 
         // given
