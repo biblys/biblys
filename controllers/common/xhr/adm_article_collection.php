@@ -1,6 +1,8 @@
 <?php
 
+use Biblys\Exception\EntityAlreadyExistsException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 $getTerm = trim($request->query->get('term'));
 
@@ -99,10 +101,14 @@ if ($getTerm) {
         $publisherId = $request->request->get('collection_publisher_id');
 
         $cm = new CollectionManager();
-        $collection = $cm->create([
-            'collection_name' => $collectionName,
-            'publisher_id' => $publisherId,
-        ]);
+        try {
+            $collection = $cm->create([
+                'collection_name' => $collectionName,
+                'publisher_id' => $publisherId,
+            ]);
+        } catch (EntityAlreadyExistsException $exception) {
+            throw new ConflictHttpException($exception->getMessage());
+        }
         echo json_encode(array_merge([
             'collection_id' => $collection->get('id'),
         ], $_POST));
