@@ -130,7 +130,7 @@ class Template
         if (!$this->customFileExists()) {
             $this->createCustomFile();
         }
-        $path = $this->getCustomDirPath().$this->getFileName();
+        $path = $this->getCustomDirPath()."/".$this->getFileName();
         $filesystem->dumpFile($path, $content);
 
         // If css was modified, refresh theme and bump assets version
@@ -176,14 +176,17 @@ class Template
      */
     public function getCustomDirPath(): string
     {
+        $themeBasePath = __DIR__."/../../../app";
+
         if ($this->getSlug() === 'css') {
-            return __DIR__.'/../../../app/public/theme/';
-        }
-        if ($this->getSlug() === 'layout') {
-            return BIBLYS_PATH.'/app/layout/';
+            return "$themeBasePath/public/theme";
         }
 
-        return BIBLYS_PATH.'/app/views/'.$this->getDirPath().'/';
+        if ($this->getSlug() === 'layout') {
+            return "$themeBasePath/layout";
+        }
+
+        return "$themeBasePath/views/{$this->getDirPath()}";
     }
 
     /**
@@ -191,15 +194,17 @@ class Template
      */
     public function getDefaultDirPath(): string
     {
-        if ($this->getSlug() === 'global') {
-            return BIBLYS_PATH.'/src/AppBundle/Resources/views/';
+        $frameworkResourcesPath = __DIR__."/../../AppBundle/Resources";
+
+        if ($this->getSlug() === "global") {
+            return "$frameworkResourcesPath/views";
         }
 
-        if ($this->getSlug() === 'layout') {
-            return BIBLYS_PATH.'/src/AppBundle/Resources/layout/';
+        if ($this->getSlug() === "layout") {
+            return "$frameworkResourcesPath/layout";
         }
 
-        return BIBLYS_PATH.'src/AppBundle/Resources/views/'.$this->getDirPath().'/';
+        return "$frameworkResourcesPath/views/".$this->getDirPath();
     }
 
     /**
