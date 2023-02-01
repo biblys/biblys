@@ -7,6 +7,8 @@ Corrections
 - Le lien pour le suivi Colissimo ne fonctionnait plus. C'est corrigé.
 - Une erreur "RuntimeException" pouvait s'afficher lors de l'affichage de la 
   page d'édition d'un contributeur. Ça n'arrivera plus.
+- Une erreur pouvait survenir lors de l'ajout d'un administrateur. 
+  Maintenant, ça marche.
 
 ### 2.65.2 (21 janvier 2023)
 

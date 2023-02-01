@@ -60,8 +60,9 @@ if ($request->getMethod() === "POST") {
 
     $params["added"] = 1;
     $params["email"] = $user->get("user_email");
+    $queryParams = http_build_query($params);
 
-    return new RedirectResponse("/pages/adm_admins?", http_build_query($params));
+    return new RedirectResponse("/pages/adm_admins?$queryParams");
 }
 
 $request->attributes->set("page_title", "Ajouter un administrateur");
