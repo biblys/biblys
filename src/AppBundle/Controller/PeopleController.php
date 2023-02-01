@@ -6,7 +6,6 @@ use ArticleManager;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use PeopleManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -53,7 +52,7 @@ class PeopleController extends Controller
      * @throws PropelException
      * @throws LoaderError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(Request $request, $slug): RedirectResponse|Response
     {
         global $site;
 
@@ -102,14 +101,14 @@ class PeopleController extends Controller
      * @route /admin/people/{id}/edit.
      * @param Request $request
      * @param int $id
+     * @param UrlGenerator $urlGenerator
      * @return RedirectResponse|Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function editAction(Request $request, int $id, UrlGenerator $urlGenerator)
+    public function editAction(Request $request, int $id, UrlGenerator $urlGenerator): RedirectResponse|Response
     {
         Controller::authAdmin($request);
 
