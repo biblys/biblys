@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'mailing' table.
- *
- *
+ * Base class that represents a query for the `mailing` table.
  *
  * @method     ChildMailingQuery orderById($order = Criteria::ASC) Order by the mailing_id column
  * @method     ChildMailingQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -55,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMailing|null findOneByChecked(boolean $mailing_checked) Return the first ChildMailing filtered by the mailing_checked column
  * @method     ChildMailing|null findOneByDate(string $mailing_date) Return the first ChildMailing filtered by the mailing_date column
  * @method     ChildMailing|null findOneByCreatedAt(string $mailing_created) Return the first ChildMailing filtered by the mailing_created column
- * @method     ChildMailing|null findOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column *
-
+ * @method     ChildMailing|null findOneByUpdatedAt(string $mailing_updated) Return the first ChildMailing filtered by the mailing_updated column
+ *
  * @method     ChildMailing requirePk($key, ?ConnectionInterface $con = null) Return the ChildMailing by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMailing requireOne(?ConnectionInterface $con = null) Return the first ChildMailing matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -71,25 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildMailing[]|Collection find(?ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildMailing> find(?ConnectionInterface $con = null) Return ChildMailing objects based on current ModelCriteria
- * @method     ChildMailing[]|Collection findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
- * @psalm-method Collection&\Traversable<ChildMailing> findById(int $mailing_id) Return ChildMailing objects filtered by the mailing_id column
- * @method     ChildMailing[]|Collection findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildMailing> findBySiteId(int $site_id) Return ChildMailing objects filtered by the site_id column
- * @method     ChildMailing[]|Collection findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
- * @psalm-method Collection&\Traversable<ChildMailing> findByEmail(string $mailing_email) Return ChildMailing objects filtered by the mailing_email column
- * @method     ChildMailing[]|Collection findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
- * @psalm-method Collection&\Traversable<ChildMailing> findByBlock(boolean $mailing_block) Return ChildMailing objects filtered by the mailing_block column
- * @method     ChildMailing[]|Collection findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
- * @psalm-method Collection&\Traversable<ChildMailing> findByChecked(boolean $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
- * @method     ChildMailing[]|Collection findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
- * @psalm-method Collection&\Traversable<ChildMailing> findByDate(string $mailing_date) Return ChildMailing objects filtered by the mailing_date column
- * @method     ChildMailing[]|Collection findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
- * @psalm-method Collection&\Traversable<ChildMailing> findByCreatedAt(string $mailing_created) Return ChildMailing objects filtered by the mailing_created column
- * @method     ChildMailing[]|Collection findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
- * @psalm-method Collection&\Traversable<ChildMailing> findByUpdatedAt(string $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ *
+ * @method     ChildMailing[]|Collection findById(int|array<int> $mailing_id) Return ChildMailing objects filtered by the mailing_id column
+ * @psalm-method Collection&\Traversable<ChildMailing> findById(int|array<int> $mailing_id) Return ChildMailing objects filtered by the mailing_id column
+ * @method     ChildMailing[]|Collection findBySiteId(int|array<int> $site_id) Return ChildMailing objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildMailing> findBySiteId(int|array<int> $site_id) Return ChildMailing objects filtered by the site_id column
+ * @method     ChildMailing[]|Collection findByEmail(string|array<string> $mailing_email) Return ChildMailing objects filtered by the mailing_email column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByEmail(string|array<string> $mailing_email) Return ChildMailing objects filtered by the mailing_email column
+ * @method     ChildMailing[]|Collection findByBlock(boolean|array<boolean> $mailing_block) Return ChildMailing objects filtered by the mailing_block column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByBlock(boolean|array<boolean> $mailing_block) Return ChildMailing objects filtered by the mailing_block column
+ * @method     ChildMailing[]|Collection findByChecked(boolean|array<boolean> $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByChecked(boolean|array<boolean> $mailing_checked) Return ChildMailing objects filtered by the mailing_checked column
+ * @method     ChildMailing[]|Collection findByDate(string|array<string> $mailing_date) Return ChildMailing objects filtered by the mailing_date column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByDate(string|array<string> $mailing_date) Return ChildMailing objects filtered by the mailing_date column
+ * @method     ChildMailing[]|Collection findByCreatedAt(string|array<string> $mailing_created) Return ChildMailing objects filtered by the mailing_created column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByCreatedAt(string|array<string> $mailing_created) Return ChildMailing objects filtered by the mailing_created column
+ * @method     ChildMailing[]|Collection findByUpdatedAt(string|array<string> $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ * @psalm-method Collection&\Traversable<ChildMailing> findByUpdatedAt(string|array<string> $mailing_updated) Return ChildMailing objects filtered by the mailing_updated column
+ *
  * @method     ChildMailing[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMailing> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class MailingQuery extends ModelCriteria
 {
@@ -415,7 +414,7 @@ abstract class MailingQuery extends ModelCriteria
     public function filterByBlock($block = null, ?string $comparison = null)
     {
         if (is_string($block)) {
-            $block = in_array(strtolower($block), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $block = in_array(strtolower($block), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(MailingTableMap::COL_MAILING_BLOCK, $block, $comparison);
@@ -444,7 +443,7 @@ abstract class MailingQuery extends ModelCriteria
     public function filterByChecked($checked = null, ?string $comparison = null)
     {
         if (is_string($checked)) {
-            $checked = in_array(strtolower($checked), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $checked = in_array(strtolower($checked), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(MailingTableMap::COL_MAILING_CHECKED, $checked, $comparison);

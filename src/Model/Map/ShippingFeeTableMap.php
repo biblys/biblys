@@ -46,6 +46,11 @@ class ShippingFeeTableMap extends TableMap
     public const TABLE_NAME = 'shipping';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'ShippingFee';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\ShippingFee';
@@ -455,7 +460,7 @@ class ShippingFeeTableMap extends TableMap
             ShippingFeeTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -2575,8 +2575,8 @@ abstract class Order implements ActiveRecordInterface
                 $col = null;
             }
             $this->order_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -2997,153 +2997,203 @@ abstract class Order implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'order_id':
                         $stmt->bindValue($identifier, $this->order_id, PDO::PARAM_INT);
+
                         break;
                     case 'order_url':
                         $stmt->bindValue($identifier, $this->order_url, PDO::PARAM_STR);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'customer_id':
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
+
                         break;
                     case 'seller_id':
                         $stmt->bindValue($identifier, $this->seller_id, PDO::PARAM_INT);
+
                         break;
                     case 'order_type':
                         $stmt->bindValue($identifier, $this->order_type, PDO::PARAM_STR);
+
                         break;
                     case 'order_as_a_gift':
                         $stmt->bindValue($identifier, $this->order_as_a_gift, PDO::PARAM_STR);
+
                         break;
                     case 'order_gift_recipient':
                         $stmt->bindValue($identifier, $this->order_gift_recipient, PDO::PARAM_INT);
+
                         break;
                     case 'order_amount':
                         $stmt->bindValue($identifier, $this->order_amount, PDO::PARAM_INT);
+
                         break;
                     case 'order_discount':
                         $stmt->bindValue($identifier, $this->order_discount, PDO::PARAM_INT);
+
                         break;
                     case 'order_amount_tobepaid':
                         $stmt->bindValue($identifier, $this->order_amount_tobepaid, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_id':
                         $stmt->bindValue($identifier, $this->shipping_id, PDO::PARAM_INT);
+
                         break;
                     case 'country_id':
                         $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
+
                         break;
                     case 'order_shipping':
                         $stmt->bindValue($identifier, $this->order_shipping, PDO::PARAM_INT);
+
                         break;
                     case 'order_shipping_mode':
                         $stmt->bindValue($identifier, $this->order_shipping_mode, PDO::PARAM_STR);
+
                         break;
                     case 'order_track_number':
                         $stmt->bindValue($identifier, $this->order_track_number, PDO::PARAM_STR);
+
                         break;
                     case 'order_payment_mode':
                         $stmt->bindValue($identifier, $this->order_payment_mode, PDO::PARAM_STR);
+
                         break;
                     case 'order_payment_cash':
                         $stmt->bindValue($identifier, $this->order_payment_cash, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_cheque':
                         $stmt->bindValue($identifier, $this->order_payment_cheque, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_transfer':
                         $stmt->bindValue($identifier, $this->order_payment_transfer, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_card':
                         $stmt->bindValue($identifier, $this->order_payment_card, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_paypal':
                         $stmt->bindValue($identifier, $this->order_payment_paypal, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_payplug':
                         $stmt->bindValue($identifier, $this->order_payment_payplug, PDO::PARAM_INT);
+
                         break;
                     case 'order_payment_left':
                         $stmt->bindValue($identifier, $this->order_payment_left, PDO::PARAM_INT);
+
                         break;
                     case 'order_title':
                         $stmt->bindValue($identifier, $this->order_title, PDO::PARAM_STR);
+
                         break;
                     case 'order_firstname':
                         $stmt->bindValue($identifier, $this->order_firstname, PDO::PARAM_STR);
+
                         break;
                     case 'order_lastname':
                         $stmt->bindValue($identifier, $this->order_lastname, PDO::PARAM_STR);
+
                         break;
                     case 'order_address1':
                         $stmt->bindValue($identifier, $this->order_address1, PDO::PARAM_STR);
+
                         break;
                     case 'order_address2':
                         $stmt->bindValue($identifier, $this->order_address2, PDO::PARAM_STR);
+
                         break;
                     case 'order_postalcode':
                         $stmt->bindValue($identifier, $this->order_postalcode, PDO::PARAM_STR);
+
                         break;
                     case 'order_city':
                         $stmt->bindValue($identifier, $this->order_city, PDO::PARAM_STR);
+
                         break;
                     case 'order_country':
                         $stmt->bindValue($identifier, $this->order_country, PDO::PARAM_STR);
+
                         break;
                     case 'order_email':
                         $stmt->bindValue($identifier, $this->order_email, PDO::PARAM_STR);
+
                         break;
                     case 'order_phone':
                         $stmt->bindValue($identifier, $this->order_phone, PDO::PARAM_STR);
+
                         break;
                     case 'order_comment':
                         $stmt->bindValue($identifier, $this->order_comment, PDO::PARAM_STR);
+
                         break;
                     case 'order_utmz':
                         $stmt->bindValue($identifier, $this->order_utmz, PDO::PARAM_STR);
+
                         break;
                     case 'order_utm_source':
                         $stmt->bindValue($identifier, $this->order_utm_source, PDO::PARAM_STR);
+
                         break;
                     case 'order_utm_campaign':
                         $stmt->bindValue($identifier, $this->order_utm_campaign, PDO::PARAM_STR);
+
                         break;
                     case 'order_utm_medium':
                         $stmt->bindValue($identifier, $this->order_utm_medium, PDO::PARAM_STR);
+
                         break;
                     case 'order_referer':
                         $stmt->bindValue($identifier, $this->order_referer, PDO::PARAM_STR);
+
                         break;
                     case 'order_insert':
                         $stmt->bindValue($identifier, $this->order_insert ? $this->order_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_payment_date':
                         $stmt->bindValue($identifier, $this->order_payment_date ? $this->order_payment_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_shipping_date':
                         $stmt->bindValue($identifier, $this->order_shipping_date ? $this->order_shipping_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_followup_date':
                         $stmt->bindValue($identifier, $this->order_followup_date ? $this->order_followup_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_confirmation_date':
                         $stmt->bindValue($identifier, $this->order_confirmation_date ? $this->order_confirmation_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_cancel_date':
                         $stmt->bindValue($identifier, $this->order_cancel_date ? $this->order_cancel_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_update':
                         $stmt->bindValue($identifier, $this->order_update ? $this->order_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_created':
                         $stmt->bindValue($identifier, $this->order_created ? $this->order_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'order_updated':
                         $stmt->bindValue($identifier, $this->order_updated ? $this->order_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

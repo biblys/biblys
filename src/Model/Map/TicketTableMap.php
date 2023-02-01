@@ -46,6 +46,11 @@ class TicketTableMap extends TableMap
     public const TABLE_NAME = 'ticket';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Ticket';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Ticket';
@@ -399,7 +404,7 @@ class TicketTableMap extends TableMap
             TicketTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

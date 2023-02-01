@@ -801,8 +801,8 @@ abstract class Signing implements ActiveRecordInterface
                 $col = null;
             }
             $this->signing_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1067,33 +1067,43 @@ abstract class Signing implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'signing_id':
                         $stmt->bindValue($identifier, $this->signing_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'people_id':
                         $stmt->bindValue($identifier, $this->people_id, PDO::PARAM_INT);
+
                         break;
                     case 'signing_date':
                         $stmt->bindValue($identifier, $this->signing_date ? $this->signing_date->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                     case 'signing_starts':
                         $stmt->bindValue($identifier, $this->signing_starts ? $this->signing_starts->format("H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'signing_ends':
                         $stmt->bindValue($identifier, $this->signing_ends ? $this->signing_ends->format("H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'signing_location':
                         $stmt->bindValue($identifier, $this->signing_location, PDO::PARAM_STR);
+
                         break;
                     case 'signing_created':
                         $stmt->bindValue($identifier, $this->signing_created ? $this->signing_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'signing_updated':
                         $stmt->bindValue($identifier, $this->signing_updated ? $this->signing_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

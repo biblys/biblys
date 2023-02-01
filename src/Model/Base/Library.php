@@ -1215,8 +1215,8 @@ abstract class Library implements ActiveRecordInterface
                 $col = null;
             }
             $this->library_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1514,66 +1514,87 @@ abstract class Library implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_name':
                         $stmt->bindValue($identifier, $this->library_name, PDO::PARAM_STR);
+
                         break;
                     case 'library_name_alphabetic':
                         $stmt->bindValue($identifier, $this->library_name_alphabetic, PDO::PARAM_STR);
+
                         break;
                     case 'library_url':
                         $stmt->bindValue($identifier, $this->library_url, PDO::PARAM_STR);
+
                         break;
                     case 'library_representative':
                         $stmt->bindValue($identifier, $this->library_representative, PDO::PARAM_STR);
+
                         break;
                     case 'library_address':
                         $stmt->bindValue($identifier, $this->library_address, PDO::PARAM_STR);
+
                         break;
                     case 'library_postal_code':
                         $stmt->bindValue($identifier, $this->library_postal_code, PDO::PARAM_STR);
+
                         break;
                     case 'library_city':
                         $stmt->bindValue($identifier, $this->library_city, PDO::PARAM_STR);
+
                         break;
                     case 'library_country':
                         $stmt->bindValue($identifier, $this->library_country, PDO::PARAM_STR);
+
                         break;
                     case 'library_phone':
                         $stmt->bindValue($identifier, $this->library_phone, PDO::PARAM_STR);
+
                         break;
                     case 'library_fax':
                         $stmt->bindValue($identifier, $this->library_fax, PDO::PARAM_STR);
+
                         break;
                     case 'library_website':
                         $stmt->bindValue($identifier, $this->library_website, PDO::PARAM_STR);
+
                         break;
                     case 'library_email':
                         $stmt->bindValue($identifier, $this->library_email, PDO::PARAM_STR);
+
                         break;
                     case 'library_facebook':
                         $stmt->bindValue($identifier, $this->library_facebook, PDO::PARAM_STR);
+
                         break;
                     case 'library_twitter':
                         $stmt->bindValue($identifier, $this->library_twitter, PDO::PARAM_STR);
+
                         break;
                     case 'library_creation_year':
                         $stmt->bindValue($identifier, $this->library_creation_year, PDO::PARAM_STR);
+
                         break;
                     case 'library_specialities':
                         $stmt->bindValue($identifier, $this->library_specialities, PDO::PARAM_STR);
+
                         break;
                     case 'library_readings':
                         $stmt->bindValue($identifier, $this->library_readings, PDO::PARAM_STR);
+
                         break;
                     case 'library_desc':
                         $stmt->bindValue($identifier, $this->library_desc, PDO::PARAM_STR);
+
                         break;
                     case 'library_created':
                         $stmt->bindValue($identifier, $this->library_created ? $this->library_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'library_updated':
                         $stmt->bindValue($identifier, $this->library_updated ? $this->library_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

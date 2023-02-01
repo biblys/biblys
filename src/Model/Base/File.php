@@ -1000,8 +1000,8 @@ abstract class File implements ActiveRecordInterface
                 $col = null;
             }
             $this->file_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1278,45 +1278,59 @@ abstract class File implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'file_id':
                         $stmt->bindValue($identifier, $this->file_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'file_title':
                         $stmt->bindValue($identifier, $this->file_title, PDO::PARAM_STR);
+
                         break;
                     case 'file_type':
                         $stmt->bindValue($identifier, $this->file_type, PDO::PARAM_STR);
+
                         break;
                     case 'file_access':
                         $stmt->bindValue($identifier, (int) $this->file_access, PDO::PARAM_INT);
+
                         break;
                     case 'file_version':
                         $stmt->bindValue($identifier, $this->file_version, PDO::PARAM_STR);
+
                         break;
                     case 'file_hash':
                         $stmt->bindValue($identifier, $this->file_hash, PDO::PARAM_STR);
+
                         break;
                     case 'file_size':
                         $stmt->bindValue($identifier, $this->file_size, PDO::PARAM_INT);
+
                         break;
                     case 'file_ean':
                         $stmt->bindValue($identifier, $this->file_ean, PDO::PARAM_INT);
+
                         break;
                     case 'file_inserted':
                         $stmt->bindValue($identifier, $this->file_inserted ? $this->file_inserted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'file_uploaded':
                         $stmt->bindValue($identifier, $this->file_uploaded ? $this->file_uploaded->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'file_updated':
                         $stmt->bindValue($identifier, $this->file_updated ? $this->file_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'file_created':
                         $stmt->bindValue($identifier, $this->file_created ? $this->file_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

@@ -46,6 +46,11 @@ class BookshopTableMap extends TableMap
     public const TABLE_NAME = 'bookshops';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Bookshop';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Bookshop';
@@ -567,7 +572,7 @@ class BookshopTableMap extends TableMap
             BookshopTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

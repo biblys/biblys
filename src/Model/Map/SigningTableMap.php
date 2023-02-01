@@ -46,6 +46,11 @@ class SigningTableMap extends TableMap
     public const TABLE_NAME = 'signings';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Signing';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Signing';
@@ -385,7 +390,7 @@ class SigningTableMap extends TableMap
             SigningTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

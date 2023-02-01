@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'cron_jobs' table.
- *
- *
+ * Base class that represents a query for the `cron_jobs` table.
  *
  * @method     ChildCronJobQuery orderById($order = Criteria::ASC) Order by the cron_job_id column
  * @method     ChildCronJobQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCronJob|null findOneByResult(string $cron_job_result) Return the first ChildCronJob filtered by the cron_job_result column
  * @method     ChildCronJob|null findOneByMessage(string $cron_job_message) Return the first ChildCronJob filtered by the cron_job_message column
  * @method     ChildCronJob|null findOneByCreatedAt(string $cron_job_created) Return the first ChildCronJob filtered by the cron_job_created column
- * @method     ChildCronJob|null findOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column *
-
+ * @method     ChildCronJob|null findOneByUpdatedAt(string $cron_job_updated) Return the first ChildCronJob filtered by the cron_job_updated column
+ *
  * @method     ChildCronJob requirePk($key, ?ConnectionInterface $con = null) Return the ChildCronJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCronJob requireOne(?ConnectionInterface $con = null) Return the first ChildCronJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCronJob[]|Collection find(?ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCronJob> find(?ConnectionInterface $con = null) Return ChildCronJob objects based on current ModelCriteria
- * @method     ChildCronJob[]|Collection findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
- * @psalm-method Collection&\Traversable<ChildCronJob> findById(int $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
- * @method     ChildCronJob[]|Collection findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCronJob> findBySiteId(int $site_id) Return ChildCronJob objects filtered by the site_id column
- * @method     ChildCronJob[]|Collection findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
- * @psalm-method Collection&\Traversable<ChildCronJob> findByTask(string $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
- * @method     ChildCronJob[]|Collection findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
- * @psalm-method Collection&\Traversable<ChildCronJob> findByResult(string $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
- * @method     ChildCronJob[]|Collection findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
- * @psalm-method Collection&\Traversable<ChildCronJob> findByMessage(string $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
- * @method     ChildCronJob[]|Collection findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
- * @psalm-method Collection&\Traversable<ChildCronJob> findByCreatedAt(string $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
- * @method     ChildCronJob[]|Collection findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
- * @psalm-method Collection&\Traversable<ChildCronJob> findByUpdatedAt(string $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
+ *
+ * @method     ChildCronJob[]|Collection findById(int|array<int> $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findById(int|array<int> $cron_job_id) Return ChildCronJob objects filtered by the cron_job_id column
+ * @method     ChildCronJob[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCronJob objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findBySiteId(int|array<int> $site_id) Return ChildCronJob objects filtered by the site_id column
+ * @method     ChildCronJob[]|Collection findByTask(string|array<string> $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByTask(string|array<string> $cron_job_task) Return ChildCronJob objects filtered by the cron_job_task column
+ * @method     ChildCronJob[]|Collection findByResult(string|array<string> $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByResult(string|array<string> $cron_job_result) Return ChildCronJob objects filtered by the cron_job_result column
+ * @method     ChildCronJob[]|Collection findByMessage(string|array<string> $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByMessage(string|array<string> $cron_job_message) Return ChildCronJob objects filtered by the cron_job_message column
+ * @method     ChildCronJob[]|Collection findByCreatedAt(string|array<string> $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByCreatedAt(string|array<string> $cron_job_created) Return ChildCronJob objects filtered by the cron_job_created column
+ * @method     ChildCronJob[]|Collection findByUpdatedAt(string|array<string> $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
+ * @psalm-method Collection&\Traversable<ChildCronJob> findByUpdatedAt(string|array<string> $cron_job_updated) Return ChildCronJob objects filtered by the cron_job_updated column
+ *
  * @method     ChildCronJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCronJob> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CronJobQuery extends ModelCriteria
 {

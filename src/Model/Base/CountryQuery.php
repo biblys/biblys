@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'countries' table.
- *
- *
+ * Base class that represents a query for the `countries` table.
  *
  * @method     ChildCountryQuery orderById($order = Criteria::ASC) Order by the country_id column
  * @method     ChildCountryQuery orderByCode($order = Criteria::ASC) Order by the country_code column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCountry|null findOneByNameEn(string $country_name_en) Return the first ChildCountry filtered by the country_name_en column
  * @method     ChildCountry|null findOneByShippingZone(string $shipping_zone) Return the first ChildCountry filtered by the shipping_zone column
  * @method     ChildCountry|null findOneByCreatedAt(string $country_created) Return the first ChildCountry filtered by the country_created column
- * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column *
-
+ * @method     ChildCountry|null findOneByUpdatedAt(string $country_updated) Return the first ChildCountry filtered by the country_updated column
+ *
  * @method     ChildCountry requirePk($key, ?ConnectionInterface $con = null) Return the ChildCountry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCountry requireOne(?ConnectionInterface $con = null) Return the first ChildCountry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCountry[]|Collection find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCountry> find(?ConnectionInterface $con = null) Return ChildCountry objects based on current ModelCriteria
- * @method     ChildCountry[]|Collection findById(int $country_id) Return ChildCountry objects filtered by the country_id column
- * @psalm-method Collection&\Traversable<ChildCountry> findById(int $country_id) Return ChildCountry objects filtered by the country_id column
- * @method     ChildCountry[]|Collection findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
- * @psalm-method Collection&\Traversable<ChildCountry> findByCode(string $country_code) Return ChildCountry objects filtered by the country_code column
- * @method     ChildCountry[]|Collection findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
- * @psalm-method Collection&\Traversable<ChildCountry> findByName(string $country_name) Return ChildCountry objects filtered by the country_name column
- * @method     ChildCountry[]|Collection findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @psalm-method Collection&\Traversable<ChildCountry> findByNameEn(string $country_name_en) Return ChildCountry objects filtered by the country_name_en column
- * @method     ChildCountry[]|Collection findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildCountry> findByShippingZone(string $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
- * @method     ChildCountry[]|Collection findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
- * @psalm-method Collection&\Traversable<ChildCountry> findByCreatedAt(string $country_created) Return ChildCountry objects filtered by the country_created column
- * @method     ChildCountry[]|Collection findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
- * @psalm-method Collection&\Traversable<ChildCountry> findByUpdatedAt(string $country_updated) Return ChildCountry objects filtered by the country_updated column
+ *
+ * @method     ChildCountry[]|Collection findById(int|array<int> $country_id) Return ChildCountry objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildCountry> findById(int|array<int> $country_id) Return ChildCountry objects filtered by the country_id column
+ * @method     ChildCountry[]|Collection findByCode(string|array<string> $country_code) Return ChildCountry objects filtered by the country_code column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByCode(string|array<string> $country_code) Return ChildCountry objects filtered by the country_code column
+ * @method     ChildCountry[]|Collection findByName(string|array<string> $country_name) Return ChildCountry objects filtered by the country_name column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByName(string|array<string> $country_name) Return ChildCountry objects filtered by the country_name column
+ * @method     ChildCountry[]|Collection findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByNameEn(string|array<string> $country_name_en) Return ChildCountry objects filtered by the country_name_en column
+ * @method     ChildCountry[]|Collection findByShippingZone(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByShippingZone(string|array<string> $shipping_zone) Return ChildCountry objects filtered by the shipping_zone column
+ * @method     ChildCountry[]|Collection findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByCreatedAt(string|array<string> $country_created) Return ChildCountry objects filtered by the country_created column
+ * @method     ChildCountry[]|Collection findByUpdatedAt(string|array<string> $country_updated) Return ChildCountry objects filtered by the country_updated column
+ * @psalm-method Collection&\Traversable<ChildCountry> findByUpdatedAt(string|array<string> $country_updated) Return ChildCountry objects filtered by the country_updated column
+ *
  * @method     ChildCountry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCountry> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CountryQuery extends ModelCriteria
 {

@@ -1295,8 +1295,8 @@ abstract class Bookshop implements ActiveRecordInterface
                 $col = null;
             }
             $this->bookshop_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1600,72 +1600,95 @@ abstract class Bookshop implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_name':
                         $stmt->bindValue($identifier, $this->bookshop_name, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_name_alphabetic':
                         $stmt->bindValue($identifier, $this->bookshop_name_alphabetic, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_url':
                         $stmt->bindValue($identifier, $this->bookshop_url, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_representative':
                         $stmt->bindValue($identifier, $this->bookshop_representative, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_address':
                         $stmt->bindValue($identifier, $this->bookshop_address, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_postal_code':
                         $stmt->bindValue($identifier, $this->bookshop_postal_code, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_city':
                         $stmt->bindValue($identifier, $this->bookshop_city, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_country':
                         $stmt->bindValue($identifier, $this->bookshop_country, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_phone':
                         $stmt->bindValue($identifier, $this->bookshop_phone, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_fax':
                         $stmt->bindValue($identifier, $this->bookshop_fax, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_website':
                         $stmt->bindValue($identifier, $this->bookshop_website, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_email':
                         $stmt->bindValue($identifier, $this->bookshop_email, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_facebook':
                         $stmt->bindValue($identifier, $this->bookshop_facebook, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_twitter':
                         $stmt->bindValue($identifier, $this->bookshop_twitter, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_legal_form':
                         $stmt->bindValue($identifier, $this->bookshop_legal_form, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_creation_year':
                         $stmt->bindValue($identifier, $this->bookshop_creation_year, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_specialities':
                         $stmt->bindValue($identifier, $this->bookshop_specialities, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_membership':
                         $stmt->bindValue($identifier, $this->bookshop_membership, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_motto':
                         $stmt->bindValue($identifier, $this->bookshop_motto, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_desc':
                         $stmt->bindValue($identifier, $this->bookshop_desc, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_created':
                         $stmt->bindValue($identifier, $this->bookshop_created ? $this->bookshop_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'bookshop_updated':
                         $stmt->bindValue($identifier, $this->bookshop_updated ? $this->bookshop_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

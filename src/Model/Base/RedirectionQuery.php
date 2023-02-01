@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'redirections' table.
- *
- *
+ * Base class that represents a query for the `redirections` table.
  *
  * @method     ChildRedirectionQuery orderById($order = Criteria::ASC) Order by the redirection_id column
  * @method     ChildRedirectionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -55,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRedirection|null findOneByHits(int $redirection_hits) Return the first ChildRedirection filtered by the redirection_hits column
  * @method     ChildRedirection|null findOneByDate(string $redirection_date) Return the first ChildRedirection filtered by the redirection_date column
  * @method     ChildRedirection|null findOneByCreatedAt(string $redirection_created) Return the first ChildRedirection filtered by the redirection_created column
- * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column *
-
+ * @method     ChildRedirection|null findOneByUpdatedAt(string $redirection_updated) Return the first ChildRedirection filtered by the redirection_updated column
+ *
  * @method     ChildRedirection requirePk($key, ?ConnectionInterface $con = null) Return the ChildRedirection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRedirection requireOne(?ConnectionInterface $con = null) Return the first ChildRedirection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -71,25 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRedirection[]|Collection find(?ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildRedirection> find(?ConnectionInterface $con = null) Return ChildRedirection objects based on current ModelCriteria
- * @method     ChildRedirection[]|Collection findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
- * @psalm-method Collection&\Traversable<ChildRedirection> findById(int $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
- * @method     ChildRedirection[]|Collection findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildRedirection> findBySiteId(int $site_id) Return ChildRedirection objects filtered by the site_id column
- * @method     ChildRedirection[]|Collection findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByOld(string $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
- * @method     ChildRedirection[]|Collection findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByNew(string $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
- * @method     ChildRedirection[]|Collection findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByHits(int $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
- * @method     ChildRedirection[]|Collection findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByDate(string $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
- * @method     ChildRedirection[]|Collection findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByCreatedAt(string $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
- * @method     ChildRedirection[]|Collection findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
- * @psalm-method Collection&\Traversable<ChildRedirection> findByUpdatedAt(string $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ *
+ * @method     ChildRedirection[]|Collection findById(int|array<int> $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findById(int|array<int> $redirection_id) Return ChildRedirection objects filtered by the redirection_id column
+ * @method     ChildRedirection[]|Collection findBySiteId(int|array<int> $site_id) Return ChildRedirection objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findBySiteId(int|array<int> $site_id) Return ChildRedirection objects filtered by the site_id column
+ * @method     ChildRedirection[]|Collection findByOld(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByOld(string|array<string> $redirection_old) Return ChildRedirection objects filtered by the redirection_old column
+ * @method     ChildRedirection[]|Collection findByNew(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByNew(string|array<string> $redirection_new) Return ChildRedirection objects filtered by the redirection_new column
+ * @method     ChildRedirection[]|Collection findByHits(int|array<int> $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByHits(int|array<int> $redirection_hits) Return ChildRedirection objects filtered by the redirection_hits column
+ * @method     ChildRedirection[]|Collection findByDate(string|array<string> $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByDate(string|array<string> $redirection_date) Return ChildRedirection objects filtered by the redirection_date column
+ * @method     ChildRedirection[]|Collection findByCreatedAt(string|array<string> $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByCreatedAt(string|array<string> $redirection_created) Return ChildRedirection objects filtered by the redirection_created column
+ * @method     ChildRedirection[]|Collection findByUpdatedAt(string|array<string> $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ * @psalm-method Collection&\Traversable<ChildRedirection> findByUpdatedAt(string|array<string> $redirection_updated) Return ChildRedirection objects filtered by the redirection_updated column
+ *
  * @method     ChildRedirection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRedirection> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class RedirectionQuery extends ModelCriteria
 {

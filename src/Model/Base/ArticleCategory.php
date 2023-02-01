@@ -868,8 +868,8 @@ abstract class ArticleCategory implements ActiveRecordInterface
                 $col = null;
             }
             $this->rayon_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1144,36 +1144,47 @@ abstract class ArticleCategory implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'rayon_id':
                         $stmt->bindValue($identifier, $this->rayon_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'rayon_name':
                         $stmt->bindValue($identifier, $this->rayon_name, PDO::PARAM_STR);
+
                         break;
                     case 'rayon_url':
                         $stmt->bindValue($identifier, $this->rayon_url, PDO::PARAM_STR);
+
                         break;
                     case 'rayon_desc':
                         $stmt->bindValue($identifier, $this->rayon_desc, PDO::PARAM_STR);
+
                         break;
                     case 'rayon_order':
                         $stmt->bindValue($identifier, $this->rayon_order, PDO::PARAM_INT);
+
                         break;
                     case 'rayon_sort_by':
                         $stmt->bindValue($identifier, $this->rayon_sort_by, PDO::PARAM_STR);
+
                         break;
                     case 'rayon_sort_order':
                         $stmt->bindValue($identifier, (int) $this->rayon_sort_order, PDO::PARAM_INT);
+
                         break;
                     case 'rayon_show_upcoming':
                         $stmt->bindValue($identifier, (int) $this->rayon_show_upcoming, PDO::PARAM_INT);
+
                         break;
                     case 'rayon_created':
                         $stmt->bindValue($identifier, $this->rayon_created ? $this->rayon_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'rayon_updated':
                         $stmt->bindValue($identifier, $this->rayon_updated ? $this->rayon_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

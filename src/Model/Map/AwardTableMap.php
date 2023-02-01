@@ -46,6 +46,11 @@ class AwardTableMap extends TableMap
     public const TABLE_NAME = 'awards';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Award';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Award';
@@ -385,7 +390,7 @@ class AwardTableMap extends TableMap
             AwardTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

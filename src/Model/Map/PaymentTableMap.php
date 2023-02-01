@@ -46,6 +46,11 @@ class PaymentTableMap extends TableMap
     public const TABLE_NAME = 'payments';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Payment';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Payment';
@@ -399,7 +404,7 @@ class PaymentTableMap extends TableMap
             PaymentTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -642,8 +642,8 @@ abstract class AxysApp implements ActiveRecordInterface
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -899,24 +899,31 @@ abstract class AxysApp implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+
                         break;
                     case 'client_id':
                         $stmt->bindValue($identifier, $this->client_id, PDO::PARAM_STR);
+
                         break;
                     case 'client_secret':
                         $stmt->bindValue($identifier, $this->client_secret, PDO::PARAM_STR);
+
                         break;
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+
                         break;
                     case 'redirect_uri':
                         $stmt->bindValue($identifier, $this->redirect_uri, PDO::PARAM_STR);
+
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'updated_at':
                         $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

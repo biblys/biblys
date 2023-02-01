@@ -46,6 +46,11 @@ class FileTableMap extends TableMap
     public const TABLE_NAME = 'files';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'File';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\File';
@@ -441,7 +446,7 @@ class FileTableMap extends TableMap
             FileTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

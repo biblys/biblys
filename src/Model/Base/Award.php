@@ -777,8 +777,8 @@ abstract class Award implements ActiveRecordInterface
                 $col = null;
             }
             $this->award_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1043,33 +1043,43 @@ abstract class Award implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'award_id':
                         $stmt->bindValue($identifier, $this->award_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'book_id':
                         $stmt->bindValue($identifier, $this->book_id, PDO::PARAM_INT);
+
                         break;
                     case 'award_name':
                         $stmt->bindValue($identifier, $this->award_name, PDO::PARAM_STR);
+
                         break;
                     case 'award_year':
                         $stmt->bindValue($identifier, $this->award_year, PDO::PARAM_STR);
+
                         break;
                     case 'award_category':
                         $stmt->bindValue($identifier, $this->award_category, PDO::PARAM_STR);
+
                         break;
                     case 'award_note':
                         $stmt->bindValue($identifier, $this->award_note, PDO::PARAM_STR);
+
                         break;
                     case 'award_date':
                         $stmt->bindValue($identifier, $this->award_date ? $this->award_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'award_created':
                         $stmt->bindValue($identifier, $this->award_created ? $this->award_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'award_updated':
                         $stmt->bindValue($identifier, $this->award_updated ? $this->award_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

@@ -942,8 +942,8 @@ abstract class CrowfundingReward implements ActiveRecordInterface
                 $col = null;
             }
             $this->reward_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1217,42 +1217,55 @@ abstract class CrowfundingReward implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'reward_id':
                         $stmt->bindValue($identifier, $this->reward_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_id':
                         $stmt->bindValue($identifier, $this->campaign_id, PDO::PARAM_INT);
+
                         break;
                     case 'reward_content':
                         $stmt->bindValue($identifier, $this->reward_content, PDO::PARAM_STR);
+
                         break;
                     case 'reward_articles':
                         $stmt->bindValue($identifier, $this->reward_articles, PDO::PARAM_STR);
+
                         break;
                     case 'reward_price':
                         $stmt->bindValue($identifier, $this->reward_price, PDO::PARAM_INT);
+
                         break;
                     case 'reward_limited':
                         $stmt->bindValue($identifier, (int) $this->reward_limited, PDO::PARAM_INT);
+
                         break;
                     case 'reward_highlighted':
                         $stmt->bindValue($identifier, (int) $this->reward_highlighted, PDO::PARAM_INT);
+
                         break;
                     case 'reward_image':
                         $stmt->bindValue($identifier, $this->reward_image, PDO::PARAM_STR);
+
                         break;
                     case 'reward_quantity':
                         $stmt->bindValue($identifier, $this->reward_quantity, PDO::PARAM_INT);
+
                         break;
                     case 'reward_backers':
                         $stmt->bindValue($identifier, $this->reward_backers, PDO::PARAM_INT);
+
                         break;
                     case 'reward_created':
                         $stmt->bindValue($identifier, $this->reward_created ? $this->reward_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'reward_updated':
                         $stmt->bindValue($identifier, $this->reward_updated ? $this->reward_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

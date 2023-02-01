@@ -46,6 +46,11 @@ class TagTableMap extends TableMap
     public const TABLE_NAME = 'tags';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Tag';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Tag';
@@ -392,7 +397,7 @@ class TagTableMap extends TableMap
             TagTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

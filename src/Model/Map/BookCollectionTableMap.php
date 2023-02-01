@@ -46,6 +46,11 @@ class BookCollectionTableMap extends TableMap
     public const TABLE_NAME = 'collections';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'BookCollection';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\BookCollection';
@@ -504,7 +509,7 @@ class BookCollectionTableMap extends TableMap
             BookCollectionTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

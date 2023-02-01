@@ -2417,8 +2417,8 @@ abstract class Site implements ActiveRecordInterface
                 $col = null;
             }
             $this->site_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -2930,120 +2930,159 @@ abstract class Site implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_name':
                         $stmt->bindValue($identifier, $this->site_name, PDO::PARAM_STR);
+
                         break;
                     case 'site_pass':
                         $stmt->bindValue($identifier, $this->site_pass, PDO::PARAM_STR);
+
                         break;
                     case 'site_title':
                         $stmt->bindValue($identifier, $this->site_title, PDO::PARAM_STR);
+
                         break;
                     case 'site_domain':
                         $stmt->bindValue($identifier, $this->site_domain, PDO::PARAM_STR);
+
                         break;
                     case 'site_version':
                         $stmt->bindValue($identifier, $this->site_version, PDO::PARAM_STR);
+
                         break;
                     case 'site_tag':
                         $stmt->bindValue($identifier, $this->site_tag, PDO::PARAM_STR);
+
                         break;
                     case 'site_flag':
                         $stmt->bindValue($identifier, $this->site_flag, PDO::PARAM_STR);
+
                         break;
                     case 'site_contact':
                         $stmt->bindValue($identifier, $this->site_contact, PDO::PARAM_STR);
+
                         break;
                     case 'site_address':
                         $stmt->bindValue($identifier, $this->site_address, PDO::PARAM_STR);
+
                         break;
                     case 'site_tva':
                         $stmt->bindValue($identifier, $this->site_tva, PDO::PARAM_STR);
+
                         break;
                     case 'site_html_renderer':
                         $stmt->bindValue($identifier, (int) $this->site_html_renderer, PDO::PARAM_INT);
+
                         break;
                     case 'site_axys':
                         $stmt->bindValue($identifier, (int) $this->site_axys, PDO::PARAM_INT);
+
                         break;
                     case 'site_noosfere':
                         $stmt->bindValue($identifier, (int) $this->site_noosfere, PDO::PARAM_INT);
+
                         break;
                     case 'site_amazon':
                         $stmt->bindValue($identifier, (int) $this->site_amazon, PDO::PARAM_INT);
+
                         break;
                     case 'site_event_id':
                         $stmt->bindValue($identifier, $this->site_event_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_event_date':
                         $stmt->bindValue($identifier, $this->site_event_date, PDO::PARAM_INT);
+
                         break;
                     case 'site_shop':
                         $stmt->bindValue($identifier, (int) $this->site_shop, PDO::PARAM_INT);
+
                         break;
                     case 'site_vpc':
                         $stmt->bindValue($identifier, (int) $this->site_vpc, PDO::PARAM_INT);
+
                         break;
                     case 'site_shipping_fee':
                         $stmt->bindValue($identifier, $this->site_shipping_fee, PDO::PARAM_STR);
+
                         break;
                     case 'site_wishlist':
                         $stmt->bindValue($identifier, (int) $this->site_wishlist, PDO::PARAM_INT);
+
                         break;
                     case 'site_payment_cheque':
                         $stmt->bindValue($identifier, (int) $this->site_payment_cheque, PDO::PARAM_INT);
+
                         break;
                     case 'site_payment_paypal':
                         $stmt->bindValue($identifier, $this->site_payment_paypal, PDO::PARAM_STR);
+
                         break;
                     case 'site_payment_payplug':
                         $stmt->bindValue($identifier, (int) $this->site_payment_payplug, PDO::PARAM_INT);
+
                         break;
                     case 'site_payment_transfer':
                         $stmt->bindValue($identifier, (int) $this->site_payment_transfer, PDO::PARAM_INT);
+
                         break;
                     case 'site_bookshop':
                         $stmt->bindValue($identifier, (int) $this->site_bookshop, PDO::PARAM_INT);
+
                         break;
                     case 'site_bookshop_id':
                         $stmt->bindValue($identifier, $this->site_bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_publisher':
                         $stmt->bindValue($identifier, (int) $this->site_publisher, PDO::PARAM_INT);
+
                         break;
                     case 'site_publisher_stock':
                         $stmt->bindValue($identifier, (int) $this->site_publisher_stock, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_ebook_bundle':
                         $stmt->bindValue($identifier, $this->site_ebook_bundle, PDO::PARAM_INT);
+
                         break;
                     case 'site_fb_page_id':
                         $stmt->bindValue($identifier, $this->site_fb_page_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_fb_page_token':
                         $stmt->bindValue($identifier, $this->site_fb_page_token, PDO::PARAM_STR);
+
                         break;
                     case 'site_analytics_id':
                         $stmt->bindValue($identifier, $this->site_analytics_id, PDO::PARAM_STR);
+
                         break;
                     case 'site_piwik_id':
                         $stmt->bindValue($identifier, $this->site_piwik_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_sitemap_updated':
                         $stmt->bindValue($identifier, $this->site_sitemap_updated ? $this->site_sitemap_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'site_monitoring':
                         $stmt->bindValue($identifier, (int) $this->site_monitoring, PDO::PARAM_INT);
+
                         break;
                     case 'site_created':
                         $stmt->bindValue($identifier, $this->site_created ? $this->site_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'site_updated':
                         $stmt->bindValue($identifier, $this->site_updated ? $this->site_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

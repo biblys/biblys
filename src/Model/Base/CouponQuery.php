@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'coupons' table.
- *
- *
+ * Base class that represents a query for the `coupons` table.
  *
  * @method     ChildCouponQuery orderById($order = Criteria::ASC) Order by the coupon_id column
  * @method     ChildCouponQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -67,8 +65,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon|null findOneByUsed(string $coupon_used) Return the first ChildCoupon filtered by the coupon_used column
  * @method     ChildCoupon|null findOneByCreator(int $coupon_creator) Return the first ChildCoupon filtered by the coupon_creator column
  * @method     ChildCoupon|null findOneByCreatedAt(string $coupon_insert) Return the first ChildCoupon filtered by the coupon_insert column
- * @method     ChildCoupon|null findOneByUpdatedAt(string $coupon_update) Return the first ChildCoupon filtered by the coupon_update column *
-
+ * @method     ChildCoupon|null findOneByUpdatedAt(string $coupon_update) Return the first ChildCoupon filtered by the coupon_update column
+ *
  * @method     ChildCoupon requirePk($key, ?ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOne(?ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -87,33 +85,34 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCoupon[]|Collection find(?ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCoupon> find(?ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
- * @method     ChildCoupon[]|Collection findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findById(int $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
- * @method     ChildCoupon[]|Collection findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findBySiteId(int $site_id) Return ChildCoupon objects filtered by the site_id column
- * @method     ChildCoupon[]|Collection findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByUserId(int $user_id) Return ChildCoupon objects filtered by the user_id column
- * @method     ChildCoupon[]|Collection findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByCode(string $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
- * @method     ChildCoupon[]|Collection findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByArticleId(int $article_id) Return ChildCoupon objects filtered by the article_id column
- * @method     ChildCoupon[]|Collection findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByStockId(int $stock_id) Return ChildCoupon objects filtered by the stock_id column
- * @method     ChildCoupon[]|Collection findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByAmount(int $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
- * @method     ChildCoupon[]|Collection findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByNote(string $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
- * @method     ChildCoupon[]|Collection findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByUsed(string $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
- * @method     ChildCoupon[]|Collection findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByCreator(int $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
- * @method     ChildCoupon[]|Collection findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByCreatedAt(string $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
- * @method     ChildCoupon[]|Collection findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
- * @psalm-method Collection&\Traversable<ChildCoupon> findByUpdatedAt(string $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
+ *
+ * @method     ChildCoupon[]|Collection findById(int|array<int> $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findById(int|array<int> $coupon_id) Return ChildCoupon objects filtered by the coupon_id column
+ * @method     ChildCoupon[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCoupon objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findBySiteId(int|array<int> $site_id) Return ChildCoupon objects filtered by the site_id column
+ * @method     ChildCoupon[]|Collection findByUserId(int|array<int> $user_id) Return ChildCoupon objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUserId(int|array<int> $user_id) Return ChildCoupon objects filtered by the user_id column
+ * @method     ChildCoupon[]|Collection findByCode(string|array<string> $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCode(string|array<string> $coupon_code) Return ChildCoupon objects filtered by the coupon_code column
+ * @method     ChildCoupon[]|Collection findByArticleId(int|array<int> $article_id) Return ChildCoupon objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByArticleId(int|array<int> $article_id) Return ChildCoupon objects filtered by the article_id column
+ * @method     ChildCoupon[]|Collection findByStockId(int|array<int> $stock_id) Return ChildCoupon objects filtered by the stock_id column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByStockId(int|array<int> $stock_id) Return ChildCoupon objects filtered by the stock_id column
+ * @method     ChildCoupon[]|Collection findByAmount(int|array<int> $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByAmount(int|array<int> $coupon_amount) Return ChildCoupon objects filtered by the coupon_amount column
+ * @method     ChildCoupon[]|Collection findByNote(string|array<string> $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByNote(string|array<string> $coupon_note) Return ChildCoupon objects filtered by the coupon_note column
+ * @method     ChildCoupon[]|Collection findByUsed(string|array<string> $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUsed(string|array<string> $coupon_used) Return ChildCoupon objects filtered by the coupon_used column
+ * @method     ChildCoupon[]|Collection findByCreator(int|array<int> $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCreator(int|array<int> $coupon_creator) Return ChildCoupon objects filtered by the coupon_creator column
+ * @method     ChildCoupon[]|Collection findByCreatedAt(string|array<string> $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByCreatedAt(string|array<string> $coupon_insert) Return ChildCoupon objects filtered by the coupon_insert column
+ * @method     ChildCoupon[]|Collection findByUpdatedAt(string|array<string> $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
+ * @psalm-method Collection&\Traversable<ChildCoupon> findByUpdatedAt(string|array<string> $coupon_update) Return ChildCoupon objects filtered by the coupon_update column
+ *
  * @method     ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCoupon> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CouponQuery extends ModelCriteria
 {

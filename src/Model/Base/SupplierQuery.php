@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'suppliers' table.
- *
- *
+ * Base class that represents a query for the `suppliers` table.
  *
  * @method     ChildSupplierQuery orderById($order = Criteria::ASC) Order by the supplier_id column
  * @method     ChildSupplierQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -64,8 +62,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSupplier|null findOneByInsert(string $supplier_insert) Return the first ChildSupplier filtered by the supplier_insert column
  * @method     ChildSupplier|null findOneByUpdate(string $supplier_update) Return the first ChildSupplier filtered by the supplier_update column
  * @method     ChildSupplier|null findOneByCreatedAt(string $supplier_created) Return the first ChildSupplier filtered by the supplier_created column
- * @method     ChildSupplier|null findOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column *
-
+ * @method     ChildSupplier|null findOneByUpdatedAt(string $supplier_updated) Return the first ChildSupplier filtered by the supplier_updated column
+ *
  * @method     ChildSupplier requirePk($key, ?ConnectionInterface $con = null) Return the ChildSupplier by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSupplier requireOne(?ConnectionInterface $con = null) Return the first ChildSupplier matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -83,31 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSupplier[]|Collection find(?ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildSupplier> find(?ConnectionInterface $con = null) Return ChildSupplier objects based on current ModelCriteria
- * @method     ChildSupplier[]|Collection findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
- * @psalm-method Collection&\Traversable<ChildSupplier> findById(int $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
- * @method     ChildSupplier[]|Collection findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildSupplier> findBySiteId(int $site_id) Return ChildSupplier objects filtered by the site_id column
- * @method     ChildSupplier[]|Collection findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByName(string $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
- * @method     ChildSupplier[]|Collection findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByGln(string $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
- * @method     ChildSupplier[]|Collection findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByRemise(int $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
- * @method     ChildSupplier[]|Collection findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByNotva(boolean $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
- * @method     ChildSupplier[]|Collection findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByOnOrder(boolean $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
- * @method     ChildSupplier[]|Collection findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByInsert(string $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
- * @method     ChildSupplier[]|Collection findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdate(string $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
- * @method     ChildSupplier[]|Collection findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByCreatedAt(string $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
- * @method     ChildSupplier[]|Collection findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
- * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdatedAt(string $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ *
+ * @method     ChildSupplier[]|Collection findById(int|array<int> $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findById(int|array<int> $supplier_id) Return ChildSupplier objects filtered by the supplier_id column
+ * @method     ChildSupplier[]|Collection findBySiteId(int|array<int> $site_id) Return ChildSupplier objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findBySiteId(int|array<int> $site_id) Return ChildSupplier objects filtered by the site_id column
+ * @method     ChildSupplier[]|Collection findByName(string|array<string> $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByName(string|array<string> $supplier_name) Return ChildSupplier objects filtered by the supplier_name column
+ * @method     ChildSupplier[]|Collection findByGln(string|array<string> $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByGln(string|array<string> $supplier_gln) Return ChildSupplier objects filtered by the supplier_gln column
+ * @method     ChildSupplier[]|Collection findByRemise(int|array<int> $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByRemise(int|array<int> $supplier_remise) Return ChildSupplier objects filtered by the supplier_remise column
+ * @method     ChildSupplier[]|Collection findByNotva(boolean|array<boolean> $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByNotva(boolean|array<boolean> $supplier_notva) Return ChildSupplier objects filtered by the supplier_notva column
+ * @method     ChildSupplier[]|Collection findByOnOrder(boolean|array<boolean> $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByOnOrder(boolean|array<boolean> $supplier_on_order) Return ChildSupplier objects filtered by the supplier_on_order column
+ * @method     ChildSupplier[]|Collection findByInsert(string|array<string> $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByInsert(string|array<string> $supplier_insert) Return ChildSupplier objects filtered by the supplier_insert column
+ * @method     ChildSupplier[]|Collection findByUpdate(string|array<string> $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdate(string|array<string> $supplier_update) Return ChildSupplier objects filtered by the supplier_update column
+ * @method     ChildSupplier[]|Collection findByCreatedAt(string|array<string> $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByCreatedAt(string|array<string> $supplier_created) Return ChildSupplier objects filtered by the supplier_created column
+ * @method     ChildSupplier[]|Collection findByUpdatedAt(string|array<string> $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ * @psalm-method Collection&\Traversable<ChildSupplier> findByUpdatedAt(string|array<string> $supplier_updated) Return ChildSupplier objects filtered by the supplier_updated column
+ *
  * @method     ChildSupplier[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSupplier> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class SupplierQuery extends ModelCriteria
 {
@@ -519,7 +518,7 @@ abstract class SupplierQuery extends ModelCriteria
     public function filterByNotva($notva = null, ?string $comparison = null)
     {
         if (is_string($notva)) {
-            $notva = in_array(strtolower($notva), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $notva = in_array(strtolower($notva), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_NOTVA, $notva, $comparison);
@@ -548,7 +547,7 @@ abstract class SupplierQuery extends ModelCriteria
     public function filterByOnOrder($onOrder = null, ?string $comparison = null)
     {
         if (is_string($onOrder)) {
-            $onOrder = in_array(strtolower($onOrder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $onOrder = in_array(strtolower($onOrder), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SupplierTableMap::COL_SUPPLIER_ON_ORDER, $onOrder, $comparison);

@@ -17,7 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'people' table.
+ * Base class that represents a query for the `people` table.
  *
  * Intervenants
  *
@@ -114,8 +114,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPeople|null findOneByInsert(string $people_insert) Return the first ChildPeople filtered by the people_insert column
  * @method     ChildPeople|null findOneByUpdate(string $people_update) Return the first ChildPeople filtered by the people_update column
  * @method     ChildPeople|null findOneByCreatedAt(string $people_created) Return the first ChildPeople filtered by the people_created column
- * @method     ChildPeople|null findOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column *
-
+ * @method     ChildPeople|null findOneByUpdatedAt(string $people_updated) Return the first ChildPeople filtered by the people_updated column
+ *
  * @method     ChildPeople requirePk($key, ?ConnectionInterface $con = null) Return the ChildPeople by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPeople requireOne(?ConnectionInterface $con = null) Return the first ChildPeople matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -145,55 +145,56 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPeople[]|Collection find(?ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildPeople> find(?ConnectionInterface $con = null) Return ChildPeople objects based on current ModelCriteria
- * @method     ChildPeople[]|Collection findById(int $people_id) Return ChildPeople objects filtered by the people_id column
- * @psalm-method Collection&\Traversable<ChildPeople> findById(int $people_id) Return ChildPeople objects filtered by the people_id column
- * @method     ChildPeople[]|Collection findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
- * @psalm-method Collection&\Traversable<ChildPeople> findByFirstName(string $people_first_name) Return ChildPeople objects filtered by the people_first_name column
- * @method     ChildPeople[]|Collection findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
- * @psalm-method Collection&\Traversable<ChildPeople> findByLastName(string $people_last_name) Return ChildPeople objects filtered by the people_last_name column
- * @method     ChildPeople[]|Collection findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
- * @psalm-method Collection&\Traversable<ChildPeople> findByName(string $people_name) Return ChildPeople objects filtered by the people_name column
- * @method     ChildPeople[]|Collection findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
- * @psalm-method Collection&\Traversable<ChildPeople> findByAlpha(string $people_alpha) Return ChildPeople objects filtered by the people_alpha column
- * @method     ChildPeople[]|Collection findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
- * @psalm-method Collection&\Traversable<ChildPeople> findByUrlOld(string $people_url_old) Return ChildPeople objects filtered by the people_url_old column
- * @method     ChildPeople[]|Collection findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
- * @psalm-method Collection&\Traversable<ChildPeople> findByUrl(string $people_url) Return ChildPeople objects filtered by the people_url column
- * @method     ChildPeople[]|Collection findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
- * @psalm-method Collection&\Traversable<ChildPeople> findByPseudo(int $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
- * @method     ChildPeople[]|Collection findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
- * @psalm-method Collection&\Traversable<ChildPeople> findByNoosfereId(int $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
- * @method     ChildPeople[]|Collection findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
- * @psalm-method Collection&\Traversable<ChildPeople> findByBirth(int $people_birth) Return ChildPeople objects filtered by the people_birth column
- * @method     ChildPeople[]|Collection findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
- * @psalm-method Collection&\Traversable<ChildPeople> findByDeath(int $people_death) Return ChildPeople objects filtered by the people_death column
- * @method     ChildPeople[]|Collection findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
- * @psalm-method Collection&\Traversable<ChildPeople> findByGender(string $people_gender) Return ChildPeople objects filtered by the people_gender column
- * @method     ChildPeople[]|Collection findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
- * @psalm-method Collection&\Traversable<ChildPeople> findByNation(string $people_nation) Return ChildPeople objects filtered by the people_nation column
- * @method     ChildPeople[]|Collection findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
- * @psalm-method Collection&\Traversable<ChildPeople> findByBio(string $people_bio) Return ChildPeople objects filtered by the people_bio column
- * @method     ChildPeople[]|Collection findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
- * @psalm-method Collection&\Traversable<ChildPeople> findBySite(string $people_site) Return ChildPeople objects filtered by the people_site column
- * @method     ChildPeople[]|Collection findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
- * @psalm-method Collection&\Traversable<ChildPeople> findByFacebook(string $people_facebook) Return ChildPeople objects filtered by the people_facebook column
- * @method     ChildPeople[]|Collection findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
- * @psalm-method Collection&\Traversable<ChildPeople> findByTwitter(string $people_twitter) Return ChildPeople objects filtered by the people_twitter column
- * @method     ChildPeople[]|Collection findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
- * @psalm-method Collection&\Traversable<ChildPeople> findByHits(int $people_hits) Return ChildPeople objects filtered by the people_hits column
- * @method     ChildPeople[]|Collection findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
- * @psalm-method Collection&\Traversable<ChildPeople> findByDate(string $people_date) Return ChildPeople objects filtered by the people_date column
- * @method     ChildPeople[]|Collection findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
- * @psalm-method Collection&\Traversable<ChildPeople> findByInsert(string $people_insert) Return ChildPeople objects filtered by the people_insert column
- * @method     ChildPeople[]|Collection findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
- * @psalm-method Collection&\Traversable<ChildPeople> findByUpdate(string $people_update) Return ChildPeople objects filtered by the people_update column
- * @method     ChildPeople[]|Collection findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
- * @psalm-method Collection&\Traversable<ChildPeople> findByCreatedAt(string $people_created) Return ChildPeople objects filtered by the people_created column
- * @method     ChildPeople[]|Collection findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
- * @psalm-method Collection&\Traversable<ChildPeople> findByUpdatedAt(string $people_updated) Return ChildPeople objects filtered by the people_updated column
+ *
+ * @method     ChildPeople[]|Collection findById(int|array<int> $people_id) Return ChildPeople objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildPeople> findById(int|array<int> $people_id) Return ChildPeople objects filtered by the people_id column
+ * @method     ChildPeople[]|Collection findByFirstName(string|array<string> $people_first_name) Return ChildPeople objects filtered by the people_first_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByFirstName(string|array<string> $people_first_name) Return ChildPeople objects filtered by the people_first_name column
+ * @method     ChildPeople[]|Collection findByLastName(string|array<string> $people_last_name) Return ChildPeople objects filtered by the people_last_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByLastName(string|array<string> $people_last_name) Return ChildPeople objects filtered by the people_last_name column
+ * @method     ChildPeople[]|Collection findByName(string|array<string> $people_name) Return ChildPeople objects filtered by the people_name column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByName(string|array<string> $people_name) Return ChildPeople objects filtered by the people_name column
+ * @method     ChildPeople[]|Collection findByAlpha(string|array<string> $people_alpha) Return ChildPeople objects filtered by the people_alpha column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByAlpha(string|array<string> $people_alpha) Return ChildPeople objects filtered by the people_alpha column
+ * @method     ChildPeople[]|Collection findByUrlOld(string|array<string> $people_url_old) Return ChildPeople objects filtered by the people_url_old column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUrlOld(string|array<string> $people_url_old) Return ChildPeople objects filtered by the people_url_old column
+ * @method     ChildPeople[]|Collection findByUrl(string|array<string> $people_url) Return ChildPeople objects filtered by the people_url column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUrl(string|array<string> $people_url) Return ChildPeople objects filtered by the people_url column
+ * @method     ChildPeople[]|Collection findByPseudo(int|array<int> $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByPseudo(int|array<int> $people_pseudo) Return ChildPeople objects filtered by the people_pseudo column
+ * @method     ChildPeople[]|Collection findByNoosfereId(int|array<int> $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByNoosfereId(int|array<int> $people_noosfere_id) Return ChildPeople objects filtered by the people_noosfere_id column
+ * @method     ChildPeople[]|Collection findByBirth(int|array<int> $people_birth) Return ChildPeople objects filtered by the people_birth column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByBirth(int|array<int> $people_birth) Return ChildPeople objects filtered by the people_birth column
+ * @method     ChildPeople[]|Collection findByDeath(int|array<int> $people_death) Return ChildPeople objects filtered by the people_death column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByDeath(int|array<int> $people_death) Return ChildPeople objects filtered by the people_death column
+ * @method     ChildPeople[]|Collection findByGender(string|array<string> $people_gender) Return ChildPeople objects filtered by the people_gender column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByGender(string|array<string> $people_gender) Return ChildPeople objects filtered by the people_gender column
+ * @method     ChildPeople[]|Collection findByNation(string|array<string> $people_nation) Return ChildPeople objects filtered by the people_nation column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByNation(string|array<string> $people_nation) Return ChildPeople objects filtered by the people_nation column
+ * @method     ChildPeople[]|Collection findByBio(string|array<string> $people_bio) Return ChildPeople objects filtered by the people_bio column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByBio(string|array<string> $people_bio) Return ChildPeople objects filtered by the people_bio column
+ * @method     ChildPeople[]|Collection findBySite(string|array<string> $people_site) Return ChildPeople objects filtered by the people_site column
+ * @psalm-method Collection&\Traversable<ChildPeople> findBySite(string|array<string> $people_site) Return ChildPeople objects filtered by the people_site column
+ * @method     ChildPeople[]|Collection findByFacebook(string|array<string> $people_facebook) Return ChildPeople objects filtered by the people_facebook column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByFacebook(string|array<string> $people_facebook) Return ChildPeople objects filtered by the people_facebook column
+ * @method     ChildPeople[]|Collection findByTwitter(string|array<string> $people_twitter) Return ChildPeople objects filtered by the people_twitter column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByTwitter(string|array<string> $people_twitter) Return ChildPeople objects filtered by the people_twitter column
+ * @method     ChildPeople[]|Collection findByHits(int|array<int> $people_hits) Return ChildPeople objects filtered by the people_hits column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByHits(int|array<int> $people_hits) Return ChildPeople objects filtered by the people_hits column
+ * @method     ChildPeople[]|Collection findByDate(string|array<string> $people_date) Return ChildPeople objects filtered by the people_date column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByDate(string|array<string> $people_date) Return ChildPeople objects filtered by the people_date column
+ * @method     ChildPeople[]|Collection findByInsert(string|array<string> $people_insert) Return ChildPeople objects filtered by the people_insert column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByInsert(string|array<string> $people_insert) Return ChildPeople objects filtered by the people_insert column
+ * @method     ChildPeople[]|Collection findByUpdate(string|array<string> $people_update) Return ChildPeople objects filtered by the people_update column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUpdate(string|array<string> $people_update) Return ChildPeople objects filtered by the people_update column
+ * @method     ChildPeople[]|Collection findByCreatedAt(string|array<string> $people_created) Return ChildPeople objects filtered by the people_created column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByCreatedAt(string|array<string> $people_created) Return ChildPeople objects filtered by the people_created column
+ * @method     ChildPeople[]|Collection findByUpdatedAt(string|array<string> $people_updated) Return ChildPeople objects filtered by the people_updated column
+ * @psalm-method Collection&\Traversable<ChildPeople> findByUpdatedAt(string|array<string> $people_updated) Return ChildPeople objects filtered by the people_updated column
+ *
  * @method     ChildPeople[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPeople> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class PeopleQuery extends ModelCriteria
 {
@@ -1305,20 +1306,23 @@ abstract class PeopleQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Role table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\RoleQuery The inner query object of the EXISTS statement
      */
     public function useRoleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Role', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\RoleQuery */
+        $q = $this->useExistsQuery('Role', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1333,8 +1337,46 @@ abstract class PeopleQuery extends ModelCriteria
      */
     public function useRoleNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Role', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\RoleQuery */
+        $q = $this->useExistsQuery('Role', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Role table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\RoleQuery The inner query object of the IN statement
+     */
+    public function useInRoleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\RoleQuery */
+        $q = $this->useInQuery('Role', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Role table for a NOT IN query.
+     *
+     * @see useRoleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RoleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInRoleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\RoleQuery */
+        $q = $this->useInQuery('Role', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

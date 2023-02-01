@@ -1204,8 +1204,8 @@ abstract class BookCollection implements ActiveRecordInterface
                 $col = null;
             }
             $this->collection_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1514,57 +1514,75 @@ abstract class BookCollection implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'collection_id':
                         $stmt->bindValue($identifier, $this->collection_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'pricegrid_id':
                         $stmt->bindValue($identifier, $this->pricegrid_id, PDO::PARAM_INT);
+
                         break;
                     case 'collection_name':
                         $stmt->bindValue($identifier, $this->collection_name, PDO::PARAM_STR);
+
                         break;
                     case 'collection_url':
                         $stmt->bindValue($identifier, $this->collection_url, PDO::PARAM_STR);
+
                         break;
                     case 'collection_publisher':
                         $stmt->bindValue($identifier, $this->collection_publisher, PDO::PARAM_STR);
+
                         break;
                     case 'collection_desc':
                         $stmt->bindValue($identifier, $this->collection_desc, PDO::PARAM_STR);
+
                         break;
                     case 'collection_ignorenum':
                         $stmt->bindValue($identifier, (int) $this->collection_ignorenum, PDO::PARAM_INT);
+
                         break;
                     case 'collection_orderby':
                         $stmt->bindValue($identifier, $this->collection_orderby, PDO::PARAM_STR);
+
                         break;
                     case 'collection_incorrect_weights':
                         $stmt->bindValue($identifier, (int) $this->collection_incorrect_weights, PDO::PARAM_INT);
+
                         break;
                     case 'collection_noosfere_id':
                         $stmt->bindValue($identifier, $this->collection_noosfere_id, PDO::PARAM_INT);
+
                         break;
                     case 'collection_insert':
                         $stmt->bindValue($identifier, $this->collection_insert ? $this->collection_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'collection_update':
                         $stmt->bindValue($identifier, $this->collection_update ? $this->collection_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'collection_hits':
                         $stmt->bindValue($identifier, $this->collection_hits, PDO::PARAM_INT);
+
                         break;
                     case 'collection_duplicate':
                         $stmt->bindValue($identifier, (int) $this->collection_duplicate, PDO::PARAM_INT);
+
                         break;
                     case 'collection_created':
                         $stmt->bindValue($identifier, $this->collection_created ? $this->collection_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'collection_updated':
                         $stmt->bindValue($identifier, $this->collection_updated ? $this->collection_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

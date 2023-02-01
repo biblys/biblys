@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'payments' table.
- *
- *
+ * Base class that represents a query for the `payments` table.
  *
  * @method     ChildPaymentQuery orderById($order = Criteria::ASC) Order by the payment_id column
  * @method     ChildPaymentQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -85,8 +83,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment|null findOneByUrl(string $payment_url) Return the first ChildPayment filtered by the payment_url column
  * @method     ChildPayment|null findOneByCreatedAt(string $payment_created) Return the first ChildPayment filtered by the payment_created column
  * @method     ChildPayment|null findOneByExecuted(string $payment_executed) Return the first ChildPayment filtered by the payment_executed column
- * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column *
-
+ * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column
+ *
  * @method     ChildPayment requirePk($key, ?ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOne(?ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -103,29 +101,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPayment[]|Collection find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildPayment> find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
- * @method     ChildPayment[]|Collection findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
- * @psalm-method Collection&\Traversable<ChildPayment> findById(int $payment_id) Return ChildPayment objects filtered by the payment_id column
- * @method     ChildPayment[]|Collection findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildPayment> findBySiteId(int $site_id) Return ChildPayment objects filtered by the site_id column
- * @method     ChildPayment[]|Collection findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
- * @psalm-method Collection&\Traversable<ChildPayment> findByOrderId(int $order_id) Return ChildPayment objects filtered by the order_id column
- * @method     ChildPayment[]|Collection findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
- * @psalm-method Collection&\Traversable<ChildPayment> findByAmount(int $payment_amount) Return ChildPayment objects filtered by the payment_amount column
- * @method     ChildPayment[]|Collection findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
- * @psalm-method Collection&\Traversable<ChildPayment> findByMode(string $payment_mode) Return ChildPayment objects filtered by the payment_mode column
- * @method     ChildPayment[]|Collection findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
- * @psalm-method Collection&\Traversable<ChildPayment> findByProviderId(string $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
- * @method     ChildPayment[]|Collection findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
- * @psalm-method Collection&\Traversable<ChildPayment> findByUrl(string $payment_url) Return ChildPayment objects filtered by the payment_url column
- * @method     ChildPayment[]|Collection findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
- * @psalm-method Collection&\Traversable<ChildPayment> findByCreatedAt(string $payment_created) Return ChildPayment objects filtered by the payment_created column
- * @method     ChildPayment[]|Collection findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
- * @psalm-method Collection&\Traversable<ChildPayment> findByExecuted(string $payment_executed) Return ChildPayment objects filtered by the payment_executed column
- * @method     ChildPayment[]|Collection findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
- * @psalm-method Collection&\Traversable<ChildPayment> findByUpdatedAt(string $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ *
+ * @method     ChildPayment[]|Collection findById(int|array<int> $payment_id) Return ChildPayment objects filtered by the payment_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findById(int|array<int> $payment_id) Return ChildPayment objects filtered by the payment_id column
+ * @method     ChildPayment[]|Collection findBySiteId(int|array<int> $site_id) Return ChildPayment objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findBySiteId(int|array<int> $site_id) Return ChildPayment objects filtered by the site_id column
+ * @method     ChildPayment[]|Collection findByOrderId(int|array<int> $order_id) Return ChildPayment objects filtered by the order_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByOrderId(int|array<int> $order_id) Return ChildPayment objects filtered by the order_id column
+ * @method     ChildPayment[]|Collection findByAmount(int|array<int> $payment_amount) Return ChildPayment objects filtered by the payment_amount column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByAmount(int|array<int> $payment_amount) Return ChildPayment objects filtered by the payment_amount column
+ * @method     ChildPayment[]|Collection findByMode(string|array<string> $payment_mode) Return ChildPayment objects filtered by the payment_mode column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByMode(string|array<string> $payment_mode) Return ChildPayment objects filtered by the payment_mode column
+ * @method     ChildPayment[]|Collection findByProviderId(string|array<string> $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByProviderId(string|array<string> $payment_provider_id) Return ChildPayment objects filtered by the payment_provider_id column
+ * @method     ChildPayment[]|Collection findByUrl(string|array<string> $payment_url) Return ChildPayment objects filtered by the payment_url column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByUrl(string|array<string> $payment_url) Return ChildPayment objects filtered by the payment_url column
+ * @method     ChildPayment[]|Collection findByCreatedAt(string|array<string> $payment_created) Return ChildPayment objects filtered by the payment_created column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByCreatedAt(string|array<string> $payment_created) Return ChildPayment objects filtered by the payment_created column
+ * @method     ChildPayment[]|Collection findByExecuted(string|array<string> $payment_executed) Return ChildPayment objects filtered by the payment_executed column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByExecuted(string|array<string> $payment_executed) Return ChildPayment objects filtered by the payment_executed column
+ * @method     ChildPayment[]|Collection findByUpdatedAt(string|array<string> $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByUpdatedAt(string|array<string> $payment_updated) Return ChildPayment objects filtered by the payment_updated column
+ *
  * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class PaymentQuery extends ModelCriteria
 {
@@ -815,20 +814,23 @@ abstract class PaymentQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Site table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
     public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -843,8 +845,46 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Order object
      *
@@ -949,20 +989,23 @@ abstract class PaymentQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Order table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\OrderQuery The inner query object of the EXISTS statement
      */
     public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -977,8 +1020,46 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Order table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\OrderQuery The inner query object of the IN statement
+     */
+    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT IN query.
+     *
+     * @see useOrderInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

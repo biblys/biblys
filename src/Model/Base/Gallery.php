@@ -712,8 +712,8 @@ abstract class Gallery implements ActiveRecordInterface
                 $col = null;
             }
             $this->gallery_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -972,27 +972,35 @@ abstract class Gallery implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'gallery_id':
                         $stmt->bindValue($identifier, $this->gallery_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'gallery_title':
                         $stmt->bindValue($identifier, $this->gallery_title, PDO::PARAM_STR);
+
                         break;
                     case 'media_dir':
                         $stmt->bindValue($identifier, $this->media_dir, PDO::PARAM_STR);
+
                         break;
                     case 'gallery_insert':
                         $stmt->bindValue($identifier, $this->gallery_insert ? $this->gallery_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'gallery_update':
                         $stmt->bindValue($identifier, $this->gallery_update ? $this->gallery_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'gallery_created':
                         $stmt->bindValue($identifier, $this->gallery_created ? $this->gallery_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'gallery_updated':
                         $stmt->bindValue($identifier, $this->gallery_updated ? $this->gallery_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

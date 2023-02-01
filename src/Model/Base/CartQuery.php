@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'carts' table.
- *
- *
+ * Base class that represents a query for the `carts` table.
  *
  * @method     ChildCartQuery orderById($order = Criteria::ASC) Order by the cart_id column
  * @method     ChildCartQuery orderByUid($order = Criteria::ASC) Order by the cart_uid column
@@ -109,8 +107,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCart|null findOneByInsert(string $cart_insert) Return the first ChildCart filtered by the cart_insert column
  * @method     ChildCart|null findOneByUpdate(string $cart_update) Return the first ChildCart filtered by the cart_update column
  * @method     ChildCart|null findOneByCreatedAt(string $cart_created) Return the first ChildCart filtered by the cart_created column
- * @method     ChildCart|null findOneByUpdatedAt(string $cart_updated) Return the first ChildCart filtered by the cart_updated column *
-
+ * @method     ChildCart|null findOneByUpdatedAt(string $cart_updated) Return the first ChildCart filtered by the cart_updated column
+ *
  * @method     ChildCart requirePk($key, ?ConnectionInterface $con = null) Return the ChildCart by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCart requireOne(?ConnectionInterface $con = null) Return the first ChildCart matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -135,45 +133,46 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCart[]|Collection find(?ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCart> find(?ConnectionInterface $con = null) Return ChildCart objects based on current ModelCriteria
- * @method     ChildCart[]|Collection findById(int $cart_id) Return ChildCart objects filtered by the cart_id column
- * @psalm-method Collection&\Traversable<ChildCart> findById(int $cart_id) Return ChildCart objects filtered by the cart_id column
- * @method     ChildCart[]|Collection findByUid(string $cart_uid) Return ChildCart objects filtered by the cart_uid column
- * @psalm-method Collection&\Traversable<ChildCart> findByUid(string $cart_uid) Return ChildCart objects filtered by the cart_uid column
- * @method     ChildCart[]|Collection findBySiteId(int $site_id) Return ChildCart objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCart> findBySiteId(int $site_id) Return ChildCart objects filtered by the site_id column
- * @method     ChildCart[]|Collection findByUserId(int $user_id) Return ChildCart objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildCart> findByUserId(int $user_id) Return ChildCart objects filtered by the user_id column
- * @method     ChildCart[]|Collection findBySellerId(int $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
- * @psalm-method Collection&\Traversable<ChildCart> findBySellerId(int $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
- * @method     ChildCart[]|Collection findByCustomerId(int $customer_id) Return ChildCart objects filtered by the customer_id column
- * @psalm-method Collection&\Traversable<ChildCart> findByCustomerId(int $customer_id) Return ChildCart objects filtered by the customer_id column
- * @method     ChildCart[]|Collection findByTitle(string $cart_title) Return ChildCart objects filtered by the cart_title column
- * @psalm-method Collection&\Traversable<ChildCart> findByTitle(string $cart_title) Return ChildCart objects filtered by the cart_title column
- * @method     ChildCart[]|Collection findByType(string $cart_type) Return ChildCart objects filtered by the cart_type column
- * @psalm-method Collection&\Traversable<ChildCart> findByType(string $cart_type) Return ChildCart objects filtered by the cart_type column
- * @method     ChildCart[]|Collection findByIp(string $cart_ip) Return ChildCart objects filtered by the cart_ip column
- * @psalm-method Collection&\Traversable<ChildCart> findByIp(string $cart_ip) Return ChildCart objects filtered by the cart_ip column
- * @method     ChildCart[]|Collection findByCount(int $cart_count) Return ChildCart objects filtered by the cart_count column
- * @psalm-method Collection&\Traversable<ChildCart> findByCount(int $cart_count) Return ChildCart objects filtered by the cart_count column
- * @method     ChildCart[]|Collection findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
- * @psalm-method Collection&\Traversable<ChildCart> findByAmount(int $cart_amount) Return ChildCart objects filtered by the cart_amount column
- * @method     ChildCart[]|Collection findByAsAGift(string $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
- * @psalm-method Collection&\Traversable<ChildCart> findByAsAGift(string $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
- * @method     ChildCart[]|Collection findByGiftRecipient(int $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
- * @psalm-method Collection&\Traversable<ChildCart> findByGiftRecipient(int $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
- * @method     ChildCart[]|Collection findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
- * @psalm-method Collection&\Traversable<ChildCart> findByDate(string $cart_date) Return ChildCart objects filtered by the cart_date column
- * @method     ChildCart[]|Collection findByInsert(string $cart_insert) Return ChildCart objects filtered by the cart_insert column
- * @psalm-method Collection&\Traversable<ChildCart> findByInsert(string $cart_insert) Return ChildCart objects filtered by the cart_insert column
- * @method     ChildCart[]|Collection findByUpdate(string $cart_update) Return ChildCart objects filtered by the cart_update column
- * @psalm-method Collection&\Traversable<ChildCart> findByUpdate(string $cart_update) Return ChildCart objects filtered by the cart_update column
- * @method     ChildCart[]|Collection findByCreatedAt(string $cart_created) Return ChildCart objects filtered by the cart_created column
- * @psalm-method Collection&\Traversable<ChildCart> findByCreatedAt(string $cart_created) Return ChildCart objects filtered by the cart_created column
- * @method     ChildCart[]|Collection findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
- * @psalm-method Collection&\Traversable<ChildCart> findByUpdatedAt(string $cart_updated) Return ChildCart objects filtered by the cart_updated column
+ *
+ * @method     ChildCart[]|Collection findById(int|array<int> $cart_id) Return ChildCart objects filtered by the cart_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findById(int|array<int> $cart_id) Return ChildCart objects filtered by the cart_id column
+ * @method     ChildCart[]|Collection findByUid(string|array<string> $cart_uid) Return ChildCart objects filtered by the cart_uid column
+ * @psalm-method Collection&\Traversable<ChildCart> findByUid(string|array<string> $cart_uid) Return ChildCart objects filtered by the cart_uid column
+ * @method     ChildCart[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCart objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findBySiteId(int|array<int> $site_id) Return ChildCart objects filtered by the site_id column
+ * @method     ChildCart[]|Collection findByUserId(int|array<int> $user_id) Return ChildCart objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findByUserId(int|array<int> $user_id) Return ChildCart objects filtered by the user_id column
+ * @method     ChildCart[]|Collection findBySellerId(int|array<int> $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findBySellerId(int|array<int> $cart_seller_id) Return ChildCart objects filtered by the cart_seller_id column
+ * @method     ChildCart[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildCart objects filtered by the customer_id column
+ * @psalm-method Collection&\Traversable<ChildCart> findByCustomerId(int|array<int> $customer_id) Return ChildCart objects filtered by the customer_id column
+ * @method     ChildCart[]|Collection findByTitle(string|array<string> $cart_title) Return ChildCart objects filtered by the cart_title column
+ * @psalm-method Collection&\Traversable<ChildCart> findByTitle(string|array<string> $cart_title) Return ChildCart objects filtered by the cart_title column
+ * @method     ChildCart[]|Collection findByType(string|array<string> $cart_type) Return ChildCart objects filtered by the cart_type column
+ * @psalm-method Collection&\Traversable<ChildCart> findByType(string|array<string> $cart_type) Return ChildCart objects filtered by the cart_type column
+ * @method     ChildCart[]|Collection findByIp(string|array<string> $cart_ip) Return ChildCart objects filtered by the cart_ip column
+ * @psalm-method Collection&\Traversable<ChildCart> findByIp(string|array<string> $cart_ip) Return ChildCart objects filtered by the cart_ip column
+ * @method     ChildCart[]|Collection findByCount(int|array<int> $cart_count) Return ChildCart objects filtered by the cart_count column
+ * @psalm-method Collection&\Traversable<ChildCart> findByCount(int|array<int> $cart_count) Return ChildCart objects filtered by the cart_count column
+ * @method     ChildCart[]|Collection findByAmount(int|array<int> $cart_amount) Return ChildCart objects filtered by the cart_amount column
+ * @psalm-method Collection&\Traversable<ChildCart> findByAmount(int|array<int> $cart_amount) Return ChildCart objects filtered by the cart_amount column
+ * @method     ChildCart[]|Collection findByAsAGift(string|array<string> $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
+ * @psalm-method Collection&\Traversable<ChildCart> findByAsAGift(string|array<string> $cart_as_a_gift) Return ChildCart objects filtered by the cart_as_a_gift column
+ * @method     ChildCart[]|Collection findByGiftRecipient(int|array<int> $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
+ * @psalm-method Collection&\Traversable<ChildCart> findByGiftRecipient(int|array<int> $cart_gift_recipient) Return ChildCart objects filtered by the cart_gift_recipient column
+ * @method     ChildCart[]|Collection findByDate(string|array<string> $cart_date) Return ChildCart objects filtered by the cart_date column
+ * @psalm-method Collection&\Traversable<ChildCart> findByDate(string|array<string> $cart_date) Return ChildCart objects filtered by the cart_date column
+ * @method     ChildCart[]|Collection findByInsert(string|array<string> $cart_insert) Return ChildCart objects filtered by the cart_insert column
+ * @psalm-method Collection&\Traversable<ChildCart> findByInsert(string|array<string> $cart_insert) Return ChildCart objects filtered by the cart_insert column
+ * @method     ChildCart[]|Collection findByUpdate(string|array<string> $cart_update) Return ChildCart objects filtered by the cart_update column
+ * @psalm-method Collection&\Traversable<ChildCart> findByUpdate(string|array<string> $cart_update) Return ChildCart objects filtered by the cart_update column
+ * @method     ChildCart[]|Collection findByCreatedAt(string|array<string> $cart_created) Return ChildCart objects filtered by the cart_created column
+ * @psalm-method Collection&\Traversable<ChildCart> findByCreatedAt(string|array<string> $cart_created) Return ChildCart objects filtered by the cart_created column
+ * @method     ChildCart[]|Collection findByUpdatedAt(string|array<string> $cart_updated) Return ChildCart objects filtered by the cart_updated column
+ * @psalm-method Collection&\Traversable<ChildCart> findByUpdatedAt(string|array<string> $cart_updated) Return ChildCart objects filtered by the cart_updated column
+ *
  * @method     ChildCart[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCart> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CartQuery extends ModelCriteria
 {
@@ -1181,20 +1180,23 @@ abstract class CartQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Site table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
     public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1209,8 +1211,46 @@ abstract class CartQuery extends ModelCriteria
      */
     public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\User object
      *
@@ -1315,20 +1355,23 @@ abstract class CartQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to User table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\UserQuery The inner query object of the EXISTS statement
      */
     public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1343,8 +1386,46 @@ abstract class CartQuery extends ModelCriteria
      */
     public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

@@ -46,6 +46,11 @@ class PeopleTableMap extends TableMap
     public const TABLE_NAME = 'people';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'People';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\People';
@@ -574,7 +579,7 @@ class PeopleTableMap extends TableMap
             PeopleTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

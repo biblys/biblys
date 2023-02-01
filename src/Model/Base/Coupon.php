@@ -857,8 +857,8 @@ abstract class Coupon implements ActiveRecordInterface
                 $col = null;
             }
             $this->coupon_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1129,39 +1129,51 @@ abstract class Coupon implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'coupon_id':
                         $stmt->bindValue($identifier, $this->coupon_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'coupon_code':
                         $stmt->bindValue($identifier, $this->coupon_code, PDO::PARAM_STR);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'stock_id':
                         $stmt->bindValue($identifier, $this->stock_id, PDO::PARAM_INT);
+
                         break;
                     case 'coupon_amount':
                         $stmt->bindValue($identifier, $this->coupon_amount, PDO::PARAM_INT);
+
                         break;
                     case 'coupon_note':
                         $stmt->bindValue($identifier, $this->coupon_note, PDO::PARAM_STR);
+
                         break;
                     case 'coupon_used':
                         $stmt->bindValue($identifier, $this->coupon_used ? $this->coupon_used->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'coupon_creator':
                         $stmt->bindValue($identifier, $this->coupon_creator, PDO::PARAM_INT);
+
                         break;
                     case 'coupon_insert':
                         $stmt->bindValue($identifier, $this->coupon_insert ? $this->coupon_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'coupon_update':
                         $stmt->bindValue($identifier, $this->coupon_update ? $this->coupon_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

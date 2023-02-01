@@ -697,8 +697,8 @@ abstract class Wish implements ActiveRecordInterface
                 $col = null;
             }
             $this->wish_bought = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -957,27 +957,35 @@ abstract class Wish implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'wish_id':
                         $stmt->bindValue($identifier, $this->wish_id, PDO::PARAM_INT);
+
                         break;
                     case 'wishlist_id':
                         $stmt->bindValue($identifier, $this->wishlist_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'wish_created':
                         $stmt->bindValue($identifier, $this->wish_created ? $this->wish_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'wish_updated':
                         $stmt->bindValue($identifier, $this->wish_updated ? $this->wish_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'wish_bought':
                         $stmt->bindValue($identifier, $this->wish_bought ? $this->wish_bought->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

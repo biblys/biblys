@@ -46,6 +46,11 @@ class CategoryTableMap extends TableMap
     public const TABLE_NAME = 'categories';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Category';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Category';
@@ -399,7 +404,7 @@ class CategoryTableMap extends TableMap
             CategoryTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -642,8 +642,8 @@ abstract class InventoryItem implements ActiveRecordInterface
                 $col = null;
             }
             $this->ii_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -899,24 +899,31 @@ abstract class InventoryItem implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'ii_id':
                         $stmt->bindValue($identifier, $this->ii_id, PDO::PARAM_INT);
+
                         break;
                     case 'inventory_id':
                         $stmt->bindValue($identifier, $this->inventory_id, PDO::PARAM_INT);
+
                         break;
                     case 'ii_ean':
                         $stmt->bindValue($identifier, $this->ii_ean, PDO::PARAM_STR);
+
                         break;
                     case 'ii_quantity':
                         $stmt->bindValue($identifier, $this->ii_quantity, PDO::PARAM_INT);
+
                         break;
                     case 'ii_stock':
                         $stmt->bindValue($identifier, $this->ii_stock, PDO::PARAM_INT);
+
                         break;
                     case 'ii_created':
                         $stmt->bindValue($identifier, $this->ii_created ? $this->ii_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'ii_updated':
                         $stmt->bindValue($identifier, $this->ii_updated ? $this->ii_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

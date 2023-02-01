@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'session' table.
- *
- *
+ * Base class that represents a query for the `session` table.
  *
  * @method     ChildSessionQuery orderById($order = Criteria::ASC) Order by the session_id column
  * @method     ChildSessionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -76,8 +74,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSession|null findOneByToken(string $session_token) Return the first ChildSession filtered by the session_token column
  * @method     ChildSession|null findOneByCreatedAt(string $session_created) Return the first ChildSession filtered by the session_created column
  * @method     ChildSession|null findOneByExpiresAt(string $session_expires) Return the first ChildSession filtered by the session_expires column
- * @method     ChildSession|null findOneByUpdatedAt(string $session_updated) Return the first ChildSession filtered by the session_updated column *
-
+ * @method     ChildSession|null findOneByUpdatedAt(string $session_updated) Return the first ChildSession filtered by the session_updated column
+ *
  * @method     ChildSession requirePk($key, ?ConnectionInterface $con = null) Return the ChildSession by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSession requireOne(?ConnectionInterface $con = null) Return the first ChildSession matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -91,23 +89,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSession[]|Collection find(?ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildSession> find(?ConnectionInterface $con = null) Return ChildSession objects based on current ModelCriteria
- * @method     ChildSession[]|Collection findById(int $session_id) Return ChildSession objects filtered by the session_id column
- * @psalm-method Collection&\Traversable<ChildSession> findById(int $session_id) Return ChildSession objects filtered by the session_id column
- * @method     ChildSession[]|Collection findBySiteId(int $site_id) Return ChildSession objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildSession> findBySiteId(int $site_id) Return ChildSession objects filtered by the site_id column
- * @method     ChildSession[]|Collection findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildSession> findByUserId(int $user_id) Return ChildSession objects filtered by the user_id column
- * @method     ChildSession[]|Collection findByToken(string $session_token) Return ChildSession objects filtered by the session_token column
- * @psalm-method Collection&\Traversable<ChildSession> findByToken(string $session_token) Return ChildSession objects filtered by the session_token column
- * @method     ChildSession[]|Collection findByCreatedAt(string $session_created) Return ChildSession objects filtered by the session_created column
- * @psalm-method Collection&\Traversable<ChildSession> findByCreatedAt(string $session_created) Return ChildSession objects filtered by the session_created column
- * @method     ChildSession[]|Collection findByExpiresAt(string $session_expires) Return ChildSession objects filtered by the session_expires column
- * @psalm-method Collection&\Traversable<ChildSession> findByExpiresAt(string $session_expires) Return ChildSession objects filtered by the session_expires column
- * @method     ChildSession[]|Collection findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
- * @psalm-method Collection&\Traversable<ChildSession> findByUpdatedAt(string $session_updated) Return ChildSession objects filtered by the session_updated column
+ *
+ * @method     ChildSession[]|Collection findById(int|array<int> $session_id) Return ChildSession objects filtered by the session_id column
+ * @psalm-method Collection&\Traversable<ChildSession> findById(int|array<int> $session_id) Return ChildSession objects filtered by the session_id column
+ * @method     ChildSession[]|Collection findBySiteId(int|array<int> $site_id) Return ChildSession objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSession> findBySiteId(int|array<int> $site_id) Return ChildSession objects filtered by the site_id column
+ * @method     ChildSession[]|Collection findByUserId(int|array<int> $user_id) Return ChildSession objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildSession> findByUserId(int|array<int> $user_id) Return ChildSession objects filtered by the user_id column
+ * @method     ChildSession[]|Collection findByToken(string|array<string> $session_token) Return ChildSession objects filtered by the session_token column
+ * @psalm-method Collection&\Traversable<ChildSession> findByToken(string|array<string> $session_token) Return ChildSession objects filtered by the session_token column
+ * @method     ChildSession[]|Collection findByCreatedAt(string|array<string> $session_created) Return ChildSession objects filtered by the session_created column
+ * @psalm-method Collection&\Traversable<ChildSession> findByCreatedAt(string|array<string> $session_created) Return ChildSession objects filtered by the session_created column
+ * @method     ChildSession[]|Collection findByExpiresAt(string|array<string> $session_expires) Return ChildSession objects filtered by the session_expires column
+ * @psalm-method Collection&\Traversable<ChildSession> findByExpiresAt(string|array<string> $session_expires) Return ChildSession objects filtered by the session_expires column
+ * @method     ChildSession[]|Collection findByUpdatedAt(string|array<string> $session_updated) Return ChildSession objects filtered by the session_updated column
+ * @psalm-method Collection&\Traversable<ChildSession> findByUpdatedAt(string|array<string> $session_updated) Return ChildSession objects filtered by the session_updated column
+ *
  * @method     ChildSession[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSession> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class SessionQuery extends ModelCriteria
 {
@@ -698,20 +697,23 @@ abstract class SessionQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to User table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\UserQuery The inner query object of the EXISTS statement
      */
     public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -726,8 +728,46 @@ abstract class SessionQuery extends ModelCriteria
      */
     public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Site object
      *
@@ -832,20 +872,23 @@ abstract class SessionQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Site table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
     public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -860,8 +903,46 @@ abstract class SessionQuery extends ModelCriteria
      */
     public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

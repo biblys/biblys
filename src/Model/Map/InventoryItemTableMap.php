@@ -46,6 +46,11 @@ class InventoryItemTableMap extends TableMap
     public const TABLE_NAME = 'inventory_item';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'InventoryItem';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\InventoryItem';
@@ -343,7 +348,7 @@ class InventoryItemTableMap extends TableMap
             InventoryItemTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -2082,8 +2082,8 @@ abstract class User implements ActiveRecordInterface
                 $col = null;
             }
             $this->user_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -2525,114 +2525,151 @@ abstract class User implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'Email':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
+
                         break;
                     case 'user_password':
                         $stmt->bindValue($identifier, $this->user_password, PDO::PARAM_STR);
+
                         break;
                     case 'user_key':
                         $stmt->bindValue($identifier, $this->user_key, PDO::PARAM_STR);
+
                         break;
                     case 'email_key':
                         $stmt->bindValue($identifier, $this->email_key, PDO::PARAM_STR);
+
                         break;
                     case 'facebook_uid':
                         $stmt->bindValue($identifier, $this->facebook_uid, PDO::PARAM_INT);
+
                         break;
                     case 'user_screen_name':
                         $stmt->bindValue($identifier, $this->user_screen_name, PDO::PARAM_STR);
+
                         break;
                     case 'user_slug':
                         $stmt->bindValue($identifier, $this->user_slug, PDO::PARAM_STR);
+
                         break;
                     case 'user_wishlist_ship':
                         $stmt->bindValue($identifier, (int) $this->user_wishlist_ship, PDO::PARAM_INT);
+
                         break;
                     case 'user_top':
                         $stmt->bindValue($identifier, (int) $this->user_top, PDO::PARAM_INT);
+
                         break;
                     case 'user_biblio':
                         $stmt->bindValue($identifier, (int) $this->user_biblio, PDO::PARAM_INT);
+
                         break;
                     case 'adresse_ip':
                         $stmt->bindValue($identifier, $this->adresse_ip, PDO::PARAM_STR);
+
                         break;
                     case 'recaptcha_score':
                         $stmt->bindValue($identifier, $this->recaptcha_score, PDO::PARAM_STR);
+
                         break;
                     case 'DateInscription':
                         $stmt->bindValue($identifier, $this->dateinscription ? $this->dateinscription->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'DateConnexion':
                         $stmt->bindValue($identifier, $this->dateconnexion ? $this->dateconnexion->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_civilite':
                         $stmt->bindValue($identifier, $this->user_civilite, PDO::PARAM_STR);
+
                         break;
                     case 'user_nom':
                         $stmt->bindValue($identifier, $this->user_nom, PDO::PARAM_STR);
+
                         break;
                     case 'user_prenom':
                         $stmt->bindValue($identifier, $this->user_prenom, PDO::PARAM_STR);
+
                         break;
                     case 'user_adresse1':
                         $stmt->bindValue($identifier, $this->user_adresse1, PDO::PARAM_STR);
+
                         break;
                     case 'user_adresse2':
                         $stmt->bindValue($identifier, $this->user_adresse2, PDO::PARAM_STR);
+
                         break;
                     case 'user_codepostal':
                         $stmt->bindValue($identifier, $this->user_codepostal, PDO::PARAM_STR);
+
                         break;
                     case 'user_ville':
                         $stmt->bindValue($identifier, $this->user_ville, PDO::PARAM_STR);
+
                         break;
                     case 'user_pays':
                         $stmt->bindValue($identifier, $this->user_pays, PDO::PARAM_STR);
+
                         break;
                     case 'user_telephone':
                         $stmt->bindValue($identifier, $this->user_telephone, PDO::PARAM_STR);
+
                         break;
                     case 'user_pref_articles_show':
                         $stmt->bindValue($identifier, $this->user_pref_articles_show, PDO::PARAM_STR);
+
                         break;
                     case 'user_fb_id':
                         $stmt->bindValue($identifier, $this->user_fb_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_fb_token':
                         $stmt->bindValue($identifier, $this->user_fb_token, PDO::PARAM_STR);
+
                         break;
                     case 'country_id':
                         $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_password_reset_token':
                         $stmt->bindValue($identifier, $this->user_password_reset_token, PDO::PARAM_STR);
+
                         break;
                     case 'user_password_reset_token_created':
                         $stmt->bindValue($identifier, $this->user_password_reset_token_created ? $this->user_password_reset_token_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'user_update':
                         $stmt->bindValue($identifier, $this->user_update ? $this->user_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'user_created':
                         $stmt->bindValue($identifier, $this->user_created ? $this->user_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'user_updated':
                         $stmt->bindValue($identifier, $this->user_updated ? $this->user_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

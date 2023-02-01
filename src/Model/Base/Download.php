@@ -817,8 +817,8 @@ abstract class Download implements ActiveRecordInterface
                 $col = null;
             }
             $this->download_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1086,36 +1086,47 @@ abstract class Download implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'download_id':
                         $stmt->bindValue($identifier, $this->download_id, PDO::PARAM_INT);
+
                         break;
                     case 'file_id':
                         $stmt->bindValue($identifier, $this->file_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'book_id':
                         $stmt->bindValue($identifier, $this->book_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'download_filetype':
                         $stmt->bindValue($identifier, $this->download_filetype, PDO::PARAM_STR);
+
                         break;
                     case 'download_version':
                         $stmt->bindValue($identifier, $this->download_version, PDO::PARAM_STR);
+
                         break;
                     case 'download_ip':
                         $stmt->bindValue($identifier, $this->download_ip, PDO::PARAM_STR);
+
                         break;
                     case 'download_date':
                         $stmt->bindValue($identifier, $this->download_date ? $this->download_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'download_created':
                         $stmt->bindValue($identifier, $this->download_created ? $this->download_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'download_updated':
                         $stmt->bindValue($identifier, $this->download_updated ? $this->download_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

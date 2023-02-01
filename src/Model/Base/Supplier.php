@@ -886,8 +886,8 @@ abstract class Supplier implements ActiveRecordInterface
                 $col = null;
             }
             $this->supplier_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1155,36 +1155,47 @@ abstract class Supplier implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'supplier_id':
                         $stmt->bindValue($identifier, $this->supplier_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_name':
                         $stmt->bindValue($identifier, $this->supplier_name, PDO::PARAM_STR);
+
                         break;
                     case 'supplier_gln':
                         $stmt->bindValue($identifier, $this->supplier_gln, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_remise':
                         $stmt->bindValue($identifier, $this->supplier_remise, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_notva':
                         $stmt->bindValue($identifier, (int) $this->supplier_notva, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_on_order':
                         $stmt->bindValue($identifier, (int) $this->supplier_on_order, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_insert':
                         $stmt->bindValue($identifier, $this->supplier_insert ? $this->supplier_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'supplier_update':
                         $stmt->bindValue($identifier, $this->supplier_update ? $this->supplier_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'supplier_created':
                         $stmt->bindValue($identifier, $this->supplier_created ? $this->supplier_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'supplier_updated':
                         $stmt->bindValue($identifier, $this->supplier_updated ? $this->supplier_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

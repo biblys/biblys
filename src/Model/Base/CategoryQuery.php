@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'categories' table.
- *
- *
+ * Base class that represents a query for the `categories` table.
  *
  * @method     ChildCategoryQuery orderById($order = Criteria::ASC) Order by the category_id column
  * @method     ChildCategoryQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -64,8 +62,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCategory|null findOneByInsert(string $category_insert) Return the first ChildCategory filtered by the category_insert column
  * @method     ChildCategory|null findOneByUpdate(string $category_update) Return the first ChildCategory filtered by the category_update column
  * @method     ChildCategory|null findOneByCreatedAt(string $category_created) Return the first ChildCategory filtered by the category_created column
- * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column *
-
+ * @method     ChildCategory|null findOneByUpdatedAt(string $category_updated) Return the first ChildCategory filtered by the category_updated column
+ *
  * @method     ChildCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCategory requireOne(?ConnectionInterface $con = null) Return the first ChildCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -83,31 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCategory> find(?ConnectionInterface $con = null) Return ChildCategory objects based on current ModelCriteria
- * @method     ChildCategory[]|Collection findById(int $category_id) Return ChildCategory objects filtered by the category_id column
- * @psalm-method Collection&\Traversable<ChildCategory> findById(int $category_id) Return ChildCategory objects filtered by the category_id column
- * @method     ChildCategory[]|Collection findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCategory> findBySiteId(int $site_id) Return ChildCategory objects filtered by the site_id column
- * @method     ChildCategory[]|Collection findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
- * @psalm-method Collection&\Traversable<ChildCategory> findByName(string $category_name) Return ChildCategory objects filtered by the category_name column
- * @method     ChildCategory[]|Collection findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUrl(string $category_url) Return ChildCategory objects filtered by the category_url column
- * @method     ChildCategory[]|Collection findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @psalm-method Collection&\Traversable<ChildCategory> findByDesc(string $category_desc) Return ChildCategory objects filtered by the category_desc column
- * @method     ChildCategory[]|Collection findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
- * @psalm-method Collection&\Traversable<ChildCategory> findByOrder(int $category_order) Return ChildCategory objects filtered by the category_order column
- * @method     ChildCategory[]|Collection findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @psalm-method Collection&\Traversable<ChildCategory> findByHidden(boolean $category_hidden) Return ChildCategory objects filtered by the category_hidden column
- * @method     ChildCategory[]|Collection findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @psalm-method Collection&\Traversable<ChildCategory> findByInsert(string $category_insert) Return ChildCategory objects filtered by the category_insert column
- * @method     ChildCategory[]|Collection findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUpdate(string $category_update) Return ChildCategory objects filtered by the category_update column
- * @method     ChildCategory[]|Collection findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
- * @psalm-method Collection&\Traversable<ChildCategory> findByCreatedAt(string $category_created) Return ChildCategory objects filtered by the category_created column
- * @method     ChildCategory[]|Collection findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
- * @psalm-method Collection&\Traversable<ChildCategory> findByUpdatedAt(string $category_updated) Return ChildCategory objects filtered by the category_updated column
+ *
+ * @method     ChildCategory[]|Collection findById(int|array<int> $category_id) Return ChildCategory objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildCategory> findById(int|array<int> $category_id) Return ChildCategory objects filtered by the category_id column
+ * @method     ChildCategory[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCategory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCategory> findBySiteId(int|array<int> $site_id) Return ChildCategory objects filtered by the site_id column
+ * @method     ChildCategory[]|Collection findByName(string|array<string> $category_name) Return ChildCategory objects filtered by the category_name column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByName(string|array<string> $category_name) Return ChildCategory objects filtered by the category_name column
+ * @method     ChildCategory[]|Collection findByUrl(string|array<string> $category_url) Return ChildCategory objects filtered by the category_url column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUrl(string|array<string> $category_url) Return ChildCategory objects filtered by the category_url column
+ * @method     ChildCategory[]|Collection findByDesc(string|array<string> $category_desc) Return ChildCategory objects filtered by the category_desc column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByDesc(string|array<string> $category_desc) Return ChildCategory objects filtered by the category_desc column
+ * @method     ChildCategory[]|Collection findByOrder(int|array<int> $category_order) Return ChildCategory objects filtered by the category_order column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByOrder(int|array<int> $category_order) Return ChildCategory objects filtered by the category_order column
+ * @method     ChildCategory[]|Collection findByHidden(boolean|array<boolean> $category_hidden) Return ChildCategory objects filtered by the category_hidden column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByHidden(boolean|array<boolean> $category_hidden) Return ChildCategory objects filtered by the category_hidden column
+ * @method     ChildCategory[]|Collection findByInsert(string|array<string> $category_insert) Return ChildCategory objects filtered by the category_insert column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByInsert(string|array<string> $category_insert) Return ChildCategory objects filtered by the category_insert column
+ * @method     ChildCategory[]|Collection findByUpdate(string|array<string> $category_update) Return ChildCategory objects filtered by the category_update column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUpdate(string|array<string> $category_update) Return ChildCategory objects filtered by the category_update column
+ * @method     ChildCategory[]|Collection findByCreatedAt(string|array<string> $category_created) Return ChildCategory objects filtered by the category_created column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByCreatedAt(string|array<string> $category_created) Return ChildCategory objects filtered by the category_created column
+ * @method     ChildCategory[]|Collection findByUpdatedAt(string|array<string> $category_updated) Return ChildCategory objects filtered by the category_updated column
+ * @psalm-method Collection&\Traversable<ChildCategory> findByUpdatedAt(string|array<string> $category_updated) Return ChildCategory objects filtered by the category_updated column
+ *
  * @method     ChildCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CategoryQuery extends ModelCriteria
 {
@@ -532,7 +531,7 @@ abstract class CategoryQuery extends ModelCriteria
     public function filterByHidden($hidden = null, ?string $comparison = null)
     {
         if (is_string($hidden)) {
-            $hidden = in_array(strtolower($hidden), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $hidden = in_array(strtolower($hidden), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(CategoryTableMap::COL_CATEGORY_HIDDEN, $hidden, $comparison);

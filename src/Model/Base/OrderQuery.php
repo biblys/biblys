@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'orders' table.
- *
- *
+ * Base class that represents a query for the `orders` table.
  *
  * @method     ChildOrderQuery orderById($order = Criteria::ASC) Order by the order_id column
  * @method     ChildOrderQuery orderBySlug($order = Criteria::ASC) Order by the order_url column
@@ -205,8 +203,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByCancelDate(string $order_cancel_date) Return the first ChildOrder filtered by the order_cancel_date column
  * @method     ChildOrder|null findOneByUpdate(string $order_update) Return the first ChildOrder filtered by the order_update column
  * @method     ChildOrder|null findOneByCreatedAt(string $order_created) Return the first ChildOrder filtered by the order_created column
- * @method     ChildOrder|null findOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column *
-
+ * @method     ChildOrder|null findOneByUpdatedAt(string $order_updated) Return the first ChildOrder filtered by the order_updated column
+ *
  * @method     ChildOrder requirePk($key, ?ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOne(?ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -263,109 +261,110 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOrder[]|Collection find(?ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildOrder> find(?ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
- * @method     ChildOrder[]|Collection findById(int $order_id) Return ChildOrder objects filtered by the order_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findById(int $order_id) Return ChildOrder objects filtered by the order_id column
- * @method     ChildOrder[]|Collection findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
- * @psalm-method Collection&\Traversable<ChildOrder> findBySlug(string $order_url) Return ChildOrder objects filtered by the order_url column
- * @method     ChildOrder[]|Collection findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findBySiteId(int $site_id) Return ChildOrder objects filtered by the site_id column
- * @method     ChildOrder[]|Collection findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUserId(int $user_id) Return ChildOrder objects filtered by the user_id column
- * @method     ChildOrder[]|Collection findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCustomerId(int $customer_id) Return ChildOrder objects filtered by the customer_id column
- * @method     ChildOrder[]|Collection findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findBySellerId(int $seller_id) Return ChildOrder objects filtered by the seller_id column
- * @method     ChildOrder[]|Collection findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
- * @psalm-method Collection&\Traversable<ChildOrder> findByType(string $order_type) Return ChildOrder objects filtered by the order_type column
- * @method     ChildOrder[]|Collection findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
- * @psalm-method Collection&\Traversable<ChildOrder> findByAsAGift(string $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
- * @method     ChildOrder[]|Collection findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
- * @psalm-method Collection&\Traversable<ChildOrder> findByGiftRecipient(int $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
- * @method     ChildOrder[]|Collection findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
- * @psalm-method Collection&\Traversable<ChildOrder> findByAmount(int $order_amount) Return ChildOrder objects filtered by the order_amount column
- * @method     ChildOrder[]|Collection findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
- * @psalm-method Collection&\Traversable<ChildOrder> findByDiscount(int $order_discount) Return ChildOrder objects filtered by the order_discount column
- * @method     ChildOrder[]|Collection findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
- * @psalm-method Collection&\Traversable<ChildOrder> findByAmountTobepaid(int $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
- * @method     ChildOrder[]|Collection findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findByShippingId(int $shipping_id) Return ChildOrder objects filtered by the shipping_id column
- * @method     ChildOrder[]|Collection findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCountryId(int $country_id) Return ChildOrder objects filtered by the country_id column
- * @method     ChildOrder[]|Collection findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
- * @psalm-method Collection&\Traversable<ChildOrder> findByShipping(int $order_shipping) Return ChildOrder objects filtered by the order_shipping column
- * @method     ChildOrder[]|Collection findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
- * @psalm-method Collection&\Traversable<ChildOrder> findByShippingMode(string $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
- * @method     ChildOrder[]|Collection findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
- * @psalm-method Collection&\Traversable<ChildOrder> findByTrackNumber(string $order_track_number) Return ChildOrder objects filtered by the order_track_number column
- * @method     ChildOrder[]|Collection findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentMode(string $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
- * @method     ChildOrder[]|Collection findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCash(int $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
- * @method     ChildOrder[]|Collection findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCheque(int $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
- * @method     ChildOrder[]|Collection findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentTransfer(int $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
- * @method     ChildOrder[]|Collection findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCard(int $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
- * @method     ChildOrder[]|Collection findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPaypal(int $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
- * @method     ChildOrder[]|Collection findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPayplug(int $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
- * @method     ChildOrder[]|Collection findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentLeft(int $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
- * @method     ChildOrder[]|Collection findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
- * @psalm-method Collection&\Traversable<ChildOrder> findByTitle(string $order_title) Return ChildOrder objects filtered by the order_title column
- * @method     ChildOrder[]|Collection findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
- * @psalm-method Collection&\Traversable<ChildOrder> findByFirstname(string $order_firstname) Return ChildOrder objects filtered by the order_firstname column
- * @method     ChildOrder[]|Collection findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
- * @psalm-method Collection&\Traversable<ChildOrder> findByLastname(string $order_lastname) Return ChildOrder objects filtered by the order_lastname column
- * @method     ChildOrder[]|Collection findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
- * @psalm-method Collection&\Traversable<ChildOrder> findByAddress1(string $order_address1) Return ChildOrder objects filtered by the order_address1 column
- * @method     ChildOrder[]|Collection findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
- * @psalm-method Collection&\Traversable<ChildOrder> findByAddress2(string $order_address2) Return ChildOrder objects filtered by the order_address2 column
- * @method     ChildOrder[]|Collection findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPostalcode(string $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
- * @method     ChildOrder[]|Collection findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCity(string $order_city) Return ChildOrder objects filtered by the order_city column
- * @method     ChildOrder[]|Collection findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCountry(string $order_country) Return ChildOrder objects filtered by the order_country column
- * @method     ChildOrder[]|Collection findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
- * @psalm-method Collection&\Traversable<ChildOrder> findByEmail(string $order_email) Return ChildOrder objects filtered by the order_email column
- * @method     ChildOrder[]|Collection findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPhone(string $order_phone) Return ChildOrder objects filtered by the order_phone column
- * @method     ChildOrder[]|Collection findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
- * @psalm-method Collection&\Traversable<ChildOrder> findByComment(string $order_comment) Return ChildOrder objects filtered by the order_comment column
- * @method     ChildOrder[]|Collection findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmz(string $order_utmz) Return ChildOrder objects filtered by the order_utmz column
- * @method     ChildOrder[]|Collection findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmSource(string $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @method     ChildOrder[]|Collection findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmCampaign(string $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @method     ChildOrder[]|Collection findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmMedium(string $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
- * @method     ChildOrder[]|Collection findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
- * @psalm-method Collection&\Traversable<ChildOrder> findByReferer(string $order_referer) Return ChildOrder objects filtered by the order_referer column
- * @method     ChildOrder[]|Collection findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
- * @psalm-method Collection&\Traversable<ChildOrder> findByInsert(string $order_insert) Return ChildOrder objects filtered by the order_insert column
- * @method     ChildOrder[]|Collection findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
- * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentDate(string $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
- * @method     ChildOrder[]|Collection findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
- * @psalm-method Collection&\Traversable<ChildOrder> findByShippingDate(string $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
- * @method     ChildOrder[]|Collection findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
- * @psalm-method Collection&\Traversable<ChildOrder> findByFollowupDate(string $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
- * @method     ChildOrder[]|Collection findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
- * @psalm-method Collection&\Traversable<ChildOrder> findByConfirmationDate(string $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
- * @method     ChildOrder[]|Collection findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCancelDate(string $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
- * @method     ChildOrder[]|Collection findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUpdate(string $order_update) Return ChildOrder objects filtered by the order_update column
- * @method     ChildOrder[]|Collection findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
- * @psalm-method Collection&\Traversable<ChildOrder> findByCreatedAt(string $order_created) Return ChildOrder objects filtered by the order_created column
- * @method     ChildOrder[]|Collection findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUpdatedAt(string $order_updated) Return ChildOrder objects filtered by the order_updated column
+ *
+ * @method     ChildOrder[]|Collection findById(int|array<int> $order_id) Return ChildOrder objects filtered by the order_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findById(int|array<int> $order_id) Return ChildOrder objects filtered by the order_id column
+ * @method     ChildOrder[]|Collection findBySlug(string|array<string> $order_url) Return ChildOrder objects filtered by the order_url column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySlug(string|array<string> $order_url) Return ChildOrder objects filtered by the order_url column
+ * @method     ChildOrder[]|Collection findBySiteId(int|array<int> $site_id) Return ChildOrder objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySiteId(int|array<int> $site_id) Return ChildOrder objects filtered by the site_id column
+ * @method     ChildOrder[]|Collection findByUserId(int|array<int> $user_id) Return ChildOrder objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUserId(int|array<int> $user_id) Return ChildOrder objects filtered by the user_id column
+ * @method     ChildOrder[]|Collection findByCustomerId(int|array<int> $customer_id) Return ChildOrder objects filtered by the customer_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCustomerId(int|array<int> $customer_id) Return ChildOrder objects filtered by the customer_id column
+ * @method     ChildOrder[]|Collection findBySellerId(int|array<int> $seller_id) Return ChildOrder objects filtered by the seller_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findBySellerId(int|array<int> $seller_id) Return ChildOrder objects filtered by the seller_id column
+ * @method     ChildOrder[]|Collection findByType(string|array<string> $order_type) Return ChildOrder objects filtered by the order_type column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByType(string|array<string> $order_type) Return ChildOrder objects filtered by the order_type column
+ * @method     ChildOrder[]|Collection findByAsAGift(string|array<string> $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAsAGift(string|array<string> $order_as_a_gift) Return ChildOrder objects filtered by the order_as_a_gift column
+ * @method     ChildOrder[]|Collection findByGiftRecipient(int|array<int> $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByGiftRecipient(int|array<int> $order_gift_recipient) Return ChildOrder objects filtered by the order_gift_recipient column
+ * @method     ChildOrder[]|Collection findByAmount(int|array<int> $order_amount) Return ChildOrder objects filtered by the order_amount column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAmount(int|array<int> $order_amount) Return ChildOrder objects filtered by the order_amount column
+ * @method     ChildOrder[]|Collection findByDiscount(int|array<int> $order_discount) Return ChildOrder objects filtered by the order_discount column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByDiscount(int|array<int> $order_discount) Return ChildOrder objects filtered by the order_discount column
+ * @method     ChildOrder[]|Collection findByAmountTobepaid(int|array<int> $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAmountTobepaid(int|array<int> $order_amount_tobepaid) Return ChildOrder objects filtered by the order_amount_tobepaid column
+ * @method     ChildOrder[]|Collection findByShippingId(int|array<int> $shipping_id) Return ChildOrder objects filtered by the shipping_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingId(int|array<int> $shipping_id) Return ChildOrder objects filtered by the shipping_id column
+ * @method     ChildOrder[]|Collection findByCountryId(int|array<int> $country_id) Return ChildOrder objects filtered by the country_id column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCountryId(int|array<int> $country_id) Return ChildOrder objects filtered by the country_id column
+ * @method     ChildOrder[]|Collection findByShipping(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShipping(int|array<int> $order_shipping) Return ChildOrder objects filtered by the order_shipping column
+ * @method     ChildOrder[]|Collection findByShippingMode(string|array<string> $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingMode(string|array<string> $order_shipping_mode) Return ChildOrder objects filtered by the order_shipping_mode column
+ * @method     ChildOrder[]|Collection findByTrackNumber(string|array<string> $order_track_number) Return ChildOrder objects filtered by the order_track_number column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByTrackNumber(string|array<string> $order_track_number) Return ChildOrder objects filtered by the order_track_number column
+ * @method     ChildOrder[]|Collection findByPaymentMode(string|array<string> $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentMode(string|array<string> $order_payment_mode) Return ChildOrder objects filtered by the order_payment_mode column
+ * @method     ChildOrder[]|Collection findByPaymentCash(int|array<int> $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCash(int|array<int> $order_payment_cash) Return ChildOrder objects filtered by the order_payment_cash column
+ * @method     ChildOrder[]|Collection findByPaymentCheque(int|array<int> $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCheque(int|array<int> $order_payment_cheque) Return ChildOrder objects filtered by the order_payment_cheque column
+ * @method     ChildOrder[]|Collection findByPaymentTransfer(int|array<int> $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentTransfer(int|array<int> $order_payment_transfer) Return ChildOrder objects filtered by the order_payment_transfer column
+ * @method     ChildOrder[]|Collection findByPaymentCard(int|array<int> $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentCard(int|array<int> $order_payment_card) Return ChildOrder objects filtered by the order_payment_card column
+ * @method     ChildOrder[]|Collection findByPaymentPaypal(int|array<int> $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPaypal(int|array<int> $order_payment_paypal) Return ChildOrder objects filtered by the order_payment_paypal column
+ * @method     ChildOrder[]|Collection findByPaymentPayplug(int|array<int> $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentPayplug(int|array<int> $order_payment_payplug) Return ChildOrder objects filtered by the order_payment_payplug column
+ * @method     ChildOrder[]|Collection findByPaymentLeft(int|array<int> $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentLeft(int|array<int> $order_payment_left) Return ChildOrder objects filtered by the order_payment_left column
+ * @method     ChildOrder[]|Collection findByTitle(string|array<string> $order_title) Return ChildOrder objects filtered by the order_title column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByTitle(string|array<string> $order_title) Return ChildOrder objects filtered by the order_title column
+ * @method     ChildOrder[]|Collection findByFirstname(string|array<string> $order_firstname) Return ChildOrder objects filtered by the order_firstname column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByFirstname(string|array<string> $order_firstname) Return ChildOrder objects filtered by the order_firstname column
+ * @method     ChildOrder[]|Collection findByLastname(string|array<string> $order_lastname) Return ChildOrder objects filtered by the order_lastname column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByLastname(string|array<string> $order_lastname) Return ChildOrder objects filtered by the order_lastname column
+ * @method     ChildOrder[]|Collection findByAddress1(string|array<string> $order_address1) Return ChildOrder objects filtered by the order_address1 column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAddress1(string|array<string> $order_address1) Return ChildOrder objects filtered by the order_address1 column
+ * @method     ChildOrder[]|Collection findByAddress2(string|array<string> $order_address2) Return ChildOrder objects filtered by the order_address2 column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByAddress2(string|array<string> $order_address2) Return ChildOrder objects filtered by the order_address2 column
+ * @method     ChildOrder[]|Collection findByPostalcode(string|array<string> $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPostalcode(string|array<string> $order_postalcode) Return ChildOrder objects filtered by the order_postalcode column
+ * @method     ChildOrder[]|Collection findByCity(string|array<string> $order_city) Return ChildOrder objects filtered by the order_city column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCity(string|array<string> $order_city) Return ChildOrder objects filtered by the order_city column
+ * @method     ChildOrder[]|Collection findByCountry(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCountry(string|array<string> $order_country) Return ChildOrder objects filtered by the order_country column
+ * @method     ChildOrder[]|Collection findByEmail(string|array<string> $order_email) Return ChildOrder objects filtered by the order_email column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByEmail(string|array<string> $order_email) Return ChildOrder objects filtered by the order_email column
+ * @method     ChildOrder[]|Collection findByPhone(string|array<string> $order_phone) Return ChildOrder objects filtered by the order_phone column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPhone(string|array<string> $order_phone) Return ChildOrder objects filtered by the order_phone column
+ * @method     ChildOrder[]|Collection findByComment(string|array<string> $order_comment) Return ChildOrder objects filtered by the order_comment column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByComment(string|array<string> $order_comment) Return ChildOrder objects filtered by the order_comment column
+ * @method     ChildOrder[]|Collection findByUtmz(string|array<string> $order_utmz) Return ChildOrder objects filtered by the order_utmz column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmz(string|array<string> $order_utmz) Return ChildOrder objects filtered by the order_utmz column
+ * @method     ChildOrder[]|Collection findByUtmSource(string|array<string> $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmSource(string|array<string> $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
+ * @method     ChildOrder[]|Collection findByUtmCampaign(string|array<string> $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmCampaign(string|array<string> $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
+ * @method     ChildOrder[]|Collection findByUtmMedium(string|array<string> $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUtmMedium(string|array<string> $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
+ * @method     ChildOrder[]|Collection findByReferer(string|array<string> $order_referer) Return ChildOrder objects filtered by the order_referer column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByReferer(string|array<string> $order_referer) Return ChildOrder objects filtered by the order_referer column
+ * @method     ChildOrder[]|Collection findByInsert(string|array<string> $order_insert) Return ChildOrder objects filtered by the order_insert column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByInsert(string|array<string> $order_insert) Return ChildOrder objects filtered by the order_insert column
+ * @method     ChildOrder[]|Collection findByPaymentDate(string|array<string> $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByPaymentDate(string|array<string> $order_payment_date) Return ChildOrder objects filtered by the order_payment_date column
+ * @method     ChildOrder[]|Collection findByShippingDate(string|array<string> $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByShippingDate(string|array<string> $order_shipping_date) Return ChildOrder objects filtered by the order_shipping_date column
+ * @method     ChildOrder[]|Collection findByFollowupDate(string|array<string> $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByFollowupDate(string|array<string> $order_followup_date) Return ChildOrder objects filtered by the order_followup_date column
+ * @method     ChildOrder[]|Collection findByConfirmationDate(string|array<string> $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByConfirmationDate(string|array<string> $order_confirmation_date) Return ChildOrder objects filtered by the order_confirmation_date column
+ * @method     ChildOrder[]|Collection findByCancelDate(string|array<string> $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCancelDate(string|array<string> $order_cancel_date) Return ChildOrder objects filtered by the order_cancel_date column
+ * @method     ChildOrder[]|Collection findByUpdate(string|array<string> $order_update) Return ChildOrder objects filtered by the order_update column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUpdate(string|array<string> $order_update) Return ChildOrder objects filtered by the order_update column
+ * @method     ChildOrder[]|Collection findByCreatedAt(string|array<string> $order_created) Return ChildOrder objects filtered by the order_created column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByCreatedAt(string|array<string> $order_created) Return ChildOrder objects filtered by the order_created column
+ * @method     ChildOrder[]|Collection findByUpdatedAt(string|array<string> $order_updated) Return ChildOrder objects filtered by the order_updated column
+ * @psalm-method Collection&\Traversable<ChildOrder> findByUpdatedAt(string|array<string> $order_updated) Return ChildOrder objects filtered by the order_updated column
+ *
  * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildOrder> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class OrderQuery extends ModelCriteria
 {
@@ -2500,20 +2499,23 @@ abstract class OrderQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Site table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
     public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2528,8 +2530,46 @@ abstract class OrderQuery extends ModelCriteria
      */
     public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Payment object
      *
@@ -2632,20 +2672,23 @@ abstract class OrderQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Payment table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\PaymentQuery The inner query object of the EXISTS statement
      */
     public function usePaymentExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Payment', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useExistsQuery('Payment', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2660,8 +2703,46 @@ abstract class OrderQuery extends ModelCriteria
      */
     public function usePaymentNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Payment', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useExistsQuery('Payment', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Payment table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PaymentQuery The inner query object of the IN statement
+     */
+    public function useInPaymentQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useInQuery('Payment', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Payment table for a NOT IN query.
+     *
+     * @see usePaymentInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PaymentQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPaymentQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useInQuery('Payment', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

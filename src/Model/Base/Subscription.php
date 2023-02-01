@@ -988,8 +988,8 @@ abstract class Subscription implements ActiveRecordInterface
                 $col = null;
             }
             $this->subscription_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1266,45 +1266,59 @@ abstract class Subscription implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'subscription_id':
                         $stmt->bindValue($identifier, $this->subscription_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'subscription_type':
                         $stmt->bindValue($identifier, $this->subscription_type, PDO::PARAM_STR);
+
                         break;
                     case 'subscription_email':
                         $stmt->bindValue($identifier, $this->subscription_email, PDO::PARAM_STR);
+
                         break;
                     case 'subscription_ends':
                         $stmt->bindValue($identifier, $this->subscription_ends, PDO::PARAM_INT);
+
                         break;
                     case 'subscription_option':
                         $stmt->bindValue($identifier, (int) $this->subscription_option, PDO::PARAM_INT);
+
                         break;
                     case 'subscription_insert':
                         $stmt->bindValue($identifier, $this->subscription_insert ? $this->subscription_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'subscription_update':
                         $stmt->bindValue($identifier, $this->subscription_update ? $this->subscription_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'subscription_created':
                         $stmt->bindValue($identifier, $this->subscription_created ? $this->subscription_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'subscription_updated':
                         $stmt->bindValue($identifier, $this->subscription_updated ? $this->subscription_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

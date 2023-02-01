@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'ticket_comment' table.
- *
- *
+ * Base class that represents a query for the `ticket_comment` table.
  *
  * @method     ChildTicketCommentQuery orderById($order = Criteria::ASC) Order by the ticket_comment_id column
  * @method     ChildTicketCommentQuery orderByTicketId($order = Criteria::ASC) Order by the ticket_id column
@@ -49,8 +47,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTicketComment|null findOneByUserId(int $user_id) Return the first ChildTicketComment filtered by the user_id column
  * @method     ChildTicketComment|null findOneByContent(string $ticket_comment_content) Return the first ChildTicketComment filtered by the ticket_comment_content column
  * @method     ChildTicketComment|null findOneByCreatedAt(string $ticket_comment_created) Return the first ChildTicketComment filtered by the ticket_comment_created column
- * @method     ChildTicketComment|null findOneByUpdate(string $ticket_comment_update) Return the first ChildTicketComment filtered by the ticket_comment_update column *
-
+ * @method     ChildTicketComment|null findOneByUpdate(string $ticket_comment_update) Return the first ChildTicketComment filtered by the ticket_comment_update column
+ *
  * @method     ChildTicketComment requirePk($key, ?ConnectionInterface $con = null) Return the ChildTicketComment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTicketComment requireOne(?ConnectionInterface $con = null) Return the first ChildTicketComment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -63,21 +61,22 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildTicketComment[]|Collection find(?ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildTicketComment> find(?ConnectionInterface $con = null) Return ChildTicketComment objects based on current ModelCriteria
- * @method     ChildTicketComment[]|Collection findById(int $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findById(int $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
- * @method     ChildTicketComment[]|Collection findByTicketId(int $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findByTicketId(int $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
- * @method     ChildTicketComment[]|Collection findByUserId(int $user_id) Return ChildTicketComment objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findByUserId(int $user_id) Return ChildTicketComment objects filtered by the user_id column
- * @method     ChildTicketComment[]|Collection findByContent(string $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findByContent(string $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
- * @method     ChildTicketComment[]|Collection findByCreatedAt(string $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findByCreatedAt(string $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
- * @method     ChildTicketComment[]|Collection findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
- * @psalm-method Collection&\Traversable<ChildTicketComment> findByUpdate(string $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
+ *
+ * @method     ChildTicketComment[]|Collection findById(int|array<int> $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findById(int|array<int> $ticket_comment_id) Return ChildTicketComment objects filtered by the ticket_comment_id column
+ * @method     ChildTicketComment[]|Collection findByTicketId(int|array<int> $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findByTicketId(int|array<int> $ticket_id) Return ChildTicketComment objects filtered by the ticket_id column
+ * @method     ChildTicketComment[]|Collection findByUserId(int|array<int> $user_id) Return ChildTicketComment objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findByUserId(int|array<int> $user_id) Return ChildTicketComment objects filtered by the user_id column
+ * @method     ChildTicketComment[]|Collection findByContent(string|array<string> $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findByContent(string|array<string> $ticket_comment_content) Return ChildTicketComment objects filtered by the ticket_comment_content column
+ * @method     ChildTicketComment[]|Collection findByCreatedAt(string|array<string> $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findByCreatedAt(string|array<string> $ticket_comment_created) Return ChildTicketComment objects filtered by the ticket_comment_created column
+ * @method     ChildTicketComment[]|Collection findByUpdate(string|array<string> $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
+ * @psalm-method Collection&\Traversable<ChildTicketComment> findByUpdate(string|array<string> $ticket_comment_update) Return ChildTicketComment objects filtered by the ticket_comment_update column
+ *
  * @method     ChildTicketComment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTicketComment> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class TicketCommentQuery extends ModelCriteria
 {

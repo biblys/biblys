@@ -799,8 +799,8 @@ abstract class Payment implements ActiveRecordInterface
                 $col = null;
             }
             $this->payment_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1092,33 +1092,43 @@ abstract class Payment implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'payment_id':
                         $stmt->bindValue($identifier, $this->payment_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'order_id':
                         $stmt->bindValue($identifier, $this->order_id, PDO::PARAM_INT);
+
                         break;
                     case 'payment_amount':
                         $stmt->bindValue($identifier, $this->payment_amount, PDO::PARAM_INT);
+
                         break;
                     case 'payment_mode':
                         $stmt->bindValue($identifier, $this->payment_mode, PDO::PARAM_STR);
+
                         break;
                     case 'payment_provider_id':
                         $stmt->bindValue($identifier, $this->payment_provider_id, PDO::PARAM_STR);
+
                         break;
                     case 'payment_url':
                         $stmt->bindValue($identifier, $this->payment_url, PDO::PARAM_STR);
+
                         break;
                     case 'payment_created':
                         $stmt->bindValue($identifier, $this->payment_created ? $this->payment_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'payment_executed':
                         $stmt->bindValue($identifier, $this->payment_executed ? $this->payment_executed->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'payment_updated':
                         $stmt->bindValue($identifier, $this->payment_updated ? $this->payment_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

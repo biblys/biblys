@@ -826,8 +826,8 @@ abstract class Tag implements ActiveRecordInterface
                 $col = null;
             }
             $this->tag_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1112,33 +1112,43 @@ abstract class Tag implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'tag_id':
                         $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
+
                         break;
                     case 'tag_name':
                         $stmt->bindValue($identifier, $this->tag_name, PDO::PARAM_STR);
+
                         break;
                     case 'tag_url':
                         $stmt->bindValue($identifier, $this->tag_url, PDO::PARAM_STR);
+
                         break;
                     case 'tag_description':
                         $stmt->bindValue($identifier, $this->tag_description, PDO::PARAM_STR);
+
                         break;
                     case 'tag_date':
                         $stmt->bindValue($identifier, $this->tag_date ? $this->tag_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'tag_num':
                         $stmt->bindValue($identifier, $this->tag_num, PDO::PARAM_INT);
+
                         break;
                     case 'tag_insert':
                         $stmt->bindValue($identifier, $this->tag_insert ? $this->tag_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'tag_update':
                         $stmt->bindValue($identifier, $this->tag_update ? $this->tag_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'tag_created':
                         $stmt->bindValue($identifier, $this->tag_created ? $this->tag_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'tag_updated':
                         $stmt->bindValue($identifier, $this->tag_updated ? $this->tag_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

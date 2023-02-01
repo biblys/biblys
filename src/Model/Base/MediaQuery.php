@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'medias' table.
- *
- *
+ * Base class that represents a query for the `medias` table.
  *
  * @method     ChildMediaQuery orderById($order = Criteria::ASC) Order by the media_id column
  * @method     ChildMediaQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -73,8 +71,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMedia|null findOneByInsert(string $media_insert) Return the first ChildMedia filtered by the media_insert column
  * @method     ChildMedia|null findOneByUpdate(string $media_update) Return the first ChildMedia filtered by the media_update column
  * @method     ChildMedia|null findOneByCreatedAt(string $media_created) Return the first ChildMedia filtered by the media_created column
- * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column *
-
+ * @method     ChildMedia|null findOneByUpdatedAt(string $media_updated) Return the first ChildMedia filtered by the media_updated column
+ *
  * @method     ChildMedia requirePk($key, ?ConnectionInterface $con = null) Return the ChildMedia by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMedia requireOne(?ConnectionInterface $con = null) Return the first ChildMedia matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -95,37 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildMedia[]|Collection find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildMedia> find(?ConnectionInterface $con = null) Return ChildMedia objects based on current ModelCriteria
- * @method     ChildMedia[]|Collection findById(int $media_id) Return ChildMedia objects filtered by the media_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findById(int $media_id) Return ChildMedia objects filtered by the media_id column
- * @method     ChildMedia[]|Collection findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findBySiteId(int $site_id) Return ChildMedia objects filtered by the site_id column
- * @method     ChildMedia[]|Collection findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
- * @psalm-method Collection&\Traversable<ChildMedia> findByCategoryId(int $category_id) Return ChildMedia objects filtered by the category_id column
- * @method     ChildMedia[]|Collection findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @psalm-method Collection&\Traversable<ChildMedia> findByDir(string $media_dir) Return ChildMedia objects filtered by the media_dir column
- * @method     ChildMedia[]|Collection findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
- * @psalm-method Collection&\Traversable<ChildMedia> findByFile(string $media_file) Return ChildMedia objects filtered by the media_file column
- * @method     ChildMedia[]|Collection findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @psalm-method Collection&\Traversable<ChildMedia> findByExt(string $media_ext) Return ChildMedia objects filtered by the media_ext column
- * @method     ChildMedia[]|Collection findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
- * @psalm-method Collection&\Traversable<ChildMedia> findByTitle(string $media_title) Return ChildMedia objects filtered by the media_title column
- * @method     ChildMedia[]|Collection findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @psalm-method Collection&\Traversable<ChildMedia> findByDesc(string $media_desc) Return ChildMedia objects filtered by the media_desc column
- * @method     ChildMedia[]|Collection findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
- * @psalm-method Collection&\Traversable<ChildMedia> findByLink(string $media_link) Return ChildMedia objects filtered by the media_link column
- * @method     ChildMedia[]|Collection findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @psalm-method Collection&\Traversable<ChildMedia> findByHeadline(string $media_headline) Return ChildMedia objects filtered by the media_headline column
- * @method     ChildMedia[]|Collection findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @psalm-method Collection&\Traversable<ChildMedia> findByInsert(string $media_insert) Return ChildMedia objects filtered by the media_insert column
- * @method     ChildMedia[]|Collection findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
- * @psalm-method Collection&\Traversable<ChildMedia> findByUpdate(string $media_update) Return ChildMedia objects filtered by the media_update column
- * @method     ChildMedia[]|Collection findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
- * @psalm-method Collection&\Traversable<ChildMedia> findByCreatedAt(string $media_created) Return ChildMedia objects filtered by the media_created column
- * @method     ChildMedia[]|Collection findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
- * @psalm-method Collection&\Traversable<ChildMedia> findByUpdatedAt(string $media_updated) Return ChildMedia objects filtered by the media_updated column
+ *
+ * @method     ChildMedia[]|Collection findById(int|array<int> $media_id) Return ChildMedia objects filtered by the media_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findById(int|array<int> $media_id) Return ChildMedia objects filtered by the media_id column
+ * @method     ChildMedia[]|Collection findBySiteId(int|array<int> $site_id) Return ChildMedia objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findBySiteId(int|array<int> $site_id) Return ChildMedia objects filtered by the site_id column
+ * @method     ChildMedia[]|Collection findByCategoryId(int|array<int> $category_id) Return ChildMedia objects filtered by the category_id column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByCategoryId(int|array<int> $category_id) Return ChildMedia objects filtered by the category_id column
+ * @method     ChildMedia[]|Collection findByDir(string|array<string> $media_dir) Return ChildMedia objects filtered by the media_dir column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByDir(string|array<string> $media_dir) Return ChildMedia objects filtered by the media_dir column
+ * @method     ChildMedia[]|Collection findByFile(string|array<string> $media_file) Return ChildMedia objects filtered by the media_file column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByFile(string|array<string> $media_file) Return ChildMedia objects filtered by the media_file column
+ * @method     ChildMedia[]|Collection findByExt(string|array<string> $media_ext) Return ChildMedia objects filtered by the media_ext column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByExt(string|array<string> $media_ext) Return ChildMedia objects filtered by the media_ext column
+ * @method     ChildMedia[]|Collection findByTitle(string|array<string> $media_title) Return ChildMedia objects filtered by the media_title column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByTitle(string|array<string> $media_title) Return ChildMedia objects filtered by the media_title column
+ * @method     ChildMedia[]|Collection findByDesc(string|array<string> $media_desc) Return ChildMedia objects filtered by the media_desc column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByDesc(string|array<string> $media_desc) Return ChildMedia objects filtered by the media_desc column
+ * @method     ChildMedia[]|Collection findByLink(string|array<string> $media_link) Return ChildMedia objects filtered by the media_link column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByLink(string|array<string> $media_link) Return ChildMedia objects filtered by the media_link column
+ * @method     ChildMedia[]|Collection findByHeadline(string|array<string> $media_headline) Return ChildMedia objects filtered by the media_headline column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByHeadline(string|array<string> $media_headline) Return ChildMedia objects filtered by the media_headline column
+ * @method     ChildMedia[]|Collection findByInsert(string|array<string> $media_insert) Return ChildMedia objects filtered by the media_insert column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByInsert(string|array<string> $media_insert) Return ChildMedia objects filtered by the media_insert column
+ * @method     ChildMedia[]|Collection findByUpdate(string|array<string> $media_update) Return ChildMedia objects filtered by the media_update column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByUpdate(string|array<string> $media_update) Return ChildMedia objects filtered by the media_update column
+ * @method     ChildMedia[]|Collection findByCreatedAt(string|array<string> $media_created) Return ChildMedia objects filtered by the media_created column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByCreatedAt(string|array<string> $media_created) Return ChildMedia objects filtered by the media_created column
+ * @method     ChildMedia[]|Collection findByUpdatedAt(string|array<string> $media_updated) Return ChildMedia objects filtered by the media_updated column
+ * @psalm-method Collection&\Traversable<ChildMedia> findByUpdatedAt(string|array<string> $media_updated) Return ChildMedia objects filtered by the media_updated column
+ *
  * @method     ChildMedia[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildMedia> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class MediaQuery extends ModelCriteria
 {

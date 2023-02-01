@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'sites' table.
- *
- *
+ * Base class that represents a query for the `sites` table.
  *
  * @method     ChildSiteQuery orderById($order = Criteria::ASC) Order by the site_id column
  * @method     ChildSiteQuery orderByName($order = Criteria::ASC) Order by the site_name column
@@ -232,8 +230,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSite|null findOneBySitemapUpdated(string $site_sitemap_updated) Return the first ChildSite filtered by the site_sitemap_updated column
  * @method     ChildSite|null findOneByMonitoring(boolean $site_monitoring) Return the first ChildSite filtered by the site_monitoring column
  * @method     ChildSite|null findOneByCreatedAt(string $site_created) Return the first ChildSite filtered by the site_created column
- * @method     ChildSite|null findOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column *
-
+ * @method     ChildSite|null findOneByUpdatedAt(string $site_updated) Return the first ChildSite filtered by the site_updated column
+ *
  * @method     ChildSite requirePk($key, ?ConnectionInterface $con = null) Return the ChildSite by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSite requireOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -279,87 +277,88 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSite[]|Collection find(?ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildSite> find(?ConnectionInterface $con = null) Return ChildSite objects based on current ModelCriteria
- * @method     ChildSite[]|Collection findById(int $site_id) Return ChildSite objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildSite> findById(int $site_id) Return ChildSite objects filtered by the site_id column
- * @method     ChildSite[]|Collection findByName(string $site_name) Return ChildSite objects filtered by the site_name column
- * @psalm-method Collection&\Traversable<ChildSite> findByName(string $site_name) Return ChildSite objects filtered by the site_name column
- * @method     ChildSite[]|Collection findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
- * @psalm-method Collection&\Traversable<ChildSite> findByPass(string $site_pass) Return ChildSite objects filtered by the site_pass column
- * @method     ChildSite[]|Collection findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
- * @psalm-method Collection&\Traversable<ChildSite> findByTitle(string $site_title) Return ChildSite objects filtered by the site_title column
- * @method     ChildSite[]|Collection findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
- * @psalm-method Collection&\Traversable<ChildSite> findByDomain(string $site_domain) Return ChildSite objects filtered by the site_domain column
- * @method     ChildSite[]|Collection findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
- * @psalm-method Collection&\Traversable<ChildSite> findByVersion(string $site_version) Return ChildSite objects filtered by the site_version column
- * @method     ChildSite[]|Collection findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
- * @psalm-method Collection&\Traversable<ChildSite> findByTag(string $site_tag) Return ChildSite objects filtered by the site_tag column
- * @method     ChildSite[]|Collection findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
- * @psalm-method Collection&\Traversable<ChildSite> findByFlag(string $site_flag) Return ChildSite objects filtered by the site_flag column
- * @method     ChildSite[]|Collection findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
- * @psalm-method Collection&\Traversable<ChildSite> findByContact(string $site_contact) Return ChildSite objects filtered by the site_contact column
- * @method     ChildSite[]|Collection findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
- * @psalm-method Collection&\Traversable<ChildSite> findByAddress(string $site_address) Return ChildSite objects filtered by the site_address column
- * @method     ChildSite[]|Collection findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
- * @psalm-method Collection&\Traversable<ChildSite> findByTva(string $site_tva) Return ChildSite objects filtered by the site_tva column
- * @method     ChildSite[]|Collection findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
- * @psalm-method Collection&\Traversable<ChildSite> findByHtmlRenderer(boolean $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
- * @method     ChildSite[]|Collection findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
- * @psalm-method Collection&\Traversable<ChildSite> findByAxys(boolean $site_axys) Return ChildSite objects filtered by the site_axys column
- * @method     ChildSite[]|Collection findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
- * @psalm-method Collection&\Traversable<ChildSite> findByNoosfere(boolean $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
- * @method     ChildSite[]|Collection findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
- * @psalm-method Collection&\Traversable<ChildSite> findByAmazon(boolean $site_amazon) Return ChildSite objects filtered by the site_amazon column
- * @method     ChildSite[]|Collection findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByEventId(int $site_event_id) Return ChildSite objects filtered by the site_event_id column
- * @method     ChildSite[]|Collection findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
- * @psalm-method Collection&\Traversable<ChildSite> findByEventDate(int $site_event_date) Return ChildSite objects filtered by the site_event_date column
- * @method     ChildSite[]|Collection findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
- * @psalm-method Collection&\Traversable<ChildSite> findByShop(boolean $site_shop) Return ChildSite objects filtered by the site_shop column
- * @method     ChildSite[]|Collection findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
- * @psalm-method Collection&\Traversable<ChildSite> findByVpc(boolean $site_vpc) Return ChildSite objects filtered by the site_vpc column
- * @method     ChildSite[]|Collection findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @psalm-method Collection&\Traversable<ChildSite> findByShippingFee(string $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
- * @method     ChildSite[]|Collection findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
- * @psalm-method Collection&\Traversable<ChildSite> findByWishlist(boolean $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
- * @method     ChildSite[]|Collection findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
- * @psalm-method Collection&\Traversable<ChildSite> findByPaymentCheque(boolean $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
- * @method     ChildSite[]|Collection findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
- * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPaypal(string $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
- * @method     ChildSite[]|Collection findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
- * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPayplug(boolean $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
- * @method     ChildSite[]|Collection findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
- * @psalm-method Collection&\Traversable<ChildSite> findByPaymentTransfer(boolean $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
- * @method     ChildSite[]|Collection findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @psalm-method Collection&\Traversable<ChildSite> findByBookshop(boolean $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
- * @method     ChildSite[]|Collection findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByBookshopId(int $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
- * @method     ChildSite[]|Collection findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
- * @psalm-method Collection&\Traversable<ChildSite> findByPublisher(boolean $site_publisher) Return ChildSite objects filtered by the site_publisher column
- * @method     ChildSite[]|Collection findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
- * @psalm-method Collection&\Traversable<ChildSite> findByPublisherStock(boolean $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
- * @method     ChildSite[]|Collection findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByPublisherId(int $publisher_id) Return ChildSite objects filtered by the publisher_id column
- * @method     ChildSite[]|Collection findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
- * @psalm-method Collection&\Traversable<ChildSite> findByEbookBundle(int $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
- * @method     ChildSite[]|Collection findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByFbPageId(string $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
- * @method     ChildSite[]|Collection findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
- * @psalm-method Collection&\Traversable<ChildSite> findByFbPageToken(string $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
- * @method     ChildSite[]|Collection findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByAnalyticsId(string $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
- * @method     ChildSite[]|Collection findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
- * @psalm-method Collection&\Traversable<ChildSite> findByPiwikId(int $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
- * @method     ChildSite[]|Collection findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
- * @psalm-method Collection&\Traversable<ChildSite> findBySitemapUpdated(string $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
- * @method     ChildSite[]|Collection findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
- * @psalm-method Collection&\Traversable<ChildSite> findByMonitoring(boolean $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
- * @method     ChildSite[]|Collection findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
- * @psalm-method Collection&\Traversable<ChildSite> findByCreatedAt(string $site_created) Return ChildSite objects filtered by the site_created column
- * @method     ChildSite[]|Collection findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
- * @psalm-method Collection&\Traversable<ChildSite> findByUpdatedAt(string $site_updated) Return ChildSite objects filtered by the site_updated column
+ *
+ * @method     ChildSite[]|Collection findById(int|array<int> $site_id) Return ChildSite objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findById(int|array<int> $site_id) Return ChildSite objects filtered by the site_id column
+ * @method     ChildSite[]|Collection findByName(string|array<string> $site_name) Return ChildSite objects filtered by the site_name column
+ * @psalm-method Collection&\Traversable<ChildSite> findByName(string|array<string> $site_name) Return ChildSite objects filtered by the site_name column
+ * @method     ChildSite[]|Collection findByPass(string|array<string> $site_pass) Return ChildSite objects filtered by the site_pass column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPass(string|array<string> $site_pass) Return ChildSite objects filtered by the site_pass column
+ * @method     ChildSite[]|Collection findByTitle(string|array<string> $site_title) Return ChildSite objects filtered by the site_title column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTitle(string|array<string> $site_title) Return ChildSite objects filtered by the site_title column
+ * @method     ChildSite[]|Collection findByDomain(string|array<string> $site_domain) Return ChildSite objects filtered by the site_domain column
+ * @psalm-method Collection&\Traversable<ChildSite> findByDomain(string|array<string> $site_domain) Return ChildSite objects filtered by the site_domain column
+ * @method     ChildSite[]|Collection findByVersion(string|array<string> $site_version) Return ChildSite objects filtered by the site_version column
+ * @psalm-method Collection&\Traversable<ChildSite> findByVersion(string|array<string> $site_version) Return ChildSite objects filtered by the site_version column
+ * @method     ChildSite[]|Collection findByTag(string|array<string> $site_tag) Return ChildSite objects filtered by the site_tag column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTag(string|array<string> $site_tag) Return ChildSite objects filtered by the site_tag column
+ * @method     ChildSite[]|Collection findByFlag(string|array<string> $site_flag) Return ChildSite objects filtered by the site_flag column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFlag(string|array<string> $site_flag) Return ChildSite objects filtered by the site_flag column
+ * @method     ChildSite[]|Collection findByContact(string|array<string> $site_contact) Return ChildSite objects filtered by the site_contact column
+ * @psalm-method Collection&\Traversable<ChildSite> findByContact(string|array<string> $site_contact) Return ChildSite objects filtered by the site_contact column
+ * @method     ChildSite[]|Collection findByAddress(string|array<string> $site_address) Return ChildSite objects filtered by the site_address column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAddress(string|array<string> $site_address) Return ChildSite objects filtered by the site_address column
+ * @method     ChildSite[]|Collection findByTva(string|array<string> $site_tva) Return ChildSite objects filtered by the site_tva column
+ * @psalm-method Collection&\Traversable<ChildSite> findByTva(string|array<string> $site_tva) Return ChildSite objects filtered by the site_tva column
+ * @method     ChildSite[]|Collection findByHtmlRenderer(boolean|array<boolean> $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
+ * @psalm-method Collection&\Traversable<ChildSite> findByHtmlRenderer(boolean|array<boolean> $site_html_renderer) Return ChildSite objects filtered by the site_html_renderer column
+ * @method     ChildSite[]|Collection findByAxys(boolean|array<boolean> $site_axys) Return ChildSite objects filtered by the site_axys column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAxys(boolean|array<boolean> $site_axys) Return ChildSite objects filtered by the site_axys column
+ * @method     ChildSite[]|Collection findByNoosfere(boolean|array<boolean> $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
+ * @psalm-method Collection&\Traversable<ChildSite> findByNoosfere(boolean|array<boolean> $site_noosfere) Return ChildSite objects filtered by the site_noosfere column
+ * @method     ChildSite[]|Collection findByAmazon(boolean|array<boolean> $site_amazon) Return ChildSite objects filtered by the site_amazon column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAmazon(boolean|array<boolean> $site_amazon) Return ChildSite objects filtered by the site_amazon column
+ * @method     ChildSite[]|Collection findByEventId(int|array<int> $site_event_id) Return ChildSite objects filtered by the site_event_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEventId(int|array<int> $site_event_id) Return ChildSite objects filtered by the site_event_id column
+ * @method     ChildSite[]|Collection findByEventDate(int|array<int> $site_event_date) Return ChildSite objects filtered by the site_event_date column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEventDate(int|array<int> $site_event_date) Return ChildSite objects filtered by the site_event_date column
+ * @method     ChildSite[]|Collection findByShop(boolean|array<boolean> $site_shop) Return ChildSite objects filtered by the site_shop column
+ * @psalm-method Collection&\Traversable<ChildSite> findByShop(boolean|array<boolean> $site_shop) Return ChildSite objects filtered by the site_shop column
+ * @method     ChildSite[]|Collection findByVpc(boolean|array<boolean> $site_vpc) Return ChildSite objects filtered by the site_vpc column
+ * @psalm-method Collection&\Traversable<ChildSite> findByVpc(boolean|array<boolean> $site_vpc) Return ChildSite objects filtered by the site_vpc column
+ * @method     ChildSite[]|Collection findByShippingFee(string|array<string> $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildSite> findByShippingFee(string|array<string> $site_shipping_fee) Return ChildSite objects filtered by the site_shipping_fee column
+ * @method     ChildSite[]|Collection findByWishlist(boolean|array<boolean> $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
+ * @psalm-method Collection&\Traversable<ChildSite> findByWishlist(boolean|array<boolean> $site_wishlist) Return ChildSite objects filtered by the site_wishlist column
+ * @method     ChildSite[]|Collection findByPaymentCheque(boolean|array<boolean> $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentCheque(boolean|array<boolean> $site_payment_cheque) Return ChildSite objects filtered by the site_payment_cheque column
+ * @method     ChildSite[]|Collection findByPaymentPaypal(string|array<string> $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPaypal(string|array<string> $site_payment_paypal) Return ChildSite objects filtered by the site_payment_paypal column
+ * @method     ChildSite[]|Collection findByPaymentPayplug(boolean|array<boolean> $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentPayplug(boolean|array<boolean> $site_payment_payplug) Return ChildSite objects filtered by the site_payment_payplug column
+ * @method     ChildSite[]|Collection findByPaymentTransfer(boolean|array<boolean> $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPaymentTransfer(boolean|array<boolean> $site_payment_transfer) Return ChildSite objects filtered by the site_payment_transfer column
+ * @method     ChildSite[]|Collection findByBookshop(boolean|array<boolean> $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
+ * @psalm-method Collection&\Traversable<ChildSite> findByBookshop(boolean|array<boolean> $site_bookshop) Return ChildSite objects filtered by the site_bookshop column
+ * @method     ChildSite[]|Collection findByBookshopId(int|array<int> $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByBookshopId(int|array<int> $site_bookshop_id) Return ChildSite objects filtered by the site_bookshop_id column
+ * @method     ChildSite[]|Collection findByPublisher(boolean|array<boolean> $site_publisher) Return ChildSite objects filtered by the site_publisher column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisher(boolean|array<boolean> $site_publisher) Return ChildSite objects filtered by the site_publisher column
+ * @method     ChildSite[]|Collection findByPublisherStock(boolean|array<boolean> $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisherStock(boolean|array<boolean> $site_publisher_stock) Return ChildSite objects filtered by the site_publisher_stock column
+ * @method     ChildSite[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildSite objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPublisherId(int|array<int> $publisher_id) Return ChildSite objects filtered by the publisher_id column
+ * @method     ChildSite[]|Collection findByEbookBundle(int|array<int> $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
+ * @psalm-method Collection&\Traversable<ChildSite> findByEbookBundle(int|array<int> $site_ebook_bundle) Return ChildSite objects filtered by the site_ebook_bundle column
+ * @method     ChildSite[]|Collection findByFbPageId(string|array<string> $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFbPageId(string|array<string> $site_fb_page_id) Return ChildSite objects filtered by the site_fb_page_id column
+ * @method     ChildSite[]|Collection findByFbPageToken(string|array<string> $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
+ * @psalm-method Collection&\Traversable<ChildSite> findByFbPageToken(string|array<string> $site_fb_page_token) Return ChildSite objects filtered by the site_fb_page_token column
+ * @method     ChildSite[]|Collection findByAnalyticsId(string|array<string> $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByAnalyticsId(string|array<string> $site_analytics_id) Return ChildSite objects filtered by the site_analytics_id column
+ * @method     ChildSite[]|Collection findByPiwikId(int|array<int> $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
+ * @psalm-method Collection&\Traversable<ChildSite> findByPiwikId(int|array<int> $site_piwik_id) Return ChildSite objects filtered by the site_piwik_id column
+ * @method     ChildSite[]|Collection findBySitemapUpdated(string|array<string> $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
+ * @psalm-method Collection&\Traversable<ChildSite> findBySitemapUpdated(string|array<string> $site_sitemap_updated) Return ChildSite objects filtered by the site_sitemap_updated column
+ * @method     ChildSite[]|Collection findByMonitoring(boolean|array<boolean> $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
+ * @psalm-method Collection&\Traversable<ChildSite> findByMonitoring(boolean|array<boolean> $site_monitoring) Return ChildSite objects filtered by the site_monitoring column
+ * @method     ChildSite[]|Collection findByCreatedAt(string|array<string> $site_created) Return ChildSite objects filtered by the site_created column
+ * @psalm-method Collection&\Traversable<ChildSite> findByCreatedAt(string|array<string> $site_created) Return ChildSite objects filtered by the site_created column
+ * @method     ChildSite[]|Collection findByUpdatedAt(string|array<string> $site_updated) Return ChildSite objects filtered by the site_updated column
+ * @psalm-method Collection&\Traversable<ChildSite> findByUpdatedAt(string|array<string> $site_updated) Return ChildSite objects filtered by the site_updated column
+ *
  * @method     ChildSite[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSite> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class SiteQuery extends ModelCriteria
 {
@@ -894,7 +893,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByHtmlRenderer($htmlRenderer = null, ?string $comparison = null)
     {
         if (is_string($htmlRenderer)) {
-            $htmlRenderer = in_array(strtolower($htmlRenderer), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $htmlRenderer = in_array(strtolower($htmlRenderer), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_HTML_RENDERER, $htmlRenderer, $comparison);
@@ -923,7 +922,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByAxys($axys = null, ?string $comparison = null)
     {
         if (is_string($axys)) {
-            $axys = in_array(strtolower($axys), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $axys = in_array(strtolower($axys), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_AXYS, $axys, $comparison);
@@ -952,7 +951,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByNoosfere($noosfere = null, ?string $comparison = null)
     {
         if (is_string($noosfere)) {
-            $noosfere = in_array(strtolower($noosfere), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $noosfere = in_array(strtolower($noosfere), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_NOOSFERE, $noosfere, $comparison);
@@ -981,7 +980,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByAmazon($amazon = null, ?string $comparison = null)
     {
         if (is_string($amazon)) {
-            $amazon = in_array(strtolower($amazon), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $amazon = in_array(strtolower($amazon), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_AMAZON, $amazon, $comparison);
@@ -1096,7 +1095,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByShop($shop = null, ?string $comparison = null)
     {
         if (is_string($shop)) {
-            $shop = in_array(strtolower($shop), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $shop = in_array(strtolower($shop), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_SHOP, $shop, $comparison);
@@ -1125,7 +1124,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByVpc($vpc = null, ?string $comparison = null)
     {
         if (is_string($vpc)) {
-            $vpc = in_array(strtolower($vpc), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $vpc = in_array(strtolower($vpc), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_VPC, $vpc, $comparison);
@@ -1182,7 +1181,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByWishlist($wishlist = null, ?string $comparison = null)
     {
         if (is_string($wishlist)) {
-            $wishlist = in_array(strtolower($wishlist), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $wishlist = in_array(strtolower($wishlist), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_WISHLIST, $wishlist, $comparison);
@@ -1211,7 +1210,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByPaymentCheque($paymentCheque = null, ?string $comparison = null)
     {
         if (is_string($paymentCheque)) {
-            $paymentCheque = in_array(strtolower($paymentCheque), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $paymentCheque = in_array(strtolower($paymentCheque), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_CHEQUE, $paymentCheque, $comparison);
@@ -1268,7 +1267,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByPaymentPayplug($paymentPayplug = null, ?string $comparison = null)
     {
         if (is_string($paymentPayplug)) {
-            $paymentPayplug = in_array(strtolower($paymentPayplug), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $paymentPayplug = in_array(strtolower($paymentPayplug), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_PAYPLUG, $paymentPayplug, $comparison);
@@ -1297,7 +1296,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByPaymentTransfer($paymentTransfer = null, ?string $comparison = null)
     {
         if (is_string($paymentTransfer)) {
-            $paymentTransfer = in_array(strtolower($paymentTransfer), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $paymentTransfer = in_array(strtolower($paymentTransfer), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PAYMENT_TRANSFER, $paymentTransfer, $comparison);
@@ -1326,7 +1325,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByBookshop($bookshop = null, ?string $comparison = null)
     {
         if (is_string($bookshop)) {
-            $bookshop = in_array(strtolower($bookshop), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $bookshop = in_array(strtolower($bookshop), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_BOOKSHOP, $bookshop, $comparison);
@@ -1398,7 +1397,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByPublisher($publisher = null, ?string $comparison = null)
     {
         if (is_string($publisher)) {
-            $publisher = in_array(strtolower($publisher), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $publisher = in_array(strtolower($publisher), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER, $publisher, $comparison);
@@ -1427,7 +1426,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByPublisherStock($publisherStock = null, ?string $comparison = null)
     {
         if (is_string($publisherStock)) {
-            $publisherStock = in_array(strtolower($publisherStock), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $publisherStock = in_array(strtolower($publisherStock), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_PUBLISHER_STOCK, $publisherStock, $comparison);
@@ -1729,7 +1728,7 @@ abstract class SiteQuery extends ModelCriteria
     public function filterByMonitoring($monitoring = null, ?string $comparison = null)
     {
         if (is_string($monitoring)) {
-            $monitoring = in_array(strtolower($monitoring), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $monitoring = in_array(strtolower($monitoring), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SiteTableMap::COL_SITE_MONITORING, $monitoring, $comparison);
@@ -1929,20 +1928,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Cart table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\CartQuery The inner query object of the EXISTS statement
      */
     public function useCartExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Cart', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\CartQuery */
+        $q = $this->useExistsQuery('Cart', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1957,8 +1959,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useCartNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Cart', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\CartQuery */
+        $q = $this->useExistsQuery('Cart', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Cart table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CartQuery The inner query object of the IN statement
+     */
+    public function useInCartQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useInQuery('Cart', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Cart table for a NOT IN query.
+     *
+     * @see useCartInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CartQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCartQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CartQuery */
+        $q = $this->useInQuery('Cart', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Option object
      *
@@ -2061,20 +2101,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Option table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\OptionQuery The inner query object of the EXISTS statement
      */
     public function useOptionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Option', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\OptionQuery */
+        $q = $this->useExistsQuery('Option', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2089,8 +2132,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useOptionNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Option', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\OptionQuery */
+        $q = $this->useExistsQuery('Option', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Option table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\OptionQuery The inner query object of the IN statement
+     */
+    public function useInOptionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\OptionQuery */
+        $q = $this->useInQuery('Option', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Option table for a NOT IN query.
+     *
+     * @see useOptionInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OptionQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOptionQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OptionQuery */
+        $q = $this->useInQuery('Option', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Order object
      *
@@ -2193,20 +2274,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Order table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\OrderQuery The inner query object of the EXISTS statement
      */
     public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2221,8 +2305,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Order table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\OrderQuery The inner query object of the IN statement
+     */
+    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Order table for a NOT IN query.
+     *
+     * @see useOrderInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\OrderQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\OrderQuery */
+        $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Payment object
      *
@@ -2325,20 +2447,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Payment table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\PaymentQuery The inner query object of the EXISTS statement
      */
     public function usePaymentExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Payment', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useExistsQuery('Payment', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2353,8 +2478,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function usePaymentNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Payment', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useExistsQuery('Payment', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Payment table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PaymentQuery The inner query object of the IN statement
+     */
+    public function useInPaymentQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useInQuery('Payment', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Payment table for a NOT IN query.
+     *
+     * @see usePaymentInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PaymentQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPaymentQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PaymentQuery */
+        $q = $this->useInQuery('Payment', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Right object
      *
@@ -2457,20 +2620,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Right table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\RightQuery The inner query object of the EXISTS statement
      */
     public function useRightExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Right', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\RightQuery */
+        $q = $this->useExistsQuery('Right', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2485,8 +2651,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useRightNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Right', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\RightQuery */
+        $q = $this->useExistsQuery('Right', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Right table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\RightQuery The inner query object of the IN statement
+     */
+    public function useInRightQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\RightQuery */
+        $q = $this->useInQuery('Right', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Right table for a NOT IN query.
+     *
+     * @see useRightInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\RightQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInRightQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\RightQuery */
+        $q = $this->useInQuery('Right', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Session object
      *
@@ -2589,20 +2793,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Session table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SessionQuery The inner query object of the EXISTS statement
      */
     public function useSessionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Session', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SessionQuery */
+        $q = $this->useExistsQuery('Session', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2617,8 +2824,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useSessionNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Session', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SessionQuery */
+        $q = $this->useExistsQuery('Session', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Session table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SessionQuery The inner query object of the IN statement
+     */
+    public function useInSessionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SessionQuery */
+        $q = $this->useInQuery('Session', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Session table for a NOT IN query.
+     *
+     * @see useSessionInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SessionQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSessionQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SessionQuery */
+        $q = $this->useInQuery('Session', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Stock object
      *
@@ -2721,20 +2966,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Stock table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\StockQuery The inner query object of the EXISTS statement
      */
     public function useStockExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Stock', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\StockQuery */
+        $q = $this->useExistsQuery('Stock', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2749,8 +2997,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useStockNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Stock', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\StockQuery */
+        $q = $this->useExistsQuery('Stock', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Stock table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\StockQuery The inner query object of the IN statement
+     */
+    public function useInStockQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useInQuery('Stock', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Stock table for a NOT IN query.
+     *
+     * @see useStockInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\StockQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInStockQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\StockQuery */
+        $q = $this->useInQuery('Stock', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\User object
      *
@@ -2853,20 +3139,23 @@ abstract class SiteQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to User table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\UserQuery The inner query object of the EXISTS statement
      */
     public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -2881,8 +3170,46 @@ abstract class SiteQuery extends ModelCriteria
      */
     public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

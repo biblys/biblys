@@ -602,8 +602,8 @@ abstract class Price implements ActiveRecordInterface
                 $col = null;
             }
             $this->price_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -856,21 +856,27 @@ abstract class Price implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'price_id':
                         $stmt->bindValue($identifier, $this->price_id, PDO::PARAM_INT);
+
                         break;
                     case 'pricegrid_id':
                         $stmt->bindValue($identifier, $this->pricegrid_id, PDO::PARAM_INT);
+
                         break;
                     case 'price_cat':
                         $stmt->bindValue($identifier, $this->price_cat, PDO::PARAM_STR);
+
                         break;
                     case 'price_amount':
                         $stmt->bindValue($identifier, $this->price_amount, PDO::PARAM_INT);
+
                         break;
                     case 'price_created':
                         $stmt->bindValue($identifier, $this->price_created ? $this->price_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'price_updated':
                         $stmt->bindValue($identifier, $this->price_updated ? $this->price_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

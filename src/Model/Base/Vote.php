@@ -547,8 +547,8 @@ abstract class Vote implements ActiveRecordInterface
                 $col = null;
             }
             $this->vote_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -785,18 +785,23 @@ abstract class Vote implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'vote_id':
                         $stmt->bindValue($identifier, $this->vote_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'vote_F':
                         $stmt->bindValue($identifier, $this->vote_f, PDO::PARAM_INT);
+
                         break;
                     case 'vote_E':
                         $stmt->bindValue($identifier, $this->vote_e, PDO::PARAM_INT);
+
                         break;
                     case 'vote_date':
                         $stmt->bindValue($identifier, $this->vote_date ? $this->vote_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

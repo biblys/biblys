@@ -602,8 +602,8 @@ abstract class Permission implements ActiveRecordInterface
                 $col = null;
             }
             $this->permission_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -843,21 +843,27 @@ abstract class Permission implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'permission_id':
                         $stmt->bindValue($identifier, $this->permission_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'permission_rank':
                         $stmt->bindValue($identifier, $this->permission_rank, PDO::PARAM_STR);
+
                         break;
                     case 'permission_last':
                         $stmt->bindValue($identifier, $this->permission_last ? $this->permission_last->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'permission_date':
                         $stmt->bindValue($identifier, $this->permission_date ? $this->permission_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

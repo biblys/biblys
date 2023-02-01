@@ -46,6 +46,11 @@ class GalleryTableMap extends TableMap
     public const TABLE_NAME = 'galleries';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Gallery';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Gallery';
@@ -357,7 +362,7 @@ class GalleryTableMap extends TableMap
             GalleryTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

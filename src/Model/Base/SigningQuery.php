@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'signings' table.
- *
- *
+ * Base class that represents a query for the `signings` table.
  *
  * @method     ChildSigningQuery orderById($order = Criteria::ASC) Order by the signing_id column
  * @method     ChildSigningQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -61,8 +59,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSigning|null findOneByEnds(string $signing_ends) Return the first ChildSigning filtered by the signing_ends column
  * @method     ChildSigning|null findOneByLocation(string $signing_location) Return the first ChildSigning filtered by the signing_location column
  * @method     ChildSigning|null findOneByCreatedAt(string $signing_created) Return the first ChildSigning filtered by the signing_created column
- * @method     ChildSigning|null findOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column *
-
+ * @method     ChildSigning|null findOneByUpdatedAt(string $signing_updated) Return the first ChildSigning filtered by the signing_updated column
+ *
  * @method     ChildSigning requirePk($key, ?ConnectionInterface $con = null) Return the ChildSigning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSigning requireOne(?ConnectionInterface $con = null) Return the first ChildSigning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -79,29 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSigning[]|Collection find(?ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildSigning> find(?ConnectionInterface $con = null) Return ChildSigning objects based on current ModelCriteria
- * @method     ChildSigning[]|Collection findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
- * @psalm-method Collection&\Traversable<ChildSigning> findById(int $signing_id) Return ChildSigning objects filtered by the signing_id column
- * @method     ChildSigning[]|Collection findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildSigning> findBySiteId(int $site_id) Return ChildSigning objects filtered by the site_id column
- * @method     ChildSigning[]|Collection findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildSigning> findByPublisherId(int $publisher_id) Return ChildSigning objects filtered by the publisher_id column
- * @method     ChildSigning[]|Collection findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
- * @psalm-method Collection&\Traversable<ChildSigning> findByPeopleId(int $people_id) Return ChildSigning objects filtered by the people_id column
- * @method     ChildSigning[]|Collection findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
- * @psalm-method Collection&\Traversable<ChildSigning> findByDate(string $signing_date) Return ChildSigning objects filtered by the signing_date column
- * @method     ChildSigning[]|Collection findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
- * @psalm-method Collection&\Traversable<ChildSigning> findByStarts(string $signing_starts) Return ChildSigning objects filtered by the signing_starts column
- * @method     ChildSigning[]|Collection findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
- * @psalm-method Collection&\Traversable<ChildSigning> findByEnds(string $signing_ends) Return ChildSigning objects filtered by the signing_ends column
- * @method     ChildSigning[]|Collection findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
- * @psalm-method Collection&\Traversable<ChildSigning> findByLocation(string $signing_location) Return ChildSigning objects filtered by the signing_location column
- * @method     ChildSigning[]|Collection findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
- * @psalm-method Collection&\Traversable<ChildSigning> findByCreatedAt(string $signing_created) Return ChildSigning objects filtered by the signing_created column
- * @method     ChildSigning[]|Collection findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
- * @psalm-method Collection&\Traversable<ChildSigning> findByUpdatedAt(string $signing_updated) Return ChildSigning objects filtered by the signing_updated column
+ *
+ * @method     ChildSigning[]|Collection findById(int|array<int> $signing_id) Return ChildSigning objects filtered by the signing_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findById(int|array<int> $signing_id) Return ChildSigning objects filtered by the signing_id column
+ * @method     ChildSigning[]|Collection findBySiteId(int|array<int> $site_id) Return ChildSigning objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findBySiteId(int|array<int> $site_id) Return ChildSigning objects filtered by the site_id column
+ * @method     ChildSigning[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildSigning objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByPublisherId(int|array<int> $publisher_id) Return ChildSigning objects filtered by the publisher_id column
+ * @method     ChildSigning[]|Collection findByPeopleId(int|array<int> $people_id) Return ChildSigning objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByPeopleId(int|array<int> $people_id) Return ChildSigning objects filtered by the people_id column
+ * @method     ChildSigning[]|Collection findByDate(string|array<string> $signing_date) Return ChildSigning objects filtered by the signing_date column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByDate(string|array<string> $signing_date) Return ChildSigning objects filtered by the signing_date column
+ * @method     ChildSigning[]|Collection findByStarts(string|array<string> $signing_starts) Return ChildSigning objects filtered by the signing_starts column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByStarts(string|array<string> $signing_starts) Return ChildSigning objects filtered by the signing_starts column
+ * @method     ChildSigning[]|Collection findByEnds(string|array<string> $signing_ends) Return ChildSigning objects filtered by the signing_ends column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByEnds(string|array<string> $signing_ends) Return ChildSigning objects filtered by the signing_ends column
+ * @method     ChildSigning[]|Collection findByLocation(string|array<string> $signing_location) Return ChildSigning objects filtered by the signing_location column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByLocation(string|array<string> $signing_location) Return ChildSigning objects filtered by the signing_location column
+ * @method     ChildSigning[]|Collection findByCreatedAt(string|array<string> $signing_created) Return ChildSigning objects filtered by the signing_created column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByCreatedAt(string|array<string> $signing_created) Return ChildSigning objects filtered by the signing_created column
+ * @method     ChildSigning[]|Collection findByUpdatedAt(string|array<string> $signing_updated) Return ChildSigning objects filtered by the signing_updated column
+ * @psalm-method Collection&\Traversable<ChildSigning> findByUpdatedAt(string|array<string> $signing_updated) Return ChildSigning objects filtered by the signing_updated column
+ *
  * @method     ChildSigning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSigning> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class SigningQuery extends ModelCriteria
 {

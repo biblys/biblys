@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'lists' table.
- *
- *
+ * Base class that represents a query for the `lists` table.
  *
  * @method     ChildStockItemListQuery orderById($order = Criteria::ASC) Order by the list_id column
  * @method     ChildStockItemListQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildStockItemList|null findOneByTitle(string $list_title) Return the first ChildStockItemList filtered by the list_title column
  * @method     ChildStockItemList|null findOneByUrl(string $list_url) Return the first ChildStockItemList filtered by the list_url column
  * @method     ChildStockItemList|null findOneByCreatedAt(string $list_created) Return the first ChildStockItemList filtered by the list_created column
- * @method     ChildStockItemList|null findOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column *
-
+ * @method     ChildStockItemList|null findOneByUpdatedAt(string $list_updated) Return the first ChildStockItemList filtered by the list_updated column
+ *
  * @method     ChildStockItemList requirePk($key, ?ConnectionInterface $con = null) Return the ChildStockItemList by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildStockItemList requireOne(?ConnectionInterface $con = null) Return the first ChildStockItemList matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildStockItemList[]|Collection find(?ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildStockItemList> find(?ConnectionInterface $con = null) Return ChildStockItemList objects based on current ModelCriteria
- * @method     ChildStockItemList[]|Collection findById(int $list_id) Return ChildStockItemList objects filtered by the list_id column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findById(int $list_id) Return ChildStockItemList objects filtered by the list_id column
- * @method     ChildStockItemList[]|Collection findByUserId(int $user_id) Return ChildStockItemList objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByUserId(int $user_id) Return ChildStockItemList objects filtered by the user_id column
- * @method     ChildStockItemList[]|Collection findBySiteId(int $site_id) Return ChildStockItemList objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findBySiteId(int $site_id) Return ChildStockItemList objects filtered by the site_id column
- * @method     ChildStockItemList[]|Collection findByTitle(string $list_title) Return ChildStockItemList objects filtered by the list_title column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByTitle(string $list_title) Return ChildStockItemList objects filtered by the list_title column
- * @method     ChildStockItemList[]|Collection findByUrl(string $list_url) Return ChildStockItemList objects filtered by the list_url column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByUrl(string $list_url) Return ChildStockItemList objects filtered by the list_url column
- * @method     ChildStockItemList[]|Collection findByCreatedAt(string $list_created) Return ChildStockItemList objects filtered by the list_created column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByCreatedAt(string $list_created) Return ChildStockItemList objects filtered by the list_created column
- * @method     ChildStockItemList[]|Collection findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
- * @psalm-method Collection&\Traversable<ChildStockItemList> findByUpdatedAt(string $list_updated) Return ChildStockItemList objects filtered by the list_updated column
+ *
+ * @method     ChildStockItemList[]|Collection findById(int|array<int> $list_id) Return ChildStockItemList objects filtered by the list_id column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findById(int|array<int> $list_id) Return ChildStockItemList objects filtered by the list_id column
+ * @method     ChildStockItemList[]|Collection findByUserId(int|array<int> $user_id) Return ChildStockItemList objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByUserId(int|array<int> $user_id) Return ChildStockItemList objects filtered by the user_id column
+ * @method     ChildStockItemList[]|Collection findBySiteId(int|array<int> $site_id) Return ChildStockItemList objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findBySiteId(int|array<int> $site_id) Return ChildStockItemList objects filtered by the site_id column
+ * @method     ChildStockItemList[]|Collection findByTitle(string|array<string> $list_title) Return ChildStockItemList objects filtered by the list_title column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByTitle(string|array<string> $list_title) Return ChildStockItemList objects filtered by the list_title column
+ * @method     ChildStockItemList[]|Collection findByUrl(string|array<string> $list_url) Return ChildStockItemList objects filtered by the list_url column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByUrl(string|array<string> $list_url) Return ChildStockItemList objects filtered by the list_url column
+ * @method     ChildStockItemList[]|Collection findByCreatedAt(string|array<string> $list_created) Return ChildStockItemList objects filtered by the list_created column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByCreatedAt(string|array<string> $list_created) Return ChildStockItemList objects filtered by the list_created column
+ * @method     ChildStockItemList[]|Collection findByUpdatedAt(string|array<string> $list_updated) Return ChildStockItemList objects filtered by the list_updated column
+ * @psalm-method Collection&\Traversable<ChildStockItemList> findByUpdatedAt(string|array<string> $list_updated) Return ChildStockItemList objects filtered by the list_updated column
+ *
  * @method     ChildStockItemList[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildStockItemList> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class StockItemListQuery extends ModelCriteria
 {

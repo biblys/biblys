@@ -1346,8 +1346,8 @@ abstract class People implements ActiveRecordInterface
                 $col = null;
             }
             $this->people_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1671,72 +1671,95 @@ abstract class People implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'people_id':
                         $stmt->bindValue($identifier, $this->people_id, PDO::PARAM_INT);
+
                         break;
                     case 'people_first_name':
                         $stmt->bindValue($identifier, $this->people_first_name, PDO::PARAM_STR);
+
                         break;
                     case 'people_last_name':
                         $stmt->bindValue($identifier, $this->people_last_name, PDO::PARAM_STR);
+
                         break;
                     case 'people_name':
                         $stmt->bindValue($identifier, $this->people_name, PDO::PARAM_STR);
+
                         break;
                     case 'people_alpha':
                         $stmt->bindValue($identifier, $this->people_alpha, PDO::PARAM_STR);
+
                         break;
                     case 'people_url_old':
                         $stmt->bindValue($identifier, $this->people_url_old, PDO::PARAM_STR);
+
                         break;
                     case 'people_url':
                         $stmt->bindValue($identifier, $this->people_url, PDO::PARAM_STR);
+
                         break;
                     case 'people_pseudo':
                         $stmt->bindValue($identifier, $this->people_pseudo, PDO::PARAM_INT);
+
                         break;
                     case 'people_noosfere_id':
                         $stmt->bindValue($identifier, $this->people_noosfere_id, PDO::PARAM_INT);
+
                         break;
                     case 'people_birth':
                         $stmt->bindValue($identifier, $this->people_birth, PDO::PARAM_INT);
+
                         break;
                     case 'people_death':
                         $stmt->bindValue($identifier, $this->people_death, PDO::PARAM_INT);
+
                         break;
                     case 'people_gender':
                         $stmt->bindValue($identifier, $this->people_gender, PDO::PARAM_STR);
+
                         break;
                     case 'people_nation':
                         $stmt->bindValue($identifier, $this->people_nation, PDO::PARAM_STR);
+
                         break;
                     case 'people_bio':
                         $stmt->bindValue($identifier, $this->people_bio, PDO::PARAM_STR);
+
                         break;
                     case 'people_site':
                         $stmt->bindValue($identifier, $this->people_site, PDO::PARAM_STR);
+
                         break;
                     case 'people_facebook':
                         $stmt->bindValue($identifier, $this->people_facebook, PDO::PARAM_STR);
+
                         break;
                     case 'people_twitter':
                         $stmt->bindValue($identifier, $this->people_twitter, PDO::PARAM_STR);
+
                         break;
                     case 'people_hits':
                         $stmt->bindValue($identifier, $this->people_hits, PDO::PARAM_INT);
+
                         break;
                     case 'people_date':
                         $stmt->bindValue($identifier, $this->people_date ? $this->people_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'people_insert':
                         $stmt->bindValue($identifier, $this->people_insert ? $this->people_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'people_update':
                         $stmt->bindValue($identifier, $this->people_update ? $this->people_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'people_created':
                         $stmt->bindValue($identifier, $this->people_created ? $this->people_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'people_updated':
                         $stmt->bindValue($identifier, $this->people_updated ? $this->people_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

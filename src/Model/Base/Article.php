@@ -3748,8 +3748,8 @@ abstract class Article implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 76 + $startcol : ArticleTableMap::translateFieldName('DeletionReason', TableMap::TYPE_PHPNAME, $indexType)];
             $this->article_deletion_reason = (null !== $col) ? (string) $col : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -4309,234 +4309,311 @@ abstract class Article implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_item':
                         $stmt->bindValue($identifier, $this->article_item, PDO::PARAM_INT);
+
                         break;
                     case 'article_textid':
                         $stmt->bindValue($identifier, $this->article_textid, PDO::PARAM_STR);
+
                         break;
                     case 'article_ean':
                         $stmt->bindValue($identifier, $this->article_ean, PDO::PARAM_INT);
+
                         break;
                     case 'article_ean_others':
                         $stmt->bindValue($identifier, $this->article_ean_others, PDO::PARAM_STR);
+
                         break;
                     case 'article_asin':
                         $stmt->bindValue($identifier, $this->article_asin, PDO::PARAM_STR);
+
                         break;
                     case 'article_noosfere_id':
                         $stmt->bindValue($identifier, $this->article_noosfere_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_url':
                         $stmt->bindValue($identifier, $this->article_url, PDO::PARAM_STR);
+
                         break;
                     case 'type_id':
                         $stmt->bindValue($identifier, $this->type_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_title':
                         $stmt->bindValue($identifier, $this->article_title, PDO::PARAM_STR);
+
                         break;
                     case 'article_title_alphabetic':
                         $stmt->bindValue($identifier, $this->article_title_alphabetic, PDO::PARAM_STR);
+
                         break;
                     case 'article_title_original':
                         $stmt->bindValue($identifier, $this->article_title_original, PDO::PARAM_STR);
+
                         break;
                     case 'article_title_others':
                         $stmt->bindValue($identifier, $this->article_title_others, PDO::PARAM_STR);
+
                         break;
                     case 'article_subtitle':
                         $stmt->bindValue($identifier, $this->article_subtitle, PDO::PARAM_STR);
+
                         break;
                     case 'article_lang_current':
                         $stmt->bindValue($identifier, $this->article_lang_current, PDO::PARAM_INT);
+
                         break;
                     case 'article_lang_original':
                         $stmt->bindValue($identifier, $this->article_lang_original, PDO::PARAM_INT);
+
                         break;
                     case 'article_origin_country':
                         $stmt->bindValue($identifier, $this->article_origin_country, PDO::PARAM_INT);
+
                         break;
                     case 'article_theme_bisac':
                         $stmt->bindValue($identifier, $this->article_theme_bisac, PDO::PARAM_STR);
+
                         break;
                     case 'article_theme_clil':
                         $stmt->bindValue($identifier, $this->article_theme_clil, PDO::PARAM_STR);
+
                         break;
                     case 'article_theme_dewey':
                         $stmt->bindValue($identifier, $this->article_theme_dewey, PDO::PARAM_STR);
+
                         break;
                     case 'article_theme_electre':
                         $stmt->bindValue($identifier, $this->article_theme_electre, PDO::PARAM_STR);
+
                         break;
                     case 'article_source_id':
                         $stmt->bindValue($identifier, $this->article_source_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_authors':
                         $stmt->bindValue($identifier, $this->article_authors, PDO::PARAM_STR);
+
                         break;
                     case 'article_authors_alphabetic':
                         $stmt->bindValue($identifier, $this->article_authors_alphabetic, PDO::PARAM_STR);
+
                         break;
                     case 'collection_id':
                         $stmt->bindValue($identifier, $this->collection_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_collection':
                         $stmt->bindValue($identifier, $this->article_collection, PDO::PARAM_STR);
+
                         break;
                     case 'article_number':
                         $stmt->bindValue($identifier, $this->article_number, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_publisher':
                         $stmt->bindValue($identifier, $this->article_publisher, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_id':
                         $stmt->bindValue($identifier, $this->cycle_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_cycle':
                         $stmt->bindValue($identifier, $this->article_cycle, PDO::PARAM_STR);
+
                         break;
                     case 'article_tome':
                         $stmt->bindValue($identifier, $this->article_tome, PDO::PARAM_STR);
+
                         break;
                     case 'article_cover_version':
                         $stmt->bindValue($identifier, $this->article_cover_version, PDO::PARAM_INT);
+
                         break;
                     case 'article_availability':
                         $stmt->bindValue($identifier, $this->article_availability, PDO::PARAM_INT);
+
                         break;
                     case 'article_availability_dilicom':
                         $stmt->bindValue($identifier, $this->article_availability_dilicom, PDO::PARAM_INT);
+
                         break;
                     case 'article_preorder':
                         $stmt->bindValue($identifier, (int) $this->article_preorder, PDO::PARAM_INT);
+
                         break;
                     case 'article_price':
                         $stmt->bindValue($identifier, $this->article_price, PDO::PARAM_INT);
+
                         break;
                     case 'article_price_editable':
                         $stmt->bindValue($identifier, (int) $this->article_price_editable, PDO::PARAM_INT);
+
                         break;
                     case 'article_new_price':
                         $stmt->bindValue($identifier, $this->article_new_price, PDO::PARAM_INT);
+
                         break;
                     case 'article_category':
                         $stmt->bindValue($identifier, $this->article_category, PDO::PARAM_STR);
+
                         break;
                     case 'article_tva':
                         $stmt->bindValue($identifier, $this->article_tva, PDO::PARAM_INT);
+
                         break;
                     case 'article_pdf_ean':
                         $stmt->bindValue($identifier, $this->article_pdf_ean, PDO::PARAM_INT);
+
                         break;
                     case 'article_pdf_version':
                         $stmt->bindValue($identifier, $this->article_pdf_version, PDO::PARAM_STR);
+
                         break;
                     case 'article_epub_ean':
                         $stmt->bindValue($identifier, $this->article_epub_ean, PDO::PARAM_INT);
+
                         break;
                     case 'article_epub_version':
                         $stmt->bindValue($identifier, $this->article_epub_version, PDO::PARAM_STR);
+
                         break;
                     case 'article_azw_ean':
                         $stmt->bindValue($identifier, $this->article_azw_ean, PDO::PARAM_INT);
+
                         break;
                     case 'article_azw_version':
                         $stmt->bindValue($identifier, $this->article_azw_version, PDO::PARAM_STR);
+
                         break;
                     case 'article_pages':
                         $stmt->bindValue($identifier, $this->article_pages, PDO::PARAM_INT);
+
                         break;
                     case 'article_weight':
                         $stmt->bindValue($identifier, $this->article_weight, PDO::PARAM_INT);
+
                         break;
                     case 'article_shaping':
                         $stmt->bindValue($identifier, $this->article_shaping, PDO::PARAM_STR);
+
                         break;
                     case 'article_format':
                         $stmt->bindValue($identifier, $this->article_format, PDO::PARAM_STR);
+
                         break;
                     case 'article_printing_process':
                         $stmt->bindValue($identifier, $this->article_printing_process, PDO::PARAM_STR);
+
                         break;
                     case 'article_age_min':
                         $stmt->bindValue($identifier, $this->article_age_min, PDO::PARAM_INT);
+
                         break;
                     case 'article_age_max':
                         $stmt->bindValue($identifier, $this->article_age_max, PDO::PARAM_INT);
+
                         break;
                     case 'article_summary':
                         $stmt->bindValue($identifier, $this->article_summary, PDO::PARAM_STR);
+
                         break;
                     case 'article_contents':
                         $stmt->bindValue($identifier, $this->article_contents, PDO::PARAM_STR);
+
                         break;
                     case 'article_bonus':
                         $stmt->bindValue($identifier, $this->article_bonus, PDO::PARAM_STR);
+
                         break;
                     case 'article_catchline':
                         $stmt->bindValue($identifier, $this->article_catchline, PDO::PARAM_STR);
+
                         break;
                     case 'article_biography':
                         $stmt->bindValue($identifier, $this->article_biography, PDO::PARAM_STR);
+
                         break;
                     case 'article_motsv':
                         $stmt->bindValue($identifier, $this->article_motsv, PDO::PARAM_STR);
+
                         break;
                     case 'article_copyright':
                         $stmt->bindValue($identifier, $this->article_copyright, PDO::PARAM_INT);
+
                         break;
                     case 'article_pubdate':
                         $stmt->bindValue($identifier, $this->article_pubdate ? $this->article_pubdate->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_keywords':
                         $stmt->bindValue($identifier, $this->article_keywords, PDO::PARAM_STR);
+
                         break;
                     case 'article_links':
                         $stmt->bindValue($identifier, $this->article_links, PDO::PARAM_STR);
+
                         break;
                     case 'article_keywords_generated':
                         $stmt->bindValue($identifier, $this->article_keywords_generated ? $this->article_keywords_generated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_publisher_stock':
                         $stmt->bindValue($identifier, $this->article_publisher_stock, PDO::PARAM_INT);
+
                         break;
                     case 'article_hits':
                         $stmt->bindValue($identifier, $this->article_hits, PDO::PARAM_INT);
+
                         break;
                     case 'article_editing_user':
                         $stmt->bindValue($identifier, $this->article_editing_user, PDO::PARAM_INT);
+
                         break;
                     case 'article_insert':
                         $stmt->bindValue($identifier, $this->article_insert ? $this->article_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_update':
                         $stmt->bindValue($identifier, $this->article_update ? $this->article_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_created':
                         $stmt->bindValue($identifier, $this->article_created ? $this->article_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_updated':
                         $stmt->bindValue($identifier, $this->article_updated ? $this->article_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_done':
                         $stmt->bindValue($identifier, (int) $this->article_done, PDO::PARAM_INT);
+
                         break;
                     case 'article_to_check':
                         $stmt->bindValue($identifier, (int) $this->article_to_check, PDO::PARAM_INT);
+
                         break;
                     case 'article_deletion_by':
                         $stmt->bindValue($identifier, $this->article_deletion_by, PDO::PARAM_INT);
+
                         break;
                     case 'article_deletion_date':
                         $stmt->bindValue($identifier, $this->article_deletion_date ? $this->article_deletion_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'article_deletion_reason':
                         $stmt->bindValue($identifier, $this->article_deletion_reason, PDO::PARAM_STR);
+
                         break;
                 }
             }

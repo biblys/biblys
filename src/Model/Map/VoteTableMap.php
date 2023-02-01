@@ -46,6 +46,11 @@ class VoteTableMap extends TableMap
     public const TABLE_NAME = 'votes';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Vote';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Vote';
@@ -302,7 +307,7 @@ class VoteTableMap extends TableMap
             VoteTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

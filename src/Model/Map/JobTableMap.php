@@ -46,6 +46,11 @@ class JobTableMap extends TableMap
     public const TABLE_NAME = 'jobs';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Job';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Job';
@@ -385,7 +390,7 @@ class JobTableMap extends TableMap
             JobTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

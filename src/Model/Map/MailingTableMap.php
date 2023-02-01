@@ -46,6 +46,11 @@ class MailingTableMap extends TableMap
     public const TABLE_NAME = 'mailing';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Mailing';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Mailing';
@@ -357,7 +362,7 @@ class MailingTableMap extends TableMap
             MailingTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'langs' table.
- *
- *
+ * Base class that represents a query for the `langs` table.
  *
  * @method     ChildLangQuery orderById($order = Criteria::ASC) Order by the lang_id column
  * @method     ChildLangQuery orderByIso639-1($order = Criteria::ASC) Order by the lang_iso_639-1 column
@@ -55,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLang|null findOneByName(string $lang_name) Return the first ChildLang filtered by the lang_name column
  * @method     ChildLang|null findOneByNameOriginal(string $lang_name_original) Return the first ChildLang filtered by the lang_name_original column
  * @method     ChildLang|null findOneByCreatedAt(string $lang_created) Return the first ChildLang filtered by the lang_created column
- * @method     ChildLang|null findOneByUpdatedAt(string $lang_updated) Return the first ChildLang filtered by the lang_updated column *
-
+ * @method     ChildLang|null findOneByUpdatedAt(string $lang_updated) Return the first ChildLang filtered by the lang_updated column
+ *
  * @method     ChildLang requirePk($key, ?ConnectionInterface $con = null) Return the ChildLang by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLang requireOne(?ConnectionInterface $con = null) Return the first ChildLang matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -71,25 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLang[]|Collection find(?ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildLang> find(?ConnectionInterface $con = null) Return ChildLang objects based on current ModelCriteria
- * @method     ChildLang[]|Collection findById(int $lang_id) Return ChildLang objects filtered by the lang_id column
- * @psalm-method Collection&\Traversable<ChildLang> findById(int $lang_id) Return ChildLang objects filtered by the lang_id column
- * @method     ChildLang[]|Collection findByIso639-1(string $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
- * @psalm-method Collection&\Traversable<ChildLang> findByIso639-1(string $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
- * @method     ChildLang[]|Collection findByIso639-2(string $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
- * @psalm-method Collection&\Traversable<ChildLang> findByIso639-2(string $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
- * @method     ChildLang[]|Collection findByIso639-3(string $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
- * @psalm-method Collection&\Traversable<ChildLang> findByIso639-3(string $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
- * @method     ChildLang[]|Collection findByName(string $lang_name) Return ChildLang objects filtered by the lang_name column
- * @psalm-method Collection&\Traversable<ChildLang> findByName(string $lang_name) Return ChildLang objects filtered by the lang_name column
- * @method     ChildLang[]|Collection findByNameOriginal(string $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
- * @psalm-method Collection&\Traversable<ChildLang> findByNameOriginal(string $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
- * @method     ChildLang[]|Collection findByCreatedAt(string $lang_created) Return ChildLang objects filtered by the lang_created column
- * @psalm-method Collection&\Traversable<ChildLang> findByCreatedAt(string $lang_created) Return ChildLang objects filtered by the lang_created column
- * @method     ChildLang[]|Collection findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
- * @psalm-method Collection&\Traversable<ChildLang> findByUpdatedAt(string $lang_updated) Return ChildLang objects filtered by the lang_updated column
+ *
+ * @method     ChildLang[]|Collection findById(int|array<int> $lang_id) Return ChildLang objects filtered by the lang_id column
+ * @psalm-method Collection&\Traversable<ChildLang> findById(int|array<int> $lang_id) Return ChildLang objects filtered by the lang_id column
+ * @method     ChildLang[]|Collection findByIso639-1(string|array<string> $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
+ * @psalm-method Collection&\Traversable<ChildLang> findByIso639-1(string|array<string> $lang_iso_639-1) Return ChildLang objects filtered by the lang_iso_639-1 column
+ * @method     ChildLang[]|Collection findByIso639-2(string|array<string> $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
+ * @psalm-method Collection&\Traversable<ChildLang> findByIso639-2(string|array<string> $lang_iso_639-2) Return ChildLang objects filtered by the lang_iso_639-2 column
+ * @method     ChildLang[]|Collection findByIso639-3(string|array<string> $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
+ * @psalm-method Collection&\Traversable<ChildLang> findByIso639-3(string|array<string> $lang_iso_639-3) Return ChildLang objects filtered by the lang_iso_639-3 column
+ * @method     ChildLang[]|Collection findByName(string|array<string> $lang_name) Return ChildLang objects filtered by the lang_name column
+ * @psalm-method Collection&\Traversable<ChildLang> findByName(string|array<string> $lang_name) Return ChildLang objects filtered by the lang_name column
+ * @method     ChildLang[]|Collection findByNameOriginal(string|array<string> $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
+ * @psalm-method Collection&\Traversable<ChildLang> findByNameOriginal(string|array<string> $lang_name_original) Return ChildLang objects filtered by the lang_name_original column
+ * @method     ChildLang[]|Collection findByCreatedAt(string|array<string> $lang_created) Return ChildLang objects filtered by the lang_created column
+ * @psalm-method Collection&\Traversable<ChildLang> findByCreatedAt(string|array<string> $lang_created) Return ChildLang objects filtered by the lang_created column
+ * @method     ChildLang[]|Collection findByUpdatedAt(string|array<string> $lang_updated) Return ChildLang objects filtered by the lang_updated column
+ * @psalm-method Collection&\Traversable<ChildLang> findByUpdatedAt(string|array<string> $lang_updated) Return ChildLang objects filtered by the lang_updated column
+ *
  * @method     ChildLang[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLang> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class LangQuery extends ModelCriteria
 {

@@ -831,8 +831,8 @@ abstract class Right implements ActiveRecordInterface
                 $col = null;
             }
             $this->right_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1135,33 +1135,43 @@ abstract class Right implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'right_id':
                         $stmt->bindValue($identifier, $this->right_id, PDO::PARAM_INT);
+
                         break;
                     case 'right_uid':
                         $stmt->bindValue($identifier, $this->right_uid, PDO::PARAM_STR);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'right_current':
                         $stmt->bindValue($identifier, (int) $this->right_current, PDO::PARAM_INT);
+
                         break;
                     case 'right_created':
                         $stmt->bindValue($identifier, $this->right_created ? $this->right_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'right_updated':
                         $stmt->bindValue($identifier, $this->right_updated ? $this->right_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

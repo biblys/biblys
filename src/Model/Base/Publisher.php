@@ -1997,8 +1997,8 @@ abstract class Publisher implements ActiveRecordInterface
                 $col = null;
             }
             $this->publisher_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -2387,117 +2387,155 @@ abstract class Publisher implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_name':
                         $stmt->bindValue($identifier, $this->publisher_name, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_name_alphabetic':
                         $stmt->bindValue($identifier, $this->publisher_name_alphabetic, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_url':
                         $stmt->bindValue($identifier, $this->publisher_url, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_noosfere_id':
                         $stmt->bindValue($identifier, $this->publisher_noosfere_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_representative':
                         $stmt->bindValue($identifier, $this->publisher_representative, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_address':
                         $stmt->bindValue($identifier, $this->publisher_address, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_postal_code':
                         $stmt->bindValue($identifier, $this->publisher_postal_code, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_city':
                         $stmt->bindValue($identifier, $this->publisher_city, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_country':
                         $stmt->bindValue($identifier, $this->publisher_country, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_phone':
                         $stmt->bindValue($identifier, $this->publisher_phone, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_fax':
                         $stmt->bindValue($identifier, $this->publisher_fax, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_website':
                         $stmt->bindValue($identifier, $this->publisher_website, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_buy_link':
                         $stmt->bindValue($identifier, $this->publisher_buy_link, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_email':
                         $stmt->bindValue($identifier, $this->publisher_email, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_facebook':
                         $stmt->bindValue($identifier, $this->publisher_facebook, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_twitter':
                         $stmt->bindValue($identifier, $this->publisher_twitter, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_legal_form':
                         $stmt->bindValue($identifier, $this->publisher_legal_form, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_creation_year':
                         $stmt->bindValue($identifier, $this->publisher_creation_year, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_isbn':
                         $stmt->bindValue($identifier, $this->publisher_isbn, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_volumes':
                         $stmt->bindValue($identifier, $this->publisher_volumes, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_average_run':
                         $stmt->bindValue($identifier, $this->publisher_average_run, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_specialities':
                         $stmt->bindValue($identifier, $this->publisher_specialities, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_diffuseur':
                         $stmt->bindValue($identifier, $this->publisher_diffuseur, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_distributeur':
                         $stmt->bindValue($identifier, $this->publisher_distributeur, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_vpc':
                         $stmt->bindValue($identifier, (int) $this->publisher_vpc, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_paypal':
                         $stmt->bindValue($identifier, $this->publisher_paypal, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_shipping_mode':
                         $stmt->bindValue($identifier, $this->publisher_shipping_mode, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_shipping_fee':
                         $stmt->bindValue($identifier, $this->publisher_shipping_fee, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_gln':
                         $stmt->bindValue($identifier, $this->publisher_gln, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_desc':
                         $stmt->bindValue($identifier, $this->publisher_desc, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_desc_short':
                         $stmt->bindValue($identifier, $this->publisher_desc_short, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_order_by':
                         $stmt->bindValue($identifier, $this->publisher_order_by, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_insert':
                         $stmt->bindValue($identifier, $this->publisher_insert ? $this->publisher_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_update':
                         $stmt->bindValue($identifier, $this->publisher_update ? $this->publisher_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_created':
                         $stmt->bindValue($identifier, $this->publisher_created ? $this->publisher_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'publisher_updated':
                         $stmt->bindValue($identifier, $this->publisher_updated ? $this->publisher_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

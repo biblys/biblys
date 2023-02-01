@@ -897,8 +897,8 @@ abstract class Role implements ActiveRecordInterface
                 $col = null;
             }
             $this->role_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1196,39 +1196,51 @@ abstract class Role implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'id':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'book_id':
                         $stmt->bindValue($identifier, $this->book_id, PDO::PARAM_INT);
+
                         break;
                     case 'event_id':
                         $stmt->bindValue($identifier, $this->event_id, PDO::PARAM_INT);
+
                         break;
                     case 'people_id':
                         $stmt->bindValue($identifier, $this->people_id, PDO::PARAM_INT);
+
                         break;
                     case 'job_id':
                         $stmt->bindValue($identifier, $this->job_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'role_hide':
                         $stmt->bindValue($identifier, (int) $this->role_hide, PDO::PARAM_INT);
+
                         break;
                     case 'role_presence':
                         $stmt->bindValue($identifier, $this->role_presence, PDO::PARAM_STR);
+
                         break;
                     case 'role_date':
                         $stmt->bindValue($identifier, $this->role_date ? $this->role_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'role_created':
                         $stmt->bindValue($identifier, $this->role_created ? $this->role_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'role_updated':
                         $stmt->bindValue($identifier, $this->role_updated ? $this->role_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

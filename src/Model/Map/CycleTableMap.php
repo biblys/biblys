@@ -46,6 +46,11 @@ class CycleTableMap extends TableMap
     public const TABLE_NAME = 'cycles';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Cycle';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Cycle';
@@ -385,7 +390,7 @@ class CycleTableMap extends TableMap
             CycleTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

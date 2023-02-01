@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'permissions' table.
- *
- *
+ * Base class that represents a query for the `permissions` table.
  *
  * @method     ChildPermissionQuery orderById($order = Criteria::ASC) Order by the permission_id column
  * @method     ChildPermissionQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -49,8 +47,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPermission|null findOneBySiteId(int $site_id) Return the first ChildPermission filtered by the site_id column
  * @method     ChildPermission|null findOneByRank(string $permission_rank) Return the first ChildPermission filtered by the permission_rank column
  * @method     ChildPermission|null findOneByLast(string $permission_last) Return the first ChildPermission filtered by the permission_last column
- * @method     ChildPermission|null findOneByDate(string $permission_date) Return the first ChildPermission filtered by the permission_date column *
-
+ * @method     ChildPermission|null findOneByDate(string $permission_date) Return the first ChildPermission filtered by the permission_date column
+ *
  * @method     ChildPermission requirePk($key, ?ConnectionInterface $con = null) Return the ChildPermission by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPermission requireOne(?ConnectionInterface $con = null) Return the first ChildPermission matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -63,21 +61,22 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPermission[]|Collection find(?ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildPermission> find(?ConnectionInterface $con = null) Return ChildPermission objects based on current ModelCriteria
- * @method     ChildPermission[]|Collection findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
- * @psalm-method Collection&\Traversable<ChildPermission> findById(int $permission_id) Return ChildPermission objects filtered by the permission_id column
- * @method     ChildPermission[]|Collection findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildPermission> findByUserId(int $user_id) Return ChildPermission objects filtered by the user_id column
- * @method     ChildPermission[]|Collection findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildPermission> findBySiteId(int $site_id) Return ChildPermission objects filtered by the site_id column
- * @method     ChildPermission[]|Collection findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
- * @psalm-method Collection&\Traversable<ChildPermission> findByRank(string $permission_rank) Return ChildPermission objects filtered by the permission_rank column
- * @method     ChildPermission[]|Collection findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
- * @psalm-method Collection&\Traversable<ChildPermission> findByLast(string $permission_last) Return ChildPermission objects filtered by the permission_last column
- * @method     ChildPermission[]|Collection findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
- * @psalm-method Collection&\Traversable<ChildPermission> findByDate(string $permission_date) Return ChildPermission objects filtered by the permission_date column
+ *
+ * @method     ChildPermission[]|Collection findById(int|array<int> $permission_id) Return ChildPermission objects filtered by the permission_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findById(int|array<int> $permission_id) Return ChildPermission objects filtered by the permission_id column
+ * @method     ChildPermission[]|Collection findByUserId(int|array<int> $user_id) Return ChildPermission objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByUserId(int|array<int> $user_id) Return ChildPermission objects filtered by the user_id column
+ * @method     ChildPermission[]|Collection findBySiteId(int|array<int> $site_id) Return ChildPermission objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildPermission> findBySiteId(int|array<int> $site_id) Return ChildPermission objects filtered by the site_id column
+ * @method     ChildPermission[]|Collection findByRank(string|array<string> $permission_rank) Return ChildPermission objects filtered by the permission_rank column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByRank(string|array<string> $permission_rank) Return ChildPermission objects filtered by the permission_rank column
+ * @method     ChildPermission[]|Collection findByLast(string|array<string> $permission_last) Return ChildPermission objects filtered by the permission_last column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByLast(string|array<string> $permission_last) Return ChildPermission objects filtered by the permission_last column
+ * @method     ChildPermission[]|Collection findByDate(string|array<string> $permission_date) Return ChildPermission objects filtered by the permission_date column
+ * @psalm-method Collection&\Traversable<ChildPermission> findByDate(string|array<string> $permission_date) Return ChildPermission objects filtered by the permission_date column
+ *
  * @method     ChildPermission[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPermission> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class PermissionQuery extends ModelCriteria
 {

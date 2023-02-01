@@ -642,8 +642,8 @@ abstract class CronJob implements ActiveRecordInterface
                 $col = null;
             }
             $this->cron_job_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -899,24 +899,31 @@ abstract class CronJob implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'cron_job_id':
                         $stmt->bindValue($identifier, $this->cron_job_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'cron_job_task':
                         $stmt->bindValue($identifier, $this->cron_job_task, PDO::PARAM_STR);
+
                         break;
                     case 'cron_job_result':
                         $stmt->bindValue($identifier, $this->cron_job_result, PDO::PARAM_STR);
+
                         break;
                     case 'cron_job_message':
                         $stmt->bindValue($identifier, $this->cron_job_message, PDO::PARAM_STR);
+
                         break;
                     case 'cron_job_created':
                         $stmt->bindValue($identifier, $this->cron_job_created ? $this->cron_job_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cron_job_updated':
                         $stmt->bindValue($identifier, $this->cron_job_updated ? $this->cron_job_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

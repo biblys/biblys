@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'libraries' table.
- *
- *
+ * Base class that represents a query for the `libraries` table.
  *
  * @method     ChildLibraryQuery orderById($order = Criteria::ASC) Order by the library_id column
  * @method     ChildLibraryQuery orderByName($order = Criteria::ASC) Order by the library_name column
@@ -94,8 +92,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLibrary|null findOneByReadings(string $library_readings) Return the first ChildLibrary filtered by the library_readings column
  * @method     ChildLibrary|null findOneByDesc(string $library_desc) Return the first ChildLibrary filtered by the library_desc column
  * @method     ChildLibrary|null findOneByCreatedAt(string $library_created) Return the first ChildLibrary filtered by the library_created column
- * @method     ChildLibrary|null findOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column *
-
+ * @method     ChildLibrary|null findOneByUpdatedAt(string $library_updated) Return the first ChildLibrary filtered by the library_updated column
+ *
  * @method     ChildLibrary requirePk($key, ?ConnectionInterface $con = null) Return the ChildLibrary by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLibrary requireOne(?ConnectionInterface $con = null) Return the first ChildLibrary matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -123,51 +121,52 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLibrary[]|Collection find(?ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildLibrary> find(?ConnectionInterface $con = null) Return ChildLibrary objects based on current ModelCriteria
- * @method     ChildLibrary[]|Collection findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildLibrary> findById(int $library_id) Return ChildLibrary objects filtered by the library_id column
- * @method     ChildLibrary[]|Collection findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByName(string $library_name) Return ChildLibrary objects filtered by the library_name column
- * @method     ChildLibrary[]|Collection findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByNameAlphabetic(string $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
- * @method     ChildLibrary[]|Collection findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByUrl(string $library_url) Return ChildLibrary objects filtered by the library_url column
- * @method     ChildLibrary[]|Collection findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByRepresentative(string $library_representative) Return ChildLibrary objects filtered by the library_representative column
- * @method     ChildLibrary[]|Collection findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByAddress(string $library_address) Return ChildLibrary objects filtered by the library_address column
- * @method     ChildLibrary[]|Collection findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByPostalCode(string $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
- * @method     ChildLibrary[]|Collection findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByCity(string $library_city) Return ChildLibrary objects filtered by the library_city column
- * @method     ChildLibrary[]|Collection findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByCountry(string $library_country) Return ChildLibrary objects filtered by the library_country column
- * @method     ChildLibrary[]|Collection findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByPhone(string $library_phone) Return ChildLibrary objects filtered by the library_phone column
- * @method     ChildLibrary[]|Collection findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByFax(string $library_fax) Return ChildLibrary objects filtered by the library_fax column
- * @method     ChildLibrary[]|Collection findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByWebsite(string $library_website) Return ChildLibrary objects filtered by the library_website column
- * @method     ChildLibrary[]|Collection findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByEmail(string $library_email) Return ChildLibrary objects filtered by the library_email column
- * @method     ChildLibrary[]|Collection findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByFacebook(string $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
- * @method     ChildLibrary[]|Collection findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByTwitter(string $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
- * @method     ChildLibrary[]|Collection findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByCreationYear(string $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
- * @method     ChildLibrary[]|Collection findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
- * @psalm-method Collection&\Traversable<ChildLibrary> findBySpecialities(string $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
- * @method     ChildLibrary[]|Collection findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByReadings(string $library_readings) Return ChildLibrary objects filtered by the library_readings column
- * @method     ChildLibrary[]|Collection findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByDesc(string $library_desc) Return ChildLibrary objects filtered by the library_desc column
- * @method     ChildLibrary[]|Collection findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByCreatedAt(string $library_created) Return ChildLibrary objects filtered by the library_created column
- * @method     ChildLibrary[]|Collection findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
- * @psalm-method Collection&\Traversable<ChildLibrary> findByUpdatedAt(string $library_updated) Return ChildLibrary objects filtered by the library_updated column
+ *
+ * @method     ChildLibrary[]|Collection findById(int|array<int> $library_id) Return ChildLibrary objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findById(int|array<int> $library_id) Return ChildLibrary objects filtered by the library_id column
+ * @method     ChildLibrary[]|Collection findByName(string|array<string> $library_name) Return ChildLibrary objects filtered by the library_name column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByName(string|array<string> $library_name) Return ChildLibrary objects filtered by the library_name column
+ * @method     ChildLibrary[]|Collection findByNameAlphabetic(string|array<string> $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByNameAlphabetic(string|array<string> $library_name_alphabetic) Return ChildLibrary objects filtered by the library_name_alphabetic column
+ * @method     ChildLibrary[]|Collection findByUrl(string|array<string> $library_url) Return ChildLibrary objects filtered by the library_url column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByUrl(string|array<string> $library_url) Return ChildLibrary objects filtered by the library_url column
+ * @method     ChildLibrary[]|Collection findByRepresentative(string|array<string> $library_representative) Return ChildLibrary objects filtered by the library_representative column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByRepresentative(string|array<string> $library_representative) Return ChildLibrary objects filtered by the library_representative column
+ * @method     ChildLibrary[]|Collection findByAddress(string|array<string> $library_address) Return ChildLibrary objects filtered by the library_address column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByAddress(string|array<string> $library_address) Return ChildLibrary objects filtered by the library_address column
+ * @method     ChildLibrary[]|Collection findByPostalCode(string|array<string> $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByPostalCode(string|array<string> $library_postal_code) Return ChildLibrary objects filtered by the library_postal_code column
+ * @method     ChildLibrary[]|Collection findByCity(string|array<string> $library_city) Return ChildLibrary objects filtered by the library_city column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCity(string|array<string> $library_city) Return ChildLibrary objects filtered by the library_city column
+ * @method     ChildLibrary[]|Collection findByCountry(string|array<string> $library_country) Return ChildLibrary objects filtered by the library_country column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCountry(string|array<string> $library_country) Return ChildLibrary objects filtered by the library_country column
+ * @method     ChildLibrary[]|Collection findByPhone(string|array<string> $library_phone) Return ChildLibrary objects filtered by the library_phone column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByPhone(string|array<string> $library_phone) Return ChildLibrary objects filtered by the library_phone column
+ * @method     ChildLibrary[]|Collection findByFax(string|array<string> $library_fax) Return ChildLibrary objects filtered by the library_fax column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByFax(string|array<string> $library_fax) Return ChildLibrary objects filtered by the library_fax column
+ * @method     ChildLibrary[]|Collection findByWebsite(string|array<string> $library_website) Return ChildLibrary objects filtered by the library_website column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByWebsite(string|array<string> $library_website) Return ChildLibrary objects filtered by the library_website column
+ * @method     ChildLibrary[]|Collection findByEmail(string|array<string> $library_email) Return ChildLibrary objects filtered by the library_email column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByEmail(string|array<string> $library_email) Return ChildLibrary objects filtered by the library_email column
+ * @method     ChildLibrary[]|Collection findByFacebook(string|array<string> $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByFacebook(string|array<string> $library_facebook) Return ChildLibrary objects filtered by the library_facebook column
+ * @method     ChildLibrary[]|Collection findByTwitter(string|array<string> $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByTwitter(string|array<string> $library_twitter) Return ChildLibrary objects filtered by the library_twitter column
+ * @method     ChildLibrary[]|Collection findByCreationYear(string|array<string> $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCreationYear(string|array<string> $library_creation_year) Return ChildLibrary objects filtered by the library_creation_year column
+ * @method     ChildLibrary[]|Collection findBySpecialities(string|array<string> $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findBySpecialities(string|array<string> $library_specialities) Return ChildLibrary objects filtered by the library_specialities column
+ * @method     ChildLibrary[]|Collection findByReadings(string|array<string> $library_readings) Return ChildLibrary objects filtered by the library_readings column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByReadings(string|array<string> $library_readings) Return ChildLibrary objects filtered by the library_readings column
+ * @method     ChildLibrary[]|Collection findByDesc(string|array<string> $library_desc) Return ChildLibrary objects filtered by the library_desc column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByDesc(string|array<string> $library_desc) Return ChildLibrary objects filtered by the library_desc column
+ * @method     ChildLibrary[]|Collection findByCreatedAt(string|array<string> $library_created) Return ChildLibrary objects filtered by the library_created column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByCreatedAt(string|array<string> $library_created) Return ChildLibrary objects filtered by the library_created column
+ * @method     ChildLibrary[]|Collection findByUpdatedAt(string|array<string> $library_updated) Return ChildLibrary objects filtered by the library_updated column
+ * @psalm-method Collection&\Traversable<ChildLibrary> findByUpdatedAt(string|array<string> $library_updated) Return ChildLibrary objects filtered by the library_updated column
+ *
  * @method     ChildLibrary[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLibrary> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class LibraryQuery extends ModelCriteria
 {

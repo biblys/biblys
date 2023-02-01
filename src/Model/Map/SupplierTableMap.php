@@ -46,6 +46,11 @@ class SupplierTableMap extends TableMap
     public const TABLE_NAME = 'suppliers';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Supplier';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Supplier';
@@ -399,7 +404,7 @@ class SupplierTableMap extends TableMap
             SupplierTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -46,6 +46,11 @@ class OptionTableMap extends TableMap
     public const TABLE_NAME = 'options';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Option';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Option';
@@ -357,7 +362,7 @@ class OptionTableMap extends TableMap
             OptionTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

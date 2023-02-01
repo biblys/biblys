@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'axys_apps' table.
- *
- *
+ * Base class that represents a query for the `axys_apps` table.
  *
  * @method     ChildAxysAppQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildAxysAppQuery orderByClientId($order = Criteria::ASC) Order by the client_id column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAxysApp|null findOneByName(string $name) Return the first ChildAxysApp filtered by the name column
  * @method     ChildAxysApp|null findOneByRedirectUri(string $redirect_uri) Return the first ChildAxysApp filtered by the redirect_uri column
  * @method     ChildAxysApp|null findOneByCreatedAt(string $created_at) Return the first ChildAxysApp filtered by the created_at column
- * @method     ChildAxysApp|null findOneByUpdatedAt(string $updated_at) Return the first ChildAxysApp filtered by the updated_at column *
-
+ * @method     ChildAxysApp|null findOneByUpdatedAt(string $updated_at) Return the first ChildAxysApp filtered by the updated_at column
+ *
  * @method     ChildAxysApp requirePk($key, ?ConnectionInterface $con = null) Return the ChildAxysApp by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAxysApp requireOne(?ConnectionInterface $con = null) Return the first ChildAxysApp matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAxysApp[]|Collection find(?ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildAxysApp> find(?ConnectionInterface $con = null) Return ChildAxysApp objects based on current ModelCriteria
- * @method     ChildAxysApp[]|Collection findById(int $id) Return ChildAxysApp objects filtered by the id column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findById(int $id) Return ChildAxysApp objects filtered by the id column
- * @method     ChildAxysApp[]|Collection findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientId(string $client_id) Return ChildAxysApp objects filtered by the client_id column
- * @method     ChildAxysApp[]|Collection findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientSecret(string $client_secret) Return ChildAxysApp objects filtered by the client_secret column
- * @method     ChildAxysApp[]|Collection findByName(string $name) Return ChildAxysApp objects filtered by the name column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByName(string $name) Return ChildAxysApp objects filtered by the name column
- * @method     ChildAxysApp[]|Collection findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByRedirectUri(string $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
- * @method     ChildAxysApp[]|Collection findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByCreatedAt(string $created_at) Return ChildAxysApp objects filtered by the created_at column
- * @method     ChildAxysApp[]|Collection findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
- * @psalm-method Collection&\Traversable<ChildAxysApp> findByUpdatedAt(string $updated_at) Return ChildAxysApp objects filtered by the updated_at column
+ *
+ * @method     ChildAxysApp[]|Collection findById(int|array<int> $id) Return ChildAxysApp objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findById(int|array<int> $id) Return ChildAxysApp objects filtered by the id column
+ * @method     ChildAxysApp[]|Collection findByClientId(string|array<string> $client_id) Return ChildAxysApp objects filtered by the client_id column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientId(string|array<string> $client_id) Return ChildAxysApp objects filtered by the client_id column
+ * @method     ChildAxysApp[]|Collection findByClientSecret(string|array<string> $client_secret) Return ChildAxysApp objects filtered by the client_secret column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByClientSecret(string|array<string> $client_secret) Return ChildAxysApp objects filtered by the client_secret column
+ * @method     ChildAxysApp[]|Collection findByName(string|array<string> $name) Return ChildAxysApp objects filtered by the name column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByName(string|array<string> $name) Return ChildAxysApp objects filtered by the name column
+ * @method     ChildAxysApp[]|Collection findByRedirectUri(string|array<string> $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByRedirectUri(string|array<string> $redirect_uri) Return ChildAxysApp objects filtered by the redirect_uri column
+ * @method     ChildAxysApp[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildAxysApp objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByCreatedAt(string|array<string> $created_at) Return ChildAxysApp objects filtered by the created_at column
+ * @method     ChildAxysApp[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildAxysApp objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildAxysApp> findByUpdatedAt(string|array<string> $updated_at) Return ChildAxysApp objects filtered by the updated_at column
+ *
  * @method     ChildAxysApp[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAxysApp> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class AxysAppQuery extends ModelCriteria
 {

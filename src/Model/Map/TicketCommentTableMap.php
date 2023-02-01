@@ -46,6 +46,11 @@ class TicketCommentTableMap extends TableMap
     public const TABLE_NAME = 'ticket_comment';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'TicketComment';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\TicketComment';
@@ -329,7 +334,7 @@ class TicketCommentTableMap extends TableMap
             TicketCommentTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

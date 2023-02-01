@@ -46,6 +46,11 @@ class SubscriptionTableMap extends TableMap
     public const TABLE_NAME = 'subscriptions';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Subscription';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Subscription';
@@ -441,7 +446,7 @@ class SubscriptionTableMap extends TableMap
             SubscriptionTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

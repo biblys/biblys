@@ -1338,8 +1338,8 @@ abstract class Post implements ActiveRecordInterface
                 $col = null;
             }
             $this->post_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1640,69 +1640,91 @@ abstract class Post implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'post_id':
                         $stmt->bindValue($identifier, $this->post_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'category_id':
                         $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
+
                         break;
                     case 'post_url':
                         $stmt->bindValue($identifier, $this->post_url, PDO::PARAM_STR);
+
                         break;
                     case 'post_title':
                         $stmt->bindValue($identifier, $this->post_title, PDO::PARAM_STR);
+
                         break;
                     case 'post_content':
                         $stmt->bindValue($identifier, $this->post_content, PDO::PARAM_STR);
+
                         break;
                     case 'post_illustration_legend':
                         $stmt->bindValue($identifier, $this->post_illustration_legend, PDO::PARAM_STR);
+
                         break;
                     case 'post_selected':
                         $stmt->bindValue($identifier, (int) $this->post_selected, PDO::PARAM_INT);
+
                         break;
                     case 'post_link':
                         $stmt->bindValue($identifier, $this->post_link, PDO::PARAM_STR);
+
                         break;
                     case 'post_status':
                         $stmt->bindValue($identifier, (int) $this->post_status, PDO::PARAM_INT);
+
                         break;
                     case 'post_keywords':
                         $stmt->bindValue($identifier, $this->post_keywords, PDO::PARAM_STR);
+
                         break;
                     case 'post_links':
                         $stmt->bindValue($identifier, $this->post_links, PDO::PARAM_STR);
+
                         break;
                     case 'post_keywords_generated':
                         $stmt->bindValue($identifier, $this->post_keywords_generated ? $this->post_keywords_generated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'post_fb_id':
                         $stmt->bindValue($identifier, $this->post_fb_id, PDO::PARAM_INT);
+
                         break;
                     case 'post_date':
                         $stmt->bindValue($identifier, $this->post_date ? $this->post_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'post_hits':
                         $stmt->bindValue($identifier, $this->post_hits, PDO::PARAM_INT);
+
                         break;
                     case 'post_insert':
                         $stmt->bindValue($identifier, $this->post_insert ? $this->post_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'post_update':
                         $stmt->bindValue($identifier, $this->post_update ? $this->post_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'post_created':
                         $stmt->bindValue($identifier, $this->post_created ? $this->post_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'post_updated':
                         $stmt->bindValue($identifier, $this->post_updated ? $this->post_updated->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

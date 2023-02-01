@@ -46,6 +46,11 @@ class SessionTableMap extends TableMap
     public const TABLE_NAME = 'session';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Session';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Session';
@@ -357,7 +362,7 @@ class SessionTableMap extends TableMap
             SessionTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

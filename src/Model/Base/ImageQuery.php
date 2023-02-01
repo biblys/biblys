@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'images' table.
- *
- *
+ * Base class that represents a query for the `images` table.
  *
  * @method     ChildImageQuery orderById($order = Criteria::ASC) Order by the image_id column
  * @method     ChildImageQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -67,8 +65,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildImage|null findOneBySize(string $image_size) Return the first ChildImage filtered by the image_size column
  * @method     ChildImage|null findOneByInserted(string $image_inserted) Return the first ChildImage filtered by the image_inserted column
  * @method     ChildImage|null findOneByUploaded(string $image_uploaded) Return the first ChildImage filtered by the image_uploaded column
- * @method     ChildImage|null findOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column *
-
+ * @method     ChildImage|null findOneByUpdatedAt(string $image_updated) Return the first ChildImage filtered by the image_updated column
+ *
  * @method     ChildImage requirePk($key, ?ConnectionInterface $con = null) Return the ChildImage by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildImage requireOne(?ConnectionInterface $con = null) Return the first ChildImage matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -87,33 +85,34 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildImage[]|Collection find(?ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildImage> find(?ConnectionInterface $con = null) Return ChildImage objects based on current ModelCriteria
- * @method     ChildImage[]|Collection findById(int $image_id) Return ChildImage objects filtered by the image_id column
- * @psalm-method Collection&\Traversable<ChildImage> findById(int $image_id) Return ChildImage objects filtered by the image_id column
- * @method     ChildImage[]|Collection findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildImage> findBySiteId(int $site_id) Return ChildImage objects filtered by the site_id column
- * @method     ChildImage[]|Collection findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildImage> findByBookshopId(int $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
- * @method     ChildImage[]|Collection findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
- * @psalm-method Collection&\Traversable<ChildImage> findByEventId(int $event_id) Return ChildImage objects filtered by the event_id column
- * @method     ChildImage[]|Collection findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildImage> findByLibraryId(int $library_id) Return ChildImage objects filtered by the library_id column
- * @method     ChildImage[]|Collection findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
- * @psalm-method Collection&\Traversable<ChildImage> findByNature(string $image_nature) Return ChildImage objects filtered by the image_nature column
- * @method     ChildImage[]|Collection findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
- * @psalm-method Collection&\Traversable<ChildImage> findByLegend(string $image_legend) Return ChildImage objects filtered by the image_legend column
- * @method     ChildImage[]|Collection findByType(string $image_type) Return ChildImage objects filtered by the image_type column
- * @psalm-method Collection&\Traversable<ChildImage> findByType(string $image_type) Return ChildImage objects filtered by the image_type column
- * @method     ChildImage[]|Collection findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
- * @psalm-method Collection&\Traversable<ChildImage> findBySize(string $image_size) Return ChildImage objects filtered by the image_size column
- * @method     ChildImage[]|Collection findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
- * @psalm-method Collection&\Traversable<ChildImage> findByInserted(string $image_inserted) Return ChildImage objects filtered by the image_inserted column
- * @method     ChildImage[]|Collection findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
- * @psalm-method Collection&\Traversable<ChildImage> findByUploaded(string $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
- * @method     ChildImage[]|Collection findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
- * @psalm-method Collection&\Traversable<ChildImage> findByUpdatedAt(string $image_updated) Return ChildImage objects filtered by the image_updated column
+ *
+ * @method     ChildImage[]|Collection findById(int|array<int> $image_id) Return ChildImage objects filtered by the image_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findById(int|array<int> $image_id) Return ChildImage objects filtered by the image_id column
+ * @method     ChildImage[]|Collection findBySiteId(int|array<int> $site_id) Return ChildImage objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findBySiteId(int|array<int> $site_id) Return ChildImage objects filtered by the site_id column
+ * @method     ChildImage[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByBookshopId(int|array<int> $bookshop_id) Return ChildImage objects filtered by the bookshop_id column
+ * @method     ChildImage[]|Collection findByEventId(int|array<int> $event_id) Return ChildImage objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByEventId(int|array<int> $event_id) Return ChildImage objects filtered by the event_id column
+ * @method     ChildImage[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildImage objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildImage> findByLibraryId(int|array<int> $library_id) Return ChildImage objects filtered by the library_id column
+ * @method     ChildImage[]|Collection findByNature(string|array<string> $image_nature) Return ChildImage objects filtered by the image_nature column
+ * @psalm-method Collection&\Traversable<ChildImage> findByNature(string|array<string> $image_nature) Return ChildImage objects filtered by the image_nature column
+ * @method     ChildImage[]|Collection findByLegend(string|array<string> $image_legend) Return ChildImage objects filtered by the image_legend column
+ * @psalm-method Collection&\Traversable<ChildImage> findByLegend(string|array<string> $image_legend) Return ChildImage objects filtered by the image_legend column
+ * @method     ChildImage[]|Collection findByType(string|array<string> $image_type) Return ChildImage objects filtered by the image_type column
+ * @psalm-method Collection&\Traversable<ChildImage> findByType(string|array<string> $image_type) Return ChildImage objects filtered by the image_type column
+ * @method     ChildImage[]|Collection findBySize(string|array<string> $image_size) Return ChildImage objects filtered by the image_size column
+ * @psalm-method Collection&\Traversable<ChildImage> findBySize(string|array<string> $image_size) Return ChildImage objects filtered by the image_size column
+ * @method     ChildImage[]|Collection findByInserted(string|array<string> $image_inserted) Return ChildImage objects filtered by the image_inserted column
+ * @psalm-method Collection&\Traversable<ChildImage> findByInserted(string|array<string> $image_inserted) Return ChildImage objects filtered by the image_inserted column
+ * @method     ChildImage[]|Collection findByUploaded(string|array<string> $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
+ * @psalm-method Collection&\Traversable<ChildImage> findByUploaded(string|array<string> $image_uploaded) Return ChildImage objects filtered by the image_uploaded column
+ * @method     ChildImage[]|Collection findByUpdatedAt(string|array<string> $image_updated) Return ChildImage objects filtered by the image_updated column
+ * @psalm-method Collection&\Traversable<ChildImage> findByUpdatedAt(string|array<string> $image_updated) Return ChildImage objects filtered by the image_updated column
+ *
  * @method     ChildImage[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildImage> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class ImageQuery extends ModelCriteria
 {

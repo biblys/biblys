@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'jobs' table.
- *
- *
+ * Base class that represents a query for the `jobs` table.
  *
  * @method     ChildJobQuery orderById($order = Criteria::ASC) Order by the job_id column
  * @method     ChildJobQuery orderByName($order = Criteria::ASC) Order by the job_name column
@@ -61,8 +59,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildJob|null findOneByOnix(string $job_onix) Return the first ChildJob filtered by the job_onix column
  * @method     ChildJob|null findOneByDate(string $job_date) Return the first ChildJob filtered by the job_date column
  * @method     ChildJob|null findOneByCreatedAt(string $job_created) Return the first ChildJob filtered by the job_created column
- * @method     ChildJob|null findOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column *
-
+ * @method     ChildJob|null findOneByUpdatedAt(string $job_updated) Return the first ChildJob filtered by the job_updated column
+ *
  * @method     ChildJob requirePk($key, ?ConnectionInterface $con = null) Return the ChildJob by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildJob requireOne(?ConnectionInterface $con = null) Return the first ChildJob matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -79,29 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildJob[]|Collection find(?ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildJob> find(?ConnectionInterface $con = null) Return ChildJob objects based on current ModelCriteria
- * @method     ChildJob[]|Collection findById(int $job_id) Return ChildJob objects filtered by the job_id column
- * @psalm-method Collection&\Traversable<ChildJob> findById(int $job_id) Return ChildJob objects filtered by the job_id column
- * @method     ChildJob[]|Collection findByName(string $job_name) Return ChildJob objects filtered by the job_name column
- * @psalm-method Collection&\Traversable<ChildJob> findByName(string $job_name) Return ChildJob objects filtered by the job_name column
- * @method     ChildJob[]|Collection findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
- * @psalm-method Collection&\Traversable<ChildJob> findByNameF(string $job_name_f) Return ChildJob objects filtered by the job_name_f column
- * @method     ChildJob[]|Collection findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
- * @psalm-method Collection&\Traversable<ChildJob> findByOtherNames(string $job_other_names) Return ChildJob objects filtered by the job_other_names column
- * @method     ChildJob[]|Collection findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
- * @psalm-method Collection&\Traversable<ChildJob> findByEvent(boolean $job_event) Return ChildJob objects filtered by the job_event column
- * @method     ChildJob[]|Collection findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
- * @psalm-method Collection&\Traversable<ChildJob> findByOrder(int $job_order) Return ChildJob objects filtered by the job_order column
- * @method     ChildJob[]|Collection findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
- * @psalm-method Collection&\Traversable<ChildJob> findByOnix(string $job_onix) Return ChildJob objects filtered by the job_onix column
- * @method     ChildJob[]|Collection findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
- * @psalm-method Collection&\Traversable<ChildJob> findByDate(string $job_date) Return ChildJob objects filtered by the job_date column
- * @method     ChildJob[]|Collection findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
- * @psalm-method Collection&\Traversable<ChildJob> findByCreatedAt(string $job_created) Return ChildJob objects filtered by the job_created column
- * @method     ChildJob[]|Collection findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
- * @psalm-method Collection&\Traversable<ChildJob> findByUpdatedAt(string $job_updated) Return ChildJob objects filtered by the job_updated column
+ *
+ * @method     ChildJob[]|Collection findById(int|array<int> $job_id) Return ChildJob objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildJob> findById(int|array<int> $job_id) Return ChildJob objects filtered by the job_id column
+ * @method     ChildJob[]|Collection findByName(string|array<string> $job_name) Return ChildJob objects filtered by the job_name column
+ * @psalm-method Collection&\Traversable<ChildJob> findByName(string|array<string> $job_name) Return ChildJob objects filtered by the job_name column
+ * @method     ChildJob[]|Collection findByNameF(string|array<string> $job_name_f) Return ChildJob objects filtered by the job_name_f column
+ * @psalm-method Collection&\Traversable<ChildJob> findByNameF(string|array<string> $job_name_f) Return ChildJob objects filtered by the job_name_f column
+ * @method     ChildJob[]|Collection findByOtherNames(string|array<string> $job_other_names) Return ChildJob objects filtered by the job_other_names column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOtherNames(string|array<string> $job_other_names) Return ChildJob objects filtered by the job_other_names column
+ * @method     ChildJob[]|Collection findByEvent(boolean|array<boolean> $job_event) Return ChildJob objects filtered by the job_event column
+ * @psalm-method Collection&\Traversable<ChildJob> findByEvent(boolean|array<boolean> $job_event) Return ChildJob objects filtered by the job_event column
+ * @method     ChildJob[]|Collection findByOrder(int|array<int> $job_order) Return ChildJob objects filtered by the job_order column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOrder(int|array<int> $job_order) Return ChildJob objects filtered by the job_order column
+ * @method     ChildJob[]|Collection findByOnix(string|array<string> $job_onix) Return ChildJob objects filtered by the job_onix column
+ * @psalm-method Collection&\Traversable<ChildJob> findByOnix(string|array<string> $job_onix) Return ChildJob objects filtered by the job_onix column
+ * @method     ChildJob[]|Collection findByDate(string|array<string> $job_date) Return ChildJob objects filtered by the job_date column
+ * @psalm-method Collection&\Traversable<ChildJob> findByDate(string|array<string> $job_date) Return ChildJob objects filtered by the job_date column
+ * @method     ChildJob[]|Collection findByCreatedAt(string|array<string> $job_created) Return ChildJob objects filtered by the job_created column
+ * @psalm-method Collection&\Traversable<ChildJob> findByCreatedAt(string|array<string> $job_created) Return ChildJob objects filtered by the job_created column
+ * @method     ChildJob[]|Collection findByUpdatedAt(string|array<string> $job_updated) Return ChildJob objects filtered by the job_updated column
+ * @psalm-method Collection&\Traversable<ChildJob> findByUpdatedAt(string|array<string> $job_updated) Return ChildJob objects filtered by the job_updated column
+ *
  * @method     ChildJob[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildJob> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class JobQuery extends ModelCriteria
 {
@@ -440,7 +439,7 @@ abstract class JobQuery extends ModelCriteria
     public function filterByEvent($event = null, ?string $comparison = null)
     {
         if (is_string($event)) {
-            $event = in_array(strtolower($event), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $event = in_array(strtolower($event), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(JobTableMap::COL_JOB_EVENT, $event, $comparison);

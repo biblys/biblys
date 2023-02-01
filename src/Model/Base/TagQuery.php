@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'tags' table.
- *
- *
+ * Base class that represents a query for the `tags` table.
  *
  * @method     ChildTagQuery orderById($order = Criteria::ASC) Order by the tag_id column
  * @method     ChildTagQuery orderByName($order = Criteria::ASC) Order by the tag_name column
@@ -75,8 +73,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildTag|null findOneByInsert(string $tag_insert) Return the first ChildTag filtered by the tag_insert column
  * @method     ChildTag|null findOneByUpdate(string $tag_update) Return the first ChildTag filtered by the tag_update column
  * @method     ChildTag|null findOneByCreatedAt(string $tag_created) Return the first ChildTag filtered by the tag_created column
- * @method     ChildTag|null findOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column *
-
+ * @method     ChildTag|null findOneByUpdatedAt(string $tag_updated) Return the first ChildTag filtered by the tag_updated column
+ *
  * @method     ChildTag requirePk($key, ?ConnectionInterface $con = null) Return the ChildTag by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildTag requireOne(?ConnectionInterface $con = null) Return the first ChildTag matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -93,29 +91,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildTag[]|Collection find(?ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildTag> find(?ConnectionInterface $con = null) Return ChildTag objects based on current ModelCriteria
- * @method     ChildTag[]|Collection findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
- * @psalm-method Collection&\Traversable<ChildTag> findById(int $tag_id) Return ChildTag objects filtered by the tag_id column
- * @method     ChildTag[]|Collection findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
- * @psalm-method Collection&\Traversable<ChildTag> findByName(string $tag_name) Return ChildTag objects filtered by the tag_name column
- * @method     ChildTag[]|Collection findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
- * @psalm-method Collection&\Traversable<ChildTag> findByUrl(string $tag_url) Return ChildTag objects filtered by the tag_url column
- * @method     ChildTag[]|Collection findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
- * @psalm-method Collection&\Traversable<ChildTag> findByDescription(string $tag_description) Return ChildTag objects filtered by the tag_description column
- * @method     ChildTag[]|Collection findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
- * @psalm-method Collection&\Traversable<ChildTag> findByDate(string $tag_date) Return ChildTag objects filtered by the tag_date column
- * @method     ChildTag[]|Collection findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
- * @psalm-method Collection&\Traversable<ChildTag> findByNum(int $tag_num) Return ChildTag objects filtered by the tag_num column
- * @method     ChildTag[]|Collection findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
- * @psalm-method Collection&\Traversable<ChildTag> findByInsert(string $tag_insert) Return ChildTag objects filtered by the tag_insert column
- * @method     ChildTag[]|Collection findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
- * @psalm-method Collection&\Traversable<ChildTag> findByUpdate(string $tag_update) Return ChildTag objects filtered by the tag_update column
- * @method     ChildTag[]|Collection findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
- * @psalm-method Collection&\Traversable<ChildTag> findByCreatedAt(string $tag_created) Return ChildTag objects filtered by the tag_created column
- * @method     ChildTag[]|Collection findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
- * @psalm-method Collection&\Traversable<ChildTag> findByUpdatedAt(string $tag_updated) Return ChildTag objects filtered by the tag_updated column
+ *
+ * @method     ChildTag[]|Collection findById(int|array<int> $tag_id) Return ChildTag objects filtered by the tag_id column
+ * @psalm-method Collection&\Traversable<ChildTag> findById(int|array<int> $tag_id) Return ChildTag objects filtered by the tag_id column
+ * @method     ChildTag[]|Collection findByName(string|array<string> $tag_name) Return ChildTag objects filtered by the tag_name column
+ * @psalm-method Collection&\Traversable<ChildTag> findByName(string|array<string> $tag_name) Return ChildTag objects filtered by the tag_name column
+ * @method     ChildTag[]|Collection findByUrl(string|array<string> $tag_url) Return ChildTag objects filtered by the tag_url column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUrl(string|array<string> $tag_url) Return ChildTag objects filtered by the tag_url column
+ * @method     ChildTag[]|Collection findByDescription(string|array<string> $tag_description) Return ChildTag objects filtered by the tag_description column
+ * @psalm-method Collection&\Traversable<ChildTag> findByDescription(string|array<string> $tag_description) Return ChildTag objects filtered by the tag_description column
+ * @method     ChildTag[]|Collection findByDate(string|array<string> $tag_date) Return ChildTag objects filtered by the tag_date column
+ * @psalm-method Collection&\Traversable<ChildTag> findByDate(string|array<string> $tag_date) Return ChildTag objects filtered by the tag_date column
+ * @method     ChildTag[]|Collection findByNum(int|array<int> $tag_num) Return ChildTag objects filtered by the tag_num column
+ * @psalm-method Collection&\Traversable<ChildTag> findByNum(int|array<int> $tag_num) Return ChildTag objects filtered by the tag_num column
+ * @method     ChildTag[]|Collection findByInsert(string|array<string> $tag_insert) Return ChildTag objects filtered by the tag_insert column
+ * @psalm-method Collection&\Traversable<ChildTag> findByInsert(string|array<string> $tag_insert) Return ChildTag objects filtered by the tag_insert column
+ * @method     ChildTag[]|Collection findByUpdate(string|array<string> $tag_update) Return ChildTag objects filtered by the tag_update column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUpdate(string|array<string> $tag_update) Return ChildTag objects filtered by the tag_update column
+ * @method     ChildTag[]|Collection findByCreatedAt(string|array<string> $tag_created) Return ChildTag objects filtered by the tag_created column
+ * @psalm-method Collection&\Traversable<ChildTag> findByCreatedAt(string|array<string> $tag_created) Return ChildTag objects filtered by the tag_created column
+ * @method     ChildTag[]|Collection findByUpdatedAt(string|array<string> $tag_updated) Return ChildTag objects filtered by the tag_updated column
+ * @psalm-method Collection&\Traversable<ChildTag> findByUpdatedAt(string|array<string> $tag_updated) Return ChildTag objects filtered by the tag_updated column
+ *
  * @method     ChildTag[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildTag> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class TagQuery extends ModelCriteria
 {
@@ -803,20 +802,23 @@ abstract class TagQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Link table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\LinkQuery The inner query object of the EXISTS statement
      */
     public function useLinkExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Link', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\LinkQuery */
+        $q = $this->useExistsQuery('Link', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -831,8 +833,46 @@ abstract class TagQuery extends ModelCriteria
      */
     public function useLinkNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Link', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\LinkQuery */
+        $q = $this->useExistsQuery('Link', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Link table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\LinkQuery The inner query object of the IN statement
+     */
+    public function useInLinkQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\LinkQuery */
+        $q = $this->useInQuery('Link', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Link table for a NOT IN query.
+     *
+     * @see useLinkInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\LinkQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInLinkQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\LinkQuery */
+        $q = $this->useInQuery('Link', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

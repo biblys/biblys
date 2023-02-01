@@ -856,8 +856,8 @@ abstract class Ticket implements ActiveRecordInterface
                 $col = null;
             }
             $this->ticket_closed = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1125,36 +1125,47 @@ abstract class Ticket implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'ticket_id':
                         $stmt->bindValue($identifier, $this->ticket_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'ticket_type':
                         $stmt->bindValue($identifier, $this->ticket_type, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_title':
                         $stmt->bindValue($identifier, $this->ticket_title, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_content':
                         $stmt->bindValue($identifier, $this->ticket_content, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_priority':
                         $stmt->bindValue($identifier, $this->ticket_priority, PDO::PARAM_INT);
+
                         break;
                     case 'ticket_created':
                         $stmt->bindValue($identifier, $this->ticket_created ? $this->ticket_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_updated':
                         $stmt->bindValue($identifier, $this->ticket_updated ? $this->ticket_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_resolved':
                         $stmt->bindValue($identifier, $this->ticket_resolved ? $this->ticket_resolved->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_closed':
                         $stmt->bindValue($identifier, $this->ticket_closed ? $this->ticket_closed->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

@@ -751,8 +751,8 @@ abstract class Mailing implements ActiveRecordInterface
                 $col = null;
             }
             $this->mailing_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1011,27 +1011,35 @@ abstract class Mailing implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'mailing_id':
                         $stmt->bindValue($identifier, $this->mailing_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'mailing_email':
                         $stmt->bindValue($identifier, $this->mailing_email, PDO::PARAM_STR);
+
                         break;
                     case 'mailing_block':
                         $stmt->bindValue($identifier, (int) $this->mailing_block, PDO::PARAM_INT);
+
                         break;
                     case 'mailing_checked':
                         $stmt->bindValue($identifier, (int) $this->mailing_checked, PDO::PARAM_INT);
+
                         break;
                     case 'mailing_date':
                         $stmt->bindValue($identifier, $this->mailing_date ? $this->mailing_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'mailing_created':
                         $stmt->bindValue($identifier, $this->mailing_created ? $this->mailing_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'mailing_updated':
                         $stmt->bindValue($identifier, $this->mailing_updated ? $this->mailing_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

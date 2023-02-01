@@ -642,8 +642,8 @@ abstract class Country implements ActiveRecordInterface
                 $col = null;
             }
             $this->country_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -899,24 +899,31 @@ abstract class Country implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'country_id':
                         $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
+
                         break;
                     case 'country_code':
                         $stmt->bindValue($identifier, $this->country_code, PDO::PARAM_STR);
+
                         break;
                     case 'country_name':
                         $stmt->bindValue($identifier, $this->country_name, PDO::PARAM_STR);
+
                         break;
                     case 'country_name_en':
                         $stmt->bindValue($identifier, $this->country_name_en, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_zone':
                         $stmt->bindValue($identifier, $this->shipping_zone, PDO::PARAM_STR);
+
                         break;
                     case 'country_created':
                         $stmt->bindValue($identifier, $this->country_created ? $this->country_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'country_updated':
                         $stmt->bindValue($identifier, $this->country_updated ? $this->country_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

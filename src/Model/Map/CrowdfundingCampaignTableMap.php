@@ -46,6 +46,11 @@ class CrowdfundingCampaignTableMap extends TableMap
     public const TABLE_NAME = 'cf_campaigns';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'CrowdfundingCampaign';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\CrowdfundingCampaign';
@@ -427,7 +432,7 @@ class CrowdfundingCampaignTableMap extends TableMap
             CrowdfundingCampaignTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

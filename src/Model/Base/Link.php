@@ -1395,8 +1395,8 @@ abstract class Link implements ActiveRecordInterface
                 $col = null;
             }
             $this->link_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1730,75 +1730,99 @@ abstract class Link implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'link_id':
                         $stmt->bindValue($identifier, $this->link_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'stock_id':
                         $stmt->bindValue($identifier, $this->stock_id, PDO::PARAM_INT);
+
                         break;
                     case 'list_id':
                         $stmt->bindValue($identifier, $this->list_id, PDO::PARAM_INT);
+
                         break;
                     case 'book_id':
                         $stmt->bindValue($identifier, $this->book_id, PDO::PARAM_INT);
+
                         break;
                     case 'people_id':
                         $stmt->bindValue($identifier, $this->people_id, PDO::PARAM_INT);
+
                         break;
                     case 'job_id':
                         $stmt->bindValue($identifier, $this->job_id, PDO::PARAM_INT);
+
                         break;
                     case 'rayon_id':
                         $stmt->bindValue($identifier, $this->rayon_id, PDO::PARAM_INT);
+
                         break;
                     case 'tag_id':
                         $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
+
                         break;
                     case 'event_id':
                         $stmt->bindValue($identifier, $this->event_id, PDO::PARAM_INT);
+
                         break;
                     case 'post_id':
                         $stmt->bindValue($identifier, $this->post_id, PDO::PARAM_INT);
+
                         break;
                     case 'collection_id':
                         $stmt->bindValue($identifier, $this->collection_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'supplier_id':
                         $stmt->bindValue($identifier, $this->supplier_id, PDO::PARAM_INT);
+
                         break;
                     case 'media_id':
                         $stmt->bindValue($identifier, $this->media_id, PDO::PARAM_INT);
+
                         break;
                     case 'bundle_id':
                         $stmt->bindValue($identifier, $this->bundle_id, PDO::PARAM_INT);
+
                         break;
                     case 'link_hide':
                         $stmt->bindValue($identifier, (int) $this->link_hide, PDO::PARAM_INT);
+
                         break;
                     case 'link_do_not_reorder':
                         $stmt->bindValue($identifier, (int) $this->link_do_not_reorder, PDO::PARAM_INT);
+
                         break;
                     case 'link_sponsor_user_id':
                         $stmt->bindValue($identifier, $this->link_sponsor_user_id, PDO::PARAM_INT);
+
                         break;
                     case 'link_date':
                         $stmt->bindValue($identifier, $this->link_date ? $this->link_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'link_created':
                         $stmt->bindValue($identifier, $this->link_created ? $this->link_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'link_updated':
                         $stmt->bindValue($identifier, $this->link_updated ? $this->link_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

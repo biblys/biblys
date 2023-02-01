@@ -814,8 +814,8 @@ abstract class Job implements ActiveRecordInterface
                 $col = null;
             }
             $this->job_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1080,33 +1080,43 @@ abstract class Job implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'job_id':
                         $stmt->bindValue($identifier, $this->job_id, PDO::PARAM_INT);
+
                         break;
                     case 'job_name':
                         $stmt->bindValue($identifier, $this->job_name, PDO::PARAM_STR);
+
                         break;
                     case 'job_name_f':
                         $stmt->bindValue($identifier, $this->job_name_f, PDO::PARAM_STR);
+
                         break;
                     case 'job_other_names':
                         $stmt->bindValue($identifier, $this->job_other_names, PDO::PARAM_STR);
+
                         break;
                     case 'job_event':
                         $stmt->bindValue($identifier, (int) $this->job_event, PDO::PARAM_INT);
+
                         break;
                     case 'job_order':
                         $stmt->bindValue($identifier, $this->job_order, PDO::PARAM_INT);
+
                         break;
                     case 'job_onix':
                         $stmt->bindValue($identifier, $this->job_onix, PDO::PARAM_STR);
+
                         break;
                     case 'job_date':
                         $stmt->bindValue($identifier, $this->job_date ? $this->job_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'job_created':
                         $stmt->bindValue($identifier, $this->job_created ? $this->job_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'job_updated':
                         $stmt->bindValue($identifier, $this->job_updated ? $this->job_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

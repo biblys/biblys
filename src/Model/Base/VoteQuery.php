@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'votes' table.
- *
- *
+ * Base class that represents a query for the `votes` table.
  *
  * @method     ChildVoteQuery orderById($order = Criteria::ASC) Order by the vote_id column
  * @method     ChildVoteQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -46,8 +44,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVote|null findOneByUserId(int $user_id) Return the first ChildVote filtered by the user_id column
  * @method     ChildVote|null findOneByF(int $vote_F) Return the first ChildVote filtered by the vote_F column
  * @method     ChildVote|null findOneByE(int $vote_E) Return the first ChildVote filtered by the vote_E column
- * @method     ChildVote|null findOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column *
-
+ * @method     ChildVote|null findOneByDate(string $vote_date) Return the first ChildVote filtered by the vote_date column
+ *
  * @method     ChildVote requirePk($key, ?ConnectionInterface $con = null) Return the ChildVote by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVote requireOne(?ConnectionInterface $con = null) Return the first ChildVote matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -59,19 +57,20 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildVote[]|Collection find(?ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildVote> find(?ConnectionInterface $con = null) Return ChildVote objects based on current ModelCriteria
- * @method     ChildVote[]|Collection findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
- * @psalm-method Collection&\Traversable<ChildVote> findById(int $vote_id) Return ChildVote objects filtered by the vote_id column
- * @method     ChildVote[]|Collection findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildVote> findByUserId(int $user_id) Return ChildVote objects filtered by the user_id column
- * @method     ChildVote[]|Collection findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
- * @psalm-method Collection&\Traversable<ChildVote> findByF(int $vote_F) Return ChildVote objects filtered by the vote_F column
- * @method     ChildVote[]|Collection findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
- * @psalm-method Collection&\Traversable<ChildVote> findByE(int $vote_E) Return ChildVote objects filtered by the vote_E column
- * @method     ChildVote[]|Collection findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
- * @psalm-method Collection&\Traversable<ChildVote> findByDate(string $vote_date) Return ChildVote objects filtered by the vote_date column
+ *
+ * @method     ChildVote[]|Collection findById(int|array<int> $vote_id) Return ChildVote objects filtered by the vote_id column
+ * @psalm-method Collection&\Traversable<ChildVote> findById(int|array<int> $vote_id) Return ChildVote objects filtered by the vote_id column
+ * @method     ChildVote[]|Collection findByUserId(int|array<int> $user_id) Return ChildVote objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildVote> findByUserId(int|array<int> $user_id) Return ChildVote objects filtered by the user_id column
+ * @method     ChildVote[]|Collection findByF(int|array<int> $vote_F) Return ChildVote objects filtered by the vote_F column
+ * @psalm-method Collection&\Traversable<ChildVote> findByF(int|array<int> $vote_F) Return ChildVote objects filtered by the vote_F column
+ * @method     ChildVote[]|Collection findByE(int|array<int> $vote_E) Return ChildVote objects filtered by the vote_E column
+ * @psalm-method Collection&\Traversable<ChildVote> findByE(int|array<int> $vote_E) Return ChildVote objects filtered by the vote_E column
+ * @method     ChildVote[]|Collection findByDate(string|array<string> $vote_date) Return ChildVote objects filtered by the vote_date column
+ * @psalm-method Collection&\Traversable<ChildVote> findByDate(string|array<string> $vote_date) Return ChildVote objects filtered by the vote_date column
+ *
  * @method     ChildVote[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildVote> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class VoteQuery extends ModelCriteria
 {

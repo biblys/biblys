@@ -792,8 +792,8 @@ abstract class Cycle implements ActiveRecordInterface
                 $col = null;
             }
             $this->cycle_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1058,33 +1058,43 @@ abstract class Cycle implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'cycle_id':
                         $stmt->bindValue($identifier, $this->cycle_id, PDO::PARAM_INT);
+
                         break;
                     case 'cycle_name':
                         $stmt->bindValue($identifier, $this->cycle_name, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_url':
                         $stmt->bindValue($identifier, $this->cycle_url, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_desc':
                         $stmt->bindValue($identifier, $this->cycle_desc, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_hits':
                         $stmt->bindValue($identifier, $this->cycle_hits, PDO::PARAM_INT);
+
                         break;
                     case 'cycle_noosfere_id':
                         $stmt->bindValue($identifier, $this->cycle_noosfere_id, PDO::PARAM_INT);
+
                         break;
                     case 'cycle_insert':
                         $stmt->bindValue($identifier, $this->cycle_insert ? $this->cycle_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_update':
                         $stmt->bindValue($identifier, $this->cycle_update ? $this->cycle_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_created':
                         $stmt->bindValue($identifier, $this->cycle_created ? $this->cycle_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cycle_updated':
                         $stmt->bindValue($identifier, $this->cycle_updated ? $this->cycle_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

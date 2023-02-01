@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'subscriptions' table.
- *
- *
+ * Base class that represents a query for the `subscriptions` table.
  *
  * @method     ChildSubscriptionQuery orderById($order = Criteria::ASC) Order by the subscription_id column
  * @method     ChildSubscriptionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -73,8 +71,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSubscription|null findOneByInsert(string $subscription_insert) Return the first ChildSubscription filtered by the subscription_insert column
  * @method     ChildSubscription|null findOneByUpdate(string $subscription_update) Return the first ChildSubscription filtered by the subscription_update column
  * @method     ChildSubscription|null findOneByCreatedAt(string $subscription_created) Return the first ChildSubscription filtered by the subscription_created column
- * @method     ChildSubscription|null findOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column *
-
+ * @method     ChildSubscription|null findOneByUpdatedAt(string $subscription_updated) Return the first ChildSubscription filtered by the subscription_updated column
+ *
  * @method     ChildSubscription requirePk($key, ?ConnectionInterface $con = null) Return the ChildSubscription by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildSubscription requireOne(?ConnectionInterface $con = null) Return the first ChildSubscription matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -95,37 +93,38 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildSubscription[]|Collection find(?ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildSubscription> find(?ConnectionInterface $con = null) Return ChildSubscription objects based on current ModelCriteria
- * @method     ChildSubscription[]|Collection findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findById(int $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
- * @method     ChildSubscription[]|Collection findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findBySiteId(int $site_id) Return ChildSubscription objects filtered by the site_id column
- * @method     ChildSubscription[]|Collection findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByUserId(int $user_id) Return ChildSubscription objects filtered by the user_id column
- * @method     ChildSubscription[]|Collection findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByPublisherId(int $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
- * @method     ChildSubscription[]|Collection findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByBookshopId(int $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
- * @method     ChildSubscription[]|Collection findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByLibraryId(int $library_id) Return ChildSubscription objects filtered by the library_id column
- * @method     ChildSubscription[]|Collection findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByType(string $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
- * @method     ChildSubscription[]|Collection findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByEmail(string $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
- * @method     ChildSubscription[]|Collection findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByEnds(int $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
- * @method     ChildSubscription[]|Collection findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByOption(boolean $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
- * @method     ChildSubscription[]|Collection findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByInsert(string $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
- * @method     ChildSubscription[]|Collection findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdate(string $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
- * @method     ChildSubscription[]|Collection findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByCreatedAt(string $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
- * @method     ChildSubscription[]|Collection findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
- * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdatedAt(string $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ *
+ * @method     ChildSubscription[]|Collection findById(int|array<int> $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findById(int|array<int> $subscription_id) Return ChildSubscription objects filtered by the subscription_id column
+ * @method     ChildSubscription[]|Collection findBySiteId(int|array<int> $site_id) Return ChildSubscription objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findBySiteId(int|array<int> $site_id) Return ChildSubscription objects filtered by the site_id column
+ * @method     ChildSubscription[]|Collection findByUserId(int|array<int> $user_id) Return ChildSubscription objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUserId(int|array<int> $user_id) Return ChildSubscription objects filtered by the user_id column
+ * @method     ChildSubscription[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByPublisherId(int|array<int> $publisher_id) Return ChildSubscription objects filtered by the publisher_id column
+ * @method     ChildSubscription[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByBookshopId(int|array<int> $bookshop_id) Return ChildSubscription objects filtered by the bookshop_id column
+ * @method     ChildSubscription[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildSubscription objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByLibraryId(int|array<int> $library_id) Return ChildSubscription objects filtered by the library_id column
+ * @method     ChildSubscription[]|Collection findByType(string|array<string> $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByType(string|array<string> $subscription_type) Return ChildSubscription objects filtered by the subscription_type column
+ * @method     ChildSubscription[]|Collection findByEmail(string|array<string> $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByEmail(string|array<string> $subscription_email) Return ChildSubscription objects filtered by the subscription_email column
+ * @method     ChildSubscription[]|Collection findByEnds(int|array<int> $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByEnds(int|array<int> $subscription_ends) Return ChildSubscription objects filtered by the subscription_ends column
+ * @method     ChildSubscription[]|Collection findByOption(boolean|array<boolean> $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByOption(boolean|array<boolean> $subscription_option) Return ChildSubscription objects filtered by the subscription_option column
+ * @method     ChildSubscription[]|Collection findByInsert(string|array<string> $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByInsert(string|array<string> $subscription_insert) Return ChildSubscription objects filtered by the subscription_insert column
+ * @method     ChildSubscription[]|Collection findByUpdate(string|array<string> $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdate(string|array<string> $subscription_update) Return ChildSubscription objects filtered by the subscription_update column
+ * @method     ChildSubscription[]|Collection findByCreatedAt(string|array<string> $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByCreatedAt(string|array<string> $subscription_created) Return ChildSubscription objects filtered by the subscription_created column
+ * @method     ChildSubscription[]|Collection findByUpdatedAt(string|array<string> $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ * @psalm-method Collection&\Traversable<ChildSubscription> findByUpdatedAt(string|array<string> $subscription_updated) Return ChildSubscription objects filtered by the subscription_updated column
+ *
  * @method     ChildSubscription[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildSubscription> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class SubscriptionQuery extends ModelCriteria
 {
@@ -694,7 +693,7 @@ abstract class SubscriptionQuery extends ModelCriteria
     public function filterByOption($option = null, ?string $comparison = null)
     {
         if (is_string($option)) {
-            $option = in_array(strtolower($option), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $option = in_array(strtolower($option), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(SubscriptionTableMap::COL_SUBSCRIPTION_OPTION, $option, $comparison);

@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'shipping' table.
- *
- *
+ * Base class that represents a query for the `shipping` table.
  *
  * @method     ChildShippingFeeQuery orderById($order = Criteria::ASC) Order by the shipping_id column
  * @method     ChildShippingFeeQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -76,8 +74,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildShippingFee|null findOneByFee(int $shipping_fee) Return the first ChildShippingFee filtered by the shipping_fee column
  * @method     ChildShippingFee|null findOneByInfo(string $shipping_info) Return the first ChildShippingFee filtered by the shipping_info column
  * @method     ChildShippingFee|null findOneByCreatedAt(string $shipping_created) Return the first ChildShippingFee filtered by the shipping_created column
- * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column *
-
+ * @method     ChildShippingFee|null findOneByUpdatedAt(string $shipping_updated) Return the first ChildShippingFee filtered by the shipping_updated column
+ *
  * @method     ChildShippingFee requirePk($key, ?ConnectionInterface $con = null) Return the ChildShippingFee by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildShippingFee requireOne(?ConnectionInterface $con = null) Return the first ChildShippingFee matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -99,39 +97,40 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildShippingFee[]|Collection find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildShippingFee> find(?ConnectionInterface $con = null) Return ChildShippingFee objects based on current ModelCriteria
- * @method     ChildShippingFee[]|Collection findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findById(int $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
- * @method     ChildShippingFee[]|Collection findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findBySiteId(int $site_id) Return ChildShippingFee objects filtered by the site_id column
- * @method     ChildShippingFee[]|Collection findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByArticleId(int $article_id) Return ChildShippingFee objects filtered by the article_id column
- * @method     ChildShippingFee[]|Collection findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMode(string $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
- * @method     ChildShippingFee[]|Collection findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByType(string $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
- * @method     ChildShippingFee[]|Collection findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByZone(string $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
- * @method     ChildShippingFee[]|Collection findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinWeight(int $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
- * @method     ChildShippingFee[]|Collection findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxWeight(int $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
- * @method     ChildShippingFee[]|Collection findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxArticles(int $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
- * @method     ChildShippingFee[]|Collection findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinAmount(int $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
- * @method     ChildShippingFee[]|Collection findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxAmount(int $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
- * @method     ChildShippingFee[]|Collection findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByFee(int $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
- * @method     ChildShippingFee[]|Collection findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByInfo(string $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
- * @method     ChildShippingFee[]|Collection findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByCreatedAt(string $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
- * @method     ChildShippingFee[]|Collection findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
- * @psalm-method Collection&\Traversable<ChildShippingFee> findByUpdatedAt(string $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ *
+ * @method     ChildShippingFee[]|Collection findById(int|array<int> $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findById(int|array<int> $shipping_id) Return ChildShippingFee objects filtered by the shipping_id column
+ * @method     ChildShippingFee[]|Collection findBySiteId(int|array<int> $site_id) Return ChildShippingFee objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findBySiteId(int|array<int> $site_id) Return ChildShippingFee objects filtered by the site_id column
+ * @method     ChildShippingFee[]|Collection findByArticleId(int|array<int> $article_id) Return ChildShippingFee objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByArticleId(int|array<int> $article_id) Return ChildShippingFee objects filtered by the article_id column
+ * @method     ChildShippingFee[]|Collection findByMode(string|array<string> $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMode(string|array<string> $shipping_mode) Return ChildShippingFee objects filtered by the shipping_mode column
+ * @method     ChildShippingFee[]|Collection findByType(string|array<string> $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByType(string|array<string> $shipping_type) Return ChildShippingFee objects filtered by the shipping_type column
+ * @method     ChildShippingFee[]|Collection findByZone(string|array<string> $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByZone(string|array<string> $shipping_zone) Return ChildShippingFee objects filtered by the shipping_zone column
+ * @method     ChildShippingFee[]|Collection findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinWeight(int|array<int> $shipping_min_weight) Return ChildShippingFee objects filtered by the shipping_min_weight column
+ * @method     ChildShippingFee[]|Collection findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxWeight(int|array<int> $shipping_max_weight) Return ChildShippingFee objects filtered by the shipping_max_weight column
+ * @method     ChildShippingFee[]|Collection findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxArticles(int|array<int> $shipping_max_articles) Return ChildShippingFee objects filtered by the shipping_max_articles column
+ * @method     ChildShippingFee[]|Collection findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMinAmount(int|array<int> $shipping_min_amount) Return ChildShippingFee objects filtered by the shipping_min_amount column
+ * @method     ChildShippingFee[]|Collection findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByMaxAmount(int|array<int> $shipping_max_amount) Return ChildShippingFee objects filtered by the shipping_max_amount column
+ * @method     ChildShippingFee[]|Collection findByFee(int|array<int> $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByFee(int|array<int> $shipping_fee) Return ChildShippingFee objects filtered by the shipping_fee column
+ * @method     ChildShippingFee[]|Collection findByInfo(string|array<string> $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByInfo(string|array<string> $shipping_info) Return ChildShippingFee objects filtered by the shipping_info column
+ * @method     ChildShippingFee[]|Collection findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByCreatedAt(string|array<string> $shipping_created) Return ChildShippingFee objects filtered by the shipping_created column
+ * @method     ChildShippingFee[]|Collection findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ * @psalm-method Collection&\Traversable<ChildShippingFee> findByUpdatedAt(string|array<string> $shipping_updated) Return ChildShippingFee objects filtered by the shipping_updated column
+ *
  * @method     ChildShippingFee[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildShippingFee> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class ShippingFeeQuery extends ModelCriteria
 {

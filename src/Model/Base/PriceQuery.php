@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'prices' table.
- *
- *
+ * Base class that represents a query for the `prices` table.
  *
  * @method     ChildPriceQuery orderById($order = Criteria::ASC) Order by the price_id column
  * @method     ChildPriceQuery orderBygridId($order = Criteria::ASC) Order by the pricegrid_id column
@@ -49,8 +47,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPrice|null findOneByCat(string $price_cat) Return the first ChildPrice filtered by the price_cat column
  * @method     ChildPrice|null findOneByAmount(int $price_amount) Return the first ChildPrice filtered by the price_amount column
  * @method     ChildPrice|null findOneByCreatedAt(string $price_created) Return the first ChildPrice filtered by the price_created column
- * @method     ChildPrice|null findOneByUpdatedAt(string $price_updated) Return the first ChildPrice filtered by the price_updated column *
-
+ * @method     ChildPrice|null findOneByUpdatedAt(string $price_updated) Return the first ChildPrice filtered by the price_updated column
+ *
  * @method     ChildPrice requirePk($key, ?ConnectionInterface $con = null) Return the ChildPrice by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPrice requireOne(?ConnectionInterface $con = null) Return the first ChildPrice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -63,21 +61,22 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildPrice[]|Collection find(?ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildPrice> find(?ConnectionInterface $con = null) Return ChildPrice objects based on current ModelCriteria
- * @method     ChildPrice[]|Collection findById(int $price_id) Return ChildPrice objects filtered by the price_id column
- * @psalm-method Collection&\Traversable<ChildPrice> findById(int $price_id) Return ChildPrice objects filtered by the price_id column
- * @method     ChildPrice[]|Collection findBygridId(int $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
- * @psalm-method Collection&\Traversable<ChildPrice> findBygridId(int $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
- * @method     ChildPrice[]|Collection findByCat(string $price_cat) Return ChildPrice objects filtered by the price_cat column
- * @psalm-method Collection&\Traversable<ChildPrice> findByCat(string $price_cat) Return ChildPrice objects filtered by the price_cat column
- * @method     ChildPrice[]|Collection findByAmount(int $price_amount) Return ChildPrice objects filtered by the price_amount column
- * @psalm-method Collection&\Traversable<ChildPrice> findByAmount(int $price_amount) Return ChildPrice objects filtered by the price_amount column
- * @method     ChildPrice[]|Collection findByCreatedAt(string $price_created) Return ChildPrice objects filtered by the price_created column
- * @psalm-method Collection&\Traversable<ChildPrice> findByCreatedAt(string $price_created) Return ChildPrice objects filtered by the price_created column
- * @method     ChildPrice[]|Collection findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
- * @psalm-method Collection&\Traversable<ChildPrice> findByUpdatedAt(string $price_updated) Return ChildPrice objects filtered by the price_updated column
+ *
+ * @method     ChildPrice[]|Collection findById(int|array<int> $price_id) Return ChildPrice objects filtered by the price_id column
+ * @psalm-method Collection&\Traversable<ChildPrice> findById(int|array<int> $price_id) Return ChildPrice objects filtered by the price_id column
+ * @method     ChildPrice[]|Collection findBygridId(int|array<int> $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
+ * @psalm-method Collection&\Traversable<ChildPrice> findBygridId(int|array<int> $pricegrid_id) Return ChildPrice objects filtered by the pricegrid_id column
+ * @method     ChildPrice[]|Collection findByCat(string|array<string> $price_cat) Return ChildPrice objects filtered by the price_cat column
+ * @psalm-method Collection&\Traversable<ChildPrice> findByCat(string|array<string> $price_cat) Return ChildPrice objects filtered by the price_cat column
+ * @method     ChildPrice[]|Collection findByAmount(int|array<int> $price_amount) Return ChildPrice objects filtered by the price_amount column
+ * @psalm-method Collection&\Traversable<ChildPrice> findByAmount(int|array<int> $price_amount) Return ChildPrice objects filtered by the price_amount column
+ * @method     ChildPrice[]|Collection findByCreatedAt(string|array<string> $price_created) Return ChildPrice objects filtered by the price_created column
+ * @psalm-method Collection&\Traversable<ChildPrice> findByCreatedAt(string|array<string> $price_created) Return ChildPrice objects filtered by the price_created column
+ * @method     ChildPrice[]|Collection findByUpdatedAt(string|array<string> $price_updated) Return ChildPrice objects filtered by the price_updated column
+ * @psalm-method Collection&\Traversable<ChildPrice> findByUpdatedAt(string|array<string> $price_updated) Return ChildPrice objects filtered by the price_updated column
+ *
  * @method     ChildPrice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPrice> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class PriceQuery extends ModelCriteria
 {

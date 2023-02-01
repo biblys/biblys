@@ -1180,8 +1180,8 @@ abstract class Cart implements ActiveRecordInterface
                 $col = null;
             }
             $this->cart_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1497,57 +1497,75 @@ abstract class Cart implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'cart_id':
                         $stmt->bindValue($identifier, $this->cart_id, PDO::PARAM_INT);
+
                         break;
                     case 'cart_uid':
                         $stmt->bindValue($identifier, $this->cart_uid, PDO::PARAM_STR);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'cart_seller_id':
                         $stmt->bindValue($identifier, $this->cart_seller_id, PDO::PARAM_INT);
+
                         break;
                     case 'customer_id':
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
+
                         break;
                     case 'cart_title':
                         $stmt->bindValue($identifier, $this->cart_title, PDO::PARAM_STR);
+
                         break;
                     case 'cart_type':
                         $stmt->bindValue($identifier, $this->cart_type, PDO::PARAM_STR);
+
                         break;
                     case 'cart_ip':
                         $stmt->bindValue($identifier, $this->cart_ip, PDO::PARAM_STR);
+
                         break;
                     case 'cart_count':
                         $stmt->bindValue($identifier, $this->cart_count, PDO::PARAM_INT);
+
                         break;
                     case 'cart_amount':
                         $stmt->bindValue($identifier, $this->cart_amount, PDO::PARAM_INT);
+
                         break;
                     case 'cart_as_a_gift':
                         $stmt->bindValue($identifier, $this->cart_as_a_gift, PDO::PARAM_STR);
+
                         break;
                     case 'cart_gift_recipient':
                         $stmt->bindValue($identifier, $this->cart_gift_recipient, PDO::PARAM_INT);
+
                         break;
                     case 'cart_date':
                         $stmt->bindValue($identifier, $this->cart_date ? $this->cart_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cart_insert':
                         $stmt->bindValue($identifier, $this->cart_insert ? $this->cart_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cart_update':
                         $stmt->bindValue($identifier, $this->cart_update ? $this->cart_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cart_created':
                         $stmt->bindValue($identifier, $this->cart_created ? $this->cart_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'cart_updated':
                         $stmt->bindValue($identifier, $this->cart_updated ? $this->cart_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

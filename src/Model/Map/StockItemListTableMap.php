@@ -46,6 +46,11 @@ class StockItemListTableMap extends TableMap
     public const TABLE_NAME = 'lists';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'StockItemList';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\StockItemList';
@@ -343,7 +348,7 @@ class StockItemListTableMap extends TableMap
             StockItemListTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

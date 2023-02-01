@@ -46,6 +46,11 @@ class CartTableMap extends TableMap
     public const TABLE_NAME = 'carts';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Cart';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Cart';
@@ -511,7 +516,7 @@ class CartTableMap extends TableMap
             CartTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

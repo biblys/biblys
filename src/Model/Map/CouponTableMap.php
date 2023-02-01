@@ -46,6 +46,11 @@ class CouponTableMap extends TableMap
     public const TABLE_NAME = 'coupons';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Coupon';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Coupon';
@@ -413,7 +418,7 @@ class CouponTableMap extends TableMap
             CouponTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'roles' table.
- *
- *
+ * Base class that represents a query for the `roles` table.
  *
  * @method     ChildRoleQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRoleQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
@@ -91,8 +89,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRole|null findOneByPresence(string $role_presence) Return the first ChildRole filtered by the role_presence column
  * @method     ChildRole|null findOneByDate(string $role_date) Return the first ChildRole filtered by the role_date column
  * @method     ChildRole|null findOneByCreatedAt(string $role_created) Return the first ChildRole filtered by the role_created column
- * @method     ChildRole|null findOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column *
-
+ * @method     ChildRole|null findOneByUpdatedAt(string $role_updated) Return the first ChildRole filtered by the role_updated column
+ *
  * @method     ChildRole requirePk($key, ?ConnectionInterface $con = null) Return the ChildRole by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRole requireOne(?ConnectionInterface $con = null) Return the first ChildRole matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -111,33 +109,34 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRole[]|Collection find(?ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildRole> find(?ConnectionInterface $con = null) Return ChildRole objects based on current ModelCriteria
- * @method     ChildRole[]|Collection findById(int $id) Return ChildRole objects filtered by the id column
- * @psalm-method Collection&\Traversable<ChildRole> findById(int $id) Return ChildRole objects filtered by the id column
- * @method     ChildRole[]|Collection findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByArticleId(int $article_id) Return ChildRole objects filtered by the article_id column
- * @method     ChildRole[]|Collection findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByBookId(int $book_id) Return ChildRole objects filtered by the book_id column
- * @method     ChildRole[]|Collection findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByEventId(int $event_id) Return ChildRole objects filtered by the event_id column
- * @method     ChildRole[]|Collection findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByPeopleId(int $people_id) Return ChildRole objects filtered by the people_id column
- * @method     ChildRole[]|Collection findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByJobId(int $job_id) Return ChildRole objects filtered by the job_id column
- * @method     ChildRole[]|Collection findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildRole> findByUserId(int $user_id) Return ChildRole objects filtered by the user_id column
- * @method     ChildRole[]|Collection findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
- * @psalm-method Collection&\Traversable<ChildRole> findByHide(boolean $role_hide) Return ChildRole objects filtered by the role_hide column
- * @method     ChildRole[]|Collection findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
- * @psalm-method Collection&\Traversable<ChildRole> findByPresence(string $role_presence) Return ChildRole objects filtered by the role_presence column
- * @method     ChildRole[]|Collection findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
- * @psalm-method Collection&\Traversable<ChildRole> findByDate(string $role_date) Return ChildRole objects filtered by the role_date column
- * @method     ChildRole[]|Collection findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
- * @psalm-method Collection&\Traversable<ChildRole> findByCreatedAt(string $role_created) Return ChildRole objects filtered by the role_created column
- * @method     ChildRole[]|Collection findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
- * @psalm-method Collection&\Traversable<ChildRole> findByUpdatedAt(string $role_updated) Return ChildRole objects filtered by the role_updated column
+ *
+ * @method     ChildRole[]|Collection findById(int|array<int> $id) Return ChildRole objects filtered by the id column
+ * @psalm-method Collection&\Traversable<ChildRole> findById(int|array<int> $id) Return ChildRole objects filtered by the id column
+ * @method     ChildRole[]|Collection findByArticleId(int|array<int> $article_id) Return ChildRole objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByArticleId(int|array<int> $article_id) Return ChildRole objects filtered by the article_id column
+ * @method     ChildRole[]|Collection findByBookId(int|array<int> $book_id) Return ChildRole objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByBookId(int|array<int> $book_id) Return ChildRole objects filtered by the book_id column
+ * @method     ChildRole[]|Collection findByEventId(int|array<int> $event_id) Return ChildRole objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByEventId(int|array<int> $event_id) Return ChildRole objects filtered by the event_id column
+ * @method     ChildRole[]|Collection findByPeopleId(int|array<int> $people_id) Return ChildRole objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByPeopleId(int|array<int> $people_id) Return ChildRole objects filtered by the people_id column
+ * @method     ChildRole[]|Collection findByJobId(int|array<int> $job_id) Return ChildRole objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByJobId(int|array<int> $job_id) Return ChildRole objects filtered by the job_id column
+ * @method     ChildRole[]|Collection findByUserId(int|array<int> $user_id) Return ChildRole objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildRole> findByUserId(int|array<int> $user_id) Return ChildRole objects filtered by the user_id column
+ * @method     ChildRole[]|Collection findByHide(boolean|array<boolean> $role_hide) Return ChildRole objects filtered by the role_hide column
+ * @psalm-method Collection&\Traversable<ChildRole> findByHide(boolean|array<boolean> $role_hide) Return ChildRole objects filtered by the role_hide column
+ * @method     ChildRole[]|Collection findByPresence(string|array<string> $role_presence) Return ChildRole objects filtered by the role_presence column
+ * @psalm-method Collection&\Traversable<ChildRole> findByPresence(string|array<string> $role_presence) Return ChildRole objects filtered by the role_presence column
+ * @method     ChildRole[]|Collection findByDate(string|array<string> $role_date) Return ChildRole objects filtered by the role_date column
+ * @psalm-method Collection&\Traversable<ChildRole> findByDate(string|array<string> $role_date) Return ChildRole objects filtered by the role_date column
+ * @method     ChildRole[]|Collection findByCreatedAt(string|array<string> $role_created) Return ChildRole objects filtered by the role_created column
+ * @psalm-method Collection&\Traversable<ChildRole> findByCreatedAt(string|array<string> $role_created) Return ChildRole objects filtered by the role_created column
+ * @method     ChildRole[]|Collection findByUpdatedAt(string|array<string> $role_updated) Return ChildRole objects filtered by the role_updated column
+ * @psalm-method Collection&\Traversable<ChildRole> findByUpdatedAt(string|array<string> $role_updated) Return ChildRole objects filtered by the role_updated column
+ *
  * @method     ChildRole[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRole> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class RoleQuery extends ModelCriteria
 {
@@ -654,7 +653,7 @@ abstract class RoleQuery extends ModelCriteria
     public function filterByHide($hide = null, ?string $comparison = null)
     {
         if (is_string($hide)) {
-            $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(RoleTableMap::COL_ROLE_HIDE, $hide, $comparison);
@@ -929,20 +928,23 @@ abstract class RoleQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Article table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\ArticleQuery The inner query object of the EXISTS statement
      */
     public function useArticleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -957,8 +959,46 @@ abstract class RoleQuery extends ModelCriteria
      */
     public function useArticleNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Article table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleQuery The inner query object of the IN statement
+     */
+    public function useInArticleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for a NOT IN query.
+     *
+     * @see useArticleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\People object
      *
@@ -1063,20 +1103,23 @@ abstract class RoleQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to People table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\PeopleQuery The inner query object of the EXISTS statement
      */
     public function usePeopleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('People', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\PeopleQuery */
+        $q = $this->useExistsQuery('People', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1091,8 +1134,46 @@ abstract class RoleQuery extends ModelCriteria
      */
     public function usePeopleNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('People', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\PeopleQuery */
+        $q = $this->useExistsQuery('People', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to People table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PeopleQuery The inner query object of the IN statement
+     */
+    public function useInPeopleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PeopleQuery */
+        $q = $this->useInQuery('People', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to People table for a NOT IN query.
+     *
+     * @see usePeopleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PeopleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPeopleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PeopleQuery */
+        $q = $this->useInQuery('People', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

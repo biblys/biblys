@@ -952,8 +952,8 @@ abstract class Media implements ActiveRecordInterface
                 $col = null;
             }
             $this->media_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1230,45 +1230,59 @@ abstract class Media implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'media_id':
                         $stmt->bindValue($identifier, $this->media_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'category_id':
                         $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
+
                         break;
                     case 'media_dir':
                         $stmt->bindValue($identifier, $this->media_dir, PDO::PARAM_STR);
+
                         break;
                     case 'media_file':
                         $stmt->bindValue($identifier, $this->media_file, PDO::PARAM_STR);
+
                         break;
                     case 'media_ext':
                         $stmt->bindValue($identifier, $this->media_ext, PDO::PARAM_STR);
+
                         break;
                     case 'media_title':
                         $stmt->bindValue($identifier, $this->media_title, PDO::PARAM_STR);
+
                         break;
                     case 'media_desc':
                         $stmt->bindValue($identifier, $this->media_desc, PDO::PARAM_STR);
+
                         break;
                     case 'media_link':
                         $stmt->bindValue($identifier, $this->media_link, PDO::PARAM_STR);
+
                         break;
                     case 'media_headline':
                         $stmt->bindValue($identifier, $this->media_headline, PDO::PARAM_STR);
+
                         break;
                     case 'media_insert':
                         $stmt->bindValue($identifier, $this->media_insert ? $this->media_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'media_update':
                         $stmt->bindValue($identifier, $this->media_update ? $this->media_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'media_created':
                         $stmt->bindValue($identifier, $this->media_created ? $this->media_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'media_updated':
                         $stmt->bindValue($identifier, $this->media_updated ? $this->media_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

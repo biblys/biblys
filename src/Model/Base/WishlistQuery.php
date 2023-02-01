@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'wishlist' table.
- *
- *
+ * Base class that represents a query for the `wishlist` table.
  *
  * @method     ChildWishlistQuery orderById($order = Criteria::ASC) Order by the wishlist_id column
  * @method     ChildWishlistQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWishlist|null findOneByCurrent(boolean $wishlist_current) Return the first ChildWishlist filtered by the wishlist_current column
  * @method     ChildWishlist|null findOneByPublic(boolean $wishlist_public) Return the first ChildWishlist filtered by the wishlist_public column
  * @method     ChildWishlist|null findOneByCreatedAt(string $wishlist_created) Return the first ChildWishlist filtered by the wishlist_created column
- * @method     ChildWishlist|null findOneByUpdatedAt(string $wishlist_updated) Return the first ChildWishlist filtered by the wishlist_updated column *
-
+ * @method     ChildWishlist|null findOneByUpdatedAt(string $wishlist_updated) Return the first ChildWishlist filtered by the wishlist_updated column
+ *
  * @method     ChildWishlist requirePk($key, ?ConnectionInterface $con = null) Return the ChildWishlist by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWishlist requireOne(?ConnectionInterface $con = null) Return the first ChildWishlist matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWishlist[]|Collection find(?ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildWishlist> find(?ConnectionInterface $con = null) Return ChildWishlist objects based on current ModelCriteria
- * @method     ChildWishlist[]|Collection findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
- * @psalm-method Collection&\Traversable<ChildWishlist> findById(int $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
- * @method     ChildWishlist[]|Collection findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByUserId(int $user_id) Return ChildWishlist objects filtered by the user_id column
- * @method     ChildWishlist[]|Collection findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByName(string $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
- * @method     ChildWishlist[]|Collection findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByCurrent(boolean $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
- * @method     ChildWishlist[]|Collection findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByPublic(boolean $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
- * @method     ChildWishlist[]|Collection findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByCreatedAt(string $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
- * @method     ChildWishlist[]|Collection findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
- * @psalm-method Collection&\Traversable<ChildWishlist> findByUpdatedAt(string $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ *
+ * @method     ChildWishlist[]|Collection findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findById(int|array<int> $wishlist_id) Return ChildWishlist objects filtered by the wishlist_id column
+ * @method     ChildWishlist[]|Collection findByUserId(int|array<int> $user_id) Return ChildWishlist objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByUserId(int|array<int> $user_id) Return ChildWishlist objects filtered by the user_id column
+ * @method     ChildWishlist[]|Collection findByName(string|array<string> $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByName(string|array<string> $wishlist_name) Return ChildWishlist objects filtered by the wishlist_name column
+ * @method     ChildWishlist[]|Collection findByCurrent(boolean|array<boolean> $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByCurrent(boolean|array<boolean> $wishlist_current) Return ChildWishlist objects filtered by the wishlist_current column
+ * @method     ChildWishlist[]|Collection findByPublic(boolean|array<boolean> $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByPublic(boolean|array<boolean> $wishlist_public) Return ChildWishlist objects filtered by the wishlist_public column
+ * @method     ChildWishlist[]|Collection findByCreatedAt(string|array<string> $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByCreatedAt(string|array<string> $wishlist_created) Return ChildWishlist objects filtered by the wishlist_created column
+ * @method     ChildWishlist[]|Collection findByUpdatedAt(string|array<string> $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ * @psalm-method Collection&\Traversable<ChildWishlist> findByUpdatedAt(string|array<string> $wishlist_updated) Return ChildWishlist objects filtered by the wishlist_updated column
+ *
  * @method     ChildWishlist[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWishlist> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class WishlistQuery extends ModelCriteria
 {
@@ -409,7 +408,7 @@ abstract class WishlistQuery extends ModelCriteria
     public function filterByCurrent($current = null, ?string $comparison = null)
     {
         if (is_string($current)) {
-            $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_CURRENT, $current, $comparison);
@@ -438,7 +437,7 @@ abstract class WishlistQuery extends ModelCriteria
     public function filterByPublic($public = null, ?string $comparison = null)
     {
         if (is_string($public)) {
-            $public = in_array(strtolower($public), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $public = in_array(strtolower($public), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(WishlistTableMap::COL_WISHLIST_PUBLIC, $public, $comparison);

@@ -875,8 +875,8 @@ abstract class Image implements ActiveRecordInterface
                 $col = null;
             }
             $this->image_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1147,39 +1147,51 @@ abstract class Image implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'image_id':
                         $stmt->bindValue($identifier, $this->image_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'event_id':
                         $stmt->bindValue($identifier, $this->event_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'image_nature':
                         $stmt->bindValue($identifier, $this->image_nature, PDO::PARAM_STR);
+
                         break;
                     case 'image_legend':
                         $stmt->bindValue($identifier, $this->image_legend, PDO::PARAM_STR);
+
                         break;
                     case 'image_type':
                         $stmt->bindValue($identifier, $this->image_type, PDO::PARAM_STR);
+
                         break;
                     case 'image_size':
                         $stmt->bindValue($identifier, $this->image_size, PDO::PARAM_INT);
+
                         break;
                     case 'image_inserted':
                         $stmt->bindValue($identifier, $this->image_inserted ? $this->image_inserted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'image_uploaded':
                         $stmt->bindValue($identifier, $this->image_uploaded ? $this->image_uploaded->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'image_updated':
                         $stmt->bindValue($identifier, $this->image_updated ? $this->image_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

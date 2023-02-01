@@ -46,6 +46,11 @@ class PostTableMap extends TableMap
     public const TABLE_NAME = 'posts';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Post';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Post';
@@ -553,7 +558,7 @@ class PostTableMap extends TableMap
             PostTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

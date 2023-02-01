@@ -912,8 +912,8 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
                 $col = null;
             }
             $this->campaign_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1187,42 +1187,55 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'campaign_id':
                         $stmt->bindValue($identifier, $this->campaign_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_title':
                         $stmt->bindValue($identifier, $this->campaign_title, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_url':
                         $stmt->bindValue($identifier, $this->campaign_url, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_description':
                         $stmt->bindValue($identifier, $this->campaign_description, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_image':
                         $stmt->bindValue($identifier, $this->campaign_image, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_goal':
                         $stmt->bindValue($identifier, $this->campaign_goal, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_pledged':
                         $stmt->bindValue($identifier, $this->campaign_pledged, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_backers':
                         $stmt->bindValue($identifier, $this->campaign_backers, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_starts':
                         $stmt->bindValue($identifier, $this->campaign_starts ? $this->campaign_starts->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_ends':
                         $stmt->bindValue($identifier, $this->campaign_ends ? $this->campaign_ends->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_created':
                         $stmt->bindValue($identifier, $this->campaign_created ? $this->campaign_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'campaign_updated':
                         $stmt->bindValue($identifier, $this->campaign_updated ? $this->campaign_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

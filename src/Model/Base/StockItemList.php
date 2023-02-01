@@ -642,8 +642,8 @@ abstract class StockItemList implements ActiveRecordInterface
                 $col = null;
             }
             $this->list_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -899,24 +899,31 @@ abstract class StockItemList implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'list_id':
                         $stmt->bindValue($identifier, $this->list_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'list_title':
                         $stmt->bindValue($identifier, $this->list_title, PDO::PARAM_STR);
+
                         break;
                     case 'list_url':
                         $stmt->bindValue($identifier, $this->list_url, PDO::PARAM_STR);
+
                         break;
                     case 'list_created':
                         $stmt->bindValue($identifier, $this->list_created ? $this->list_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'list_updated':
                         $stmt->bindValue($identifier, $this->list_updated ? $this->list_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

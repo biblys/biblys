@@ -679,8 +679,8 @@ abstract class Session implements ActiveRecordInterface
                 $col = null;
             }
             $this->session_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -963,24 +963,31 @@ abstract class Session implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'session_id':
                         $stmt->bindValue($identifier, $this->session_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'session_token':
                         $stmt->bindValue($identifier, $this->session_token, PDO::PARAM_STR);
+
                         break;
                     case 'session_created':
                         $stmt->bindValue($identifier, $this->session_created ? $this->session_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'session_expires':
                         $stmt->bindValue($identifier, $this->session_expires ? $this->session_expires->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'session_updated':
                         $stmt->bindValue($identifier, $this->session_updated ? $this->session_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

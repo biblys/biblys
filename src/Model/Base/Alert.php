@@ -792,8 +792,8 @@ abstract class Alert implements ActiveRecordInterface
                 $col = null;
             }
             $this->alert_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1058,33 +1058,43 @@ abstract class Alert implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'alert_id':
                         $stmt->bindValue($identifier, $this->alert_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'alert_max_price':
                         $stmt->bindValue($identifier, $this->alert_max_price, PDO::PARAM_INT);
+
                         break;
                     case 'alert_pub_year':
                         $stmt->bindValue($identifier, $this->alert_pub_year, PDO::PARAM_INT);
+
                         break;
                     case 'alert_condition':
                         $stmt->bindValue($identifier, $this->alert_condition, PDO::PARAM_STR);
+
                         break;
                     case 'alert_insert':
                         $stmt->bindValue($identifier, $this->alert_insert ? $this->alert_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'alert_update':
                         $stmt->bindValue($identifier, $this->alert_update ? $this->alert_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'alert_created':
                         $stmt->bindValue($identifier, $this->alert_created ? $this->alert_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'alert_updated':
                         $stmt->bindValue($identifier, $this->alert_updated ? $this->alert_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

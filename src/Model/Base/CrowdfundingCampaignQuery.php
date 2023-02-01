@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'cf_campaigns' table.
- *
- *
+ * Base class that represents a query for the `cf_campaigns` table.
  *
  * @method     ChildCrowdfundingCampaignQuery orderById($order = Criteria::ASC) Order by the campaign_id column
  * @method     ChildCrowdfundingCampaignQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -70,8 +68,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaign|null findOneByStarts(string $campaign_starts) Return the first ChildCrowdfundingCampaign filtered by the campaign_starts column
  * @method     ChildCrowdfundingCampaign|null findOneByEnds(string $campaign_ends) Return the first ChildCrowdfundingCampaign filtered by the campaign_ends column
  * @method     ChildCrowdfundingCampaign|null findOneByCreatedAt(string $campaign_created) Return the first ChildCrowdfundingCampaign filtered by the campaign_created column
- * @method     ChildCrowdfundingCampaign|null findOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column *
-
+ * @method     ChildCrowdfundingCampaign|null findOneByUpdatedAt(string $campaign_updated) Return the first ChildCrowdfundingCampaign filtered by the campaign_updated column
+ *
  * @method     ChildCrowdfundingCampaign requirePk($key, ?ConnectionInterface $con = null) Return the ChildCrowdfundingCampaign by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCrowdfundingCampaign requireOne(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -91,35 +89,36 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCrowdfundingCampaign[]|Collection find(?ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> find(?ConnectionInterface $con = null) Return ChildCrowdfundingCampaign objects based on current ModelCriteria
- * @method     ChildCrowdfundingCampaign[]|Collection findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findById(int $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
- * @method     ChildCrowdfundingCampaign[]|Collection findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findBySiteId(int $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
- * @method     ChildCrowdfundingCampaign[]|Collection findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByTitle(string $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
- * @method     ChildCrowdfundingCampaign[]|Collection findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUrl(string $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
- * @method     ChildCrowdfundingCampaign[]|Collection findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByDescription(string $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
- * @method     ChildCrowdfundingCampaign[]|Collection findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByImage(string $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
- * @method     ChildCrowdfundingCampaign[]|Collection findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByGoal(int $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
- * @method     ChildCrowdfundingCampaign[]|Collection findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByPledged(int $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
- * @method     ChildCrowdfundingCampaign[]|Collection findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByBackers(int $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
- * @method     ChildCrowdfundingCampaign[]|Collection findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByStarts(string $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
- * @method     ChildCrowdfundingCampaign[]|Collection findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByEnds(string $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
- * @method     ChildCrowdfundingCampaign[]|Collection findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByCreatedAt(string $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
- * @method     ChildCrowdfundingCampaign[]|Collection findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
- * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUpdatedAt(string $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
+ *
+ * @method     ChildCrowdfundingCampaign[]|Collection findById(int|array<int> $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findById(int|array<int> $campaign_id) Return ChildCrowdfundingCampaign objects filtered by the campaign_id column
+ * @method     ChildCrowdfundingCampaign[]|Collection findBySiteId(int|array<int> $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findBySiteId(int|array<int> $site_id) Return ChildCrowdfundingCampaign objects filtered by the site_id column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByTitle(string|array<string> $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByTitle(string|array<string> $campaign_title) Return ChildCrowdfundingCampaign objects filtered by the campaign_title column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByUrl(string|array<string> $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUrl(string|array<string> $campaign_url) Return ChildCrowdfundingCampaign objects filtered by the campaign_url column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByDescription(string|array<string> $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByDescription(string|array<string> $campaign_description) Return ChildCrowdfundingCampaign objects filtered by the campaign_description column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByImage(string|array<string> $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByImage(string|array<string> $campaign_image) Return ChildCrowdfundingCampaign objects filtered by the campaign_image column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByGoal(int|array<int> $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByGoal(int|array<int> $campaign_goal) Return ChildCrowdfundingCampaign objects filtered by the campaign_goal column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByPledged(int|array<int> $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByPledged(int|array<int> $campaign_pledged) Return ChildCrowdfundingCampaign objects filtered by the campaign_pledged column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByBackers(int|array<int> $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByBackers(int|array<int> $campaign_backers) Return ChildCrowdfundingCampaign objects filtered by the campaign_backers column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByStarts(string|array<string> $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByStarts(string|array<string> $campaign_starts) Return ChildCrowdfundingCampaign objects filtered by the campaign_starts column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByEnds(string|array<string> $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByEnds(string|array<string> $campaign_ends) Return ChildCrowdfundingCampaign objects filtered by the campaign_ends column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByCreatedAt(string|array<string> $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByCreatedAt(string|array<string> $campaign_created) Return ChildCrowdfundingCampaign objects filtered by the campaign_created column
+ * @method     ChildCrowdfundingCampaign[]|Collection findByUpdatedAt(string|array<string> $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
+ * @psalm-method Collection&\Traversable<ChildCrowdfundingCampaign> findByUpdatedAt(string|array<string> $campaign_updated) Return ChildCrowdfundingCampaign objects filtered by the campaign_updated column
+ *
  * @method     ChildCrowdfundingCampaign[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildCrowdfundingCampaign> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class CrowdfundingCampaignQuery extends ModelCriteria
 {

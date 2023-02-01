@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'rights' table.
- *
- *
+ * Base class that represents a query for the `rights` table.
  *
  * @method     ChildRightQuery orderById($order = Criteria::ASC) Order by the right_id column
  * @method     ChildRightQuery orderByUid($order = Criteria::ASC) Order by the right_uid column
@@ -95,8 +93,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRight|null findOneByLibraryId(int $library_id) Return the first ChildRight filtered by the library_id column
  * @method     ChildRight|null findOneByCurrent(boolean $right_current) Return the first ChildRight filtered by the right_current column
  * @method     ChildRight|null findOneByCreatedAt(string $right_created) Return the first ChildRight filtered by the right_created column
- * @method     ChildRight|null findOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column *
-
+ * @method     ChildRight|null findOneByUpdatedAt(string $right_updated) Return the first ChildRight filtered by the right_updated column
+ *
  * @method     ChildRight requirePk($key, ?ConnectionInterface $con = null) Return the ChildRight by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRight requireOne(?ConnectionInterface $con = null) Return the first ChildRight matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -113,29 +111,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRight[]|Collection find(?ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildRight> find(?ConnectionInterface $con = null) Return ChildRight objects based on current ModelCriteria
- * @method     ChildRight[]|Collection findById(int $right_id) Return ChildRight objects filtered by the right_id column
- * @psalm-method Collection&\Traversable<ChildRight> findById(int $right_id) Return ChildRight objects filtered by the right_id column
- * @method     ChildRight[]|Collection findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
- * @psalm-method Collection&\Traversable<ChildRight> findByUid(string $right_uid) Return ChildRight objects filtered by the right_uid column
- * @method     ChildRight[]|Collection findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByUserId(int $user_id) Return ChildRight objects filtered by the user_id column
- * @method     ChildRight[]|Collection findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildRight> findBySiteId(int $site_id) Return ChildRight objects filtered by the site_id column
- * @method     ChildRight[]|Collection findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByPublisherId(int $publisher_id) Return ChildRight objects filtered by the publisher_id column
- * @method     ChildRight[]|Collection findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByBookshopId(int $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
- * @method     ChildRight[]|Collection findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
- * @psalm-method Collection&\Traversable<ChildRight> findByLibraryId(int $library_id) Return ChildRight objects filtered by the library_id column
- * @method     ChildRight[]|Collection findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
- * @psalm-method Collection&\Traversable<ChildRight> findByCurrent(boolean $right_current) Return ChildRight objects filtered by the right_current column
- * @method     ChildRight[]|Collection findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
- * @psalm-method Collection&\Traversable<ChildRight> findByCreatedAt(string $right_created) Return ChildRight objects filtered by the right_created column
- * @method     ChildRight[]|Collection findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
- * @psalm-method Collection&\Traversable<ChildRight> findByUpdatedAt(string $right_updated) Return ChildRight objects filtered by the right_updated column
+ *
+ * @method     ChildRight[]|Collection findById(int|array<int> $right_id) Return ChildRight objects filtered by the right_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findById(int|array<int> $right_id) Return ChildRight objects filtered by the right_id column
+ * @method     ChildRight[]|Collection findByUid(string|array<string> $right_uid) Return ChildRight objects filtered by the right_uid column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUid(string|array<string> $right_uid) Return ChildRight objects filtered by the right_uid column
+ * @method     ChildRight[]|Collection findByUserId(int|array<int> $user_id) Return ChildRight objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUserId(int|array<int> $user_id) Return ChildRight objects filtered by the user_id column
+ * @method     ChildRight[]|Collection findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findBySiteId(int|array<int> $site_id) Return ChildRight objects filtered by the site_id column
+ * @method     ChildRight[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByPublisherId(int|array<int> $publisher_id) Return ChildRight objects filtered by the publisher_id column
+ * @method     ChildRight[]|Collection findByBookshopId(int|array<int> $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByBookshopId(int|array<int> $bookshop_id) Return ChildRight objects filtered by the bookshop_id column
+ * @method     ChildRight[]|Collection findByLibraryId(int|array<int> $library_id) Return ChildRight objects filtered by the library_id column
+ * @psalm-method Collection&\Traversable<ChildRight> findByLibraryId(int|array<int> $library_id) Return ChildRight objects filtered by the library_id column
+ * @method     ChildRight[]|Collection findByCurrent(boolean|array<boolean> $right_current) Return ChildRight objects filtered by the right_current column
+ * @psalm-method Collection&\Traversable<ChildRight> findByCurrent(boolean|array<boolean> $right_current) Return ChildRight objects filtered by the right_current column
+ * @method     ChildRight[]|Collection findByCreatedAt(string|array<string> $right_created) Return ChildRight objects filtered by the right_created column
+ * @psalm-method Collection&\Traversable<ChildRight> findByCreatedAt(string|array<string> $right_created) Return ChildRight objects filtered by the right_created column
+ * @method     ChildRight[]|Collection findByUpdatedAt(string|array<string> $right_updated) Return ChildRight objects filtered by the right_updated column
+ * @psalm-method Collection&\Traversable<ChildRight> findByUpdatedAt(string|array<string> $right_updated) Return ChildRight objects filtered by the right_updated column
+ *
  * @method     ChildRight[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildRight> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class RightQuery extends ModelCriteria
 {
@@ -639,7 +638,7 @@ abstract class RightQuery extends ModelCriteria
     public function filterByCurrent($current = null, ?string $comparison = null)
     {
         if (is_string($current)) {
-            $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $current = in_array(strtolower($current), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(RightTableMap::COL_RIGHT_CURRENT, $current, $comparison);
@@ -841,20 +840,23 @@ abstract class RightQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to User table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\UserQuery The inner query object of the EXISTS statement
      */
     public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -869,8 +871,46 @@ abstract class RightQuery extends ModelCriteria
      */
     public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\UserQuery */
+        $q = $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to User table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\UserQuery The inner query object of the IN statement
+     */
+    public function useInUserQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to User table for a NOT IN query.
+     *
+     * @see useUserInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\UserQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInUserQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\UserQuery */
+        $q = $this->useInQuery('User', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Site object
      *
@@ -975,20 +1015,23 @@ abstract class RightQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Site table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
     public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1003,8 +1046,46 @@ abstract class RightQuery extends ModelCriteria
      */
     public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Publisher object
      *
@@ -1109,20 +1190,23 @@ abstract class RightQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Publisher table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\PublisherQuery The inner query object of the EXISTS statement
      */
     public function usePublisherExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Publisher', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useExistsQuery('Publisher', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1137,8 +1221,46 @@ abstract class RightQuery extends ModelCriteria
      */
     public function usePublisherNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Publisher', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useExistsQuery('Publisher', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Publisher table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PublisherQuery The inner query object of the IN statement
+     */
+    public function useInPublisherQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useInQuery('Publisher', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Publisher table for a NOT IN query.
+     *
+     * @see usePublisherInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PublisherQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPublisherQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PublisherQuery */
+        $q = $this->useInQuery('Publisher', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

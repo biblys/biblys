@@ -2282,8 +2282,8 @@ abstract class Stock implements ActiveRecordInterface
                 $col = null;
             }
             $this->stock_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -2668,126 +2668,167 @@ abstract class Stock implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'stock_id':
                         $stmt->bindValue($identifier, $this->stock_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'campaign_id':
                         $stmt->bindValue($identifier, $this->campaign_id, PDO::PARAM_INT);
+
                         break;
                     case 'reward_id':
                         $stmt->bindValue($identifier, $this->reward_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'customer_id':
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
+
                         break;
                     case 'wish_id':
                         $stmt->bindValue($identifier, $this->wish_id, PDO::PARAM_INT);
+
                         break;
                     case 'cart_id':
                         $stmt->bindValue($identifier, $this->cart_id, PDO::PARAM_INT);
+
                         break;
                     case 'order_id':
                         $stmt->bindValue($identifier, $this->order_id, PDO::PARAM_INT);
+
                         break;
                     case 'coupon_id':
                         $stmt->bindValue($identifier, $this->coupon_id, PDO::PARAM_INT);
+
                         break;
                     case 'stock_shop':
                         $stmt->bindValue($identifier, $this->stock_shop, PDO::PARAM_INT);
+
                         break;
                     case 'stock_invoice':
                         $stmt->bindValue($identifier, $this->stock_invoice, PDO::PARAM_STR);
+
                         break;
                     case 'stock_depot':
                         $stmt->bindValue($identifier, (int) $this->stock_depot, PDO::PARAM_INT);
+
                         break;
                     case 'stock_stockage':
                         $stmt->bindValue($identifier, $this->stock_stockage, PDO::PARAM_STR);
+
                         break;
                     case 'stock_condition':
                         $stmt->bindValue($identifier, $this->stock_condition, PDO::PARAM_STR);
+
                         break;
                     case 'stock_condition_details':
                         $stmt->bindValue($identifier, $this->stock_condition_details, PDO::PARAM_STR);
+
                         break;
                     case 'stock_purchase_price':
                         $stmt->bindValue($identifier, $this->stock_purchase_price, PDO::PARAM_INT);
+
                         break;
                     case 'stock_selling_price':
                         $stmt->bindValue($identifier, $this->stock_selling_price, PDO::PARAM_INT);
+
                         break;
                     case 'stock_selling_price2':
                         $stmt->bindValue($identifier, $this->stock_selling_price2, PDO::PARAM_INT);
+
                         break;
                     case 'stock_selling_price_saved':
                         $stmt->bindValue($identifier, $this->stock_selling_price_saved, PDO::PARAM_INT);
+
                         break;
                     case 'stock_selling_price_ht':
                         $stmt->bindValue($identifier, $this->stock_selling_price_ht, PDO::PARAM_INT);
+
                         break;
                     case 'stock_selling_price_tva':
                         $stmt->bindValue($identifier, $this->stock_selling_price_tva, PDO::PARAM_INT);
+
                         break;
                     case 'stock_tva_rate':
                         $stmt->bindValue($identifier, $this->stock_tva_rate, PDO::PARAM_STR);
+
                         break;
                     case 'stock_weight':
                         $stmt->bindValue($identifier, $this->stock_weight, PDO::PARAM_INT);
+
                         break;
                     case 'stock_pub_year':
                         $stmt->bindValue($identifier, $this->stock_pub_year, PDO::PARAM_INT);
+
                         break;
                     case 'stock_allow_predownload':
                         $stmt->bindValue($identifier, (int) $this->stock_allow_predownload, PDO::PARAM_INT);
+
                         break;
                     case 'stock_photo_version':
                         $stmt->bindValue($identifier, $this->stock_photo_version, PDO::PARAM_INT);
+
                         break;
                     case 'stock_purchase_date':
                         $stmt->bindValue($identifier, $this->stock_purchase_date ? $this->stock_purchase_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_onsale_date':
                         $stmt->bindValue($identifier, $this->stock_onsale_date ? $this->stock_onsale_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_cart_date':
                         $stmt->bindValue($identifier, $this->stock_cart_date ? $this->stock_cart_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_selling_date':
                         $stmt->bindValue($identifier, $this->stock_selling_date ? $this->stock_selling_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_return_date':
                         $stmt->bindValue($identifier, $this->stock_return_date ? $this->stock_return_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_lost_date':
                         $stmt->bindValue($identifier, $this->stock_lost_date ? $this->stock_lost_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_media_ok':
                         $stmt->bindValue($identifier, (int) $this->stock_media_ok, PDO::PARAM_INT);
+
                         break;
                     case 'stock_file_updated':
                         $stmt->bindValue($identifier, (int) $this->stock_file_updated, PDO::PARAM_INT);
+
                         break;
                     case 'stock_insert':
                         $stmt->bindValue($identifier, $this->stock_insert ? $this->stock_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_update':
                         $stmt->bindValue($identifier, $this->stock_update ? $this->stock_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_dl':
                         $stmt->bindValue($identifier, (int) $this->stock_dl, PDO::PARAM_INT);
+
                         break;
                     case 'stock_created':
                         $stmt->bindValue($identifier, $this->stock_created ? $this->stock_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'stock_updated':
                         $stmt->bindValue($identifier, $this->stock_updated ? $this->stock_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

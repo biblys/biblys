@@ -46,6 +46,11 @@ class CustomerTableMap extends TableMap
     public const TABLE_NAME = 'customers';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Customer';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Customer';
@@ -441,7 +446,7 @@ class CustomerTableMap extends TableMap
             CustomerTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

@@ -602,8 +602,8 @@ abstract class TicketComment implements ActiveRecordInterface
                 $col = null;
             }
             $this->ticket_comment_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -856,21 +856,27 @@ abstract class TicketComment implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'ticket_comment_id':
                         $stmt->bindValue($identifier, $this->ticket_comment_id, PDO::PARAM_INT);
+
                         break;
                     case 'ticket_id':
                         $stmt->bindValue($identifier, $this->ticket_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'ticket_comment_content':
                         $stmt->bindValue($identifier, $this->ticket_comment_content, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_comment_created':
                         $stmt->bindValue($identifier, $this->ticket_comment_created ? $this->ticket_comment_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'ticket_comment_update':
                         $stmt->bindValue($identifier, $this->ticket_comment_update ? $this->ticket_comment_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

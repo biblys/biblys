@@ -868,8 +868,8 @@ abstract class Category implements ActiveRecordInterface
                 $col = null;
             }
             $this->category_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1137,36 +1137,47 @@ abstract class Category implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'category_id':
                         $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'category_name':
                         $stmt->bindValue($identifier, $this->category_name, PDO::PARAM_STR);
+
                         break;
                     case 'category_url':
                         $stmt->bindValue($identifier, $this->category_url, PDO::PARAM_STR);
+
                         break;
                     case 'category_desc':
                         $stmt->bindValue($identifier, $this->category_desc, PDO::PARAM_STR);
+
                         break;
                     case 'category_order':
                         $stmt->bindValue($identifier, $this->category_order, PDO::PARAM_INT);
+
                         break;
                     case 'category_hidden':
                         $stmt->bindValue($identifier, (int) $this->category_hidden, PDO::PARAM_INT);
+
                         break;
                     case 'category_insert':
                         $stmt->bindValue($identifier, $this->category_insert ? $this->category_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'category_update':
                         $stmt->bindValue($identifier, $this->category_update ? $this->category_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'category_created':
                         $stmt->bindValue($identifier, $this->category_created ? $this->category_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'category_updated':
                         $stmt->bindValue($identifier, $this->category_updated ? $this->category_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

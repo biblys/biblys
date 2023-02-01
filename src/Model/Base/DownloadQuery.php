@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'downloads' table.
- *
- *
+ * Base class that represents a query for the `downloads` table.
  *
  * @method     ChildDownloadQuery orderById($order = Criteria::ASC) Order by the download_id column
  * @method     ChildDownloadQuery orderByFileId($order = Criteria::ASC) Order by the file_id column
@@ -64,8 +62,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDownload|null findOneByIp(string $download_ip) Return the first ChildDownload filtered by the download_ip column
  * @method     ChildDownload|null findOneByDate(string $download_date) Return the first ChildDownload filtered by the download_date column
  * @method     ChildDownload|null findOneByCreatedAt(string $download_created) Return the first ChildDownload filtered by the download_created column
- * @method     ChildDownload|null findOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column *
-
+ * @method     ChildDownload|null findOneByUpdatedAt(string $download_updated) Return the first ChildDownload filtered by the download_updated column
+ *
  * @method     ChildDownload requirePk($key, ?ConnectionInterface $con = null) Return the ChildDownload by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDownload requireOne(?ConnectionInterface $con = null) Return the first ChildDownload matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -83,31 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildDownload[]|Collection find(?ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildDownload> find(?ConnectionInterface $con = null) Return ChildDownload objects based on current ModelCriteria
- * @method     ChildDownload[]|Collection findById(string $download_id) Return ChildDownload objects filtered by the download_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findById(string $download_id) Return ChildDownload objects filtered by the download_id column
- * @method     ChildDownload[]|Collection findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findByFileId(int $file_id) Return ChildDownload objects filtered by the file_id column
- * @method     ChildDownload[]|Collection findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findByArticleId(int $article_id) Return ChildDownload objects filtered by the article_id column
- * @method     ChildDownload[]|Collection findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findByBookId(int $book_id) Return ChildDownload objects filtered by the book_id column
- * @method     ChildDownload[]|Collection findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildDownload> findByUserId(int $user_id) Return ChildDownload objects filtered by the user_id column
- * @method     ChildDownload[]|Collection findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
- * @psalm-method Collection&\Traversable<ChildDownload> findByFiletype(string $download_filetype) Return ChildDownload objects filtered by the download_filetype column
- * @method     ChildDownload[]|Collection findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
- * @psalm-method Collection&\Traversable<ChildDownload> findByVersion(string $download_version) Return ChildDownload objects filtered by the download_version column
- * @method     ChildDownload[]|Collection findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
- * @psalm-method Collection&\Traversable<ChildDownload> findByIp(string $download_ip) Return ChildDownload objects filtered by the download_ip column
- * @method     ChildDownload[]|Collection findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
- * @psalm-method Collection&\Traversable<ChildDownload> findByDate(string $download_date) Return ChildDownload objects filtered by the download_date column
- * @method     ChildDownload[]|Collection findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
- * @psalm-method Collection&\Traversable<ChildDownload> findByCreatedAt(string $download_created) Return ChildDownload objects filtered by the download_created column
- * @method     ChildDownload[]|Collection findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
- * @psalm-method Collection&\Traversable<ChildDownload> findByUpdatedAt(string $download_updated) Return ChildDownload objects filtered by the download_updated column
+ *
+ * @method     ChildDownload[]|Collection findById(string|array<string> $download_id) Return ChildDownload objects filtered by the download_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findById(string|array<string> $download_id) Return ChildDownload objects filtered by the download_id column
+ * @method     ChildDownload[]|Collection findByFileId(int|array<int> $file_id) Return ChildDownload objects filtered by the file_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByFileId(int|array<int> $file_id) Return ChildDownload objects filtered by the file_id column
+ * @method     ChildDownload[]|Collection findByArticleId(int|array<int> $article_id) Return ChildDownload objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByArticleId(int|array<int> $article_id) Return ChildDownload objects filtered by the article_id column
+ * @method     ChildDownload[]|Collection findByBookId(int|array<int> $book_id) Return ChildDownload objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByBookId(int|array<int> $book_id) Return ChildDownload objects filtered by the book_id column
+ * @method     ChildDownload[]|Collection findByUserId(int|array<int> $user_id) Return ChildDownload objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByUserId(int|array<int> $user_id) Return ChildDownload objects filtered by the user_id column
+ * @method     ChildDownload[]|Collection findByFiletype(string|array<string> $download_filetype) Return ChildDownload objects filtered by the download_filetype column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByFiletype(string|array<string> $download_filetype) Return ChildDownload objects filtered by the download_filetype column
+ * @method     ChildDownload[]|Collection findByVersion(string|array<string> $download_version) Return ChildDownload objects filtered by the download_version column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByVersion(string|array<string> $download_version) Return ChildDownload objects filtered by the download_version column
+ * @method     ChildDownload[]|Collection findByIp(string|array<string> $download_ip) Return ChildDownload objects filtered by the download_ip column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByIp(string|array<string> $download_ip) Return ChildDownload objects filtered by the download_ip column
+ * @method     ChildDownload[]|Collection findByDate(string|array<string> $download_date) Return ChildDownload objects filtered by the download_date column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByDate(string|array<string> $download_date) Return ChildDownload objects filtered by the download_date column
+ * @method     ChildDownload[]|Collection findByCreatedAt(string|array<string> $download_created) Return ChildDownload objects filtered by the download_created column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByCreatedAt(string|array<string> $download_created) Return ChildDownload objects filtered by the download_created column
+ * @method     ChildDownload[]|Collection findByUpdatedAt(string|array<string> $download_updated) Return ChildDownload objects filtered by the download_updated column
+ * @psalm-method Collection&\Traversable<ChildDownload> findByUpdatedAt(string|array<string> $download_updated) Return ChildDownload objects filtered by the download_updated column
+ *
  * @method     ChildDownload[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildDownload> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class DownloadQuery extends ModelCriteria
 {

@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'awards' table.
- *
- *
+ * Base class that represents a query for the `awards` table.
  *
  * @method     ChildAwardQuery orderById($order = Criteria::ASC) Order by the award_id column
  * @method     ChildAwardQuery orderByArticleId($order = Criteria::ASC) Order by the article_id column
@@ -61,8 +59,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAward|null findOneByNote(string $award_note) Return the first ChildAward filtered by the award_note column
  * @method     ChildAward|null findOneByDate(string $award_date) Return the first ChildAward filtered by the award_date column
  * @method     ChildAward|null findOneByCreatedAt(string $award_created) Return the first ChildAward filtered by the award_created column
- * @method     ChildAward|null findOneByUpdatedAt(string $award_updated) Return the first ChildAward filtered by the award_updated column *
-
+ * @method     ChildAward|null findOneByUpdatedAt(string $award_updated) Return the first ChildAward filtered by the award_updated column
+ *
  * @method     ChildAward requirePk($key, ?ConnectionInterface $con = null) Return the ChildAward by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAward requireOne(?ConnectionInterface $con = null) Return the first ChildAward matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -79,29 +77,30 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildAward[]|Collection find(?ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildAward> find(?ConnectionInterface $con = null) Return ChildAward objects based on current ModelCriteria
- * @method     ChildAward[]|Collection findById(int $award_id) Return ChildAward objects filtered by the award_id column
- * @psalm-method Collection&\Traversable<ChildAward> findById(int $award_id) Return ChildAward objects filtered by the award_id column
- * @method     ChildAward[]|Collection findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildAward> findByArticleId(int $article_id) Return ChildAward objects filtered by the article_id column
- * @method     ChildAward[]|Collection findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
- * @psalm-method Collection&\Traversable<ChildAward> findByBookId(int $book_id) Return ChildAward objects filtered by the book_id column
- * @method     ChildAward[]|Collection findByName(string $award_name) Return ChildAward objects filtered by the award_name column
- * @psalm-method Collection&\Traversable<ChildAward> findByName(string $award_name) Return ChildAward objects filtered by the award_name column
- * @method     ChildAward[]|Collection findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
- * @psalm-method Collection&\Traversable<ChildAward> findByYear(string $award_year) Return ChildAward objects filtered by the award_year column
- * @method     ChildAward[]|Collection findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
- * @psalm-method Collection&\Traversable<ChildAward> findByCategory(string $award_category) Return ChildAward objects filtered by the award_category column
- * @method     ChildAward[]|Collection findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
- * @psalm-method Collection&\Traversable<ChildAward> findByNote(string $award_note) Return ChildAward objects filtered by the award_note column
- * @method     ChildAward[]|Collection findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
- * @psalm-method Collection&\Traversable<ChildAward> findByDate(string $award_date) Return ChildAward objects filtered by the award_date column
- * @method     ChildAward[]|Collection findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
- * @psalm-method Collection&\Traversable<ChildAward> findByCreatedAt(string $award_created) Return ChildAward objects filtered by the award_created column
- * @method     ChildAward[]|Collection findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
- * @psalm-method Collection&\Traversable<ChildAward> findByUpdatedAt(string $award_updated) Return ChildAward objects filtered by the award_updated column
+ *
+ * @method     ChildAward[]|Collection findById(int|array<int> $award_id) Return ChildAward objects filtered by the award_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findById(int|array<int> $award_id) Return ChildAward objects filtered by the award_id column
+ * @method     ChildAward[]|Collection findByArticleId(int|array<int> $article_id) Return ChildAward objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findByArticleId(int|array<int> $article_id) Return ChildAward objects filtered by the article_id column
+ * @method     ChildAward[]|Collection findByBookId(int|array<int> $book_id) Return ChildAward objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildAward> findByBookId(int|array<int> $book_id) Return ChildAward objects filtered by the book_id column
+ * @method     ChildAward[]|Collection findByName(string|array<string> $award_name) Return ChildAward objects filtered by the award_name column
+ * @psalm-method Collection&\Traversable<ChildAward> findByName(string|array<string> $award_name) Return ChildAward objects filtered by the award_name column
+ * @method     ChildAward[]|Collection findByYear(string|array<string> $award_year) Return ChildAward objects filtered by the award_year column
+ * @psalm-method Collection&\Traversable<ChildAward> findByYear(string|array<string> $award_year) Return ChildAward objects filtered by the award_year column
+ * @method     ChildAward[]|Collection findByCategory(string|array<string> $award_category) Return ChildAward objects filtered by the award_category column
+ * @psalm-method Collection&\Traversable<ChildAward> findByCategory(string|array<string> $award_category) Return ChildAward objects filtered by the award_category column
+ * @method     ChildAward[]|Collection findByNote(string|array<string> $award_note) Return ChildAward objects filtered by the award_note column
+ * @psalm-method Collection&\Traversable<ChildAward> findByNote(string|array<string> $award_note) Return ChildAward objects filtered by the award_note column
+ * @method     ChildAward[]|Collection findByDate(string|array<string> $award_date) Return ChildAward objects filtered by the award_date column
+ * @psalm-method Collection&\Traversable<ChildAward> findByDate(string|array<string> $award_date) Return ChildAward objects filtered by the award_date column
+ * @method     ChildAward[]|Collection findByCreatedAt(string|array<string> $award_created) Return ChildAward objects filtered by the award_created column
+ * @psalm-method Collection&\Traversable<ChildAward> findByCreatedAt(string|array<string> $award_created) Return ChildAward objects filtered by the award_created column
+ * @method     ChildAward[]|Collection findByUpdatedAt(string|array<string> $award_updated) Return ChildAward objects filtered by the award_updated column
+ * @psalm-method Collection&\Traversable<ChildAward> findByUpdatedAt(string|array<string> $award_updated) Return ChildAward objects filtered by the award_updated column
+ *
  * @method     ChildAward[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAward> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class AwardQuery extends ModelCriteria
 {

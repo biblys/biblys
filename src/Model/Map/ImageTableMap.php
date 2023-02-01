@@ -46,6 +46,11 @@ class ImageTableMap extends TableMap
     public const TABLE_NAME = 'images';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Image';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Image';
@@ -413,7 +418,7 @@ class ImageTableMap extends TableMap
             ImageTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

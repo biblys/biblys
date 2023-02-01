@@ -962,8 +962,8 @@ abstract class ShippingFee implements ActiveRecordInterface
                 $col = null;
             }
             $this->shipping_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1243,48 +1243,63 @@ abstract class ShippingFee implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'shipping_id':
                         $stmt->bindValue($identifier, $this->shipping_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'article_id':
                         $stmt->bindValue($identifier, $this->article_id, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_mode':
                         $stmt->bindValue($identifier, $this->shipping_mode, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_type':
                         $stmt->bindValue($identifier, $this->shipping_type, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_zone':
                         $stmt->bindValue($identifier, $this->shipping_zone, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_min_weight':
                         $stmt->bindValue($identifier, $this->shipping_min_weight, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_max_weight':
                         $stmt->bindValue($identifier, $this->shipping_max_weight, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_max_articles':
                         $stmt->bindValue($identifier, $this->shipping_max_articles, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_min_amount':
                         $stmt->bindValue($identifier, $this->shipping_min_amount, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_max_amount':
                         $stmt->bindValue($identifier, $this->shipping_max_amount, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_fee':
                         $stmt->bindValue($identifier, $this->shipping_fee, PDO::PARAM_INT);
+
                         break;
                     case 'shipping_info':
                         $stmt->bindValue($identifier, $this->shipping_info, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_created':
                         $stmt->bindValue($identifier, $this->shipping_created ? $this->shipping_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'shipping_updated':
                         $stmt->bindValue($identifier, $this->shipping_updated ? $this->shipping_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

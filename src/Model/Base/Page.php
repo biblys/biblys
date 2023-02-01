@@ -810,8 +810,8 @@ abstract class Page implements ActiveRecordInterface
                 $col = null;
             }
             $this->page_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1076,33 +1076,43 @@ abstract class Page implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'page_id':
                         $stmt->bindValue($identifier, $this->page_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'page_url':
                         $stmt->bindValue($identifier, $this->page_url, PDO::PARAM_STR);
+
                         break;
                     case 'page_title':
                         $stmt->bindValue($identifier, $this->page_title, PDO::PARAM_STR);
+
                         break;
                     case 'page_content':
                         $stmt->bindValue($identifier, $this->page_content, PDO::PARAM_STR);
+
                         break;
                     case 'page_status':
                         $stmt->bindValue($identifier, (int) $this->page_status, PDO::PARAM_INT);
+
                         break;
                     case 'page_insert':
                         $stmt->bindValue($identifier, $this->page_insert ? $this->page_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'page_update':
                         $stmt->bindValue($identifier, $this->page_update ? $this->page_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'page_created':
                         $stmt->bindValue($identifier, $this->page_created ? $this->page_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'page_updated':
                         $stmt->bindValue($identifier, $this->page_updated ? $this->page_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

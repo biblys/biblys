@@ -985,8 +985,8 @@ abstract class Customer implements ActiveRecordInterface
                 $col = null;
             }
             $this->customer_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1263,45 +1263,59 @@ abstract class Customer implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'customer_id':
                         $stmt->bindValue($identifier, $this->customer_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'customer_type':
                         $stmt->bindValue($identifier, $this->customer_type, PDO::PARAM_STR);
+
                         break;
                     case 'customer_first_name':
                         $stmt->bindValue($identifier, $this->customer_first_name, PDO::PARAM_STR);
+
                         break;
                     case 'customer_last_name':
                         $stmt->bindValue($identifier, $this->customer_last_name, PDO::PARAM_STR);
+
                         break;
                     case 'customer_email':
                         $stmt->bindValue($identifier, $this->customer_email, PDO::PARAM_STR);
+
                         break;
                     case 'customer_phone':
                         $stmt->bindValue($identifier, $this->customer_phone, PDO::PARAM_STR);
+
                         break;
                     case 'country_id':
                         $stmt->bindValue($identifier, $this->country_id, PDO::PARAM_INT);
+
                         break;
                     case 'customer_privatization':
                         $stmt->bindValue($identifier, $this->customer_privatization ? $this->customer_privatization->format("Y-m-d") : null, PDO::PARAM_STR);
+
                         break;
                     case 'customer_insert':
                         $stmt->bindValue($identifier, $this->customer_insert ? $this->customer_insert->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'customer_update':
                         $stmt->bindValue($identifier, $this->customer_update ? $this->customer_update->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'customer_created':
                         $stmt->bindValue($identifier, $this->customer_created ? $this->customer_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'customer_updated':
                         $stmt->bindValue($identifier, $this->customer_updated ? $this->customer_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

@@ -46,6 +46,11 @@ class CountryTableMap extends TableMap
     public const TABLE_NAME = 'countries';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Country';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Country';
@@ -343,7 +348,7 @@ class CountryTableMap extends TableMap
             CountryTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

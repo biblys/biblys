@@ -46,6 +46,11 @@ class LangTableMap extends TableMap
     public const TABLE_NAME = 'langs';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Lang';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Lang';
@@ -357,7 +362,7 @@ class LangTableMap extends TableMap
             LangTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

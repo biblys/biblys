@@ -46,6 +46,11 @@ class AxysAppTableMap extends TableMap
     public const TABLE_NAME = 'axys_apps';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'AxysApp';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\AxysApp';
@@ -341,7 +346,7 @@ class AxysAppTableMap extends TableMap
             AxysAppTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

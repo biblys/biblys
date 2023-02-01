@@ -46,6 +46,11 @@ class AlertTableMap extends TableMap
     public const TABLE_NAME = 'alerts';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Alert';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Alert';
@@ -385,7 +390,7 @@ class AlertTableMap extends TableMap
             AlertTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

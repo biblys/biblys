@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'wishes' table.
- *
- *
+ * Base class that represents a query for the `wishes` table.
  *
  * @method     ChildWishQuery orderById($order = Criteria::ASC) Order by the wish_id column
  * @method     ChildWishQuery orderByWishlistId($order = Criteria::ASC) Order by the wishlist_id column
@@ -55,8 +53,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildWish|null findOneByArticleId(int $article_id) Return the first ChildWish filtered by the article_id column
  * @method     ChildWish|null findOneByCreatedAt(string $wish_created) Return the first ChildWish filtered by the wish_created column
  * @method     ChildWish|null findOneByUpdatedAt(string $wish_updated) Return the first ChildWish filtered by the wish_updated column
- * @method     ChildWish|null findOneByBought(string $wish_bought) Return the first ChildWish filtered by the wish_bought column *
-
+ * @method     ChildWish|null findOneByBought(string $wish_bought) Return the first ChildWish filtered by the wish_bought column
+ *
  * @method     ChildWish requirePk($key, ?ConnectionInterface $con = null) Return the ChildWish by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildWish requireOne(?ConnectionInterface $con = null) Return the first ChildWish matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -71,25 +69,26 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildWish[]|Collection find(?ConnectionInterface $con = null) Return ChildWish objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildWish> find(?ConnectionInterface $con = null) Return ChildWish objects based on current ModelCriteria
- * @method     ChildWish[]|Collection findById(int $wish_id) Return ChildWish objects filtered by the wish_id column
- * @psalm-method Collection&\Traversable<ChildWish> findById(int $wish_id) Return ChildWish objects filtered by the wish_id column
- * @method     ChildWish[]|Collection findByWishlistId(int $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
- * @psalm-method Collection&\Traversable<ChildWish> findByWishlistId(int $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
- * @method     ChildWish[]|Collection findByUserId(int $user_id) Return ChildWish objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildWish> findByUserId(int $user_id) Return ChildWish objects filtered by the user_id column
- * @method     ChildWish[]|Collection findBySiteId(int $site_id) Return ChildWish objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildWish> findBySiteId(int $site_id) Return ChildWish objects filtered by the site_id column
- * @method     ChildWish[]|Collection findByArticleId(int $article_id) Return ChildWish objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildWish> findByArticleId(int $article_id) Return ChildWish objects filtered by the article_id column
- * @method     ChildWish[]|Collection findByCreatedAt(string $wish_created) Return ChildWish objects filtered by the wish_created column
- * @psalm-method Collection&\Traversable<ChildWish> findByCreatedAt(string $wish_created) Return ChildWish objects filtered by the wish_created column
- * @method     ChildWish[]|Collection findByUpdatedAt(string $wish_updated) Return ChildWish objects filtered by the wish_updated column
- * @psalm-method Collection&\Traversable<ChildWish> findByUpdatedAt(string $wish_updated) Return ChildWish objects filtered by the wish_updated column
- * @method     ChildWish[]|Collection findByBought(string $wish_bought) Return ChildWish objects filtered by the wish_bought column
- * @psalm-method Collection&\Traversable<ChildWish> findByBought(string $wish_bought) Return ChildWish objects filtered by the wish_bought column
+ *
+ * @method     ChildWish[]|Collection findById(int|array<int> $wish_id) Return ChildWish objects filtered by the wish_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findById(int|array<int> $wish_id) Return ChildWish objects filtered by the wish_id column
+ * @method     ChildWish[]|Collection findByWishlistId(int|array<int> $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findByWishlistId(int|array<int> $wishlist_id) Return ChildWish objects filtered by the wishlist_id column
+ * @method     ChildWish[]|Collection findByUserId(int|array<int> $user_id) Return ChildWish objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findByUserId(int|array<int> $user_id) Return ChildWish objects filtered by the user_id column
+ * @method     ChildWish[]|Collection findBySiteId(int|array<int> $site_id) Return ChildWish objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findBySiteId(int|array<int> $site_id) Return ChildWish objects filtered by the site_id column
+ * @method     ChildWish[]|Collection findByArticleId(int|array<int> $article_id) Return ChildWish objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildWish> findByArticleId(int|array<int> $article_id) Return ChildWish objects filtered by the article_id column
+ * @method     ChildWish[]|Collection findByCreatedAt(string|array<string> $wish_created) Return ChildWish objects filtered by the wish_created column
+ * @psalm-method Collection&\Traversable<ChildWish> findByCreatedAt(string|array<string> $wish_created) Return ChildWish objects filtered by the wish_created column
+ * @method     ChildWish[]|Collection findByUpdatedAt(string|array<string> $wish_updated) Return ChildWish objects filtered by the wish_updated column
+ * @psalm-method Collection&\Traversable<ChildWish> findByUpdatedAt(string|array<string> $wish_updated) Return ChildWish objects filtered by the wish_updated column
+ * @method     ChildWish[]|Collection findByBought(string|array<string> $wish_bought) Return ChildWish objects filtered by the wish_bought column
+ * @psalm-method Collection&\Traversable<ChildWish> findByBought(string|array<string> $wish_bought) Return ChildWish objects filtered by the wish_bought column
+ *
  * @method     ChildWish[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildWish> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class WishQuery extends ModelCriteria
 {

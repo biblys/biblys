@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'inventory_item' table.
- *
- *
+ * Base class that represents a query for the `inventory_item` table.
  *
  * @method     ChildInventoryItemQuery orderById($order = Criteria::ASC) Order by the ii_id column
  * @method     ChildInventoryItemQuery orderByInventoryId($order = Criteria::ASC) Order by the inventory_id column
@@ -52,8 +50,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInventoryItem|null findOneByQuantity(int $ii_quantity) Return the first ChildInventoryItem filtered by the ii_quantity column
  * @method     ChildInventoryItem|null findOneByStock(int $ii_stock) Return the first ChildInventoryItem filtered by the ii_stock column
  * @method     ChildInventoryItem|null findOneByCreatedAt(string $ii_created) Return the first ChildInventoryItem filtered by the ii_created column
- * @method     ChildInventoryItem|null findOneByUpdatedAt(string $ii_updated) Return the first ChildInventoryItem filtered by the ii_updated column *
-
+ * @method     ChildInventoryItem|null findOneByUpdatedAt(string $ii_updated) Return the first ChildInventoryItem filtered by the ii_updated column
+ *
  * @method     ChildInventoryItem requirePk($key, ?ConnectionInterface $con = null) Return the ChildInventoryItem by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInventoryItem requireOne(?ConnectionInterface $con = null) Return the first ChildInventoryItem matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -67,23 +65,24 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInventoryItem[]|Collection find(?ConnectionInterface $con = null) Return ChildInventoryItem objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildInventoryItem> find(?ConnectionInterface $con = null) Return ChildInventoryItem objects based on current ModelCriteria
- * @method     ChildInventoryItem[]|Collection findById(int $ii_id) Return ChildInventoryItem objects filtered by the ii_id column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findById(int $ii_id) Return ChildInventoryItem objects filtered by the ii_id column
- * @method     ChildInventoryItem[]|Collection findByInventoryId(int $inventory_id) Return ChildInventoryItem objects filtered by the inventory_id column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByInventoryId(int $inventory_id) Return ChildInventoryItem objects filtered by the inventory_id column
- * @method     ChildInventoryItem[]|Collection findByEan(string $ii_ean) Return ChildInventoryItem objects filtered by the ii_ean column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByEan(string $ii_ean) Return ChildInventoryItem objects filtered by the ii_ean column
- * @method     ChildInventoryItem[]|Collection findByQuantity(int $ii_quantity) Return ChildInventoryItem objects filtered by the ii_quantity column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByQuantity(int $ii_quantity) Return ChildInventoryItem objects filtered by the ii_quantity column
- * @method     ChildInventoryItem[]|Collection findByStock(int $ii_stock) Return ChildInventoryItem objects filtered by the ii_stock column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByStock(int $ii_stock) Return ChildInventoryItem objects filtered by the ii_stock column
- * @method     ChildInventoryItem[]|Collection findByCreatedAt(string $ii_created) Return ChildInventoryItem objects filtered by the ii_created column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByCreatedAt(string $ii_created) Return ChildInventoryItem objects filtered by the ii_created column
- * @method     ChildInventoryItem[]|Collection findByUpdatedAt(string $ii_updated) Return ChildInventoryItem objects filtered by the ii_updated column
- * @psalm-method Collection&\Traversable<ChildInventoryItem> findByUpdatedAt(string $ii_updated) Return ChildInventoryItem objects filtered by the ii_updated column
+ *
+ * @method     ChildInventoryItem[]|Collection findById(int|array<int> $ii_id) Return ChildInventoryItem objects filtered by the ii_id column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findById(int|array<int> $ii_id) Return ChildInventoryItem objects filtered by the ii_id column
+ * @method     ChildInventoryItem[]|Collection findByInventoryId(int|array<int> $inventory_id) Return ChildInventoryItem objects filtered by the inventory_id column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByInventoryId(int|array<int> $inventory_id) Return ChildInventoryItem objects filtered by the inventory_id column
+ * @method     ChildInventoryItem[]|Collection findByEan(string|array<string> $ii_ean) Return ChildInventoryItem objects filtered by the ii_ean column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByEan(string|array<string> $ii_ean) Return ChildInventoryItem objects filtered by the ii_ean column
+ * @method     ChildInventoryItem[]|Collection findByQuantity(int|array<int> $ii_quantity) Return ChildInventoryItem objects filtered by the ii_quantity column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByQuantity(int|array<int> $ii_quantity) Return ChildInventoryItem objects filtered by the ii_quantity column
+ * @method     ChildInventoryItem[]|Collection findByStock(int|array<int> $ii_stock) Return ChildInventoryItem objects filtered by the ii_stock column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByStock(int|array<int> $ii_stock) Return ChildInventoryItem objects filtered by the ii_stock column
+ * @method     ChildInventoryItem[]|Collection findByCreatedAt(string|array<string> $ii_created) Return ChildInventoryItem objects filtered by the ii_created column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByCreatedAt(string|array<string> $ii_created) Return ChildInventoryItem objects filtered by the ii_created column
+ * @method     ChildInventoryItem[]|Collection findByUpdatedAt(string|array<string> $ii_updated) Return ChildInventoryItem objects filtered by the ii_updated column
+ * @psalm-method Collection&\Traversable<ChildInventoryItem> findByUpdatedAt(string|array<string> $ii_updated) Return ChildInventoryItem objects filtered by the ii_updated column
+ *
  * @method     ChildInventoryItem[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildInventoryItem> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class InventoryItemQuery extends ModelCriteria
 {

@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'collections' table.
- *
- *
+ * Base class that represents a query for the `collections` table.
  *
  * @method     ChildBookCollectionQuery orderById($order = Criteria::ASC) Order by the collection_id column
  * @method     ChildBookCollectionQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -99,8 +97,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildBookCollection|null findOneByHits(int $collection_hits) Return the first ChildBookCollection filtered by the collection_hits column
  * @method     ChildBookCollection|null findOneByDuplicate(boolean $collection_duplicate) Return the first ChildBookCollection filtered by the collection_duplicate column
  * @method     ChildBookCollection|null findOneByCreatedAt(string $collection_created) Return the first ChildBookCollection filtered by the collection_created column
- * @method     ChildBookCollection|null findOneByUpdatedAt(string $collection_updated) Return the first ChildBookCollection filtered by the collection_updated column *
-
+ * @method     ChildBookCollection|null findOneByUpdatedAt(string $collection_updated) Return the first ChildBookCollection filtered by the collection_updated column
+ *
  * @method     ChildBookCollection requirePk($key, ?ConnectionInterface $con = null) Return the ChildBookCollection by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildBookCollection requireOne(?ConnectionInterface $con = null) Return the first ChildBookCollection matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -125,45 +123,46 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildBookCollection[]|Collection find(?ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildBookCollection> find(?ConnectionInterface $con = null) Return ChildBookCollection objects based on current ModelCriteria
- * @method     ChildBookCollection[]|Collection findById(int $collection_id) Return ChildBookCollection objects filtered by the collection_id column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findById(int $collection_id) Return ChildBookCollection objects filtered by the collection_id column
- * @method     ChildBookCollection[]|Collection findBySiteId(int $site_id) Return ChildBookCollection objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findBySiteId(int $site_id) Return ChildBookCollection objects filtered by the site_id column
- * @method     ChildBookCollection[]|Collection findByPublisherId(int $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisherId(int $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
- * @method     ChildBookCollection[]|Collection findByPricegridId(int $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByPricegridId(int $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
- * @method     ChildBookCollection[]|Collection findByName(string $collection_name) Return ChildBookCollection objects filtered by the collection_name column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByName(string $collection_name) Return ChildBookCollection objects filtered by the collection_name column
- * @method     ChildBookCollection[]|Collection findByUrl(string $collection_url) Return ChildBookCollection objects filtered by the collection_url column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByUrl(string $collection_url) Return ChildBookCollection objects filtered by the collection_url column
- * @method     ChildBookCollection[]|Collection findByPublisher(string $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisher(string $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
- * @method     ChildBookCollection[]|Collection findByDesc(string $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByDesc(string $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
- * @method     ChildBookCollection[]|Collection findByIgnorenum(boolean $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByIgnorenum(boolean $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
- * @method     ChildBookCollection[]|Collection findByOrderby(string $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByOrderby(string $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
- * @method     ChildBookCollection[]|Collection findByIncorrectWeights(boolean $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByIncorrectWeights(boolean $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
- * @method     ChildBookCollection[]|Collection findByNoosfereId(int $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByNoosfereId(int $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
- * @method     ChildBookCollection[]|Collection findByInsert(string $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByInsert(string $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
- * @method     ChildBookCollection[]|Collection findByUpdate(string $collection_update) Return ChildBookCollection objects filtered by the collection_update column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByUpdate(string $collection_update) Return ChildBookCollection objects filtered by the collection_update column
- * @method     ChildBookCollection[]|Collection findByHits(int $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByHits(int $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
- * @method     ChildBookCollection[]|Collection findByDuplicate(boolean $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByDuplicate(boolean $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
- * @method     ChildBookCollection[]|Collection findByCreatedAt(string $collection_created) Return ChildBookCollection objects filtered by the collection_created column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByCreatedAt(string $collection_created) Return ChildBookCollection objects filtered by the collection_created column
- * @method     ChildBookCollection[]|Collection findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
- * @psalm-method Collection&\Traversable<ChildBookCollection> findByUpdatedAt(string $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
+ *
+ * @method     ChildBookCollection[]|Collection findById(int|array<int> $collection_id) Return ChildBookCollection objects filtered by the collection_id column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findById(int|array<int> $collection_id) Return ChildBookCollection objects filtered by the collection_id column
+ * @method     ChildBookCollection[]|Collection findBySiteId(int|array<int> $site_id) Return ChildBookCollection objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findBySiteId(int|array<int> $site_id) Return ChildBookCollection objects filtered by the site_id column
+ * @method     ChildBookCollection[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisherId(int|array<int> $publisher_id) Return ChildBookCollection objects filtered by the publisher_id column
+ * @method     ChildBookCollection[]|Collection findByPricegridId(int|array<int> $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByPricegridId(int|array<int> $pricegrid_id) Return ChildBookCollection objects filtered by the pricegrid_id column
+ * @method     ChildBookCollection[]|Collection findByName(string|array<string> $collection_name) Return ChildBookCollection objects filtered by the collection_name column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByName(string|array<string> $collection_name) Return ChildBookCollection objects filtered by the collection_name column
+ * @method     ChildBookCollection[]|Collection findByUrl(string|array<string> $collection_url) Return ChildBookCollection objects filtered by the collection_url column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByUrl(string|array<string> $collection_url) Return ChildBookCollection objects filtered by the collection_url column
+ * @method     ChildBookCollection[]|Collection findByPublisher(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByPublisher(string|array<string> $collection_publisher) Return ChildBookCollection objects filtered by the collection_publisher column
+ * @method     ChildBookCollection[]|Collection findByDesc(string|array<string> $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByDesc(string|array<string> $collection_desc) Return ChildBookCollection objects filtered by the collection_desc column
+ * @method     ChildBookCollection[]|Collection findByIgnorenum(boolean|array<boolean> $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByIgnorenum(boolean|array<boolean> $collection_ignorenum) Return ChildBookCollection objects filtered by the collection_ignorenum column
+ * @method     ChildBookCollection[]|Collection findByOrderby(string|array<string> $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByOrderby(string|array<string> $collection_orderby) Return ChildBookCollection objects filtered by the collection_orderby column
+ * @method     ChildBookCollection[]|Collection findByIncorrectWeights(boolean|array<boolean> $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByIncorrectWeights(boolean|array<boolean> $collection_incorrect_weights) Return ChildBookCollection objects filtered by the collection_incorrect_weights column
+ * @method     ChildBookCollection[]|Collection findByNoosfereId(int|array<int> $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByNoosfereId(int|array<int> $collection_noosfere_id) Return ChildBookCollection objects filtered by the collection_noosfere_id column
+ * @method     ChildBookCollection[]|Collection findByInsert(string|array<string> $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByInsert(string|array<string> $collection_insert) Return ChildBookCollection objects filtered by the collection_insert column
+ * @method     ChildBookCollection[]|Collection findByUpdate(string|array<string> $collection_update) Return ChildBookCollection objects filtered by the collection_update column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByUpdate(string|array<string> $collection_update) Return ChildBookCollection objects filtered by the collection_update column
+ * @method     ChildBookCollection[]|Collection findByHits(int|array<int> $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByHits(int|array<int> $collection_hits) Return ChildBookCollection objects filtered by the collection_hits column
+ * @method     ChildBookCollection[]|Collection findByDuplicate(boolean|array<boolean> $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByDuplicate(boolean|array<boolean> $collection_duplicate) Return ChildBookCollection objects filtered by the collection_duplicate column
+ * @method     ChildBookCollection[]|Collection findByCreatedAt(string|array<string> $collection_created) Return ChildBookCollection objects filtered by the collection_created column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByCreatedAt(string|array<string> $collection_created) Return ChildBookCollection objects filtered by the collection_created column
+ * @method     ChildBookCollection[]|Collection findByUpdatedAt(string|array<string> $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
+ * @psalm-method Collection&\Traversable<ChildBookCollection> findByUpdatedAt(string|array<string> $collection_updated) Return ChildBookCollection objects filtered by the collection_updated column
+ *
  * @method     ChildBookCollection[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildBookCollection> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class BookCollectionQuery extends ModelCriteria
 {
@@ -659,7 +658,7 @@ abstract class BookCollectionQuery extends ModelCriteria
     public function filterByIgnorenum($ignorenum = null, ?string $comparison = null)
     {
         if (is_string($ignorenum)) {
-            $ignorenum = in_array(strtolower($ignorenum), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $ignorenum = in_array(strtolower($ignorenum), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_IGNORENUM, $ignorenum, $comparison);
@@ -716,7 +715,7 @@ abstract class BookCollectionQuery extends ModelCriteria
     public function filterByIncorrectWeights($incorrectWeights = null, ?string $comparison = null)
     {
         if (is_string($incorrectWeights)) {
-            $incorrectWeights = in_array(strtolower($incorrectWeights), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $incorrectWeights = in_array(strtolower($incorrectWeights), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_INCORRECT_WEIGHTS, $incorrectWeights, $comparison);
@@ -921,7 +920,7 @@ abstract class BookCollectionQuery extends ModelCriteria
     public function filterByDuplicate($duplicate = null, ?string $comparison = null)
     {
         if (is_string($duplicate)) {
-            $duplicate = in_array(strtolower($duplicate), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $duplicate = in_array(strtolower($duplicate), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(BookCollectionTableMap::COL_COLLECTION_DUPLICATE, $duplicate, $comparison);
@@ -1121,20 +1120,23 @@ abstract class BookCollectionQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Article table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\ArticleQuery The inner query object of the EXISTS statement
      */
     public function useArticleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1149,8 +1151,46 @@ abstract class BookCollectionQuery extends ModelCriteria
      */
     public function useArticleNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Article table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleQuery The inner query object of the IN statement
+     */
+    public function useInArticleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for a NOT IN query.
+     *
+     * @see useArticleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

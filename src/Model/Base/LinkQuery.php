@@ -17,9 +17,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'links' table.
- *
- *
+ * Base class that represents a query for the `links` table.
  *
  * @method     ChildLinkQuery orderById($order = Criteria::ASC) Order by the link_id column
  * @method     ChildLinkQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -127,8 +125,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLink|null findOneBySponsorUserId(int $link_sponsor_user_id) Return the first ChildLink filtered by the link_sponsor_user_id column
  * @method     ChildLink|null findOneByDate(string $link_date) Return the first ChildLink filtered by the link_date column
  * @method     ChildLink|null findOneByCreatedAt(string $link_created) Return the first ChildLink filtered by the link_created column
- * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column *
-
+ * @method     ChildLink|null findOneByUpdatedAt(string $link_updated) Return the first ChildLink filtered by the link_updated column
+ *
  * @method     ChildLink requirePk($key, ?ConnectionInterface $con = null) Return the ChildLink by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLink requireOne(?ConnectionInterface $con = null) Return the first ChildLink matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -159,57 +157,58 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildLink[]|Collection find(?ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildLink> find(?ConnectionInterface $con = null) Return ChildLink objects based on current ModelCriteria
- * @method     ChildLink[]|Collection findById(int $link_id) Return ChildLink objects filtered by the link_id column
- * @psalm-method Collection&\Traversable<ChildLink> findById(int $link_id) Return ChildLink objects filtered by the link_id column
- * @method     ChildLink[]|Collection findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildLink> findBySiteId(int $site_id) Return ChildLink objects filtered by the site_id column
- * @method     ChildLink[]|Collection findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByUserId(int $user_id) Return ChildLink objects filtered by the user_id column
- * @method     ChildLink[]|Collection findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByArticleId(int $article_id) Return ChildLink objects filtered by the article_id column
- * @method     ChildLink[]|Collection findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByStockId(int $stock_id) Return ChildLink objects filtered by the stock_id column
- * @method     ChildLink[]|Collection findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByListId(int $list_id) Return ChildLink objects filtered by the list_id column
- * @method     ChildLink[]|Collection findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByBookId(int $book_id) Return ChildLink objects filtered by the book_id column
- * @method     ChildLink[]|Collection findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByPeopleId(int $people_id) Return ChildLink objects filtered by the people_id column
- * @method     ChildLink[]|Collection findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByJobId(int $job_id) Return ChildLink objects filtered by the job_id column
- * @method     ChildLink[]|Collection findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByRayonId(int $rayon_id) Return ChildLink objects filtered by the rayon_id column
- * @method     ChildLink[]|Collection findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByTagId(int $tag_id) Return ChildLink objects filtered by the tag_id column
- * @method     ChildLink[]|Collection findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByEventId(int $event_id) Return ChildLink objects filtered by the event_id column
- * @method     ChildLink[]|Collection findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByPostId(int $post_id) Return ChildLink objects filtered by the post_id column
- * @method     ChildLink[]|Collection findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByCollectionId(int $collection_id) Return ChildLink objects filtered by the collection_id column
- * @method     ChildLink[]|Collection findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByPublisherId(int $publisher_id) Return ChildLink objects filtered by the publisher_id column
- * @method     ChildLink[]|Collection findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
- * @psalm-method Collection&\Traversable<ChildLink> findBySupplierId(int $supplier_id) Return ChildLink objects filtered by the supplier_id column
- * @method     ChildLink[]|Collection findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByMediaId(int $media_id) Return ChildLink objects filtered by the media_id column
- * @method     ChildLink[]|Collection findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
- * @psalm-method Collection&\Traversable<ChildLink> findByBundleId(int $bundle_id) Return ChildLink objects filtered by the bundle_id column
- * @method     ChildLink[]|Collection findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
- * @psalm-method Collection&\Traversable<ChildLink> findByHide(boolean $link_hide) Return ChildLink objects filtered by the link_hide column
- * @method     ChildLink[]|Collection findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
- * @psalm-method Collection&\Traversable<ChildLink> findByDoNotReorder(boolean $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
- * @method     ChildLink[]|Collection findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
- * @psalm-method Collection&\Traversable<ChildLink> findBySponsorUserId(int $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
- * @method     ChildLink[]|Collection findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
- * @psalm-method Collection&\Traversable<ChildLink> findByDate(string $link_date) Return ChildLink objects filtered by the link_date column
- * @method     ChildLink[]|Collection findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
- * @psalm-method Collection&\Traversable<ChildLink> findByCreatedAt(string $link_created) Return ChildLink objects filtered by the link_created column
- * @method     ChildLink[]|Collection findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
- * @psalm-method Collection&\Traversable<ChildLink> findByUpdatedAt(string $link_updated) Return ChildLink objects filtered by the link_updated column
+ *
+ * @method     ChildLink[]|Collection findById(int|array<int> $link_id) Return ChildLink objects filtered by the link_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findById(int|array<int> $link_id) Return ChildLink objects filtered by the link_id column
+ * @method     ChildLink[]|Collection findBySiteId(int|array<int> $site_id) Return ChildLink objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySiteId(int|array<int> $site_id) Return ChildLink objects filtered by the site_id column
+ * @method     ChildLink[]|Collection findByUserId(int|array<int> $user_id) Return ChildLink objects filtered by the user_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByUserId(int|array<int> $user_id) Return ChildLink objects filtered by the user_id column
+ * @method     ChildLink[]|Collection findByArticleId(int|array<int> $article_id) Return ChildLink objects filtered by the article_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByArticleId(int|array<int> $article_id) Return ChildLink objects filtered by the article_id column
+ * @method     ChildLink[]|Collection findByStockId(int|array<int> $stock_id) Return ChildLink objects filtered by the stock_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByStockId(int|array<int> $stock_id) Return ChildLink objects filtered by the stock_id column
+ * @method     ChildLink[]|Collection findByListId(int|array<int> $list_id) Return ChildLink objects filtered by the list_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByListId(int|array<int> $list_id) Return ChildLink objects filtered by the list_id column
+ * @method     ChildLink[]|Collection findByBookId(int|array<int> $book_id) Return ChildLink objects filtered by the book_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByBookId(int|array<int> $book_id) Return ChildLink objects filtered by the book_id column
+ * @method     ChildLink[]|Collection findByPeopleId(int|array<int> $people_id) Return ChildLink objects filtered by the people_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPeopleId(int|array<int> $people_id) Return ChildLink objects filtered by the people_id column
+ * @method     ChildLink[]|Collection findByJobId(int|array<int> $job_id) Return ChildLink objects filtered by the job_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByJobId(int|array<int> $job_id) Return ChildLink objects filtered by the job_id column
+ * @method     ChildLink[]|Collection findByRayonId(int|array<int> $rayon_id) Return ChildLink objects filtered by the rayon_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByRayonId(int|array<int> $rayon_id) Return ChildLink objects filtered by the rayon_id column
+ * @method     ChildLink[]|Collection findByTagId(int|array<int> $tag_id) Return ChildLink objects filtered by the tag_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByTagId(int|array<int> $tag_id) Return ChildLink objects filtered by the tag_id column
+ * @method     ChildLink[]|Collection findByEventId(int|array<int> $event_id) Return ChildLink objects filtered by the event_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByEventId(int|array<int> $event_id) Return ChildLink objects filtered by the event_id column
+ * @method     ChildLink[]|Collection findByPostId(int|array<int> $post_id) Return ChildLink objects filtered by the post_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPostId(int|array<int> $post_id) Return ChildLink objects filtered by the post_id column
+ * @method     ChildLink[]|Collection findByCollectionId(int|array<int> $collection_id) Return ChildLink objects filtered by the collection_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByCollectionId(int|array<int> $collection_id) Return ChildLink objects filtered by the collection_id column
+ * @method     ChildLink[]|Collection findByPublisherId(int|array<int> $publisher_id) Return ChildLink objects filtered by the publisher_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByPublisherId(int|array<int> $publisher_id) Return ChildLink objects filtered by the publisher_id column
+ * @method     ChildLink[]|Collection findBySupplierId(int|array<int> $supplier_id) Return ChildLink objects filtered by the supplier_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySupplierId(int|array<int> $supplier_id) Return ChildLink objects filtered by the supplier_id column
+ * @method     ChildLink[]|Collection findByMediaId(int|array<int> $media_id) Return ChildLink objects filtered by the media_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByMediaId(int|array<int> $media_id) Return ChildLink objects filtered by the media_id column
+ * @method     ChildLink[]|Collection findByBundleId(int|array<int> $bundle_id) Return ChildLink objects filtered by the bundle_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findByBundleId(int|array<int> $bundle_id) Return ChildLink objects filtered by the bundle_id column
+ * @method     ChildLink[]|Collection findByHide(boolean|array<boolean> $link_hide) Return ChildLink objects filtered by the link_hide column
+ * @psalm-method Collection&\Traversable<ChildLink> findByHide(boolean|array<boolean> $link_hide) Return ChildLink objects filtered by the link_hide column
+ * @method     ChildLink[]|Collection findByDoNotReorder(boolean|array<boolean> $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
+ * @psalm-method Collection&\Traversable<ChildLink> findByDoNotReorder(boolean|array<boolean> $link_do_not_reorder) Return ChildLink objects filtered by the link_do_not_reorder column
+ * @method     ChildLink[]|Collection findBySponsorUserId(int|array<int> $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
+ * @psalm-method Collection&\Traversable<ChildLink> findBySponsorUserId(int|array<int> $link_sponsor_user_id) Return ChildLink objects filtered by the link_sponsor_user_id column
+ * @method     ChildLink[]|Collection findByDate(string|array<string> $link_date) Return ChildLink objects filtered by the link_date column
+ * @psalm-method Collection&\Traversable<ChildLink> findByDate(string|array<string> $link_date) Return ChildLink objects filtered by the link_date column
+ * @method     ChildLink[]|Collection findByCreatedAt(string|array<string> $link_created) Return ChildLink objects filtered by the link_created column
+ * @psalm-method Collection&\Traversable<ChildLink> findByCreatedAt(string|array<string> $link_created) Return ChildLink objects filtered by the link_created column
+ * @method     ChildLink[]|Collection findByUpdatedAt(string|array<string> $link_updated) Return ChildLink objects filtered by the link_updated column
+ * @psalm-method Collection&\Traversable<ChildLink> findByUpdatedAt(string|array<string> $link_updated) Return ChildLink objects filtered by the link_updated column
+ *
  * @method     ChildLink[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLink> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class LinkQuery extends ModelCriteria
 {
@@ -1199,7 +1198,7 @@ abstract class LinkQuery extends ModelCriteria
     public function filterByHide($hide = null, ?string $comparison = null)
     {
         if (is_string($hide)) {
-            $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $hide = in_array(strtolower($hide), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(LinkTableMap::COL_LINK_HIDE, $hide, $comparison);
@@ -1228,7 +1227,7 @@ abstract class LinkQuery extends ModelCriteria
     public function filterByDoNotReorder($doNotReorder = null, ?string $comparison = null)
     {
         if (is_string($doNotReorder)) {
-            $doNotReorder = in_array(strtolower($doNotReorder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $doNotReorder = in_array(strtolower($doNotReorder), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(LinkTableMap::COL_LINK_DO_NOT_REORDER, $doNotReorder, $comparison);
@@ -1518,20 +1517,23 @@ abstract class LinkQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Article table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\ArticleQuery The inner query object of the EXISTS statement
      */
     public function useArticleExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1546,8 +1548,46 @@ abstract class LinkQuery extends ModelCriteria
      */
     public function useArticleNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useExistsQuery('Article', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Article table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleQuery The inner query object of the IN statement
+     */
+    public function useInArticleQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Article table for a NOT IN query.
+     *
+     * @see useArticleInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleQuery */
+        $q = $this->useInQuery('Article', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Filter the query by a related \Model\Tag object
      *
@@ -1652,20 +1692,23 @@ abstract class LinkQuery extends ModelCriteria
 
         return $this;
     }
+
     /**
      * Use the relation to Tag table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      * @param string|null $modelAlias sets an alias for the nested query
-     * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
      *
      * @return \Model\TagQuery The inner query object of the EXISTS statement
      */
     public function useTagExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Tag', $modelAlias, $queryClass, $typeOfExists);
+        /** @var $q \Model\TagQuery */
+        $q = $this->useExistsQuery('Tag', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
     }
 
     /**
@@ -1680,8 +1723,46 @@ abstract class LinkQuery extends ModelCriteria
      */
     public function useTagNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Tag', $modelAlias, $queryClass, 'NOT EXISTS');
+        /** @var $q \Model\TagQuery */
+        $q = $this->useExistsQuery('Tag', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
     }
+
+    /**
+     * Use the relation to Tag table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\TagQuery The inner query object of the IN statement
+     */
+    public function useInTagQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\TagQuery */
+        $q = $this->useInQuery('Tag', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Tag table for a NOT IN query.
+     *
+     * @see useTagInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\TagQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInTagQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\TagQuery */
+        $q = $this->useInQuery('Tag', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
     /**
      * Exclude object from result
      *

@@ -715,8 +715,8 @@ abstract class Redirection implements ActiveRecordInterface
                 $col = null;
             }
             $this->redirection_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -975,27 +975,35 @@ abstract class Redirection implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'redirection_id':
                         $stmt->bindValue($identifier, $this->redirection_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'redirection_old':
                         $stmt->bindValue($identifier, $this->redirection_old, PDO::PARAM_STR);
+
                         break;
                     case 'redirection_new':
                         $stmt->bindValue($identifier, $this->redirection_new, PDO::PARAM_STR);
+
                         break;
                     case 'redirection_hits':
                         $stmt->bindValue($identifier, $this->redirection_hits, PDO::PARAM_INT);
+
                         break;
                     case 'redirection_date':
                         $stmt->bindValue($identifier, $this->redirection_date ? $this->redirection_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'redirection_created':
                         $stmt->bindValue($identifier, $this->redirection_created ? $this->redirection_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'redirection_updated':
                         $stmt->bindValue($identifier, $this->redirection_updated ? $this->redirection_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

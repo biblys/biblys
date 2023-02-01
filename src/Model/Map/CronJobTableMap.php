@@ -46,6 +46,11 @@ class CronJobTableMap extends TableMap
     public const TABLE_NAME = 'cron_jobs';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'CronJob';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\CronJob';
@@ -343,7 +348,7 @@ class CronJobTableMap extends TableMap
             CronJobTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

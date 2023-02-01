@@ -678,8 +678,8 @@ abstract class Wishlist implements ActiveRecordInterface
                 $col = null;
             }
             $this->wishlist_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -935,24 +935,31 @@ abstract class Wishlist implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'wishlist_id':
                         $stmt->bindValue($identifier, $this->wishlist_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'wishlist_name':
                         $stmt->bindValue($identifier, $this->wishlist_name, PDO::PARAM_STR);
+
                         break;
                     case 'wishlist_current':
                         $stmt->bindValue($identifier, (int) $this->wishlist_current, PDO::PARAM_INT);
+
                         break;
                     case 'wishlist_public':
                         $stmt->bindValue($identifier, (int) $this->wishlist_public, PDO::PARAM_INT);
+
                         break;
                     case 'wishlist_created':
                         $stmt->bindValue($identifier, $this->wishlist_created ? $this->wishlist_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'wishlist_updated':
                         $stmt->bindValue($identifier, $this->wishlist_updated ? $this->wishlist_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

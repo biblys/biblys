@@ -46,6 +46,11 @@ class WishTableMap extends TableMap
     public const TABLE_NAME = 'wishes';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Wish';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Wish';
@@ -357,7 +362,7 @@ class WishTableMap extends TableMap
             WishTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

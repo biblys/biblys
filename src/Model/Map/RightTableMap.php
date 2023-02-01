@@ -46,6 +46,11 @@ class RightTableMap extends TableMap
     public const TABLE_NAME = 'rights';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Right';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Right';
@@ -406,7 +411,7 @@ class RightTableMap extends TableMap
             RightTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**

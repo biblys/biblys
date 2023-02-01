@@ -15,9 +15,7 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'rayons' table.
- *
- *
+ * Base class that represents a query for the `rayons` table.
  *
  * @method     ChildArticleCategoryQuery orderById($order = Criteria::ASC) Order by the rayon_id column
  * @method     ChildArticleCategoryQuery orderBySiteId($order = Criteria::ASC) Order by the site_id column
@@ -64,8 +62,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildArticleCategory|null findOneBySortOrder(boolean $rayon_sort_order) Return the first ChildArticleCategory filtered by the rayon_sort_order column
  * @method     ChildArticleCategory|null findOneByShowUpcoming(boolean $rayon_show_upcoming) Return the first ChildArticleCategory filtered by the rayon_show_upcoming column
  * @method     ChildArticleCategory|null findOneByCreatedAt(string $rayon_created) Return the first ChildArticleCategory filtered by the rayon_created column
- * @method     ChildArticleCategory|null findOneByUpdatedAt(string $rayon_updated) Return the first ChildArticleCategory filtered by the rayon_updated column *
-
+ * @method     ChildArticleCategory|null findOneByUpdatedAt(string $rayon_updated) Return the first ChildArticleCategory filtered by the rayon_updated column
+ *
  * @method     ChildArticleCategory requirePk($key, ?ConnectionInterface $con = null) Return the ChildArticleCategory by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildArticleCategory requireOne(?ConnectionInterface $con = null) Return the first ChildArticleCategory matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -83,31 +81,32 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildArticleCategory[]|Collection find(?ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildArticleCategory> find(?ConnectionInterface $con = null) Return ChildArticleCategory objects based on current ModelCriteria
- * @method     ChildArticleCategory[]|Collection findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findById(string $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
- * @method     ChildArticleCategory[]|Collection findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySiteId(int $site_id) Return ChildArticleCategory objects filtered by the site_id column
- * @method     ChildArticleCategory[]|Collection findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByName(string $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
- * @method     ChildArticleCategory[]|Collection findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUrl(string $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
- * @method     ChildArticleCategory[]|Collection findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByDesc(string $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
- * @method     ChildArticleCategory[]|Collection findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByOrder(int $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
- * @method     ChildArticleCategory[]|Collection findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortBy(string $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
- * @method     ChildArticleCategory[]|Collection findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortOrder(boolean $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
- * @method     ChildArticleCategory[]|Collection findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByShowUpcoming(boolean $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
- * @method     ChildArticleCategory[]|Collection findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByCreatedAt(string $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
- * @method     ChildArticleCategory[]|Collection findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
- * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUpdatedAt(string $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
+ *
+ * @method     ChildArticleCategory[]|Collection findById(string|array<string> $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findById(string|array<string> $rayon_id) Return ChildArticleCategory objects filtered by the rayon_id column
+ * @method     ChildArticleCategory[]|Collection findBySiteId(int|array<int> $site_id) Return ChildArticleCategory objects filtered by the site_id column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySiteId(int|array<int> $site_id) Return ChildArticleCategory objects filtered by the site_id column
+ * @method     ChildArticleCategory[]|Collection findByName(string|array<string> $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByName(string|array<string> $rayon_name) Return ChildArticleCategory objects filtered by the rayon_name column
+ * @method     ChildArticleCategory[]|Collection findByUrl(string|array<string> $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUrl(string|array<string> $rayon_url) Return ChildArticleCategory objects filtered by the rayon_url column
+ * @method     ChildArticleCategory[]|Collection findByDesc(string|array<string> $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByDesc(string|array<string> $rayon_desc) Return ChildArticleCategory objects filtered by the rayon_desc column
+ * @method     ChildArticleCategory[]|Collection findByOrder(int|array<int> $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByOrder(int|array<int> $rayon_order) Return ChildArticleCategory objects filtered by the rayon_order column
+ * @method     ChildArticleCategory[]|Collection findBySortBy(string|array<string> $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortBy(string|array<string> $rayon_sort_by) Return ChildArticleCategory objects filtered by the rayon_sort_by column
+ * @method     ChildArticleCategory[]|Collection findBySortOrder(boolean|array<boolean> $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findBySortOrder(boolean|array<boolean> $rayon_sort_order) Return ChildArticleCategory objects filtered by the rayon_sort_order column
+ * @method     ChildArticleCategory[]|Collection findByShowUpcoming(boolean|array<boolean> $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByShowUpcoming(boolean|array<boolean> $rayon_show_upcoming) Return ChildArticleCategory objects filtered by the rayon_show_upcoming column
+ * @method     ChildArticleCategory[]|Collection findByCreatedAt(string|array<string> $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByCreatedAt(string|array<string> $rayon_created) Return ChildArticleCategory objects filtered by the rayon_created column
+ * @method     ChildArticleCategory[]|Collection findByUpdatedAt(string|array<string> $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
+ * @psalm-method Collection&\Traversable<ChildArticleCategory> findByUpdatedAt(string|array<string> $rayon_updated) Return ChildArticleCategory objects filtered by the rayon_updated column
+ *
  * @method     ChildArticleCategory[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildArticleCategory> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
  */
 abstract class ArticleCategoryQuery extends ModelCriteria
 {
@@ -560,7 +559,7 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     public function filterBySortOrder($sortOrder = null, ?string $comparison = null)
     {
         if (is_string($sortOrder)) {
-            $sortOrder = in_array(strtolower($sortOrder), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $sortOrder = in_array(strtolower($sortOrder), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SORT_ORDER, $sortOrder, $comparison);
@@ -589,7 +588,7 @@ abstract class ArticleCategoryQuery extends ModelCriteria
     public function filterByShowUpcoming($showUpcoming = null, ?string $comparison = null)
     {
         if (is_string($showUpcoming)) {
-            $showUpcoming = in_array(strtolower($showUpcoming), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $showUpcoming = in_array(strtolower($showUpcoming), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
         $this->addUsingAlias(ArticleCategoryTableMap::COL_RAYON_SHOW_UPCOMING, $showUpcoming, $comparison);

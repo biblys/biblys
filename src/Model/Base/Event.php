@@ -1286,8 +1286,8 @@ abstract class Event implements ActiveRecordInterface
                 $col = null;
             }
             $this->event_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -1582,63 +1582,83 @@ abstract class Event implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'event_id':
                         $stmt->bindValue($identifier, $this->event_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'publisher_id':
                         $stmt->bindValue($identifier, $this->publisher_id, PDO::PARAM_INT);
+
                         break;
                     case 'bookshop_id':
                         $stmt->bindValue($identifier, $this->bookshop_id, PDO::PARAM_INT);
+
                         break;
                     case 'library_id':
                         $stmt->bindValue($identifier, $this->library_id, PDO::PARAM_INT);
+
                         break;
                     case 'event_url':
                         $stmt->bindValue($identifier, $this->event_url, PDO::PARAM_STR);
+
                         break;
                     case 'event_title':
                         $stmt->bindValue($identifier, $this->event_title, PDO::PARAM_STR);
+
                         break;
                     case 'event_subtitle':
                         $stmt->bindValue($identifier, $this->event_subtitle, PDO::PARAM_STR);
+
                         break;
                     case 'event_desc':
                         $stmt->bindValue($identifier, $this->event_desc, PDO::PARAM_STR);
+
                         break;
                     case 'event_location':
                         $stmt->bindValue($identifier, $this->event_location, PDO::PARAM_STR);
+
                         break;
                     case 'event_illustration_legend':
                         $stmt->bindValue($identifier, $this->event_illustration_legend, PDO::PARAM_STR);
+
                         break;
                     case 'event_highlighted':
                         $stmt->bindValue($identifier, (int) $this->event_highlighted, PDO::PARAM_INT);
+
                         break;
                     case 'event_start':
                         $stmt->bindValue($identifier, $this->event_start ? $this->event_start->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_end':
                         $stmt->bindValue($identifier, $this->event_end ? $this->event_end->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_date':
                         $stmt->bindValue($identifier, $this->event_date ? $this->event_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_status':
                         $stmt->bindValue($identifier, (int) $this->event_status, PDO::PARAM_INT);
+
                         break;
                     case 'event_insert_':
                         $stmt->bindValue($identifier, $this->event_insert_ ? $this->event_insert_->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_update_':
                         $stmt->bindValue($identifier, $this->event_update_ ? $this->event_update_->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_created':
                         $stmt->bindValue($identifier, $this->event_created ? $this->event_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'event_updated':
                         $stmt->bindValue($identifier, $this->event_updated ? $this->event_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

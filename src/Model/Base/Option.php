@@ -664,8 +664,8 @@ abstract class Option implements ActiveRecordInterface
                 $col = null;
             }
             $this->option_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -948,24 +948,31 @@ abstract class Option implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'option_id':
                         $stmt->bindValue($identifier, $this->option_id, PDO::PARAM_INT);
+
                         break;
                     case 'site_id':
                         $stmt->bindValue($identifier, $this->site_id, PDO::PARAM_INT);
+
                         break;
                     case 'user_id':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+
                         break;
                     case 'option_key':
                         $stmt->bindValue($identifier, $this->option_key, PDO::PARAM_STR);
+
                         break;
                     case 'option_value':
                         $stmt->bindValue($identifier, $this->option_value, PDO::PARAM_STR);
+
                         break;
                     case 'option_created':
                         $stmt->bindValue($identifier, $this->option_created ? $this->option_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'option_updated':
                         $stmt->bindValue($identifier, $this->option_updated ? $this->option_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

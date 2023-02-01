@@ -682,8 +682,8 @@ abstract class Lang implements ActiveRecordInterface
                 $col = null;
             }
             $this->lang_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-            $this->resetModified();
 
+            $this->resetModified();
             $this->setNew(false);
 
             if ($rehydrate) {
@@ -942,27 +942,35 @@ abstract class Lang implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'lang_id':
                         $stmt->bindValue($identifier, $this->lang_id, PDO::PARAM_INT);
+
                         break;
                     case 'lang_iso_639-1':
                         $stmt->bindValue($identifier, $this->lang_iso_639-1, PDO::PARAM_STR);
+
                         break;
                     case 'lang_iso_639-2':
                         $stmt->bindValue($identifier, $this->lang_iso_639-2, PDO::PARAM_STR);
+
                         break;
                     case 'lang_iso_639-3':
                         $stmt->bindValue($identifier, $this->lang_iso_639-3, PDO::PARAM_STR);
+
                         break;
                     case 'lang_name':
                         $stmt->bindValue($identifier, $this->lang_name, PDO::PARAM_STR);
+
                         break;
                     case 'lang_name_original':
                         $stmt->bindValue($identifier, $this->lang_name_original, PDO::PARAM_STR);
+
                         break;
                     case 'lang_created':
                         $stmt->bindValue($identifier, $this->lang_created ? $this->lang_created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                     case 'lang_updated':
                         $stmt->bindValue($identifier, $this->lang_updated ? $this->lang_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
                         break;
                 }
             }

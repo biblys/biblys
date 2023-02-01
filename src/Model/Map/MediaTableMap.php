@@ -46,6 +46,11 @@ class MediaTableMap extends TableMap
     public const TABLE_NAME = 'medias';
 
     /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'Media';
+
+    /**
      * The related Propel class for this table
      */
     public const OM_CLASS = '\\Model\\Media';
@@ -441,7 +446,7 @@ class MediaTableMap extends TableMap
             MediaTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**
