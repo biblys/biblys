@@ -1,5 +1,6 @@
 <?php
 
+use ApiBundle\Controller\ErrorController;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -59,14 +60,9 @@ try {
         die('ERROR > Page introuvable');
     }
 } catch (Throwable $exception) {
-    biblys_error(
-        E_ERROR,
-        $exception->getMessage(),
-        $exception->getFile(),
-        $exception->getLine(),
-        null,
-        $exception
-    );
+    $controller = new ErrorController();
+    $response = $controller->exception($exception);
+    $response->send();
 }
 
 // Close MySQL connection

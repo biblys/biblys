@@ -240,7 +240,7 @@ function reloadArticleAdminEvents(scope) {
       error: function (jqXHR) {
         notification.remove();
         overlay('hide');
-        var error = jqXHR.responseJSON.error;
+        var error = jqXHR.responseJSON.error.message;
         _alert('Erreur lors de l\'importation : ' + error);
       }
     });
@@ -285,7 +285,7 @@ function reloadArticleAdminEvents(scope) {
         $('#article_number').focus();
       },
       error: function (data) {
-        var error = data.responseJSON.error;
+        var error = data.responseJSON.error.message;
         _alert(error);
       }
     });
@@ -394,7 +394,7 @@ $(document).ready(function () {
         }
       },
       error: function(jqXHR) {
-        window._alert(`Erreur: ${jqXHR.responseJSON.error}`);
+        window._alert(`Erreur: ${jqXHR.responseJSON.error.message}`);
       },
     });
   }).removeClass('e');
@@ -460,7 +460,7 @@ $(document).ready(function () {
               else choose_publisher(res.publisher_id, res.publisher_name);
             },
             error: function (data) {
-              _alert(data.responseJSON.error);
+              _alert(data.responseJSON.error.message);
             }
           });
         } else { // Selectionner un editeur existant
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         },
         error: function (jqXHR) {
-          var error = jqXHR.responseJSON.error;
+          var error = jqXHR.responseJSON.error.message;
           window._alert(error);
         }
       });
