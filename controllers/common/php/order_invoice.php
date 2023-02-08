@@ -12,7 +12,7 @@ $content = "";
 
 /** @var Order $order */
 if ($order = $om->get(array('order_url' => $_GET['url']))) {
-    $_PAGE_TITLE = 'Facture n&deg; '.$order->get('id');
+    $_PAGE_TITLE = 'Facture n° '.$order->get('id');
 
     // Get customer
     $customer_ref = null;
