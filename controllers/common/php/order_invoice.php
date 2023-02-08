@@ -1,7 +1,11 @@
 <?php
 
-use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+/** @var Request $request */
+/** @var Site $site */
 
 $om = new OrderManager();
 $sm = new StockManager();
@@ -12,7 +16,8 @@ $content = "";
 
 /** @var Order $order */
 if ($order = $om->get(array('order_url' => $_GET['url']))) {
-    $_PAGE_TITLE = 'Facture n° '.$order->get('id');
+    $pageTitle = "Facture n° {$order->get('id')}";
+    $request->attributes->set("page_title", $pageTitle);
 
     // Get customer
     $customer_ref = null;
@@ -22,7 +27,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         // Check access right
         /** @var Visitor $_V */
         if ($customer->get('user_id') != $_V->get('id') && !$_V->isAdmin()) {
-            throw new AuthException('Accès non autorisé.');
+            throw new AccessDeniedHttpException();
         }
 
         // Calculate customer reference
@@ -36,7 +41,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     // Condition column for bookshops
     $condition = null;
-    if ($_SITE["site_shop"]) {
+    if ($site->get("shop")) {
         $condition = '<th>&Eacute;tat</th>';
         $colspan = 3;
     }
@@ -73,7 +78,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                     <em>de '.truncate($article->get('authors'), 100, '...', true, true).'</em><br>
                     coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'
                 </td>
-                '.($_SITE['site_shop'] ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
+                '.($site->get("shop") ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
                 <td class="right">
                     '.currency($stock->get('selling_price') / 100).'
                 </td>
@@ -98,7 +103,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     // No TVA legal notice
     $notva = null;
-    if (!$_SITE["site_tva"]) {
+    if (!$site->get("tva")) {
         $notva = '<p class="center"><strong>TVA non applicable en application de l\'article 293 B du CGI.</strong></p><br>';
     }
 
@@ -122,9 +127,9 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
             <p>'.$order->get('order_email').'</p>
         </div>
 
-        <h3>'.$_SITE["site_title"].'<br />'.str_replace("|","<br />",$_SITE["site_address"]).'</h3>
+        <h3>'.$site->get("title").'<br />'.str_replace("|","<br />",$site->get("address")).'</h3>
 
-        <h2>'.$_PAGE_TITLE.'</h2>
+        <h2>'.$pageTitle.'</h2>
 
         <br>
         <table class="table invoice-table">
@@ -171,7 +176,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
         <p class="text-center">
             Confirmez la r&eacute;ception de votre commande ou signalez un incident : <br>
-            <strong>'.$_SITE["site_domain"].'/confirmer/'.$order->get('order_id').'</strong>
+            <strong>'.$site->get("domain").'/confirmer/'.$order->get('order_id').'</strong>
         </p>
 
     ';
