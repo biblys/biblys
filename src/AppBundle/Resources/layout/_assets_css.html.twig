@@ -1,14 +1,14 @@
 {% for asset in get_assets("css") %}
-  <link rel="stylesheet" href="{{ asset }}">
+  <link type="text/css" rel="stylesheet" media="screen" href="{{ asset }}">
 {% endfor %}
 
-<link rel="stylesheet" href="{{ '/libs/jquery-ui/themes/base/all.css?1.11.4' }}">
-<link rel="stylesheet" href="{{ '/libs/bootstrap/dist/css/bootstrap.min.css?3.3.6' }}">
-<link rel="stylesheet" href="{{ '/libs/tooltipster/css/tooltipster.css?3.3.0' }}">
-<link rel="stylesheet" href="{{ '/libs/font-awesome/css/font-awesome.min.css?4.5.0' }}">
+<link type="text/css" rel="stylesheet" media="screen" href="{{ '/libs/jquery-ui/themes/base/all.css?1.11.4' }}">
+<link type="text/css" rel="stylesheet" media="screen" href="{{ '/libs/bootstrap/dist/css/bootstrap.min.css?3.3.6' }}">
+<link type="text/css" rel="stylesheet" media="screen" href="{{ '/libs/tooltipster/css/tooltipster.css?3.3.0' }}">
+<link type="text/css" rel="stylesheet" media="screen" href="{{ '/libs/font-awesome/css/font-awesome.min.css?4.5.0' }}">
 
-<link rel="stylesheet" href="{{ asset('/common/css/common.css') }}">
+<link type="text/css" rel="stylesheet" media="screen" href="{{ asset('/common/css/common.css') }}">
 
 {% if app.user.isAdmin %}
-  <link rel="stylesheet" href="{{ asset('/common/css/biblys-admin.css') }}">
+  <link type="text/css" rel="stylesheet" media="screen" href="{{ asset('/common/css/biblys-admin.css') }}">
 {% endif %}
