@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.65.4 (DEV)
+
+Corrections
+
+- Le masquage des éléments lors de l'impression d'une facture ne 
+  fonctionnait plus, c'est corrigé.
+
 ### 2.65.3 (1 février 2023)
 
 Corrections
