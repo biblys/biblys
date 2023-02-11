@@ -6,5 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 $am = new ArticleManager();
 
 /** @var Request $request */
-$peopleUrl  = $request->query->get("url");
-return new RedirectResponse("/legacy/p/$peopleUrl/", 301);
+$peopleSlug  = $request->query->get("url");
+$queryParams = $request->query->all();
+unset($queryParams["page"], $queryParams["url"]);
+$queryString = http_build_query($queryParams);
+
+$legacyUrl = "/legacy/p/$peopleSlug/?$queryString";
+
+return new RedirectResponse($legacyUrl, 301);
