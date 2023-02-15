@@ -1,78 +1,79 @@
 <?php
 
 use Biblys\Contributor\Contributor;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class People extends Entity
+{
+    protected $prefix = 'people';
+
+    /**
+     * Returns concatenated first (if exists) and last name
+     * @return String people's full name
+     */
+    public function getName()
     {
-        protected $prefix = 'people';
-
-        /**
-         * Returns concatenated first (if exists) and last name
-         * @return String people's full name
-         */
-        public function getName()
-        {
-            if ($this->has('first_name')) {
-                return $this->get('first_name').' '.$this->get('last_name');
-            }
-            return $this->get('last_name');
+        if ($this->has('first_name')) {
+            return $this->get('first_name').' '.$this->get('last_name');
         }
-
-        /**
-         * Returns true if author's photo exists
-         * @return boolean
-         */
-        public function hasPhoto() {
-            $photo = $this->getPhoto();
-
-            if ($photo->exists()) {
-                return true;
-            }
-
-            return false;
-        }
-
-        /**
-         * Get people photo
-         * @return Media the media object for the photo, or false
-         */
-        public function getPhoto()
-        {
-            if (!isset($this->photo)) {
-                $this->photo = new Media('people', $this->get('id'));
-            }
-
-            return $this->photo;
-        }
-
-        /**
-         * Save uploaded file as contributor's photo
-         * @param UploadedFile $file a file that was uploaded
-         * @return Media             the contributor's saved Media
-         */
-        public function addPhoto($file)
-        {
-            if ($file->getMimeType() !== 'image/jpeg') {
-                throw new Exception('La photo doit être au format JPEG.');
-            }
-
-            $photo = new Media('people', $this->get('id'));
-            $photo->upload($file->getRealPath());
-
-            return $photo;
-        }
-
-        /**
-         * Get twitter url from Twitter username prop
-         * @return String Twitter url
-         */
-        public function getTwitterUrl()
-        {
-            $username = substr($this->get('twitter'), 1);
-            return 'https://www.twitter.com/'.$username;
-        }
+        return $this->get('last_name');
     }
+
+    /**
+     * Returns true if author's photo exists
+     * @return boolean
+     */
+    public function hasPhoto() {
+        $photo = $this->getPhoto();
+
+        if ($photo->exists()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get people photo
+     * @return Media the media object for the photo, or false
+     */
+    public function getPhoto()
+    {
+        if (!isset($this->photo)) {
+            $this->photo = new Media('people', $this->get('id'));
+        }
+
+        return $this->photo;
+    }
+
+    /**
+     * Save uploaded file as contributor's photo
+     * @param UploadedFile $file a file that was uploaded
+     * @return Media             the contributor's saved Media
+     */
+    public function addPhoto($file)
+    {
+        if ($file->getMimeType() !== 'image/jpeg') {
+            throw new Exception('La photo doit être au format JPEG.');
+        }
+
+        $photo = new Media('people', $this->get('id'));
+        $photo->upload($file->getRealPath());
+
+        return $photo;
+    }
+
+    /**
+     * Get twitter url from Twitter username prop
+     * @return String Twitter url
+     */
+    public function getTwitterUrl()
+    {
+        $username = substr($this->get('twitter'), 1);
+        return 'https://www.twitter.com/'.$username;
+    }
+}
 
 class PeopleManager extends EntityManager
 {
