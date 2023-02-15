@@ -1,6 +1,6 @@
 # Historique des modifications
 
-### 2.65.4 (DEV)
+### 2.65.4 (15 février 2023)
 
 Corrections
 
