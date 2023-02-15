@@ -12,7 +12,7 @@ class People extends Entity
      * Returns concatenated first (if exists) and last name
      * @return String people's full name
      */
-    public function getName()
+    public function getName(): string
     {
         if ($this->has('first_name')) {
             return $this->get('first_name').' '.$this->get('last_name');
@@ -22,9 +22,10 @@ class People extends Entity
 
     /**
      * Returns true if author's photo exists
-     * @return boolean
+     * @return bool
      */
-    public function hasPhoto() {
+    public function hasPhoto(): bool
+    {
         $photo = $this->getPhoto();
 
         if ($photo->exists()) {
@@ -38,7 +39,7 @@ class People extends Entity
      * Get people photo
      * @return Media the media object for the photo, or false
      */
-    public function getPhoto()
+    public function getPhoto(): Media
     {
         if (!isset($this->photo)) {
             $this->photo = new Media('people', $this->get('id'));
@@ -51,8 +52,9 @@ class People extends Entity
      * Save uploaded file as contributor's photo
      * @param UploadedFile $file a file that was uploaded
      * @return Media             the contributor's saved Media
+     * @throws Exception
      */
-    public function addPhoto($file)
+    public function addPhoto(UploadedFile $file): Media
     {
         if ($file->getMimeType() !== 'image/jpeg') {
             throw new Exception('La photo doit être au format JPEG.');
@@ -68,7 +70,7 @@ class People extends Entity
      * Get twitter url from Twitter username prop
      * @return String Twitter url
      */
-    public function getTwitterUrl()
+    public function getTwitterUrl(): string
     {
         $username = substr($this->get('twitter'), 1);
         return 'https://www.twitter.com/'.$username;
@@ -113,55 +115,55 @@ class PeopleManager extends EntityManager
         return $uniqueContributors;
     }
 
-    public function preprocess($people)
+    public function preprocess($entity): Entity
     {
-        $last_name = $people->get('last_name');
+        $last_name = $entity->get('last_name');
 
         // Uppercase last name
-        $people->set('people_last_name', mb_strtoupper($last_name, 'UTF-8'));
+        $entity->set('people_last_name', mb_strtoupper($last_name, 'UTF-8'));
 
         // Full name
-        $full_name = trim($people->get('first_name').' '.$people->get('last_name'));
-        $people->set('people_name', $full_name);
+        $full_name = trim($entity->get('first_name').' '.$entity->get('last_name'));
+        $entity->set('people_name', $full_name);
 
         // Alphabetical name
-        $alpha_name = trim($people->get('last_name').' '.$people->get('first_name'));
-        $people->set('people_alpha', $alpha_name);
+        $alpha_name = trim($entity->get('last_name').' '.$entity->get('first_name'));
+        $entity->set('people_alpha', $alpha_name);
 
         // Create slug
-        $people->set('people_url', makeurl($full_name));
+        $entity->set('people_url', makeurl($full_name));
 
-        return $people;
+        return $entity;
     }
 
-    public function validate($people)
+    public function validate($entity): bool
     {
-        if (!$people->has('last_name')) {
+        if (!$entity->has('last_name')) {
             throw new Exception('Le contributeur doit avoir un nom.');
         }
 
-        if ($people->has('site') && filter_var($people->get('site'), FILTER_VALIDATE_URL) === false) {
+        if ($entity->has('site') && filter_var($entity->get('site'), FILTER_VALIDATE_URL) === false) {
             throw new Exception('L\'adresse du site est invalide.');
         }
 
-        if ($people->has('facebook') && !preg_match('/^https:\/\/www.facebook.com\/(.*)/', $people->get('facebook'))) {
+        if ($entity->has('facebook') && !preg_match('/^https:\/\/www.facebook.com\/(.*)/', $entity->get('facebook'))) {
             throw new Exception('L\'adresse de la page Facebook doit commencer par https://www.facebook.com/.');
         }
 
-        if ($people->has('twitter') && !preg_match('/^@(\w){1,15}$/', $people->get('twitter'))) {
+        if ($entity->has('twitter') && !preg_match('/^@(\w){1,15}$/', $entity->get('twitter'))) {
             throw new Exception('Le compte Twitter doit commencer par @ et ne doit pas dépasser 15 caractères.');
         }
 
-        if (!$people->has('url')) {
+        if (!$entity->has('url')) {
             throw new Exception('Le contributeur doit avoir une url.');
         }
 
         $otherPeopleWithTheSameName = $this->get([
-            'people_url' => $people->get('url'),
-            'people_id' => '!= '.$people->get('id')
+            'people_url' => $entity->get('url'),
+            'people_id' => '!= '.$entity->get('id')
         ]);
         if ($otherPeopleWithTheSameName) {
-            $peopleName = $people->getName();
+            $peopleName = $entity->getName();
             throw new ConflictHttpException("Il existe déjà un contributeur avec le nom $peopleName.");
         }
 
