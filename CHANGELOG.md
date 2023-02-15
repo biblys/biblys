@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.66.0 (DEV)
+
+Améliorations
+
+- Lorsqu'un contributeur est modifié, les mots-clés des articles associés 
+  seront désormais rafraîchis.
+
 ### 2.65.4 (15 février 2023)
 
 Corrections

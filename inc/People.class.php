@@ -169,4 +169,35 @@ class PeopleManager extends EntityManager
 
         return true;
     }
+
+    /**
+     * Update collection AND articles.
+     *
+     * @param Entity $entity
+     * @param null $reason
+     * @return Entity|false
+     * @throws Exception
+     */
+    public function update($entity, $reason = null): bool|Entity
+    {
+        $people = parent::update($entity, $reason = null);
+        if ($people) {
+            $rm = new RoleManager();
+            $am = new ArticleManager();
+            $roles = $rm->getAll(["people_id" => $people->get("id")]);
+            foreach($roles as $role) {
+                if ($role->has("article_id")) {
+                    $articles = $am->getAll(['article_id' => $people->get('id')]);
+                    foreach ($articles as $a) {
+                        $a->set('article_keywords_generated', null);
+                        $a->set('article_collection', $people->get('name'));
+                        $am->update($a);
+                    }
+                }
+            }
+
+        }
+
+        return $people;
+    }
 }
