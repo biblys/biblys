@@ -6,6 +6,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -51,5 +52,26 @@ class StaticPageControllerTest extends TestCase
             $response->getContent(),
             "insert static page content in body"
         );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testShowActionForInvalidSlugs()
+    {
+        // then
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage("Cannot find a static page with slug \"page-inexistante\".");
+
+        // given
+        $controller = new StaticPageController();
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getId")->willReturn(1);
+
+        // when
+        $controller->showAction($currentSite, "page-inexistante");
     }
 }
