@@ -223,6 +223,7 @@ class ModelFactory
         $page->setUrl($attributes["page_url"] ?? "cgv");
         $page->setSiteId($attributes["site_id"] ?? 1);
         $page->setStatus($attributes["status"] ?? 1);
+        $page->setContent($attributes["content"] ?? "Veuillez lire attentivement le texte suivant.");
         $page->save();
 
         return $page;

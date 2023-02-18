@@ -1,0 +1,13 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  {{ staticPage.title }}
+{% endblock %}
+
+{% block main %}
+  <article id="static-page-{{ staticPage.url }}" class="page static-page">
+    <h1 class="page-title static-page__title">{{ staticPage.title }}</h1>
+
+    {{ staticPage.content|raw }}
+  </article>
+{% endblock %}

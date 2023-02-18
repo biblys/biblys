@@ -564,6 +564,14 @@ site_default_values:
   path: /admin/default-values
   controller: AppBundle\Controller\SiteController::defaultValuesAction
 
+# Static pages
+
+static_page_show:
+  path: /page/{slug}
+  controller: AppBundle\Controller\StaticPageController::showAction
+  requirements:
+    slug: '.+'
+
 # Stats
 
 stats_lost:
