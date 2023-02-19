@@ -3,6 +3,9 @@
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var UrlGenerator $urlGenerator */
 
 $pm = new PageManager();
 
@@ -32,12 +35,14 @@ if ($delPageId) {
         ->set('page_status', $request->request->get('page_status'));
     $page = $pm->update($page);
 
-    return new RedirectResponse("/pages/".$page->get("url"));
+    $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $page->get("url")]);
+    return new RedirectResponse($staticPageUrl);
 }
 
 if ($pageId && $page) {
     $p = $page;
-    $pageTitle = "Modifier &laquo; <a href=\"/pages/{$p["page_url"]}\">{$p["page_title"]}</a> &raquo;";
+    $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $page->get("url")]);
+    $pageTitle = "Modifier &laquo; <a href=\"$staticPageUrl\">{$p["page_title"]}</a> &raquo;";
     $page_status[$p["page_status"]] = 'selected = "selected"';
 } else {
     $pageTitle = 'Nouvelle page statique';

@@ -68,27 +68,10 @@ class LegacyController extends Controller
             $_INCLUDE = $controller_path;
         }
 
-        // Controller for static page from DB
+        // If static page, redirect to new /page/:slug url
         else {
-            $pm = new PageManager();
-
-            $currentSiteService = CurrentSite::buildFromConfig($config);
-            $currentSite = $currentSiteService->getSite();
-
-            $pageQuery = PageQuery::create()
-                ->filterBySiteId($currentSite->getId())
-                ->filterByUrl($_PAGE);
-
-            if (!$_V->isAdmin()) {
-                $pageQuery->filterByStatus(1);
-            }
-
-            $page = $pageQuery->findOne();
-            if ($page) {
-                $_INCLUDE = get_controller_path('_page');
-            } else {
-                throw new ResourceNotFoundException('Cannot find static page ' . $_PAGE);
-            }
+            $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $_PAGE]);
+            return new RedirectResponse($staticPageUrl, 301);
         }
 
         // INCLUDE PAGE EN COURS

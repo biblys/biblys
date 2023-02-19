@@ -145,4 +145,47 @@ class LegacyControllerTest extends TestCase
             $urlGenerator,
         );
     }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     */
+    public function testDefaultActionForStaticPagesLegacyRoute()
+    {
+        // given
+        $request = new Request();
+        $request->query->set("page", "page-statique");
+        $session = new Session();
+        $mailer = new Mailer();
+        $legacyController = new LegacyController();
+        $config = new Config();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator
+            ->method("generate")
+            ->with("static_page_show", ["slug" => "page-statique"])
+            ->willReturn("/page/page-statique");
+
+        // when
+        $response = $legacyController->defaultAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(
+            "301",
+            $response->getStatusCode(),
+            "responds with status code 301"
+        );
+        $this->assertEquals(
+            "/page/page-statique",
+            $response->headers->get("location"),
+            "redirects to new static page url"
+        );
+    }
 }

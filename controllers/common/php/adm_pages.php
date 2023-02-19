@@ -1,9 +1,11 @@
 <?php
 
 /** @var Request $request */
+/** @var UrlGenerator $urlGenerator */
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $request->attributes->set("page_title", "Gestion des pages");
 
@@ -29,10 +31,11 @@ foreach ($pages as $page) {
     $p = $page;
     if($p["page_status"] == 1) $p["status"] = '<span class="fa fa-square led-green"></span>';
     else $p["status"] = '<span class="fa fa-square led-red"></span>';
+    $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $page->get("url")]);
     $content .= '
         <tr>
             <td>'.$p["status"].'</td>
-            <td width="99%"><a href="/pages/'.$p["page_url"].'">'.$p["page_title"].'</a></td>
+            <td><a href="'.$staticPageUrl.'">'.$p["page_title"].'</a></td>
             <td class="right nowrap">
                 <a href="/pages/adm_page?id='.$p["page_id"].'" class="button" title="Éditer"><i class="fa fa-edit fa-lg"></i></a>
                 <a href="/pages/adm_page?del='.$p["page_id"].'" class="button" title="Supprimer" data-confirm="Êtes-vous sûr de vouloir supprimer la page '.$p["page_title"].' ?"><i class="fa fa-trash-o fa-lg"></i></a>
