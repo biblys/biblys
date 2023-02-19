@@ -13,11 +13,13 @@ use Framework\Composer\ComposerException;
 use Framework\Composer\ScriptRunner;
 use Framework\Controller;
 use Framework\Exception\AuthException;
+use InvalidArgumentException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -149,9 +151,13 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
+     * @param Request $request
+     * @param Updater $updater
+     * @return Response
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function changelogIndexAction(Request $request, Updater $updater): Response
     {
@@ -159,9 +165,13 @@ class MaintenanceController extends Controller
 
         $releases = $updater->getReleases();
 
-        $page = (int) $request->query->get('p', 0);
-        $pagination = new Pagination($page, count($releases));
-        $currentPageReleases = array_slice($releases, $pagination->getOffset(), $pagination->getLimit());
+        try {
+            $page = (int) $request->query->get('p', 0);
+            $pagination = new Pagination($page, count($releases));
+            $currentPageReleases = array_slice($releases, $pagination->getOffset(), $pagination->getLimit());
+        } catch(InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
 
         return $this->render('AppBundle:Maintenance:changelogIndex.html.twig', [
             'releases' => $currentPageReleases,
@@ -170,9 +180,14 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
+     * @param string $version
+     * @param Updater $updater
+     * @param Request $request
+     * @return Response
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function changelogShowAction(
         string $version,
