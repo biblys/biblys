@@ -102,4 +102,35 @@ class StaticPageControllerTest extends TestCase
         // when
         $controller->showAction($request, $currentSite, "offline-page");
     }
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testShowActionForOfflinePageViewedByAdmin()
+    {
+        // given
+        $controller = new StaticPageController();
+        ModelFactory::createPage(["page_url" => "for-admin-only", "status" => 0]);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getId")->willReturn(1);
+        $request = RequestFactory::createAuthRequestForAdminUser();
+
+        // when
+        $response = $controller->showAction($request, $currentSite, "for-admin-only");
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "responds with http status 200",
+        );
+        $this->assertStringContainsString(
+            "Cette page est hors-ligne et n'est prévisualisable que par les administrateurs.",
+            $response->getContent(),
+            "inserts admin preview warning"
+        );
+    }
 }

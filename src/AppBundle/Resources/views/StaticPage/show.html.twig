@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block main %}
+
+  {% if not staticPage.isOnline %}
+    <p class="alert alert-warning">
+      <span class="fa fa-warning"></span>
+      Cette page est hors-ligne et n'est prévisualisable que par les administrateurs.
+    </p>
+  {% endif %}
+
   <article id="static-page-{{ staticPage.url }}" class="page static-page">
     <h1 class="page-title static-page__title">{{ staticPage.title }}</h1>
 
