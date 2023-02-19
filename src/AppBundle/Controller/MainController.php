@@ -94,9 +94,9 @@ class MainController extends Controller
                 $am = new ArticleManager();
 
                 // Pagination
-                $page = (int) $request->query->get('p', 0);
+                $staticHomePage = (int) $request->query->get('p', 0);
                 $totalCount = $am->countAll();
-                $pagination = new Pagination($page, $totalCount);
+                $pagination = new Pagination($staticHomePage, $totalCount);
 
                 $articles = $am->getAll(['article_pubdate' => '<= '.date('Y-m-d H:i:s')], [
                     'order' => 'article_pubdate',
@@ -145,26 +145,17 @@ class MainController extends Controller
             } elseif (preg_match('/page:(\\d+)/', $behavior, $matches)) {
                 $pageId = $matches[1];
 
-                $page = PageQuery::create()
+                $staticHomePage = PageQuery::create()
                     ->filterBySiteId($currentSite->getSite()->getId())
                     ->filterById($pageId)
                     ->findOne();
 
-                if (!$page) {
+                if (!$staticHomePage) {
                     throw new Exception('Unable to find page '.$pageId);
                 }
 
-                $request->attributes->set('page', $page->getUrl());
-
-                $legacyController = new LegacyController();
-                return $legacyController->defaultAction(
-                    $request,
-                    $session,
-                    $mailer,
-                    $config,
-                    $currentSite,
-                    $urlGenerator
-                );
+                $staticPageController = new StaticPageController();
+                return $staticPageController->showAction($request, $currentSite, $staticHomePage->getUrl());
 
             // Old controller
             } elseif ($behavior == 'old_controller') {
