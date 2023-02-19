@@ -15,5 +15,8 @@ use Model\Base\Page as BasePage;
  */
 class Page extends BasePage
 {
-
+    public function isOnline(): ?bool
+    {
+        return $this->getStatus();
+    }
 }
