@@ -424,13 +424,16 @@ class Controller
      * @return CurrentUser
      * @throws PropelException
      */
-    protected static function authAdmin(Request $request): CurrentUser
+    protected static function authAdmin(
+        Request $request,
+        string $errorMessage = "Accès réservé aux administrateurs.",
+    ): CurrentUser
     {
         $currentUser = self::authUser($request);
         $currentSite = CurrentSite::buildFromConfig(new Config());
 
         if (!$currentUser->isAdminForSite($currentSite->getSite())) {
-            throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
+            throw new AccessDeniedHttpException($errorMessage);
         }
 
         return $currentUser;

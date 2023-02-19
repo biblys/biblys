@@ -2,11 +2,9 @@
 
 namespace Framework;
 
-use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionException;
@@ -85,6 +83,24 @@ class ControllerTest extends TestCase
 
         // when
         Helpers::callPrivateMethod($controller, "authAdmin", [$request]);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws PropelException
+     */
+    public function testAuthAdminForWithCustomMessage()
+    {
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Un message personnalisé.");
+
+        // given
+        $controller = new Controller();
+        $request = RequestFactory::createAuthRequest();
+
+        // when
+        Helpers::callPrivateMethod($controller, "authAdmin", [$request, "Un message personnalisé."]);
     }
 
     /**
@@ -208,7 +224,6 @@ class ControllerTest extends TestCase
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur");
 
         // given
-        $publisher = ModelFactory::createPublisher();
         $controller = new Controller();
         $request = RequestFactory::createAuthRequest();
 
