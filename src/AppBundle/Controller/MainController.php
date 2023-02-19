@@ -142,20 +142,11 @@ class MainController extends Controller
                 ]);
 
             // Display a static page from db
-            } elseif (preg_match('/page:(\\d+)/', $behavior, $matches)) {
-                $pageId = $matches[1];
+            } elseif (preg_match('/page:([a-z-]+)/m', $behavior, $matches)) {
 
-                $staticHomePage = PageQuery::create()
-                    ->filterBySiteId($currentSite->getSite()->getId())
-                    ->filterById($pageId)
-                    ->findOne();
-
-                if (!$staticHomePage) {
-                    throw new Exception('Unable to find page '.$pageId);
-                }
-
+                $staticPageSlug = $matches[1];
                 $staticPageController = new StaticPageController();
-                return $staticPageController->showAction($request, $currentSite, $staticHomePage->getUrl());
+                return $staticPageController->showAction($request, $currentSite, $staticPageSlug);
 
             // Old controller
             } elseif ($behavior == 'old_controller') {

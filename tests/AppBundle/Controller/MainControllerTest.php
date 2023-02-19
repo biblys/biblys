@@ -82,8 +82,12 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = new Request();
         $site = EntityFactory::createSite();
-        $page = ModelFactory::createPage(["page_title" => "Home", "site_id" => $site->get("id")]);
-        $site->setOpt("home", "page:{$page->getId()}");
+        $page = ModelFactory::createPage([
+            "page_title" => "Home",
+            "page_url" => "home",
+            "site_id" => $site->get("id"),
+        ]);
+        $site->setOpt("home", "page:home");
         $config = new Config();
         $config->set("site", $site->get("site_id"));
         $mailer = new Mailer();

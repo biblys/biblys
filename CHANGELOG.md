@@ -7,6 +7,11 @@ Améliorations
 - Lorsqu'un contributeur est modifié, les mots-clés des articles associés 
   seront désormais rafraîchis.
 
+Déploiement
+
+- L'option de site permettant d'utiliser une page statique comme page 
+  d'accueil s'écrit désormais `page:{slug}` plutôt que `page:{id}`.
+
 ### 2.65.4 (15 février 2023)
 
 Corrections
