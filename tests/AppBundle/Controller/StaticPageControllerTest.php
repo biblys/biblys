@@ -4,8 +4,11 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
+use Biblys\Test\RequestFactory;
+use Symfony\Component\HttpFoundation\Request;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -32,9 +35,10 @@ class StaticPageControllerTest extends TestCase
         ]);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
+        $request = new Request();
 
         // when
-        $response = $controller->showAction($currentSite, "mentions-legales");
+        $response = $controller->showAction($request, $currentSite, "mentions-legales");
 
         // then
         $this->assertEquals(
@@ -70,8 +74,32 @@ class StaticPageControllerTest extends TestCase
         $controller = new StaticPageController();
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getId")->willReturn(1);
+        $request = new Request();
 
         // when
-        $controller->showAction($currentSite, "page-inexistante");
+        $controller->showAction($request, $currentSite,  "page-inexistante");
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testShowActionForOfflinePages()
+    {
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Page \"offline-page\" is offline.");
+
+        // given
+        $controller = new StaticPageController();
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getId")->willReturn(1);
+        ModelFactory::createPage(["page_url" => "offline-page", "status" => 0]);
+        $request = RequestFactory::createAuthRequest();
+
+        // when
+        $controller->showAction($request, $currentSite, "offline-page");
     }
 }

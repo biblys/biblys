@@ -6,6 +6,7 @@ use Biblys\Service\CurrentSite;
 use Framework\Controller;
 use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
@@ -22,7 +23,7 @@ class StaticPageController extends Controller
      * @throws SyntaxError
      * @throws PropelException
      */
-    public function showAction(CurrentSite $currentSite, string $slug): Response
+    public function showAction(Request $request, CurrentSite $currentSite, string $slug): Response
     {
         $pageQuery = PageQuery::create()
             ->filterBySiteId($currentSite->getId())
@@ -33,8 +34,12 @@ class StaticPageController extends Controller
             throw new NotFoundHttpException("Cannot find a static page with slug \"$slug\".");
         }
 
-        return $this->render('AppBundle:StaticPage:show.html.twig', [
-            'staticPage' => $staticPage,
+        if (!$staticPage->isOnline()) {
+            Controller::authAdmin($request, "Page \"$slug\" is offline.");
+        }
+
+        return $this->render("AppBundle:StaticPage:show.html.twig", [
+            "staticPage" => $staticPage,
         ]);
     }
 }
