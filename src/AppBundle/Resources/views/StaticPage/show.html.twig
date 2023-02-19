@@ -18,4 +18,12 @@
 
     {{ staticPage.content|raw }}
   </article>
+
+  {% if app.user.isAdmin %}
+    <div class="admin">
+      <p>Page n&deg; {{ staticPage.id }}</p>
+      <p><a href="/pages/adm_page?id={{ staticPage.id }}">modifier</a></p>
+      <p><a href="/pages/adm_page?del={{ staticPage.id }}" data-confirm="Voulez-vous vraiment SUPPRIMER la page {{ staticPage.title }} ?">supprimer</a></p>
+    </div>
+  {% endif %}
 {% endblock %}
