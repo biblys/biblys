@@ -1,0 +1,40 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  {{ inventory.title }} - Import
+{% endblock %}
+
+{% block main %}
+
+  {% if dateIsMissing %}
+    <h1>Importation du stock</h1>
+
+    <form>
+      Importer le stock à date du
+      <input name="date" type="date" value="">
+      <input name="time" type="time" value="">
+      <button type="submit" class="btn btn-primary">Commencer</button>
+    </form>
+  {% elseif importInProgress %}
+    <h1>Importation du stock en cours...</h1>
+    <p>{{ total}} références à traiter.</p>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+        {{ progress }} %
+      </div>
+    </div>
+    <script>
+      setTimeout( function() {
+        window.location.href = "{{ nextStepUrl }}";
+      }, 1000)
+    </script>
+  {% else %}
+    <h1>Importation du stock en cours...</h1>
+    <p class="alert alert-success">Le stock a été importé.</p>
+  {% endif %}
+
+  <p class="text-center">
+    <a class="btn btn-primary" href="{{ path("inventory_show", { id: inventory.id }) }}">Revenir à l'inventaire</a>
+  </p>
+
+{% endblock %}

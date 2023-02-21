@@ -10,6 +10,11 @@ Améliorations
 - Un lien a été ajouté dans l'administration vers la nouvelle plateforme 
   Améliorer Biblys
 
+Corrections
+
+- Un problème d'affichage pouvait affecter le bon fonctionnement de l'outil 
+  d'inventaire. C'est corrigé.
+
 Déploiement
 
 - L'option de site permettant d'utiliser une page statique comme page 

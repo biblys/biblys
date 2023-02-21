@@ -1,0 +1,28 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Inventaires
+{% endblock %}
+
+{% block main %}
+  <h1><span class="fa fa-check"></span> Inventaires</h1>
+
+  <table class="admin-table">
+    <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Créé le</th>
+      <th>Mis à jour le</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for inventory in inventories %}
+        <tr>
+          <td><a href="{{ path("inventory_show", { id: inventory.id }) }}">{{ inventory.title }}</a></td>
+          <td>{{ inventory.created|date }}</td>
+          <td>{{ inventory.updated|date }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

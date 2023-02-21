@@ -2,11 +2,15 @@
 
 namespace AppBundle\Controller;
 
+use Framework\Controller;
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
-class InventoryController
+class InventoryController extends Controller
 {
 
     public function __construct()
@@ -24,6 +28,12 @@ class InventoryController
         $this->url = $urlgenerator;
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function indexAction()
     {
         if (!$this->user->isAdmin()) {
@@ -31,34 +41,18 @@ class InventoryController
         }
 
         $inventories = $this->im->getAll();
-        $inventories = array_map( function($inventory) {
-            $url = $this->url->generate('inventory_show', ['id' => $inventory->get('id')]);
-            return '<tr>
-                <td><a href="'.$url.'">'.$inventory->get('title').'</a></td>
-                <td>'.$inventory->get('created').'</td>
-                <td>'.$inventory->get('updated').'</td>
-            </tr>';
-        }, $inventories);
 
-        return new Response('
-            <h1><span class="fa fa-check"></span> Inventaires</h1>
-
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Créé le</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    '.implode($inventories).'
-                </tbody>
-            </table>
-
-        ');
-
+        return $this->render('AppBundle:Inventory:index.html.twig', [
+            "inventories" => $inventories
+        ]);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function showAction(REQUEST $request, $id, $mode)
     {
         if (!$this->user->isAdmin()) {
@@ -117,65 +111,16 @@ class InventoryController
 
         $items = $this->iim->getAll(['inventory_id' => $inventory->get('id')], $items_options);
 
-        $items_tr = array();
-        foreach ($items as $item) {
-
-            // If no error, skip in error mode
-            $class = null;
-            if ($item->get('quantity') == $item->get('stock')) {
-                if ($mode == "errors") continue;
-            } else {
-                $class = ' class="danger"';
-            }
-
-            $items_tr[] = '<tr'.$class.'>
-                <td>'.$item->get('ean').'</td>
-                <td class="right">'.$item->get('quantity').'</td>
-                <td class="right">'.$item->get('stock').'</td>
-                <td class="center">
-                    <a href="'.$this->url->generate('inventory_item_remove', ["inventory_id" => $item->get('inventory_id'), "id" => $item->get('id')]).'" title="Retirer un exemplaire"><i class="fa fa-minus-square"></i></a>
-                    <a href="'.$this->url->generate('inventory_item_delete', ["inventory_id" => $item->get('inventory_id'), "id" => $item->get('id')]).'" title="Supprimer la ligne" data-confirm="Voulez-vous vraiment supprimer cette ligne ?"><i class="fa fa-trash-o"></i></a>
-                </td>
-            </tr>';
-        }
-
         if ($mode == "errors") {
             $errorButton = '';
         } else {
             $errorButton = '';
         }
 
-        return new Response('
-            <h1><span class="fa fa-check"></span> <a href="'.$this->url->generate('inventory_show', ["id" => $inventory->get('id')]).'">'.$inventory->get('title').'</a></h1>
-
-            <form action="'.$this->url->generate('inventory_show', ["id" => $inventory->get('id')]).'" method="post">
-                <fieldset>
-                    <input type="text" name="ean" id="ean" class="form-control" autocomplete="off" autofocus placeholder="Ajouter un exemplaire...">
-                </fieldset>
-            </form>
-            <br>
-
-            <p class="text-center">
-                <a href="'.$this->url->generate('inventory_show', ['id' => $inventory->get('id'), 'mode' => 'all']).'" class="btn btn-default">Afficher tout</a>
-                <a href="'.$this->url->generate('inventory_show', ['id' => $inventory->get('id'), 'mode' => 'errors']).'" class="btn btn-warning">Afficher les erreurs</a>
-                <a href="'.$this->url->generate('inventory_import', ["id" => $inventory->get('id')]).'" class="btn btn-primary">Importer le stock</a>
-            </p>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>EAN</th>
-                        <th>Qté réelle</th>
-                        <th>Qté en base</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    '.implode($items_tr).'
-                </tbody>
-            </table>
-
-        ');
-
+        return $this->render('AppBundle:Inventory:show.html.twig', [
+            "inventory" => $inventory,
+            "items" => $items,
+        ]);
     }
 
     // Import actual stock into inventory
@@ -200,7 +145,10 @@ class InventoryController
         }
 
         // Count all available copies
-        $stocks = $_SQL->prepare("SELECT COUNT(stock_id) AS stocks, article_ean, stock_purchase_date
+        $stocks = $_SQL->prepare("SELECT 
+                COUNT(`stock_id`) AS `stocks`, 
+                `article_ean`, 
+                `stock_purchase_date`
             FROM stock
             JOIN articles USING(article_id)
             WHERE article_ean IS NOT NULL AND site_id = :site_id AND stock_condition = 'Neuf'
@@ -208,7 +156,7 @@ class InventoryController
                 AND (stock_selling_date IS NULL OR stock_selling_date > :date)
                 AND (stock_return_date IS NULL OR stock_return_date > :date)
                 AND (stock_lost_date IS NULL OR stock_lost_date > :date)
-            GROUP BY article_ean
+            GROUP BY `article_ean`, `stock_purchase_date`
             ORDER BY stock_purchase_date DESC
         ");
         $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
@@ -229,7 +177,6 @@ class InventoryController
         $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
         $stocks = $stocks->fetchAll(\PDO::FETCH_ASSOC);
 
-        $table = array();
         foreach ($stocks as $stock) {
 
             // If there is no item with this ean in this inventory, create
@@ -243,48 +190,23 @@ class InventoryController
             $this->iim->update($item);
         }
 
-        // If date is not set, ask for it
-        if (!$date) {
-           $response = '
-                <h1>Importation du stock</h1>
+        $dateIsMissing = $date === false;
+        $importInProgress = $offset < $total;
+        $nextStepUrl = $this->url->generate('inventory_import', ['id' => $inventory->get('id'), 'offset' => $offset + $limit, 'date' => $date, 'time' => $time]);
 
-                <form>
-                    Importer le stock à date du
-                        <input name="date" type="date" value="'.date("Y-m-d").'">
-                        <input name="time" type="time" value="'.date("H:i:s").'">
-                    <button type="submit" class="btn btn-primary">Commencer</button>
-                </form>
-
-           ';
-        }
-
-       // If date is set, process import
-        elseif ($offset < $total) {
+        $progress = 0;
+        if ($total > 0) {
             $progress = round($offset / $total * 100);
-            $response = '
-                <h1>Importation du stock en cours...</h1>
-                <p>'.$total.' références à traiter.</p>
-                <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="'.$progress.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$progress.'%;">
-                    '.$progress.' %
-                  </div>
-                </div>
-                <p class="text-center"><a class="btn btn-primary" href="'.$this->url->generate('inventory_show', ['id' => $inventory->get('id')]).'">Revenir à l\'inventaire</a></p>
-                <script>
-                    setTimeout( function() {
-                        window.location.href = "'.$this->url->generate('inventory_import', ['id' => $inventory->get('id'), 'offset' => $offset + $limit, 'date' => $date, 'time' => $time]).'";
-                    }, 1000)
-                </script>
-            ';
-        } else {
-            $response = '
-                <h1>Importation du stock en cours...</h1>
-                <p class="alert alert-success">Le stock a été importé.</p>
-                <p class="text-center"><a class="btn btn-primary" href="'.$this->url->generate('inventory_show', ['id' => $inventory->get('id')]).'">Revenir à l\'inventaire</a></p>
-            ';
         }
 
-        return new Response($response);
+        return $this->render('AppBundle:Inventory:import.html.twig', [
+            "inventory" => $inventory,
+            "dateIsMissing" => $dateIsMissing,
+            "importInProgress" => $importInProgress,
+            "total" => $total,
+            "progress" => $progress,
+            "nextStepUrl" => $nextStepUrl,
+        ]);
     }
 
     // Remove this item and all copies completely
