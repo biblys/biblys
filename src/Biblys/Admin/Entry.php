@@ -252,6 +252,7 @@ class Entry
         $entries[] = new Entry('Tâches planifiées', ['category' => 'site', 'path' => 'crons_tasks', 'icon' => 'clock-o']);
 
         $entries[] = new Entry('Support Biblys', ['category' => 'biblys', 'path' => 'ticket_index', 'icon' => 'medkit']);
+        $entries[] = new Entry('Améliorer Biblys', ['category' => 'biblys', 'url' => 'https://ameliorer.biblys.cloud', 'icon' => 'lightbulb-o']);
         $cloud = new CloudService($config);
         if ($cloud->isConfigured()) {
             $entries[] = new Entry('Abonnement Cloud', ['category' => 'biblys', 'path' => 'main_admin_cloud', 'icon' => 'cloud']);

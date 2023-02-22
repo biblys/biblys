@@ -6,6 +6,9 @@ Améliorations
 
 - Lorsqu'un contributeur est modifié, les mots-clés des articles associés 
   seront désormais rafraîchis.
+- L'outil de support intégré a été déprécié
+- Un lien a été ajouté dans l'administration vers la nouvelle plateforme 
+  Améliorer Biblys
 
 Déploiement
 
