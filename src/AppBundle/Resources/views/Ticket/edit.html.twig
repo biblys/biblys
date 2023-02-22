@@ -7,6 +7,8 @@
 {% block main %}
   <h1>Éditer le ticket #{{ ticket.id }}</h1>
 
+  {% include 'AppBundle:Ticket:_deprecation_warning.html.twig' %}
+
   {% include 'AppBundle:Ticket:_form.html.twig' %}
 
   <a href="{{ path('ticket_index') }}">Retour</a>

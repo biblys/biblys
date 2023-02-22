@@ -9,6 +9,9 @@
   <h1>
     Ticket #{{ ticket.id }} : {{ ticket.title }}
   </h1>
+
+  {% include 'AppBundle:Ticket:_deprecation_warning.html.twig' %}
+
   <p>
     <a href="{{ path('ticket_index') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Retour</a>
     <a href="{{ path('ticket_edit', { 'id': ticket.id }) }}" class="btn btn-primary"><i class="fa fa-edit"></i>
