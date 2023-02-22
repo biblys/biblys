@@ -2,16 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Ticket;
 use TicketCommentManager;
 use TicketManager;
@@ -26,6 +23,9 @@ class TicketController extends Controller
      * @var false|mixed
      */
     private mixed $site;
+    private UrlGenerator $url;
+    private TicketManager $tm;
+    private TicketCommentManager $tcm;
 
     public function __construct()
     {
@@ -37,17 +37,16 @@ class TicketController extends Controller
         $this->tm = new TicketManager();
         $this->tcm = new TicketCommentManager();
 
-        $this->support_email = 'contact@biblys.fr';
-
         parent::__construct();
     }
 
     /**
-     * @throws SyntaxError
-     * @throws AuthException
-     * @throws RuntimeError
-     * @throws PropelException
+     * @param Request $request
+     * @return Response
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function indexAction(Request $request): Response
     {
@@ -74,7 +73,6 @@ class TicketController extends Controller
         $tickets = array_map(/**
          * @throws Exception
          */ function($ticket) {
-            $site = $ticket->getRelated('site');
             $user = $ticket->getRelated('user');
             return '
                 <tr>
@@ -106,7 +104,6 @@ class TicketController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws PropelException
      * @throws LoaderError
@@ -146,13 +143,10 @@ class TicketController extends Controller
      *
      * @param Request $request
      * @return RedirectResponse|Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws TransportExceptionInterface
-     * @throws Exception
      */
     public function newAction(Request $request): RedirectResponse|Response
     {
