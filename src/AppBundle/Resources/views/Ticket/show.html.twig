@@ -14,8 +14,6 @@
 
   <p>
     <a href="{{ path('ticket_index') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Retour</a>
-    <a href="{{ path('ticket_edit', { 'id': ticket.id }) }}" class="btn btn-primary"><i class="fa fa-edit"></i>
-      Éditer</a>
     {% if app.user.isRoot() and not ticket.isResolved() and not ticket.isClosed() %}
       <a href="{{ path('ticket_resolve', { 'id': ticket.id }) }}" class="btn btn-success"
          data-confirm="Voulez-vous vraiment marquer ce ticket comme résolu ?"><i class="fa fa-check"></i> Résolu</a>
