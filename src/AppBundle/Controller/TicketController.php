@@ -65,24 +65,6 @@ class TicketController extends Controller
         ]);
     }
 
-    /**
-     * @throws SyntaxError
-     * @throws AuthException
-     * @throws RuntimeError
-     * @throws PropelException
-     * @throws LoaderError
-     */
-    public function rootAction(): Response
-    {
-        $this->auth("root");
-
-        $tickets = $this->tm->getAll(array("ticket_closed" => "NULL", "ticket_resolved" => "NULL"), ['order' => 'ticket_created']);
-        $tickets = $this->tm->sort($tickets);
-        $tickets = $this->renderTicketTable($tickets);
-
-        return $this->render('AppBundle:Ticket:root.html.twig', ['tickets' => $tickets]);
-    }
-
     private function renderTicketTable($tickets): bool|string
     {
         if (empty($tickets)) {
