@@ -98,7 +98,7 @@ class TicketController extends Controller
                 <tr>
                     <td>'.$this->tm->getPriority($ticket->get('priority')).'</td>
                     <td>'.$ticket->get('type').'</td>
-                    <td><a href="https://'.$site->get('domain').$this->url->generate('ticket_show', array("id" => $ticket->get('id'))).'">#'.$ticket->get('id').' '.$ticket->get('title').'</td>
+                    <td><a href="'.$this->url->generate('ticket_show', array("id" => $ticket->get('id'))).'">#'.$ticket->get('id').' '.$ticket->get('title').'</td>
                     <td>'.$user->get('screen_name').'</td>
                     <td>'._date($ticket->get('created'), 'd/m/Y').'</td>
                 </tr>
