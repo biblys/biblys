@@ -38,16 +38,4 @@
   <h2>Discussion</h2>
   {{ comments|join|raw }}
 
-  <form action="{{ path('ticket_comment_new', { 'ticket_id': ticket.id }) }}" method="post" class="fieldset">
-    <fieldset>
-      <p>
-        <textarea id="ticket_comment_content" name="ticket_comment_content" class="form-control" rows=5
-                  required></textarea>
-      </p>
-      <p class="text-right">
-        <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
-      </p>
-    </fieldset>
-  </form>
-
 {% endblock %}
