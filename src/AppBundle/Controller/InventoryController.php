@@ -1,46 +1,39 @@
-<?php
+<?php /** @noinspection SqlCheckUsingColumns */
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
+use Exception;
 use Framework\Controller;
+use Framework\Exception\AuthException;
+use InventoryItemManager;
+use InventoryManager;
+use PDO;
 use Propel\Runtime\Exception\PropelException;
+use StockManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class InventoryController extends Controller
 {
-
-    public function __construct()
-    {
-        global $urlgenerator, $_V, $_SITE, $session;
-
-        // $this->sm = new \SiteManager();
-        $this->im = new \InventoryManager();
-        $this->iim = new \InventoryItemManager();
-        $this->am = new \ArticleManager();
-        $this->stm = new \StockManager();
-
-        // $this->site = $this->sm->getById($_SITE['site_id']);
-        $this->user = $_V;
-        $this->url = $urlgenerator;
-    }
-
     /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws AuthException
      */
-    public function indexAction()
+    public function indexAction(Request $request): Response
     {
-        if (!$this->user->isAdmin()) {
-            return new Response('<p>Accès réservé aux administrateurs.</p>');
-        }
+        self::authAdmin($request);
 
-        $inventories = $this->im->getAll();
+        $im = new InventoryManager();
+        $inventories = $im->getAll();
 
         return $this->render('AppBundle:Inventory:index.html.twig', [
             "inventories" => $inventories
@@ -52,16 +45,17 @@ class InventoryController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws AuthException
+     * @throws Exception
      */
-    public function showAction(REQUEST $request, $id, $mode)
+    public function showAction(Request $request, UrlGenerator $urlGenerator, $id, $mode): RedirectResponse|Response
     {
-        if (!$this->user->isAdmin()) {
-            return new Response('<p>Accès réservé aux administrateurs.</p>');
-        }
+        self::authAdmin($request);
 
-        $inventory = $this->im->getById($id);
+        $im = new InventoryManager();
+        $inventory = $im->getById($id);
         if (!$inventory) {
-            throw new \Exception("Inventory $id not found.");
+            throw new Exception("Inventory $id not found.");
         }
 
         // Add an item to the inventory
@@ -70,7 +64,8 @@ class InventoryController extends Controller
             $ean = $request->request->get('ean');
 
             // If there already is an item with this ean in this inventory, update quantity
-            $item = $this->iim->get(['inventory_id' => $inventory->get('id'), 'ii_ean' => $ean]);
+            $iim = new InventoryItemManager();
+            $item = $iim->get(['inventory_id' => $inventory->get('id'), 'ii_ean' => $ean]);
             if ($item) {
                 $quantity = $item->get('quantity') + 1;
                 $item->set('ii_quantity', $quantity);
@@ -78,7 +73,7 @@ class InventoryController extends Controller
 
             // Else create a new item in this inventory with this ean and quantity 1
             else {
-                $item = $this->iim->create();
+                $item = $iim->create();
                 $item->set('inventory_id', $inventory->get('id'));
                 $item->set('ii_ean', $ean);
                 $item->set('ii_quantity', 1);
@@ -86,9 +81,11 @@ class InventoryController extends Controller
 
             // Check related article stock
             $stock_count = 0;
-            $article = $this->am->get(['article_ean' => $ean]);
+            $am = new ArticleManager();
+            $article = $am->get(['article_ean' => $ean]);
             if ($article) {
-                $stocks = $this->stm->getAll(['article_id' => $article->get('id')]);
+                $stm = new StockManager();
+                $stocks = $stm->getAll(['article_id' => $article->get('id')]);
                 foreach ($stocks as $stock) {
                     if ($stock->isAvailable() && $stock->get('condition') == 'Neuf') {
                         $stock_count++;
@@ -98,9 +95,11 @@ class InventoryController extends Controller
 
             // Update item
             $item->set('ii_stock', $stock_count);
-            $this->iim->update($item);
+            $iim->update($item);
 
-            redirect($this->url->generate('inventory_show', ["id" => $inventory->get('id')]));
+            return new RedirectResponse(
+                $urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')])
+            );
         }
 
         $items_options = ['order' => 'ii_updated', 'sort' => 'desc'];
@@ -109,13 +108,8 @@ class InventoryController extends Controller
             $items_options["limit"] = 10;
         }
 
-        $items = $this->iim->getAll(['inventory_id' => $inventory->get('id')], $items_options);
-
-        if ($mode == "errors") {
-            $errorButton = '';
-        } else {
-            $errorButton = '';
-        }
+        $iim = new InventoryItemManager();
+        $items = $iim->getAll(['inventory_id' => $inventory->get('id')], $items_options);
 
         return $this->render('AppBundle:Inventory:show.html.twig', [
             "inventory" => $inventory,
@@ -124,13 +118,22 @@ class InventoryController extends Controller
     }
 
     // Import actual stock into inventory
-    public function importAction(Request $request, $id)
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function importAction(Request $request, UrlGenerator $urlGenerator, $id): Response
     {
         global $_SQL, $_SITE;
 
-        $inventory = $this->im->getById($id);
+        $im = new InventoryManager();
+        $inventory = $im->getById($id);
         if (!$inventory) {
-            throw new \Exception("Inventory $id not found.");
+            throw new Exception("Inventory $id not found.");
         }
 
         $date = $request->query->get('date', false);
@@ -150,7 +153,7 @@ class InventoryController extends Controller
                 `article_ean`, 
                 `stock_purchase_date`
             FROM stock
-            JOIN articles USING(article_id)
+            JOIN articles USING(`article_id`)
             WHERE article_ean IS NOT NULL AND site_id = :site_id AND stock_condition = 'Neuf'
                 AND stock_purchase_date IS NOT NULL AND stock_purchase_date <= :date
                 AND (stock_selling_date IS NULL OR stock_selling_date > :date)
@@ -160,12 +163,12 @@ class InventoryController extends Controller
             ORDER BY stock_purchase_date DESC
         ");
         $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
-        $total = count($stocks->fetchAll(\PDO::FETCH_ASSOC));
+        $total = count($stocks->fetchAll(PDO::FETCH_ASSOC));
 
         // Process 100 more copies
         $stocks = $_SQL->prepare("SELECT COUNT(stock_id) AS stocks, article_ean
             FROM stock
-            JOIN articles USING(article_id)
+            JOIN articles USING(`article_id`)
             WHERE article_ean IS NOT NULL AND site_id = :site_id AND stock_condition = 'Neuf'
                 AND stock_purchase_date IS NOT NULL AND stock_purchase_date <= :date
                 AND (stock_selling_date IS NULL OR stock_selling_date > :date)
@@ -175,24 +178,26 @@ class InventoryController extends Controller
             LIMIT $offset, $limit
         ");
         $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
-        $stocks = $stocks->fetchAll(\PDO::FETCH_ASSOC);
+        $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($stocks as $stock) {
 
             // If there is no item with this ean in this inventory, create
-            $item = $this->iim->get(['inventory_id' => $id, 'ii_ean' => $stock["article_ean"]]);
+            $iim = new InventoryItemManager();
+            $item = $iim->get(['inventory_id' => $id, 'ii_ean' => $stock["article_ean"]]);
             if (!$item) {
-                $item = $this->iim->create();
+                $item = $iim->create();
                 $item->set('inventory_id', $id);
                 $item->set('ii_ean', $stock["article_ean"]);
             }
             $item->set('ii_stock', $stock["stocks"]);
-            $this->iim->update($item);
+            $iim->update($item);
         }
 
         $dateIsMissing = $date === false;
         $importInProgress = $offset < $total;
-        $nextStepUrl = $this->url->generate('inventory_import', ['id' => $inventory->get('id'), 'offset' => $offset + $limit, 'date' => $date, 'time' => $time]);
+        $nextStepUrl = $urlGenerator->generate('inventory_import', ['id' => $inventory->get('id'), 'offset'
+        => $offset + $limit, 'date' => $date, 'time' => $time]);
 
         $progress = 0;
         if ($total > 0) {
@@ -210,51 +215,74 @@ class InventoryController extends Controller
     }
 
     // Remove this item and all copies completely
-    public function itemDeleteAction($inventory_id, $id)
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function itemDeleteAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $inventory_id,
+        $id
+    ): RedirectResponse|Response
     {
-        if (!$this->user->isAdmin()) {
-            return new Response('<p>Accès réservé aux administrateurs.</p>');
-        }
+        self::authAdmin($request);
 
-        $inventory = $this->im->getById($inventory_id);
-        if (!$inventory) {
-            throw new \Exception("Inventory $inventory_id not found.");
-        }
+        list($inventory, $item) = $this->_getInventoryAndItem($inventory_id, $id);
 
-        $item = $this->iim->get(['ii_id' => $id, 'inventory_id' => $inventory->get('id')]);
-        if (!$item) {
-            throw new \Exception("Item $id not found.");
-        }
-
-        $this->iim->delete($item);
-        redirect($this->url->generate('inventory_show', ["id" => $inventory->get('id')]));
+        $iim = new InventoryItemManager();
+        $iim->delete($item);
+        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')]));
     }
 
     // Remove this item and all copies completely
-    public function itemRemoveAction($inventory_id, $id)
+
+    /**
+     * @throws Exception
+     */
+    public function itemRemoveAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $inventory_id,
+        $id
+    ): RedirectResponse|Response
     {
-        if (!$this->user->isAdmin()) {
-            return new Response('<p>Accès réservé aux administrateurs.</p>');
-        }
+        self::authAdmin($request);
 
-        $inventory = $this->im->getById($inventory_id);
-        if (!$inventory) {
-            throw new \Exception("Inventory $inventory_id not found.");
-        }
-
-        $item = $this->iim->get(['ii_id' => $id, 'inventory_id' => $inventory->get('id')]);
-        if (!$item) {
-            throw new \Exception("Item $id not found.");
-        }
+        list($inventory, $item) = $this->_getInventoryAndItem($inventory_id, $id);
 
         // Only remove if there is quantity
         if ($item->get('quantity') > 0) {
             $quantity = $item->get('quantity') - 1;
             $item->set('ii_quantity', $quantity);
-            $this->iim->update($item);
+            $iim = new InventoryItemManager();
+            $iim->update($item);
         }
 
-        redirect($this->url->generate('inventory_show', ["id" => $inventory->get('id')]));
+        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')]));
+    }
+
+    /**
+     * @param $inventory_id
+     * @param $id
+     * @return array
+     * @throws Exception
+     */
+    public function _getInventoryAndItem($inventory_id, $id): array
+    {
+        $im = new InventoryManager();
+        $inventory = $im->getById($inventory_id);
+        if (!$inventory) {
+            throw new Exception("Inventory $inventory_id not found.");
+        }
+
+        $iim = new InventoryItemManager();
+        $item = $iim->get(['ii_id' => $id, 'inventory_id' => $inventory->get('id')]);
+        if (!$item) {
+            throw new Exception("Item $id not found.");
+        }
+        return array($inventory, $item);
     }
 
 }
