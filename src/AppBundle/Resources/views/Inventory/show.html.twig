@@ -35,8 +35,20 @@
       {% for item in items %}
         <tr>
           <td>{{ item.ean }}</td>
-          <td class="right">{{ item.quantity }}</td>
-          <td class="right">{{ item.stock }}</td>
+          <td class="right">
+            {% if item.has("quantity") %}
+              {{ item.quantity }}
+            {% else %}
+              0
+            {% endif %}
+          </td>
+          <td class="right">
+            {% if item.has("stock") %}
+              {{ item.stock }}
+            {% else %}
+              0
+            {% endif %}
+          </td>
           <td class="center">
             <a href="{{ path("inventory_item_remove", { inventory_id: item.inventory_id, id: item.id }) }} " title="Retirer un exemplaire">
               <span class="fa fa-minus-square"></span>

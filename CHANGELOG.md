@@ -1,6 +1,13 @@
 # Historique des modifications
 
-### 2.66.0 (1er mars 2023)
+### 2.66.1
+
+Corrections
+
+- L'affichage d'un inventaire pouvait échouer pour les articles avec une 
+  quantité de 0. C'est corrigé.
+
+## 2.66.0 (1er mars 2023)
 
 Améliorations
 
