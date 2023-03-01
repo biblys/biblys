@@ -217,7 +217,6 @@ class Entry
         $entries[] = new Entry('Billets', ['category' => 'content', 'url' => '/pages/adm_posts', 'icon' => 'newspaper-o']);
         $entries[] = new Entry('Évènements', ['category' => 'content', 'url' => '/pages/log_events_admin', 'icon' => 'calendar']);
         $entries[] = new Entry('Médias', ['category' => 'content', 'url' => '/pages/adm_media', 'icon' => 'image']);
-        $entries[] = new Entry('Envoyer newsletter', ['category' => 'content', 'url' => '/pages/adm_newsletter_send', 'icon' => 'send']);
         $entries[] = new Entry('Abonnés newsletter', ['category' => 'content', 'url' => '/pages/adm_newsletter_users', 'icon' => 'address-book']);
 
         $entries[] = new Entry('Chiffre d\'affaires', ['category' => 'stats', 'url' => '/pages/adm_revenue', 'icon' => 'money']);

@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.67.0 (DEV)
+
+Améliorations
+
+- L'outil d'envoi de newsletter a été supprimé
+
 ### 2.66.3 (27 mars 2023)
 
 Corrections
@@ -24,10 +30,10 @@ Corrections
 
 Corrections
 
-- L'affichage d'un inventaire pouvait échouer pour les articles avec une 
+- L'affichage d'un inventaire pouvait échouer pour les articles avec une
   quantité de 0. C'est corrigé.
 - La création d'un paiement Paypal pouvait déclencher une erreur. C'est réparé.
-- L'accès à une page statique inexistante pouvait déclencher une erreur 
+- L'accès à une page statique inexistante pouvait déclencher une erreur
   serveur. C'est maintenant une erreur 404.
 
 ## 2.66.0 (1er mars 2023)
