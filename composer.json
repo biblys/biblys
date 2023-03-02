@@ -36,7 +36,7 @@
     "symfony/config": "^4.3|^6.0",
     "monolog/monolog": "^2.0",
     "google/recaptcha": "^1.1",
-    "paypal/rest-api-sdk-php": "*",
+    "paypal/rest-api-sdk-php": "^1.14",
     "guzzlehttp/guzzle": "~7.4",
     "biblys/isbn": "dev-next",
     "symfony/form": "^5.1",
