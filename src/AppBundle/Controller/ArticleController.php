@@ -4,9 +4,12 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use Biblys\Exception\ArticleAlreadyInRayonException;
+use Biblys\Gleeph\GleephAPI;
 use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\GleephService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -15,6 +18,7 @@ use MailingManager;
 use Model\ArticleQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
+use Psr\Http\Client\ClientExceptionInterface;
 use RayonManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,9 +40,11 @@ class ArticleController extends Controller
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
+     * @throws ClientExceptionInterface
      */
     public function showAction(
         Request $request,
+        Config $config,
         CurrentSite $currentSiteService,
         UrlGenerator $urlGenerator,
         $slug
@@ -97,11 +103,24 @@ class ArticleController extends Controller
         }
         $this->setTwitterCardsTags($twitterCardsTags);
 
+        $similarArticles = [];
+        $gleephConfig = $config->get("gleeph");
+        if ($gleephConfig) {
+            $gleephApi = new GleephAPI($gleephConfig["api_key"]);
+            $gleephApi->setEnvironment($gleephConfig["environment"] || "prod");
+            $gleephService = new GleephService($gleephApi, $currentSiteService);
+            $similarArticles = $gleephService->getSimilarArticlesByEan(
+                $article->get("ean"),
+                numberOfSuggestions: 5,
+            );
+        }
+
         $articleModel = ArticleQuery::create()->findPk($article->get("id"));
 
         return $this->render("AppBundle:Article:show.html.twig", [
             "article" => $article,
             "articleModel" => $articleModel,
+            "similarArticles" => $similarArticles,
         ]);
     }
 
