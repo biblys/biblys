@@ -38,10 +38,13 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws PropelException
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(
+        Request $request,
+        CurrentSite $currentSiteService,
+        UrlGenerator $urlGenerator,
+        $slug
+    ): RedirectResponse|Response
     {
-        global $site, $urlgenerator;
-
         $am = new ArticleManager();
         $article = $am->get(['article_url' => $slug]);
 
@@ -50,7 +53,7 @@ class ArticleController extends Controller
             throw new NotFoundException("Article $slug not found.");
         }
 
-        $use_old_controller = $site->getOpt('use_old_article_controller');
+        $use_old_controller = $currentSiteService->getOption('use_old_article_controller');
         if ($use_old_controller) {
             return new RedirectResponse("/".$slug);
         }
@@ -67,7 +70,7 @@ class ArticleController extends Controller
             'type' => 'book',
             'title' => $article->get('title'),
             'url' => $request->getScheme().'://'.$request->getHost().
-                $urlgenerator->generate('article_show', ['slug' => $article->get('url')]),
+                $urlGenerator->generate('article_show', ['slug' => $article->get('url')]),
             'description' => truncate(strip_tags($article->get('summary')), '500', '...', true),
         ];
         if ($article->hasCover()) {

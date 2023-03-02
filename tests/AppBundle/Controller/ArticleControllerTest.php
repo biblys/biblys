@@ -24,6 +24,37 @@ require_once __DIR__ . "/../../setUp.php";
 class ArticleControllerTest extends TestCase
 {
     /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testShow()
+    {
+        // given
+        $article = ModelFactory::createArticle(["title" => "Citoyens de demain"]);
+        $request = new Request();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $controller = new ArticleController();
+
+        // when
+        $response = $controller->showAction($request, $currentSiteService, $urlGenerator, $article->getSlug());
+
+        // then
+        $this->assertEquals(
+            "200",
+            $response->getStatusCode(),
+            "respond http status 200"
+        );
+        $this->assertStringContainsString(
+            "Citoyens de demain",
+            $response->getContent(),
+            "includes article title"
+        );
+    }
+
+    /**
      * @throws Exception
      */
     public function testUpdatePublisherStock()
