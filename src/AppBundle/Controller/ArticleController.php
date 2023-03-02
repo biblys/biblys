@@ -247,7 +247,7 @@ class ArticleController extends Controller
                 try {
                     $mm = new MailingManager();
                     $mm->addSubscriber($email, true);
-                } catch (Exception $e) {
+                } catch (Exception) {
                     // Ignore errors
                 }
             }
@@ -282,7 +282,7 @@ class ArticleController extends Controller
         UrlGenerator $urlGenerator,
         CurrentSite $currentSite,
         int $id
-    )
+    ): Response
     {
         $article = ArticleQuery::create()->filterForCurrentSite($currentSite)->findOneById($id);
         if (!$article) {
@@ -344,7 +344,7 @@ class ArticleController extends Controller
      * @throws PropelException
      * @throws Exception
      */
-    public function addTagsAction(Request $request, $id)
+    public function addTagsAction(Request $request, $id): Response
     {
         self::authPublisher($request, null);
 
@@ -440,7 +440,7 @@ class ArticleController extends Controller
 
         try {
             $link = $am->addRayon($article, $rayon);
-        } catch (ArticleAlreadyInRayonException $e) {
+        } catch (ArticleAlreadyInRayonException) {
             return new JsonResponse([], 409);
         }
 
@@ -464,7 +464,7 @@ class ArticleController extends Controller
      * @throws SyntaxError
      * @throws Exception
      */
-    public function searchTermsAction(Request $request, UrlGenerator $urlGenerator)
+    public function searchTermsAction(Request $request, UrlGenerator $urlGenerator): Response
     {
         self::authAdmin($request);
         $request->attributes->set("page_title", "Termes de recherche");
@@ -521,7 +521,6 @@ class ArticleController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
@@ -546,7 +545,7 @@ class ArticleController extends Controller
      * Find article by ISBN
      * /isbn/{ean}.
      *
-     * @param UrlGenerator|null $urlGenerator
+     * @param UrlGenerator $urlGenerator
      * @param string $ean An article's ISBN in EAN format
      * @return Response
      */
@@ -579,7 +578,6 @@ class ArticleController extends Controller
      * @param Request $request
      * @param CurrentSite $currentSite
      * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -604,9 +602,10 @@ class ArticleController extends Controller
     /**
      * Check that ISBN is valid and isn't used.
      *
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function checkIsbn(Request $request)
+    public function checkIsbn(Request $request): JsonResponse
     {
 
         $am = new ArticleManager();
@@ -626,10 +625,9 @@ class ArticleController extends Controller
     /**
      * Update article's publisher stock property
      *
-     * @return Response
      * @throws Exception
      */
-    public function updatePublisherStock(Request $request, int $articleId)
+    public function updatePublisherStock(Request $request, int $articleId): JsonResponse
     {
         $am = new ArticleManager();
 
