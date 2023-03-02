@@ -100,3 +100,8 @@ logs:
 # rollbar:
 #   access_token: abcdef12345
 #   environment: biblys-local
+
+# Gleeph
+# gleeph:
+#   api_key: abcdef12345
+#   environment: prod
