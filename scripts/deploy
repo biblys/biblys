@@ -13,14 +13,11 @@ read version
 
 echo "> Deploying version $version on site $site..."
 
-echo "> Changing directory to ~/cloud/$site..."
-ssh biblys "cd ~/cloud/$site"
+echo "> Fetching latest changes from repository..."
+ssh biblys "cd ~/cloud/$site && git fetch"
 
 echo "> Changing to tag $version..."
 ssh biblys "cd ~/cloud/$site && git checkout $version"
-
-echo "> Fetching latest changes from git remote..."
-ssh biblys "cd ~/cloud/$site && git pull"
 
 echo "> Installing dependencies..."
 ssh biblys "cd ~/cloud/$site && composer install"
