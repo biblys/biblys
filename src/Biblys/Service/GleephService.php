@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Exception\GleephAPIException;
 use Biblys\Gleeph\GleephAPI;
 use Model\Article;
 use Model\ArticleQuery;
@@ -26,7 +27,12 @@ class GleephService
      */
     public function getSimilarArticlesByEan(string $ean, int $numberOfSuggestions = 3): array
     {
-        $eans = $this->api->getSimilarBooksByEan($ean);
+        try {
+            $eans = $this->api->getSimilarBooksByEan($ean);
+        } catch (GleephAPIException) {
+            return [];
+        }
+
         return ArticleQuery::create()
             ->filterForCurrentSite($this->currentSiteService)
             ->findByEan($eans)

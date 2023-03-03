@@ -2,6 +2,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Exception\GleephAPIException;
 use Biblys\Gleeph\GleephAPI;
 use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +13,6 @@ require_once __DIR__."/../../setUp.php";
 
 class GleephServiceTest extends TestCase
 {
-
     /**
      * @throws PropelException
      * @throws ClientExceptionInterface
@@ -43,5 +43,26 @@ class GleephServiceTest extends TestCase
             $articles[0]->getTitle(),
             "returns similar article for ean",
         );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws ClientExceptionInterface
+     */
+    public function testGetSimilarArticlesByEanWithAPIException()
+    {
+        // given
+        $api = $this->createMock(GleephAPI::class);
+        $api
+            ->method("getSimilarBooksByEan")
+            ->willThrowException(new GleephAPIException());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $gleeph = new GleephService($api, $currentSite);
+
+        // when
+        $articles = $gleeph->getSimilarArticlesByEan("978123456789");
+
+        // then
+        $this->assertCount(0, $articles);
     }
 }
