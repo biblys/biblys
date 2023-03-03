@@ -3,15 +3,21 @@
 # Immediatly exit if a command fails
 set -e
 
-# Ask for site
-printf "Site: "
-read site
+if [ $# -lt 2 ]; then
+  echo 1>&2 "usage: deploy {site} {version}"
+  exit 2
+elif [ $# -gt 2 ]; then
+  echo 1>&2 "usage: deploy {site} {version}"
+  exit 2
+fi
 
-# Ask for version
-printf "Version: "
-read version
+site=$1
+version=$2
+current=$(git describe --tags)
 
 echo "> Deploying version $version on site $site..."
+
+echo "> Version currently deployed on $site: $current"
 
 echo "> Fetching latest changes from repository..."
 ssh biblys "cd ~/cloud/$site && git fetch"
@@ -21,3 +27,5 @@ ssh biblys "cd ~/cloud/$site && git checkout $version"
 
 echo "> Installing dependencies..."
 ssh biblys "cd ~/cloud/$site && composer install"
+
+echo "> ✅  Version $version has been deployed on $site"

@@ -84,3 +84,9 @@ composer theme:watch
 ```console
 composer test
 ```
+
+## Deploy script (biblys.cloud)
+
+```shell
+./script/deploy {site} {version}
+```
