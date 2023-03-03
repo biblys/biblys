@@ -2,6 +2,7 @@
 
 namespace Biblys\Gleeph;
 
+use Biblys\Exception\GleephAPIException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -46,6 +47,7 @@ class GleephAPI
      * @param int $numberOfSuggestions
      * @return string[]
      * @throws ClientExceptionInterface
+     * @throws GleephAPIException
      */
     public function getSimilarBooksByEan(string $ean, int $numberOfSuggestions = 3): array
     {
@@ -53,6 +55,11 @@ class GleephAPI
         $requestUri = "{$this->_getBaseUrl()}/{$this->_getSimilarBooksByEanEndpointPath()}?$queryParams";
         $request = new Request("GET", $requestUri, ["x-api-key" => $this->apiKey]);
         $response = $this->client->sendRequest($request);
+
+        if ($response->getStatusCode() !== 200) {
+            $json = json_decode($response->getBody(), true);
+            throw new GleephAPIException($json["message"]);
+        }
 
         return $this->_extractEansFromResponse($response);
     }

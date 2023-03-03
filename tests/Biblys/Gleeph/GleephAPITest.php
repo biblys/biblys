@@ -2,6 +2,7 @@
 
 namespace Biblys\Gleeph;
 
+use Biblys\Exception\GleephAPIException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -62,5 +63,33 @@ class GleephAPITest extends TestCase
             $similarBooks,
             "returns an array of EANs"
         );
+    }
+
+
+    /**
+     * @throws ClientExceptionInterface
+     */
+    public function testGetSimilarBooksErrorHandling()
+    {
+        // then
+        $this->expectException(GleephAPIException::class);
+        $this->expectExceptionMessage("INVALID_ARGUMENT:API key not valid. Please pass a valid API key.");
+
+        // given
+        $gleeph = new GleephAPI("invalid-api-key");
+        $httpClient = $this->createMock(ClientInterface::class);
+        $response = new Response(400, [], '{"code":400,"message":"INVALID_ARGUMENT:API key not valid. Please pass a valid API key."}');
+        $httpClient
+            ->method("sendRequest")
+            ->with(new Request(
+                "GET",
+                "https://data.gleeph.pro/v2.0.0/similarsbooks_byean?ean=9782715233324&nbrecos=3",
+                ["x-api-key" => "invalid-api-key"]
+            ))
+            ->willReturn($response);
+        $gleeph->setHttpClient($httpClient);
+
+        // when
+        $gleeph->getSimilarBooksByEan("9782715233324");
     }
 }
