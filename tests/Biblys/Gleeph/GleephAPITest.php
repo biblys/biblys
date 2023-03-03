@@ -13,6 +13,7 @@ class GleephAPITest extends TestCase
 {
     /**
      * @throws ClientExceptionInterface
+     * @throws GleephAPIException
      */
     public function testGetSimilarBooksByEan()
     {
@@ -40,6 +41,7 @@ class GleephAPITest extends TestCase
 
     /**
      * @throws ClientExceptionInterface
+     * @throws GleephAPIException
      */
     public function testGetSimilarBooksByEanInTestEnv()
     {

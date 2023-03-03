@@ -29,9 +29,16 @@ class GleephServiceTest extends TestCase
             ->method("getSimilarBooksByEan")
             ->with("978123456789", 5)
             ->willReturn(["9788765432109", "9789876543210"]);
+        $logger = $this->createMock(LoggerService::class);
+        $logger->expects($this->once())->method("log")->with(
+            "gleeph",
+            "info",
+            "Found 1 similar article(s) for EAN 978123456789",
+            ["9788765432109", "9789876543210"]
+        );
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getOption")->willReturn((string) $sitePublisher->getId());
-        $gleeph = new GleephService($api, $currentSite);
+        $gleeph = new GleephService($api, $currentSite, $logger);
 
         // when
         $articles = $gleeph->getSimilarArticlesByEan("978123456789", 5);
@@ -45,6 +52,7 @@ class GleephServiceTest extends TestCase
         );
     }
 
+
     /**
      * @throws PropelException
      * @throws ClientExceptionInterface
@@ -55,9 +63,16 @@ class GleephServiceTest extends TestCase
         $api = $this->createMock(GleephAPI::class);
         $api
             ->method("getSimilarBooksByEan")
-            ->willThrowException(new GleephAPIException());
+            ->willThrowException(new GleephAPIException("API key is required"));
         $currentSite = $this->createMock(CurrentSite::class);
-        $gleeph = new GleephService($api, $currentSite);
+        $logger = $this->createMock(LoggerService::class);
+        $logger->expects($this->once())->method("log")->with(
+            "gleeph",
+            "error",
+            "Call to Gleeph API failed",
+            ["API key is required"]
+        );
+        $gleeph = new GleephService($api, $currentSite, $logger);
 
         // when
         $articles = $gleeph->getSimilarArticlesByEan("978123456789");

@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use ArticleManager;
 use Biblys\Article\Type;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\LoggerService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -12,6 +14,7 @@ use Exception;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -24,22 +27,32 @@ require_once __DIR__ . "/../../setUp.php";
 class ArticleControllerTest extends TestCase
 {
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws ClientExceptionInterface
      */
     public function testShow()
     {
         // given
         $article = ModelFactory::createArticle(["title" => "Citoyens de demain"]);
         $request = new Request();
+        $config = $this->createMock(Config::class);
         $currentSiteService = $this->createMock(CurrentSite::class);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $loggerService = $this->createMock(LoggerService::class);
         $controller = new ArticleController();
 
         // when
-        $response = $controller->showAction($request, $currentSiteService, $urlGenerator, $article->getSlug());
+        $response = $controller->showAction(
+            request: $request,
+            config: $config,
+            currentSiteService: $currentSiteService,
+            urlGenerator:  $urlGenerator,
+            loggerService: $loggerService,
+            slug: $article->getSlug(),
+        );
 
         // then
         $this->assertEquals(

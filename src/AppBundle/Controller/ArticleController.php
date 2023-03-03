@@ -10,6 +10,7 @@ use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\GleephService;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -47,6 +48,7 @@ class ArticleController extends Controller
         Config $config,
         CurrentSite $currentSiteService,
         UrlGenerator $urlGenerator,
+        LoggerService $loggerService,
         $slug
     ): RedirectResponse|Response
     {
@@ -107,8 +109,8 @@ class ArticleController extends Controller
         $gleephConfig = $config->get("gleeph");
         if ($gleephConfig) {
             $gleephApi = new GleephAPI($gleephConfig["api_key"]);
-            $gleephApi->setEnvironment($gleephConfig["environment"] || "prod");
-            $gleephService = new GleephService($gleephApi, $currentSiteService);
+            $gleephApi->setEnvironment($gleephConfig["environment"] ?? "prod");
+            $gleephService = new GleephService($gleephApi, $currentSiteService, $loggerService);
             $similarArticles = $gleephService->getSimilarArticlesByEan(
                 $article->get("ean"),
                 numberOfSuggestions: 5,
