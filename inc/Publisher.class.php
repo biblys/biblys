@@ -168,6 +168,17 @@ class PublisherManager extends EntityManager
     protected $prefix = 'publisher';
     protected $table = 'publishers';
     protected $object = 'Publisher';
+    private bool $isSiteFilterEnabled = true;
+
+    public function enableSiteFilter(): void
+    {
+        $this->isSiteFilterEnabled = true;
+    }
+
+    public function disableSiteFilter(): void
+    {
+        $this->isSiteFilterEnabled = false;
+    }
 
     /**
      * Add site filters if any defined
@@ -176,6 +187,9 @@ class PublisherManager extends EntityManager
      */
     public function addSiteFilters(array $where = []): array
     {
+        if (!$this->isSiteFilterEnabled) {
+            return $where;
+        }
 
         global $site;
 
