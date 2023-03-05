@@ -2,12 +2,13 @@
 
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Exception\InvalidEntityException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Publisher extends Entity
 {
     protected $prefix = 'publisher';
 
-    public function hasLogo()
+    public function hasLogo(): bool
     {
         $media = new Media("publisher", $this->get("id"));
         if ($media->exists()) {
@@ -17,7 +18,7 @@ class Publisher extends Entity
         return false;
     }
 
-    public function getLogo()
+    public function getLogo(): Media
     {
         if ($this->hasLogo()) {
             return new Media("publisher", $this->get("id"));
@@ -31,8 +32,9 @@ class Publisher extends Entity
      * Save uploaded file as publisher's logo
      * @param UploadedFile $file a file that was uploaded
      * @return Media             the contributor's saved Media
+     * @throws Exception
      */
-    public function addLogo($file)
+    public function addLogo(UploadedFile $file): Media
     {
         if ($file->getMimeType() !== 'image/png') {
             throw new Exception('La photo doit être au format PNG.');
@@ -50,7 +52,7 @@ class Publisher extends Entity
         return $am->count(['publisher_id' => $this->get('id')]);
     }
 
-    public function getArticles()
+    public function getArticles(): array
     {
         $am = new ArticleManager();
         return $am->getAll(['publisher_id' => $this->get('id')]);
@@ -58,9 +60,9 @@ class Publisher extends Entity
 
     /**
      * Returns all publisher's supplers
-     * @return an array of Suppliers
+     * @return Supplier[]
      */
-    public function getSuppliers()
+    public function getSuppliers(): array
     {
         global $site, $_SQL;
 
@@ -78,6 +80,7 @@ class Publisher extends Entity
 
     /**
      * Add a publisher's supplier
+     * @throws Exception
      */
     public function addSupplier(Supplier $supplier)
     {
@@ -102,6 +105,7 @@ class Publisher extends Entity
 
     /**
      * Remove a publisher's supplier
+     * @throws Exception
      */
     public function removeSupplier(Supplier $supplier)
     {
@@ -123,19 +127,16 @@ class Publisher extends Entity
 
     /**
      * Returns revenue for all sales of this publisher
-     * @param {int} $year: year filter
-     * @return {int} the revenue for this publisher
+     * @param string $year
+     * @return int|mixed {int} the revenue for this publisher
      */
-    public function getRevenue($year = 'all')
+    public function getRevenue(string $year = 'all'): mixed
     {
         global $_SQL;
 
         if ($year == 'current') {
             $year = date('Y');
         }
-
-        $am = new ArticleManager();
-        $sm = new StockManager();
 
         $revenue = 0;
         $params = ['publisher_id' => $this->get('id')];
@@ -155,7 +156,7 @@ class Publisher extends Entity
         return $revenue;
     }
 
-    public function getRights()
+    public function getRights(): array
     {
         $rm = new RightManager();
         return $rm->getAll(["publisher_id" => $this->get('id')]);
@@ -164,20 +165,17 @@ class Publisher extends Entity
 
 class PublisherManager extends EntityManager
 {
-    protected $prefix = 'publisher',
-        $table = 'publishers',
-        $object = 'Publisher',
-        $ignoreSiteFilters = false;
+    protected $prefix = 'publisher';
+    protected $table = 'publishers';
+    protected $object = 'Publisher';
 
     /**
      * Add site filters if any defined
-     * @param [type] $where [description]
+     * @param array $where
+     * @return array
      */
-    public function addSiteFilters(array $where = [])
+    public function addSiteFilters(array $where = []): array
     {
-        if ($this->ignoreSiteFilters) {
-            return $where;
-        }
 
         global $site;
 
@@ -192,44 +190,44 @@ class PublisherManager extends EntityManager
     /**
      * Calls Entity->getAll after adding site filter
      */
-    public function getAll(array $where = array(), array $options =  array(), $withJoins = true)
+    public function getAll(array $where = array(), array $options =  array(), $withJoins = true): array
     {
 
         $where = $this->addSiteFilters($where);
         return parent::getAll($where, $options, $withJoins);
     }
 
-    public function preprocess($publisher)
+    public function preprocess($entity): Entity
     {
-        $name = $publisher->get('name');
+        $name = $entity->get('name');
 
         // Uppercase publisher's name
         $name = mb_strtoupper($name, 'UTF-8');
 
         // Alphabetize publiser's name
-        $alpha = alphabetize($name, 'UTF-8');
+        $alpha = alphabetize($name);
 
         // Make publisher's slug from name
         $slug = makeurl($name);
 
-        $publisher->set('publisher_name', $name);
-        $publisher->set('publisher_name_alphabetic', $alpha);
-        $publisher->set('publisher_url', $slug);
+        $entity->set('publisher_name', $name);
+        $entity->set('publisher_name_alphabetic', $alpha);
+        $entity->set('publisher_url', $slug);
 
-        return $publisher;
+        return $entity;
     }
 
-    public function validate($publisher)
+    public function validate($entity): bool
     {
-        if (!$publisher->has("name")) {
+        if (!$entity->has("name")) {
             throw new InvalidEntityException("L'éditeur doit avoir un nom.");
         }
 
         // Check that there is not another publisher with that name
-        $other = $this->get(["publisher_url" => $publisher->get("url"), "publisher_id" => "!= " . $publisher->get('id')]);
+        $other = $this->get(["publisher_url" => $entity->get("url"), "publisher_id" => "!= " . $entity->get('id')]);
         if ($other) {
             throw new EntityAlreadyExistsException(
-                "Il existe déjà un éditeur avec le nom " . $publisher->get("name") . "."
+                "Il existe déjà un éditeur avec le nom " . $entity->get("name") . "."
             );
         }
 
