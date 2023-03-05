@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
@@ -42,7 +43,7 @@ class ErrorController extends Controller
      */
     public function exception(Request $request, Exception $exception): Response
     {
-        if (is_a($exception, "Symfony\Component\Routing\Exception\ResourceNotFoundException")) {
+        if (is_a($exception, ResourceNotFoundException::class) || is_a($exception, InvalidParameterException::class)) {
             return $this->handlePageNotFound($request, $exception);
         }
 
@@ -143,14 +144,17 @@ class ErrorController extends Controller
      * HTTP 404
      *
      * @param Request $request
-     * @param ResourceNotFoundException $exception
+     * @param ResourceNotFoundException|InvalidParameterException $exception
      * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function handlePageNotFound(Request $request, ResourceNotFoundException $exception): Response
+    private function handlePageNotFound(
+        Request $request,
+        ResourceNotFoundException|InvalidParameterException $exception
+    ): Response
     {
         global $_SQL, $site;
 
