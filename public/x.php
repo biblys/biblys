@@ -10,16 +10,16 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
 
 // INCLUDES
-if (file_exists('../inc/functions.php')) {
-    include('../inc/functions.php');
-} else {
-    include('/home/biblys/biblys/prod/inc/functions.php');
-}
+require_once(__DIR__."/../inc/functions.php");
 
 $response = new JsonResponse();
 
 // Config
 $config = new Biblys\Service\Config();
+
+$dbConfig = $config->get("db");
+Biblys\Database\Connection::initPropel($dbConfig);
+
 $axysConfig = $config->get("axys");
 $axys = new AxysClient($axysConfig);
 
