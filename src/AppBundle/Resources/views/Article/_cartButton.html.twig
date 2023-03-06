@@ -1,0 +1,10 @@
+<a
+  class="btn btn-primary{% if text is not defined %} btn-sm{% endif %} cart-button add_to_cart event"
+  data-type="article"
+  data-id="{{ article.id }}"
+>
+  <span class="fa fa-shopping-cart"></span>
+  {% if text is defined %}
+    <span class="cart-button-text">{{ text }}</span>
+  {% endif %}
+</a>

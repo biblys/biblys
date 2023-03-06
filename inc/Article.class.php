@@ -821,11 +821,19 @@ class Article extends Entity
     }
 
     /**
+     * @deprecated Article->getCartButton is deprecated. Use
+     *             {% include "AppBundle:Article:_cartButton.html.twig"%} instead
      * @throws Exception
      */
     public function getCartButton($text = false): string
     {
         global $urlgenerator;
+
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.67.0",
+            "Article->getCartButton is deprecated. Use {% include \"AppBundle:Article:_cartButton.html.twig\" %} instead",
+        );
 
         if ($this->get('price') == 0) {
             return '
