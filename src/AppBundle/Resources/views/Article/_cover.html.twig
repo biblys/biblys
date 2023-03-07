@@ -1,0 +1,17 @@
+{% set linkUrl = article|coverUrl %}
+{% set cursor = "zoom-in" %}
+{% if link is defined %}
+  {% set linkUrl = link %}
+  {% set cursor = "pointer" %}
+{% endif %}
+
+<a href="{{ linkUrl }}"
+   {% if rel is defined %} rel="{{ rel }}" {% endif %}
+   style="cursor: {{ cursor }};"
+>
+  <img
+    src="{{ article|coverUrl }}"
+    {% if class is defined %} class="{{ class }}" {% endif %}
+    alt="{{ article.title }}"
+  >
+</a>

@@ -307,9 +307,18 @@ class Article extends Entity
      * @param array $options (link, size, class)
      * @return string
      * @throws Exception
+     *
+     * @deprecated Article->getCoverTag is deprecated. Use
+     *             {% include "AppBundle:Article:_cover.html.twig"%} instead
      */
     public function getCoverTag(array $options = []): string
     {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.67.0",
+            "Article->getCoverTag is deprecated. Use {% include \"AppBundle:Article:_cover.html.twig\" %} instead",
+        );
+
         if (!isset($options["link"])) {
             $options["link"] = $this->getCoverUrl();
         }
