@@ -163,7 +163,7 @@ class ControllerTest extends TestCase
     public function testAuthPublisherForUserAuthorizedForOtherPublisher()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier l'éditeur Éditeur interdit");
 
         // given
@@ -183,7 +183,7 @@ class ControllerTest extends TestCase
     public function testAuthPublisherForUserWithNoPublisherRight()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier l'éditeur Éditeur interdit");
 
         // given
@@ -220,7 +220,7 @@ class ControllerTest extends TestCase
     public function testAuthPublisherWhenPublisherIsNullForUserWithNoPublisherRight()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur");
 
         // given

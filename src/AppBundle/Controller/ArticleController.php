@@ -10,7 +10,6 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use LinkManager;
 use MailingManager;
 use Model\ArticleQuery;
@@ -271,11 +270,15 @@ class ArticleController extends Controller
      * Mark an article for deletion.
      *
      * @route POST /admin/article/{id}/delete
-     * @throws AuthException
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @param CurrentSite $currentSite
+     * @param int $id
+     * @return Response
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws PropelException
      */
     public function deleteAction(
         Request $request,
@@ -340,7 +343,6 @@ class ArticleController extends Controller
      * @param Request $request
      * @param $id
      * @return Response
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
@@ -410,7 +412,6 @@ class ArticleController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @throws AuthException
      * @throws Exception
      */
     public function addRayonsAction(Request $request, $id): JsonResponse
@@ -457,7 +458,6 @@ class ArticleController extends Controller
      * @param Request $request
      * @param UrlGenerator $urlGenerator
      * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError

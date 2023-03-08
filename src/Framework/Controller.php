@@ -447,7 +447,6 @@ class Controller
      * @param Request $request
      * @param Publisher|null $publisher
      * @return CurrentUser
-     * @throws AuthException
      * @throws PropelException
      */
     protected static function authPublisher(Request $request, ?Publisher $publisher): CurrentUser
@@ -464,8 +463,7 @@ class Controller
                 return $currentUser;
             }
 
-            // TODO: throw unauthorized exception (403)
-            throw new AuthException("Vous n'avez pas l'autorisation de modifier un éditeur.");
+            throw new AccessDeniedHttpException("Vous n'avez pas l'autorisation de modifier un éditeur.");
         }
 
         if ($currentUser->hasRightForPublisher($publisher)) {
@@ -473,7 +471,7 @@ class Controller
         }
 
         // TODO: throw unauthorized exception (403)
-        throw new AuthException(
+        throw new AccessDeniedHttpException(
             sprintf("Vous n'avez pas l'autorisation de modifier l'éditeur %s", $publisher->getName())
         );
     }

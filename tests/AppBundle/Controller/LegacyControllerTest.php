@@ -91,7 +91,7 @@ class LegacyControllerTest extends TestCase
     public function testDefaultActionRequiringPublisherRight()
     {
         // then
-        $this->expectException("Framework\Exception\AuthException");
+        $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas l'autorisation de modifier un éditeur.");
 
         // given
