@@ -10,6 +10,8 @@ use Biblys\Service\CurrentUser;
 use Cart;
 use EntityManager;
 use Framework\Exception\AuthException;
+use Media;
+use Model\Article;
 use Model\Publisher;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Bridge\Twig\Extension\FormExtension;
@@ -197,6 +199,11 @@ class Controller
             }
 
             return $authors[0];
+        });
+
+        $filters[] = new TwigFilter('coverUrl', function (Article $article) {
+            $media = new Media("article", $article->getId());
+            return $media->getUrl();
         });
 
         $filters[] = new TwigFilter('currency', function ($amount, $cents = false) {
