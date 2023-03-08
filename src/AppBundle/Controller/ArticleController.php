@@ -97,8 +97,11 @@ class ArticleController extends Controller
         }
         $this->setTwitterCardsTags($twitterCardsTags);
 
-        return $this->render('AppBundle:Article:show.html.twig', [
-            'article' => $article,
+        $articleModel = ArticleQuery::create()->findPk($article->get("id"));
+
+        return $this->render("AppBundle:Article:show.html.twig", [
+            "article" => $article,
+            "articleModel" => $articleModel,
         ]);
     }
 
