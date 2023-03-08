@@ -42,7 +42,7 @@ class Controller
      * @var Visitor
      * @deprecated Controller->user is deprecated. Use CurrentUser service instead.
      */
-    protected $user;
+    protected Visitor $user;
 
     public function __construct()
     {
@@ -332,7 +332,7 @@ class Controller
      *             use {% block title %} in template
      *             or $request->attributes->set("page_title") instead.
      */
-    public function setPageTitle(string $title)
+    public function setPageTitle(string $title): void
     {
         global $request;
 
@@ -345,7 +345,7 @@ class Controller
         $request->attributes->set('page_title', $title);
     }
 
-    public function setOpengraphTags($tags = [])
+    public function setOpengraphTags($tags = []): void
     {
         global $request;
 
@@ -369,7 +369,7 @@ class Controller
         $request->attributes->set('opengraph_tags', $tags);
     }
 
-    public function setTwitterCardsTags($tags)
+    public function setTwitterCardsTags($tags): void
     {
         global $request;
 
@@ -424,6 +424,7 @@ class Controller
 
     /**
      * @param Request $request
+     * @param string $errorMessage
      * @return CurrentUser
      * @throws PropelException
      */
