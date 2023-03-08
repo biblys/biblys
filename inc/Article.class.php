@@ -830,9 +830,9 @@ class Article extends Entity
     }
 
     /**
+     * @throws Exception
      * @deprecated Article->getCartButton is deprecated. Use
      *             {% include "AppBundle:Article:_cartButton.html.twig"%} instead
-     * @throws Exception
      */
     public function getCartButton($text = false): string
     {
@@ -1127,7 +1127,7 @@ class ArticleManager extends EntityManager
         return $where;
     }
 
-    public function getAll(array $where = array(), array $options =  array(), $withJoins = true): array
+    public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
     {
         $query = array();
         $params = array();
@@ -1167,7 +1167,7 @@ class ArticleManager extends EntityManager
         $q = EntityManager::buildSqlQuery($where);
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
         if (!empty($q['where'])) {
-            $query .=  ' AND ' . $q['where'];
+            $query .= ' AND ' . $q['where'];
         }
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
@@ -1258,9 +1258,9 @@ class ArticleManager extends EntityManager
     }
 
     public function _buildSearchQueryForAvailableStock(
-        string $keywords,
+        string      $keywords,
         CurrentSite $currentSite,
-        array $options = []
+        array       $options = []
     ): array
     {
         $queryWithParams = $this->_buildSearchQuery($keywords);
@@ -1275,7 +1275,7 @@ class ArticleManager extends EntityManager
         $options["group-by"] = "article_id";
 
         return [
-            "query" => $searchCriteria.$stockCriteria.$siteCriteria,
+            "query" => $searchCriteria . $stockCriteria . $siteCriteria,
             "params" => $queryWithParams["params"],
             "options" => $options,
         ];
@@ -1292,7 +1292,7 @@ class ArticleManager extends EntityManager
     }
 
     public function countSearchResultsForAvailableStock(
-        string $keywords,
+        string      $keywords,
         CurrentSite $currentSiteService
     ): int
     {
@@ -1318,9 +1318,9 @@ class ArticleManager extends EntityManager
      * @return Article[]
      */
     public function searchWithAvailableStock(
-        string $keywords,
+        string      $keywords,
         CurrentSite $currentSite,
-        array $options = []
+        array       $options = []
     ): array
     {
         $queryWithParamsAndOptions = $this->_buildSearchQueryForAvailableStock(
@@ -1381,7 +1381,7 @@ class ArticleManager extends EntityManager
             $article = $articles[0];
 
             // If found article has articleId, return true
-            if ($articleId === (int) $article->get('id')) {
+            if ($articleId === (int)$article->get('id')) {
                 return true;
             }
 
