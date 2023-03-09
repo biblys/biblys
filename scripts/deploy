@@ -13,7 +13,7 @@ fi
 
 site=$1
 version=$2
-current=$(git describe --tags)
+current=$(ssh biblys "cd ~/cloud/$site && git describe --tags")
 
 echo "> Deploying version $version on site $site..."
 
