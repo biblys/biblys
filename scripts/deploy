@@ -23,7 +23,10 @@ versionText=${yellow}$version${normal}
 current=$(ssh biblys "cd ~/cloud/$site && git describe --tags")
 currentText=${yellow}$current${normal}
 
-echo "> Deploying version $version on site $site..."
+if [ $version == $current ]; then
+  echo 1>&2 "> ✅  Version $versionText is already deployed on site $siteText."
+  exit 0
+fi
 
 echo "> Upgrading $siteText from $currentText to $versionText..."
 
