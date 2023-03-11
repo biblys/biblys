@@ -11,21 +11,29 @@ elif [ $# -gt 2 ]; then
   exit 2
 fi
 
+bold=$(tput bold)
+normal=$(tput sgr0)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+
 site=$1
+siteText=${blue}$site${normal}
 version=$2
+versionText=${yellow}$version${normal}
 current=$(ssh biblys "cd ~/cloud/$site && git describe --tags")
+currentText=${yellow}$current${normal}
 
 echo "> Deploying version $version on site $site..."
 
-echo "> Version currently deployed on $site: $current"
+echo "> Upgrading $siteText from $currentText to $versionText..."
 
 echo "> Fetching latest changes from repository..."
 ssh biblys "cd ~/cloud/$site && git fetch"
 
-echo "> Changing to tag $version..."
+echo "> Changing to tag $versionText..."
 ssh biblys "cd ~/cloud/$site && git checkout $version"
 
 echo "> Installing dependencies..."
 ssh biblys "cd ~/cloud/$site && composer install"
 
-echo "> ✅  Version $version has been deployed on $site"
+echo "> ✅  Version $versionText has been deployed on $siteText"
