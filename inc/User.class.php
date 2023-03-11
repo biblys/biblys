@@ -386,8 +386,7 @@ class UserManager extends EntityManager
     {
         parent::__construct();
 
-        $config = new Config();
-        $this->table = $config->get("users_table_name");
+        $this->table = "users";
     }
 
     public function getQuery($query, $params, $options = [], $withJoins = true)

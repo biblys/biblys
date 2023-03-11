@@ -36,15 +36,12 @@ if ($post->get('status') == 0) {
     ';
 }
 
-$config = new Config();
-$usersTableName = $config->get("users_table_name");
-
 $query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date`, `post_update`,
         `category_name`, `category_url`,
         `user_screen_name`, `user_slug`
     FROM `posts`
     LEFT JOIN `categories` USING(`category_id`)
-    LEFT JOIN `$usersTableName` ON `user_id` = `$usersTableName`.`id`
+    LEFT JOIN `users` ON `user_id` = `users`.`id`
     WHERE `post_id` = :post_id";
 
 $posts = $_SQL->prepare($query);

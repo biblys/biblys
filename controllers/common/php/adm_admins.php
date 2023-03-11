@@ -31,13 +31,10 @@ if (isset($_GET['added'])) {
     $message = $messageC.'<p class="success">L\'utilisateur '.$_GET['email'].' a été ajouté aux administrateurs.</p>';
 }
 
-$config = new Config();
-$usersTableName = $config->get("users_table_name");
-
 $rights = $_SQL->prepare("
-    SELECT `$usersTableName`.`id` as `user_id`, `$usersTableName`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
+    SELECT `users`.`id` as `user_id`, `users`.`Email` AS `user_email`, `user_screen_name`, `DateConnexion`, `right_id`
         FROM `rights`
-        JOIN `$usersTableName` ON `$usersTableName`.`id` = `rights`.`user_id`
+        JOIN `users` ON `users`.`id` = `rights`.`user_id`
     WHERE `rights`.`site_id` = :site_id
     ORDER BY `DateConnexion` DESC
 ");

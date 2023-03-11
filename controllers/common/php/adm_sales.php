@@ -66,9 +66,6 @@ if (!empty($_GET["date1"])) {
     $params['date_2'] = $_GET['date2'].' '.$_GET['time2'].':00';
 }
 
-$config = new Config();
-$usersTableName = $config->get("users_table_name");
-
 $orders = EntityManager::prepareAndExecute(
     "SELECT
         `order_id`,
@@ -87,7 +84,7 @@ $orders = EntityManager::prepareAndExecute(
         `customer_first_name`, `customer_last_name`
     FROM `orders` AS `o`
     JOIN `stock` AS `s` USING(`order_id`)
-    LEFT JOIN `$usersTableName` AS `u` ON `o`.`user_id` = `u`.`id`
+    LEFT JOIN `users` AS `u` ON `o`.`user_id` = `u`.`id`
     LEFT JOIN `customers` AS `c` ON `o`.`customer_id` = `c`.`customer_id`
     WHERE `o`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `order_id`

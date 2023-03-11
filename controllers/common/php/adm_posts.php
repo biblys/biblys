@@ -40,14 +40,12 @@ if(!$_V->isAdmin() && $_V->isPublisher()) {
 }
 
 $config = new Config();
-$usersTableName = $config->get("users_table_name");
-
 $posts = EntityManager::prepareAndExecute(
     "SELECT
         `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`,
         `user_screen_name`, `category_name`, `publishers`.`publisher_id`, `publisher_name`
     FROM `posts`
-    JOIN `$usersTableName` ON `$usersTableName`.`id` = `user_id`
+    JOIN `users` ON `users`.`id` = `user_id`
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `publishers` ON `posts`.`publisher_id` = `publishers`.`publisher_id`
     WHERE `posts`.`site_id` = :site_id $req
