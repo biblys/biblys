@@ -324,18 +324,6 @@ class Media
             '.'.$this->ext().
             $version;
 
-        $cloud = $config->get("cloud");
-        if ($cloud && isset($cloud["cdn"])) {
-            
-            $cdnOptions = null;
-            if ($options) {
-                $cdnOptions = "?".http_build_query($options);
-            }
-            
-            return "https://cdn.biblys.cloud$baseUrl$cdnOptions";
-        }
-
-
         $imagesCdn = $config->get('images_cdn');
         if ($imagesCdn) {
             
