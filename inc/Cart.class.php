@@ -47,8 +47,8 @@ class Cart extends Entity
         $article_cover = new Media('article', $article->get('id'));
         $stock_cover   = new Media('stock',  $stock->get('id'));
 
-        if ($article_cover->exists())   $cover = '<a href="' . $article_cover->url() . '" rel="fancybox"><img src="' . $article_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
-        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->url() . '" rel="fancybox"><img src="' . $stock_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
+        if ($article_cover->exists())   $cover = '<a href="' . $article_cover->url() . '" rel="lightbox"><img src="' . $article_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
+        elseif ($stock_cover->exists()) $cover = '<a href="' . $stock_cover->url() . '" rel="lightbox"><img src="' . $stock_cover->url('h100') . '" height=55 alt="' . $article->get('title') . '"></a>';
         else $cover = NULL;
 
         // Etat

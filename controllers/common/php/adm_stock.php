@@ -20,9 +20,6 @@ $om = new OrderManager();
 $um = new UserManager();
 $rm = new RayonManager();
 
-$_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
-$_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
-
 $content = null;
 
 /** @var Session $session */

@@ -560,17 +560,6 @@ function reloadEvents(scope) {
     }
   });
 
-  // Fancybox
-  if (jQuery.isFunction(jQuery.fn.fancybox)) {
-    $('[rel="fancybox"]').fancybox();
-  }
-  if (jQuery.isFunction(jQuery.fn.fancybox)) {
-    $('[data-rel="fancybox"]').fancybox();
-  }
-  if (jQuery.isFunction(jQuery.fn.fancybox)) {
-    $('[data-fancybox]').fancybox();
-  }
-
   // DateTimePicker
   if (jQuery.isFunction(jQuery.fn.datetimepicker)) {
     $('.datetime').datetimepicker({

@@ -72,9 +72,9 @@ foreach ($stocks as $stock) {
     // Cover
     $cover = null;
     if (media_exists('stock', $stock->get('id'))) {
-        $cover = '<a href="'.media_url('stock', $stock->get('id')).'" rel="fancybox"><img src="'.media_url('stock', $stock->get('id'), 'h60').'" alt="'.$article->get('title').'" height="60"></a>';
+        $cover = '<a href="'.media_url('stock', $stock->get('id')).'" rel="lightbox"><img src="'.media_url('stock', $stock->get('id'), 'h60').'" alt="'.$article->get('title').'" height="60"></a>';
     } elseif (media_exists('article', $article->get('id'))) {
-        $cover = '<a href="'.media_url('article', $article->get('id')).'" rel="fancybox"><img src="'.media_url('article', $article->get('id'), 'h60').'" alt="'.$article->get('title').'"></a>';
+        $cover = '<a href="'.media_url('article', $article->get('id')).'" rel="lightbox"><img src="'.media_url('article', $article->get('id'), 'h60').'" alt="'.$article->get('title').'"></a>';
     }
 
     // Books & ebooks
@@ -258,9 +258,9 @@ if (isset($Articles) && $Articles > 0) {
                 // Image
                 $s["couv"] = null;
                 if (media_exists('stock', $s["stock_id"])) {
-                    $s["couv"] = '<a href="'.media_url('stock', $s["stock_id"]).'" rel="fancybox"><img src="'.media_url('stock', $s["stock_id"], 'h60').'" alt="'.$s["article_title"].'" height="60" /></a>';
+                    $s["couv"] = '<a href="'.media_url('stock', $s["stock_id"]).'" rel="lightbox"><img src="'.media_url('stock', $s["stock_id"], 'h60').'" alt="'.$s["article_title"].'" height="60" /></a>';
                 } elseif (media_exists('article', $article->get('id'))) {
-                    $s["couv"] = '<a href="'.media_url('article', $article->get('id')).'" rel="fancybox"><img src="'.media_url('article', $article->get('id'), "h60").'" alt="'.$article->get('title').'" /></a>';
+                    $s["couv"] = '<a href="'.media_url('article', $article->get('id')).'" rel="lightbox"><img src="'.media_url('article', $article->get('id'), "h60").'" alt="'.$article->get('title').'" /></a>';
                 }
 
                 $content .= '

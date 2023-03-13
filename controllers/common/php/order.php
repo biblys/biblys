@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
-$_JS_CALLS[] = '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
-$_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
-
 $om = new OrderManager();
 $am = new ArticleManager();
 
@@ -248,9 +245,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         $cover_article = new Media('stock', $copy->get('id'));
         $cover = NULL;
         if ($cover_article->exists()) {
-            $cover = '<a href="' . $cover_article->url() . '" rel="fancybox"><img src="' . $cover_article->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
+            $cover = '<a href="' . $cover_article->url() . '" rel="lightbox"><img src="' . $cover_article->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
         } elseif ($cover_stock->exists()) {
-            $cover = '<a href="' . $cover_stock->url() . '" rel="fancybox"><img src="' . $cover_stock->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
+            $cover = '<a href="' . $cover_stock->url() . '" rel="lightbox"><img src="' . $cover_stock->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
         }
 
         // Precommande

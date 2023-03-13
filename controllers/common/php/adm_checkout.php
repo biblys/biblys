@@ -5,9 +5,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$_JS_CALLS[] =  '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
-$_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
-
 $cm = new CartManager();
 $um = new UserManager();
 

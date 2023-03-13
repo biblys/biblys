@@ -2,9 +2,6 @@
 
 	//$_LOG['user_id'] = 199;
 
-	$_JS_CALLS[] =  '//cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.pack.js';
-	$_CSS_CALLS[] = 'screen://cdn.biblys.fr/fancybox/2.1.5/jquery.fancybox.css';
-
 	$_PAGE_TITLE = 'Mes achats';
 
 	$req = "SELECT `stock_id`, `stock_selling_date`,
@@ -29,9 +26,9 @@
 		// Image
 		$s['article_cover'] = new Media('article',$s['article_id']);
 		$s['stock_cover']   = new Media('stock',  $s['stock_id']);
-		if ($s['article_cover']->exists())   $s['cover'] = '<a href="'.$s['article_cover']->url().'" rel="fancybox"><img src="'.$s['article_cover']->url('h100').'" height=55 alt="'.$s['article_title'].'"></a>';
-		elseif ($s['stock_cover']->exists()) $s['cover'] = '<a href="'.$s['stock_cover']->url().'" rel="fancybox"><img src="'.$s['stock_cover']->url('h100').'"   height=55 alt="'.$s['article_title'].'"></a>';
-		else $s['cover'] = NULL;
+		if ($s['article_cover']->exists())   $s['cover'] = '<a href="'.$s['article_cover']->url() .'" rel="lightbox"><img src="'.$s['article_cover']->url('h100').'" height=55 alt="' .$s['article_title'].'"></a>';
+		elseif ($s['stock_cover']->exists()) $s['cover'] = '<a href="'.$s['stock_cover']->url().'" rel="lightbox"><img src="'.$s['stock_cover']->url('h100').'"   height=55 alt="'.$s['article_title'].'"></a>';
+        else $s['cover'] = NULL;
 		
 		$mybooks .= '
 			<tr>
