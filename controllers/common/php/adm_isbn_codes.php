@@ -2,8 +2,6 @@
 
     use Biblys\Isbn\Isbn as Isbn;
 
-    $_JS_CALLS[] = '/common/js/sorttable.js';
-
     $_PAGE_TITLE = 'Codes ISBN';
 
     $nexts = null;

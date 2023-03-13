@@ -24,8 +24,6 @@ if (!$browser->isUpToDate()) {
     $content .= $browser->getUpdateAlert('error');
 }
 
-$_JS_CALLS[] = '/common/js/adm_article.js';
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     /** @var Article $article */
     $article = $am->getById($_POST['article_id']);

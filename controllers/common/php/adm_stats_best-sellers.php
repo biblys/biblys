@@ -1,7 +1,5 @@
 <?php
 
-$_JS_CALLS[] = '//cdn.biblys.fr/sortable/sortable.js';
-
 $_PAGE_TITLE = 'Best-sellers';
 
 $list = null;

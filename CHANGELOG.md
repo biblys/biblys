@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.66.2 (DEV)
+
+Corrections
+
+- Les fichiers javascripts pouvaient ne pas être importés dans certains
+  controllers dépréciés. C'est corrigé.
+
 ### 2.66.1 (8 mars 2023)
 
 Corrections

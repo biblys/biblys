@@ -17,12 +17,6 @@ if (isset($_GET['collection_id'])) {
     ';
 }
 
-if (BIBLYS_VERSION < 2) {
-    echo '<script type="text/javascript" src="/common/js/adm_stocks.js?'.BIBLYS_VERSION.'.'.$_SITE['site_version'].'"></script>';
-} else {
-    $_JS_CALLS[] = '/common/js/adm_stocks.js';
-}
-
 if (empty($_GET['stock_insert'])) {
     $_GET['stock_insert'] = null;
 }

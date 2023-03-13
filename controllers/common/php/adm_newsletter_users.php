@@ -1,7 +1,5 @@
 <?php
 
-    $_JS_CALLS[] = "/common/js/adm_newsletter_users.js";
-
     $_PAGE_TITLE = 'Abonnés à la newsletter';
 
     $_ECHO .= '

@@ -6,8 +6,6 @@ $cm = new CollectionManager();
 
 $_PAGE_TITLE = 'Réassort';
 
-$_JS_CALLS[] = '/common/js/adm_reorder.js';
-
 $suppliers = $sm->getAll(array(), array('order' => 'supplier_name'));
 $suppliers = array_map(function($supplier) {
     return '<option value="/pages/adm_reorder?f='.$supplier->get('id').'">'.$supplier->get('name').'</option>';

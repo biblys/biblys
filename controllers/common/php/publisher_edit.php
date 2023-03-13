@@ -28,8 +28,6 @@ if (!$publisher) {
     throw new ResourceNotFoundException('Publisher id not defined');
 }
 
-$_JS_CALLS[] = "/common/js/adm_publisher.js";
-
 // Update publisher
 if ($request->getMethod() == "POST") {
     $url_p = array();

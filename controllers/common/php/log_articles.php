@@ -9,9 +9,6 @@ $am = new ArticleManager();
 
 $content = "";
 
-$_JS_CALLS[] = "/common/js/adm_publisher_stock.js";
-$_JS_CALLS[] = "/common/js/sorttable.js";
-
 if (!$GLOBALS["_V"]->isPublisher()) {
     throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
 }

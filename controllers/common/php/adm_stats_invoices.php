@@ -3,8 +3,6 @@
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors','On');
 
-	//$_JS_CALLS[] = '//cdn.biblys.fr/sortable/sortable.js';
-
 	$_PAGE_TITLE = 'R&eacute;sultats par facture';
 
 	$stock = $_SQL->prepare('SELECT

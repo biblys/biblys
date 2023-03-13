@@ -3,8 +3,6 @@
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-$_JS_CALLS[] = "/common/js/_list.js";
-
 $sm = new StockManager();
 
 $pdo = array(); // PDO search query

@@ -1,7 +1,5 @@
 <?php
 
-	$_JS_CALLS[] = '/common/js/sortable.js';
-
     $_PAGE_TITLE = 'Chiffre d\'affaires par collections';
 
     $list = NULL;
