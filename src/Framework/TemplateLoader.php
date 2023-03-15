@@ -91,14 +91,14 @@ class TemplateLoader implements LoaderInterface
         // Legacy deprecated templates
         if (!isset($path[1])) {
             $siteName = $this->currentSite->getSite()->getName();
-            $site_file = BIBLYS_PATH.'/public/'. $siteName .'/templates/'.$name.'.html.twig';
+            $site_file = biblysPath().'/public/'. $siteName .'/templates/'.$name.'.html.twig';
             if (file_exists($site_file)) {
                 trigger_error('Using deprecated legacy template '.$site_file, E_USER_DEPRECATED);
 
                 return $site_file;
             }
 
-            $common_file = BIBLYS_PATH.'/public/common/templates/'.$name.'.html.twig';
+            $common_file = biblysPath().'/public/common/templates/'.$name.'.html.twig';
             if (file_exists($common_file)) {
                 trigger_error('Using deprecated legacy template '.$common_file, E_USER_DEPRECATED);
 
@@ -155,14 +155,14 @@ class TemplateLoader implements LoaderInterface
 
         $customFile = __DIR__."/../../app/views/$path[1]/$path[2]";
         if ($this->currentSite->getOption("use_legacy_layout_builder")) {
-            $customFile = BIBLYS_PATH."/app/Resources/$path[0]/views/$path[1]/$path[2]";
+            $customFile = biblysPath()."/app/Resources/$path[0]/views/$path[1]/$path[2]";
         }
 
         if ($this->filesystem->exists($customFile)) {
             return $customFile;
         }
 
-        $defaultFile = BIBLYS_PATH."/src/$path[0]/Resources/views/$path[1]/$path[2]";
+        $defaultFile = biblysPath()."/src/$path[0]/Resources/views/$path[1]/$path[2]";
         if ($this->filesystem->exists($defaultFile)) {
             return $defaultFile;
         }

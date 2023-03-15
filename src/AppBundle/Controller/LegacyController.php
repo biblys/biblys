@@ -55,7 +55,7 @@ class LegacyController extends Controller
 
         // Get correct controller for called url
         $controller_path = get_controller_path($_PAGE);
-        $twig_template = BIBLYS_PATH . '/public/' . $site->get('name') . '/html/' . $_PAGE . '.html.twig';
+        $twig_template = biblysPath() . '/public/' . $site->get('name') . '/html/' . $_PAGE . '.html.twig';
 
         // Twig template controller
         if ($site->get('html_renderer') && file_exists($twig_template)) {

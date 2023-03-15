@@ -52,7 +52,7 @@
 		/* Get image dir and create it if needed */
 		public function getDir()
 		{
-			$dir = BIBLYS_PATH . "/../../images/files" ."/".str_pad(substr($this->get('image_id'),-2,2),2,'0',STR_PAD_LEFT).'/'.$this->get('image_id').'/';
+			$dir = biblysPath() . "/../../images/files" ."/".str_pad(substr($this->get('image_id'),-2,2),2,'0',STR_PAD_LEFT).'/'.$this->get('image_id').'/';
 			// trigger_error($dir);
 			if (!is_dir($dir)) {
 				mkdir($dir, 0777, true);

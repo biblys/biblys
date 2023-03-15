@@ -110,7 +110,7 @@ else
 {
 
     // Images
-    require_once BIBLYS_PATH.'/inc/Image.class.php';
+    require_once biblysPath().'/inc/Image.class.php';
     /** @var PDO $_SQL */
     $im = new ImagesManager($_SQL);
 

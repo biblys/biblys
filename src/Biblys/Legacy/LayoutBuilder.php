@@ -68,7 +68,7 @@ class LayoutBuilder
 ';
 
         // Get custom or default layout template
-        $customLayout = BIBLYS_PATH . '/app/Resources/views/layout.html';
+        $customLayout = biblysPath() . '/app/Resources/views/layout.html';
         if (!file_exists($customLayout)) {
             throw new Exception("Missing layout template: $customLayout");
         }

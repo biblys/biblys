@@ -16,7 +16,7 @@ class LogTest extends PHPUnit\Framework\TestCase
     public function testLog()
     {
         // given
-        $logFilePath = BIBLYS_PATH . "app/logs/errors.log";
+        $logFilePath = biblysPath() . "app/logs/errors.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }
@@ -39,7 +39,7 @@ class LogTest extends PHPUnit\Framework\TestCase
     public function testLogForCriticalError()
     {
         // given
-        $logFilePath = BIBLYS_PATH . "app/logs/errors.log";
+        $logFilePath = biblysPath() . "app/logs/errors.log";
         if (file_exists($logFilePath)) {
             unlink($logFilePath);
         }

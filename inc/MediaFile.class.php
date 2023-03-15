@@ -22,7 +22,7 @@ class MediaFileManager extends EntityManager
 
     public function getMediaFolderPath()
     {
-        $mediaFolderPath = BIBLYS_PATH . 'public/media/';
+        $mediaFolderPath = biblysPath() . 'public/media/';
         if (!is_dir($mediaFolderPath)) {
             throw new Exception("Le dossier $mediaFolderPath n'existe pas.");
         }

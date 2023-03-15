@@ -133,7 +133,7 @@ foreach ($items as $k => $v) {
         $i['icon_link'] = null;
 //			if(!empty($i[2])) $i["class"] = ' class="'.$i[2].'"'; else $i['class'] = NULL;
         if (isset($i[2]) && strstr($i[2], 'fa-')) $i['icon_link'] = '<i class="fa ' . $i[2] . '"></i>';
-        elseif (file_exists(BIBLYS_PATH . '/sites' . $i["icon_path"])) $i['icon_link'] = '<a href="' . $i["link"] . '"' . $i["class"] . '><img src="' . $i['icon_path'] . '" style="vertical-align: middle;" width=16 height=16></a>';
+        elseif (file_exists(biblysPath() . '/sites' . $i["icon_path"])) $i['icon_link'] = '<a href="' . $i["link"] . '"' . $i["class"] . '><img src="' . $i['icon_path'] . '" style="vertical-align: middle;" width=16 height=16></a>';
         else $i['icon_link'] = NULL;
         $sections .= '
         <p>

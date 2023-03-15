@@ -4,7 +4,7 @@
 
 	$_B = new BookshopManager();
 	
-	require_once BIBLYS_PATH.'/inc/Image.class.php';
+	require_once biblysPath().'/inc/Image.class.php';
 	$_I = new ImagesManager($_SQL);
 	
 	if (isset($_GET['url']) && $b = $_B->get(array('bookshop_url' => $_GET['url'])))

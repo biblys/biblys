@@ -51,10 +51,10 @@ $_RESULT = null;
 
 // Recherche de la page site, par defaut, ou 404
 try {
-    if (file_exists(BIBLYS_PATH.'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php')) {
-        $_PAGE = include(BIBLYS_PATH.'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php');
-    } elseif (file_exists(BIBLYS_PATH.'/controllers/common/xhr/'.$_PAGE.'.php')) {
-        $_PAGE = include(BIBLYS_PATH.'/controllers/common/xhr/'.$_PAGE.'.php');
+    if (file_exists(biblysPath().'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php')) {
+        $_PAGE = include(biblysPath().'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php');
+    } elseif (file_exists(biblysPath().'/controllers/common/xhr/'.$_PAGE.'.php')) {
+        $_PAGE = include(biblysPath().'/controllers/common/xhr/'.$_PAGE.'.php');
     } else {
         header("HTTP/1.0 404 Not Found");
         die('ERROR > Page introuvable');

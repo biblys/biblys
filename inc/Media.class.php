@@ -37,7 +37,7 @@ class Media
             $this->setDirectoryPath(MEDIA_PATH.'/'.$this->type().'/'.$this->dir().'/');
             $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
         } elseif ($this->domain() == 'dl') {
-            $this->setDirectoryPath(BIBLYS_PATH . "/../../dl" .'/'.$this->type().'/'.$this->dir().'/');
+            $this->setDirectoryPath(biblysPath() . "/../../dl" .'/'.$this->type().'/'.$this->dir().'/');
             $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
         }
 

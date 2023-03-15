@@ -2,8 +2,8 @@
 
 function autoloadEntity($class)
 {
-    $Entity = BIBLYS_PATH . "/inc/" . $class . ".class.php";
-    $EntityManager = BIBLYS_PATH . "/inc/" . str_replace("Manager", "", $class) . ".class.php";
+    $Entity = biblysPath() . "/inc/" . $class . ".class.php";
+    $EntityManager = biblysPath() . "/inc/" . str_replace("Manager", "", $class) . ".class.php";
 
     if (is_file($Entity)) {
         require_once $Entity;

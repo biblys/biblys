@@ -72,7 +72,7 @@ $container->register("framework", HttpKernel::class)
 
 $container->register("config", Config::class);
 $container->register("updater", Updater::class)
-    ->setArguments([BIBLYS_PATH, BIBLYS_VERSION, new Reference("config")]);
+    ->setArguments([biblysPath(), BIBLYS_VERSION, new Reference("config")]);
 $container->register("biblys_cloud", CloudService::class)
     ->setArguments([new Reference("config")]);
 $container->register("axys", Axys::class)

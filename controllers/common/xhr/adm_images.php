@@ -2,7 +2,7 @@
 
 	$r = array();
 	
-	require_once BIBLYS_PATH.'/inc/Image.class.php';
+	require_once biblysPath().'/inc/Image.class.php';
 	$_IMAGES = new ImagesManager($_SQL);
 
 	if (isset($_POST['action']))

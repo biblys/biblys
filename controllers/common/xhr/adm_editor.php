@@ -27,7 +27,7 @@
 			global $_SITE;
 			$this->options = array(
 				'script_url' => $this->get_full_url().'/',
-				'upload_dir' => BIBLYS_PATH."/public/".$_SITE["site_name"]."/img/",
+				'upload_dir' => biblysPath()."/public/".$_SITE["site_name"]."/img/",
 				'upload_url' => "/".$_SITE["site_name"]."/img/",
 				'param_name' => 'files',
 				// Set the following option to 'POST', if your server does not support
@@ -519,7 +519,7 @@
 
 	if($_GET["load"]) {
 		// Fichiers HTML
-		$dir = BIBLYS_PATH."/public/".$_SITE["site_name"]."/html/";
+		$dir = biblysPath()."/public/".$_SITE["site_name"]."/html/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			while($element = readdir($dir)) {
@@ -534,7 +534,7 @@
 		}
 		
 		// Fichiers CSS
-		$dir = BIBLYS_PATH."/public/".$_SITE["site_name"]."/css/";
+		$dir = biblysPath()."/public/".$_SITE["site_name"]."/css/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			while($element = readdir($dir)) {
@@ -549,7 +549,7 @@
 		}
 		
 		// Fichiers IMG
-		$dir = BIBLYS_PATH."/public/".$_SITE["site_name"]."/img/";
+		$dir = biblysPath()."/public/".$_SITE["site_name"]."/img/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			$img = array();
@@ -564,7 +564,7 @@
 		}
 		
 	} elseif($_GET["open"]) {
-		$file = BIBLYS_PATH."/public/".$_SITE["site_name"].$_GET["file"];
+		$file = biblysPath()."/public/".$_SITE["site_name"].$_GET["file"];
 		if(file_exists($file)) {
 			$j["id"] = md5($_GET["file"]);
 			$j["content"] = htmlspecialchars(file_get_contents($file, true));
@@ -572,11 +572,11 @@
 			$j["name"] = $_GET["name"];
 		} else $j["error"] = 'Le fichier n\'existe pas !';
 	} elseif($_GET["save"]) {
-		$file = BIBLYS_PATH."/public/".$_SITE["site_name"].$_POST["url"];
+		$file = biblysPath()."/public/".$_SITE["site_name"].$_POST["url"];
 		fwrite(fopen($file, "w"), stripslashes($_POST["content"]));
 		$j["ok"] = 1;
 	} elseif($_GET["create"]) {
-		$file = BIBLYS_PATH."/public/".$_SITE["site_name"].'/html/'.$_GET["name"];
+		$file = biblysPath()."/public/".$_SITE["site_name"].'/html/'.$_GET["name"];
 		fwrite(fopen($file, "w"), stripslashes($_POST["content"]));
 		$j["ok"] = 1;
 	} elseif($_GET["upload"]) {

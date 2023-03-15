@@ -16,7 +16,7 @@ $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
 $config = new Config();
 setUpTestDatabase($config->get("db"));
-require_once BIBLYS_PATH . "inc/functions.php";
+require_once __DIR__."/../inc/functions.php";
 $config->set("environment", "test");
 
 /**

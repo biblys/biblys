@@ -3,8 +3,8 @@
 include("../inc/constants.php");
 
 // INCLUDES
-include(BIBLYS_PATH.'inc/functions.php');
-include(BIBLYS_PATH.'inc/Array2XML.class.php');
+include(biblysPath().'inc/functions.php');
+include(biblysPath().'inc/Array2XML.class.php');
 
 // PAGE EN COURS
 $_PAGE = str_replace("/feed/","",$_SERVER["REQUEST_URI"]);
@@ -17,8 +17,8 @@ $_FEED["channel"]["language"] = "fr";
 $_FEED["channel"]["atom:link"] = array('@attributes' => array('href' => 'http://'.$_SITE["site_domain"].'/feed/'.$_PAGE, 'rel' => 'self', 'type' => 'application/rss+xml'));
 
 // Recherche de la page site, par defaut, ou 404
-$default_feed = BIBLYS_PATH.'/controllers/common/feeds/'.$_PAGE.'.php';
-$app_feed = BIBLYS_PATH.'/app/controllers/'.$_PAGE.'_feed.php';
+$default_feed = biblysPath().'/controllers/common/feeds/'.$_PAGE.'.php';
+$app_feed = biblysPath().'/app/controllers/'.$_PAGE.'_feed.php';
 
 if (file_exists($default_feed)) {
     header("Content-Type: application/xml; charset=UTF-8");

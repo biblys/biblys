@@ -29,11 +29,11 @@ $_OPENGRAPH = null;
 /* AUTOLOAD */
 
 // Include composer autoload
-$autoload_file = BIBLYS_PATH . '/vendor/autoload.php';
-if (!file_exists($autoload_file)) {
+$autoloadFile = __DIR__."/../vendor/autoload.php";
+if (!file_exists($autoloadFile)) {
     throw new Exception('Composer autoload file not found. Run `composer install`.');
 } else {
-    require_once BIBLYS_PATH . '/vendor/autoload.php';
+    require_once $autoloadFile;
 }
 
 $config = new Config();
@@ -47,10 +47,26 @@ if ($rollbarConfig) {
 }
 
 // Biblys autoload
-require_once BIBLYS_PATH . '/inc/autoload-entity.php';
+require_once __DIR__."/autoload-entity.php";
+
+
+
+/**
+ * @deprecated biblysPath() is deprecated. Use relative path with __DIR__ instead.
+ */
+function biblysPath(): string
+{
+    trigger_deprecation(
+        package: "biblys/biblys",
+        version: "2.67.0",
+        message: "biblysPath() is deprecated. Use relative path with __DIR__ instead.",
+    );
+
+    return __DIR__."/../";
+}
 
 // Media path
-$media_path = BIBLYS_PATH . $config->get("media_path");
+$media_path = __DIR__."/../".$config->get("media_path");
 define('MEDIA_PATH', $media_path);
 
 // Media url
@@ -131,7 +147,7 @@ if (!$site) {
 
 // Define site_path (should be replace with $site->get("path"))
 if (!defined('SITE_PATH')) {
-    $sitePath = BIBLYS_PATH . '/public/' . $site->get('name');
+    $sitePath = __DIR__.'/../public/'.$site->get('name');
     define('SITE_PATH', $sitePath);
 }
 
@@ -381,13 +397,13 @@ function media_delete($type, $id)
         }
         $path = MEDIA_PATH . '//' . $type . '/' . file_dir($id) . '/' . $id;
         if ('ebook-pdf' == $type) {
-            $path = BIBLYS_PATH . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
+            $path = biblysPath() . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
         }
         if ('ebook-epub' == $type) {
-            $path = BIBLYS_PATH . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
+            $path = biblysPath() . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
         }
         if ('ebook-azw' == $type) {
-            $path = BIBLYS_PATH . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
+            $path = biblysPath() . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
         }
         $files = glob($path . '*');
         foreach ($files as $filename) {
@@ -414,13 +430,13 @@ function media_exists($type, $id): bool
     }
     $path = MEDIA_PATH . '//' . $type . '/' . file_dir($id) . '/' . $id . '.' . $ext;
     if ('ebook-pdf' == $type) {
-        $path = BIBLYS_PATH . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
+        $path = biblysPath() . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
     }
     if ('ebook-epub' == $type) {
-        $path = BIBLYS_PATH . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
+        $path = biblysPath() . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
     }
     if ('ebook-azw' == $type) {
-        $path = BIBLYS_PATH . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
+        $path = biblysPath() . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
     }
     if (file_exists($path)) {
         return true;
@@ -859,8 +875,8 @@ function get_controller_path($controller)
 {
     global $site;
 
-    $default_path = BIBLYS_PATH . '/controllers/common/php/' . $controller . '.php';
-    $app_path = BIBLYS_PATH . 'app/controllers/' . $controller . '.php';
+    $default_path = biblysPath() . '/controllers/common/php/' . $controller . '.php';
+    $app_path = biblysPath() . 'app/controllers/' . $controller . '.php';
 
     if (file_exists($app_path)) {
         return $app_path;
