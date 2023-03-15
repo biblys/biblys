@@ -37,7 +37,7 @@ class Media
             $this->setDirectoryPath(MEDIA_PATH.'/'.$this->type().'/'.$this->dir().'/');
             $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
         } elseif ($this->domain() == 'dl') {
-            $this->setDirectoryPath(DL_PATH.'/'.$this->type().'/'.$this->dir().'/');
+            $this->setDirectoryPath(BIBLYS_PATH . "/../../dl" .'/'.$this->type().'/'.$this->dir().'/');
             $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
         }
 
@@ -51,7 +51,7 @@ class Media
                 $this->setURL(MEDIA_URL.'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext());
             }
             if ($this->domain() == 'dl') {
-                $this->setURL(DL_URL.'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext());
+                $this->setURL("http://dl.biblys.fr" .'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext());
             }
         }
     }
