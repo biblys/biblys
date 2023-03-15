@@ -244,16 +244,6 @@ define('MEDIA_URL', $media_url);
 // Get request
 $request = Request::createFromGlobals();
 
-/* ENVIRONNEMENT */
-
-if ('dev' == $config->get('environment')) {
-    error_reporting(E_ALL);
-    set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED);
-} else {
-    error_reporting(E_ALL ^ E_DEPRECATED ^ E_NOTICE);
-    set_error_handler('biblys_error', E_ALL ^ E_DEPRECATED ^ E_NOTICE);
-}
-
 /* MAINTENANCE MODE */
 
 $maintenanceMode = $config->get("maintenance");
