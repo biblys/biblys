@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use Axys\LegacyClient;
 use Exception;
 use Framework\Exception\AuthException;
-use Framework\Exception\ServiceUnavailableException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -169,24 +168,6 @@ class ErrorControllerTest extends TestCase
             "Erreur d'authentification",
             $response->getContent(),
             "it should return the error message"
-        );
-    }
-
-    public function testHandleServiceUnavailable()
-    {
-        // given
-        $controller = new ErrorController();
-        $request = new Request();
-        $exception = new ServiceUnavailableException("Site is closed");
-
-        // when
-        $response = $controller->exception($request, $exception);
-
-        // then
-        $this->assertEquals(
-            503,
-            $response->getStatusCode(),
-            "it should response with HTTP status 503"
         );
     }
 

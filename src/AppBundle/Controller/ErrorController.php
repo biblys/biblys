@@ -71,10 +71,6 @@ class ErrorController extends Controller
             return self::_defaultHandler(409, $exception, $request);
         }
 
-        if (is_a($exception, "Framework\Exception\ServiceUnavailableException")) {
-            return $this->handleServiceUnavailable($request);
-        }
-
         // If route is not found in route.yml, we might be dealing with a legacy
         // controller. We try to handle the route below. If not, default action
         // will throw a resourceNotFoundException that will be catched below.
