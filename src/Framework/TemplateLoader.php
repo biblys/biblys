@@ -155,14 +155,14 @@ class TemplateLoader implements LoaderInterface
 
         $customFile = __DIR__."/../../app/views/$path[1]/$path[2]";
         if ($this->currentSite->getOption("use_legacy_layout_builder")) {
-            $customFile = biblysPath()."/app/Resources/$path[0]/views/$path[1]/$path[2]";
+            $customFile = __DIR__."/../../app/Resources/$path[0]/views/$path[1]/$path[2]";
         }
 
         if ($this->filesystem->exists($customFile)) {
             return $customFile;
         }
 
-        $defaultFile = biblysPath()."/src/$path[0]/Resources/views/$path[1]/$path[2]";
+        $defaultFile = __DIR__."/../$path[0]/Resources/views/$path[1]/$path[2]";
         if ($this->filesystem->exists($defaultFile)) {
             return $defaultFile;
         }

@@ -1,9 +1,9 @@
 <?php
 
-function autoloadEntity($class)
+function autoloadEntity($class): void
 {
-    $Entity = biblysPath() . "/inc/" . $class . ".class.php";
-    $EntityManager = biblysPath() . "/inc/" . str_replace("Manager", "", $class) . ".class.php";
+    $Entity = __DIR__.$class.".class.php";
+    $EntityManager = __DIR__."/".str_replace("Manager", "", $class).".class.php";
 
     if (is_file($Entity)) {
         require_once $Entity;
