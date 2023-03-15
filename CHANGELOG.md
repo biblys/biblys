@@ -6,6 +6,9 @@ Corrections
 
 - Les fichiers javascripts pouvaient ne pas être importés dans certains
   controllers dépréciés. C'est corrigé.
+- L'auto-complétion des contributeurs depuis la page d'édition des articles 
+  ne fonctionnaient plus pour les utilisateurs avec des droits éditeurs. 
+  C'est réparé.
 
 ### 2.66.1 (8 mars 2023)
 
