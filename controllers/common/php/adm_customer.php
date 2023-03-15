@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CustomerManager();
 
-$_PAGE_TITLE = "Clients";
+$pageTitle = "Clients";
 
 /** @var $request */
 if ($request->getMethod() === "POST") {
@@ -53,9 +53,9 @@ $customerId = (int) $request->query->get("id");
 $customer = $cm->getById($customerId);
 
 if ($customer) {
-    $_PAGE_TITLE = sprintf("Client n°%s", $customerId);
+    $pageTitle = sprintf("Client n°%s", $customerId);
 } else {
-    $_PAGE_TITLE = "Créer un nouveau client";
+    $pageTitle = "Créer un nouveau client";
     $customer = new Customer([]);
 }
 
@@ -77,7 +77,7 @@ if (isset($_GET['updated'])) {
 }
 
 $content = '
-    <h1><i class="fa fa-user"></i> '.$_PAGE_TITLE.'</h1>
+    <h1><i class="fa fa-user"></i> '.$pageTitle.'</h1>
 
     '.$message.'
 
@@ -133,4 +133,5 @@ $content = '
     </form>
 ';
 
+$request->attributes->set("page_title", $pageTitle);
 return new Response($content);
