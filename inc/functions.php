@@ -67,7 +67,7 @@ $request = Request::createFromGlobals();
 
 $maintenanceMode = $config->get("maintenance");
 if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
-    $response = new Response($maintenanceMode["message"]);
+    $response = new Response($maintenanceMode["message"], 503);
     $response->send();
     die();
 }
