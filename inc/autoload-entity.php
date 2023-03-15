@@ -1,14 +1,18 @@
 <?php
 
-function autoloadEntity($class): void
+function autoloadEntity(string $class): void
 {
-    $Entity = __DIR__.$class.".class.php";
-    $EntityManager = __DIR__."/".str_replace("Manager", "", $class).".class.php";
-
-    if (is_file($Entity)) {
-        require_once $Entity;
-    } elseif (is_file($EntityManager)) {
-        require_once $EntityManager;
+    $entityName = $class;
+    if (str_contains(haystack: $class, needle: "Manager")) {
+        $entityName = str_replace("Manager", "", $class);
     }
+
+    $entityFilePath = __DIR__."/".$entityName.".class.php";
+
+    if (!file_exists($entityFilePath)) {
+        return;
+    }
+
+    require_once $entityFilePath;
 }
 spl_autoload_register("autoloadEntity");
