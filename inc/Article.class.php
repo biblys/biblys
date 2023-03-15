@@ -1646,4 +1646,13 @@ class ArticleManager extends EntityManager
         $res->execute($q['params']);
         return $res->fetchColumn();
     }
+
+    public static function buildUnknownArticle(): Article
+    {
+        $article = new Article([]);
+        $article->set("article_title", "Article inconnu");
+        $article->set("type_id", 1);
+
+        return $article;
+    }
 }

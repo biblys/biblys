@@ -143,14 +143,6 @@ elseif ($order) {
         $message = '<p class="alert alert-success">Le mode d\'expédition de la commande a été mis à jour.</p>';
     }
 
-    // Articles in order
-    $stock = $sm->getAll(array('order_id' => $o->get('id')));
-    $order_content = array();
-    foreach ($stock as $s)
-    {
-        $order_content[] = '<option value='.$s->get('id').'>'.$s->get('article')->get('title').' ('.price($s->get('selling_price'), 'EUR').')</option>';
-    }
-
     // Articles de la commande
     /** @var PDO $_SQL */
     $articles = $_SQL->prepare("SELECT `stock_id`, `article_title`, `stock_selling_price` FROM `stock` JOIN `articles` ON `stock`.`article_id` = `articles`.`article_id` WHERE `order_id` = :order_id ORDER BY `article_title_alphabetic`");

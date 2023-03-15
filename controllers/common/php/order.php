@@ -239,13 +239,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     $ArticlesCount = 0;
     $books = NULL;
     foreach ($copies as $copy) {
-        $article = $copy->getArticle();
+        $article = $copy->getArticle() ?: ArticleManager::buildUnknownArticle();
         $a = $article;
         $i++;
-
-        if (!$article) {
-            continue;
-        }
 
         // Image
         $cover_stock = new Media('stock', $copy->get('id'));
@@ -298,7 +294,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
                 <td class="center">' . $copyId . '</td>
                 <td class="center">' . $cover . '</td>
                 <td>
-                    <strong><a href="/' . $a["article_url"] . '">' . $a["article_title"] . '</a><br /></strong>
+                    <strong><a href="/' . $a["article_url"] . '">' . $article->get("title") . '</a><br /></strong>
                     <em>de ' . $a["article_authors"] . '</em><br />
                     coll. ' . $a["article_collection"] . ' ' . numero($a["article_number"]) . '<br />
                     ' . $a["dl_links"] . '
@@ -385,7 +381,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
         $groups = StockManager::groupByArticles($order->getCopies());
         foreach ($groups as $group) {
-            $article = $group["article"];
+            $article = $group["article"] ?: ArticleManager::buildUnknownArticle();
             $content .= "
                 <script>
                     _paq.push(['addEcommerceItem',

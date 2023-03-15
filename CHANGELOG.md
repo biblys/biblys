@@ -9,6 +9,9 @@ Corrections
 - L'auto-complétion des contributeurs depuis la page d'édition des articles 
   ne fonctionnaient plus pour les utilisateurs avec des droits éditeurs. 
   C'est réparé.
+- La présence d'un article supprimé dans une commande pouvait déclencher une 
+  erreur. Désormais, la mention "Article inconnu" s'affichera à la place du 
+  titre.
 
 ### 2.66.1 (8 mars 2023)
 
