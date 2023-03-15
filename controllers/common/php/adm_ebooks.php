@@ -60,8 +60,6 @@ if ($peopleId) {
     $reqPeopleParams['people_id'] = '%[people:' . $peopleId . ']%';
 }
 
-biblys_error(E_USER_WARNING, "Warning!", "error.php", 45);
-
 // Ventes numériques
 $ventes = EntityManager::prepareAndExecute("
     SELECT
