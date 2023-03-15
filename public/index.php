@@ -30,6 +30,31 @@ if ($_V->isLogged()) {
 
 $request = Request::createFromGlobals();
 
+// TODO: use a DeprecationNoticesHandler class
+// TODO: handle displaying error in JSON and CLI
+set_error_handler(function ($level, $message) use ($config): void {
+    if ($config->get("environment") !== "dev") {
+        return;
+    }
+
+    $i = 0;
+    $trace = "";
+    foreach (debug_backtrace() as $b) {
+
+        if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
+            continue;
+        }
+
+        $trace .= "#{$i} {$b['file']}({$b['line']}): {$b['function']}\n";
+        $i++;
+    }
+
+    echo "<div class=\"biblys-warning noprint\">
+            DEPRECATED: {$message}
+            <pre>{$trace}</pre>
+        </div>";
+}, E_USER_DEPRECATED);
+
 /** @var Site $site */
 list($_JS_CALLS, $_CSS_CALLS) = LayoutBuilder::loadAssets($config, $_V, $site, $request);
 
