@@ -1,0 +1,19 @@
+{% if app.trackers.matomo is defined %}
+  <!-- Matomo -->
+  <script>
+    const matomo = window._paq = window._paq || [];
+    const matomoSiteId = {{ app.trackers.matomo.site_id }};
+    matomo.push(["trackPageView"]);
+    matomo.push(["enableLinkTracking"]);
+    (function() {
+      matomo.push(["setTrackerUrl", "https://{{ app.trackers.matomo.domain }}/matomo.php"]);
+      matomo.push(["setSiteId", matomoSiteId]);
+      {% if app.trackers.matomo.secondary_domain is defined %}
+        matomo.push(["addTracker", "https://{{ app.trackers.matomo.secondary_domain }}/matomo.php", matomoSiteId]);
+      {% endif %}
+      const d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+      g.async=true; g.src="//cdn.matomo.cloud/biblys.matomo.cloud/matomo.js"; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+{% endif %}

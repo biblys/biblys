@@ -91,10 +91,12 @@ logs:
 #   login: SHOP-PDL
 #   password: 1234-Pdl
 
-# Also add {MATOMO} to your main layout
-# matomo:
-#   domain: analytics.biblys.cloud
-#   site_id: 1
+# Matomo Analytics tracker
+# https://matomo.org
+#matomo:
+#  domain: biblys.matomo.cloud
+#  secondary_domain: analytics.biblys.cloud
+#  site_id: 1
 
 # Rollbar
 # rollbar:

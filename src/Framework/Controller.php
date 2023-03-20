@@ -274,6 +274,8 @@ class Controller
         $axys = new LegacyClient($config->get("axys"), $currentUser->getToken());
         $axysMenu = LegacyClient::buildMenu($config, $urlGenerator, $request);
 
+        $trackers = $this->_getAnalyticsTrackers($config);
+
         // Global variables
         $app = [
             'request' => $request,
@@ -282,6 +284,7 @@ class Controller
             'axysMenu' => $axysMenu,
             'session' => $session,
             'site' => $site,
+            "trackers" => $trackers,
         ];
         $twig->addGlobal('app', $app);
 
@@ -472,5 +475,28 @@ class Controller
         throw new AuthException(
             sprintf("Vous n'avez pas l'autorisation de modifier l'éditeur %s", $publisher->getName())
         );
+    }
+
+    /**
+     * @param Config $config
+     * @return array
+     */
+    public function _getAnalyticsTrackers(Config $config): array
+    {
+        $trackers = [];
+
+        $matomoConfig = $config->get("matomo");
+        if ($matomoConfig) {
+            $trackers["matomo"] = [
+                "domain" => $matomoConfig["domain"],
+                "site_id" => $matomoConfig["site_id"],
+            ];
+
+            if (isset($matomoConfig["secondary_domain"])) {
+                $trackers["matomo"]["secondary_domain"] = $matomoConfig["secondary_domain"];
+            }
+        }
+
+        return $trackers;
     }
 }
