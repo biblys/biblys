@@ -91,7 +91,6 @@ logs:
 
 # Matomo Analytics tracker
 # https://matomo.org
-#matomo:
 #  domain: biblys.matomo.cloud
 #  secondary_domain: analytics.biblys.cloud
 #  site_id: 1
