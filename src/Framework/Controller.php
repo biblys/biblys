@@ -503,6 +503,11 @@ class Controller
             }
         }
 
+        $umamiConfig = $config->get("umami");
+        if ($umamiConfig) {
+            $trackers["umami"] = $umamiConfig;
+        }
+
         return $trackers;
     }
 }

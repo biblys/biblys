@@ -17,3 +17,12 @@
   </script>
   <!-- End Matomo Code -->
 {% endif %}
+
+{% if app.trackers.umami is defined %}
+  <script
+    async
+    defer
+    src="https://analytics.umami.is/script.js"
+    data-website-id="{{ app.trackers.umami.website_id }}"
+  ></script>
+{% endif %}

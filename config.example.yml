@@ -95,6 +95,11 @@ logs:
 #  secondary_domain: analytics.biblys.cloud
 #  site_id: 1
 
+# Umami Analytics Tracker
+# https://cloud.umami.is/
+#umami:
+#  website_id: abcd-1234-efgh-5678
+
 # Rollbar
 # rollbar:
 #   access_token: abcdef12345
