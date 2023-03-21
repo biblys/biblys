@@ -505,7 +505,9 @@ class Controller
 
         $umamiConfig = $config->get("umami");
         if ($umamiConfig) {
-            $trackers["umami"] = $umamiConfig;
+            $trackers["umami"] = [
+                "website_id" => $umamiConfig["website_id"],
+            ];
         }
 
         return $trackers;
