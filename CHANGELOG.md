@@ -5,6 +5,7 @@
 Améliorations
 
 - Le moteur de suggestions Gleeph a été ajouté.
+- L'outil de statistiques Umami a été ajouté.
 - L'outil d'envoi de newsletter a été supprimé.
 
 ### 2.66.3 (27 mars 2023)
