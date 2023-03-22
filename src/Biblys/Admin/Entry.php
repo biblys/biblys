@@ -7,22 +7,21 @@ use Biblys\Service\Config;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
 use OrderManager;
-use Symfony\Component\Intl\Data\Generator\GeneratorConfig;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class Entry
 {
-    private $_name;
-    private $_path = null;
-    private $_url = null;
-    private $_target;
-    private $_icon;
-    private $_class;
-    private $_hasClass = false;
-    private $_taskCount;
-    private $_subscription;
-    private $_hasSubscription = false;
-    private $_category;
+    private string $_name;
+    private ?string $_path = null;
+    private ?string $_url = null;
+    private string $_target;
+    private string $_icon;
+    private string $_class;
+    private bool $_hasClass = false;
+    private int $_taskCount = 0;
+    private string $_subscription;
+    private bool $_hasSubscription = false;
+    private string $_category;
 
     public function __construct($name, $options = [])
     {
@@ -66,17 +65,17 @@ class Entry
         }
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
         $this->_name = $name;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->_name;
     }
 
-    private function setPath(string $path)
+    private function setPath(string $path): void
     {
         $this->_path = $path;
     }
@@ -86,7 +85,7 @@ class Entry
         return $this->_path;
     }
 
-    public function setUrl($url)
+    public function setUrl($url): void
     {
         $this->_url = $url;
     }
@@ -105,22 +104,22 @@ class Entry
         return $this->_url;
     }
 
-    public function setTarget($target)
+    public function setTarget($target): void
     {
         $this->_target = $target;
     }
 
-    public function getTarget()
+    public function getTarget(): string
     {
         return $this->_target;
     }
 
-    public function setIcon($icon)
+    public function setIcon($icon): void
     {
         $this->_icon = $icon;
     }
 
-    public function getIcon()
+    public function getIcon(): string
     {
         return $this->_icon;
     }
@@ -130,32 +129,32 @@ class Entry
         return $this->_hasClass;
     }
 
-    public function setClass($class)
+    public function setClass($class): void
     {
         $this->_class = $class;
     }
 
-    public function getClass()
+    public function getClass(): string
     {
         return $this->_class;
     }
 
-    public function setTaskCount($count)
+    public function setTaskCount($count): void
     {
         $this->_taskCount = $count;
     }
 
-    public function getTaskCount()
+    public function getTaskCount(): int
     {
         return $this->_taskCount;
     }
 
-    public function setSubscription($subscription)
+    public function setSubscription($subscription): void
     {
         $this->_subscription = $subscription;
     }
 
-    public function getSubscription()
+    public function getSubscription(): string
     {
         return $this->_subscription;
     }
@@ -165,19 +164,18 @@ class Entry
         return $this->_hasSubscription;
     }
 
-    public function setCategory($category)
+    public function setCategory($category): void
     {
         $this->_category = $category;
     }
 
-    public function getCategory()
+    public function getCategory(): string
     {
         return $this->_category;
     }
 
     /**
-     * @return Entry[]
-     * @throws UpdaterException
+     * @return array
      */
     public static function findAll(): array
     {
