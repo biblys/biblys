@@ -3,9 +3,11 @@
 namespace Biblys\Admin;
 
 use Biblys\Service\Cloud\CloudService;
+use Biblys\Service\Config;
 use Biblys\Service\Updater\UpdaterException;
 use Exception;
 use OrderManager;
+use Symfony\Component\Intl\Data\Generator\GeneratorConfig;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class Entry
@@ -231,19 +233,7 @@ class Entry
         // Site
         $entries[] = new Entry('Administrateurs', ['category' => 'site', 'url' => '/pages/adm_admins', 'icon' => 'users']);
 
-        $matomo = $config->get('matomo');
-        if ($matomo) {
-            $name = $matomo['name'] ?? 'Matomo Analytics';
-            $loginUrl = isset($matomo['login']) && isset($matomo['md5pass']) ?
-                'index.php?module=Login&action=logme&login='.$matomo['login'].'&password='.$matomo['md5pass'] :
-                '';
-            $entries[] = new Entry($name, [
-                'category' => 'site',
-                'url' => 'https://'.$matomo['domain'].'/'.$loginUrl,
-                'target' => '_blank',
-                'icon' => 'area-chart',
-            ]);
-        }
+        $entries = self::_addAnalyticsLinks($config, $entries);
 
         $entries[] = new Entry('Options', ['category' => 'site', 'path' => 'site_options', 'icon' => 'cogs']);
         $entries[] = new Entry('Valeurs par défaut', ['category' => 'site', 'path' => 'site_default_values', 'icon' => 'pencil-square-o']);
@@ -328,5 +318,27 @@ class Entry
             }
             return $entry;
         }, $entries);
+    }
+
+    /**
+     * @param Config $config
+     * @param array $entries
+     * @return array
+     */
+    public static function _addAnalyticsLinks(Config $config, array $entries): array
+    {
+        $matomo = $config->get("matomo");
+        if ($matomo) {
+            $loginUrl = isset($matomo["login"]) && isset($matomo["md5pass"]) ?
+                'index.php?module=Login&action=logme&login=' . $matomo["login"] . '&password=' . $matomo["md5pass"] :
+                '';
+            $entries[] = new Entry("Statistiques (Matomo)", [
+                'category' => 'site',
+                'url' => 'https://' . $matomo['domain'] . '/' . $loginUrl,
+                'target' => '_blank',
+                'icon' => 'area-chart',
+            ]);
+        }
+        return $entries;
     }
 }

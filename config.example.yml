@@ -94,6 +94,8 @@ logs:
 #  domain: biblys.matomo.cloud
 #  secondary_domain: analytics.biblys.cloud
 #  site_id: 1
+#  login: biblys
+#  md5pass: abcd1234efgh5678
 
 # Umami Analytics Tracker
 # https://cloud.umami.is/
