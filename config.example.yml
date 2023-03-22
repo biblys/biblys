@@ -101,6 +101,7 @@ logs:
 # https://cloud.umami.is/
 #umami:
 #  website_id: abcd-1234-efgh-5678
+#  share_url: https://analytics.umami.is/share/9876ijkl5432mnop/biblys.fr
 
 # Rollbar
 # rollbar:

@@ -337,6 +337,17 @@ class Entry
                 'icon' => 'area-chart',
             ]);
         }
+
+        $umami = $config->get("umami");
+        if ($umami && isset($umami["share_url"])) {
+            $entries[] = new Entry("Statistiques (Umami)", [
+                'category' => 'site',
+                'url' => $umami["share_url"],
+                'target' => '_blank',
+                'icon' => 'area-chart',
+            ]);
+        }
+
         return $entries;
     }
 }
