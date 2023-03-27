@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.66.3 (DEV)
+
+Corrections
+
+- Le code du tracker de suivi Matomo Analytics n'était plus inséré, même si 
+  l'option de configuration correspondant été présente. C'est corrigé.
+
 ### 2.66.2 (15 mars 2023)
 
 Corrections
