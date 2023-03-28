@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\ArticleCategory as ChildArticleCategory;
+use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\Option as ChildOption;
@@ -23,6 +25,7 @@ use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
+use Model\Map\ArticleCategoryTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
@@ -404,6 +407,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collPaymentsPartial;
 
     /**
+     * @var        ObjectCollection|ChildArticleCategory[] Collection to store aggregation of ChildArticleCategory objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildArticleCategory> Collection to store aggregation of ChildArticleCategory objects.
+     */
+    protected $collArticleCategories;
+    protected $collArticleCategoriesPartial;
+
+    /**
      * @var        ObjectCollection|ChildRight[] Collection to store aggregation of ChildRight objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildRight> Collection to store aggregation of ChildRight objects.
      */
@@ -466,6 +476,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildPayment>
      */
     protected $paymentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildArticleCategory[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildArticleCategory>
+     */
+    protected $articleCategoriesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2495,6 +2512,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collPayments = null;
 
+            $this->collArticleCategories = null;
+
             $this->collRights = null;
 
             $this->collSessions = null;
@@ -2696,6 +2715,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collPayments !== null) {
                 foreach ($this->collPayments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->articleCategoriesScheduledForDeletion !== null) {
+                if (!$this->articleCategoriesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->articleCategoriesScheduledForDeletion as $articleCategory) {
+                        // need to save related object because we set the relation to null
+                        $articleCategory->save($con);
+                    }
+                    $this->articleCategoriesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collArticleCategories !== null) {
+                foreach ($this->collArticleCategories as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3409,6 +3446,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collPayments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collArticleCategories) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'articleCategories';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rayonss';
+                        break;
+                    default:
+                        $key = 'ArticleCategories';
+                }
+
+                $result[$key] = $this->collArticleCategories->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collRights) {
 
                 switch ($keyType) {
@@ -4081,6 +4133,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getArticleCategories() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addArticleCategory($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRights() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRight($relObj->copy($deepCopy));
@@ -4160,6 +4218,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Payment' === $relationName) {
             $this->initPayments();
+            return;
+        }
+        if ('ArticleCategory' === $relationName) {
+            $this->initArticleCategories();
             return;
         }
         if ('Right' === $relationName) {
@@ -5212,6 +5274,245 @@ abstract class Site implements ActiveRecordInterface
         $query->joinWith('Order', $joinBehavior);
 
         return $this->getPayments($query, $con);
+    }
+
+    /**
+     * Clears out the collArticleCategories collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addArticleCategories()
+     */
+    public function clearArticleCategories()
+    {
+        $this->collArticleCategories = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collArticleCategories collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialArticleCategories($v = true): void
+    {
+        $this->collArticleCategoriesPartial = $v;
+    }
+
+    /**
+     * Initializes the collArticleCategories collection.
+     *
+     * By default this just sets the collArticleCategories collection to an empty array (like clearcollArticleCategories());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initArticleCategories(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collArticleCategories && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = ArticleCategoryTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collArticleCategories = new $collectionClassName;
+        $this->collArticleCategories->setModel('\Model\ArticleCategory');
+    }
+
+    /**
+     * Gets an array of ChildArticleCategory objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildArticleCategory[] List of ChildArticleCategory objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildArticleCategory> List of ChildArticleCategory objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getArticleCategories(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collArticleCategoriesPartial && !$this->isNew();
+        if (null === $this->collArticleCategories || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collArticleCategories) {
+                    $this->initArticleCategories();
+                } else {
+                    $collectionClassName = ArticleCategoryTableMap::getTableMap()->getCollectionClassName();
+
+                    $collArticleCategories = new $collectionClassName;
+                    $collArticleCategories->setModel('\Model\ArticleCategory');
+
+                    return $collArticleCategories;
+                }
+            } else {
+                $collArticleCategories = ChildArticleCategoryQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collArticleCategoriesPartial && count($collArticleCategories)) {
+                        $this->initArticleCategories(false);
+
+                        foreach ($collArticleCategories as $obj) {
+                            if (false == $this->collArticleCategories->contains($obj)) {
+                                $this->collArticleCategories->append($obj);
+                            }
+                        }
+
+                        $this->collArticleCategoriesPartial = true;
+                    }
+
+                    return $collArticleCategories;
+                }
+
+                if ($partial && $this->collArticleCategories) {
+                    foreach ($this->collArticleCategories as $obj) {
+                        if ($obj->isNew()) {
+                            $collArticleCategories[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collArticleCategories = $collArticleCategories;
+                $this->collArticleCategoriesPartial = false;
+            }
+        }
+
+        return $this->collArticleCategories;
+    }
+
+    /**
+     * Sets a collection of ChildArticleCategory objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $articleCategories A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setArticleCategories(Collection $articleCategories, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildArticleCategory[] $articleCategoriesToDelete */
+        $articleCategoriesToDelete = $this->getArticleCategories(new Criteria(), $con)->diff($articleCategories);
+
+
+        $this->articleCategoriesScheduledForDeletion = $articleCategoriesToDelete;
+
+        foreach ($articleCategoriesToDelete as $articleCategoryRemoved) {
+            $articleCategoryRemoved->setSite(null);
+        }
+
+        $this->collArticleCategories = null;
+        foreach ($articleCategories as $articleCategory) {
+            $this->addArticleCategory($articleCategory);
+        }
+
+        $this->collArticleCategories = $articleCategories;
+        $this->collArticleCategoriesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ArticleCategory objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related ArticleCategory objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countArticleCategories(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collArticleCategoriesPartial && !$this->isNew();
+        if (null === $this->collArticleCategories || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collArticleCategories) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getArticleCategories());
+            }
+
+            $query = ChildArticleCategoryQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collArticleCategories);
+    }
+
+    /**
+     * Method called to associate a ChildArticleCategory object to this object
+     * through the ChildArticleCategory foreign key attribute.
+     *
+     * @param ChildArticleCategory $l ChildArticleCategory
+     * @return $this The current object (for fluent API support)
+     */
+    public function addArticleCategory(ChildArticleCategory $l)
+    {
+        if ($this->collArticleCategories === null) {
+            $this->initArticleCategories();
+            $this->collArticleCategoriesPartial = true;
+        }
+
+        if (!$this->collArticleCategories->contains($l)) {
+            $this->doAddArticleCategory($l);
+
+            if ($this->articleCategoriesScheduledForDeletion and $this->articleCategoriesScheduledForDeletion->contains($l)) {
+                $this->articleCategoriesScheduledForDeletion->remove($this->articleCategoriesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildArticleCategory $articleCategory The ChildArticleCategory object to add.
+     */
+    protected function doAddArticleCategory(ChildArticleCategory $articleCategory): void
+    {
+        $this->collArticleCategories[]= $articleCategory;
+        $articleCategory->setSite($this);
+    }
+
+    /**
+     * @param ChildArticleCategory $articleCategory The ChildArticleCategory object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeArticleCategory(ChildArticleCategory $articleCategory)
+    {
+        if ($this->getArticleCategories()->contains($articleCategory)) {
+            $pos = $this->collArticleCategories->search($articleCategory);
+            $this->collArticleCategories->remove($pos);
+            if (null === $this->articleCategoriesScheduledForDeletion) {
+                $this->articleCategoriesScheduledForDeletion = clone $this->collArticleCategories;
+                $this->articleCategoriesScheduledForDeletion->clear();
+            }
+            $this->articleCategoriesScheduledForDeletion[]= $articleCategory;
+            $articleCategory->setSite(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -6364,6 +6665,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collArticleCategories) {
+                foreach ($this->collArticleCategories as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRights) {
                 foreach ($this->collRights as $o) {
                     $o->clearAllReferences($deep);
@@ -6390,6 +6696,7 @@ abstract class Site implements ActiveRecordInterface
         $this->collOptions = null;
         $this->collOrders = null;
         $this->collPayments = null;
+        $this->collArticleCategories = null;
         $this->collRights = null;
         $this->collSessions = null;
         $this->collStocks = null;

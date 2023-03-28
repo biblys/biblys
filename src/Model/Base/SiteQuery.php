@@ -147,6 +147,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildSiteQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
  *
+ * @method     ChildSiteQuery leftJoinArticleCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the ArticleCategory relation
+ * @method     ChildSiteQuery rightJoinArticleCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ArticleCategory relation
+ * @method     ChildSiteQuery innerJoinArticleCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the ArticleCategory relation
+ *
+ * @method     ChildSiteQuery joinWithArticleCategory($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the ArticleCategory relation
+ *
+ * @method     ChildSiteQuery leftJoinWithArticleCategory() Adds a LEFT JOIN clause and with to the query using the ArticleCategory relation
+ * @method     ChildSiteQuery rightJoinWithArticleCategory() Adds a RIGHT JOIN clause and with to the query using the ArticleCategory relation
+ * @method     ChildSiteQuery innerJoinWithArticleCategory() Adds a INNER JOIN clause and with to the query using the ArticleCategory relation
+ *
  * @method     ChildSiteQuery leftJoinRight($relationAlias = null) Adds a LEFT JOIN clause to the query using the Right relation
  * @method     ChildSiteQuery rightJoinRight($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Right relation
  * @method     ChildSiteQuery innerJoinRight($relationAlias = null) Adds a INNER JOIN clause to the query using the Right relation
@@ -187,7 +197,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildSiteQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\CartQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PaymentQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\CartQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -2515,6 +2525,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('Payment', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\ArticleCategory object
+     *
+     * @param \Model\ArticleCategory|ObjectCollection $articleCategory the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByArticleCategory($articleCategory, ?string $comparison = null)
+    {
+        if ($articleCategory instanceof \Model\ArticleCategory) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $articleCategory->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($articleCategory instanceof ObjectCollection) {
+            $this
+                ->useArticleCategoryQuery()
+                ->filterByPrimaryKeys($articleCategory->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByArticleCategory() only accepts arguments of type \Model\ArticleCategory or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ArticleCategory relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinArticleCategory(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ArticleCategory');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ArticleCategory');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ArticleCategory relation ArticleCategory object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\ArticleCategoryQuery A secondary query class using the current class as primary query
+     */
+    public function useArticleCategoryQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinArticleCategory($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ArticleCategory', '\Model\ArticleCategoryQuery');
+    }
+
+    /**
+     * Use the ArticleCategory relation ArticleCategory object
+     *
+     * @param callable(\Model\ArticleCategoryQuery):\Model\ArticleCategoryQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withArticleCategoryQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useArticleCategoryQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to ArticleCategory table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\ArticleCategoryQuery The inner query object of the EXISTS statement
+     */
+    public function useArticleCategoryExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\ArticleCategoryQuery */
+        $q = $this->useExistsQuery('ArticleCategory', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleCategory table for a NOT EXISTS query.
+     *
+     * @see useArticleCategoryExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleCategoryQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useArticleCategoryNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleCategoryQuery */
+        $q = $this->useExistsQuery('ArticleCategory', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleCategory table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\ArticleCategoryQuery The inner query object of the IN statement
+     */
+    public function useInArticleCategoryQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\ArticleCategoryQuery */
+        $q = $this->useInQuery('ArticleCategory', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to ArticleCategory table for a NOT IN query.
+     *
+     * @see useArticleCategoryInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\ArticleCategoryQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInArticleCategoryQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\ArticleCategoryQuery */
+        $q = $this->useInQuery('ArticleCategory', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

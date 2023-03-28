@@ -1095,6 +1095,9 @@
       <parameter name="slug_column" value="rayon_url" />
       <parameter name="slug_pattern" value="{Name}" />
     </behavior>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
