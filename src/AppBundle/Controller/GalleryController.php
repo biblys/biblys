@@ -3,13 +3,25 @@
 namespace AppBundle\Controller;
 
 use Framework\Controller;
+use GalleryManager;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class GalleryController extends Controller
 {
-    public function indexAction()
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function indexAction(): Response
     {
-        $gm = $this->entityManager('Gallery');
+        $gm = new GalleryManager();
 
         $galleries = $gm->getAll([], [
             'order' => 'gallery_created',
@@ -21,16 +33,20 @@ class GalleryController extends Controller
         ]);
     }
 
-    public function showAction($slug)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function showAction($slug): Response
     {
-        $gm = $this->entityManager('Gallery');
+        $gm = new GalleryManager();
 
         $gallery = $gm->get(['media_dir' => $slug]);
         if (!$gallery) {
             throw new NotFoundException('Cannot find gallery with slug '.$slug);
         }
-
-        $this->setPageTitle($gallery->get('title'));
 
         return $this->render('AppBundle:Gallery:show.html.twig', [
             'gallery' => $gallery,

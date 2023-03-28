@@ -2,17 +2,27 @@
 
 namespace AppBundle\Controller;
 
+use AwardManager;
 use Framework\Controller;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class AwardsController extends Controller
 {
-    public function indexAction()
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function indexAction(): Response
     {
         global $site;
 
-        $this->setPageTitle('Récompenses littéraires');
-
-        $awm = $this->entityManager("Award");
+        $awm = new AwardManager();
 
         $where = [];
         $filter = $site->getOpt('publisher_filter');

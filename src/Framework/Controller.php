@@ -8,7 +8,6 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Cart;
-use EntityManager;
 use Media;
 use Model\Article;
 use Model\Publisher;
@@ -50,21 +49,6 @@ class Controller
         global $_V;
 
         $this->user = $_V;
-    }
-
-    /**
-     * Returns an entity manager.
-     *
-     * @param string $entity the entity we want a manager for
-     *
-     * @return EntityManager child class
-     * @deprecated
-     */
-    public function entityManager(string $entity): EntityManager
-    {
-        $class = $entity.'Manager';
-
-        return new $class();
     }
 
     /**
