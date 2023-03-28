@@ -14,12 +14,12 @@ class TemplateLoader implements LoaderInterface
     /**
      * @var CurrentSite
      */
-    private $currentSite;
+    private CurrentSite $currentSite;
 
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    private Filesystem $filesystem;
 
     public function __construct(CurrentSite $currentSite, Filesystem $filesystem)
     {
@@ -91,14 +91,14 @@ class TemplateLoader implements LoaderInterface
         // Legacy deprecated templates
         if (!isset($path[1])) {
             $siteName = $this->currentSite->getSite()->getName();
-            $site_file = biblysPath().'/public/'. $siteName .'/templates/'.$name.'.html.twig';
+            $site_file = __DIR__."/../../public/$siteName/templates/$name.html.twig";
             if (file_exists($site_file)) {
                 trigger_error('Using deprecated legacy template '.$site_file, E_USER_DEPRECATED);
 
                 return $site_file;
             }
 
-            $common_file = biblysPath().'/public/common/templates/'.$name.'.html.twig';
+            $common_file = __DIR__."/../../public/common/templates/$name.html.twig";
             if (file_exists($common_file)) {
                 trigger_error('Using deprecated legacy template '.$common_file, E_USER_DEPRECATED);
 
@@ -110,13 +110,6 @@ class TemplateLoader implements LoaderInterface
 
         // Twig layout templates
         if ($path[0] === "layout") {
-            if (
-                $path[1] === "base.html.twig" &&
-                $this->currentSite->getOption("use_legacy_layout_builder")
-            ) {
-                return __DIR__."/../AppBundle/Resources/layout/base_for_legacy_builder.html.twig";
-            }
-
             return self::_getLayoutFilePath($path[1], $name);
         }
 
@@ -154,10 +147,6 @@ class TemplateLoader implements LoaderInterface
     {
 
         $customFile = __DIR__."/../../app/views/$path[1]/$path[2]";
-        if ($this->currentSite->getOption("use_legacy_layout_builder")) {
-            $customFile = __DIR__."/../../app/Resources/$path[0]/views/$path[1]/$path[2]";
-        }
-
         if ($this->filesystem->exists($customFile)) {
             return $customFile;
         }

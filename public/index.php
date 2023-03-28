@@ -1,18 +1,17 @@
 <?php
 
 use AppBundle\Controller\ErrorController;
-use Biblys\Legacy\LayoutBuilder;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Framework\Framework;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
+
+/** @var Site $site */
 
 // INCLUDES
 include __DIR__."/../inc/functions.php";
@@ -55,8 +54,6 @@ set_error_handler(function ($level, $message) use ($config): void {
         </div>";
 }, E_USER_DEPRECATED);
 
-/** @var Site $site */
-list($_JS_CALLS, $_CSS_CALLS) = LayoutBuilder::loadAssets($config, $_V, $site, $request);
 
 $exceptionController = new ErrorController();
 
@@ -97,10 +94,6 @@ if ($request->isSecure() && $config->get('hsts') === true) {
 }
 
 $currentSite = CurrentSite::buildFromConfig($config);
-
-if (!$response instanceof JsonResponse && $currentSite->hasOptionEnabled("use_legacy_layout_builder")) {
-    $response = LayoutBuilder::wrapResponseInThemeLayout($site, $_CSS_CALLS, $_JS_CALLS, $_V, $urlgenerator, $request, $config, $response);
-}
 
 $response->send();
 $framework->terminate($request, $response);
