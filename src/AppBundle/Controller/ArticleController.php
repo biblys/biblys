@@ -460,7 +460,7 @@ class ArticleController extends Controller
         $rayon_id = $request->request->get('rayon_id');
         $rayon = $rm->getById($rayon_id);
         if (!$rayon) {
-            throw new Exception("Rayon $id not found");
+            throw new Exception("Rayon $rayon_id not found");
         }
 
         try {
