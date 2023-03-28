@@ -9,8 +9,6 @@ use CFRewardManager;
 use Exception;
 use Framework\Controller;
 
-use Framework\Exception\AuthException;
-use Model\ArticleQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,7 +25,6 @@ class CFRewardController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
@@ -55,13 +52,12 @@ class CFRewardController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
      * @throws Exception
      */
-    public function newAction(Request $request, UrlGenerator $urlGenerator, $campaign_id)
+    public function newAction(Request $request, UrlGenerator $urlGenerator, $campaign_id): RedirectResponse|Response
     {
         self::authAdmin($request);
 
@@ -97,7 +93,7 @@ class CFRewardController extends Controller
             // Update price from content
             $cfrm->updatePrice($reward);
 
-            return $this->redirect($urlGenerator->generate('cf_reward_list', [
+            return new RedirectResponse($urlGenerator->generate('cf_reward_list', [
                 'campaign_id' => $reward->getCampaign()->get('id')
             ]));
         }
@@ -109,14 +105,13 @@ class CFRewardController extends Controller
 
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
      * @throws Exception
      * @throws Exception
      */
-    public function editAction(Request $request, UrlGenerator $urlGenerator, $id)
+    public function editAction(Request $request, UrlGenerator $urlGenerator, $id): RedirectResponse|Response
     {
         self::authAdmin($request);
 
@@ -147,7 +142,7 @@ class CFRewardController extends Controller
             // Update price from content
             $cfrm->updatePrice($reward);
 
-            return $this->redirect(
+            return new RedirectResponse(
                 $urlGenerator->generate(
                     "cf_reward_list",
                     ["campaign_id" => $reward->getCampaign()->get("id")]
@@ -161,11 +156,14 @@ class CFRewardController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      */
-    public function deleteAction(Request $request, $id): RedirectResponse
+    public function deleteAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        $id
+    ): RedirectResponse
     {
         self::authAdmin($request);
 
@@ -177,7 +175,9 @@ class CFRewardController extends Controller
 
         $cfrm->delete($reward);
 
-        return $this->redirect($this->generateUrl('cf_reward_list', ['campaign_id' => $reward->getCampaign()->get('id')]));
+        return new RedirectResponse(
+            $urlGenerator->generate('cf_reward_list', ['campaign_id' => $reward->getCampaign()->get('id')])
+        );
     }
 
     /**
@@ -190,7 +190,7 @@ class CFRewardController extends Controller
         $am = new ArticleManager();
         foreach ($articlesIds as $articleId) {
             if (!$am->getById($articleId)) {
-                throw new BadRequestException("L'article {$articleId} n'existe pas.");
+                throw new BadRequestException("L'article $articleId n'existe pas.");
             }
         }
     }
