@@ -6,6 +6,8 @@ Améliorations
 
 - Le moteur de suggestions Gleeph a été ajouté.
 - L'outil de statistiques Umami a été ajouté.
+- Après la connexion, l'utilisateur sera désormais redirigé vers la page où 
+  il se trouvait lorsqu'il a cliqué sur le bouton "Connexion".
 - L'outil d'envoi de newsletter a été supprimé.
 
 ### 2.66.3 (27 mars 2023)
