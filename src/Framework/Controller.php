@@ -229,14 +229,14 @@ class Controller
         $twig->addRuntimeLoader($runtimeLoader);
 
         $config = new Config();
-        $currentUser = CurrentUser::buildFromRequest($request);
-        $axys = new LegacyClient($config->get("axys"), $currentUser->getToken());
+        $axys = new LegacyClient($config->get("axys"), $currentUserService->getToken());
         $axysMenu = LegacyClient::buildMenu($config, $urlGenerator, $request);
 
         $trackers = $this->_getAnalyticsTrackers($config);
 
         // Global variables
         $app = [
+            "currentUser" => $currentUserService,
             'request' => $request,
             'user' => $this->user,
             'axys' => $axys,
