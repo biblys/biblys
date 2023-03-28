@@ -16,11 +16,13 @@ use Exception;
 use Framework\Controller;
 use LinkManager;
 use MailingManager;
+use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
+use Model\Link;
+use Model\LinkQuery;
 use Model\PublisherQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
-use RayonManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -434,44 +436,61 @@ class ArticleController extends Controller
      * /articles/{id}/rayons/add.
      *
      * @param Request $request
+     * @param CurrentSite $currentSite
      * @param $id
      * @return JsonResponse
+     * @throws PropelException
      * @throws Exception
      */
-    public function addRayonsAction(Request $request, $id): JsonResponse
+    public function addRayonsAction(
+        Request $request,
+        CurrentSite $currentSite,
+        $id
+    ):
+    JsonResponse
     {
         self::authPublisher($request, null);
 
-        $am = new ArticleManager();
-        $rm = new RayonManager();
-
-        $am->setIgnoreSiteFilters(true);
-
-        $article = $am->getById($id);
+        $article = ArticleQuery::create()->findPk($id);
         if (!$article) {
             throw new Exception("Article $id not found");
         }
 
-        if ($article->has('publisher_id')) {
-            $publisher = PublisherQuery::create()->findPk($article->get("publisher_id"));
+        if ($article->getPublisher() !== null) {
+            $publisher = PublisherQuery::create()->findPk($article->getPublisherId());
             self::authPublisher($request, $publisher);
         }
 
-        $rayon_id = $request->request->get('rayon_id');
-        $rayon = $rm->getById($rayon_id);
-        if (!$rayon) {
-            throw new Exception("Rayon $rayon_id not found");
+        $articleCategoryId = $request->request->get("rayon_id");
+        $articleCategory = ArticleCategoryQuery::createForSite($currentSite)->findPk($articleCategoryId);
+        if (!$articleCategory) {
+            throw new BadRequestHttpException("Rayon $articleCategoryId not found");
         }
 
         try {
-            $link = $am->addRayon($article, $rayon);
+            $linkAlreadyExists = LinkQuery::create()
+                ->filterByArticle($article)
+                ->filterByArticleCategory($articleCategory)
+                ->findOne();
+
+            if ($linkAlreadyExists) {
+                throw new ArticleAlreadyInRayonException(
+                    articleTitle: $article->getTitle(),
+                    rayonName: $articleCategory->getName(),
+                );
+            }
+
+            $link = new Link();
+            $link->setArticle($article);
+            $link->setArticleCategory($articleCategory);
+            $link->save();
         } catch (ArticleAlreadyInRayonException) {
             return new JsonResponse([], 409);
         }
 
         return new JsonResponse([
-            'id' => $link->get('id'),
-            'rayon_name' => $rayon->get('name'),
+            'id' => $link->getId(),
+            'rayon_name' => $articleCategory->getName(),
         ]);
     }
 

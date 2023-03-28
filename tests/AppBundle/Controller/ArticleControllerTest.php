@@ -11,7 +11,6 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
-use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -194,19 +193,22 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
+     * @throws PropelException
      */
     public function testAddRayonActionForUser()
     {
         // given
         $controller = new ArticleController();
         $request = new Request();
+        $currentSite = ModelFactory::createSite();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService->method("getSite")->willReturn($currentSite);
 
         // then
         $this->expectException(UnauthorizedHttpException::class);
 
         // when
-        $controller->addRayonsAction($request, 1);
+        $controller->addRayonsAction($request, $currentSiteService, 1);
     }
 
     /**
@@ -220,11 +222,14 @@ class ArticleControllerTest extends TestCase
         $publisher = ModelFactory::createPublisher();
         $request = RequestFactory::createAuthRequestForPublisherUser($publisher);
         $article = ModelFactory::createArticle([], $publisher);
-        $category = ModelFactory::createArticleCategory();
+        $currentSite = ModelFactory::createSite();
+        $category = ModelFactory::createArticleCategory($currentSite);
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService->method("getSite")->willReturn($currentSite);
         $request->request->set("rayon_id", $category->getId());
 
         // when
-        $response = $controller->addRayonsAction($request, $article->getId());
+        $response = $controller->addRayonsAction($request, $currentSiteService, $article->getId());
 
         // then
         $this->assertEquals(
@@ -235,11 +240,10 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws AuthException
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function testDeleteAction()
     {

@@ -12,26 +12,6 @@ class ArticleCategoryTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testAddingSiteIdonSave()
-    {
-        // given
-        $user = new ArticleCategory();
-        $user->setName("Science Fiction");
-
-        // when
-        $user->save();
-
-        // then
-        $this->assertEquals(
-            1,
-            $user->getSiteId(),
-            "it should have added current site id"
-        );
-    }
-
-    /**
-     * @throws PropelException
-     */
     public function testAddingSlugOnSave()
     {
         // given

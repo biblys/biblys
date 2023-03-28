@@ -17,12 +17,4 @@ use Propel\Runtime\Connection\ConnectionInterface;
  */
 class ArticleCategory extends BaseArticleCategory
 {
-    public function preSave(?ConnectionInterface $con = null): bool
-    {
-//        $config = new Config();
-
-//        $this->setSiteId($config->get("site"));
-
-        return true;
-    }
 }
