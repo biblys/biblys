@@ -1,13 +1,13 @@
 {% extends "layout:base.html.twig" %}
 
 {% block title %}
-  Modifier l'éditeur {{ tag.name }}
+  Modifier le mot-clé {{ tag.name }}
 {% endblock %}
 
 {% block main %}
 
   <h1>
-    Modifier l'éditeur
+    Modifier le mot-clé
     <a href="{{ path("tag_show", { slug: tag.url }) }}">
       {{ tag.name }}
     </a>

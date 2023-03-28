@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -16,7 +15,6 @@ class OrderControllerTest extends TestCase
 {
     /**
      * @throws PropelException
-     * @throws AuthException
      */
     public function testShowForUnauthorizedUser()
     {
@@ -35,7 +33,6 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws PropelException
-     * @throws AuthException
      */
     public function testShowForAdmin()
     {

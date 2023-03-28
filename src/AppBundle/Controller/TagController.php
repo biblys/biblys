@@ -2,16 +2,26 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
+use Biblys\Service\Pagination;
+use Exception;
 use Framework\Controller;
 
+use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use TagManager;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class TagController extends Controller
 {
@@ -19,27 +29,30 @@ class TagController extends Controller
     /**
      * Show a Tag's page and related articles
      * /tag/{slug}
-     * @param  $url the tag's slug
+     * @param Request $request
+     * @param $slug
      * @return Response the rendered templated
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function showAction(Request $request, $slug)
+    public function showAction(Request $request, $slug): Response
     {
-        $tm = $this->entityManager("Tag");
-        $am = $this->entityManager("Article");
+        $tm = new TagManager();
+        $am = new ArticleManager();
 
         $tag = $tm->get(["tag_url" => $slug]);
         if (!$tag) {
             throw new NotFoundException("Tag $slug not found");
         }
 
-        $this->setPageTitle($tag->get('name'));
-
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->countAllFromTag($tag);
-        $pagination = new \Biblys\Service\Pagination($page, $totalCount);
+        $pagination = new Pagination($page, $totalCount);
 
-        $am = $this->entityManager("Article");
+        $am = new ArticleManager();
         $articles = $am->getAllFromTag($tag, [
             'fields' => 'article_id, article_title, article_url, article_authors, collection_id, publisher_id, type_id, article_pubdate, article_availability_dilicom, article_price',
             'order' => 'article_pubdate',
@@ -58,24 +71,29 @@ class TagController extends Controller
     /**
      * Edit a tag
      * /admin/tag/{id}/edit
-     * @param  Request $request
-     * @param  Int  $id the tag's id
-     * @return Response
+     * @param Request $request
+     * @param UrlGenerator $urlGenerator
+     * @param Int $id the tag's id
+     * @return RedirectResponse|Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function editAction(Request $request, $id)
+    public function editAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        int $id
+    ): RedirectResponse|Response
     {
-        global $site;
+        self::authAdmin($request);
 
-        $this->auth("admin");
-
-        $tm = $this->entityManager("Tag");
+        $tm = new TagManager();
 
         $tag = $tm->get(["tag_id" => $id]);
         if (!$tag) {
             throw new NotFoundException("Tag $id not found.");
         }
-
-        $this->setPageTitle('Modifier l\'éditeur '.$tag->get('name'));
 
         $formFactory = $this->getFormFactory();
 
@@ -101,12 +119,14 @@ class TagController extends Controller
 
             try {
                 $updated = $tm->update($updated);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
-                return new RedirectResponse($this->generateUrl('tag_show', ['slug' => $updated->get('url')]));
+                return new RedirectResponse(
+                    $urlGenerator->generate('tag_show', ['slug' => $updated->get('url')])
+                );
             }
         }
 

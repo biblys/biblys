@@ -3,18 +3,29 @@
 namespace AppBundle\Controller;
 
 use Framework\Controller;
-
+use Propel\Runtime\Exception\PropelException;
+use StockManager;
+use SupplierManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class StatsController extends Controller
 {
 
-    public function suppliersAction($year)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function suppliersAction(Request $request, $year): Response
     {
-        $this->auth('admin');
-        $this->setPageTitle('Chiffre d\'affaires par fournisseur');
+        self::authAdmin($request);
 
-        $sum = $this->entityManager("Supplier");
+        $sum = new SupplierManager();
         $suppliers = $sum->getAll([], [
             'order' => 'supplier_name'
         ]);
@@ -26,17 +37,22 @@ class StatsController extends Controller
         ]);
     }
 
-    public function lostAction($year)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function lostAction(Request $request, $year): Response
     {
-        $this->auth('admin');
-        $this->setPageTitle('Exemplaire perdus');
+        self::authAdmin($request);
 
         $year_filter = 'NOT NULL';
         if ($year != 'all') {
             $year_filter = "LIKE $year%";
         }
 
-        $sm = $this->entityManager('Stock');
+        $sm = new StockManager();
         $copies = $sm->getAll([
             'stock_lost_date' => $year_filter
         ],[

@@ -3,15 +3,16 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
-use Biblys\Service\Log;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Model\OrderQuery;
 use Order;
 use OrderManager;
+use PaymentManager;
 use PayPal\Exception\PayPalConnectionException;
+use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
 use Payplug\Notification;
@@ -26,12 +27,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class OrderController extends Controller
 {
-    public function indexAction(Request $request)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function indexAction(Request $request): JsonResponse|Response
     {
-        $this->auth('admin');
+        self::authAdmin($request);
 
         // JSON Raw data
         if ($request->isXmlHttpRequest()) {
@@ -78,10 +88,10 @@ class OrderController extends Controller
             // Query filter
             $query = $request->query->get('query', false);
             if ($query) {
-                $orders = $om->search($query, $where, $options, false);
+                $orders = $om->search($query, $where, $options);
                 $total = 0;
             } else {
-                $total = $om->count($where, [], false);
+                $total = $om->count($where);
                 $orders = $om->getAll($where, $options, false);
             }
 
@@ -103,7 +113,10 @@ class OrderController extends Controller
     }
 
     /**
-     * @throws AuthException
+     * @param Request $request
+     * @param CurrentSite $currentSite
+     * @param int $id
+     * @return RedirectResponse
      * @throws PropelException
      */
     public function show(Request $request, CurrentSite $currentSite, int $id): RedirectResponse
@@ -122,20 +135,24 @@ class OrderController extends Controller
         return new RedirectResponse("/order/{$order->getSlug()}");
     }
 
-    public function updateAction(Request $request, $id, $action)
+    /**
+     * @throws Exception
+     */
+    public function updateAction(Request $request, $id, $action): JsonResponse
     {
-        $om = $this->entityManager('Order');
+        $om = new OrderManager();
         $order = $om->getById($id);
+        $notice = "";
 
         if ($action == 'payed') {
             $amount = $order->get('amount_tobepaid');
-            $payment_mode = $request->request->get('payment_mode', null);
+            $payment_mode = $request->request->get('payment_mode');
             $om->addPayment($order, $payment_mode, $amount);
             $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été marquée comme payée.';
         }
 
         if ($action == 'shipped') {
-            $tracking_number = $request->request->get('tracking_number', null);
+            $tracking_number = $request->request->get('tracking_number');
             $om->markAsShipped($order, $tracking_number);
             $notice = 'La commande n°&nbsp;'.$order->get('id').' de '.$order->get('firstname').' '.$order->get('lastname').' a été marquée comme expédiée.';
         }
@@ -154,33 +171,44 @@ class OrderController extends Controller
         ]);
     }
 
-    public function paypalProcessAction(Request $request, $url)
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function paypalProcessAction(
+        Request $request,
+        LoggerService $loggerService,
+        $url
+    ): RedirectResponse|Response
     {
-        $om = $this->entityManager('Order');
+        $om = new OrderManager();
 
         // Check if order exists
         $order = $om->get(['order_url' => $url]);
         if (!$order) {
-            Log::paypal("ERROR", "Order $url not found.");
+            $loggerService->log("paypal", "ERROR", "Order $url not found.");
             throw new NotFoundException("Order $url not found.");
         }
-        Log::paypal("INFO", 'Initiating paypal process for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
+        $loggerService->log("paypal", "INFO", 'Initiating paypal process for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
 
         // Get paypal parameters from request
         $paymentId = $request->query->get('paymentId');
         $payerId = $request->query->get('PayerID');
         if (!$paymentId || !$payerId) {
-            Log::paypal("ERROR", 'Missing parameters.', ['order_id' => $order->get('id')]);
+            $loggerService->log("paypal", "ERROR", 'Missing parameters.', ['order_id' => $order->get('id')]);
             throw new Exception('Missing parameters.');
         }
-        Log::paypal("INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
+        $loggerService->log("paypal", "INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
 
         // Execute payment
         try {
             $payment = $order->executePaypalPayment($paymentId, $payerId);
         }
         catch (PayPalConnectionException $exception) {
-            Log::paypal(
+            $loggerService->log("paypal", 
                 "ERROR",
                 $exception->getMessage(),
                 ['order_id' => $order->get('id'), 'paymentId' => $paymentId]
@@ -198,64 +226,75 @@ class OrderController extends Controller
         }
         catch (Exception $e) {
             dump($e);
-            Log::paypal("ERROR", $e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $loggerService->log("paypal", "ERROR", $e->getMessage(), ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new Exception('Une erreur est survenue pendant l\'execution du paiement PayPal. Merci de nous contacter.');
         }
-        Log::paypal("INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
+        $loggerService->log("paypal", "INFO", "Got paymentId ($paymentId) and payerId ($payerId) for order " . $order->get('id'));
 
         // Check that payment was approved
         $state = $payment->getState();
         if ($state !== 'approved') {
-            Log::paypal("ERROR", "Payment state is invalid ($state).", ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $loggerService->log("paypal", "ERROR", "Payment state is invalid ($state).", ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new Exception("Payment state is invalid ($state).");
         }
-        Log::paypal("INFO", "Payment ($paymentId) state is $state for order " . $order->get('id'));
+        $loggerService->log("paypal", "INFO", "Payment ($paymentId) state is $state for order " . $order->get('id'));
 
         // Get invoice number from first transaction and compare to order id
         $transaction = $payment->getTransactions()[0];
         $invoice = $transaction->getInvoiceNumber();
         if ($invoice != $order->get('id')) {
-            Log::paypal("ERROR", "Invoice number ($invoice) does not match order ID (" . $order->get('id') . ').', ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
+            $loggerService->log("paypal", "ERROR", "Invoice number ($invoice) does not match order ID (" . $order->get('id') . ').', ['order_id' => $order->get('id'), 'paymentId' => $paymentId]);
             throw new Exception('Invoice number does not match order ID.');
         }
-        Log::paypal("INFO", "Invoice number ($invoice) matches order id (" . $order->get('id') . ')');
+        $loggerService->log("paypal", "INFO", "Invoice number ($invoice) matches order id (" . $order->get('id') . ')');
 
         // Get amount and add payment to current order
         $amount = $transaction->getAmount();
         $total = $amount->getTotal();
         $om->addPayment($order, 'paypal', $total * 100);
-        Log::paypal("INFO", "Payment amount ($amount) was added to order " . $order->get('id'));
+        $loggerService->log("paypal", "INFO", "Payment amount ($amount) was added to order " . $order->get('id'));
 
-        return $this->redirect('/order/'.$order->get('url'));
+        return new RedirectResponse("/order/{$order->get("url")}");
     }
 
-    public function payplugNotificationAction(Request $request, $url): Response
+    /**
+     * @throws ConfigurationException
+     * @throws UnknownAPIResourceException
+     * @throws PayplugException
+     * @throws Exception
+     * @noinspection PhpUndefinedFieldInspection
+     */
+    public function payplugNotificationAction(
+        Request $request,
+        LoggerService $loggerService,
+        $url
+    ): Response
     {
         global $config;
 
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
-            Log::payplug("ERROR", 'Payplug configuration not found.');
+            $loggerService->log("payplug", "ERROR", 'Payplug configuration not found.');
             throw new Exception('Payplug configuration not found.');
         }
 
         if (!isset($payplug_config['secret'])) {
-            Log::payplug("ERROR", 'Missing payplug private key.');
+            $loggerService->log("payplug", "ERROR", 'Missing payplug private key.');
             throw new Exception('Missing payplug private key.');
         }
 
         Payplug::init(["secretKey" => $payplug_config['secret']]);
 
-        $om = $this->entityManager('Order');
-        $pm = $this->entityManager('Payment');
+        $om = new OrderManager();
+        $pm = new PaymentManager();
 
         // Check if order exists
         $order = $om->get(['order_url' => $url]);
         if (!$order) {
-            Log::payplug("ERROR", "Order $url not found.");
+            $loggerService->log("payplug", "ERROR", "Order $url not found.");
             throw new Exception("Order $url not found.");
         }
-        Log::payplug("INFO", 'Receiving Payplug notification for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
+        $loggerService->log("payplug", "INFO", 'Receiving Payplug notification for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
 
         // Process notification
         $input = $request->getContent();
@@ -263,46 +302,46 @@ class OrderController extends Controller
             $resource = Notification::treat($input);
 
             if ($resource instanceof Refund) {
-                Log::payplug("INFO", 'Ignoring resource ' . $resource->id . ' (refund)');
+                $loggerService->log("payplug", "INFO", 'Ignoring resource ' . $resource->id . ' (refund)');
                 return new Response();
             }
 
             if (!$resource instanceof Payment) {
-                Log::payplug("ERROR", 'Resource ' . $resource->id . '  is not a Payment.');
+                $loggerService->log("payplug", "ERROR", 'Resource ' . $resource->id . '  is not a Payment.');
                 throw new Exception('Resource '.$resource->id.'  is not a Payment.');
             }
 
             // Payment failed, log error and ignore process
             if (!$resource->is_paid) {
-                Log::payplug("ERROR", 'Payment ' . $resource->id . '  is not paid.');
+                $loggerService->log("payplug", "ERROR", 'Payment ' . $resource->id . '  is not paid.');
                 return new Response('');
             }
 
             // Check if payment exists
             $payment = $pm->get(['payment_provider_id' => $resource->id]);
             if (!$payment) {
-                Log::payplug("ERROR", 'Payment ' . $resource->id . ' not found.');
+                $loggerService->log("payplug", "ERROR", 'Payment ' . $resource->id . ' not found.');
                 throw new Exception('Payment '.$resource->id.' not found.');
             }
-            Log::payplug("INFO", 'Found payment ' . $payment->get('id') . ' in database.');
+            $loggerService->log("payplug", "INFO", 'Found payment ' . $payment->get('id') . ' in database.');
 
             // Get order id from metadata and compare to database order id
             if ($resource->metadata['order_id'] != $order->get('id')) {
-                Log::payplug("ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->get('id') . ').');
+                $loggerService->log("payplug", "ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->get('id') . ').');
                 throw new Exception('Invoice number does not match order ID.');
             }
-            Log::payplug("INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
+            $loggerService->log("payplug", "INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
 
             // Add payment to the order
             $om->addPayment($order, $payment);
-            Log::payplug("INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
+            $loggerService->log("payplug", "INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
 
             return new Response('');
         } catch (UnknownAPIResourceException $exception) {
-            Log::payplug("ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
+            $loggerService->log("payplug", "ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         } catch (PayplugException $exception) {
-            Log::payplug("ERROR", 'PayplugException: ' . $exception->getMessage());
+            $loggerService->log("payplug", "ERROR", 'PayplugException: ' . $exception->getMessage());
             throw $exception;
         }
     }
@@ -311,12 +350,16 @@ class OrderController extends Controller
      * Display conversions for recents orders
      * /admin/orders/conversions.
      *
-     * @return [type] [description]
+     * @param Request $request
+     * @return Response
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function conversionsAction(Request $request)
+    public function conversionsAction(Request $request): Response
     {
-        $this->auth('admin');
-        $this->setPageTitle('Suivi des conversions');
+        self::authAdmin($request);
 
         $filters = ['order_utm_source' => 'NOT NULL'];
 
@@ -335,7 +378,7 @@ class OrderController extends Controller
             $filters['order_utm_medium'] = $utmMedium;
         }
 
-        $om = $this->entityManager('Order');
+        $om = new OrderManager();
 
         // Pagination
         $page = (int) $request->query->get('p', 0);
@@ -357,13 +400,13 @@ class OrderController extends Controller
 
     /**
      * Mass converts utmz property to utm_ properties.
+     * @throws Exception
      */
-    public function convertUtmzAction()
+    public function convertUtmzAction(Request $request): Response
     {
-        $this->auth('admin');
-        $this->setPageTitle('Conversion UTMZ');
+        self::authAdmin($request);
 
-        $om = $this->entityManager('Order');
+        $om = new OrderManager();
         $order = $om->get(['order_utmz' => 'NOT NULL'], [
             'order' => 'order_payment_date',
             'sort' => 'desc',
@@ -385,7 +428,7 @@ class OrderController extends Controller
         return $response;
     }
 
-    private function _jsonOrder(Order $order)
+    private function _jsonOrder(Order $order): array
     {
         return [
             'id' => $order->get('id'),

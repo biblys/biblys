@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use ArticleManager;
 use CartManager;
 use Exception;
 use Framework\Controller;
 
+use Propel\Runtime\Exception\PropelException;
 use StockManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +21,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 class StockController extends Controller
 {
 
-    public function searchAction($query)
+    public function searchAction($query): JsonResponse
     {
-        $am = $this->entityManager('Article');
-
+        $am = new ArticleManager();
         $articles = $am->search($query);
 
         $results = [];
@@ -63,14 +64,15 @@ class StockController extends Controller
     /**
      * Adding a stock item to cart
      * /stock/{stock_id}/add-to-cart
+     * @throws PropelException
      */
-    public function addToCartAction(Request $request, Session $session, $stock_id)
+    public function addToCartAction(Request $request, Session $session, $stock_id): RedirectResponse
     {
-        $this->auth('admin'); // to be implemented: non-admin users adding stock
-                              // items to their own carts
+        // to be implemented: non-admin users adding stockitems to their own carts
+        self::authAdmin($request);
 
-        $sm = $this->entityManager('Stock');
-        $cm = $this->entityManager('Cart');
+        $sm = new StockManager();
+        $cm = new CartManager();
 
         $stock = $sm->getById($stock_id);
         if (!$stock) {
@@ -97,39 +99,35 @@ class StockController extends Controller
             $session->getFlashBag()->add('success', $article->get('title').' a été ajouté au panier.');
         }
 
-        if ($request->isXmlHttpRequest()) {
-            // to be implemented
-        }
-
-        return $this->redirect('/pages/cart?cart_id='.$cart->get('id'));
+        return new RedirectResponse("/pages/cart?cart_id={$cart->get("id")}");
     }
 
     /**
      * Canceling return for a copy
      * GET /stock/{stockId}/cancel-return
-    */
-    public function cancelReturnAction(Session $session, $stockId) {
-        $this->auth('admin');
+     * @throws PropelException
+     */
+    public function cancelReturnAction(Request $request, Session $session, $stockId): RedirectResponse
+    {
+        self::authAdmin($request);
 
-        $sm = $this->entityManager('Stock');
+        $sm = new StockManager();
 
         $stock = $sm->getById($stockId);
         if (!$stock) {
             throw new NotFoundException("Stock $stockId not found");
         }
 
-        $error = false;
         try {
             $stock->cancelReturn();
             $sm->update($stock);
             $session->getFlashBag()->add('success', "L'exemplaire $stockId a bien été remis en vente.");
 
         } catch (Exception $e) {
-            $error = true;
             $session->getFlashBag()->add('error', $e->getMessage());
         }
 
-        return $this->redirect('/pages/adm_stock?id='.$stock->get('id'));
+        return new RedirectResponse('/pages/adm_stock?id='.$stock->get('id'));
     }
 
     /**
