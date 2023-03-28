@@ -448,6 +448,7 @@ class LinkTableMap extends TableMap
         $this->setClassName('\\Model\\Link');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('link_id', 'Id', 'INTEGER', true, 10, null);
         $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
@@ -458,7 +459,7 @@ class LinkTableMap extends TableMap
         $this->addColumn('book_id', 'BookId', 'INTEGER', false, 10, null);
         $this->addColumn('people_id', 'PeopleId', 'INTEGER', false, 10, null);
         $this->addColumn('job_id', 'JobId', 'INTEGER', false, 10, null);
-        $this->addColumn('rayon_id', 'RayonId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('rayon_id', 'RayonId', 'INTEGER', 'rayons', 'rayon_id', false, 10, null);
         $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'tags', 'tag_id', false, 10, null);
         $this->addColumn('event_id', 'EventId', 'INTEGER', false, null, null);
         $this->addColumn('post_id', 'PostId', 'INTEGER', false, null, null);
@@ -494,6 +495,13 @@ class LinkTableMap extends TableMap
   array (
     0 => ':tag_id',
     1 => ':tag_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('ArticleCategory', '\\Model\\ArticleCategory', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':rayon_id',
+    1 => ':rayon_id',
   ),
 ), null, null, null, false);
     }

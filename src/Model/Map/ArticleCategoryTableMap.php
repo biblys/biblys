@@ -307,6 +307,13 @@ class ArticleCategoryTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('Link', '\\Model\\Link', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':rayon_id',
+    1 => ':rayon_id',
+  ),
+), null, null, 'Links', false);
     }
 
     /**

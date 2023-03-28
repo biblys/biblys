@@ -6,6 +6,8 @@ use \DateTime;
 use \Exception;
 use \PDO;
 use Model\Article as ChildArticle;
+use Model\ArticleCategory as ChildArticleCategory;
+use Model\ArticleCategoryQuery as ChildArticleCategoryQuery;
 use Model\ArticleQuery as ChildArticleQuery;
 use Model\LinkQuery as ChildLinkQuery;
 use Model\Tag as ChildTag;
@@ -244,6 +246,11 @@ abstract class Link implements ActiveRecordInterface
      * @var        ChildTag
      */
     protected $aTag;
+
+    /**
+     * @var        ChildArticleCategory
+     */
+    protected $aArticleCategory;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -976,6 +983,10 @@ abstract class Link implements ActiveRecordInterface
             $this->modifiedColumns[LinkTableMap::COL_RAYON_ID] = true;
         }
 
+        if ($this->aArticleCategory !== null && $this->aArticleCategory->getId() !== $v) {
+            $this->aArticleCategory = null;
+        }
+
         return $this;
     }
 
@@ -1429,6 +1440,9 @@ abstract class Link implements ActiveRecordInterface
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
+        if ($this->aArticleCategory !== null && $this->rayon_id !== $this->aArticleCategory->getId()) {
+            $this->aArticleCategory = null;
+        }
         if ($this->aTag !== null && $this->tag_id !== $this->aTag->getId()) {
             $this->aTag = null;
         }
@@ -1473,6 +1487,7 @@ abstract class Link implements ActiveRecordInterface
 
             $this->aArticle = null;
             $this->aTag = null;
+            $this->aArticleCategory = null;
         } // if (deep)
     }
 
@@ -1606,6 +1621,13 @@ abstract class Link implements ActiveRecordInterface
                     $affectedRows += $this->aTag->save($con);
                 }
                 $this->setTag($this->aTag);
+            }
+
+            if ($this->aArticleCategory !== null) {
+                if ($this->aArticleCategory->isModified() || $this->aArticleCategory->isNew()) {
+                    $affectedRows += $this->aArticleCategory->save($con);
+                }
+                $this->setArticleCategory($this->aArticleCategory);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -2058,6 +2080,21 @@ abstract class Link implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aTag->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aArticleCategory) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'articleCategory';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'rayons';
+                        break;
+                    default:
+                        $key = 'ArticleCategory';
+                }
+
+                $result[$key] = $this->aArticleCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -2622,6 +2659,57 @@ abstract class Link implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildArticleCategory object.
+     *
+     * @param ChildArticleCategory|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setArticleCategory(ChildArticleCategory $v = null)
+    {
+        if ($v === null) {
+            $this->setRayonId(NULL);
+        } else {
+            $this->setRayonId($v->getId());
+        }
+
+        $this->aArticleCategory = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildArticleCategory object, it will not be re-added.
+        if ($v !== null) {
+            $v->addLink($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildArticleCategory object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildArticleCategory|null The associated ChildArticleCategory object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getArticleCategory(?ConnectionInterface $con = null)
+    {
+        if ($this->aArticleCategory === null && ($this->rayon_id != 0)) {
+            $this->aArticleCategory = ChildArticleCategoryQuery::create()->findPk($this->rayon_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aArticleCategory->addLinks($this);
+             */
+        }
+
+        return $this->aArticleCategory;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2635,6 +2723,9 @@ abstract class Link implements ActiveRecordInterface
         }
         if (null !== $this->aTag) {
             $this->aTag->removeLink($this);
+        }
+        if (null !== $this->aArticleCategory) {
+            $this->aArticleCategory->removeLink($this);
         }
         $this->link_id = null;
         $this->site_id = null;
@@ -2685,6 +2776,7 @@ abstract class Link implements ActiveRecordInterface
 
         $this->aArticle = null;
         $this->aTag = null;
+        $this->aArticleCategory = null;
         return $this;
     }
 

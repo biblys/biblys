@@ -19,9 +19,9 @@ class ArticleCategory extends BaseArticleCategory
 {
     public function preSave(?ConnectionInterface $con = null): bool
     {
-        $config = new Config();
+//        $config = new Config();
 
-        $this->setSiteId($config->get("site"));
+//        $this->setSiteId($config->get("site"));
 
         return true;
     }
