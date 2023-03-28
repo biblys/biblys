@@ -9,7 +9,6 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Cart;
 use EntityManager;
-use Framework\Exception\AuthException;
 use Media;
 use Model\Article;
 use Model\Publisher;
@@ -51,37 +50,6 @@ class Controller
         global $_V;
 
         $this->user = $_V;
-    }
-
-    /**
-     * Check current user's rank.
-     *
-     * @param string $rank minimal rank required
-     * @param int|null $id publisher id required
-     *
-     * @return bool true if user's rank match requirement
-     * @throws AuthException
-     * @deprecated Controller->auth is deprecated, use Controller::auth… functions instead.
-     */
-    public function auth(string $rank = 'user', int $id = null): bool
-    {
-        if ($rank == 'root' && !$this->user->isRoot()) {
-            throw new AuthException('Accès réservé aux super-administrateurs.');
-        }
-
-        if ($rank == 'admin' && !$this->user->isAdmin()) {
-            throw new AuthException('Accès réservé aux administrateurs.');
-        }
-
-        if ($rank == 'publisher' && !$this->user->isPublisherWithId($id) && !$this->user->isAdmin()) {
-            throw new AuthException('Accès réservé aux éditeurs.');
-        }
-
-        if ($rank == 'user' && !$this->user->isLogged()) {
-            throw new AuthException('Identification requise.');
-        }
-
-        return true;
     }
 
     /**
