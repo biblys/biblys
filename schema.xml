@@ -275,6 +275,10 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
+
   </table>
   <table name="cf_rewards" idMethod="native" phpName="CrowfundingReward">
     <column name="reward_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
@@ -297,6 +301,12 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="cf_campaigns" skipSql="true">
+      <reference local="campaign_id" foreign="campaign_id"/>
+    </foreign-key>
   </table>
   <table name="collections" idMethod="native" phpName="BookCollection">
     <column name="collection_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

@@ -307,7 +307,7 @@ class CrowdfundingCampaignTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('campaign_id', 'Id', 'INTEGER', true, 10, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, 10, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, 10, null);
         $this->addColumn('campaign_title', 'Title', 'VARCHAR', false, 255, null);
         $this->addColumn('campaign_url', 'Url', 'VARCHAR', false, 128, null);
         $this->addColumn('campaign_description', 'Description', 'LONGVARCHAR', false, null, null);
@@ -328,6 +328,20 @@ class CrowdfundingCampaignTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
+        $this->addRelation('CrowfundingReward', '\\Model\\CrowfundingReward', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':campaign_id',
+    1 => ':campaign_id',
+  ),
+), null, null, 'CrowfundingRewards', false);
     }
 
     /**

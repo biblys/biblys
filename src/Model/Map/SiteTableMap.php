@@ -699,6 +699,20 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Carts', false);
+        $this->addRelation('CrowdfundingCampaign', '\\Model\\CrowdfundingCampaign', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'CrowdfundingCampaigns', false);
+        $this->addRelation('CrowfundingReward', '\\Model\\CrowfundingReward', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'CrowfundingRewards', false);
         $this->addRelation('Option', '\\Model\\Option', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

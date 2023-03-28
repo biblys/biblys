@@ -10,7 +10,9 @@ use Model\Map\CrowdfundingCampaignTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
@@ -52,6 +54,28 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCrowdfundingCampaignQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildCrowdfundingCampaignQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildCrowdfundingCampaignQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildCrowdfundingCampaignQuery leftJoinSite($relationAlias = null) Adds a LEFT JOIN clause to the query using the Site relation
+ * @method     ChildCrowdfundingCampaignQuery rightJoinSite($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Site relation
+ * @method     ChildCrowdfundingCampaignQuery innerJoinSite($relationAlias = null) Adds a INNER JOIN clause to the query using the Site relation
+ *
+ * @method     ChildCrowdfundingCampaignQuery joinWithSite($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Site relation
+ *
+ * @method     ChildCrowdfundingCampaignQuery leftJoinWithSite() Adds a LEFT JOIN clause and with to the query using the Site relation
+ * @method     ChildCrowdfundingCampaignQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
+ * @method     ChildCrowdfundingCampaignQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
+ *
+ * @method     ChildCrowdfundingCampaignQuery leftJoinCrowfundingReward($relationAlias = null) Adds a LEFT JOIN clause to the query using the CrowfundingReward relation
+ * @method     ChildCrowdfundingCampaignQuery rightJoinCrowfundingReward($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CrowfundingReward relation
+ * @method     ChildCrowdfundingCampaignQuery innerJoinCrowfundingReward($relationAlias = null) Adds a INNER JOIN clause to the query using the CrowfundingReward relation
+ *
+ * @method     ChildCrowdfundingCampaignQuery joinWithCrowfundingReward($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the CrowfundingReward relation
+ *
+ * @method     ChildCrowdfundingCampaignQuery leftJoinWithCrowfundingReward() Adds a LEFT JOIN clause and with to the query using the CrowfundingReward relation
+ * @method     ChildCrowdfundingCampaignQuery rightJoinWithCrowfundingReward() Adds a RIGHT JOIN clause and with to the query using the CrowfundingReward relation
+ * @method     ChildCrowdfundingCampaignQuery innerJoinWithCrowfundingReward() Adds a INNER JOIN clause and with to the query using the CrowfundingReward relation
+ *
+ * @method     \Model\SiteQuery|\Model\CrowfundingRewardQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildCrowdfundingCampaign|null findOne(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query
  * @method     ChildCrowdfundingCampaign findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildCrowdfundingCampaign matching the query, or a new ChildCrowdfundingCampaign object populated from the query conditions when no match is found
@@ -361,6 +385,8 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
      * $query->filterBySiteId(array(12, 34)); // WHERE site_id IN (12, 34)
      * $query->filterBySiteId(array('min' => 12)); // WHERE site_id > 12
      * </code>
+     *
+     * @see       filterBySite()
      *
      * @param mixed $siteId The value to use as filter.
      *              Use scalar values for equality.
@@ -814,6 +840,354 @@ abstract class CrowdfundingCampaignQuery extends ModelCriteria
         $this->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_UPDATED, $updatedAt, $comparison);
 
         return $this;
+    }
+
+    /**
+     * Filter the query by a related \Model\Site object
+     *
+     * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterBySite($site, ?string $comparison = null)
+    {
+        if ($site instanceof \Model\Site) {
+            return $this
+                ->addUsingAlias(CrowdfundingCampaignTableMap::COL_SITE_ID, $site->getId(), $comparison);
+        } elseif ($site instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            $this
+                ->addUsingAlias(CrowdfundingCampaignTableMap::COL_SITE_ID, $site->toKeyValue('PrimaryKey', 'Id'), $comparison);
+
+            return $this;
+        } else {
+            throw new PropelException('filterBySite() only accepts arguments of type \Model\Site or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Site relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Site');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Site');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\SiteQuery A secondary query class using the current class as primary query
+     */
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinSite($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Site', '\Model\SiteQuery');
+    }
+
+    /**
+     * Use the Site relation Site object
+     *
+     * @param callable(\Model\SiteQuery):\Model\SiteQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withSiteQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useSiteQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Site table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\SiteQuery The inner query object of the EXISTS statement
+     */
+    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT EXISTS query.
+     *
+     * @see useSiteExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\SiteQuery The inner query object of the IN statement
+     */
+    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Site table for a NOT IN query.
+     *
+     * @see useSiteInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\SiteQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\SiteQuery */
+        $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\CrowfundingReward object
+     *
+     * @param \Model\CrowfundingReward|ObjectCollection $crowfundingReward the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByCrowfundingReward($crowfundingReward, ?string $comparison = null)
+    {
+        if ($crowfundingReward instanceof \Model\CrowfundingReward) {
+            $this
+                ->addUsingAlias(CrowdfundingCampaignTableMap::COL_CAMPAIGN_ID, $crowfundingReward->getCampaignId(), $comparison);
+
+            return $this;
+        } elseif ($crowfundingReward instanceof ObjectCollection) {
+            $this
+                ->useCrowfundingRewardQuery()
+                ->filterByPrimaryKeys($crowfundingReward->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByCrowfundingReward() only accepts arguments of type \Model\CrowfundingReward or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CrowfundingReward relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinCrowfundingReward(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CrowfundingReward');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CrowfundingReward');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CrowfundingReward relation CrowfundingReward object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\CrowfundingRewardQuery A secondary query class using the current class as primary query
+     */
+    public function useCrowfundingRewardQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCrowfundingReward($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CrowfundingReward', '\Model\CrowfundingRewardQuery');
+    }
+
+    /**
+     * Use the CrowfundingReward relation CrowfundingReward object
+     *
+     * @param callable(\Model\CrowfundingRewardQuery):\Model\CrowfundingRewardQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withCrowfundingRewardQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useCrowfundingRewardQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to CrowfundingReward table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\CrowfundingRewardQuery The inner query object of the EXISTS statement
+     */
+    public function useCrowfundingRewardExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\CrowfundingRewardQuery */
+        $q = $this->useExistsQuery('CrowfundingReward', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to CrowfundingReward table for a NOT EXISTS query.
+     *
+     * @see useCrowfundingRewardExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CrowfundingRewardQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useCrowfundingRewardNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CrowfundingRewardQuery */
+        $q = $this->useExistsQuery('CrowfundingReward', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to CrowfundingReward table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\CrowfundingRewardQuery The inner query object of the IN statement
+     */
+    public function useInCrowfundingRewardQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\CrowfundingRewardQuery */
+        $q = $this->useInQuery('CrowfundingReward', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to CrowfundingReward table for a NOT IN query.
+     *
+     * @see useCrowfundingRewardInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\CrowfundingRewardQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInCrowfundingRewardQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\CrowfundingRewardQuery */
+        $q = $this->useInQuery('CrowfundingReward', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
     }
 
     /**

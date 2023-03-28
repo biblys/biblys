@@ -5,13 +5,20 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\CrowdfundingCampaign as ChildCrowdfundingCampaign;
 use Model\CrowdfundingCampaignQuery as ChildCrowdfundingCampaignQuery;
+use Model\CrowfundingReward as ChildCrowfundingReward;
+use Model\CrowfundingRewardQuery as ChildCrowfundingRewardQuery;
+use Model\Site as ChildSite;
+use Model\SiteQuery as ChildSiteQuery;
 use Model\Map\CrowdfundingCampaignTableMap;
+use Model\Map\CrowfundingRewardTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -155,12 +162,31 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
     protected $campaign_updated;
 
     /**
+     * @var        ChildSite
+     */
+    protected $aSite;
+
+    /**
+     * @var        ObjectCollection|ChildCrowfundingReward[] Collection to store aggregation of ChildCrowfundingReward objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildCrowfundingReward> Collection to store aggregation of ChildCrowfundingReward objects.
+     */
+    protected $collCrowfundingRewards;
+    protected $collCrowfundingRewardsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var bool
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildCrowfundingReward[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildCrowfundingReward>
+     */
+    protected $crowfundingRewardsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Model\Base\CrowdfundingCampaign object.
@@ -603,6 +629,10 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
             $this->modifiedColumns[CrowdfundingCampaignTableMap::COL_SITE_ID] = true;
         }
 
+        if ($this->aSite !== null && $this->aSite->getId() !== $v) {
+            $this->aSite = null;
+        }
+
         return $this;
     }
 
@@ -943,6 +973,9 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aSite !== null && $this->site_id !== $this->aSite->getId()) {
+            $this->aSite = null;
+        }
     }
 
     /**
@@ -981,6 +1014,9 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aSite = null;
+            $this->collCrowfundingRewards = null;
 
         } // if (deep)
     }
@@ -1098,6 +1134,18 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aSite !== null) {
+                if ($this->aSite->isModified() || $this->aSite->isNew()) {
+                    $affectedRows += $this->aSite->save($con);
+                }
+                $this->setSite($this->aSite);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -1107,6 +1155,24 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->crowfundingRewardsScheduledForDeletion !== null) {
+                if (!$this->crowfundingRewardsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->crowfundingRewardsScheduledForDeletion as $crowfundingReward) {
+                        // need to save related object because we set the relation to null
+                        $crowfundingReward->save($con);
+                    }
+                    $this->crowfundingRewardsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCrowfundingRewards !== null) {
+                foreach ($this->collCrowfundingRewards as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1354,10 +1420,11 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param bool $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param bool $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array An associative array containing the field names (as keys) and field values
      */
-    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = []): array
+    public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
         if (isset($alreadyDumpedObjects['CrowdfundingCampaign'][$this->hashCode()])) {
             return ['*RECURSION*'];
@@ -1400,6 +1467,38 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aSite) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'site';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'sites';
+                        break;
+                    default:
+                        $key = 'Site';
+                }
+
+                $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCrowfundingRewards) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'crowfundingRewards';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'cf_rewardss';
+                        break;
+                    default:
+                        $key = 'CrowfundingRewards';
+                }
+
+                $result[$key] = $this->collCrowfundingRewards->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1721,6 +1820,20 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
         $copyObj->setEnds($this->getEnds());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getCrowfundingRewards() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCrowfundingReward($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1750,6 +1863,339 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildSite object.
+     *
+     * @param ChildSite|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setSite(ChildSite $v = null)
+    {
+        if ($v === null) {
+            $this->setSiteId(NULL);
+        } else {
+            $this->setSiteId($v->getId());
+        }
+
+        $this->aSite = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildSite object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCrowdfundingCampaign($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildSite object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildSite|null The associated ChildSite object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getSite(?ConnectionInterface $con = null)
+    {
+        if ($this->aSite === null && ($this->site_id != 0)) {
+            $this->aSite = ChildSiteQuery::create()->findPk($this->site_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSite->addCrowdfundingCampaigns($this);
+             */
+        }
+
+        return $this->aSite;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName): void
+    {
+        if ('CrowfundingReward' === $relationName) {
+            $this->initCrowfundingRewards();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collCrowfundingRewards collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addCrowfundingRewards()
+     */
+    public function clearCrowfundingRewards()
+    {
+        $this->collCrowfundingRewards = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collCrowfundingRewards collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialCrowfundingRewards($v = true): void
+    {
+        $this->collCrowfundingRewardsPartial = $v;
+    }
+
+    /**
+     * Initializes the collCrowfundingRewards collection.
+     *
+     * By default this just sets the collCrowfundingRewards collection to an empty array (like clearcollCrowfundingRewards());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCrowfundingRewards(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collCrowfundingRewards && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = CrowfundingRewardTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collCrowfundingRewards = new $collectionClassName;
+        $this->collCrowfundingRewards->setModel('\Model\CrowfundingReward');
+    }
+
+    /**
+     * Gets an array of ChildCrowfundingReward objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildCrowdfundingCampaign is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildCrowfundingReward[] List of ChildCrowfundingReward objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCrowfundingReward> List of ChildCrowfundingReward objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getCrowfundingRewards(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collCrowfundingRewardsPartial && !$this->isNew();
+        if (null === $this->collCrowfundingRewards || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collCrowfundingRewards) {
+                    $this->initCrowfundingRewards();
+                } else {
+                    $collectionClassName = CrowfundingRewardTableMap::getTableMap()->getCollectionClassName();
+
+                    $collCrowfundingRewards = new $collectionClassName;
+                    $collCrowfundingRewards->setModel('\Model\CrowfundingReward');
+
+                    return $collCrowfundingRewards;
+                }
+            } else {
+                $collCrowfundingRewards = ChildCrowfundingRewardQuery::create(null, $criteria)
+                    ->filterByCrowdfundingCampaign($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collCrowfundingRewardsPartial && count($collCrowfundingRewards)) {
+                        $this->initCrowfundingRewards(false);
+
+                        foreach ($collCrowfundingRewards as $obj) {
+                            if (false == $this->collCrowfundingRewards->contains($obj)) {
+                                $this->collCrowfundingRewards->append($obj);
+                            }
+                        }
+
+                        $this->collCrowfundingRewardsPartial = true;
+                    }
+
+                    return $collCrowfundingRewards;
+                }
+
+                if ($partial && $this->collCrowfundingRewards) {
+                    foreach ($this->collCrowfundingRewards as $obj) {
+                        if ($obj->isNew()) {
+                            $collCrowfundingRewards[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCrowfundingRewards = $collCrowfundingRewards;
+                $this->collCrowfundingRewardsPartial = false;
+            }
+        }
+
+        return $this->collCrowfundingRewards;
+    }
+
+    /**
+     * Sets a collection of ChildCrowfundingReward objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $crowfundingRewards A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setCrowfundingRewards(Collection $crowfundingRewards, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildCrowfundingReward[] $crowfundingRewardsToDelete */
+        $crowfundingRewardsToDelete = $this->getCrowfundingRewards(new Criteria(), $con)->diff($crowfundingRewards);
+
+
+        $this->crowfundingRewardsScheduledForDeletion = $crowfundingRewardsToDelete;
+
+        foreach ($crowfundingRewardsToDelete as $crowfundingRewardRemoved) {
+            $crowfundingRewardRemoved->setCrowdfundingCampaign(null);
+        }
+
+        $this->collCrowfundingRewards = null;
+        foreach ($crowfundingRewards as $crowfundingReward) {
+            $this->addCrowfundingReward($crowfundingReward);
+        }
+
+        $this->collCrowfundingRewards = $crowfundingRewards;
+        $this->collCrowfundingRewardsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related CrowfundingReward objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related CrowfundingReward objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countCrowfundingRewards(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collCrowfundingRewardsPartial && !$this->isNew();
+        if (null === $this->collCrowfundingRewards || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCrowfundingRewards) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCrowfundingRewards());
+            }
+
+            $query = ChildCrowfundingRewardQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCrowdfundingCampaign($this)
+                ->count($con);
+        }
+
+        return count($this->collCrowfundingRewards);
+    }
+
+    /**
+     * Method called to associate a ChildCrowfundingReward object to this object
+     * through the ChildCrowfundingReward foreign key attribute.
+     *
+     * @param ChildCrowfundingReward $l ChildCrowfundingReward
+     * @return $this The current object (for fluent API support)
+     */
+    public function addCrowfundingReward(ChildCrowfundingReward $l)
+    {
+        if ($this->collCrowfundingRewards === null) {
+            $this->initCrowfundingRewards();
+            $this->collCrowfundingRewardsPartial = true;
+        }
+
+        if (!$this->collCrowfundingRewards->contains($l)) {
+            $this->doAddCrowfundingReward($l);
+
+            if ($this->crowfundingRewardsScheduledForDeletion and $this->crowfundingRewardsScheduledForDeletion->contains($l)) {
+                $this->crowfundingRewardsScheduledForDeletion->remove($this->crowfundingRewardsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildCrowfundingReward $crowfundingReward The ChildCrowfundingReward object to add.
+     */
+    protected function doAddCrowfundingReward(ChildCrowfundingReward $crowfundingReward): void
+    {
+        $this->collCrowfundingRewards[]= $crowfundingReward;
+        $crowfundingReward->setCrowdfundingCampaign($this);
+    }
+
+    /**
+     * @param ChildCrowfundingReward $crowfundingReward The ChildCrowfundingReward object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeCrowfundingReward(ChildCrowfundingReward $crowfundingReward)
+    {
+        if ($this->getCrowfundingRewards()->contains($crowfundingReward)) {
+            $pos = $this->collCrowfundingRewards->search($crowfundingReward);
+            $this->collCrowfundingRewards->remove($pos);
+            if (null === $this->crowfundingRewardsScheduledForDeletion) {
+                $this->crowfundingRewardsScheduledForDeletion = clone $this->collCrowfundingRewards;
+                $this->crowfundingRewardsScheduledForDeletion->clear();
+            }
+            $this->crowfundingRewardsScheduledForDeletion[]= $crowfundingReward;
+            $crowfundingReward->setCrowdfundingCampaign(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this CrowdfundingCampaign is new, it will return
+     * an empty collection; or if this CrowdfundingCampaign has previously
+     * been saved, it will retrieve related CrowfundingRewards from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in CrowdfundingCampaign.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildCrowfundingReward[] List of ChildCrowfundingReward objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildCrowfundingReward}> List of ChildCrowfundingReward objects
+     */
+    public function getCrowfundingRewardsJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildCrowfundingRewardQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getCrowfundingRewards($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1758,6 +2204,9 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aSite) {
+            $this->aSite->removeCrowdfundingCampaign($this);
+        }
         $this->campaign_id = null;
         $this->site_id = null;
         $this->campaign_title = null;
@@ -1792,8 +2241,15 @@ abstract class CrowdfundingCampaign implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collCrowfundingRewards) {
+                foreach ($this->collCrowfundingRewards as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collCrowfundingRewards = null;
+        $this->aSite = null;
         return $this;
     }
 
