@@ -158,7 +158,7 @@ class EntityFactory
     {
         $sm = new SiteManager();
         return $sm->create([
-            "site_name" => "Librairie Ys",
+            "site_title" => "Librairie Ys",
             "site_tag" => "YS",
             "site_contact" => "contact@librys.fr",
         ]);
