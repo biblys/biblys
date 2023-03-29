@@ -1,0 +1,25 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Connexion
+{% endblock %}
+
+{% block main %}
+  <h1>Connexion</h1>
+
+  <a href="{{ loginWithAxysUrl }}" class="btn btn-primary">
+    Se connecter avec Axys
+  </a>
+
+  <h2>Pas encore de compte Axys ?</h2>
+
+  <p>
+    Le fournisseur d'identité <a href="https://axys.me/">Axys</a> vous permettra de vous connecter au site
+    {{ app.currentSite.site.title }} mais aussi à de nombreux autres sites de librairies ou de maisons d'édition avec un
+    seul et même compte.
+  </p>
+
+  <p>
+    <a href="https://axys.me" class="btn btn-info btn-sm">Créer un compte Axys</a>
+  </p>
+{% endblock %}

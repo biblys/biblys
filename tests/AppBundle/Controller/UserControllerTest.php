@@ -15,6 +15,12 @@ require_once __DIR__."/../../setUp.php";
 
 class UserControllerTest extends TestCase
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testLogin()
     {
         // given
@@ -30,10 +36,16 @@ class UserControllerTest extends TestCase
         $response = $userController->login($request, $urlGenerator);
 
         // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/openid/axys", $response->getTargetUrl());
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Se connecter avec Axys", $response->getContent());
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function testLoginWithReturnUrl()
     {
         // given
@@ -41,17 +53,17 @@ class UserControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")
-            ->with("openid_axys", ["return_url" => "return_url"])
-            ->willReturn("openid_axys_url_with_return_url_param");
+            ->with("openid_axys", ["return_url" => "url_to_return_to"])
+            ->willReturn("/openid/axys?return_url=url_to_return_to");
         $request = new Request();
-        $request->query->set("return_url", "return_url");
+        $request->query->set("return_url", "url_to_return_to");
 
         // when
         $response = $userController->login($request, $urlGenerator);
 
         // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("openid_axys_url_with_return_url_param", $response->getTargetUrl());
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("url_to_return_to", $response->getContent());
     }
 
     public function testAccount()

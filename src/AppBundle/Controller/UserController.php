@@ -14,11 +14,20 @@ use Twig\Error\SyntaxError;
 
 class UserController extends Controller
 {
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
     public function login(Request $request, UrlGenerator $urlGenerator): Response
     {
         $returnUrl = $request->query->get("return_url");
-        $loginRoute = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
-        return new RedirectResponse($loginRoute);
+        $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
+
+        return $this->render("AppBundle:User:login.html.twig", [
+            "loginWithAxysUrl" => $loginWithAxysUrl,
+        ]);
     }
 
     /**
