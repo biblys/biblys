@@ -229,6 +229,7 @@ class Controller
         $twig->addRuntimeLoader($runtimeLoader);
 
         $config = new Config();
+        $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
         $axys = new LegacyClient($config->get("axys"), $currentUserService->getToken());
         $axysMenu = LegacyClient::buildMenu($config, $urlGenerator, $request);
 
@@ -236,6 +237,7 @@ class Controller
 
         // Global variables
         $app = [
+            "currentUrl" => $currentUrl,
             "currentUser" => $currentUserService,
             'request' => $request,
             'user' => $this->user,
