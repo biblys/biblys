@@ -4,7 +4,6 @@ use ApiBundle\Controller\ErrorController;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Axys\LegacyClient as AxysClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
@@ -21,7 +20,6 @@ $dbConfig = $config->get("db");
 Biblys\Database\Connection::initPropel($dbConfig);
 
 $axysConfig = $config->get("axys");
-$axys = new AxysClient($axysConfig);
 
 // Identification utilisateur
 if (auth()) {

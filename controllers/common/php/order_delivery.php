@@ -1,8 +1,6 @@
 <?php
 
-use Axys\LegacyClient;
 use Biblys\Legacy\OrderDeliveryHelpers;
-use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Model\PageQuery;
@@ -14,9 +12,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 /** @var Request $request */
 /** @var Visitor $_V */
 /** @var UrlGenerator $urlGenerator */
-
-$config = new Config();
-$axys = new LegacyClient($config->get("axys"));
 
 $request->attributes->set("page_title", "Commande » Validation");
 

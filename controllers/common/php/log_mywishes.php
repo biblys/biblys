@@ -1,7 +1,5 @@
 <?php
 
-use Axys\LegacyClient;
-use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,9 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 /** @var Visitor $_V */
 /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
 /** @var Site $site */
-
-$config = new Config();
-$axys = new LegacyClient($config->get("axys"));
 
 $wlm = new WishlistManager();
 $wm = new WishManager();

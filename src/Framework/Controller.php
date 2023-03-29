@@ -2,7 +2,6 @@
 
 namespace Framework;
 
-use Axys\LegacyClient;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -65,7 +64,7 @@ class Controller
      */
     public function render(string $templatePath, array $vars = []): Response
     {
-        global $site, $request, $axys;
+        global $site, $request;
 
         $container = require __DIR__."/../container.php";
         $urlGenerator = $container->get("url_generator");
@@ -228,11 +227,8 @@ class Controller
         );
         $twig->addRuntimeLoader($runtimeLoader);
 
-        $config = new Config();
         $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
-        $axys = new LegacyClient($config->get("axys"), $currentUserService->getToken());
-        $axysMenu = LegacyClient::buildMenu($config, $urlGenerator, $request);
-
+        $config = new Config();
         $trackers = $this->_getAnalyticsTrackers($config);
 
         // Global variables
@@ -242,8 +238,6 @@ class Controller
             "currentUser" => $currentUserService,
             'request' => $request,
             'user' => $this->user,
-            'axys' => $axys,
-            'axysMenu' => $axysMenu,
             'session' => $session,
             'site' => $site,
             "trackers" => $trackers,

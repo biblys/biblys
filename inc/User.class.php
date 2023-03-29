@@ -1,7 +1,5 @@
 <?php
 
-use Axys\LegacyClient as AxysClient;
-use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 
 class InvalidCredentialsException extends Exception

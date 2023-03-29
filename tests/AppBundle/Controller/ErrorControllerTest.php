@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use Axys\LegacyClient;
 use Exception;
 use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
@@ -94,10 +93,9 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new UnauthorizedHttpException("User should login.");
-        $axys = new LegacyClient();
 
         // when
-        $response = $controller->exception($request, $exception, $axys);
+        $response = $controller->exception($request, $exception);
 
         // then
         $this->assertEquals(
@@ -124,10 +122,9 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AccessDeniedHttpException("Access if forbidden for user.");
-        $axys = new LegacyClient();
 
         // when
-        $response = $controller->exception($request, $exception, $axys);
+        $response = $controller->exception($request, $exception);
 
         // then
         $this->assertEquals(
@@ -153,10 +150,9 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $exception = new AuthException("Unauthorized");
-        $axys = new LegacyClient();
 
         // when
-        $response = $controller->exception($request, $exception, $axys);
+        $response = $controller->exception($request, $exception);
 
         // then
         $this->assertEquals(
