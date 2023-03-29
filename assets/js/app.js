@@ -1,6 +1,7 @@
 import loadModuleForElements from './loadModuleForElements';
 
 import '../css/app.css';
+import '../css/user-menu.css';
 
 document.addEventListener('DOMContentLoaded', function() {
   loadModuleForElements('carousel', '.biblys-carousel');

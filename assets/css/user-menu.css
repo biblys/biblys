@@ -1,0 +1,17 @@
+.user-menu {
+  background: rgba(15,15,15);
+  display: flex;
+  font-size: 16px;
+  padding: 8px 16px;
+  justify-content: flex-end;
+}
+
+.user-menu a {
+  color: white;
+  margin-left: 8px;
+}
+
+.user-menu a:hover {
+  color: #ff6600;
+  text-decoration: none;
+}

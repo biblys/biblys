@@ -2,20 +2,20 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/assets/bundle/runtime.bb0789cb.js",
-        "/assets/bundle/app.885ce407.js"
+        "/assets/bundle/runtime.898bf96a.js",
+        "/assets/bundle/app.037c2cca.js"
       ],
       "css": [
-        "/assets/bundle/app.fb5c00f5.css"
+        "/assets/bundle/app.279c71aa.css"
       ]
     },
     "admin": {
       "js": [
-        "/assets/bundle/runtime.bb0789cb.js",
-        "/assets/bundle/admin.6e2d71e3.js"
+        "/assets/bundle/runtime.898bf96a.js",
+        "/assets/bundle/admin.4ad7f8c3.js"
       ],
       "css": [
-        "/assets/bundle/admin.0e07afef.css"
+        "/assets/bundle/admin.c87e17c7.css"
       ]
     }
   }

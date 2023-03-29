@@ -4,6 +4,8 @@
     {% include "layout:_assets_css.html.twig" %}
   </head>
   <body>
+    {% include "layout:_user_menu.html.twig" %}
+
     <h1>{{ app.site.title }}</h1>
 
     {% block main %}{% endblock %}

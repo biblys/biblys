@@ -1,0 +1,16 @@
+<div class="user-menu">
+  {% if not app.currentUser.isAuthentified %}
+    <a href="{{ path("user_login", { return_url: app.currentUrl }) }}">
+      connexion
+    </a>
+
+    <a href="{{ path("user_signup", { return_url: app.
+    currentUrl }) }}">
+      inscription
+    </a>
+  {% else %}
+    <a href="{{ path("user_logout") }}">
+      déconnexion
+    </a>
+  {% endif %}
+</div>
