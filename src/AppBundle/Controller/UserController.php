@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\CurrentUser;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,8 +21,16 @@ class UserController extends Controller
      * @throws LoaderError
      * @throws PropelException
      */
-    public function login(Request $request, UrlGenerator $urlGenerator): Response
+    public function login(
+        Request $request,
+        CurrentUser $currentUser,
+        UrlGenerator $urlGenerator
+    ): Response
     {
+        if ($currentUser->isAuthentified()) {
+            return new RedirectResponse("/");
+        }
+
         $returnUrl = $request->query->get("return_url");
         if (str_contains($returnUrl, "logged-out")) {
             $returnUrl = null;

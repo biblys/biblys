@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use Model\User;
+use Biblys\Service\CurrentUser;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +25,8 @@ class UserControllerTest extends TestCase
     {
         // given
         $userController = new UserController();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("isAuthentified")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator
             ->method("generate")
@@ -33,7 +35,7 @@ class UserControllerTest extends TestCase
         $request = new Request();
 
         // when
-        $response = $userController->login($request, $urlGenerator);
+        $response = $userController->login($request, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -51,6 +53,8 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("isAuthentified")->willReturn(false);
         $urlGenerator
             ->method("generate")
             ->with("openid_axys", ["return_url" => "url_to_return_to"])
@@ -59,11 +63,41 @@ class UserControllerTest extends TestCase
         $request->query->set("return_url", "url_to_return_to");
 
         // when
-        $response = $userController->login($request, $urlGenerator);
+        $response = $userController->login($request, $currentUser, $urlGenerator);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("url_to_return_to", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testLoginForAuthentifiedUser()
+    {
+        // given
+        $userController = new UserController();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("isAuthentified")->willReturn(true);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator
+            ->method("generate")
+            ->with("main_home")
+            ->willReturn("/");
+        $request = new Request();
+
+        // when
+        $response = $userController->login($request, $currentUser, $urlGenerator);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals(
+            "/",
+            $response->headers->get("Location"),
+        );
     }
 
     public function testAccount()
