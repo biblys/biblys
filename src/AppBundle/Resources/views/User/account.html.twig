@@ -1,0 +1,74 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Mon compte {{ app.currentSite.site.title }}
+{% endblock %}
+
+{% block main %}
+  <h1>Mon compte {{ app.currentSite.site.title }}</h1>
+
+  <p class="alert alert-info">
+    <span class="fa fa-info-circle"></span>
+    Vous êtes connecté·e à l'aide d'un compte Axys. Rendez-vous sur <a href="https://axys.me/"><strong>axys.me</strong></a> pour gérer vos identifiants.
+  </p>
+
+  <ul>
+
+    {% if app.currentSite.hasOptionEnabled("wishlist") %}
+      <li>
+        <a href="/pages/log_mywishes">
+          <span class="fa fa-heart"></span>
+          Mes envies
+        </a>
+      </li>
+    {% endif %}
+
+    {% if app.currentSite.hasOptionEnabled("alerts") %}
+      <li>
+        <a href="/pages/log_myalerts">
+          <span class="fa fa-bell"></span>
+          Mes alertes
+        </a>
+      </li>
+    {% endif %}
+
+    <li>
+      <a href="/pages/log_myorders">
+        <span class="fa fa-dropbox"></span>
+        Mes commandes
+      </a>
+    </li>
+
+    {% if app.currentSite.hasOptionEnabled("show_elibrary") %}
+      <li>
+        <a href="/pages/log_myebooks">
+          <span class="fa fa-book"></span>
+          Ma bibliothèque
+        </a>
+      </li>
+    {% endif %}
+
+    {% if app.currentUser.hasPublisherRight %}
+      <li>
+        <a href="/pages/log_dashboard">
+          <span class="fa fa-home"></span>
+          Gérer ma maison d'édition
+        </a>
+      </li>
+    {% endif %}
+
+    <li>
+      <a href="{{ path("user_logout") }}">
+        <span class="fa fa-sign-out"></span>
+        Déconnexion
+      </a>
+    </li>
+  </ul>
+
+  {% if app.currentUser.isAdminForSite(app.currentSite.site) %}
+    <p class="alert alert-warning">
+      <span class="fa fa-lightbulb-o"></span>
+      Accédez à l'administration en cliquant sur le logo <strong>biblys</strong> en haut à gauche de la page.
+    </p>
+  {% endif %}
+{% endblock %}

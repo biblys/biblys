@@ -639,6 +639,10 @@ user_login:
   path: /user/login
   controller: AppBundle\Controller\UserController::login
 
+user_account:
+  path: /user/account
+  controller: AppBundle\Controller\UserController::account
+
 user_logged_out:
   path: /user/logged-out
   controller: AppBundle\Controller\UserController::loggedOut

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Model\User;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,22 @@ class UserControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("openid_axys_url_with_return_url_param", $response->getTargetUrl());
+    }
+
+    public function testAccount()
+    {
+        // given
+        $userController = new UserController();
+
+        // when
+        $response = $userController->account();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString(
+            "Vous êtes connecté·e à l'aide d'un compte Axys.",
+            $response->getContent(),
+        );
     }
 
     public function testLogout()

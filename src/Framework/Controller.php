@@ -237,6 +237,7 @@ class Controller
 
         // Global variables
         $app = [
+            "currentSite" => $currentSite,
             "currentUrl" => $currentUrl,
             "currentUser" => $currentUserService,
             'request' => $request,

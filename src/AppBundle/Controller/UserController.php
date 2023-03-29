@@ -21,6 +21,17 @@ class UserController extends Controller
         return new RedirectResponse($loginRoute);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function account(): Response
+    {
+        return $this->render("AppBundle:User:account.html.twig");
+    }
+
     public function logout(UrlGenerator $urlGenerator): Response
     {
         $loggedOutUrl = $urlGenerator->generate("user_logged_out");

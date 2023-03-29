@@ -1,16 +1,13 @@
 <div class="user-menu">
   {% if not app.currentUser.isAuthentified %}
     <a href="{{ path("user_login", { return_url: app.currentUrl }) }}">
-      connexion
-    </a>
-
-    <a href="{{ path("user_signup", { return_url: app.
-    currentUrl }) }}">
-      inscription
+      <span class="fa fa-user-circle-o"></span>
+      Connexion
     </a>
   {% else %}
-    <a href="{{ path("user_logout") }}">
-      déconnexion
+    <a href="{{ path("user_account") }}">
+      <span class="fa fa-user-circle"></span>
+      Mon compte {{ app.site.title }}
     </a>
   {% endif %}
 </div>
