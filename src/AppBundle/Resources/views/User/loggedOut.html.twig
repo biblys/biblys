@@ -1,0 +1,15 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Vous avez été déconnecté·e du site {{ app.site.title }}.
+{% endblock %}
+
+{% block main %}
+  <h1>A bientôt !</h1>
+
+  <p>Vous avez été déconnecté·e du site <strong>{{ app.site.title }}</strong>.</p>
+
+  <p>Voulez-vous également vous
+    <a href="https://axys.me/session/logout">déconnecter de votre compte Axys</a> ?
+  </p>
+{% endblock %}
