@@ -633,42 +633,6 @@ template_delete:
   path: /admin/templates/{slug}/delete
   controller: AppBundle\Controller\TemplateController::deleteAction
 
-# Ticket
-
-ticket_index:
-  path: /support/
-  controller: AppBundle\Controller\TicketController::indexAction
-
-ticket_root:
-  path: /support/root
-  controller: AppBundle\Controller\TicketController::rootAction
-
-ticket_new:
-  path: /ticket/new
-  controller: AppBundle\Controller\TicketController::newAction
-
-ticket_show:
-  path: /ticket/{id}
-  controller: AppBundle\Controller\TicketController::showAction
-
-ticket_edit:
-  path: /ticket/{id}/edit
-  controller: AppBundle\Controller\TicketController::editAction
-
-ticket_close:
-  path: /ticket/{id}/close
-  controller: AppBundle\Controller\TicketController::closeAction
-
-ticket_resolve:
-  path: /ticket/{id}/resolve
-  controller: AppBundle\Controller\TicketController::resolveAction
-
-# TicketComment
-
-ticket_comment_new:
-  path: /ticket/{ticket_id}/comment
-  controller: AppBundle\Controller\TicketController::newCommentAction
-
 # User
 
 user_login:
