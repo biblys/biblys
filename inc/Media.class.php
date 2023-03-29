@@ -2,17 +2,20 @@
 
 class Media
 {
-    private $_id;
-    private $_type;
-    private $_mime;
-    private $_ext;
-    private $_dir;
-    private $_domain;
-    private $_directoryPath;
-    private $_path;
-    private $_exists = false;
-    private $_dimensions;
+    private int $_id;
+    private string $_type;
+    private string $_mime;
+    private string $_ext;
+    private string $_dir;
+    private string $_domain;
+    private string $_directoryPath;
+    private ?string $_path = null;
+    private bool $_exists = false;
+    private array $_dimensions;
 
+    /**
+     * @throws Exception
+     */
     public function __construct($type, $id)
     {
         $this->setDomain('media'); // domaine par défaut
@@ -26,7 +29,7 @@ class Media
     /**
      * Mettre à jour l'objet
      */
-    public function update()
+    public function update(): void
     {
 
         // Dossier
@@ -36,37 +39,25 @@ class Media
         if ($this->domain() == 'media') {
             $this->setDirectoryPath(MEDIA_PATH.'/'.$this->type().'/'.$this->dir().'/');
             $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
-        } elseif ($this->domain() == 'dl') {
-            $this->setDirectoryPath(biblysPath() . "/../../dl" .'/'.$this->type().'/'.$this->dir().'/');
-            $this->setPath($this->directoryPath().$this->id().'.'.$this->ext());
         }
 
         // Exists
         if (file_exists($this->path())) {
             $this->setExists(true);
         }
-        // URL
-        if ($this->exists()) {
-            if ($this->domain() == 'media') {
-                $this->setURL(MEDIA_URL.'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext());
-            }
-            if ($this->domain() == 'dl') {
-                $this->setURL("http://dl.biblys.fr" .'/'.$this->type().'/'.$this->dir().'/'.$this->id().'.'.$this->ext());
-            }
-        }
     }
 
     /**
      * Upload a new file
      */
-    public function upload($file, $mime = null)
+    public function upload($file): bool
     {
         // If file already exists, delete it
         if ($this->exists()) {
             $this->delete();
         }
 
-        // If directory does not already exists create it
+        // If directory do not already exists create it
         if (!is_dir($this->directoryPath())) {
             mkdir($this->directoryPath(), 0777, true);
         }
@@ -74,13 +65,13 @@ class Media
         // Copy file from temp upload path
         if (copy($file, $this->path())) {
             $this->update();
-            return (bool) true;
+            return true;
         }
 
-        return (bool) false;
+        return false;
     }
 
-    public function getDimensions()
+    public function getDimensions(): array
     {
         if (!isset($this->_dimensions)) {
             $size = getimagesize($this->path());
@@ -93,7 +84,7 @@ class Media
         return $this->_dimensions;
     }
 
-    public function getOrientation()
+    public function getOrientation(): string
     {
         $dimensions = $this->getDimensions();
         $height = $dimensions['height'];
@@ -111,10 +102,8 @@ class Media
      * Fix image orientation based on exif
      *
      * @param string $file file path to image to fix
-     *
-     * @return null
      */
-    public function fixImageOrientation($file)
+    public function fixImageOrientation(string $file): void
     {
 
         // Skip if image is not jpeg
@@ -151,7 +140,7 @@ class Media
     /**
      * Supprimer le fichier (et les vignettes)
      */
-    public function delete()
+    public function delete(): void
     {
         if ($this->exists()) {
             foreach (glob(substr($this->path(), 0, -4)."*") as $f) {
@@ -162,7 +151,7 @@ class Media
 
     /* SETTERS */
 
-    private function setId($id)
+    private function setId($id): void
     {
         $this->_id = (int) $id;
     }
@@ -170,7 +159,7 @@ class Media
     /**
      * @throws Exception
      */
-    private function setType($type)
+    private function setType($type): void
     {
 
         if ($type == "article") {
@@ -210,84 +199,79 @@ class Media
         }
     }
 
-    private function setExt($ext)
+    private function setExt($ext): void
     {
         $this->_ext = (string) $ext;
     }
 
-    private function setMime($mime)
+    private function setMime($mime): void
     {
         $this->_mime = (string) $mime;
     }
 
-    private function setDomain($domain)
+    private function setDomain($domain): void
     {
         $this->_domain = (string) $domain;
     }
 
-    private function setDirectoryPath($directoryPath)
+    private function setDirectoryPath($directoryPath): void
     {
         $this->_directoryPath = (string) $directoryPath;
     }
 
-    private function setPath($path)
+    private function setPath($path): void
     {
         $this->_path = (string) $path;
     }
 
-    private function setDir($dir)
+    private function setDir($dir): void
     {
         $this->_dir = (string) $dir;
     }
 
-    private function setURL($url)
+    public function setExists(bool $exists): void
     {
-        $this->_url = (string) $url;
-    }
-
-    public function setExists(bool $exists)
-    {
-        $this->_exists = (bool) $exists;
+        $this->_exists = $exists;
     }
 
     /* GETTERS */
 
-    public function id()
+    public function id(): int
     {
         return $this->_id;
     }
 
-    public function type()
+    public function type(): string
     {
         return $this->_type;
     }
 
-    public function ext()
+    public function ext(): string
     {
         return $this->_ext;
     }
 
-    public function mime()
+    public function mime(): string
     {
         return $this->_mime;
     }
 
-    public function domain()
+    public function domain(): string
     {
         return $this->_domain;
     }
 
-    public function directoryPath()
+    public function directoryPath(): string
     {
         return $this->_directoryPath;
     }
 
-    public function path()
+    public function path(): ?string
     {
         return $this->_path;
     }
 
-    public function dir()
+    public function dir(): string
     {
         return $this->_dir;
     }
@@ -295,12 +279,12 @@ class Media
     /**
      * Kept for backward compatibility, use getUrl instead
      */
-    public function url($data = null)
+    public function url($data = null): string
     {
         return $this->getUrl(["size" => $data]);
     }
 
-    public function getUrl(array $options = [])
+    public function getUrl(array $options = []): string
     {
         global $config;
 
@@ -330,26 +314,24 @@ class Media
             if ($imagesCdn['service'] === 'cloudimage') {
                 $operation = 'cdn';
                 $operationSize = 'n';
-                if ($orientation) {
+                if ($orientation && isset($size)) {
                     $operation = $orientation === 'w' ? 'width' : 'height';
                     $operationSize = $size;
                 }
 
                 $url = MEDIA_URL.$baseUrl;
-                $cloudUrl = 'https://'.$imagesCdn['options']['token'].'.cloudimg.io/'.$operation.'/'.$operationSize.'/faf/'.$url;
-                return $cloudUrl;
+                return 'https://'.$imagesCdn['options']['token'].'.cloudimg.io/'.$operation.'/'.$operationSize.'/faf/'.$url;
             }
             
             if ($imagesCdn['service'] === 'weserv') {
                 $url = MEDIA_URL.$baseUrl;
                 $weservOptions = ["url" => $url];
                 
-                if ($orientation) {
+                if ($orientation && isset($size)) {
                     $weservOptions[$orientation] = $size;
                 }
 
-                $weservUrl = "//images.weserv.nl?".http_build_query($weservOptions);
-                return $weservUrl;
+                return "//images.weserv.nl?".http_build_query($weservOptions);
             }
         }
 
@@ -358,6 +340,6 @@ class Media
 
     public function exists(): bool
     {
-        return (bool) $this->_exists;
+        return $this->_exists;
     }
 }
