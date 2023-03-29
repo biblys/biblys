@@ -23,8 +23,11 @@ class UserController extends Controller
     public function login(Request $request, UrlGenerator $urlGenerator): Response
     {
         $returnUrl = $request->query->get("return_url");
-        $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
+        if (str_contains($returnUrl, "logged-out")) {
+            $returnUrl = null;
+        }
 
+        $loginWithAxysUrl = $urlGenerator->generate("openid_axys", ["return_url" => $returnUrl]);
         return $this->render("AppBundle:User:login.html.twig", [
             "loginWithAxysUrl" => $loginWithAxysUrl,
         ]);
