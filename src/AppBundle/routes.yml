@@ -643,6 +643,10 @@ user_logged_out:
   path: /user/logged-out
   controller: AppBundle\Controller\UserController::loggedOut
 
+user_logout:
+  path: /user/logout
+  controller: AppBundle\Controller\UserController::logout
+
 user_signup:
   path: /user/signup
   controller: AppBundle\Controller\UserController::signup

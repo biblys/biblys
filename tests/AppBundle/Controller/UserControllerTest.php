@@ -53,6 +53,26 @@ class UserControllerTest extends TestCase
         $this->assertEquals("openid_axys_url_with_return_url_param", $response->getTargetUrl());
     }
 
+    public function testLogout()
+    {
+        // given
+        $userController = new UserController();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")
+            ->with("user_logged_out")
+            ->willReturn("logged_out_url");
+
+        // when
+        $response = $userController->logout($urlGenerator);
+
+        // then
+        $cookie = $response->headers->getCookies()[0];
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("logged_out_url", $response->headers->get("Location"));
+        $this->assertEquals("user_uid", $cookie->getName(), "clears user_uid cookie");
+        $this->assertEquals(null, $cookie->getValue(), "clears user_uid cookie");
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
