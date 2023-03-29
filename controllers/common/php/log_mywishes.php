@@ -4,7 +4,12 @@ use Axys\LegacyClient;
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+/** @var Visitor $_V */
+/** @var \Symfony\Component\HttpFoundation\Session\Session $session */
+/** @var Site $site */
 
 $config = new Config();
 $axys = new LegacyClient($config->get("axys"));
@@ -76,7 +81,7 @@ if ($request->getMethod() === "POST") {
 // Show wish list
 else {
 
-    $_PAGE_TITLE = $wishlist->get('name');
+    $request->attributes->set("page_title", $wishlist->get('name'));
 
     $messages = null;
     foreach ($session->getFlashBag()->get('success') as $message) {
@@ -95,7 +100,7 @@ else {
 
     // Show wishlist url & share buttons
     else {
-        $url = 'http://' . $_SITE['site_domain'] . '/wishlist/' . $_V->get('slug');
+        $url = 'https://' . $site->get("domaine") . '/wishlist/' . $_V->get('slug');
         $share = '
 			<br>
 
@@ -124,7 +129,7 @@ else {
 				</a>
 			</div>
 
-			<h2>' . $_PAGE_TITLE . '</h2>
+			<h2>'.$wishlist->get("name").'</h2>
 
 			' . $messages . '
 
@@ -146,7 +151,7 @@ else {
 				</p>
 				<p class="center">
 					Vous pourrez ensuite retrouver votre liste<br>
-					sur tous les sites <a href="http://www.biblys.fr/">Biblys</a> et la partager<br>
+					sur tous les sites <a href="https://www.biblys.fr/">Biblys</a> et la partager<br>
 					pour vous faire offrir des livres !
 				</p>
 			';
@@ -156,6 +161,7 @@ else {
 
 				</div><br>
 			';
+        $_REQ = "";
         foreach ($wishes as $w) {
 
             if (!isset($_REQ)) $_REQ = '(';
@@ -163,9 +169,9 @@ else {
             $_REQ .= ' `articles`.`article_id` = ' . $w['article_id'];
         }
         $_REQ .= ')';
-        if ($_SITE['site_publisher']) $_REQ .= ' AND `articles`.`publisher_id` = ' . $_SITE['publisher_id'];
-        require_once '_list.php';
-        $content .= $_ECHO;
+        if ($site->has("publisher_id")) $_REQ .= ' AND `articles`.`publisher_id` = ' . $site->get
+            ("publisher_id");
+        $content .= require_once '_list.php';
         $_ECHO = null;
     }
 }
