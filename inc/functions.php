@@ -871,12 +871,12 @@ function share_buttons($url, $text = null, $options = [])
 }
 
 // Returns site controller if it exists, or default controller, or false
-function get_controller_path($controller)
+function get_controller_path($controller): bool|string
 {
     global $site;
 
-    $default_path = biblysPath() . '/controllers/common/php/' . $controller . '.php';
-    $app_path = biblysPath() . 'app/controllers/' . $controller . '.php';
+    $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
+    $app_path = __DIR__."/../app/controllers/".$controller.".php";
 
     if (file_exists($app_path)) {
         return $app_path;

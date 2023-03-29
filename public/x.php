@@ -40,6 +40,7 @@ $urlGenerator = new UrlGenerator($routes, new RequestContext());
 $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $_PAGE_TYPE = substr($_PAGE, 0, 4);
+/** @var Visitor $_V */
 if ($_PAGE_TYPE == "adm_" && !$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
     json_error(0, "Cette action est réservée aux administrateurs (".$_PAGE."). Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
@@ -51,10 +52,11 @@ $_RESULT = null;
 
 // Recherche de la page site, par defaut, ou 404
 try {
-    if (file_exists(biblysPath().'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php')) {
-        $_PAGE = include(biblysPath().'controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php');
-    } elseif (file_exists(biblysPath().'/controllers/common/xhr/'.$_PAGE.'.php')) {
-        $_PAGE = include(biblysPath().'/controllers/common/xhr/'.$_PAGE.'.php');
+    /** @var Site $site */
+    if (file_exists(__DIR__.'/../controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php')) {
+        $_PAGE = include(__DIR__.'/../controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php');
+    } elseif (file_exists(__DIR__.'/../controllers/common/xhr/'.$_PAGE.'.php')) {
+        $_PAGE = include(__DIR__.'/../controllers/common/xhr/'.$_PAGE.'.php');
     } else {
         header("HTTP/1.0 404 Not Found");
         die('ERROR > Page introuvable');
