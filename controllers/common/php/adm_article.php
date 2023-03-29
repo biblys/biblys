@@ -1,13 +1,22 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
-use Biblys\Contributor\Contributor;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/** @var PDO $_SQL */
+/** @var Request $request */
+/** @var Site $site */
+/** @var Site $_SITE */
+/** @var UrlGenerator $urlgenerator */
+/** @var Visitor $_V */
+/** @var string $_PAGE */
 
 $am = new ArticleManager();
 $sm = new SiteManager();
@@ -124,8 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['type_id'])) {
         if (in_array($_POST['type_id'], array(1, 2, 7, 8, 9, 12))) {
             $_POST['article_tva'] = 1;
-        } elseif ($_POST['type_id'] == 12) {
-            $_POST['article_tva'] = 2;
         }
     }
 
@@ -137,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cover->upload($_FILES['article_cover_upload']['tmp_name']);
         $article->bumpCoverVersion();
     } elseif (!empty($_POST['article_cover_import'])) { // Import
-        media_delete('article', $_POST['article_id']);
+        $media = new Media("article", $_POST["article_id"]);
         $copy_from = $_POST['article_cover_import'];
         $file_dir = MEDIA_PATH.'/book/'.file_dir($_POST['article_id']).'/';
         if (!is_dir($file_dir)) {
@@ -147,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         copy($copy_from, $copy_to) or error('Unable to copy '.$copy_from.' to '.$copy_to);
         $article->bumpCoverVersion();
     } elseif (isset($_POST['article_cover_delete']) && $_POST['article_cover_delete']) { // Suppression
-        media_delete('article', $_POST['article_id']);
+        $media = new Media("article", $_POST["article_id"]);
     }
     unset($_POST['article_cover_upload']);
     unset($_POST['article_cover_import']);
@@ -263,7 +270,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
             die("Vous n'avez pas le droit de modifier ce livre !");
         }
 
-        // Biblys publisher's catalog can only be edited on it's own site
+        // Biblys publisher's catalog can only be edited on its own site
         $publisher = $article->get('publisher');
         $publisher_site = $sm->get(array('publisher_id' => $publisher->get('id')));
         if (
@@ -271,7 +278,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
             $publisher_site->get('id') != $_SITE['site_id'] &&
             !$_V->hasRight('publisher', $publisher->get('id'))
         ) {
-            trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name').", merci de <a href='http://".$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
+            trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name'). ", merci de <a href='https://" .$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
         }
 
         $request->attributes->set("page_title", "Modifier {$a["article_title"]}");
@@ -347,7 +354,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         ['user_id' => $_V->get('user_id')]
     );
 
-    $import = $request->query->get('import', null);
+    $import = $request->query->get('import');
     return new RedirectResponse('/pages/'.$_PAGE.'?import='.$import);
 }
 
@@ -363,9 +370,9 @@ $type_options = Biblys\Article\Type::getOptions($article->get('type_id'));
 
 if ($a['type_id'] == 2) {
     $ebooks_fieldset_class = null;
-    $article_ean_required = null;
     $article_ean_div_class = 'hidden';
 }
+
 if ($a['type_id'] == 8) {
     $bundle_fieldset_class = null;
 }
@@ -461,6 +468,10 @@ if (!$publisher_id && !$_V->isAdmin() && $_V->isPublisher()) {
 
 $bonus_fieldset_class = 'hidden';
 
+$createCollectionPublisher = '
+    <input type="text" id="collection_publisher" name="collection_publisher" class="long uncomplete" required>
+    <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
+';
 if ($publisher_id) {
     $pub = $pm->getById($publisher_id);
     if ($pub) {
@@ -472,11 +483,6 @@ if ($publisher_id) {
         // Display bonus field if on current publisher's site
         $bonus_fieldset_class = null;
     }
-} else {
-    $createCollectionPublisher = '
-        <input type="text" id="collection_publisher" name="collection_publisher" class="long uncomplete" required>
-        <input type="hidden" id="collection_publisher_id" name="collection_publisher_id" required>
-    ';
 }
 
 // Cycle
@@ -504,10 +510,9 @@ if ($_MODE == 'insert') {
 // ** FICHIERS ** //
 
 // Couverture
-if (media_exists('article', $a['article_id'])) {
+$article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
+if ($article->hasCover()) {
     $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
-} else {
-    $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
 }
 
 // ** FICHIERS TELECHARGEABLES ** //
@@ -568,7 +573,7 @@ $awards = $_SQL->prepare('SELECT `award_id`, `award_name`, `award_year`, `award_
 $awards->execute(['article_id' => $article->get('id')]);
 $the_awards = null;
 while ($aw = $awards->fetch(PDO::FETCH_ASSOC)) {
-    $the_awards .= '<li id="award_'.$aw['award_id'].'"><img src="/common/icons/delete_16.png" class="pointer deleteAward" data-award_id="'.$aw['award_id'].'"> '.$aw['award_name'].' '.$aw['award_year'].' ('.$aw['award_category'].')</li>';
+    $the_awards .= '<li id="award_'.$aw['award_id'].'"><img alt="Supprimer" src="/common/icons/delete_16.png" class="pointer deleteAward" data-award_id="'.$aw['award_id'].'"> '.$aw['award_name'].' '.$aw['award_year'].' ('.$aw['award_category'].')</li>';
 }
 
 // Lot
@@ -577,7 +582,7 @@ if ($a['type_id'] == 8) {
     $bundle = $_SQL->prepare('SELECT `article_title`, `article_authors`, `article_url`, `article_collection`, `link_id` FROM `articles` JOIN `links` USING(`article_id`) WHERE `bundle_id` = :article_id ORDER BY `link_id`');
     $bundle->execute(['article_id' => $article->get('id')]);
     while ($bu = $bundle->fetch(PDO::FETCH_ASSOC)) {
-        $bundle_articles .= '<li id="link_'.$bu['link_id'].'"><img src="/common/icons/delete_16.png" data-link_id="'.$bu['link_id'].'" class="deleteLink pointer" /> <a href="/'.$bu['article_url'].'">'.$bu['article_title'].'</a> de '.$bu['article_authors'].' ('.$bu['article_collection'].')</li>';
+        $bundle_articles .= '<li id="link_'.$bu['link_id'].'"><img alt="Supprimer" src="/common/icons/delete_16.png" data-link_id="'.$bu['link_id'].'" class="deleteLink pointer" /> <a href="/'.$bu['article_url'].'">'.$bu['article_title'].'</a> de '.$bu['article_authors'].' ('.$bu['article_collection'].')</li>';
     }
 }
 
@@ -733,7 +738,7 @@ $content .= '
         </fieldset>
 
         <fieldset id="Contributeurs">
-            <a href="http://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
+            <a href="https://www.biblys.fr/pages/doc_article#Contributeurs" target="_blank" class="pull-right">Besoin d\'aide ?</a>
             <legend>Contributions</legend>
             <div id="people_list"></div>
             <br /><br />
@@ -1038,14 +1043,14 @@ $content .= '
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_show">Valider et aller à la fiche</button>
                 <br>
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_new">Valider et créer une autre fiche</button>
-                '.$submit_and_stock.'
-                <p><a href="http://www.biblys.fr/pages/doc_article">Documentation</a></p>
+                '.$submit_and_stock. '
+                <p><a href="https://www.biblys.fr/pages/doc_article">Documentation</a></p>
             </div>
             <p class="center">
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_show">Valider et aller &agrave; la fiche</button>
                 <br>
                 <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_new">Valider et cr&eacute;er une autre fiche</button>
-                '.$submit_and_stock.'
+                ' .$submit_and_stock.'
             </p>
         </fieldset>
 
