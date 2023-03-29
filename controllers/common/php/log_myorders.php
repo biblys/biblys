@@ -1,10 +1,12 @@
 <?php
 
+/** @var Visitor $_V */
+
+use Symfony\Component\HttpFoundation\Response;
+
 $om = new OrderManager();
 
-$_PAGE_TITLE = 'Mes commandes';
-
-$_ECHO .= '<h2>'.$_PAGE_TITLE.'</h2>';
+$content = "<h2>Mes commandes</h2>";
 
 $orders = $om->getAll([
     'order_type' => 'web',
@@ -14,7 +16,7 @@ $orders = $om->getAll([
     'sort' => 'desc'
 ]);
 
-$_ECHO .= '
+$content .= '
     <table class="table">
         <thead>
             <tr class="center">
@@ -44,7 +46,7 @@ foreach ($orders as $order) {
     }
     
     if ($o["order_cancel_date"]) {
-        $_ECHO .= '
+        $content .= '
             <tr>
                 <td class="center"><a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a></td>
                 <td class="center">'._date($o["order_insert"], 'd/m/Y').'</td>
@@ -52,7 +54,7 @@ foreach ($orders as $order) {
             </tr>
         ';
     } else {
-        $_ECHO .= '
+        $content .= '
             <tr>
                 <td class="center"><a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a></td>
                 <td class="center">'._date($o["order_insert"], 'd/m/Y').'</td>
@@ -64,7 +66,9 @@ foreach ($orders as $order) {
     }
 }
 
-$_ECHO .= '
+$content .= '
         </tbody>
     </table>
 ';
+
+return new Response($content);
