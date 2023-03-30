@@ -4,6 +4,8 @@
 
 Améliorations
 
+- Le widget Axys a été remplacé par des liens de connexion, d'inscription et
+  un menu utilisateur local.
 - Le moteur de suggestions Gleeph a été ajouté.
 - L'outil de statistiques Umami a été ajouté.
 - Les outils de statistiques ignorent désormais les visiteurs qui sont 
@@ -11,6 +13,11 @@ Améliorations
 - Après la connexion, l'utilisateur sera désormais redirigé vers la page où 
   il se trouvait lorsqu'il a cliqué sur le bouton "Connexion".
 - L'outil d'envoi de newsletter a été supprimé.
+
+Déploiement
+    
+- Ajouter `{% include "layout:_user_menu.html.twig" %}` au fichier de layout 
+  base.html.twig, juste après l'ouverture de la base `<body>`
 
 ### 2.66.3 (27 mars 2023)
 
