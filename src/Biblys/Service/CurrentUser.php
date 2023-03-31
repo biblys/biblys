@@ -86,6 +86,15 @@ class CurrentUser
         return false;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function isAdmin(): bool
+    {
+        $site = $this->getCurrentSite()->getSite();
+        return $this->isAdminForSite($site);
+    }
+
     public function isAdminForSite(Site $site): bool
     {
         if ($this->user) {

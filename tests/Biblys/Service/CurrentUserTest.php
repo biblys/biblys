@@ -5,6 +5,7 @@ namespace Biblys\Service;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
+use Exception;
 use Model\Option;
 use Model\SiteQuery;
 use PHPUnit\Framework\TestCase;
@@ -168,6 +169,69 @@ class CurrentUserTest extends TestCase
         $this->assertFalse(
             $currentUser->isAuthentified(),
             "it returns false if user is unauthentified"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIsAdmin()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $isAdmin = $currentUser->isAdmin();
+
+        // then
+        $this->assertTrue(
+            $isAdmin,
+            "it returns true for admin user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIsAdminWithNonAdminUser()
+    {
+        // given
+        $request = RequestFactory::createAuthRequest();
+        $config = new Config();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $isAdmin = $currentUser->isAdmin();
+
+        // then
+        $this->assertFalse(
+            $isAdmin,
+            "it returns false for non-admin user"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testIsAdminWithUnauthentifiedUser()
+    {
+        // given
+        $request = new Request();
+        $config = new Config();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+        // when
+        $isAdmin = $currentUser->isAdmin();
+
+        // then
+        $this->assertFalse(
+            $isAdmin,
+            "it returns false for unauthentified user"
         );
     }
 
