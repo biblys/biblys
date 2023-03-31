@@ -202,6 +202,10 @@ table.checkable tbody tr {
   height: 32px;
 }
 
+.admin-bar-shortcuts {
+  display: none;
+}
+
 .admin-bar-shortcut {
   color: white;
   display: inline-block;
@@ -237,5 +241,9 @@ table.checkable tbody tr {
 @media (min-width: 768px) {
   .admin-bar {
     max-width: none;
+  }
+
+  .admin-bar-shortcuts {
+    display: inline;
   }
 }
