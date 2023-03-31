@@ -1,4 +1,4 @@
-.user-menu {
+.overall-menu {
   background: rgba(15,15,15);
   display: flex;
   font-size: 16px;
@@ -6,22 +6,22 @@
   justify-content: flex-end;
 }
 
-.user-menu a {
+.overall-menu a {
   color: white;
   margin-left: 8px;
 }
 
-.user-menu a:hover {
+.overall-menu a:hover {
   color: #ff6600;
   text-decoration: none;
 }
 
-.user-menu__site-title {
+.overall-menu__site-title {
   display: none;
 }
 
 @media (min-width: 768px) {
-  .user-menu__site-title {
+  .overall-menu__site-title {
     display: inline;
   }
 }

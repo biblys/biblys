@@ -16,7 +16,7 @@ Améliorations
 
 Déploiement
     
-- Ajouter `{% include "layout:_user_menu.html.twig" %}` au fichier de layout 
+- Ajouter `{% include "layout:_overall_menu.html.twig" %}` au fichier de layout 
   base.html.twig, juste après l'ouverture de la base `<body>`
 
 ### 2.66.3 (27 mars 2023)

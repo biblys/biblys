@@ -2,16 +2,16 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/assets/bundle/runtime.76bb06af.js",
-        "/assets/bundle/app.037c2cca.js"
+        "/assets/bundle/runtime.65b7d4fa.js",
+        "/assets/bundle/app.dd627bee.js"
       ],
       "css": [
-        "/assets/bundle/app.ee4662bb.css"
+        "/assets/bundle/app.490eb29f.css"
       ]
     },
     "admin": {
       "js": [
-        "/assets/bundle/runtime.76bb06af.js",
+        "/assets/bundle/runtime.65b7d4fa.js",
         "/assets/bundle/admin.4ad7f8c3.js"
       ],
       "css": [
