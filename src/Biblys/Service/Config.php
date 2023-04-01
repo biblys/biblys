@@ -13,8 +13,13 @@ class Config
     /**
      * @throws Exception
      */
-    public function __construct()
+    public function __construct(array $options = [])
     {
+        if ($options !== []) {
+            $this->config = $options;
+            return;
+        }
+
         $configFilePath = self::_getConfigFilePath();
 
         // If config file does not exist, throw Exception
