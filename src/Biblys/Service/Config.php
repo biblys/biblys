@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Parser;
 
 class Config
 {
-    private mixed $config;
+    private array $options;
 
     /**
      * @throws Exception
@@ -15,11 +15,11 @@ class Config
     public function __construct(array $options = [])
     {
         if ($options !== []) {
-            $this->config = $options;
+            $this->options = $options;
             return;
         }
 
-        $this->config = self::_getConfigFromFile();
+        $this->options = self::_getOptionsFromConfigFile();
     }
 
     public function get($path = null): array|bool|string|null
@@ -34,14 +34,14 @@ class Config
 
     public function set($level1key, $value): void
     {
-        $this->config[$level1key] = $value;
+        $this->options[$level1key] = $value;
     }
 
     private function _getOptionByPath(mixed $path): array|bool|string|null
     {
         $pathSteps = explode(".", $path);
 
-        $current = $this->config;
+        $current = $this->options;
         foreach($pathSteps as $step) {
             if (!isset($current[$step])) {
                 return null;
@@ -82,7 +82,7 @@ class Config
      * @return mixed
      * @throws Exception
      */
-    public static function _getConfigFromFile(): mixed
+    public static function _getOptionsFromConfigFile(): array
     {
         $configFilePath = self::_getConfigFilePath();
         if (!file_exists($configFilePath)) {
