@@ -14,12 +14,17 @@ class Config
      */
     public function __construct(array $options = [])
     {
-        if ($options !== []) {
-            $this->options = $options;
+        if ($options === []) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.67.0",
+                "Calling Config constructor without option is deprecated. Pass an array of options as the constructor's argument or use Config::load to load options from config file.",
+            );
+            $this->options = self::_getOptionsFromConfigFile();
             return;
         }
 
-        $this->options = self::_getOptionsFromConfigFile();
+        $this->options = $options;
     }
 
     public function get($path = null): array|bool|string|null
@@ -91,5 +96,14 @@ class Config
 
         $yaml = new Parser();
         return $yaml->parse(file_get_contents($configFilePath));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function load(): Config
+    {
+        $options = self::_getOptionsFromConfigFile();
+        return new Config($options);
     }
 }

@@ -23,3 +23,5 @@ placedeslibraires:
   password: password
 
 composer_home: ~/.composer
+
+config: for tests
