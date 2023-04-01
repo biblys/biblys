@@ -14,7 +14,7 @@ $_SERVER["SERVER_NAME"] = "localhost";
 $_SERVER["SCRIPT_NAME"] = "index.php";
 $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
-$config = new Config();
+$config = Config::load();
 setUpTestDatabase($config->get("db"));
 require_once __DIR__."/../inc/functions.php";
 $config->set("environment", "test");

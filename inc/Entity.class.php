@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\InvalidEntityFetchedException;
+use Biblys\Service\Config;
 use Biblys\Service\Mailer;
 use Biblys\Service\Log;
 
@@ -340,7 +341,7 @@ class EntityManager
     public static function prepareAndExecute($query, array $params)
     {
         global $_SQL;
-        $config = new Biblys\Service\Config();
+        $config = Config::load();
 
         try {
             // Logs sql query

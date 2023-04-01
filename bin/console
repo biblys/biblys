@@ -10,7 +10,7 @@ use Command\CreateSeedsCommand;
 use Command\ResetDatabaseCommand;
 use Symfony\Component\Console\Application;
 
-$config = new Config();
+$config = Config::load();
 Connection::initPropel($config->get("db"));
 
 $application = new Application();

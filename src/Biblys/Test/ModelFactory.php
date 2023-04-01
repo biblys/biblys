@@ -40,7 +40,7 @@ class ModelFactory
         $user = new User();
         $user->save();
 
-        $config = new Config();
+        $config = Config::load();
         if ($site === null) {
             $site = SiteQuery::create()->findOneById($config->get("site"));
         }

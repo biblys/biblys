@@ -36,7 +36,7 @@ if (!file_exists($autoloadFile)) {
     require_once $autoloadFile;
 }
 
-$config = new Config();
+$config = Config::load();
 $rollbarConfig = $config->get("rollbar");
 if ($rollbarConfig) {
     Rollbar::init([

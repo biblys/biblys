@@ -78,7 +78,7 @@ class ErrorController extends Controller
             $legacyController = new LegacyController();
             $session = new Session();
             $mailer = new Mailer();
-            $config = new Config();
+            $config = Config::load();
             $currentSite = CurrentSite::buildFromConfig($config);
             $routes = RouteLoader::load();
             $urlgenerator = new UrlGenerator($routes, new RequestContext());

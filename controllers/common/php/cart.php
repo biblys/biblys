@@ -19,7 +19,7 @@ $um = new UserManager();
 
 $content = null;
 
-$config = new Config();
+$config = Config::load();
 
 /** @var Request $request */
 /** @var UrlGenerator $urlGenerator */

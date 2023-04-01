@@ -65,10 +65,10 @@ class Controller
     public function render(string $templatePath, array $vars = []): Response
     {
         global $site, $request;
+        $config = Config::load();
 
         $container = require __DIR__."/../container.php";
         $urlGenerator = $container->get("url_generator");
-        $config = $container->get("config");
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserIsAdmin = $currentUserService->isAdminForSite($currentSiteService->getSite());
@@ -198,7 +198,6 @@ class Controller
         $defaultFormTheme = 'AppBundle:Main:_form_bootstrap_layout.html.twig';
 
         // Custom template loader
-        $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $filesystem = new Filesystem();
         $loader = new TemplateLoader($currentSite, $filesystem);
@@ -228,7 +227,6 @@ class Controller
         $twig->addRuntimeLoader($runtimeLoader);
 
         $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
-        $config = new Config();
         $trackers = $this->_getAnalyticsTrackers($config);
 
         // Global variables
@@ -390,7 +388,7 @@ class Controller
     ): CurrentUser
     {
         $currentUser = self::authUser($request);
-        $currentSite = CurrentSite::buildFromConfig(new Config());
+        $currentSite = CurrentSite::buildFromConfig(Config::load());
 
         if (!$currentUser->isAdminForSite($currentSite->getSite())) {
             throw new AccessDeniedHttpException($errorMessage);
@@ -409,7 +407,7 @@ class Controller
     {
         $currentUser = self::authUser($request);
 
-        $currentSite = CurrentSite::buildFromConfig(new Config());
+        $currentSite = CurrentSite::buildFromConfig(Config::load());
         if ($currentUser->isAdminForSite($currentSite->getSite())) {
             return $currentUser;
         }

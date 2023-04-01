@@ -39,7 +39,7 @@ if(!$_V->isAdmin() && $_V->isPublisher()) {
     $params["publisher_id"] = $_V->getCurrentRight()->get('publisher_id');
 }
 
-$config = new Config();
+$config = Config::load();
 $posts = EntityManager::prepareAndExecute(
     "SELECT
         `post_id`, `post_title`, `post_content`, `post_url`, `post_status`, `post_date`, `Email`,

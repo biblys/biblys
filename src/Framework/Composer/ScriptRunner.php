@@ -16,7 +16,7 @@ class ScriptRunner
      */
     public static function run(string $command)
     {
-        $config = new Config();
+        $config = Config::load();
 
         // Set composer home
         $composer_home = $config->get('composer_home');

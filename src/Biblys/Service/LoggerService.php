@@ -41,7 +41,7 @@ class LoggerService
      */
     private function _sendToRollbar(Logger $logger): void
     {
-        $config = new Config();
+        $config = Config::load();
         $rollbarConfig = $config->get("rollbar");
         if (!$rollbarConfig) {
             return;

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-$config = new Config();
+$config = Config::load();
 $currentSiteService = CurrentSite::buildFromConfig($config);
 $currentSite = $currentSiteService->getSite();
 /** @noinspection PhpUnhandledExceptionInspection */

@@ -16,7 +16,7 @@ class RequestListener
             return;
         }
 
-        $config = new Config();
+        $config = Config::load();
         if ($config->get('https') !== true) {
             return;
         }

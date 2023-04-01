@@ -30,7 +30,7 @@ class ConfigTest extends PHPUnit\Framework\TestCase
     public function testConfigFromFile()
     {
         // given
-        $config = new Config();
+        $config = Config::load();
 
         // when
         $option = $config->get("config");

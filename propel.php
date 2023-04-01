@@ -3,7 +3,7 @@
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
 
-$config = new Config();
+$config = Config::load();
 $dbConfig = $config->get("db");
 
 $propelConfig = [

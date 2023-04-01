@@ -14,7 +14,7 @@ use Symfony\Component\Routing\RequestContext;
 require_once __DIR__."/../vendor/autoload.php";
 require_once __DIR__."/../inc/constants.php";
 
-$config = new Config();
+$config = Config::load();
 Biblys\Database\Connection::initPropel($config->get("db"));
 
 $routes = RouteLoader::load();

@@ -25,7 +25,7 @@ class ResetDatabaseCommand extends Command
     {
         $output->writeln(["Resetting database…"]);
 
-        $config = new Config();
+        $config = Config::load();
         $db = new Database($config->get("db"));
         $db->reset();
         $db->migrate();

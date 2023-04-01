@@ -24,7 +24,7 @@ class CurrentSiteValueResolver implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        $config = new Config();
+        $config = Config::load();
         yield CurrentSite::buildFromConfig($config);
     }
 }

@@ -16,7 +16,7 @@ use Symfony\Component\Routing\RequestContext;
 // INCLUDES
 include __DIR__."/../inc/functions.php";
 
-$config = new Config();
+$config = Config::load();
 
 $dbConfig = $config->get("db");
 Biblys\Database\Connection::initPropel($dbConfig);
