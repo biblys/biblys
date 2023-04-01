@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Parser;
 
 class Config
 {
-    private $config;
+    private mixed $config;
 
     /**
      * @throws Exception
@@ -22,26 +22,34 @@ class Config
         $this->config = self::_getConfigFromFile();
     }
 
-    public function get($key = null)
+    public function get($path = null): array|bool|string|null
     {
-        if (!$key) {
-            return $this->config;
+        $optionByPath = $this->_getOptionByPath($path);
+        if ($optionByPath !== null) {
+            return $optionByPath;
         }
 
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
-        }
-
-        if (self::_getDefaultValueForKey($key) !== null) {
-            return self::_getDefaultValueForKey($key);
-        }
-
-        return false;
+        return self::_getDefaultValueForPath($path);
     }
 
-    public function set($key, $value)
+    public function set($level1key, $value): void
     {
-        $this->config[$key] = $value;
+        $this->config[$level1key] = $value;
+    }
+
+    private function _getOptionByPath(mixed $path): array|bool|string|null
+    {
+        $pathSteps = explode(".", $path);
+
+        $current = $this->config;
+        foreach($pathSteps as $step) {
+            if (!isset($current[$step])) {
+                return null;
+            }
+            $current = $current[$step];
+        }
+
+        return $current;
     }
 
     private static function _getConfigFilePath(): string
@@ -53,17 +61,17 @@ class Config
         return __DIR__ . "/../../../app/config.yml";
     }
 
-    private static function _getDefaultValueForKey($key): ?string
+    private static function _getDefaultValueForPath($path): ?string
     {
-        if ($key === "site") {
+        if ($path === "site") {
             return 1;
         }
 
-        if ($key === "media_path") {
+        if ($path === "media_path") {
             return "/public/media";
         }
 
-        if ($key === "composer_home") {
+        if ($path === "composer_home") {
             return "~/.composer";
         }
 

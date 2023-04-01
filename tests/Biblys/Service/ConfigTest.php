@@ -53,4 +53,26 @@ class ConfigTest extends PHPUnit\Framework\TestCase
             $siteId
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetValueByPath()
+    {
+        // given
+        $options = ["a" => [
+            "really" => [
+                "deep" => [
+                    "option" => "value"
+                ]
+            ]
+        ]];
+        $config = new Config($options);
+
+        // when
+        $value = $config->get("a.really.deep.option");
+
+        // then
+        $this->assertEquals("value", $value);
+    }
 }
