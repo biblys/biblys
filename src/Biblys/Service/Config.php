@@ -4,7 +4,6 @@ namespace Biblys\Service;
 
 use Exception;
 use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Exception\ParseException;
 
 class Config
 {
@@ -20,21 +19,7 @@ class Config
             return;
         }
 
-        $configFilePath = self::_getConfigFilePath();
-
-        // If config file does not exist, throw Exception
-        if (!file_exists($configFilePath)) {
-            throw new Exception("Cannot find config file at $configFilePath.");
-        }
-
-        // Get global config
-        $yaml = new Parser();
-
-        try {
-            $this->config = $yaml->parse(file_get_contents($configFilePath));
-        } catch (ParseException $e) {
-            printf("Unable to parse the YAML string: %s", $e->getMessage());
-        }
+        $this->config = self::_getConfigFromFile();
     }
 
     public function get($key = null)
@@ -83,5 +68,20 @@ class Config
         }
 
         return null;
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public static function _getConfigFromFile(): mixed
+    {
+        $configFilePath = self::_getConfigFilePath();
+        if (!file_exists($configFilePath)) {
+            throw new Exception("Cannot find config file at $configFilePath.");
+        }
+
+        $yaml = new Parser();
+        return $yaml->parse(file_get_contents($configFilePath));
     }
 }
