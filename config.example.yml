@@ -1,110 +1,106 @@
 environment: prod # dev|prod|test
 
 db:
-    host:
-    port: 3306
-    user:
-    pass:
-    base:
+  host:
+  port: 3306
+  user:
+  pass:
+  base:
 
 site: 1
 
-logs:
-    sql: false
-
-# maintenance:
+#logs:
+#  sql: false
+#
+#maintenance:
 #  enabled: true
 #  message: Une opération de maintenance est en cours. Merci de réessayer d'ici quelques instants.
 
-# cloud:
+#cloud:
 #  cdn: false
 #  public_key: cus_abcd1234
 #  secret_key: abcd1234
 #  domains: librys.fr, librairieys.fr
 
-# axys:
-#   client_id: abcd1234
-#   client_secret: efgh5678
-#   redirect_uri: http://librys.fr/openid/callback
-#   base_uri: https://axys.me/
+#axys:
+#    client_id: abcd1234
+#  client_secret: efgh5678
+#  redirect_uri: http://librys.fr/openid/callback
+#  base_uri: https://axys.me/
 
-# smtp:
-#   host: smtp.example.com
-#   user: sender@example.com
-#   pass: password123
-#   port: 587
-#   encryption: tls
+#smtp:
+#  host: smtp.example.com
+#  user: sender@example.com
+#  pass: password123
+#  port: 587
+#  encryption: tls
 
-# Force HTTPS
-# https: true
+## Force HTTPS
+#https: true
 
-# Set HTTP Strict Transport Security to 6 months
-# hsts: true
+## Set HTTP Strict Transport Security to 6 months
+#hsts: true
 
-# Path to composer home folder must be defined
-# to allow auto-updates
-# composer_home: /Users/biblys/.composer
+## Path to composer home folder must be defined
+## to allow auto-updates
+#composer_home: /Users/biblys/.composer
 
-# axys:
-#   protocol: https
-#   host: axys.me
+## Cron key to allow external web cron service
+#cron:
+#  key: abcd1234
 
-# Cron key to allow external web cron service
-# cron:
-#   key: abcd1234
+#media_path: /public/media
+#media_url: /media
+#downloadable_path: ../dlfiles/
 
-# media_path: /public/media
-# media_url: /media
-# downloadable_path: ../dlfiles/
+#paypal:
+#  client_id: paypal_id
+#  client_secret: paypal_secret_key
+#  mode: live
 
-# paypal:
-#   client_id: paypal_id
-#   client_secret: paypal_secret_key
-#   mode: live
+#payplug:
+#  secret: sk_test_abcd1234
 
-# payplug:
-#   secret: sk_test_abcd1234
+#stripe:
+#  public_key: pk_test_abcd1234
+#  secret_key: sk_test_abcd1234
+#  endpoint_secret: whsec_abcd1234
 
-# stripe:
-#   public_key: pk_test_abcd1234
-#   secret_key: sk_test_abcd1234
-#   endpoint_secret: whsec_abcd1234
+#recaptcha:
+#  sitekey: recaptcha_sitekey
+#  secret: recaptcha_secret
 
-# recaptcha:
-#   sitekey: recaptcha_sitekey
-#   secret: recaptcha_secret
+#images_cdn:
+#  service: cloudimage|weserv
+#  options:
+#    token: abcdef12345 # cloudimage only
 
-# images_cdn:
-#   service: cloudimage|weserv
-#   options:
-#     token: abcdef12345 # cloudimage only
+## Place des libraires stock export
+#placedeslibraires:
+#  shop_id: 12345
+#  login: SHOP-PDL
+#  password: 1234-Pdl
 
-# Place des libraires stock export
-# placedeslibraires:
-#   shop_id: 12345
-#   login: SHOP-PDL
-#   password: 1234-Pdl
-
-# Matomo Analytics tracker
-# https://matomo.org
+## Matomo Analytics tracker
+## https://matomo.org
 #  domain: biblys.matomo.cloud
 #  secondary_domain: analytics.biblys.cloud
 #  site_id: 1
 #  login: biblys
 #  md5pass: abcd1234efgh5678
 
-# Umami Analytics Tracker
-# https://cloud.umami.is/
+## Umami Analytics Tracker
+## https://cloud.umami.is/
 #umami:
 #  website_id: abcd-1234-efgh-5678
 #  share_url: https://analytics.umami.is/share/9876ijkl5432mnop/biblys.fr
 
-# Rollbar
-# rollbar:
-#   access_token: abcdef12345
-#   environment: biblys-local
+## Rollbar
+#rollbar:
+#  access_token: abcdef12345
+#  environment: biblys-local
 
-# Gleeph
-# gleeph:
-#   api_key: abcdef12345
-#   environment: prod
+## Gleeph
+#gleeph:
+#  api_key: abcdef12345
+#  environment: prod
