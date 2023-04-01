@@ -14,16 +14,6 @@ class Config
      */
     public function __construct(array $options = [])
     {
-        if ($options === []) {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.67.0",
-                "Calling Config constructor without option is deprecated. Pass an array of options as the constructor's argument or use Config::load to load options from config file.",
-            );
-            $this->options = self::_getOptionsFromConfigFile();
-            return;
-        }
-
         $this->options = $options;
     }
 
