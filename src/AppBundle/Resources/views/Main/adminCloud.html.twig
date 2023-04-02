@@ -12,6 +12,10 @@
       <p>Domaines inclus : {{ domains|join(", ") }}</p>
     {% endif %}
 
+    {% if not subscription.isPaid %}
+      <p>Votre abonnement a expiré.</p>
+    {% endif %}
+
     <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-primary">
       <span class="fa fa-cloud"></span>
       Gérer mon abonnement

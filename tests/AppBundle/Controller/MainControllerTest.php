@@ -229,7 +229,7 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
-    public function testAdminWithCloudSubscriptionExpiringSoon()
+    public function testAdminWithUnpaidCloudSubscription()
     {
         // given
         $controller = new MainController();
@@ -240,66 +240,25 @@ class MainControllerTest extends TestCase
         $updater = new Updater('', '3.0', $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(CloudService::class);
-        $cloud->method("isConfigured")->willReturn(true);
-        $cloud->method("getSubscription")->willReturn(new CloudSubscription(
-            "past_due",
-            (new DateTime("2019-04-28"))->getTimestamp(),
-        ));
+        $cloudSubscription = $this->createMock(CloudSubscription::class);
+        $cloudSubscription->method("isPaid")->willReturn(false);
+        $cloudService = $this->createMock(CloudService::class);
+        $cloudService->method("isConfigured")->willReturn(true);
+        $cloudService->method("getSubscription")->willReturn($cloudSubscription);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService);
 
         // then
         $this->assertEquals(
             200,
             $response->getStatusCode(),
-            "it should return HTTP 200"
+            "returns HTTP 200"
         );
         $this->assertStringContainsString(
             "Votre abonnement Biblys Cloud a expiré.",
             $response->getContent(),
-            "it should display the warning"
-        );
-    }
-
-    /**
-     * @throws AuthException
-     * @throws PropelException
-     * @throws UpdaterException
-     * @throws GuzzleException
-     */
-    public function testAdminWithCloudSubscriptionExpired()
-    {
-        // given
-        $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
-        $config = new Config();
-        $config->set("environment", "test");
-        $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = new Updater('', '3.0', $config);
-        $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(CloudService::class);
-        $cloud->method("isConfigured")->willReturn(true);
-        $cloud->method("getSubscription")->willReturn(new CloudSubscription(
-            "past_due",
-            (new DateTime("2019-04-28"))->getTimestamp(),
-        ));
-
-        // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should return HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "Votre abonnement Biblys Cloud a expiré.",
-            $response->getContent(),
-            "it should display the warning"
+            "displays the warning"
         );
     }
 
@@ -446,6 +405,29 @@ class MainControllerTest extends TestCase
             $response->getContent(),
             "it should display expiration date"
         );
+    }
+
+    /**
+     * @throws AuthException
+     * @throws PropelException
+     * @throws GuzzleException
+     */
+    public function testAdminCloudWithUnpaidSubscription() {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = $this->createMock(Config::class);
+        $config->method("get")->willReturn(true);
+        $cloudSubscription = $this->createMock(CloudSubscription::class);
+        $cloudService = $this->createMock(CloudService::class);
+        $cloudService->method("getSubscription")->willReturn($cloudSubscription);
+
+        // when
+        $response = $controller->adminCloud($request, $config, $cloudService);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString("Votre abonnement a expiré.", $response->getContent(), "displays warning");
     }
 
     /**
