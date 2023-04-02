@@ -3,6 +3,7 @@
 namespace Framework\ArgumentResolver;
 
 use Biblys\Service\Axys;
+use Biblys\Service\Config;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -22,7 +23,7 @@ class AxysValueResolver implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        $container = include __DIR__."/../../container.php";
-        yield $container->get("axys");
+        $config = Config::load();
+        yield new Axys($config);
     }
 }
