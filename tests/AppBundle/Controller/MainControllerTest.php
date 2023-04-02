@@ -165,7 +165,8 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["expires" => "2020-01-01"]);
-        $updater = new Updater('', '3.0', $config);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config);
@@ -187,6 +188,72 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws AuthException
+     * @throws GuzzleException
+     */
+    public function testAdminWithHotNews()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
+        $config->set("cloud", ["hot_news" => $hotNews]);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = new CloudService($config);
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString(
+            "Un message à caractère informatif",
+            $response->getContent(),
+            "displays the hot news message"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws AuthException
+     * @throws GuzzleException
+     */
+    public function testAdminWithHotNewsMarkedAsRead()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $hotNews = ["date" => "2019-04-28", "message" => "Un message à caractère informatif", "link" => "https://www.biblys.fr"];
+        $config->set("cloud", ["hot_news" => $hotNews]);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = new CloudService($config);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringNotContainsString(
+            "Un message à caractère informatif",
+            $response->getContent(),
+            "displays the hot news message"
+        );
+    }
+
+    /**
      * @throws AuthException
      * @throws PropelException
      * @throws UpdaterException
@@ -200,7 +267,8 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = new Updater('', '3.0', $config);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
@@ -237,7 +305,8 @@ class MainControllerTest extends TestCase
         $config = new Config();
         $config->set("environment", "test");
         $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = new Updater('', '3.0', $config);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloudSubscription = $this->createMock(CloudSubscription::class);

@@ -309,6 +309,7 @@ class MainController extends Controller
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
             "cloud" => $cloud,
+            "hot_news" => $config->get("cloud.hot_news"),
         ]);
     }
 

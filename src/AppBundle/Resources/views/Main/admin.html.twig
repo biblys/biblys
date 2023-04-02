@@ -32,6 +32,16 @@
     </script>
   {% endif %}
 
+  {% if hot_news %}
+    <p class="alert alert-info">
+      <span class="fa fa-newspaper-o"></span>
+      <strong>Actu Biblys</strong> |
+      <a href="{{ hot_news.link }}">
+        {{ hot_news.message }}
+      </a>
+    </p>
+  {% endif %}
+
   <h3>Raccourcis</h3>
 
   {% if shortcuts|length > 0 %}
