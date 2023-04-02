@@ -1,6 +1,8 @@
 <?php
 
 use ApiBundle\Controller\ErrorController;
+use Biblys\Database\Connection;
+use Biblys\Service\Config;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -13,13 +15,8 @@ require_once(__DIR__."/../inc/functions.php");
 
 $response = new JsonResponse();
 
-// Config
-$config = new Biblys\Service\Config();
-
-$dbConfig = $config->get("db");
-Biblys\Database\Connection::initPropel($dbConfig);
-
-$axysConfig = $config->get("axys");
+$config = Config::load();
+Connection::initPropel($config->get("db"));
 
 // Identification utilisateur
 if (auth()) {
