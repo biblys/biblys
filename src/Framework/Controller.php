@@ -67,8 +67,6 @@ class Controller
         global $site, $request;
         $config = Config::load();
 
-        $container = require __DIR__."/../container.php";
-        $urlGenerator = $container->get("url_generator");
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserIsAdmin = $currentUserService->isAdminForSite($currentSiteService->getSite());
