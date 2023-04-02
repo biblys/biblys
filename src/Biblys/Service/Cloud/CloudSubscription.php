@@ -4,19 +4,23 @@ namespace Biblys\Service\Cloud;
 
 class CloudSubscription
 {
-    /**
-     * @var string
-     */
-    private $status;
+    private string $status;
+    private bool $isPaid;
 
-    public function __construct(string $status)
+    public function __construct(string $status, bool $isPaid = false)
     {
         $this->status = $status;
+        $this->isPaid = $isPaid;
     }
 
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->isPaid;
     }
 
     public function hasExpired(): bool
