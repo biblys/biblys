@@ -11,13 +11,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CloudService
 {
-    private string|array|bool|null $cloudConfig;
+    private Config $config;
     private bool $subscriptionFetched = false;
     private ?CloudSubscription $subscription = null;
 
     public function __construct(Config $config)
     {
-        $this->cloudConfig = $config->get("cloud");
+        $this->config = $config;
     }
 
     /**
@@ -55,7 +55,8 @@ class CloudService
 
     public function isConfigured(): bool
     {
-        if (isset($this->cloudConfig["public_key"])) {
+        $publicKey = $this->config->get("cloud.public_key");
+        if ($publicKey) {
             return true;
         }
 
@@ -73,11 +74,11 @@ class CloudService
         }
 
         $client = new Client();
-        $baseUrl = $this->cloudConfig["base_url"] ?: "https://biblys.cloud";
+        $baseUrl = $this->config->get("cloud.base_url") ?: "https://biblys.cloud";
         $response = $client->request("GET", "$baseUrl/api$endpointUrl", [
             "auth" => [
-                $this->cloudConfig["public_key"],
-                $this->cloudConfig["secret_key"],
+                $this->config->get("cloud.public_key"),
+                $this->config->get("cloud.secret_key"),
             ],
         ]);
         $body = $response->getBody();
