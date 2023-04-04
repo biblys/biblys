@@ -9,6 +9,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
 use Biblys\Service\Updater\Updater;
@@ -453,6 +454,23 @@ class MainController extends Controller
         $portalUrl = $cloud->getPortalUrl($urlGenerator);
 
         return new RedirectResponse($portalUrl);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function hotNewsMarkAsRead(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        CurrentUser $currentUser
+    ): RedirectResponse
+    {
+        self::authAdmin($request);
+
+        $currentUser->setOption("hot_news_read", 1);
+
+        $dashboardUrl = $urlGenerator->generate("main_admin");
+        return new RedirectResponse($dashboardUrl);
     }
 
 }

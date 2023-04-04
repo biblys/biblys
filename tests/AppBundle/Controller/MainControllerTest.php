@@ -11,6 +11,7 @@ use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -529,4 +530,34 @@ class MainControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws PropelException
+     */
+    public function testHotNewsMarkAsRead()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator
+            ->method("generate")
+            ->with("main_admin")
+            ->willReturn("admin-dashboard-url");
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser
+            ->expects($this->once())
+            ->method("setOption")
+            ->with("hot_news_read", 1);
+
+        // when
+        $response = $controller->hotNewsMarkAsRead($request, $urlGenerator, $currentUser);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");
+        $this->assertEquals(
+            "admin-dashboard-url",
+            $response->getTargetUrl(),
+            "redirects to the admin dashboard"
+        );
+    }
 }

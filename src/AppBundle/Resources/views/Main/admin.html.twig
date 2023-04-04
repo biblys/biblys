@@ -33,13 +33,18 @@
   {% endif %}
 
   {% if hot_news %}
-    <p class="alert alert-info">
+    <div class="alert alert-info">
       <span class="fa fa-newspaper-o"></span>
       <strong>Actu Biblys</strong> |
       <a href="{{ hot_news.link }}">
         {{ hot_news.message }}
       </a>
-    </p>
+      <form action="{{ path("main_admin_hot_news_mark_as_read") }}" method="post" class="pull-right">
+        <button type="submit" class="btn btn-primary btn-xs">
+          <span class="fa fa-close"></span> Fermer
+        </button>
+      </form>
+    </div>
   {% endif %}
 
   <h3>Raccourcis</h3>
