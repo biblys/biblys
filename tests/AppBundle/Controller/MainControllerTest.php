@@ -171,9 +171,11 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
 
         // then
         $this->assertEquals(
@@ -207,9 +209,11 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = new CloudService($config);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn(null);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -275,9 +279,11 @@ class MainControllerTest extends TestCase
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("isConfigured")->willReturn(true);
         $cloud->method("getSubscription")->willReturn(null);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
 
         // then
         $this->assertEquals(
@@ -315,9 +321,11 @@ class MainControllerTest extends TestCase
         $cloudService = $this->createMock(CloudService::class);
         $cloudService->method("isConfigured")->willReturn(true);
         $cloudService->method("getSubscription")->willReturn($cloudSubscription);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService, $currentUser);
 
         // then
         $this->assertEquals(
@@ -350,9 +358,11 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloud = $this->createMock(CloudService::class);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
 
         // then
         $this->assertEquals(

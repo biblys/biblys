@@ -254,12 +254,13 @@ class MainController extends Controller
         Config $config,
         Updater $updater,
         UrlGenerator $urlGenerator,
-        CloudService $cloud
+        CloudService $cloud,
+        CurrentUser $currentUser,
     ): Response
     {
         global $site;
 
-        $currentUser = self::authAdmin($request);
+        self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
 
         // Display alert if Biblys has been updated since last visit
@@ -294,6 +295,11 @@ class MainController extends Controller
             return $entry;
         }, $biblysEntries);
 
+        $hotNewsBanner = $config->get("cloud.hot_news");
+        if ($currentUser->getOption("hot_news_read")) {
+            $hotNewsBanner = null;
+        }
+
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
             'update_alert' => $update_alert,
@@ -310,7 +316,7 @@ class MainController extends Controller
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
             "cloud" => $cloud,
-            "hot_news" => $config->get("cloud.hot_news"),
+            "hot_news" => $hotNewsBanner,
         ]);
     }
 
