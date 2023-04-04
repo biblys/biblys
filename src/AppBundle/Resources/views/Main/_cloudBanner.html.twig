@@ -1,15 +1,19 @@
 {% if not cloud.subscription %}
-  <div class="alert alert-warning text-center">
+  <div class="alert alert-warning">
     <span class="fa fa-warning"></span>
-    <strong>Aucun abonnement Biblys Cloud en cours.</strong><br/>
-    <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-sm btn-success">
+    Aucun abonnement Biblys Cloud en cours.
+    <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-xs btn-success pull-right">
+      <span class="fa fa-plus-square"></span>
       Souscrire
     </a>
   </div>
 {% elseif not cloud.subscription.isPaid %}
-  <div class="alert alert-danger text-center">
+  <div class="alert alert-danger">
     <span class="fa fa-exclamation-triangle"></span>
     Votre abonnement Biblys Cloud a expiré.
-    <a href="{{ path('main_admin_cloud') }}" class="btn btn-sm btn-primary">En savoir plus</a>
+    <a href="{{ path('main_admin_cloud') }}" class="btn btn-xs btn-success pull-right">
+      <span class="fa fa-refresh"></span>
+      Renouveler
+    </a>
   </div>
 {% endif %}
