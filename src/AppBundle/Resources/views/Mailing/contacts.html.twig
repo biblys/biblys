@@ -7,10 +7,16 @@
 {% block main %}
   <h1>Liste de contacts</h1>
 
-  <h2>{{ subscribed|length }} abonnés</h2>
+  <h2>{{ total }} contacts</h2>
+
+  <p>Source : {{ source }}</p>
 
   <form action="/pages/export_to_csv" method="post" class="fieldset">
-    <fieldset class="center">
+    <fieldset>
+      <a class="btn btn-primary" href="{{ link }}">
+        <span class="fa fa-cog"></span>
+        Gérer la liste
+      </a>
       <input type="hidden" name="filename" value="contacts">
       <input type="hidden" name="data" value="{{ export }}">
       <button type="submit" class="btn btn-primary"><i class="fa fa-download"></i> Télécharger au format CSV</button>
@@ -26,12 +32,14 @@
     </thead>
 
     <tbody>
-      {% for email in subscribed %}
+      {% for contact in contacts %}
         <tr>
-          <td> {{ email.has('email') ? email.email }} </td>
-          <td> {{ email.has('created') ? email.created|date }} </td>
+          <td>{{ contact.email }}</td>
+          <td>{{ contact.createdAt }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
+
+  {% include "AppBundle:Mailing:_pagination.html.twig" %}
 {% endblock %}

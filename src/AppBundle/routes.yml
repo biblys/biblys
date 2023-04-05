@@ -330,7 +330,7 @@ mailing_unsubscribe:
 
 mailing_contacts:
   path: /admin/mailing/contacts
-  controller: AppBundle\Controller\MailingController::contactsAction
+  controller: AppBundle\Controller\MailingController::contacts
 
 # OpenID Connect
 

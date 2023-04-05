@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\CaptchaValidationException;
+use Biblys\Service\Config;
+use Biblys\Service\MailingList\MailingListService;
+use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use MailingManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,14 +23,19 @@ class MailingController extends Controller
 {
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function subscribeAction(Request $request, UrlGenerator $urlGenerator)
+    public function subscribeAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        Config $config,
+        MailingListService $mailingListService,
+    ): RedirectResponse|Response
     {
-        global $config;
-
         $mm = new MailingManager();
         $subscribers = $mm->countSubscribers();
 
@@ -62,14 +69,12 @@ class MailingController extends Controller
                     }
                 }
 
-                $result = $mm->addSubscriber($email, true);
-            } catch (CaptchaValidationException $e) {
-                $error = $e->getMessage();
-            }
-
-            if (isset($result)) {
+                $mailingList = $mailingListService->getMailingList();
+                $mailingList->addContact($email, true);
                 $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
                 return new RedirectResponse($successUrl);
+            } catch (CaptchaValidationException $e) {
+                $error = $e->getMessage();
             }
         }
 
@@ -89,20 +94,26 @@ class MailingController extends Controller
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
      */
-    public function unsubscribeAction(Request $request, UrlGenerator $urlGenerator)
+    public function unsubscribeAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        MailingListService $mailingListService,
+    ): RedirectResponse|Response
     {
-        $mm = new MailingManager();
         $request->attributes->set("page_title", "Désinscription de la newsletter");
         $error = null;
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() === "POST") {
             $email = $request->request->get('email', false);
             try {
                 $mailingList = $mailingListService->getMailingList();
                 $mailingList->removeContact($email);
                 $successUrl = $urlGenerator->generate("mailing_unsubscribe", ["success" => 1]);
                 return new RedirectResponse($successUrl);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
             }
         }
 
@@ -116,35 +127,37 @@ class MailingController extends Controller
     }
 
     /**
-     * @throws SyntaxError
-     * @throws AuthException
-     * @throws RuntimeError
-     * @throws PropelException
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function contactsAction(Request $request): Response
+    public function contacts(
+        Request $request,
+        MailingListService $mailingListService,
+    ): Response
     {
         self::authAdmin($request);
         $request->attributes->set("page_title", "Liste de contacts");
 
-        $mm = new MailingManager();
-        $emails = $mm->getAll([],[
-            "order" => "mailing_created",
-            "sort" => "desc"
-        ]);
+        $currentPage = $request->query->get("p", 0);
+        $contactsPerPage = 1000;
 
-        $subscribed = [];
-        $export = [];
-        foreach ($emails as $email) {
-            if ($email->isSubscribed()) {
-                $subscribed[] = $email;
-                $export[] = [$email->get('email')];
-            }
-        }
+        $list = $mailingListService->getMailingList();
+        $contactCount = $list->getContactCount();
+        $pagination = new Pagination($currentPage, $contactCount, $contactsPerPage);
+        $contacts = $list->getContacts($pagination->getOffset(), $pagination->getLimit());
+        $exportableContacts = array_map(function($contact) {
+            return [$contact->getEmail()];
+        }, $contacts);
 
         return $this->render('AppBundle:Mailing:contacts.html.twig', [
-            "subscribed" => $subscribed,
-            "export" => json_encode($export)
+            "source" => $list->getSource(),
+            "link" => $list->getLink(),
+            "total" => $contactCount,
+            "contacts" => $contacts,
+            "export" => json_encode($exportableContacts),
+            "pagination" => $pagination,
         ]);
     }
 }
