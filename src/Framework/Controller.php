@@ -437,22 +437,21 @@ class Controller
     {
         $trackers = [];
 
-        $matomoConfig = $config->get("matomo");
-        if ($matomoConfig) {
+
+        if ($config->get("matomo.site_id")) {
             $trackers["matomo"] = [
-                "domain" => $matomoConfig["domain"],
-                "site_id" => $matomoConfig["site_id"],
+                "domain" => $config->get("matomo.domain"),
+                "site_id" => $config->get("matomo.site_id"),
             ];
 
-            if (isset($matomoConfig["secondary_domain"])) {
-                $trackers["matomo"]["secondary_domain"] = $matomoConfig["secondary_domain"];
+            if ($config->get("matomo.secondary_domain")) {
+                $trackers["matomo"]["secondary_domain"] = $config->get("matomo.secondary_domain");
             }
         }
 
-        $umamiConfig = $config->get("umami");
-        if ($umamiConfig) {
+        if ($config->get("umami")) {
             $trackers["umami"] = [
-                "website_id" => $umamiConfig["website_id"],
+                "website_id" =>  $config->get("umami.website_id"),
             ];
         }
 
