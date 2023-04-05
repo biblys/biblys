@@ -352,7 +352,7 @@ fieldset {
   padding: 0;
 }
 
-label {
+label.floating {
   float: left;
   text-align: right;
   width: 150px;

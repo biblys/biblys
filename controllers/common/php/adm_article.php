@@ -512,7 +512,7 @@ if ($_MODE == 'insert') {
 // Couverture
 $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
 if ($article->hasCover()) {
-    $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
+    $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label class="floating" for="article_cover_delete" class="after">Supprimer</label>';
 }
 
 // ** FICHIERS TELECHARGEABLES ** //
@@ -601,10 +601,10 @@ $content .= '
     <form id="createCollection" class="event hidden">
         <fieldset>
             <p>Si l\'éditeur n\'a pas de collection ou si le livre est &laquo;&nbsp;hors collection&nbsp;&raquo;, indiquer le nom de l\'éditeur à l\'identique dans le champ collection.</p>
-            <label for="collection_name">Collection :</label>
+            <label class="floating" for="collection_name">Collection :</label>
             <input type="text" id="collection_name" name="collection_name" class="long" required />
             <br />
-            <label for="collection_publisher">&Eacute;diteur :</label>
+            <label class="floating" for="collection_publisher">&Eacute;diteur :</label>
             '.$createCollectionPublisher.'
             <br />
         </fieldset>
@@ -612,20 +612,20 @@ $content .= '
 
     <form id="create_people" class="e createPeopleForm hidden">
         <fieldset>
-            <label for="people_first_name">Pr&eacute;nom :</label>
+            <label class="floating" for="people_first_name">Pr&eacute;nom :</label>
             <input type="text" id="people_first_name" name="people_first_name" class="long" />
             <br />
-            <label for="people_last_name">Nom :</label>
+            <label class="floating" for="people_last_name">Nom :</label>
             <input type="text" id="people_last_name" name="people_last_name" class="long" required />
         </fieldset>
     </form>
 
     <form id="create_price" class="hidden">
         <fieldset>
-            <label for="price_cat">Cat&eacute;gorie :</label>
+            <label class="floating" for="price_cat">Cat&eacute;gorie :</label>
             <input type="text" id="price_cat" name="price_cat" class="short" />
             <br />
-            <label for="price_amount">Prix :</label>
+            <label class="floating" for="price_amount">Prix :</label>
             <input type="number" id="price_amount" name="price_amount" class="short" required /> centimes
             <br />
             <div class="right"><input type="submit" value="Valider" id="createPriceSubmit" /></div>
@@ -634,16 +634,16 @@ $content .= '
 
     <form id="add_award" class="event hidden">
         <fieldset>
-            <label for="award_name">R&eacute;compense :</label>
+            <label class="floating" for="award_name">R&eacute;compense :</label>
             <input type="text" id="award_name" name="award_name" class="long" required />
             <br />
-            <label for="award_year">Ann&eacute;e :</label>
+            <label class="floating" for="award_year">Ann&eacute;e :</label>
             <input type="number" id="award_year" name="award_year" class="short" required />
             <br />
-            <label for="award_category">Cat&eacute;gorie :</label>
+            <label class="floating" for="award_category">Cat&eacute;gorie :</label>
             <input type="text" id="award_category" name="award_category" class="long" />
             <br />
-            <label for="award_note">Note :</label>
+            <label class="floating" for="award_note">Note :</label>
             <input type="text" id="award_note" name="award_note" class="long" />
             <br />
             <div class="right"><input type="submit" value="Ajouter" id="addAwardSubmit"></div>
@@ -662,60 +662,60 @@ $content .= '
         <fieldset>
             <legend>L\'essentiel</legend>
 
-            <label for="article_id">Article n&deg;</label>
+            <label class="floating" for="article_id">Article n&deg;</label>
             <input type="text" id="article_id" name="article_id" value="'.$a['article_id'].'" class="mini" readonly required />
             <br /><br />
 
-            <label for="type_id">Type :</label>
+            <label class="floating" for="type_id">Type :</label>
             <select name="type_id" id="type_id" required>
                 '.join($type_options).'
             </select>
             <br /><br />
 
             <div id="article_ean_div" class="'.$article_ean_div_class.'">
-                <label for="article_ean">EAN/ISBN :</label>
+                <label class="floating" for="article_ean">EAN/ISBN :</label>
                 <input id="article_ean" name="article_ean" value="'.$a['article_ean'].'" class="medium event article_ean'.$article_ean_class.'" '.$article_ean_required.' autofocus />
                 <br /><br />
             </div>
 
-            <label for="article_title">Titre :</label>
+            <label class="floating" for="article_title">Titre :</label>
             <input type="text" id="article_title" name="article_title" value="'.htmlspecialchars($a['article_title']).'" class="long article_duplicate_check event'.$article_title_class.'" required />
             <br />
 
-            <label for="article_authors">Auteur·trice·s :</label>
+            <label class="floating" for="article_authors">Auteur·trice·s :</label>
             <input type="text" id="article_authors" value="'.$a['article_authors'].'" class="long" tabindex="-1" readonly required maxlength=256 data-toggle="popover" data-trigger="focus" title="Liste des auteurs et autrices" data-content="Champ rempli automatiquement. Utilisez la section Contributions (ci-dessous) pour ajouter ou supprimer un auteur ou une autrice.">
             <br />
 
-            <label for="article_collection">Collection :</label>
+            <label class="floating" for="article_collection">Collection :</label>
             '.$collection.'
             n&deg; <input type="text" id="article_number" name="article_number" value="'.$a['article_number'].'" class="mini article_duplicate_check event" />
             <br />
-            <label for="article_cycle">Cycle :</label>
+            <label class="floating" for="article_cycle">Cycle :</label>
             '.$cycle.'
             t. <input type="text" id="article_tome" name="article_tome" value="'.$a['article_tome'].'" class="mini" />
             <br /><br />
 
-            <label for="article_availability_dilicom">Disponibilit&eacute; :</label>
+            <label class="floating" for="article_availability_dilicom">Disponibilit&eacute; :</label>
             <select id="article_availability_dilicom" name="article_availability_dilicom" required>
                 '.implode($availability_options).'
             </select>
             <span'.(!$site->getOpt('virtual_stock') ? ' style="display: none;"' : null).'>
                 <input type="checkbox" name="article_preorder" id="article_preorder" value="1" '.$preorder.' />
-                <label for="article_preorder" class="after">Pr&eacute;commande</label>
+                <label class="floating" for="article_preorder" class="after">Pr&eacute;commande</label>
             </span>
             <br /><br />
 
             <div id="article_category_div" class="'.$category_field_class.'">
-                <label for="article_category">Cat&eacute;gorie :</label>
+                <label class="floating" for="article_category">Cat&eacute;gorie :</label>
                 <input type="text" id="article_category" name="article_category" value="'.$a['article_category'].'" class="mini" title="Appuyez sur la touche &darr; pour faire appara&icirc;tre la liste des cat&eacute;gories." />
                 <br />
             </div>
             <p>
-                <label for="article_price">Prix :</label>
+                <label class="floating" for="article_price">Prix :</label>
                 <input type="number" step="1" id="article_price" name="article_price" value="'.$a['article_price'].'" class="mini" required '.$article_price_readonly.' data-html="true" data-toggle="popover" data-trigger="focus" data-content="Entrez le prix de l\'article en centimes. Par exemple, pour article à 14,00 €, entrez <strong>1400</strong> ; pour un article à 8,50 €, entrez <strong>850</strong>."> centimes
             </p>
             <p>
-                <label for="article_price_editable">Prix libre:</label>
+                <label class="floating" for="article_price_editable">Prix libre:</label>
                 <input type="checkbox" name="article_price_editable" id="article_price_editable" value="1"'.($article->has('price_editable') ? ' checked' : null).'>
             </p>
             <br />
@@ -743,38 +743,38 @@ $content .= '
             <div id="people_list"></div>
             <br /><br />
 
-            <label for="article_people">Ajouter :</label>
+            <label class="floating" for="article_people">Ajouter :</label>
             <input type="text" id="article_people" placeholder="Rechercher par nom ou prénom…" class="long" />
         </fieldset>
 
         <fieldset>
             <legend>Identifiants et liens</legend>
 
-            <label for="article_url">URL Biblys :</label>
+            <label class="floating" for="article_url">URL Biblys :</label>
             <input type="text" id="article_url" name="article_url" value="'.$a['article_url'].'" pattern="^[a-z0-9-_]+/[a-z0-9-_]+$" title="Dans le doute, laisser ce champ vide." placeholder="Champ rempli automatiquement" class="long" pattern="^((?!http).)*$" />
             <br /><br />
 
-            <label for="article_textid">TextID :</label>
+            <label class="floating" for="article_textid">TextID :</label>
             <input type="text" id="article_textid" name="article_textid" value="'.$a['article_textid'].'" class="verylong" maxlength=32>
             <br />
-            <label for="article_item">Item n&deg;</label>
+            <label class="floating" for="article_item">Item n&deg;</label>
             <input type="text" id="article_item" name="article_item" value="'.$a['article_item'].'" class="mini article_duplicate_check event"  />
             <br />
-            <label for="article_link_to">Lier &agrave l\'article n&deg;</label>
+            <label class="floating" for="article_link_to">Lier &agrave l\'article n&deg;</label>
             <input type="number" id="article_link_to" name="article_link_to" class="mini" />
             <br />
-            <label for="article_source_id">Extrait de l\'article n&deg;</label>
+            <label class="floating" for="article_source_id">Extrait de l\'article n&deg;</label>
             <input type="number" name="article_source_id" value="'.$a['article_source_id'].'" class="mini" />
             <br /><br />
 
-            <label for="article_noosfere_id">Ref. nooSFere :</label>
+            <label class="floating" for="article_noosfere_id">Ref. nooSFere :</label>
             <input type="text" id="article_noosfere_id" name="article_noosfere_id" value="'.$a['article_noosfere_id'].'" class="article_duplicate_check event" />
             <br />
-            <label for="article_asin">Ref. Amazon :</label>
+            <label class="floating" for="article_asin">Ref. Amazon :</label>
             <input type="text" id="article_asin" name="article_asin" value="'.$a['article_asin'].'" class="article_duplicate_check event" />
             <br /><br />
 
-            <label for="article_ean_others">Autres ISBN :</label>
+            <label class="floating" for="article_ean_others">Autres ISBN :</label>
             <textarea id="article_ean_others" name="article_ean_others" class="small" title="ISBN de pr&eacute;c&eacute;dentes &eacute;ditions dans la m&eacute;me collection, s&eacute;par&eacute;s par un espace.">'.$a['article_ean_others'].'</textarea>
             <br /><br />
         </fieldset>
@@ -782,36 +782,36 @@ $content .= '
         <fieldset>
             <legend>Donn&eacute;es bibliographiques</legend>
 
-            <label for="article_title_alphabetic">Titre pour le tri :</label>
+            <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
             <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="'.htmlspecialchars($a['article_title_alphabetic']).'" class="long" placeholder="Champ rempli automatiquement" />
             <br />
-            <label for="article_subtitle">Sous-titre :</label>
+            <label class="floating" for="article_subtitle">Sous-titre :</label>
             <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle" value="'.htmlspecialchars($a['article_subtitle']).'" class="long" />
             <br />
-            <label for="article_title_original">Titre original :</label>
+            <label class="floating" for="article_title_original">Titre original :</label>
             <input type="text" id="article_title_original" name="article_title_original" value="'.htmlspecialchars($a['article_title_original']).'" class="long" />
             <br />
-            <label for="article_title_others">Autres titres :</label>
+            <label class="floating" for="article_title_others">Autres titres :</label>
             <input type="text" id="article_title_others" name="article_title_others" value="'.htmlspecialchars($a['article_title_others']).'" class="long" />
             <br /><br />
 
-            <label for="article_copyright">Copyright :</label>
+            <label class="floating" for="article_copyright">Copyright :</label>
             <input type="number" id="article_copyright" name="article_copyright" value="'.$a['article_copyright'].'" step="1" min="1800" max="'.date('Y').'+5" placeholder="AAAA" class="mini" />
             <br />
-            <label for="article_pubdate">Date de parution :</label>
+            <label class="floating" for="article_pubdate">Date de parution :</label>
             <input type="date" id="article_pubdate" name="article_pubdate" value="'.$a['article_pubdate'].'" placeholder="AAAA-MM-JJ" />
             <br /><br />
 
             <p>
-                <label for="article_lang_current">Langue actuelle :</label>
+                <label class="floating" for="article_lang_current">Langue actuelle :</label>
                 <select name="article_lang_current" id="article_lang_current">'.$lang_current_options.'</select>
             </p>
             <p>
-                <label for="article_lang_original">Langue d\'origine :</label>
+                <label class="floating" for="article_lang_original">Langue d\'origine :</label>
                 <select name="article_lang_original" id="article_lang_original">'.$lang_original_options.'</select>
             </p>
             <p>
-                <label for="article_origin_country">Pays d\'origine :</label>
+                <label class="floating" for="article_origin_country">Pays d\'origine :</label>
                 <select name="article_origin_country" id="article_origin_country">
                     <option value="0"></option>
                     '.join($origin_country_options).'
@@ -820,7 +820,7 @@ $content .= '
             <br />
             <p>
 
-                <label for="article_age_min">Lectorat :</label>
+                <label class="floating" for="article_age_min">Lectorat :</label>
                 <input type="number" id="article_age_min"
                     name="article_age_min" value="'.$a['article_age_min'].'"
                     step="1" min="1" max="99" class="mini" /> ans à
@@ -835,7 +835,7 @@ $content .= '
             <legend>Objet</legend>
 
             <p>
-                <label for="article_shaping">Façonnage :</label>
+                <label class="floating" for="article_shaping">Façonnage :</label>
                 <select id="article_shaping" name="article_shaping">
                     <option>'.$a['article_shaping'].'</option>
                     <option />
@@ -856,7 +856,7 @@ $content .= '
             </p>
 
             <p>
-                <label for="article_printing_process">Impression :</label>
+                <label class="floating" for="article_printing_process">Impression :</label>
                 <select id="article_printing_process" name="article_printing_process">
                     <option>'.$a['article_printing_process'].'</option>
                     <option />
@@ -865,17 +865,17 @@ $content .= '
             </p>
 
             <p>
-                <label for="article_format">Format :</label>
+                <label class="floating" for="article_format">Format :</label>
                 <input type="text" id="article_format" name="article_format" value="'.htmlspecialchars($article->get('format')).'" placeholder="10 x 18 cm" class="medium">
             </p>
 
             <p>
-                <label for="article_pages">Nombre de pages :</label>
+                <label class="floating" for="article_pages">Nombre de pages :</label>
                 <input type="number" step="1" id="article_pages" name="article_pages" value="'.$a['article_pages'].'" class="mini" />
             </p>
 
             <p>
-                <label for="article_weight">Poids :</label>
+                <label class="floating" for="article_weight">Poids :</label>
                 <input type="number" step="1" id="article_weight" name="article_weight" value="'.$a['article_weight'].'" class="mini" /> grammes
             </p>
         </fieldset>
@@ -933,22 +933,22 @@ $content .= '
                 '.$the_tags.'
             </ul>
 
-            <label for="article_theme_bisac">Ajouter :</label>
+            <label class="floating" for="article_theme_bisac">Ajouter :</label>
             <textarea id="add_tags_input" class="medium" placeholder="Entrer un ou plusieurs mots-clés, séparés par des virgules...">'.$default_tags.'</textarea>
             <a id="add_tags_button" class="btn btn-primary">Ajouter</a>
 
             <br /><br />
 
-            <label for="article_theme_bisac">BISAC :</label>
+            <label class="floating" for="article_theme_bisac">BISAC :</label>
             <input type="text" id="article_theme_bisac" name="article_theme_bisac" value="'.$a['article_theme_bisac'].'" class="medium">
             <br />
-            <label for="article_theme_clil">CLIL :</label>
+            <label class="floating" for="article_theme_clil">CLIL :</label>
             <input type="text" id="article_theme_clil" name="article_theme_clil" value="'.$a['article_theme_clil'].'" class="medium">
             <br />
-            <label for="article_theme_dewey">Dewey :</label>
+            <label class="floating" for="article_theme_dewey">Dewey :</label>
             <input type="text" id="article_theme_dewey" name="article_theme_dewey" value="'.$a['article_theme_dewey'].'" class="medium">
             <br />
-            <label for="article_theme_electre">Electre :</label>
+            <label class="floating" for="article_theme_electre">Electre :</label>
             <input type="text" id="article_theme_electre" name="article_theme_electre" value="'.$a['article_theme_electre'].'" class="medium">
             <br />
         </fieldset>
@@ -1067,18 +1067,18 @@ $content .= '
         <fieldset>
             <legend>Base de donn&eacute;es</legend>
 
-            <label for="article_created" class="readonly">Fiche créée le :</label>
+            <label class="floating" for="article_created" class="readonly">Fiche créée le :</label>
             <input type="text" name="article_created" id="article_created" value="'.$a['article_created'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
             <br />
-            <label for="article_updated" class="readonly">Fiche modifiée le :</label>
+            <label class="floating" for="article_updated" class="readonly">Fiche modifiée le :</label>
             <input type="text" name="article_updated" id="article_updated" value="'.$a['article_updated'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
             <br /><br />
 
-            <label for="article_keywords" class="disabled">Termes de recherche :</label>
+            <label class="floating" for="article_keywords" class="disabled">Termes de recherche :</label>
             <textarea id="article_keywords" name="article_keywords" class="large" placeholder="Utilis&eacute;s par le moteur de recherche et g&eacute;n&eacute;r&eacute;s automatiquement. Pour ajouter manuellement un terme de recherche personnalisé (par exemple th&eacute;matique), utilisez les mots-clés." disabled>'.$a['article_keywords'].'</textarea>
             <br /><br />
 
-            <label for="article_links" class="disabled">Liaisons :</label>
+            <label class="floating" for="article_links" class="disabled">Liaisons :</label>
             <textarea id="article_links" name="article_links" class="large" disabled>'.$a['article_links'].'</textarea>
             <br /><br />
         </fieldset>
