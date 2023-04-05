@@ -63,12 +63,17 @@ class CurrentSite
     /**
      * @throws PropelException
      */
-    public function setOption(string $key, string $value)
+    public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
             ->filterBySite($this->site)
             ->filterByKey($key)
             ->findOne();
+
+        if ($option && $value === "") {
+            $option->delete();
+            return;
+        }
 
         if (!$option) {
             $option = new Option();

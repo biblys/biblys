@@ -81,6 +81,26 @@ class CurrentSiteTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testSetOptionToEmptyValue()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("an_option_that_we_dont_want", "1");
+
+        // when
+        $currentSite->setOption("an_option_that_we_dont_want", "");
+
+        // then
+        $this->assertNull(
+            $currentSite->getOption("an_option_that_we_dont_want"),
+            "it deletes the option"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testHasOptionEnabled()
     {
         // given

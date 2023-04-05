@@ -6,8 +6,7 @@ Corrections
 
 - La section "Numérique" de l'administration est masquée si l'option de site 
   `downloadable_publishers` n'est pas renseignée.
-- Les options de site sont désormais affichées même si elles n'ont aucune 
-  valeur.
+- Les options de site sont désormais supprimées lorsque leur valeur est vidée.
 
 ## 2.67.0 (5 avril 2023)
 
