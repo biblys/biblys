@@ -126,22 +126,24 @@
       </ul>
     </div>
 
-    <div class="col-sm-4">
-      <h3>Numérique</h3>
-      <ul class="admin-entries">
-        {% for entry in ebooks %}
-          <li>
-            <a href="{{ entry.url }}" target="{{ entry.target }}">
-              <span class="fa fa-{{ entry.icon }}"></span>
-              {{ entry.name }}
-              {% if entry.taskCount > 0 %}
-                <span class="icon-badge">{{ entry.taskCount }}</span>
-              {% endif %}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
+    {% if ebooks|length > 0 %}
+      <div class="col-sm-4">
+        <h3>Numérique</h3>
+        <ul class="admin-entries">
+          {% for entry in ebooks %}
+            <li>
+              <a href="{{ entry.url }}" target="{{ entry.target }}">
+                <span class="fa fa-{{ entry.icon }}"></span>
+                {{ entry.name }}
+                {% if entry.taskCount > 0 %}
+                  <span class="icon-badge">{{ entry.taskCount }}</span>
+                {% endif %}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
 
     <div class="col-sm-4">
       <h3>Contenu</h3>

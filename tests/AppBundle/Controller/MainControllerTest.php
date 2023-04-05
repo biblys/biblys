@@ -173,9 +173,11 @@ class MainControllerTest extends TestCase
         $cloud = new CloudService($config);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->with("downloadable_publishers")->willReturn(null);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -187,6 +189,11 @@ class MainControllerTest extends TestCase
             "Administration Biblys",
             $response->getContent(),
             "it should display the title"
+        );
+        $this->assertStringNotContainsString(
+            "Numérique",
+            $response->getContent(),
+            "hides ebooks section",
         );
     }
 
@@ -211,9 +218,10 @@ class MainControllerTest extends TestCase
         $cloud = new CloudService($config);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn(null);
+        $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -245,9 +253,10 @@ class MainControllerTest extends TestCase
         $cloud = new CloudService($config);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -281,9 +290,10 @@ class MainControllerTest extends TestCase
         $cloud->method("getSubscription")->willReturn(null);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -323,9 +333,10 @@ class MainControllerTest extends TestCase
         $cloudService->method("getSubscription")->willReturn($cloudSubscription);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -360,9 +371,10 @@ class MainControllerTest extends TestCase
         $cloud = $this->createMock(CloudService::class);
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("getOption")->willReturn("1");
+        $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser);
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -508,6 +520,40 @@ class MainControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
         $this->assertStringContainsString("Votre abonnement a expiré.", $response->getContent(), "displays warning");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws AuthException
+     * @throws GuzzleException
+     */
+    public function testAdminWithEbooks()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config();
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = new CloudService($config);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn(null);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->with("downloadable_publishers")->willReturn("1");
+
+        // when
+        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString(
+            "Numérique",
+            $response->getContent(),
+            "displays the ebooks section"
+        );
     }
 
     /**

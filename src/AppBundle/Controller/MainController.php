@@ -256,6 +256,7 @@ class MainController extends Controller
         UrlGenerator $urlGenerator,
         CloudService $cloud,
         CurrentUser $currentUser,
+        CurrentSite $currentSite,
     ): Response
     {
         global $site;
@@ -300,6 +301,11 @@ class MainController extends Controller
             $hotNewsBanner = null;
         }
 
+        $ebooksSection = null;
+        if ($currentSite->getOption("downloadable_publishers") !== null) {
+            $ebooksSection = Entry::generateUrlsForEntries(Entry::findByCategory('ebooks'), $urlGenerator);
+        }
+
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
             'update_alert' => $update_alert,
@@ -308,7 +314,7 @@ class MainController extends Controller
             'articles' => Entry::generateUrlsForEntries(Entry::findByCategory('articles'), $urlGenerator),
             'stock' => Entry::generateUrlsForEntries(Entry::findByCategory('stock'), $urlGenerator),
             'sales' => Entry::generateUrlsForEntries(Entry::findByCategory('sales'), $urlGenerator),
-            'ebooks' => Entry::generateUrlsForEntries(Entry::findByCategory('ebooks'), $urlGenerator),
+            'ebooks' => $ebooksSection,
             'content' => Entry::generateUrlsForEntries(Entry::findByCategory('content'), $urlGenerator),
             'stats' => Entry::generateUrlsForEntries(Entry::findByCategory('stats'), $urlGenerator),
             'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
