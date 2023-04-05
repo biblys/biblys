@@ -30,15 +30,14 @@
         </thead>
         <tbody>
         {% for option in options %}
-
-          {% if option.has("value") %}
-            <tr>
-              <td style="line-height: 45px">{{ option.key }}</td>
-              <td><input type="text" name="options[{{ option.key }}]" id="{{ option.key }}" value="{{ option.value }}"
-                         class="form-control"></td>
-            </tr>
-          {% endif %}
-
+          <tr>
+            <td style="line-height: 45px">
+              <label for="{{ option.key }}>">{{ option.key }}</label>
+            </td>
+            <td>
+              <input type="text" name="options[{{ option.key }}]" id="{{ option.key }}" value="{{ option.value }}" class="form-control">
+            </td>
+          </tr>
         {% endfor %}
         </tbody>
       </table>

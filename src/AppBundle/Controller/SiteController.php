@@ -7,10 +7,12 @@ use Biblys\Service\CurrentSite;
 use Framework\Controller;
 
 use Framework\Exception\AuthException;
+use Model\OptionQuery;
 use OptionManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -30,13 +32,16 @@ class SiteController extends Controller
     }
 
     /**
-     * @throws SyntaxError
-     * @throws AuthException
-     * @throws RuntimeError
-     * @throws PropelException
+     * @param Request $request
+     * @param Session $session
+     * @param CurrentSite $currentSite
+     * @return RedirectResponse|Response
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function optionsAction(Request $request, Session $session, CurrentSite $currentSite)
+    public function optionsAction(Request $request, Session $session, CurrentSite $currentSite): RedirectResponse|Response
     {
         self::authAdmin($request);
         $request->attributes->set("page_title", "Options du site");
@@ -63,12 +68,10 @@ class SiteController extends Controller
             return new RedirectResponse($this->url->generate("site_options"));
         }
 
-        $om = new OptionManager();
-        $options = $om->getAll(
-            ["site_id" => $currentSite->getSite()->getId(), "user_id" => "NULL"],
-            ["order" => 'option_key']
-        );
-
+        $options = OptionQuery::create()
+            ->filterBySite($currentSite->getSite())
+            ->filterByUserId()
+            ->orderByKey();
         return $this->render("AppBundle:Site:options.html.twig", [
             "options" => $options
         ]);
