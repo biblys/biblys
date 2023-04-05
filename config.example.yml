@@ -108,3 +108,10 @@ site: 1
 #gleeph:
 #  api_key: abcdef12345
 #  environment: prod
+
+## Mailjet
+#mailing:
+#  service: mailjet
+#  client_id: abcdef123456
+#  client_secret: ghijkl789012
+#  list_id: 321654987

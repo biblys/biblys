@@ -25,3 +25,9 @@ placedeslibraires:
 composer_home: ~/.composer
 
 config: for tests
+
+mailing:
+  client_id: abcdef123456
+  client_secret: ghijkl789012
+  list_id: 321654987
+
