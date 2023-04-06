@@ -4,6 +4,8 @@
 
 Corrections
 
+- Une erreur pouvait se produire lors de l'ajout d'un·e contributeur·trice à 
+  un article. C'est corrigé.
 - La section "Numérique" de l'administration est masquée si l'option de site 
   `downloadable_publishers` n'est pas renseignée.
 - Les options de site sont désormais supprimées lorsque leur valeur est vidée.

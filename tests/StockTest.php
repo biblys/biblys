@@ -181,6 +181,7 @@ class StockTest extends PHPUnit\Framework\TestCase
      */
     public function testSetReturned()
     {
+        $GLOBALS["_V"] = $this->createMock(Visitor::class);
         $now = (new DateTime())->format('Y-m-d H:i:s');
         $cm = new CartManager();
         $sm = new StockManager();

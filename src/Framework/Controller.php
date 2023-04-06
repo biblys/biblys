@@ -38,10 +38,9 @@ use Visitor;
 class Controller
 {
     /**
-     * @var Visitor
      * @deprecated Controller->user is deprecated. Use CurrentUser service instead.
      */
-    protected Visitor $user;
+    protected ?Visitor $user;
 
     public function __construct()
     {

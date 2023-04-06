@@ -16,6 +16,18 @@ require_once __DIR__."/../setUp.php";
 
 class ControllerTest extends TestCase
 {
+    public function testConstructorWithUserNull()
+    {
+        // given
+        $GLOBALS["_V"] = null;
+
+        // when
+        new Controller();
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
     /**
      * @throws ReflectionException
      */
