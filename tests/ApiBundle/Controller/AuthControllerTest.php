@@ -57,7 +57,7 @@ class AuthControllerTest extends TestCase
     {
         // then
         $this->expectException("Symfony\Component\HttpKernel\Exception\BadRequestHttpException");
-        $this->expectErrorMessage("Credentials are missing");
+        $this->expectExceptionMessage("Credentials are missing");
 
         // given
         $controller = new AuthController();
@@ -120,7 +120,7 @@ class AuthControllerTest extends TestCase
     {
         // then
         $this->expectException(AccessDeniedHttpException::class);
-        $this->expectErrorMessage("Email address has not been validated");
+        $this->expectExceptionMessage("Email address has not been validated");
         ModelFactory::createUser([
             "email" => "non-validated-email@biblys.fr",
             "username" => "nonValidatedEmail",
