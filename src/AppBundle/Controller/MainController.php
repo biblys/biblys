@@ -79,20 +79,14 @@ class MainController extends Controller
         $this->setOpengraphTags($opengraph);
         $this->setTwitterCardsTags($twitterCards);
 
-        $homeOption = OptionQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->filterByKey("home")
-            ->findOne();
-
-        // If a home page behavior is defined
+        $homeOption = $currentSite->getOption("home");
         if ($homeOption) {
-            $behavior = $homeOption->getValue();
             // Custom Twig template
-            if ($behavior == 'custom') {
+            if ($homeOption == 'custom') {
                 return $this->render('AppBundle:Main:home.html.twig');
 
             // Display articles
-            } elseif ($behavior == 'articles') {
+            } elseif ($homeOption == 'articles') {
                 $am = new ArticleManager();
 
                 // Pagination
@@ -113,7 +107,7 @@ class MainController extends Controller
                 ]);
 
             // Display ten last posts
-            } elseif ($behavior == 'posts') {
+            } elseif ($homeOption == 'posts') {
                 $pm = new PostManager();
 
                 $posts = $pm->getAll(['post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
@@ -121,7 +115,7 @@ class MainController extends Controller
                 return $this->render('AppBundle:Main:home-posts.html.twig', ['posts' => $posts]);
 
             // Display ten last posts in a category
-            } elseif (preg_match('/post_category:(\\d+)/', $behavior, $matches)) {
+            } elseif (preg_match('/post_category:(\\d+)/', $homeOption, $matches)) {
                 $pm = new PostManager();
 
                 $posts = $pm->getAll(['category_id' => $matches[1], 'post_status' => 1, 'post_date' => '<= '.date('Y-m-d H:i:s')], ['limit' => 10, 'order' => 'post_date', 'sort' => 'desc']);
@@ -129,7 +123,7 @@ class MainController extends Controller
                 return $this->render('AppBundle:Main:home-posts.html.twig', ['posts' => $posts]);
 
             // Display a rayon
-            } elseif (preg_match('/rayon:(\\d+)/', $behavior, $matches)) {
+            } elseif (preg_match('/rayon:(\\d+)/', $homeOption, $matches)) {
                 $rm = new RayonManager();
 
                 $rayonId = $matches[1];
@@ -144,14 +138,14 @@ class MainController extends Controller
                 ]);
 
             // Display a static page from db
-            } elseif (preg_match('/page:([a-z-]+)/m', $behavior, $matches)) {
+            } elseif (preg_match('/page:([a-z-]+)/m', $homeOption, $matches)) {
 
                 $staticPageSlug = $matches[1];
                 $staticPageController = new StaticPageController();
                 return $staticPageController->showAction($request, $currentSite, $staticPageSlug);
 
             // Old controller
-            } elseif ($behavior == 'old_controller') {
+            } elseif ($homeOption == 'old_controller') {
                 $legacyController = new LegacyController();
                 return $legacyController->defaultAction(
                     $request,

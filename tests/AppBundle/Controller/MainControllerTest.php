@@ -45,8 +45,6 @@ class MainControllerTest extends TestCase
      */
     public function testHomeWithDefaultTemplate()
     {
-        $this->markTestSkipped("Flaky test");
-
         // given
         $controller = new MainController();
         $request = new Request();
@@ -56,9 +54,17 @@ class MainControllerTest extends TestCase
         $mailer = new Mailer();
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
-        $response = $controller->homeAction($request, $session, $mailer, $config, $currentSite);
+        $response = $controller->homeAction(
+            $request,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlGenerator
+        );
 
         // then
         $this->assertEquals(
@@ -67,7 +73,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Bienvenue sur votre nouveau site Biblys !",
+            "Bienvenue sur votre nouveau site Biblys",
             $response->getContent(),
             "it should display the home page title message"
         );
