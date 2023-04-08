@@ -2,6 +2,7 @@
 
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Mailer;
 use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,7 +36,8 @@ $totalWeight = 0;
 $totalPrice = 0;
 $total = 0;
 
-$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$currentUrlService = new CurrentUrlService($request);
+$currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $signupUrl = $urlGenerator->generate("user_signup");
 

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use Exception;
@@ -312,7 +313,8 @@ class ErrorController extends Controller
             return $response;
         }
 
-        $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+        $currentUrlService = new CurrentUrlService($request);
+        $currentUrl = $currentUrlService->getRelativeUrl();
         $response = $this->render("AppBundle:Error:$statusCode.html.twig", [
             "message" => $exception->getMessage(),
             "return_url" => $currentUrl,

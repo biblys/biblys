@@ -3,6 +3,7 @@
 use ApiBundle\Controller\ErrorController;
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUrlService;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -32,7 +33,8 @@ $_PAGE = $_PAGE[0];
 $request = Request::createFromGlobals();
 $routes = RouteLoader::load();
 $urlGenerator = new UrlGenerator($routes, new RequestContext());
-$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$currentUrlService = new CurrentUrlService($request);
+$currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $_PAGE_TYPE = substr($_PAGE, 0, 4);
 /** @var Visitor $_V */

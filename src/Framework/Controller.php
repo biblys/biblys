@@ -5,6 +5,7 @@ namespace Framework;
 use Biblys\Isbn\Isbn as Isbn;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Cart;
 use Media;
@@ -223,14 +224,14 @@ class Controller
         );
         $twig->addRuntimeLoader($runtimeLoader);
 
-        $currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+        $currentUrlService = new CurrentUrlService($request);
         $trackers = $this->_getAnalyticsTrackers($config);
 
         // Global variables
         $app = [
             "axysMenu" => "",
             "currentSite" => $currentSite,
-            "currentUrl" => $currentUrl,
+            "currentUrl" => $currentUrlService,
             "currentUser" => $currentUserService,
             'request' => $request,
             'user' => $this->user,

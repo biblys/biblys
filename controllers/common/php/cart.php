@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUrlService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
@@ -23,7 +24,8 @@ $config = Config::load();
 
 /** @var Request $request */
 /** @var UrlGenerator $urlGenerator */
-$currentUrl = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo();
+$currentUrlService = new CurrentUrlService($request);
+$currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 
 $cart_id = $request->query->get('cart_id', false);
