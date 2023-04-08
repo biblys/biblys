@@ -482,7 +482,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws GuzzleException
      * @throws PropelException
      */
@@ -490,13 +489,16 @@ class MainControllerTest extends TestCase
     {
         // given
         $request = RequestFactory::createAuthRequestForAdminUser();
-        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $request->query->set("return_url", "return-url");
         $controller = new MainController();
-        $cloud = $this->createMock(CloudService::class);
-        $cloud->method("getPortalUrl")->willReturn("https://stripe.com/portal");
+        $cloudService = $this->createMock(CloudService::class);
+        $cloudService->method("getPortalUrl")
+            ->with("return-url")
+            ->willReturn("https://stripe.com/portal?return-url");
+        $returnUrl = "return-url";
 
         // when
-        $response = $controller->adminCloudPortal($request, $urlGenerator, $cloud);
+        $response = $controller->adminCloudPortal($request, $cloudService);
 
         // then
         $this->assertEquals(
@@ -505,7 +507,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 302"
         );
         $this->assertEquals(
-            "https://stripe.com/portal",
+            "https://stripe.com/portal?return-url",
             $response->getTargetUrl(),
             "it should redirect to the stripe portal"
         );

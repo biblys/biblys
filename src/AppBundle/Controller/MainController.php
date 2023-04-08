@@ -9,6 +9,7 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
@@ -438,19 +439,15 @@ class MainController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws GuzzleException
      * @throws PropelException
      */
-    public function adminCloudPortal(
-        Request $request,
-        UrlGenerator $urlGenerator,
-        CloudService $cloud
-    ): RedirectResponse
+    public function adminCloudPortal(Request $request, CloudService $cloud): RedirectResponse
     {
         self::authAdmin($request);
 
-        $portalUrl = $cloud->getPortalUrl($urlGenerator);
+        $returnUrl = $request->query->get("return_url");
+        $portalUrl = $cloud->getPortalUrl($returnUrl);
 
         return new RedirectResponse($portalUrl);
     }

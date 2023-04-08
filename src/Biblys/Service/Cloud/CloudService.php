@@ -6,8 +6,6 @@ use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CloudService
 {
@@ -23,14 +21,9 @@ class CloudService
     /**
      * @throws GuzzleException
      */
-    public function getPortalUrl(UrlGenerator $urlGenerator)
+    public function getPortalUrl(string $returnUrl)
     {
-        $adminCloudUrl = $urlGenerator->generate(
-            "main_admin_cloud",
-            [],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-        $endpointUrl = "/stripe/portal-url?return_url=".urlencode($adminCloudUrl);
+        $endpointUrl = "/stripe/portal-url?return_url=".urlencode($returnUrl);
         $json = $this->_query($endpointUrl);
 
         return $json["url"];

@@ -16,7 +16,7 @@
       <p>Votre abonnement a expiré.</p>
     {% endif %}
 
-    <a href="{{ path('main_admin_cloud_portal') }}" class="btn btn-primary">
+    <a href="{{ path('main_admin_cloud_portal', { return_url: app.currentUrl.absoluteUrl }) }}" class="btn btn-primary">
       <span class="fa fa-cloud"></span>
       Gérer mon abonnement
     </a>
