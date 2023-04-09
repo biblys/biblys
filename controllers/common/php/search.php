@@ -2,6 +2,7 @@
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $query = null;
 $terms = null;
@@ -15,10 +16,24 @@ $input = $request->query->get('q', false);
 /** @var Site $site */
 $useOldArticleController = $site->getOpt("use_old_article_controller");
 if (!$useOldArticleController) {
-    return new RedirectResponse("/articles/search?q=$input");
+//    return new RedirectResponse("/articles/search?q=$input");
 }
 
 $content = '';
+
+/**
+ * @param array|string $date
+ * @return false|string
+ * @throws Exception
+ */
+function _formatDate(array|string $date): string|false
+{
+    try {
+        return _date($date, 'j f Y');
+    } catch (InvalidDateFormatException $exception) {
+        throw new BadRequestHttpException($exception->getMessage(), $exception);
+    }
+}
 
 if (!$input) {
     $content .= '
@@ -72,7 +87,7 @@ if (!$input) {
 
 			$date = str_replace("date:","",$q);
 			$sql[] = "`stock_purchase_date` LIKE '".$date."%' ";
-			$filters .= ' ajoutés le '._date($date,'j f Y');
+			$filters .= ' ajoutés le '. _formatDate($date);
 
 		}
 		elseif (strstr($q,'date<')) // Ajoute au stock avant le
@@ -80,14 +95,14 @@ if (!$input) {
 
 			$date = str_replace("date<","",$q);
 			$sql[] = "`stock_purchase_date` < '".$date." 00:00:00' ";
-			$filters .= ' ajoutés avant le '._date($date,'j f Y');
+			$filters .= ' ajoutés avant le '. _formatDate($date);
 		}
 		elseif (strstr($q,'date>')) // Ajoute au stock avant le
 		{
 
 			$date = str_replace("date>","",$q);
 			$sql[] = "`stock_purchase_date` > '".$date." 00:00:00' ";
-			$filters .= ' ajoutés après le '._date($date,'j f Y');
+			$filters .= ' ajoutés après le '. _formatDate($date);
 		}
 		elseif (strstr($q,'etat:') || strstr($q,'état:'))
 		{
