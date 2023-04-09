@@ -197,10 +197,12 @@ function authors($x, $m = null)
     }
 }
 
+class InvalidDateFormatException extends Exception {}
+
 /**
- * @throws Exception
+ * @throws InvalidDateFormatException
  */
-function _date($dateToFormat, $format = 'd-m-Y')
+function _date($dateToFormat, $format = 'd-m-Y'): bool|string
 {
     if ('0000-00-00 00:00:00' == $dateToFormat || '0000-00-00' == $dateToFormat || empty($dateToFormat)) {
         return false;
@@ -227,7 +229,7 @@ function _date($dateToFormat, $format = 'd-m-Y')
 
     $stringMatchesDateTime = preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\$/", $dateToFormat);
     if (!$stringMatchesDateTime) {
-        throw new Exception("Cannot format date in unknown format: $dateToFormat");
+        throw new InvalidDateFormatException("Cannot format date in unknown format: $dateToFormat");
     }
 
     list($dateString, $timeString) = explode(' ', $dateToFormat);
@@ -268,7 +270,7 @@ function _date($dateToFormat, $format = 'd-m-Y')
     } elseif ('12' == $month) {
         $localizedMonth = 'décembre';
     } else {
-        throw new Exception("Cannot format date with unknown month: $month");
+        throw new InvalidDateFormatException("Cannot format date with unknown month: $month");
     }
 
     // Traduction jour de la semaine
@@ -287,7 +289,7 @@ function _date($dateToFormat, $format = 'd-m-Y')
     } elseif (7 == $dayOfWeek) {
         $localizedDay = 'dimanche';
     } else {
-        throw new Exception("Cannot format date with day of week: $dayOfWeek");
+        throw new InvalidDateFormatException("Cannot format date with day of week: $dayOfWeek");
     }
 
     $trans = [ // Pour le Samedi 5 septembre 2010 à 07h34m05
