@@ -99,13 +99,9 @@ class MailingController extends Controller
         if ($request->getMethod() == "POST") {
             $email = $request->request->get('email', false);
             try {
-                $result = $mm->removeSubscriber($email);
-            } catch (Exception $e) {
-                $error = $e->getMessage();
-            }
-
-            if (isset($result)) {
-                $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
+                $mailingList = $mailingListService->getMailingList();
+                $mailingList->removeContact($email);
+                $successUrl = $urlGenerator->generate("mailing_unsubscribe", ["success" => 1]);
                 return new RedirectResponse($successUrl);
             }
         }
