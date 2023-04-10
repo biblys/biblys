@@ -8,7 +8,6 @@ use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
-use MailingManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,9 +35,6 @@ class MailingController extends Controller
         MailingListService $mailingListService,
     ): RedirectResponse|Response
     {
-        $mm = new MailingManager();
-        $subscribers = $mm->countSubscribers();
-
         $request->attributes->set("page_title", "Inscription à la newsletter");
 
         // ReCaptcha
@@ -82,7 +78,6 @@ class MailingController extends Controller
         $fieldValue = $request->request->get('email', $getEmail);
         $success = $request->query->get('success', false);
         return $this->render('AppBundle:Mailing:subscribe.html.twig', [
-            'subscribers' => $subscribers,
             'error' => $error,
             'success' => $success,
             'recaptcha_key' => $recaptcha_sitekey,
