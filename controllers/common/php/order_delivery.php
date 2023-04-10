@@ -1,9 +1,11 @@
 <?php
 
 use Biblys\Legacy\OrderDeliveryHelpers;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\Mailer;
+use Biblys\Service\MailingList\MailingListService;
 use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,6 +81,10 @@ if ($shipping) {
     $total += $shipping->get('fee');
 }
 
+$config = Config::load();
+$mailingListService = new MailingListService($config);
+$mailingList = $mailingListService->getMailingList();
+
 // Confirm order
 /** @var Request $request */
 if ($request->getMethod() === "POST") {
@@ -98,9 +104,8 @@ if ($request->getMethod() === "POST") {
         $newsletter_checked = $request->request->get('newsletter', false);
         $email = $request->request->get('order_email');
         if ($newsletter_checked) {
-            $mm = new MailingManager();
             try {
-                $result = $mm->addSubscriber($email, true);
+                $mailingList->addContact($email, true);
             } catch (Exception $e) {
                 // Ignore errors
             }
@@ -302,14 +307,8 @@ if ($site->getOpt('newsletter') == 1) {
     $checked = null;
     $showCheckbox = true;
 
-    if ($_V->isLogged()) {
-        $mm = new MailingManager();
-        $mailing = $mm->get(["mailing_email" => $_V->get("email")]);
-        if ($mailing) {
-            if ($mailing->isSubscribed()) {
-                $showCheckbox = false;
-            }
-        }
+    if ($_V->isLogged() && $mailingList->hasContact($_V->get("email"))) {
+        $showCheckbox = false;
     }
 
     if ($showCheckbox) {
