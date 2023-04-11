@@ -6,6 +6,7 @@ use ArticleManager;
 use Biblys\Article\Type;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -527,9 +528,15 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentUserService = $this->createMock(CurrentUser::class);
 
         // when
-        $response = $controller->freeDownloadAction($request, $currentSiteService, $article->getId());
+        $response = $controller->freeDownloadAction(
+            $request,
+            $currentSiteService,
+            $currentUserService,
+            $article->getId(),
+        );
 
         // then
         $this->assertEquals(
@@ -537,6 +544,39 @@ class ArticleControllerTest extends TestCase
             $response->getStatusCode(),
             "it should return HTTP 200"
         );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testFreeDownloadActionWhileAlreadyInLibrary()
+    {
+        // given
+        $controller = new ArticleController();
+        $request = RequestFactory::createAuthRequest();
+        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser();
+        ModelFactory::createStockItem([], $site, $article, $user);
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
+
+        // when
+        $response = $controller->freeDownloadAction(
+            $request,
+            $currentSiteService,
+            $currentUserService,
+            $article->getId(),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode(), "returns HTTP 302");
+        $this->assertEquals("/pages/log_myebooks", $response->getTargetUrl(), "redirects to elibrary");
     }
 
     /**
@@ -556,8 +596,14 @@ class ArticleControllerTest extends TestCase
         $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentUserService = $this->createMock(CurrentUser::class);
 
         // when
-        $controller->freeDownloadAction($request, $currentSiteService, $article->getId());
+        $controller->freeDownloadAction(
+            $request,
+            $currentSiteService,
+            $currentUserService,
+            $article->getId(),
+        );
     }
 }

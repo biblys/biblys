@@ -274,12 +274,14 @@ class ModelFactory
     public static function createStockItem(
         array $attributes = [],
         ?Site $site = null,
-        ?Article $article = null
+        ?Article $article = null,
+        ?User $user = null,
     ): Stock
     {
         $stock = new Stock();
         $stock->setSite($site ?? self::createSite());
         $stock->setArticle($article ?? self::createArticle());
+        $stock->setUser($user);
         $stock->setSellingDate($attributes["selling_date"] ?? null);
         $stock->setReturnDate($attributes["return_date"] ?? null);
         $stock->setLostDate($attributes["lost_date"] ?? null);

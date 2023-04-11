@@ -9,6 +9,7 @@ use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\GleephService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Pagination;
@@ -21,6 +22,7 @@ use Model\ArticleQuery;
 use Model\Link;
 use Model\LinkQuery;
 use Model\PublisherQuery;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -237,11 +239,10 @@ class ArticleController extends Controller
     public function freeDownloadAction(
         Request $request,
         CurrentSite $currentSiteService,
+        CurrentUser $currentUserService,
         $id,
     ): RedirectResponse|Response
     {
-        global $_V;
-
         Controller::authUser($request);
 
         $am = new ArticleManager();
@@ -263,8 +264,13 @@ class ArticleController extends Controller
             throw new NotFoundException($article->get('title')." n'est pas disponible.");
         }
 
-        // If article is already in library, redirect to library page
-        if ($_V->hasPurchased($article)) {
+        $currentUser = $currentUserService->getUser();
+        $currentUserPurchasesForArticle = StockQuery::create()
+            ->filterBySite($currentSiteService->getSite())
+            ->filterByUser($currentUser)
+            ->filterByArticleId($article->get("id"))
+            ->count();
+        if ($currentUserPurchasesForArticle > 0) {
             return new RedirectResponse("/pages/log_myebooks");
         }
 
@@ -274,19 +280,17 @@ class ArticleController extends Controller
         $newsletter_checked = false;
         if ($currentSiteService->getOption("newsletter") == 1) {
             $newsletter = true;
-            if ($_V->isLogged()) {
-                $mm = new MailingManager();
-                $mailing = $mm->get(['mailing_email' => $_V->get('email')]);
-                if ($mailing && $mailing->hasUnsubscribed()) {
-                    $newsletter_checked = null;
-                }
+            $mm = new MailingManager();
+            $mailing = $mm->get(['mailing_email' => $currentUser->getEmail()]);
+            if ($mailing && $mailing->hasUnsubscribed()) {
+                $newsletter_checked = null;
             }
         }
 
         if ($request->getMethod() == 'POST') {
             // Subscribe to newsletter
             $newsletter_checked = $request->request->get('newsletter', false);
-            $email = $_V->get('email');
+            $email = $currentUser->getEmail();
             if ($newsletter_checked) {
                 try {
                     $mm = new MailingManager();
@@ -298,7 +302,7 @@ class ArticleController extends Controller
 
             // Add book to library
             $um = new UserManager();
-            $current_user = $um->getById($_V->get('id'));
+            $current_user = $um->getById($currentUser->getId());
             $um->addToLibrary($current_user, [$article], [], false, ['send_email' => false]);
 
             return new RedirectResponse("/pages/log_myebooks");
