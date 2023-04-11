@@ -1417,6 +1417,9 @@
     <foreign-key foreignTable="articles" skipSql="true">
       <reference local="article_id" foreign="article_id"/>
     </foreign-key>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id" />
+    </foreign-key>
   </table>
   <table name="subscriptions" idMethod="native" phpName="Subscription">
     <column name="subscription_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

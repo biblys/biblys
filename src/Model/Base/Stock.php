@@ -10,6 +10,8 @@ use Model\ArticleQuery as ChildArticleQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
 use Model\StockQuery as ChildStockQuery;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\StockTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -369,6 +371,11 @@ abstract class Stock implements ActiveRecordInterface
      * @var        ChildArticle
      */
     protected $aArticle;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -1325,6 +1332,10 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->user_id !== $v) {
             $this->user_id = $v;
             $this->modifiedColumns[StockTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
@@ -2319,6 +2330,9 @@ abstract class Stock implements ActiveRecordInterface
         if ($this->aArticle !== null && $this->article_id !== $this->aArticle->getId()) {
             $this->aArticle = null;
         }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
+        }
     }
 
     /**
@@ -2360,6 +2374,7 @@ abstract class Stock implements ActiveRecordInterface
 
             $this->aSite = null;
             $this->aArticle = null;
+            $this->aUser = null;
         } // if (deep)
     }
 
@@ -2493,6 +2508,13 @@ abstract class Stock implements ActiveRecordInterface
                     $affectedRows += $this->aArticle->save($con);
                 }
                 $this->setArticle($this->aArticle);
+            }
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -3160,6 +3182,21 @@ abstract class Stock implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aArticle->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -3894,6 +3931,57 @@ abstract class Stock implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildUser object.
+     *
+     * @param ChildUser|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setUser(ChildUser $v = null)
+    {
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addStock($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildUser object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser|null The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getUser(?ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addStocks($this);
+             */
+        }
+
+        return $this->aUser;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -3907,6 +3995,9 @@ abstract class Stock implements ActiveRecordInterface
         }
         if (null !== $this->aArticle) {
             $this->aArticle->removeStock($this);
+        }
+        if (null !== $this->aUser) {
+            $this->aUser->removeStock($this);
         }
         $this->stock_id = null;
         $this->site_id = null;
@@ -3975,6 +4066,7 @@ abstract class Stock implements ActiveRecordInterface
 
         $this->aSite = null;
         $this->aArticle = null;
+        $this->aUser = null;
         return $this;
     }
 
