@@ -3,6 +3,19 @@
 use Biblys\Service\Browser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+/** @var Visitor $_V */
+if (!$_V->isAdmin() && !$_V->isPublisher()) {
+    throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
+}
+
+/** @var Site $site */
+$publisherId = $_V->getCurrentRight()->get("publisher_id");
+if (!$site->allowsPublisherWithId($publisherId)) {
+    $pm = new PublisherManager();
+    throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
+}
 
 if (!$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
     trigger_error('Accès non autorisé pour ' . $_V->get('user_email'));

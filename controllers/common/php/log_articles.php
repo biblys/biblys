@@ -1,17 +1,25 @@
 <?php
 
 use Biblys\Isbn\Isbn as Isbn;
-use Framework\Exception\AuthException;
 use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+/** @var Visitor $_V */
+if (!$_V->isAdmin() && !$_V->isPublisher()) {
+    throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
+}
+
+/** @var Site $site */
+$publisherId = $_V->getCurrentRight()->get("publisher_id");
+if (!$site->allowsPublisherWithId($publisherId)) {
+    $pm = new PublisherManager();
+    throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
+}
 
 $am = new ArticleManager();
 
 $content = "";
-
-if (!$GLOBALS["_V"]->isPublisher()) {
-    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
-}
 
 $publisherId = $GLOBALS["_V"]->getCurrentRight()->get('publisher_id');
 $publisher = PublisherQuery::create()->findPk($publisherId);
