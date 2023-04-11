@@ -234,9 +234,13 @@ class ArticleController extends Controller
      * @throws LoaderError
      * @throws Exception
      */
-    public function freeDownloadAction(Request $request, $id): RedirectResponse|Response
+    public function freeDownloadAction(
+        Request $request,
+        CurrentSite $currentSiteService,
+        $id,
+    ): RedirectResponse|Response
     {
-        global $_V, $site;
+        global $_V;
 
         Controller::authUser($request);
 
@@ -264,12 +268,11 @@ class ArticleController extends Controller
             return new RedirectResponse("/pages/log_myebooks");
         }
 
-
         $request->attributes->set("page_title", "Téléchargement gratuit de {$article->get('title')}");
 
         $newsletter = false;
         $newsletter_checked = false;
-        if ($site->getOpt('newsletter') == 1) {
+        if ($currentSiteService->getOption("newsletter") == 1) {
             $newsletter = true;
             if ($_V->isLogged()) {
                 $mm = new MailingManager();

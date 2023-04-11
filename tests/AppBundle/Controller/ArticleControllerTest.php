@@ -526,9 +526,10 @@ class ArticleControllerTest extends TestCase
         $request = RequestFactory::createAuthRequest();
         $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
         $controller = new ArticleController();
+        $currentSiteService = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->freeDownloadAction($request, $article->getId());
+        $response = $controller->freeDownloadAction($request, $currentSiteService, $article->getId());
 
         // then
         $this->assertEquals(
@@ -554,8 +555,9 @@ class ArticleControllerTest extends TestCase
         $request = new Request();
         $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
         $controller = new ArticleController();
+        $currentSiteService = $this->createMock(CurrentSite::class);
 
         // when
-        $controller->freeDownloadAction($request, $article->getId());
+        $controller->freeDownloadAction($request, $currentSiteService, $article->getId());
     }
 }
