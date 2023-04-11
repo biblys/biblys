@@ -8,6 +8,8 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
+use Biblys\Service\MailingList\MailingListInterface;
+use Biblys\Service\MailingList\MailingListService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -529,12 +531,14 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
+        $mailingListService = $this->createMock(MailingListService::class);
 
         // when
         $response = $controller->freeDownloadAction(
             $request,
             $currentSiteService,
             $currentUserService,
+            $mailingListService,
             $article->getId(),
         );
 
@@ -543,6 +547,54 @@ class ArticleControllerTest extends TestCase
             200,
             $response->getStatusCode(),
             "it should return HTTP 200"
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     */
+    public function testFreeDownloadActionWithNewsletterPrompt()
+    {
+        // given
+        $request = RequestFactory::createAuthRequest();
+        $article = ModelFactory::createArticle(["type_id" => Type::EBOOK, "price" => 0]);
+        $user = ModelFactory::createUser(["email" => "free-reader@example.org", "username" => "Free Reader"]);
+        $controller = new ArticleController();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService
+            ->expects($this->once())
+            ->method("getOption")
+            ->with("newsletter")
+            ->willReturn("1");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingList
+            ->expects($this->once())
+            ->method("hasContact")
+            ->with("free-reader@example.org")
+            ->willReturn(false);
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->expects($this->once())->method("getMailingList")->willReturn($mailingList);
+
+        // when
+        $response = $controller->freeDownloadAction(
+            $request,
+            $currentSiteService,
+            $currentUserService,
+            $mailingListService,
+            $article->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString(
+            "Je souhaite recevoir la newsletter pour être tenu·e",
+            $response->getContent(),
+            "includes newletter prompt"
         );
     }
 
@@ -565,12 +617,16 @@ class ArticleControllerTest extends TestCase
         $currentSiteService->expects($this->once())->method("getSite")->willReturn($site);
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->expects($this->once())->method("getUser")->willReturn($user);
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->method("getMailingList")->willReturn($mailingList);
 
         // when
         $response = $controller->freeDownloadAction(
             $request,
             $currentSiteService,
             $currentUserService,
+            $mailingListService,
             $article->getId(),
         );
 
@@ -597,12 +653,14 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $currentUserService = $this->createMock(CurrentUser::class);
+        $mailingListService = $this->createMock(MailingListService::class);
 
         // when
         $controller->freeDownloadAction(
             $request,
             $currentSiteService,
             $currentUserService,
+            $mailingListService,
             $article->getId(),
         );
     }

@@ -12,11 +12,11 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\GleephService;
 use Biblys\Service\LoggerService;
+use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use LinkManager;
-use MailingManager;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
 use Model\Link;
@@ -240,6 +240,7 @@ class ArticleController extends Controller
         Request $request,
         CurrentSite $currentSiteService,
         CurrentUser $currentUserService,
+        MailingListService $mailingListService,
         $id,
     ): RedirectResponse|Response
     {
@@ -278,11 +279,10 @@ class ArticleController extends Controller
 
         $newsletter = false;
         $newsletter_checked = false;
-        if ($currentSiteService->getOption("newsletter") == 1) {
+        $mailingList = $mailingListService->getMailingList();
+        if ($currentSiteService->getOption("newsletter") === "1") {
             $newsletter = true;
-            $mm = new MailingManager();
-            $mailing = $mm->get(['mailing_email' => $currentUser->getEmail()]);
-            if ($mailing && $mailing->hasUnsubscribed()) {
+            if ($mailingList->hasContact($currentUser->getEmail())) {
                 $newsletter_checked = null;
             }
         }
@@ -293,8 +293,7 @@ class ArticleController extends Controller
             $email = $currentUser->getEmail();
             if ($newsletter_checked) {
                 try {
-                    $mm = new MailingManager();
-                    $mm->addSubscriber($email, true);
+                    $mailingList->addContact($email, true);
                 } catch (Exception) {
                     // Ignore errors
                 }
