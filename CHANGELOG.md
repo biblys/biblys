@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.67.2 (DEV)
+
+Corrections
+
+- Le message d'erreur affiché lors de l'utilisateur d'un critère de tri 
+  invalide était peu clair. C'est corrigé.
+
 ## 2.67.1 (12 avril 2023)
 
 Corrections

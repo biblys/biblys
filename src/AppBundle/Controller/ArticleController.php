@@ -144,27 +144,43 @@ class ArticleController extends Controller
         $query = $request->query->get("q");
         $inStockFilter = $request->query->get("in-stock");
 
-        $sort = $request->query->get("sort", "article_pubdate|desc");
-        list($sortCriteria, $sortOrder) = explode("|", $sort);
+        $sort = $request->query->get("sort", "pubdate|desc");
+        $sortArray = explode("|", $sort);
+        if(count($sortArray) < 2) {
+            throw new BadRequestHttpException("Option de tri '$sort' invalide.");
+        }
+        list($sortCriteria, $sortOrder) = $sortArray;
+
+        if (!in_array($sortOrder, ["asc", "desc"])) {
+            throw new BadRequestHttpException("Ordre de tri '$sortOrder' invalide.");
+        }
 
         $sortOptions = [
-            ["criteria" => "article_title_alphabetic", "order" => "asc", "label" => "titre (△)"],
-            ["criteria" => "article_title_alphabetic", "order" => "desc", "label" => "titre (▽)"],
-            ["criteria" => "article_authors_alphabetic", "order" => "asc", "label" => "auteur·trice (△)"],
-            ["criteria" => "article_authors_alphabetic", "order" => "desc", "label" => "auteur·trice (▽)"],
-            ["criteria" => "article_collection", "order" => "asc", "label" => "collection (△)"],
-            ["criteria" => "article_collection", "order" => "desc", "label" => "collection (▽)"],
-            ["criteria" => "article_number", "order" => "asc", "label" => "numéro de collection (△)"],
-            ["criteria" => "article_number", "order" => "desc", "label" => "numéro de collection (▽)"],
-            ["criteria" => "article_cycle", "order" => "asc", "label" => "série (△)"],
-            ["criteria" => "article_cycle", "order" => "desc", "label" => "série (▽)"],
-            ["criteria" => "article_tome", "order" => "asc", "label" => "numéro de volume (△)"],
-            ["criteria" => "article_tome", "order" => "desc", "label" => "numéro de volume (▽)"],
-            ["criteria" => "article_publisher", "order" => "asc", "label" => "éditeur (△)"],
-            ["criteria" => "article_publisher", "order" => "desc", "label" => "éditeur (▽)"],
-            ["criteria" => "article_pubdate", "order" => "asc", "label" => "date de publication (△)"],
-            ["criteria" => "article_pubdate", "order" => "desc", "label" => "date de publication (▽)"],
+            ["criteria" => "title", "field" => "article_title_alphabetic", "order" => "asc", "label" => "titre (△)"],
+            ["criteria" => "title", "field" => "article_title_alphabetic", "order" => "desc", "label" => "titre (▽)"],
+            ["criteria" => "authors", "field" => "article_authors_alphabetic", "order" => "asc", "label" => "auteur·trice (△)"],
+            ["criteria" => "authors", "field" => "article_authors_alphabetic", "order" => "desc", "label" => "auteur·trice (▽)"],
+            ["criteria" => "collection", "field" => "article_collection", "order" => "asc", "label" => "collection (△)"],
+            ["criteria" => "collection", "field" => "article_collection", "order" => "desc", "label" => "collection (▽)"],
+            ["criteria" => "number", "field" => "article_number", "order" => "asc", "label" => "numéro de collection (△)"],
+            ["criteria" => "number", "field" => "article_number", "order" => "desc", "label" => "numéro de collection (▽)"],
+            ["criteria" => "cycle", "field" => "article_cycle", "order" => "asc", "label" => "série (△)"],
+            ["criteria" => "cycle", "field" => "article_cycle", "order" => "desc", "label" => "série (▽)"],
+            ["criteria" => "tome", "field" => "article_tome", "order" => "asc", "label" => "numéro de volume (△)"],
+            ["criteria" => "tome", "field" => "article_tome", "order" => "desc", "label" => "numéro de volume (▽)"],
+            ["criteria" => "publisher", "field" => "article_publisher", "order" => "asc", "label" => "éditeur (△)"],
+            ["criteria" => "publisher", "field" => "article_publisher", "order" => "desc", "label" => "éditeur (▽)"],
+            ["criteria" => "pubdate", "field" => "article_pubdate", "order" => "asc", "label" => "date de publication (△)"],
+            ["criteria" => "pubdate", "field" => "article_pubdate", "order" => "desc", "label" => "date de publication (▽)"],
         ];
+
+        $selectedSortOption = array_filter($sortOptions, function($option) use($sortCriteria) {
+            return $option["criteria"] === $sortCriteria;
+        });
+        if (!$selectedSortOption) {
+            throw new BadRequestHttpException("Critère de tri '$sortCriteria' invalide.");
+        }
+        $selectedSortOptionField = current($selectedSortOption)["field"];
 
         $articles = [];
         $count = 0;
@@ -182,7 +198,7 @@ class ArticleController extends Controller
                 $pagination = new Pagination($page, $count);
                 $pagination->setQueryParams($queryParams);
                 $articles = $am->searchWithAvailableStock($query, $currentSite, [
-                    'order' => $sortCriteria,
+                    'order' => $selectedSortOptionField,
                     'sort' => $sortOrder,
                     'limit' => $pagination->getLimit(),
                     'offset' => $pagination->getOffset(),
@@ -192,7 +208,7 @@ class ArticleController extends Controller
                 $pagination = new Pagination($page, $count);
                 $pagination->setQueryParams($queryParams);
                 $articles = $am->search($query, [
-                    'order' => $sortCriteria,
+                    'order' => $selectedSortOptionField,
                     'sort' => $sortOrder,
                     'limit' => $pagination->getLimit(),
                     'offset' => $pagination->getOffset(),

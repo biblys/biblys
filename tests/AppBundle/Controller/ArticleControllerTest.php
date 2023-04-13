@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -329,7 +330,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche trié");
-        $request->query->set("sort", "article_pubdate|desc");
+        $request->query->set("sort", "pubdate|desc");
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
@@ -351,6 +352,35 @@ class ArticleControllerTest extends TestCase
             $response->getContent(),
             "return article with matching title"
         );
+    }
+
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testSearchActionWithIllegalSortOption()
+    {
+        // then
+        $this->expectException(BadRequestHttpException::class);
+
+        // given
+        ModelFactory::createArticle(
+            ["title" => "Résultat de recherche trié"],
+            null,
+            null,
+            [ModelFactory::createPeople()]
+        );
+        $controller = new ArticleController();
+        $request = new Request();
+        $request->query->set("q", "Résultat de recherche trié");
+        $request->query->set("sort", "1AND+1%3D1+ORDERBY%281%2C2%2C3%2C4%2C5%29+--%3B|desc");
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        // when
+        $controller->searchAction($request, $currentSite);
     }
 
     /**
@@ -418,7 +448,7 @@ class ArticleControllerTest extends TestCase
         $controller = new ArticleController();
         $request = new Request();
         $request->query->set("q", "Résultat de recherche trié avec stock");
-        $request->query->set("sort", "article_pubdate|asc");
+        $request->query->set("sort", "pubdate|asc");
         $request->query->set("in-stock", "1");
 
         // when
