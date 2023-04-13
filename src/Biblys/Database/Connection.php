@@ -2,6 +2,7 @@
 
 namespace Biblys\Database;
 
+use Biblys\Service\Config;
 use Exception;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -15,14 +16,14 @@ class Connection
     /**
      * @throws Exception
      */
-    public static function init(array $config): PDO
+    public static function init(Config $config): PDO
     {
 
         try {
             $_SQL = new PDO(
-                self::getDsnFromConfig($config),
-                $config["user"],
-                $config["pass"]
+                self::getDsnFromConfig($config->get("db")),
+                $config->get("db.user"),
+                $config->get("db.pass"),
             );
             $_SQL->exec("SET CHARACTER SET utf8");
             $_SQL->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,7 +32,7 @@ class Connection
             return $_SQL;
         } catch (PDOException $e) {
             throw new Exception(
-                "Cannot connect to MySQL server " . $config["host"] . ":" . $config["port"] . " #" . $e->getCode() . ": " . $e->getMessage()
+                "Cannot connect to MySQL server ".$config->get("db.host").":".$config->get("db.port")." #".$e->getCode().": ".$e->getMessage()
             );
         }
     }

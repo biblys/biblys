@@ -88,14 +88,8 @@ if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
     die();
 }
 
-/* DATABASE */
-
-// Get MySQL Credential from config
-$dbConfig = $config->get("db");
-$_MYSQL = $dbConfig;
-
 try {
-    $_SQL = Biblys\Database\Connection::init($_MYSQL);
+    $_SQL = Biblys\Database\Connection::init($config);
 } catch (Exception $exception) {
     throw new Exception("An error ocurred while connecting to database.");
 }
@@ -323,7 +317,6 @@ function error($x, $t = 'MySQL')
     global $_SITE;
     global $_LOG;
     global $_POST;
-    global $_MYSQL;
     if (is_array($x)) {
         $x = 'SQL Error #' . $x[1] . ' : ' . $x[2];
     }
