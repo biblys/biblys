@@ -6,6 +6,8 @@ Corrections
 
 - Le message d'erreur affiché lors de l'utilisateur d'un critère de tri 
   invalide était peu clair. C'est corrigé.
+- L'échec de la connexion à la base de données n'arrêtait pas l'execution. 
+  C'est désormais le cas.
 
 ## 2.67.1 (12 avril 2023)
 

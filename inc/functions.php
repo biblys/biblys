@@ -96,8 +96,8 @@ $_MYSQL = $dbConfig;
 
 try {
     $_SQL = Biblys\Database\Connection::init($_MYSQL);
-} catch (Exception $e) {
-    trigger_error($e->getMessage());
+} catch (Exception $exception) {
+    throw new Exception("An error ocurred while connecting to database.");
 }
 
 /* CURRENT SITE DETECTION */
