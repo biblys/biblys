@@ -18,14 +18,6 @@ if (!isset($_SERVER['HTTP_HOST'])) {
     $_SERVER['HTTP_HOST'] = 'www.biblys.fr';
 }
 
-// Variables
-$_ENGINE = 1;
-if (!isset($_CRON)) {
-    $_CRON = 0;
-}
-$_MYSQL_DOWN = 0;
-$_OPENGRAPH = null;
-
 /* AUTOLOAD */
 
 // Include composer autoload
@@ -147,9 +139,7 @@ if (!defined('SITE_PATH')) {
 
 /* BIBLYS.ME */
 
-if (!$_CRON) {
-    $_V = new Visitor($request);
-}
+$_V = new Visitor($request);
 
 // Identification
 function auth($type = 'user')
@@ -373,40 +363,6 @@ function media_url($type, $id, $size = '0'): string
 
     return 'https://' . $host . '/' . $type . '/' . file_dir($id) . '/' . $id . $size . '.' . $ext;
 }
-
-/**
- * @deprecated Use Media->delete() instead
- */
-function media_delete($type, $id)
-{
-    if (media_exists($type, $id)) {
-        if ('article' == $type) {
-            $type = 'book';
-        }
-        if ('publisher' == $type) {
-            $ext = 'png';
-        } elseif ('extrait' == $type) {
-            $ext = 'pdf';
-        } else {
-            $ext = 'jpg';
-        }
-        $path = MEDIA_PATH . '//' . $type . '/' . file_dir($id) . '/' . $id;
-        if ('ebook-pdf' == $type) {
-            $path = biblysPath() . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
-        }
-        if ('ebook-epub' == $type) {
-            $path = biblysPath() . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
-        }
-        if ('ebook-azw' == $type) {
-            $path = biblysPath() . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
-        }
-        $files = glob($path . '*');
-        foreach ($files as $filename) {
-            unlink($filename) or die('media delete error');
-        }
-    }
-}
-
 
 /**
  * @deprecated Use Media->exists() instead
