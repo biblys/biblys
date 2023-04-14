@@ -1,5 +1,7 @@
 <?php
 
+global $request;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 $cm = new CountryManager();
@@ -10,6 +12,7 @@ if ($term) {
     $countries = $cm->getAll(
         ["country_name" => "LIKE ".$term]
     );
+    $json = [];
     foreach ($countries as $c) {
         $json[$i]["label"] = $c["country_name"];
         $json[$i]["value"] = $c["country_name"];
