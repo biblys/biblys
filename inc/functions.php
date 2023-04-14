@@ -1,6 +1,8 @@
 <?php
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
+use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +22,7 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 
 /* AUTOLOAD */
 
-// Include composer autoload
+// Composer autoload
 $autoloadFile = __DIR__."/../vendor/autoload.php";
 if (!file_exists($autoloadFile)) {
     throw new Exception('Composer autoload file not found. Run `composer install`.');
@@ -38,10 +40,8 @@ if ($rollbarConfig) {
     ]);
 }
 
-// Biblys autoload
+// Legacy entities autoload
 require_once __DIR__."/autoload-entity.php";
-
-
 
 /**
  * @deprecated biblysPath() is deprecated. Use relative path with __DIR__ instead.
@@ -142,22 +142,45 @@ if (!defined('SITE_PATH')) {
 $_V = new Visitor($request);
 
 // Identification
-function auth($type = 'user')
+/**
+ * @throws PropelException
+ * @throws Exception
+ * @deprecated Using auth() is deprecated. Use Controller::auth… functions instead.
+ */
+function auth(string $type = 'user'): bool|Visitor
 {
-    global $_V;
+    trigger_deprecation(
+        "biblys/biblys",
+        "2.68.0",
+        "Using auth() is deprecated. Use CurrentUser service instead."
+    );
 
-    if (isset($_V) && $_V->isLogged()) {
-        if ('log' == $type) {
-            return $_V;
-        } elseif ('user' == $type) {
-            return true;
-        } elseif ('publisher' == $type && $_V->isPublisher()) {
-            return true;
-        } elseif ('admin' == $type && $_V->isAdmin()) {
-            return true;
-        } elseif ('root' == $type && $_V->isRoot()) {
-            return true;
-        }
+    global $request, $config;
+
+    $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+
+    if (!$currentUserService->isAuthentified()) {
+        return false;
+    }
+
+    if ($type === "log") {
+        return new Visitor($request);
+    }
+
+    if ($type === "user") {
+        return true;
+    }
+
+    if ($type === "publisher") {
+        return $currentUserService->hasPublisherRight();
+    }
+
+    if ($type === "admin") {
+        return $currentUserService->isAdmin();
+    }
+
+    if ($type === "root") {
+        throw new InvalidArgumentException('"root" is not a valid auth type');
     }
 
     return false;
