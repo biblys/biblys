@@ -10,6 +10,8 @@ Corrections
   C'est désormais le cas.
 - La validation des adresses des sites webs d'éditeurs exigeaient qu'elles 
   commencent par "http://". À présent, "https://" est aussi accepté.
+- L'envoi d'un livre numérique à une adresse e-mail invalide échouait 
+  silencieusement. Désormais, un message d'avertissement est affiché.
 
 ## 2.67.1 (12 avril 2023)
 

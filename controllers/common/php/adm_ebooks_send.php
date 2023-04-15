@@ -8,20 +8,6 @@ $_PAGE_TITLE = 'Envoyer des livres numériques';
 $result = null;
 
 if ($request->getMethod() == "POST") {
-    function extract_email_address ($string) {
-        $emails = array();
-        $string = str_replace("\r\n",' ',$string);
-        $string = str_replace("\n",' ',$string);
-
-        foreach(preg_split('/ /', $string) as $token) {
-            $email = filter_var($token, FILTER_VALIDATE_EMAIL);
-            if ($email !== false) {
-                $emails[] = $email;
-            }
-        }
-        return $emails;
-    }
-
     // Predownload option
     $predownload = $request->request->get('predownload', false);
     if ($predownload) {
@@ -41,12 +27,22 @@ if ($request->getMethod() == "POST") {
     $articles = $am->getByIds($_POST['articles']);
 
     // Get an array of emails in the posted string
-    $emails = extract_email_address($_POST['emails']);
+    $inputString = $_POST['emails'];
+    $validEmails = [];
+    $inputString = str_replace("\r\n", ' ', $inputString);
+    $inputString = str_replace("\n", ' ', $inputString);
+    $emails = explode(' ', $inputString);
 
     // For each email in the array
+    $downloadableAdded = 0;
     foreach($emails as $email) {
         $erreur = NULL;
         if(!empty($email)) {
+            // Check if string is a valid email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $result .= "<p class=\"alert alert-warning\"><span class=\"fa fa-warning\"></span> \"$email\" a été ignoré car ce n'est pas une adresse email valide.</p>";
+                continue;
+            }
 
             // Check if there is already an user with this address
             $user = $um->get(array('user_email' => $email));
@@ -65,7 +61,12 @@ if ($request->getMethod() == "POST") {
             // At last, add the articles to user's library
             $um->addToLibrary($user, $articles, array(), $predownload, ['send_email' => $send_email]);
             $result .= '<p class="success">'.count($articles).' livre'.s(count($articles)).' ajouté à la bibliothèque de '.$email.'.</p>';
+            $downloadableAdded++;
         }
+    }
+
+    if ($downloadableAdded === 0) {
+        $result .= '<p class="alert alert-warning"><span class="fa fa-warning"></span> Aucun article n\'a été envoyé car aucune adresse e-mail valide n\'a été trouvée.</p>';
     }
 }
 
