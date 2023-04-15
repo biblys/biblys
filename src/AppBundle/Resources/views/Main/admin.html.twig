@@ -8,12 +8,14 @@
 
   <h1>Administration Biblys</h1>
 
-  {% if update_alert %}
-    <script>
-      window.addEventListener('DOMContentLoaded', function() {
-        new Biblys.Notification('Biblys a été mis à jour (v. {{ version }}) ! <p class="text-center"><a class="btn btn-primary btn-sm" href="{{ path('maintenance_changelog_index') }}">En savoir plus</a></p>', { sticky: true, closeButton: true });
-      });
-    </script>
+  {% if updated_alert %}
+    <div class="alert alert-success">
+      <span class="fa fa-check-circle"></span>
+      Biblys a été mis à jour (v. {{ version }}) !
+      <a class="btn btn-success btn-xs pull-right" href="{{ path('maintenance_changelog_index') }}">
+        En savoir plus
+      </a>
+    </div>
   {% endif %}
 
   {% if smtp_alert %}

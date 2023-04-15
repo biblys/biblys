@@ -263,10 +263,10 @@ class MainController extends Controller
         }
 
         // Display alert if Biblys has been updated since last visit
-        $update_alert = false;
+        $updatedAlert = false;
         if ($currentUser->getOption("last_version_known") != BIBLYS_VERSION) {
             $currentUser->setOption("last_version_known", BIBLYS_VERSION);
-            $update_alert = true;
+            $updatedAlert = true;
         }
 
         $smtpAlert = false;
@@ -291,7 +291,7 @@ class MainController extends Controller
 
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
-            'update_alert' => $update_alert,
+            'updated_alert' => $updatedAlert,
             'smtp_alert' => $smtpAlert,
             'shortcuts' => $shortcuts,
             'articles' => Entry::generateUrlsForEntries(Entry::findByCategory('articles'), $urlGenerator),
