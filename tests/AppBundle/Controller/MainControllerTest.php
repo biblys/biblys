@@ -488,6 +488,40 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws UpdaterException
+     * @throws AuthException
+     * @throws GuzzleException
+     * @throws Exception
+     */
+    public function testAdminWithSmtpAlert()
+    {
+        // given
+        $controller = new MainController();
+        $request = RequestFactory::createAuthRequestForAdminUser();
+        $config = new Config(["smtp" => null]);
+        $updater = $this->createMock(Updater::class);
+        $updater->method("isUpdateAvailable")->willReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $cloud = $this->createMock(CloudService::class);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturn(null);
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        // when
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString(
+            "L'envoi de courriel est désactivé car aucun serveur SMTP n'est configuré.",
+            $response->getContent(),
+            "displays the ebooks section"
+        );
+    }
+
+    /**
      * @throws GuzzleException
      * @throws PropelException
      */

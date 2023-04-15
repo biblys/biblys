@@ -16,16 +16,11 @@
     </script>
   {% endif %}
 
-  {% if smtpAlert %}
-    <script>
-      window.addEventListener('DOMContentLoaded', function () {
-        new Biblys.Notification('<p><span class="fa fa-warning"></span>&nbsp; Aucun serveur SMTP n\'est configuré pour l\'envoi de courriels.</p>', {
-          sticky: false,
-          closeButton: true,
-          type: 'warning',
-        });
-      });
-    </script>
+  {% if smtp_alert %}
+    <div class="alert alert-warning">
+      <span class="fa fa-warning"></span>
+      L'envoi de courriel est désactivé car aucun serveur SMTP n'est configuré.
+    </div>
   {% endif %}
 
   {% if hot_news %}

@@ -292,7 +292,7 @@ class MainController extends Controller
         return $this->render('AppBundle:Main:admin.html.twig', [
             'version' => BIBLYS_VERSION,
             'update_alert' => $update_alert,
-            'smtpAlert' => $smtpAlert,
+            'smtp_alert' => $smtpAlert,
             'shortcuts' => $shortcuts,
             'articles' => Entry::generateUrlsForEntries(Entry::findByCategory('articles'), $urlGenerator),
             'stock' => Entry::generateUrlsForEntries(Entry::findByCategory('stock'), $urlGenerator),
