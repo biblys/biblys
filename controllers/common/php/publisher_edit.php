@@ -58,9 +58,6 @@ if ($request->getMethod() == "POST") {
     $_POST["publisher_name_alphabetic"] = alphabetize($_POST["publisher_name"]);
     $_POST["publisher_url"] = makeurl($_POST["publisher_name"]);
 
-    // On ajoute http:// au debut de l'adresse du site s'il manque
-    if (!empty($_POST["publisher_website"]) && !preg_match('#^http://#',$_POST["publisher_website"])) $_POST["publisher_website"] = 'http://'.$_POST["publisher_website"];
-
     // Short description (L'Autre livre)
     if ($site->get("id") == 11) {
         $main_desc = $request->request->get("publisher_desc", false);
@@ -249,7 +246,15 @@ if (
                 <br /><br />
                 <p>
                     <label for="publisher_website">Site web :</label>
-                    <input type="url" name="publisher_website" id="publisher_website" value="'.$p["publisher_website"].'" placeholder="http://..." title="L\'adresse doit commencer par http://" class="long">&nbsp; <img src="/common/icons/info.svg" width=16 title="Pour que le lien fonctionne correctement, n\'oubliez pas de faire précéder l\'adresse par http://" style="vertical-align: middle;">
+                    <input 
+                        type="url" 
+                        name="publisher_website" 
+                        id="publisher_website" 
+                        value="'.$p["publisher_website"].'" 
+                        placeholder="https://..." 
+                        title="L\'adresse doit commencer par http:// ou https://" 
+                        class="long"
+                    >
                     <br>
                     <label for="publisher_email">Courriel :</label>
                     <input type="email" name="publisher_email" id="publisher_email" value="'.$p["publisher_email"].'" class="long">

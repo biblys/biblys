@@ -8,6 +8,8 @@ Corrections
   invalide était peu clair. C'est corrigé.
 - L'échec de la connexion à la base de données n'arrêtait pas l'execution. 
   C'est désormais le cas.
+- La validation des adresses des sites webs d'éditeurs exigeaient qu'elles 
+  commencent par "http://". À présent, "https://" est aussi accepté.
 
 ## 2.67.1 (12 avril 2023)
 
