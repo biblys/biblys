@@ -71,10 +71,10 @@ foreach ($stocks as $stock) {
 
     // Cover
     $cover = null;
-    if (media_exists('stock', $stock->get('id'))) {
-        $cover = '<a href="'.media_url('stock', $stock->get('id')).'" rel="lightbox"><img src="'.media_url('stock', $stock->get('id'), 'h60').'" alt="'.$article->get('title').'" height="60"></a>';
-    } elseif (media_exists('article', $article->get('id'))) {
-        $cover = '<a href="'.media_url('article', $article->get('id')).'" rel="lightbox"><img src="'.media_url('article', $article->get('id'), 'h60').'" alt="'.$article->get('title').'"></a>';
+    if ($stock->hasPhoto()) {
+        $cover = $stock->getPhotoTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
+    } elseif ($article->hasCover()) {
+        $cover = $article->getCoverTag(['size' => 'h60', 'rel' => 'lightbox', 'class' => 'cover']);
     }
 
     // Books & ebooks
