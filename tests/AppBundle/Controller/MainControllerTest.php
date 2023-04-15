@@ -177,7 +177,7 @@ class MainControllerTest extends TestCase
         $currentSite->method("getOption")->with("downloadable_publishers")->willReturn(null);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -221,7 +221,7 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -256,7 +256,7 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
@@ -293,7 +293,7 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -336,7 +336,7 @@ class MainControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloudService, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloudService, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(
@@ -348,45 +348,6 @@ class MainControllerTest extends TestCase
             "Votre abonnement Biblys Cloud a expiré.",
             $response->getContent(),
             "displays the warning"
-        );
-    }
-
-    /**
-     * @throws AuthException
-     * @throws PropelException
-     * @throws UpdaterException
-     * @throws GuzzleException
-     */
-    public function testAdminWithUpdates()
-    {
-        // given
-        $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
-        $config = new Config();
-        $config->set("cloud", ["expires" => "2018-01-01"]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(true);
-        $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(CloudService::class);
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn("1");
-        $currentSite = $this->createMock(CurrentSite::class);
-
-        // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should return HTTP 200"
-        );
-        $this->assertStringContainsString(
-            'Mise à jour
-                              <span class="icon-badge">1</span>',
-            $response->getContent(),
-            "it should contain the update notifications badge"
         );
     }
 
@@ -545,7 +506,7 @@ class MainControllerTest extends TestCase
         $currentSite->method("getOption")->with("downloadable_publishers")->willReturn("1");
 
         // when
-        $response = $controller->adminAction($request, $config, $updater, $urlGenerator, $cloud, $currentUser, $currentSite);
+        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");

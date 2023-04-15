@@ -252,7 +252,6 @@ class MainController extends Controller
     public function adminAction(
         Request $request,
         Config $config,
-        Updater $updater,
         UrlGenerator $urlGenerator,
         CloudService $cloud,
         CurrentUser $currentUser,
@@ -281,21 +280,6 @@ class MainController extends Controller
             $shortcuts = [];
         }
 
-        $biblysEntries = Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator);
-        $biblysEntriesWithUpdates = array_map(function($entry) use($updater, $site, $config) {
-            if ($entry->getName() === "Mise à jour") {
-                $diff = time() - $site->getOpt('updates_last_checked');
-                if ($diff > 60 * 60 * 24) {
-                    $updater->downloadUpdates($config);
-                    $site->setOpt('updates_last_checked', time());
-                }
-                if ($updater->isUpdateAvailable($config)) {
-                    $entry->setTaskCount(1);
-                }
-            }
-            return $entry;
-        }, $biblysEntries);
-
         $hotNewsBanner = $config->get("cloud.hot_news");
         if ($currentUser->getOption("hot_news_read")) {
             $hotNewsBanner = null;
@@ -318,7 +302,7 @@ class MainController extends Controller
             'content' => Entry::generateUrlsForEntries(Entry::findByCategory('content'), $urlGenerator),
             'stats' => Entry::generateUrlsForEntries(Entry::findByCategory('stats'), $urlGenerator),
             'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
-            'biblys' => $biblysEntriesWithUpdates,
+            'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
             "cloud" => $cloud,
