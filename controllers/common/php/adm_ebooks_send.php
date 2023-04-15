@@ -1,9 +1,13 @@
 <?php
 
+global $request;
+
+use Symfony\Component\HttpFoundation\Response;
+
 $am = new ArticleManager();
 $um = new UserManager();
 
-$_PAGE_TITLE = 'Envoyer des livres numériques';
+$request->attributes->set("page_title", "Envoyer des livres numériques");
 
 $result = null;
 
@@ -44,7 +48,7 @@ if ($request->getMethod() == "POST") {
                 continue;
             }
 
-            // Check if there is already an user with this address
+            // Check if there is already a user with this address
             $user = $um->get(array('user_email' => $email));
 
             // Else, create a new one
@@ -80,8 +84,8 @@ $articles_options = array_map(function($article) {
   return '<option value="'.$article->get('id').'">'.$article->get('title').'</option>';
 }, $articles);
 
-$_ECHO .= '
-    <h1><span class="fa fa-send"></span> '.$_PAGE_TITLE.'</h1>
+$content = '
+    <h1><span class="fa fa-send"></span> Envoyer des livres numériques</h1>
 
     '.$result.'
 
@@ -113,3 +117,5 @@ $_ECHO .= '
         </fieldset>
     </form>
 ';
+
+return new Response($content);

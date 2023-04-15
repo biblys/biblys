@@ -1,8 +1,11 @@
 <?php
 
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+global $_V, $request, $site, $_SQL, $_SITE;
 
-use Framework\Exception\AuthException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $pm = new PublisherManager();
 $cm = new CollectionManager();
@@ -18,7 +21,7 @@ if ($_V->isAdmin()) {
 } elseif ($_V->isPublisher()) {
     $publisher_id = $_V->getCurrentRight()->get('publisher_id');
 } else {
-    throw new AuthException('Accès réservé aux administrateurs et aux éditeurs.');
+    throw new AccessDeniedHttpException('Accès réservé aux administrateurs et aux éditeurs.');
 }
 
 // Get publisher
@@ -42,7 +45,7 @@ if ($request->getMethod() == "POST") {
     if (!empty($_FILES["publisher_logo_upload"]["tmp_name"])) {
         if ($_FILES["publisher_logo_upload"]["type"] == "image/png") {
             if ($logo->exists()) $logo->delete();
-            $logo->upload($_FILES["publisher_logo_upload"]["tmp_name"],$_FILES["publisher_logo_upload"]["type"]);
+            $logo->upload($_FILES["publisher_logo_upload"]["tmp_name"]);
             $url_p['logo_uploaded'] = 1;
             $_FIELDS[] = 'logo ajouté';
         } else $url_p['warning'] = 'Le logo n\'a pas pu être ajouté : l\'image doit être au format PNG.';
@@ -123,9 +126,9 @@ if ($request->getMethod() == "POST") {
         }
 
         // Requête de mise à jour
+        $params['publisher_id'] = $publisher->get("id");
+        $update_query = "UPDATE `publishers` SET ".$_UPDATE.", `publisher_update` = NOW() WHERE `publisher_id` = :publisher_id";
         try {
-            $params['publisher_id'] = $publisher->get("id");
-            $update_query = "UPDATE `publishers` SET ".$_UPDATE.", `publisher_update` = NOW() WHERE `publisher_id` = :publisher_id";
             $query = $_SQL->prepare($update_query);
             $query->execute($params);
         } catch (PDOException $e) {
@@ -137,7 +140,7 @@ if ($request->getMethod() == "POST") {
             $_SQL->exec("REPLACE INTO `redirections`(`redirection_old`,`redirection_new`,`redirection_date`) VALUES('/editeur/".$b["publisher_url"]."','/editeur/".$_POST["publisher_url"]."',NOW())") or error($_SQL->errorInfo());
         }
 
-        // Mise a jour des articles et collections liés
+        // Mise à jour des articles et collections liés
         if ($update_children) {
 
             $collections = $cm->getAll(array('publisher_id' => $publisher->get("id")));
@@ -161,17 +164,19 @@ if ($request->getMethod() == "POST") {
         $url_p['updated'] = 1;
     }
 
+    $publisherIdParam = "";
     if ($_V->isAdmin()) {
         $url_p['id'] = $publisher->get("id");
     }
-    redirect('/pages/publisher_edit', $url_p);
+    $urlQueryString = http_build_query($url_p);
+    return new RedirectResponse("/pages/publisher_edit?$urlQueryString");
 }
 
 // Logo
 $logo = new Media('publisher',$p['publisher_id']);
-if (media_exists('publisher',$p["publisher_id"])) {
+if ($logo->exists()) {
     $publisher_logo_upload = '<input type="file" id="publisher_logo_upload" name="publisher_logo_upload" accept="image/png" class="hidden"> <label class="after button" for="publisher_logo_upload">Remplacer</label> <input type="checkbox" id="publisher_logo_delete" name="publisher_logo_delete" value="1" /> <label for="publisher_logo_delete" class="after">Supprimer</label>';
-    $publisher_logo = '<a href="'.$logo->url().'"><img src="'.$logo->url('h100').'" class="floatR"></a>';
+    $publisher_logo = '<a href="'.$logo->url().'"><img src="'.$logo->url('h100').'" alt="Logo" class="floatR"></a>';
 } else {
     $publisher_logo = '<input type="file" id="publisher_logo_upload" accept="image/png" name="publisher_logo_upload">';
     $publisher_logo_upload = NULL;
@@ -191,22 +196,22 @@ $order_options = '
 if ($p['publisher_vpc'] == 1) $publisher_vpc_checked = ' checked'; else $publisher_vpc_checked = NULL;
 $sel[$p["publisher_shipping_mode"]] = ' selected';
 
-$_PAGE_TITLE = 'Modifier <a href="/editeur/'.$p["publisher_url"].'">'.$p["publisher_name"].'</a>';
+$request->attributes->set("page_title", "Modifier l'éditeur {$publisher->get("name")}");
 
-$_ECHO .= '<h1><i class="fa fa-institution"></i> '.$_PAGE_TITLE.'</h1>';
+$content = '<h1><i class="fa fa-institution"></i> '. 'Modifier <a href="/editeur/'.$p["publisher_url"].'">'.$p["publisher_name"].'</a>' .'</h1>';
 
-if (isset($_GET["updated"])) $_ECHO .= '<p class="success">L\'&eacute;diteur a bien &eacute;t&eacute; mis &agrave; jour</p>';
-if (isset($_GET["collections_updated"])) $_ECHO .= '<p class="success">'.$_GET['collections_updated'].' collection'.s($_GET['collections_updated']).' mise'.s($_GET['collections_updated']).' à jour</p>';
-if (isset($_GET["articles_updated"])) $_ECHO .= '<p class="success">'.$_GET['articles_updated'].' article'.s($_GET['collections_updated']).' mis à jour</p>';
-if (isset($_GET["logo_uploaded"])) $_ECHO .= '<p class="success">Le logo de l\'éditeur a bien été ajouté.</p>';
-elseif (isset($_GET["logo_deleted"])) $_ECHO .= '<p class="success">Le logo de l\'éditeur a bien été supprimé.</p>';
-if (isset($_GET["warning"])) $_ECHO .= '<p class="warning">'.$_GET['warning'].'</p>';
+if (isset($_GET["updated"])) $content .= '<p class="success">L\'éditeur a bien été mis à jour</p>';
+if (isset($_GET["collections_updated"])) $content .= '<p class="success">'.$_GET['collections_updated'].' collection'.s($_GET['collections_updated']).' mise'.s($_GET['collections_updated']).' à jour</p>';
+if (isset($_GET["articles_updated"])) $content .= '<p class="success">'.$_GET['articles_updated'].' article'.s($_GET['collections_updated']).' mis à jour</p>';
+if (isset($_GET["logo_uploaded"])) $content .= '<p class="success">Le logo de l\'éditeur a bien été ajouté.</p>';
+elseif (isset($_GET["logo_deleted"])) $content .= '<p class="success">Le logo de l\'éditeur a bien été supprimé.</p>';
+if (isset($_GET["warning"])) $content .= '<p class="warning">'.$_GET['warning'].'</p>';
 
 
 if(isset($p["publisher_legal_form"])) $selected_legal_form = '<option selected>'.$p["publisher_legal_form"].'</option>';
 else $selected_legal_form = null;
 
-$_ECHO .= '
+$content .= '
 
     <form method="post" class="fieldset" enctype="multipart/form-data" >
         <fieldset>
@@ -223,7 +228,7 @@ if (
     ($_V->isAdmin()) && ($site->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
-    $_ECHO .= '
+    $content .= '
             <fieldset>
                 <legend>Coordonnées</legend>
                 <label for="publisher_address">Adresse :</label>
@@ -238,7 +243,7 @@ if (
                 <label for="publisher_country">Pays :</label>
                 <input type="text" name="publisher_country" id="publisher_country" value="'.$p["publisher_country"].'">
                 <br /><br />
-                <label for="publisher_phone">T&eacute;l&eacute;phone :</label>
+                <label for="publisher_phone">Téléphone :</label>
                 <input type="tel" name="publisher_phone" id="publisher_phone" value="'.$p["publisher_phone"].'" class="long">
                 <br />
                 <label for="publisher_fax">Fax :</label>
@@ -303,10 +308,10 @@ if (
                 <input type="text" name="publisher_isbn" id="publisher_isbn" value="'.$p["publisher_isbn"].'" class="long">
                 <br /><br />
                 <label for="publisher_diffuseur">Diffuseur :</label>
-                <input type="text" name="publisher_diffuseur" id="publisher_diffuseur" value="'.$p["publisher_diffuseur"].'" class="long"> <img src="/common/icons/info.svg" width=16 class="va-middle" title="Si éditeur autodiffusé, laisser vide.">
+                <input type="text" name="publisher_diffuseur" id="publisher_diffuseur" value="' .$p["publisher_diffuseur"].'" class="long"> <img src="/common/icons/info.svg" alt="" role="presentation" width=16 class="va-middle" title="Si éditeur autodiffusé, laisser vide.">
                 <br />
                 <label for="publisher_distributeur">Distributeur :</label>
-                <input type="text" name="publisher_distributeur" id="publisher_distributeur" value="'.$p["publisher_distributeur"].'" class="long"> <img src="/common/icons/info.svg" width=16 class="va-middle" title="Si éditeur autodiffusé, laisser vide.">
+                <input type="text" name="publisher_distributeur" id="publisher_distributeur" value="'.$p["publisher_distributeur"].'" class="long"> <img src="/common/icons/info.svg" alt="" role="presentation" width=16 class="va-middle" title="Si éditeur autodiffusé, laisser vide.">
                 <br /><br />
                 <label for="publisher_specialities">Spécialités :</label>
                 <textarea name="publisher_specialities" id="publisher_specialities" class="small">'.$publisher->get("specialities").'</textarea>
@@ -315,7 +320,7 @@ if (
 
     if ($_SITE['site_id'] == 11)
     {
-        $_ECHO .= '
+        $content .= '
             <fieldset>
                 <legend>Options</legend>
                 <label for="publisher_order_by">Tri du catalogue par :</label>
@@ -333,10 +338,10 @@ if (
                 <label for="publisher_logo">Image :</label>
                 '.$publisher_logo_upload.'
                 <br /><br />
-                <p class="center">Pour une résultat optimal, utilisez une image carrée <br />au format PNG sur fond transparent de 500 pixels de côté.</p>
+                <p class="center">Pour un résultat optimal, utilisez une image carrée <br />au format PNG sur fond transparent de 500 pixels de côté.</p>
             </fieldset>
             <fieldset>
-                <legend>Pr&eacute;sentation</legend>
+                <legend>Présentation</legend>
                 <textarea id="publisher_desc" name="publisher_desc" class="wysiwyg">'.$p["publisher_desc"].'</textarea>
             </fieldset>
                 <fieldset>
@@ -380,15 +385,15 @@ if (
                 </fieldset>
         ';
     }
-    $_ECHO .= '
+    $content .= '
     ';
 }
-$_ECHO .= '
+$content .= '
         <fieldset class="center">
             <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         </fieldset>
         <fieldset>
-            <legend>Base de donn&eacute;es</legend>
+            <legend>Base de données</legend>
 
             <p>
                 <label for="publisher_id"">&Eacute;diteur n&deg; :</label>
@@ -417,11 +422,11 @@ $_ECHO .= '
             <br>
 
             <p>
-                <label for="publisher_insert">Fiche cr&eacute;e le :</label>
+                <label for="publisher_insert">Fiche créée le :</label>
                 <input type="email" name="publisher_insert" id="publisher_insert" value="'.$p["publisher_insert"].'" disabled class="long">
             </p>
             <p>
-                <label for="publisher_update">Fiche modifi&eacute;e le :</label>
+                <label for="publisher_update">Fiche modifiée le :</label>
                 <input type="email" name="publisher_update" id="publisher_update" value="'.$p["publisher_update"].'" disabled class="long">
             </p>
         </fieldset>
@@ -440,7 +445,7 @@ if ($_SITE["site_shop"]) {
             'site_id' => $site->get('id'),
             'supplier_id' => $addSupplier
         ]);
-        redirect("/pages/publisher_edit?id=".$publisher->get('id')."#suppliers");
+        return new RedirectResponse("/pages/publisher_edit?id=".$publisher->get('id')."#suppliers");
     } elseif(isset($_GET["del_supplier"])) {
         $link = $lm->get([
             'publisher_id' => $publisher->get('id'),
@@ -448,7 +453,7 @@ if ($_SITE["site_shop"]) {
             'supplier_id' => $delSupplier
         ]);
         $lm->delete($link);
-        redirect("/pages/publisher_edit?id=".$_GET["id"]."#suppliers");
+        return new RedirectResponse("/pages/publisher_edit?id=".$_GET["id"]."#suppliers");
     }
 
     // Fournisseurs actuels
@@ -457,7 +462,7 @@ if ($_SITE["site_shop"]) {
     $currentSuppliers = array_map(function ($supplier) use ($publisher) {
         return '
             <li>
-                <a href="/pages/publisher_edit?id='.$publisher->get('id').'&del_supplier='.$supplier->get('id').' 
+                <a href="/pages/publisher_edit?id='.$publisher->get('id').'&del_supplier='.$supplier->get('id').'" 
                     data-confirm="Voulez-vous vraiment SUPPRIMER le lien entre l\'éditeur '.$publisher->get('name').' et le fournisseur '.$supplier->get('name').'">
                     <span class="fa fa-trash-o"></span> 
                     '.$supplier->get('name').'
@@ -473,7 +478,7 @@ if ($_SITE["site_shop"]) {
 
     }, $all_suppliers);
 
-    $_ECHO .= '
+    $content .= '
         <h3 id="suppliers">Fournisseurs pour '.$p["publisher_name"].'</h3>
         <ul>
             '.join($currentSuppliers).'
@@ -501,5 +506,7 @@ foreach ($rights as $r) {
     }
 }
 if (!empty($managers)) {
-    $_ECHO .= '<h2>Utilisateurs autorisés'.'</h2>'.implode(', ', $managers);
+    $content .= '<h2>Utilisateurs autorisés'.'</h2>'.implode(', ', $managers);
 }
+
+return new Response($content);
