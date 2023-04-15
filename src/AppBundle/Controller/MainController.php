@@ -263,6 +263,10 @@ class MainController extends Controller
         self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
 
+        if ($cloud->isConfigured() && !$cloud->getSubscription()->isPaid()) {
+            return $this->render("AppBundle:Main:adminCloudSubscriptionExpired.html.twig");
+        }
+
         // Display alert if Biblys has been updated since last visit
         $update_alert = false;
         if ($currentUser->getOption("last_version_known") != BIBLYS_VERSION) {
@@ -305,7 +309,6 @@ class MainController extends Controller
             'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
             'site_title' => $site->get('title'),
-            "cloud" => $cloud,
             "hot_news" => $hotNewsBanner,
         ]);
     }

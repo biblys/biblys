@@ -8,10 +8,6 @@
 
   <h1>Administration Biblys</h1>
 
-  {% if cloud.isConfigured %}
-    {% include "AppBundle:Main:_cloudBanner.html.twig" %}
-  {% endif %}
-
   {% if update_alert %}
     <script>
       window.addEventListener('DOMContentLoaded', function() {

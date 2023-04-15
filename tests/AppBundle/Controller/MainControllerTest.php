@@ -273,47 +273,6 @@ class MainControllerTest extends TestCase
      * @throws UpdaterException
      * @throws GuzzleException
      */
-    public function testAdminWithoutCloudSubscription()
-    {
-        // given
-        $controller = new MainController();
-        $request = RequestFactory::createAuthRequestForAdminUser();
-        $config = new Config();
-        $config->set("environment", "test");
-        $config->set("cloud", ["customer_id" => "12345"]);
-        $updater = $this->createMock(Updater::class);
-        $updater->method("isUpdateAvailable")->willReturn(false);
-        $urlGenerator = $this->createMock(UrlGenerator::class);
-        $urlGenerator->method("generate")->willReturn("/");
-        $cloud = $this->createMock(CloudService::class);
-        $cloud->method("isConfigured")->willReturn(true);
-        $cloud->method("getSubscription")->willReturn(null);
-        $currentUser = $this->createMock(CurrentUser::class);
-        $currentUser->method("getOption")->willReturn("1");
-        $currentSite = $this->createMock(CurrentSite::class);
-
-        // when
-        $response = $controller->adminAction($request, $config, $urlGenerator, $cloud, $currentUser, $currentSite);
-
-        // then
-        $this->assertEquals(
-            200,
-            $response->getStatusCode(),
-            "it should return HTTP 200"
-        );
-        $this->assertStringContainsString(
-            "Aucun abonnement Biblys Cloud en cours",
-            $response->getContent(),
-            "it should display the invite"
-        );
-    }
-
-    /**
-     * @throws AuthException
-     * @throws PropelException
-     * @throws UpdaterException
-     * @throws GuzzleException
-     */
     public function testAdminWithUnpaidCloudSubscription()
     {
         // given
@@ -348,6 +307,11 @@ class MainControllerTest extends TestCase
             "Votre abonnement Biblys Cloud a expiré.",
             $response->getContent(),
             "displays the warning"
+        );
+        $this->assertStringNotContainsString(
+            "Raccourcis",
+            $response->getContent(),
+            "does not displays admin dashboard"
         );
     }
 

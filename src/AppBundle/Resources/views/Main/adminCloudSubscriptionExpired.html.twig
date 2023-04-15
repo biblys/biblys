@@ -1,0 +1,19 @@
+{% extends "layout:base.html.twig" %}
+
+{% block title %}
+  Administration Biblys
+{% endblock %}
+
+{% block main %}
+  <h1>Administration Biblys</h1>
+
+  <div class="alert alert-danger">
+    <span class="fa fa-exclamation-triangle"></span>
+    Votre abonnement Biblys Cloud a expiré.
+    <a href="{{ path('main_admin_cloud') }}" class="btn btn-xs btn-success pull-right">
+      <span class="fa fa-refresh"></span>
+      Renouveler
+    </a>
+  </div>
+
+{% endblock %}
