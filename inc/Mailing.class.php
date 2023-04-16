@@ -1,5 +1,9 @@
 <?php
 
+use Biblys\Service\MailingList\Exception\AlreadySubscribedEmailAddressException;
+use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
+use Biblys\Service\MailingList\Exception\UnsubscribedEmailAddressException;
+
 class Mailing extends Entity
 {
     protected $prefix = 'mailing';
@@ -54,15 +58,16 @@ class MailingManager extends EntityManager
 
     /**
      * Add an email address to the newsletter
-     * @param $email String  the email address to add
-     * @param $force Boolean if true, email will be readded even if unsubscribed
+     * @throws InvalidEmailAddressException
+     * @throws UnsubscribedEmailAddressException
+     * @throws AlreadySubscribedEmailAddressException
      * @throws Exception
      */
-    public function addSubscriber($email, $force = false)
+    public function addSubscriber(string $email, bool $force = false): bool
     {
         // Check if email address is valid
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("L'adresse ".htmlentities($email)." n'est pas valide.");
+            throw new InvalidEmailAddressException("L'adresse ".htmlentities($email)." n'est pas valide.");
         }
 
         // Check if a subscription already exists
@@ -71,12 +76,12 @@ class MailingManager extends EntityManager
 
             // Check if address has unsubscribed in the past
             if ($mailing->hasUnsubscribed() && !$force) {
-                throw new Exception("L'adresse ".htmlentities($email)." a été désabonnée de la newsletter et ne peut être réinscrite.");
+                throw new UnsubscribedEmailAddressException("L'adresse ".htmlentities($email)." a été désabonnée de la newsletter et ne peut être réinscrite.");
             }
 
             // Check if address is currently subscribed
             if ($mailing->isSubscribed()) {
-                throw new Exception("L'adresse ".htmlentities($email)." est déjà inscrite à la newsletter.");
+                throw new AlreadySubscribedEmailAddressException("L'adresse ".htmlentities($email)." est déjà inscrite à la newsletter.");
             }
 
             // Update subscription
@@ -85,7 +90,7 @@ class MailingManager extends EntityManager
             $this->update($mailing);
 
         } else {
-            $mailing = $this->create([
+            $this->create([
                 "mailing_email" => $email,
                 "mailing_block" => 0,
                 "mailing_checked" => 1

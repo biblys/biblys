@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\MailingList\Contact;
+use Biblys\Service\MailingList\Exception\AlreadySubscribedEmailAddressException;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Test\RequestFactory;
@@ -19,7 +20,6 @@ require_once __DIR__."/../../setUp.php";
 
 class MailingControllerTest extends TestCase
 {
-
     /**
      * @throws SyntaxError
      * @throws RuntimeError

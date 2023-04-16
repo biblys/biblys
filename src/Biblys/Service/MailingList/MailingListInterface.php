@@ -3,6 +3,7 @@
 namespace Biblys\Service\MailingList;
 
 use Biblys\Service\Config;
+use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 
 interface MailingListInterface
 {
@@ -21,6 +22,9 @@ interface MailingListInterface
 
     public function hasContact(string $emailAddress): bool;
 
+    /**
+     * @throws InvalidEmailAddressException
+     */
     public function addContact(string $emailAddress, bool $force = false): void;
 
     public function removeContact(string $emailAddress): void;

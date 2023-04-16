@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\CaptchaValidationException;
 use Biblys\Service\Config;
+use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
+use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
@@ -69,8 +71,8 @@ class MailingController extends Controller
                 $mailingList->addContact($email, true);
                 $successUrl = $urlGenerator->generate("mailing_subscribe", ["success" => 1]);
                 return new RedirectResponse($successUrl);
-            } catch (CaptchaValidationException $e) {
-                $error = $e->getMessage();
+            } catch (CaptchaValidationException|MailingListServiceException $exception) {
+                $error = $exception->getMessage();
             }
         }
 

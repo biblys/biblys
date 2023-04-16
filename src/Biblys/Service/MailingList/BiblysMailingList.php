@@ -4,6 +4,7 @@ namespace Biblys\Service\MailingList;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Exception;
 use MailingManager;
 use Model\Base\Mailing;
@@ -63,7 +64,7 @@ class BiblysMailingList implements MailingListInterface
     }
 
     /**
-     * @throws Exception
+     * @throws MailingListServiceException
      */
     public function addContact(string $emailAddress, bool $force = false): void
     {
