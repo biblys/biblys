@@ -1,6 +1,8 @@
 <?php
 
-use Biblys\Service\Config;
+global $request, $_SITE, $_SQL, $site;
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CartManager();
@@ -28,10 +30,10 @@ if ($empty) {
             "Impossible de vider le panier n° $empty : il n'existe plus."
         );
     }
-    redirect('/pages/adm_carts');
+    return new RedirectResponse("/pages/adm_carts");
 }
 
-$_PAGE_TITLE = 'Paniers';
+$request->attributes->set("page_title", "Paniers");
 
 $alert = null;
 
@@ -40,7 +42,7 @@ if($_SITE["site_id"] == 8) $datelimite = date('Y-m-d h:i:s',(strtotime("-2 days"
 else $datelimite = date('Y-m-d h:i:s',(strtotime("-1 days")));
 
 $content = '
-    <h1><span class="fa fa-shopping-basket"></span> '.$_PAGE_TITLE. '</h1>
+    <h1><span class="fa fa-shopping-basket"></span> Paniers</h1>
 
     <p class="buttonset">
         <a href="?refresh=1" class="btn btn-info"><i class="fa fa-refresh"></i> Actualiser les paniers</a>
@@ -138,12 +140,12 @@ $content .= '
 
 if ($refresh) {
     $session->getFlashbag()->add('success', "Les paniers ont été actualisés.");
-    redirect('/pages/adm_carts');
+    return new RedirectResponse("/pages/adm_carts");
 }
 
 if (isset($_GET["go"])) {
     $session->getFlashbag()->add('success', "$emptied paniers ont été vidés.");
-    redirect('/pages/adm_carts');
+    return new RedirectResponse("/pages/adm_carts");
 }
 
 return new Response($content);
