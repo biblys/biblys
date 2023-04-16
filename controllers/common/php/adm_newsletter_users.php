@@ -1,8 +1,12 @@
 <?php
 
-$_PAGE_TITLE = 'Abonnés à la newsletter';
+global $urlgenerator, $request;
 
-$_ECHO .= '
+use Symfony\Component\HttpFoundation\Response;
+
+$request->attributes->set("page_title", "Abonnés à la newsletterr");
+
+$content = '
     <p class="pull-right">
         <a href="'.$urlgenerator->generate('mailing_contacts').'" class="btn btn-info btn-sm">Exporter les contacts</a>
     </p>
@@ -19,7 +23,7 @@ $_ECHO .= '
     <form method="post" class="fieldset">
         <fieldset>
             <h2>Ajouter une ou plusieurs adresses :</h2>
-            <textarea class="form-control" name="emails" rows="5">'.$request->request->get("emails", null).'</textarea><br>
+            <textarea class="form-control" name="emails" rows="5">'.$request->request->get("emails").'</textarea><br>
             <button type="submit" class="btn btn-primary">Enregistrer les adresses</button>
         </fieldset>
     </form>
@@ -32,12 +36,13 @@ $num_mailing = count($mailings);
 $ajouts = null;
 if (!empty($_POST)) {
 
-    function extract_email_address ($string) {
+    function extract_email_address ($string): array
+    {
         $emails = array();
         $string = str_replace("\r\n",' ',$string);
         $string = str_replace("\n",' ',$string);
 
-        foreach(preg_split('/ /', $string) as $token) {
+        foreach(explode(' ', $string) as $token) {
              $email = filter_var($token, FILTER_VALIDATE_EMAIL);
              if ($email !== false) {
                  $emails[] = $email;
@@ -47,7 +52,7 @@ if (!empty($_POST)) {
      }
 
     // Extrait les adresses e-mail de cette chaîne
-    $emails = extract_email_address ($request->request->get("emails", null));
+    $emails = extract_email_address ($request->request->get("emails"));
 
     foreach($emails as $email) {
         $erreur = NULL;
@@ -89,7 +94,7 @@ foreach ($mailings as $m) {
     }
 }
 
-$_ECHO .= '
+$content .= '
     '.$ajouts.'
     <br />
 
@@ -104,9 +109,18 @@ $_ECHO .= '
         </thead>
         <tbody>
             <tr>
-                <td class="center"><img src="/common/icons/success_16.png" /> '.$num_emails.'</td>
-                <td class="center"><img src="/common/icons/error_16.png" /> '.$num_unsub.'</td>
-                <td class="center"><img src="/common/icons/warning_16.png" /> '.$num_invalid.'</td>
+                <td class="center">
+                    <img src="/common/icons/success_16.png" alt="" role="presentation" /> 
+                    '.$num_emails.'
+                </td>
+                <td class="center">
+                    <img src="/common/icons/error_16.png" alt="" role="presentation" /> 
+                    '.$num_unsub.'
+                </td>
+                <td class="center">
+                    <img src="/common/icons/warning_16.png" alt="" role="presentation" /> 
+                    '.$num_invalid.'
+                </td>
             </tr>
         </tbody>
     </table>
@@ -137,5 +151,6 @@ $_ECHO .= '
             </div>
         </div>
     </fieldset></form>
-
 ';
+
+return new Response($content);
