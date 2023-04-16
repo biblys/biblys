@@ -12,13 +12,13 @@ $content = '
     </p>
     <h1><span class="fa fa-address-book"></span> Abonnés à la newsletter</h1>
 
-    <p class="warning left">Bonnes pratiques anti-spam</p>
-    <p>Pour éviter que votre newsletter ne soit considérée comme du courrier indésirable :</p>
-    <ul>
-        <li>n\'ajoutez jamais d\'adresse e-mail sans l\'autorisation préalable et explicite du propriétaire ;</li>
-        <li>ne réabonnez pas une adresse e-mail désinscrite ;</li>
-        <li>désabonnez les adresses e-mails invalides ;</li>
-    </ul>
+    <p class="alert alert-warning">
+        <span class="fa fa-warning"></span>
+        <strong>La fonctionnalité &laquo; Abonnés à la newsletter &raquo; est dépréciée et va être supprimée.</strong><br />
+        Vous pouvez utiliser en remplacement la fonctionnalité
+        <a href="https://app.mailjet.com/contacts">Liste de contacts</a>
+        de Mailjet.
+    </p>
 
     <form method="post" class="fieldset">
         <fieldset>
