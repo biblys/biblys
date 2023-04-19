@@ -52,7 +52,7 @@ set_error_handler(function ($level, $message) use ($config): void {
             DEPRECATED: {$message}
             <pre>{$trace}</pre>
         </div>";
-}, E_USER_DEPRECATED);
+}, E_USER_DEPRECATED ^ E_DEPRECATED);
 
 
 $exceptionController = new ErrorController();
