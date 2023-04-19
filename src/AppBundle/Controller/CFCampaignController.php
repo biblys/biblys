@@ -103,7 +103,7 @@ class CFCampaignController extends Controller
             $goal = $request->request->get('goal', 0) * 100;
 
             $campaign->set('campaign_title', $request->request->get('title'))
-                ->set('campaign_url', slugify($request->request->get('title')))
+                ->set('campaign_url', makeurl($request->request->get('title')))
                 ->set('campaign_goal', $goal)
                 ->set('campaign_starts', $request->request->get('starts'))
                 ->set('campaign_ends', $request->request->get('ends'))

@@ -671,36 +671,6 @@ function percent($val1, $val2, $precision = 0)
     return $res . '&nbsp;%';
 }
 
-function slugify($text)
-{
-    if (empty($text)) {
-        throw new Exception('Cannot slugify: text is empty.');
-    }
-
-    // replace non letter or digits by -
-    $slug = preg_replace('~[^\\pL\d]+~u', '-', $text);
-
-    // trim
-    $slug = trim($slug, '-');
-
-    // transliterate
-    if (function_exists('iconv')) {
-        $slug = iconv('utf-8', 'us-ascii//TRANSLIT', $slug);
-    }
-
-    // lowercase
-    $slug = strtolower($slug);
-
-    // remove unwanted characters
-    $slug = preg_replace('~[^-\w]+~', '', $slug);
-
-    if (empty($slug)) {
-        throw new Exception('Slug is empty for text: "' . $text . '" .');
-    }
-
-    return $slug;
-}
-
 function get_template($template, $variables = [])
 {
     $controller = new Framework\Controller();
