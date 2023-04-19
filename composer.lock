@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83ec8fca458d1c5f6056f50b5b5678a2",
+    "content-hash": "34bc0bf1ca67968b9443876d0f812e43",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -9025,7 +9025,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.0",
+        "php": "~8.1",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-dom": "*",
@@ -9033,5 +9033,5 @@
         "ext-mbstring": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
