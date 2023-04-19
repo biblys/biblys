@@ -288,13 +288,11 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
 
         $articleCover = null;
         if ($article->hasCover()) {
-            $articleCover = $article->getCoverTag(
-                [
-                    'class' => 'article-thumb-cover',
-                    'link' => false,
-                    'height' => 85,
-                ]
-            );
+            $articleCover = '<img 
+                src="'.$article->getCoverUrl(["height" => 85]) . '" 
+                class="article-thumb-cover" 
+                alt="'.$article->get("title").'"
+                height=85>';
         }
 
         $content .= '
