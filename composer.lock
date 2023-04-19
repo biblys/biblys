@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b56c888a243831819ec84c69b6cdaae",
+    "content-hash": "7c2a42b923923d8fd97ba7f7511d608b",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -1844,6 +1844,63 @@
                 "source": "https://github.com/thephpleague/oauth2-client/tree/2.6.1"
             },
             "time": "2021-12-22T16:42:49+00:00"
+        },
+        {
+            "name": "mailjet/mailjet-apiv3-php",
+            "version": "v1.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
+                "reference": "747518ce0eebf64d27e9903441a255c85472a139"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/747518ce0eebf64d27e9903441a255c85472a139",
+                "reference": "747518ce0eebf64d27e9903441a255c85472a139",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4.4",
+                "php": "^7.2|^8.0",
+                "psr/http-client": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8|^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mailjet": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mailjet",
+                    "email": "dev@mailjet.com",
+                    "homepage": "https://dev.mailjet.com"
+                }
+            ],
+            "description": "PHP wrapper for the Mailjet API",
+            "homepage": "https://github.com/mailjet/mailjet-apiv3-php/",
+            "keywords": [
+                "Mailjet",
+                "api",
+                "email",
+                "php",
+                "v3"
+            ],
+            "support": {
+                "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
+                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.5.8"
+            },
+            "time": "2022-10-15T16:24:08+00:00"
         },
         {
             "name": "monolog/monolog",
