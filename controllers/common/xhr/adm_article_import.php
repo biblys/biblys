@@ -181,7 +181,7 @@ function noosfere($x, $mode = null): array
             $price = $matches[1];
             $price = str_replace(",", ".", $price);
             $price = round((float) $price / 6.55957 * 100);
-        } else {
+        } elseif ($price !== null) {
             $price = str_replace(",", ".", $price);
             $price = (float) $price * 100;
         }

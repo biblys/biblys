@@ -777,16 +777,16 @@ $content .= '
             <legend>Donn&eacute;es bibliographiques</legend>
 
             <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
-            <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="'.htmlspecialchars($a['article_title_alphabetic']).'" class="long" placeholder="Champ rempli automatiquement" />
+            <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="'.($article->has("article_title_alphabetic") ? htmlspecialchars($a['article_title_alphabetic']) : "").'" class="long" placeholder="Champ rempli automatiquement" />
             <br />
             <label class="floating" for="article_subtitle">Sous-titre :</label>
-            <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle" value="'.htmlspecialchars($a['article_subtitle']).'" class="long" />
+            <input type="text" id="article_subtitle" name="article_subtitle" id="article_subtitle" value="'.($article->has("article_subtitle") ? htmlspecialchars($a['article_subtitle']) : "").'" class="long" />
             <br />
             <label class="floating" for="article_title_original">Titre original :</label>
-            <input type="text" id="article_title_original" name="article_title_original" value="'.htmlspecialchars($a['article_title_original']).'" class="long" />
+            <input type="text" id="article_title_original" name="article_title_original" value="' .($article->has("article_title_original") ? htmlspecialchars($a['article_title_original']) : "") .'" class="long" />
             <br />
             <label class="floating" for="article_title_others">Autres titres :</label>
-            <input type="text" id="article_title_others" name="article_title_others" value="'.htmlspecialchars($a['article_title_others']).'" class="long" />
+            <input type="text" id="article_title_others" name="article_title_others" value="' .($article->has("article_title_others") ? htmlspecialchars($a['article_title_others']) : "") .'" class="long" />
             <br /><br />
 
             <label class="floating" for="article_copyright">Copyright :</label>
@@ -860,7 +860,7 @@ $content .= '
 
             <p>
                 <label class="floating" for="article_format">Format :</label>
-                <input type="text" id="article_format" name="article_format" value="'.htmlspecialchars($article->get('format')).'" placeholder="10 x 18 cm" class="medium">
+                <input type="text" id="article_format" name="article_format" value="'.($article->has("format") ? htmlspecialchars($article->get('format')) : "").'" placeholder="10 x 18 cm" class="medium">
             </p>
 
             <p>
