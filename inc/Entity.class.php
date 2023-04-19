@@ -396,12 +396,14 @@ class EntityManager
     }
 
     /**
-     * Get one entity by it's id from memory or from mysql.
-     *
-     * @param int $id
+     * Get one entity by its id from memory or from mysql.
      */
-    public function getById($id)
+    public function getById(?int $id): Entity|false
     {
+        if ($id === null) {
+            return false;
+        }
+
         if (isset($this->entities[$id])) {
             return $this->entities[$id];
         } else {
@@ -732,7 +734,6 @@ class EntityManager
                     $q_where .= ' AND ';
                 }
 
-                // $where['field NOT IN'] = array();
                 if (preg_match('/^(.*) NOT IN$/', $key, $matches)) {
                     $q_where .= $matches[1].' NOT IN(';
                     $foreachCounter = 0;
@@ -765,7 +766,9 @@ class EntityManager
                 } elseif ($val === 'NULL') {
                     $q_where .= '`'.$key.'` IS NULL';
                 } elseif ($val === 'NOT NULL') {
-                    $q_where .= '`'.$key.'` IS NOT NULL';
+                    $q_where .= '`' . $key . '` IS NOT NULL';
+                } elseif ($val === null) {
+                    $q_where .= '`'.$key.'` = ""';
                 } elseif (preg_match("/^(!=|<\s|>\s|<=|>=|LIKE)\s*(.*)/", $val, $matches)) {
                     $q_where .= '`'.$key.'` '.$matches[1].' :field'.$i;
                     $params['field'.$i] = $matches[2];

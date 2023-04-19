@@ -1549,11 +1549,13 @@ class ArticleManager extends EntityManager
             $article->set('article_ean', Isbn::convertToEan13($ean));
         }
 
-        // Create article slug
-        if ($article->hasAuthors()) {
-            $slug = $this->_createArticleSlug($article);
-            $article->set('article_url', $slug);
+        if (!$article->hasAuthors()) {
+            return $article;
         }
+
+        // Create article slug
+        $slug = $this->_createArticleSlug($article);
+        $article->set('article_url', $slug);
 
         // Truncate authors fields
         $authors = mb_strcut($article->get('authors'), 0, 256);
@@ -1611,7 +1613,7 @@ class ArticleManager extends EntityManager
 
     public function validate($article)
     {
-        if (strlen($article->get('authors')) > 256) {
+        if ($article->has('authors') && strlen($article->get('authors')) > 256) {
             throw new InvalidEntityException("Le champ Auteurs ne peut pas dépasser 256 caractères.");
         }
 
