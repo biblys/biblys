@@ -168,9 +168,6 @@ if ($request->getMethod() === "POST") {
             $order->set('shipping_id', $shipping->get('id'));
         }
 
-        // Save UTM params from cookies
-        $order->setUtmParams($request->cookies);
-
         // Update order info from form
         foreach ($_POST as $key => $val) {
             if ($key === "cgv_checkbox" || $key === "newsletter") {

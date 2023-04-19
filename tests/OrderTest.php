@@ -402,25 +402,6 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $om->delete($order);
     }
 
-    /**
-     * Test setting order UTM's cookies
-     */
-    public function testSetUtmParams()
-    {
-        $order = new Order([]);
-
-        $request = new Request();
-        $request->cookies->set('utm_campaign', 'my-campaign');
-        $request->cookies->set('utm_source',   'my-source');
-        $request->cookies->set('utm_medium',   'my-medium');
-
-        $order = $order->setUtmParams($request->cookies);
-
-        $this->assertEquals($order->get('utm_campaign'), 'my-campaign');
-        $this->assertEquals($order->get('utm_source'),   'my-source');
-        $this->assertEquals($order->get('utm_medium'),   'my-medium');
-    }
-
     public function testCancel()
     {
         // given

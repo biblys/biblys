@@ -474,30 +474,6 @@ class Order extends Entity
     }
 
     /**
-     * Add utm params to order from cookies
-     * @param $cookies: cookies array from Request
-     */
-    public function setUtmParams($cookies)
-    {
-        $utmCampaignCookie = $cookies->get('utm_campaign');
-        if ($utmCampaignCookie) {
-            $this->set('order_utm_campaign', $utmCampaignCookie);
-        }
-
-        $utmSourceCookie = $cookies->get('utm_source');
-        if ($utmSourceCookie) {
-            $this->set('order_utm_source', $utmSourceCookie);
-        }
-
-        $utmMediumCookie = $cookies->get('utm_medium');
-        if ($utmMediumCookie) {
-            $this->set('order_utm_medium', $utmMediumCookie);
-        }
-
-        return $this;
-    }
-
-    /**
      * Delete alerts for articles in a order
      */
     public function deleteRelatedAlerts()
