@@ -71,13 +71,6 @@ function biblysPath(): string
 $media_path = __DIR__."/../".$config->get("media_path");
 define('MEDIA_PATH', $media_path);
 
-// Media url
-$media_url = '/media';
-if ($config->get('media_url')) {
-    $media_url = $config->get('media_url');
-}
-define('MEDIA_URL', $media_url);
-
 // Get request
 $request = Request::createFromGlobals();
 

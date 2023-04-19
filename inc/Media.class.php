@@ -309,6 +309,10 @@ class Media
             $version;
 
         $imagesCdn = $config->get('images_cdn');
+        $mediaUrl = '/media';
+        if ($config->get('media_url')) {
+            $mediaUrl = $config->get('media_url');
+        }
         if ($imagesCdn) {
             
             if ($imagesCdn['service'] === 'cloudimage') {
@@ -319,12 +323,12 @@ class Media
                     $operationSize = $size;
                 }
 
-                $url = MEDIA_URL.$baseUrl;
+                $url = $mediaUrl.$baseUrl;
                 return 'https://'.$imagesCdn['options']['token'].'.cloudimg.io/'.$operation.'/'.$operationSize.'/faf/'.$url;
             }
             
             if ($imagesCdn['service'] === 'weserv') {
-                $url = MEDIA_URL.$baseUrl;
+                $url = $mediaUrl .$baseUrl;
                 $weservOptions = ["url" => $url];
                 
                 if ($orientation && isset($size)) {
@@ -335,7 +339,7 @@ class Media
             }
         }
 
-        return MEDIA_URL.$baseUrl;
+        return $mediaUrl .$baseUrl;
     }
 
     public function exists(): bool
