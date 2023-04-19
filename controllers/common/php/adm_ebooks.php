@@ -77,7 +77,6 @@ $tbody = NULL;
 $Ventes = null;
 $Total = null;
 $Gratuits = null;
-$export = [];
 $subReqParams = $reqParams;
 while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
 
@@ -106,30 +105,6 @@ while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
     $Total += $v["ca"];
     $Ventes += $v["ventes"];
     $Gratuits += $g["gratuits"];
-
-    $export[] = [
-        $l["stock_selling_date"],
-        $l["stock_selling_date"],
-        $l["article_ean"],
-        null,
-        $l["article_title"],
-        $l["article_publisher"],
-        $l["article_authors"],
-        null,
-        price($l["article_price"]),
-        "EUR",
-        $l["stock_tva_rate"],
-        $v["ventes"],
-        null,
-        $site->get('name'),
-        null,
-        null,
-        $l["stock_selling_price_ht"],
-        null,
-        $l["stock_selling_price"],
-        $v["ca_ht"],
-        $v["ca"]
-    ];
 }
 
 $content = '<h1><span class="fa fa-book"></span> Ventes numériques</h1>';
