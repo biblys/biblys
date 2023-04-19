@@ -6,6 +6,8 @@ Corrections
 
 - Le raccourci clavier "copier" pouvait parfois déclencher le raccourci 
   d'accès rapide à la caisse. C'est corrigé.
+- Une erreur pouvait empêcher le bon affichage de la page "Mes souhaits". 
+  C'est corrigé.
 
 ## 2.67.2 (19 avril 2023)
 

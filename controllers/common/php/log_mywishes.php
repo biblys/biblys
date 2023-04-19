@@ -156,14 +156,11 @@ else {
 
 				</div><br>
 			';
-        $_REQ = "";
+        $criterias = [];
         foreach ($wishes as $w) {
-
-            if (!isset($_REQ)) $_REQ = '(';
-            else $_REQ .= ' OR';
-            $_REQ .= ' `articles`.`article_id` = ' . $w['article_id'];
+            $criterias[] = '`articles`.`article_id` = ' . $w['article_id'];
         }
-        $_REQ .= ')';
+        $_REQ = "(".join(" OR ", $criterias).")";
         if ($site->has("publisher_id")) $_REQ .= ' AND `articles`.`publisher_id` = ' . $site->get
             ("publisher_id");
         $content .= require_once '_list.php';
