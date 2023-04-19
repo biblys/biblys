@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34bc0bf1ca67968b9443876d0f812e43",
+    "content-hash": "2b56c888a243831819ec84c69b6cdaae",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -2607,30 +2607,30 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v3.1.4",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "169cee9ef78139558d6a3e5f680afb5853f4228e"
+                "reference": "d9a40c864c5965a7f41e25b41abd136f54a6869f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/169cee9ef78139558d6a3e5f680afb5853f4228e",
-                "reference": "169cee9ef78139558d6a3e5f680afb5853f4228e",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/d9a40c864c5965a7f41e25b41abd136f54a6869f",
+                "reference": "d9a40c864c5965a7f41e25b41abd136f54a6869f",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "monolog/monolog": "^2",
+                "monolog/monolog": "^2 || ^3",
                 "php": ">=8.0.0 <9.0",
-                "psr/log": "^1 || ^2"
+                "psr/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
                 "mockery/mockery": "^1",
                 "phpmd/phpmd": "^2",
                 "phpunit/phpunit": "^9",
                 "squizlabs/php_codesniffer": "^3.6 || 3.x-dev",
-                "vimeo/psalm": "^4.13"
+                "vimeo/psalm": "^5"
             },
             "suggest": {
                 "fluent/logger": "Needed to use the 'fluent' handler for fluentd support"
@@ -2664,9 +2664,9 @@
             "support": {
                 "email": "support@rollbar.com",
                 "issues": "https://github.com/rollbar/rollbar-php/issues",
-                "source": "https://github.com/rollbar/rollbar-php/tree/v3.1.4"
+                "source": "https://github.com/rollbar/rollbar-php/tree/v4.0.0"
             },
-            "time": "2022-10-31T21:23:43+00:00"
+            "time": "2023-03-20T19:03:12+00:00"
         },
         {
             "name": "seld/jsonlint",
