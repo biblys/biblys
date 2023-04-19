@@ -2,6 +2,8 @@
 
 namespace Biblys\Article;
 
+use Biblys\Service\SlugService;
+
 class Type
 {
     private int $_id;
@@ -27,7 +29,9 @@ class Type
     public function setName($name): void
     {
         $this->_name = $name;
-        $this->setSlug(makeurl($name));
+        $slugService = new SlugService();
+        $slug = $slugService->slugify($name);
+        $this->setSlug($slug);
     }
 
     public function getName(): string

@@ -2,6 +2,7 @@
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\SlugService;
 use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -526,85 +527,19 @@ function truncate($string, $max_length = 30, $replacement = '', $trunc_at_space 
     }
 }
 
-// Retirer les caractères interdits dans une url
-function makeurl($x)
+/**
+ * @deprecated makeurl is deprecated. Use SlugService->slugify instead
+ */
+function makeurl($x): string
 {
-    // Caractères à supprimer
-    $delete = ['', '°', '/', '«', '»', '(', ')', '?', '!', '.', ',', ';', '"', '°', '€', '#'];
-    $x = str_replace($delete, '', $x);
+    trigger_deprecation(
+        "biblys/biblys",
+        "2.68.0",
+        "makeurl is deprecated. Use SlugService->slugify instead",
+    );
 
-    // Espaces à la fin
-    $x = trim($x);
-
-    // Caractères à remplacer
-    $replacements = [
-        'à' => 'a', 'À' => 'A',
-        'â' => 'a', 'Â' => 'A',
-        'ä' => 'a', 'Ä' => 'A',
-        'á' => 'a', 'Á' => 'A',
-        'ã' => 'a', 'Ã' => 'A',
-        'å' => 'a', 'Å' => 'A',
-        'î' => 'i', 'Î' => 'I',
-        'ï' => 'i', 'Ï' => 'I',
-        'ì' => 'i', 'Ì' => 'I',
-        'í' => 'i', 'Í' => 'I',
-        'ô' => 'o', 'Ô' => 'O',
-        'ö' => 'o', 'Ö' => 'O',
-        'ò' => 'o', 'Ò' => 'O',
-        'ó' => 'o', 'Ó' => 'O',
-        'õ' => 'o', 'Õ' => 'O',
-        'ø' => 'o', 'Ø' => 'O',
-        'ù' => 'u', 'Ù' => 'U',
-        'û' => 'u', 'Û' => 'U',
-        'ü' => 'u', 'Ü' => 'U',
-        'ú' => 'u', 'Ú' => 'U',
-        'é' => 'e', 'É' => 'E',
-        'è' => 'e', 'È' => 'E',
-        'ê' => 'e', 'Ê' => 'E',
-        'ë' => 'e', 'Ë' => 'E',
-        'ç' => 'c', 'Ç' => 'C',
-        'ÿ' => 'y', 'Ÿ' => 'Y',
-        'ñ' => 'n', 'Ñ' => 'N',
-        'ś' => 's', 'Ś' => 'S',
-        'š' => 's', 'Š' => 'S',
-        '' => 'oe', 'æ' => 'ae',
-        //" n° " => "-",
-        '%' => 'pourcents',
-        ' - ' => '-',
-        ' – ' => '-',
-        ' : ' => '-',
-        ' ' => '-',
-        '_' => '-',
-        '*' => '-',
-        "'" => '-',
-        '’' => '-',
-        '' => '-',
-        '+' => 'plus',
-        '&' => 'et',
-    ];
-    $x = str_replace(array_keys($replacements), $replacements, $x);
-
-    // Remplacer les doubles tirets par des simples
-    while (preg_match('#-{2,}#', $x)) {
-        $x = str_replace('--', '-', $x);
-    }
-
-    // Minuscules
-    $x = strtolower($x);
-
-    // Ne garder que certains caractères
-    $url = null;
-    foreach (str_split($x) as $char) {
-        if (in_array($char, str_split('-abcdefghijklmnopqrstuvwxyz0123456789'))) {
-            $url .= $char;
-        }
-    }
-    $x = $url;
-
-    $x = trim($x, ' -');
-    $x = stripslashes($x);
-
-    return $x;
+    $slugService = new SlugService();
+    return $slugService->slugify($x);
 }
 
 // Créer l'adresse de la page de la collection
