@@ -667,34 +667,12 @@ function reloadAdminEvents() {
     );
   });
 
-  // Raccourcis clavier
-  var keyCtrl = false;
-  var keyShift = false;
-  var keyA = false;
-  var keyB = false;
-  var keyC = false;
-  var keyM = false;
-  $(document)
-    .keyup(function(e) {
-      if (e.which == 17) keyCtrl = false;
-      if (e.which == 16) keyShift = false;
-      if (e.which == 65) keyA = false;
-      if (e.which == 66) keyB = false;
-      if (e.which == 67) keyC = false;
-      if (e.which == 77) keyM = false;
-    })
-    .keydown(function(e) {
-      if (e.which == 17) keyCtrl = true;
-      if (e.which == 16) keyShift = true;
-      if (e.which == 65) keyA = true;
-      if (e.which == 66) keyB = true;
-      if (e.which == 67) keyC = true;
-      if (e.which == 77) keyM = true;
-      if (keyCtrl && keyShift && keyA) quickAdd(); // Ajout rapide d'exemplaire
-      if (keyCtrl && keyShift && keyB) window.location = '/pages/adm_post'; // Nouveau billet
-      if (keyCtrl && keyShift && keyC) window.location = '/pages/adm_checkout'; // Aller a la caisse
-      if (keyCtrl && keyShift && keyM) window.location = '/admin/'; // Aller a l'administration
-    });
+  document.addEventListener('keyup', function(event) {
+    const { ctrlKey, shiftKey, key } = event;
+    if (ctrlKey && shiftKey && key === 'A') {
+      window.quickAdd();
+    }
+  });
 }
 
 $(function() {

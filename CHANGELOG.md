@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.67.3 (DEV)
+
+Corrections
+
+- Le raccourci clavier "copier" pouvait parfois déclencher le raccourci 
+  d'accès rapide à la caisse. C'est corrigé.
+
 ## 2.67.2 (19 avril 2023)
 
 Corrections
