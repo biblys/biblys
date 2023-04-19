@@ -139,22 +139,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // FICHIERS //
 
     // Couverture
-    if (!empty($_FILES['article_cover_upload']['tmp_name'])) { // Upload
-        $cover = new Media('article', $_POST['article_id']);
+    $cover = new Media('article', $_POST['article_id']);
+    if (!empty($_FILES['article_cover_upload']['tmp_name'])) {
         $cover->upload($_FILES['article_cover_upload']['tmp_name']);
         $article->bumpCoverVersion();
-    } elseif (!empty($_POST['article_cover_import'])) { // Import
-        $media = new Media("article", $_POST["article_id"]);
-        $copy_from = $_POST['article_cover_import'];
-        $file_dir = MEDIA_PATH.'/book/'.file_dir($_POST['article_id']).'/';
-        if (!is_dir($file_dir)) {
-            mkdir($file_dir, 0777, true);
-        }
-        $copy_to = $file_dir.$_POST['article_id'].'.jpg';
-        copy($copy_from, $copy_to) or error('Unable to copy '.$copy_from.' to '.$copy_to);
+    } elseif (!empty($_POST['article_cover_import'])) {
+        $cover->upload($_POST['article_cover_import']);
         $article->bumpCoverVersion();
-    } elseif (isset($_POST['article_cover_delete']) && $_POST['article_cover_delete']) { // Suppression
-        $media = new Media("article", $_POST["article_id"]);
+    } elseif (isset($_POST['article_cover_delete']) && $_POST['article_cover_delete']) {
+        $cover->delete();
+        $article->bumpCoverVersion();
     }
     unset($_POST['article_cover_upload']);
     unset($_POST['article_cover_import']);
