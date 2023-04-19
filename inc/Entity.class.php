@@ -343,20 +343,15 @@ class EntityManager
         global $_SQL;
         $config = Config::load();
 
-        try {
-            // Logs sql query
-            $logsConfig = $config->get('logs');
-            if (isset($logsConfig['sql']) && $logsConfig['sql'] === true) {
-                Log::sql('INFO', $query, $params);
-            }
-
-            $qu = $_SQL->prepare($query);
-            $qu->execute($params);
-
-            return $qu;
-        } catch (Exception $e) {
-            trigger_error($e->getMessage().'<br>query: '.$query.'<br>params: '.print_r($params, true));
+        $logsConfig = $config->get('logs');
+        if (isset($logsConfig['sql']) && $logsConfig['sql'] === true) {
+            Log::sql('INFO', $query, $params);
         }
+
+        $qu = $_SQL->prepare($query);
+        $qu->execute($params);
+
+        return $qu;
     }
 
     public function count(array $where = [])
