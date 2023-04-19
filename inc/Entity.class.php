@@ -101,22 +101,22 @@ class Entity implements ArrayAccess, Iterator, Countable
 
     // Interface ArrayAccess //
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->get($offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if ($this->has($offset)) {
             $this->remove($offset);
@@ -128,7 +128,7 @@ class Entity implements ArrayAccess, Iterator, Countable
     /**
      * Retourne l'élément courant du tableau.
      */
-    public function current()
+    public function current(): mixed
     {
         return $this->_attributes[$this->key()];
     }
@@ -136,7 +136,7 @@ class Entity implements ArrayAccess, Iterator, Countable
     /**
      * Retourne la clé actuelle (c'est la même que la position dans notre cas).
      */
-    public function key()
+    public function key(): string|int
     {
         $keys = array_keys($this->_attributes);
         return $keys[$this->cursor];
@@ -145,7 +145,7 @@ class Entity implements ArrayAccess, Iterator, Countable
     /**
      * Déplace le curseur vers l'élément suivant.
      */
-    public function next()
+    public function next(): void
     {
         ++$this->cursor;
     }
@@ -153,7 +153,7 @@ class Entity implements ArrayAccess, Iterator, Countable
     /**
      * Remet la position du curseur à 0.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->cursor = 0;
     }
@@ -161,7 +161,7 @@ class Entity implements ArrayAccess, Iterator, Countable
     /**
      * Permet de tester si la position actuelle est valide.
      */
-    public function valid()
+    public function valid(): bool
     {
         $keys = array_keys($this->_attributes);
         return isset($keys[$this->cursor]);
@@ -169,7 +169,7 @@ class Entity implements ArrayAccess, Iterator, Countable
 
     // Interface Countable //
 
-    public function count()
+    public function count(): int
     {
         return count($this->_attributes);
     }
