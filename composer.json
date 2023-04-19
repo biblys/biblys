@@ -43,7 +43,6 @@
     "symfony/security-csrf": "^6.0",
     "payplug/payplug-php": "^3.1",
     "composer/composer": "~2.0",
-    "jflight/gacookie": "~2.0",
     "sinergi/browser-detector": "^6.1",
     "gitonomy/gitlib": "^1.2",
     "symfony/debug": "^4.4",

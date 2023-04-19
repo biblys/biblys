@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c2a42b923923d8fd97ba7f7511d608b",
+    "content-hash": "c541b448911dd1f2fcea0d95f4723b99",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -1358,55 +1358,6 @@
             "time": "2023-03-09T13:19:02+00:00"
         },
         {
-            "name": "illuminate/container",
-            "version": "v4.1.30",
-            "target-dir": "Illuminate/Container",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/container.git",
-                "reference": "5b76abf9138fe1ad99788944e0561ebc655a254f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/5b76abf9138fe1ad99788944e0561ebc655a254f",
-                "reference": "5b76abf9138fe1ad99788944e0561ebc655a254f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Illuminate\\Container": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylorotwell@gmail.com",
-                    "homepage": "https://github.com/taylorotwell",
-                    "role": "Creator of Laravel"
-                }
-            ],
-            "support": {
-                "source": "https://github.com/illuminate/container/tree/v4.1.30"
-            },
-            "time": "2014-05-22T21:07:57+00:00"
-        },
-        {
             "name": "ircmaxell/random-lib",
             "version": "v1.2.0",
             "source": {
@@ -1514,50 +1465,6 @@
                 "source": "https://github.com/ircmaxell/SecurityLib/tree/master"
             },
             "time": "2015-03-20T14:31:23+00:00"
-        },
-        {
-            "name": "jflight/gacookie",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jamesflight/Google-Analytics-Cookie-Parser-PHP.git",
-                "reference": "2bf59e66559f90b940d18717a66e36efd438bb97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jamesflight/Google-Analytics-Cookie-Parser-PHP/zipball/2bf59e66559f90b940d18717a66e36efd438bb97",
-                "reference": "2bf59e66559f90b940d18717a66e36efd438bb97",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/container": "4.1.*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "dev-master",
-                "phpunit/phpunit": "4.0.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Jflight\\GACookie": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "James Flight",
-                    "email": "jamesflight2006@gmail.com"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/jamesflight/Google-Analytics-Cookie-Parser-PHP/issues",
-                "source": "https://github.com/jamesflight/Google-Analytics-Cookie-Parser-PHP/tree/master"
-            },
-            "time": "2017-01-02T11:30:29+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
