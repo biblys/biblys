@@ -12,6 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
+// Catch trigger_error calls and turn them into exceptions
+// to ensure execution is stopped until they are all replaced
+// with proper exceptions
+function errorHandler($errno, $errstr, $errfile, $errline): void
+{
+    $message = "An error was thrown using trigger_error in $errfile:$errline: $errstr";
+    throw new Exception($message);
+}
+set_error_handler("errorHandler", E_USER_ERROR);
+
 // Constants
 require_once 'constants.php';
 
