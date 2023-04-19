@@ -371,10 +371,6 @@ orders_conversions:
   path: /admin/orders/conversions
   controller: AppBundle\Controller\OrderController::conversionsAction
 
-orders_convert_utmz:
-  path: /admin/orders/convert-utmz
-  controller: AppBundle\Controller\OrderController::convertUtmzAction
-
 orders_show:
   methods: GET
   path: /admin/orders/{id}

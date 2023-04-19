@@ -403,22 +403,6 @@ class OrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test getting order's parsed Google Analytics cookie
-     */
-    public function testGetAnalyticsCookie()
-    {
-        $order = new Order([
-            'order_utmz' => '177910838.1481550491.52.15.utmcsr=newsletter|utmccn=campaign-2016|utmcmd=email'
-        ]);
-
-        $cookie = $order->getAnalyticsCookie();
-
-        $this->assertEquals('newsletter', $cookie->source);
-		$this->assertEquals('email', $cookie->medium);
-		$this->assertEquals('campaign-2016', $cookie->campaign);
-    }
-
-    /**
      * Test setting order UTM's cookies
      */
     public function testSetUtmParams()
@@ -435,23 +419,6 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($order->get('utm_campaign'), 'my-campaign');
         $this->assertEquals($order->get('utm_source'),   'my-source');
         $this->assertEquals($order->get('utm_medium'),   'my-medium');
-    }
-
-    /**
-     * Converts utmz field to utm field
-     */
-    public function testConvertUtmz()
-    {
-        $order = new Order([
-            'order_utmz' => '177910838.1481550491.52.15.utmcsr=newsletter|utmccn=campaign-2016|utmcmd=email'
-        ]);
-
-        $order->convertUtmz();
-
-        $this->assertEquals($order->get('utm_source'), 'newsletter');
-        $this->assertEquals($order->get('utm_campaign'), 'campaign-2016');
-        $this->assertEquals($order->get('utm_medium'), 'email');
-        $this->assertEquals($order->get('utmz'), false);
     }
 
     public function testCancel()

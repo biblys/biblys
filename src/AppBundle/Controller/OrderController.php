@@ -398,36 +398,6 @@ class OrderController extends Controller
         ]));
     }
 
-    /**
-     * Mass converts utmz property to utm_ properties.
-     * @throws Exception
-     */
-    public function convertUtmzAction(Request $request): Response
-    {
-        self::authAdmin($request);
-
-        $om = new OrderManager();
-        $order = $om->get(['order_utmz' => 'NOT NULL'], [
-            'order' => 'order_payment_date',
-            'sort' => 'desc',
-        ]);
-
-        $count = $om->count(['order_utmz' => 'NOT NULL']);
-
-        if ($order) {
-            $order->convertUtmz();
-            $om->update($order);
-        }
-
-        $response = new Response($count);
-
-        if ($count > 0) {
-            $response->headers->set('Refresh', '1');
-        }
-
-        return $response;
-    }
-
     private function _jsonOrder(Order $order): array
     {
         return [

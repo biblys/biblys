@@ -474,19 +474,6 @@ class Order extends Entity
     }
 
     /**
-     * Parse saved Google Analytics cookie
-     * @return [Object] A cookie object
-     */
-    public function getAnalyticsCookie()
-    {
-        if (!$this->has('utmz')) {
-            return false;
-        }
-
-        return Jflight\GACookie\GACookie::parseString('utmz', $this->get('utmz'));
-    }
-
-    /**
      * Add utm params to order from cookies
      * @param $cookies: cookies array from Request
      */
@@ -506,23 +493,6 @@ class Order extends Entity
         if ($utmMediumCookie) {
             $this->set('order_utm_medium', $utmMediumCookie);
         }
-
-        return $this;
-    }
-
-    /**
-     * Convert utmz property to utm_ properties
-     */
-    public function convertUtmz()
-    {
-        $cookie = $this->getAnalyticsCookie();
-
-        if ($cookie) {
-            $this->set('order_utm_medium', $cookie->medium);
-            $this->set('order_utm_campaign', $cookie->campaign);
-            $this->set('order_utm_source', $cookie->source);
-        }
-        $this->set('order_utmz', null);
 
         return $this;
     }
