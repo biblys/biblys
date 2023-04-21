@@ -1,5 +1,19 @@
 # Historique des modifications
 
+## 2.68.0 (DEV)
+
+Améliorations
+
+- Biblys ne supporte plus PHP 8.0. La version minimale requise est PHP 8.1.
+- Mailjet peut désormais être utilisé comme gestionnaire de liste de contacts.
+- L'affichage des messages flash d'information, de succès, d'avertissement
+  et d'erreur a été améliorée.
+
+Deploiement
+
+Ajouter `{% include "layout:_flash_messages.html.twig" %}` au fichier de layout
+`base.html.twig`, juste après l'inclusion du partiel `_overall_menu.html.twig`.
+
 ## 2.67.3 (26 avril 2023)
 
 Corrections
