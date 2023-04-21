@@ -3,6 +3,7 @@
 namespace Biblys\Database;
 
 use Biblys\Service\Config;
+use Biblys\Service\LoggerService;
 use Exception;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -11,6 +12,7 @@ use PDOException;
 use Propel\Runtime\Connection\ConnectionManagerSingle;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class Connection
 {
@@ -32,9 +34,13 @@ class Connection
 
             return $_SQL;
         } catch (PDOException $e) {
-            throw new Exception(
-                "Cannot connect to MySQL server ".$config->get("db.host").":".$config->get("db.port")." #".$e->getCode().": ".$e->getMessage()
+            $logger = new LoggerService();
+            $logger->log(
+                logger: "errors",
+                level: "ERROR",
+                message: "Cannot connect to MySQL server ".$config->get("db.host").":" .$config->get("db.port")." #".$e->getCode().": ".$e->getMessage(),
             );
+            throw new ServiceUnavailableHttpException(null, "An error ocurred while connecting to database.");
         }
     }
 

@@ -8,6 +8,7 @@ use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 // Default error level
 ini_set('display_errors', 'On');
@@ -86,8 +87,10 @@ if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
 
 try {
     $_SQL = Biblys\Database\Connection::init($config);
-} catch (Exception $exception) {
-    throw new Exception("An error ocurred while connecting to database.");
+} catch (ServiceUnavailableHttpException $exception) {
+    $response = new Response($exception->getMessage(), 503);
+    $response->send();
+    die();
 }
 
 /* CURRENT SITE DETECTION */
