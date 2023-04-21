@@ -84,7 +84,7 @@ class Config
     }
 
     /**
-     * @return mixed
+     * @throws Exception
      */
     public static function _getOptionsFromConfigFile(): array
     {
@@ -97,6 +97,9 @@ class Config
         return $yaml->parse(file_get_contents($configFilePath));
     }
 
+    /**
+     * @throws Exception
+     */
     public static function load(): Config
     {
         $options = self::_getOptionsFromConfigFile();

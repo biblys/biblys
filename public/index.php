@@ -17,9 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 include __DIR__."/../inc/functions.php";
 
 $config = Config::load();
-
-$dbConfig = $config->get("db");
-Biblys\Database\Connection::initPropel($dbConfig);
+Biblys\Database\Connection::initPropel($config);
 
 // Identification utilisateur
 /** @var $_V */

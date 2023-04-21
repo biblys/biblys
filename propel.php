@@ -4,7 +4,6 @@ use Biblys\Database\Connection;
 use Biblys\Service\Config;
 
 $config = Config::load();
-$dbConfig = $config->get("db");
 
 $propelConfig = [
     'propel' => [
@@ -12,9 +11,9 @@ $propelConfig = [
             'connections' => [
                 'default' => [
                     'adapter' => 'mysql',
-                    'dsn' => Connection::getDsnFromConfig($dbConfig),
-                    'user' => $dbConfig["user"],
-                    'password' => $dbConfig["pass"],
+                    'dsn' => Connection::getDsnFromConfig($config),
+                    'user' => $config->get("db.user"),
+                    'password' => $config->get("db.pass"),
                     'settings' => [
                         'charset' => 'utf8'
                     ]

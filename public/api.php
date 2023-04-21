@@ -15,7 +15,7 @@ require_once __DIR__."/../vendor/autoload.php";
 require_once __DIR__."/../inc/constants.php";
 
 $config = Config::load();
-Biblys\Database\Connection::initPropel($config->get("db"));
+Biblys\Database\Connection::initPropel($config);
 
 $routes = RouteLoader::load();
 $urlgenerator = new UrlGenerator($routes, new RequestContext());

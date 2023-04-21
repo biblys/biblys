@@ -9,6 +9,7 @@ use Monolog\Handler\StreamHandler;
 use PDO;
 use PDOException;
 use Propel\Runtime\Connection\ConnectionManagerSingle;
+use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 
 class Connection
@@ -21,7 +22,7 @@ class Connection
 
         try {
             $_SQL = new PDO(
-                self::getDsnFromConfig($config->get("db")),
+                self::getDsnFromConfig($config),
                 $config->get("db.user"),
                 $config->get("db.pass"),
             );
@@ -37,7 +38,10 @@ class Connection
         }
     }
 
-    public static function initPropel(array $config)
+    /**
+     * @throws PropelException
+     */
+    public static function initPropel(Config $config): void
     {
         $serviceContainer = Propel::getServiceContainer();
         $serviceContainer->checkVersion(2);
@@ -45,8 +49,8 @@ class Connection
 
         $propelConfig = [
             "dsn" => self::getDsnFromConfig($config),
-            "user" => $config["user"],
-            "password" => $config["pass"],
+            "user" => $config->get("db.user"),
+            "password" => $config->get("db.pass"),
             "settings" => [
                 "charset" => "utf8",
                 "queries" => [],
@@ -71,20 +75,19 @@ class Connection
         require_once __DIR__ . "/./loadDatabase.php";
     }
     
-    public static function getDsnFromConfig(array $config): string
+    public static function getDsnFromConfig(Config $config): string
     {
         $dbPort = self::_getDbPortFromConfig($config);
-        return "mysql:host=" . $config["host"] . ";port=" . $dbPort . ";dbname=" . $config["base"];   
-    }
+        return "mysql:host=" . $config->get("db.host") . ";port=" . $dbPort . ";dbname=" . $config->get("db.base");}
 
-    private static function _getDbPortFromConfig(array $config): int
+    private static function _getDbPortFromConfig(Config $config): int
     {
         if (getenv("DB_PORT")) {
             return getenv("DB_PORT");
         }
 
-        if (array_key_exists("port", $config)) {
-            return $config["port"];
+        if ($config->has("db.port")) {
+            return $config->get("db.port");
         }
 
         return 3306;

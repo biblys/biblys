@@ -17,7 +17,7 @@ require_once(__DIR__."/../inc/functions.php");
 $response = new JsonResponse();
 
 $config = Config::load();
-Connection::initPropel($config->get("db"));
+Connection::initPropel($config);
 
 // Identification utilisateur
 if (auth()) {

@@ -2,6 +2,7 @@
 
 namespace Biblys\Database;
 
+use Biblys\Service\Config;
 use Exception;
 use Framework\Composer\ScriptRunner;
 use Propel\Runtime\Connection\ConnectionInterface;
@@ -21,7 +22,8 @@ class Database
 
     public function __construct(array $dbConfig)
     {
-        Connection::initPropel($dbConfig);
+        $config = new Config(["db" => $dbConfig]);
+        Connection::initPropel($config);
 
         $this->config = $dbConfig;
         $this->connection = Propel::getConnection();

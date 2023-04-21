@@ -11,7 +11,7 @@ use Command\ResetDatabaseCommand;
 use Symfony\Component\Console\Application;
 
 $config = Config::load();
-Connection::initPropel($config->get("db"));
+Connection::initPropel($config);
 
 $application = new Application();
 $application->add(new ResetDatabaseCommand());
