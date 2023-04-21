@@ -7,15 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 $cm = new CartManager();
 
-// Flash messages
-$flashs = [];
-foreach ($session->getFlashBag()->get('success', array()) as $message) {
-    $flashs[] = "<p class='alert alert-success'>$message</p>";
-}
-foreach ($session->getFlashBag()->get('error', array()) as $message)  {
-    $flashs[] = "<p class='alert alert-danger'>$message</p>";
-}
-
 // Empty a single cart
 $empty = $request->query->get('empty');
 if ($empty) {
@@ -54,8 +45,6 @@ $content = '
             <i class="fa fa-trash-o"></i> Vider les paniers obsolètes
         </a>
     </p><br>
-
-      '.$alert.join($flashs).'
 
     <table class="admin-table">
         <thead>

@@ -182,18 +182,8 @@ if ($_V->isAdmin()) {
     ';
 }
 
-$flashs = [];
-foreach ($session->getFlashBag()->get('success', array()) as $message) {
-    $flashs[] = "<p class='alert alert-success'>$message</p>";
-}
-foreach ($session->getFlashBag()->get('error', array()) as $message) {
-    $flashs[] = "<p class='alert alert-danger'>$message</p>";
-}
-
 $content .= '
     <h1><i class="fa fa-shopping-cart"></i> Mon panier</h1>
-
-    '.join($flashs).'
 
     '.$alert.'
 

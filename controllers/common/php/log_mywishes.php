@@ -78,11 +78,6 @@ else {
 
     $request->attributes->set("page_title", $wishlist->get('name'));
 
-    $messages = null;
-    foreach ($session->getFlashBag()->get('success') as $message) {
-        $messages .= '<p class="alert alert-success">' . $message . '</p>';
-    }
-
     // Is user name set ?
     if ($_V->has('screen_name')) {
         $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="https://axys.me/#Profil">choisir un nom d\'utilisateur</a>.</p>';
@@ -125,8 +120,6 @@ else {
 			</div>
 
 			<h2>'.$wishlist->get("name").'</h2>
-
-			' . $messages . '
 
 			<div id="share" class="hidden">
 				' . $share . '

@@ -22,17 +22,6 @@ $rm = new RayonManager();
 
 $content = null;
 
-/** @var Session $session */
-foreach ($session->getFlashBag()->get('success', []) as $message) {
-    $content .= "<p class='alert alert-success'>$message</p>";
-}
-foreach ($session->getFlashBag()->get('info', []) as $message) {
-    $content .= "<p class='alert alert-info'>$message</p>";
-}
-foreach ($session->getFlashBag()->get('warning', []) as $message) {
-    $content .= "<p class='alert alert-warning'>$message</p>";
-}
-
 $div_admin = null;
 
 // Exemplaire retourne
