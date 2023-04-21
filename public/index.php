@@ -32,10 +32,14 @@ $session->start();
 $request->setSession($session);
 
 // TODO: use a DeprecationNoticesHandler class
-// TODO: handle displaying error in JSON and CLI
-set_error_handler(function ($level, $message) use ($config, $request): void {
+// TODO: add to other front controllers
+set_error_handler(function ($level, $message) use ($config, $session): void {
     $loggerService = new LoggerService();
     $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
+
+    if ($config->get("environment") === "dev") {
+        $session->getFlashBag()->add("warning", "DEPRECATED: $message");
+    }
 }, E_USER_DEPRECATED ^ E_DEPRECATED);
 
 $exceptionController = new ErrorController();
