@@ -75,4 +75,34 @@ class ConfigTest extends PHPUnit\Framework\TestCase
         // then
         $this->assertEquals("value", $value);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasReturnsTrue()
+    {
+        // given
+        $config = new Config(["has" => "a value"]);
+
+        // when
+        $has = $config->has("has");
+
+        // then
+        $this->assertEquals(true, $has, "returns true if config has option for path");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testHasReturnsFalse()
+    {
+        // given
+        $config = new Config(["has" => "a value"]);
+
+        // when
+        $has = $config->has("hasn't");
+
+        // then
+        $this->assertEquals(false, $has, "returns false if config has no option for path");
+    }
 }

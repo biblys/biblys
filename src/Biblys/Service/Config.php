@@ -32,6 +32,16 @@ class Config
         $this->options[$level1key] = $value;
     }
 
+    public function has($path): bool
+    {
+        $option = $this->get($path);
+        if ($option !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function _getOptionByPath(mixed $path): array|bool|string|null
     {
         $pathSteps = explode(".", $path);
