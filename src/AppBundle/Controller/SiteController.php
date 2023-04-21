@@ -55,7 +55,7 @@ class SiteController extends Controller
                 $currentSite->setOption($new_key, $new_val);
                 $session->getFlashbag()->add(
                     "success",
-                    "L'option &laquo;&nbsp;".$new_key."&nbsp;&raquo; a été ajoutée."
+                    "L'option « ".$new_key." » a été ajoutée."
                 );
             }
 
