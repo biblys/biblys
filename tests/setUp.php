@@ -19,6 +19,9 @@ setUpTestDatabase($config->get("db"));
 require_once __DIR__."/../inc/functions.php";
 $config->set("environment", "test");
 
+$session = new \Symfony\Component\HttpFoundation\Session\Session();
+$session->start();
+
 /**
  * @throws PropelException
  */

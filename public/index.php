@@ -3,6 +3,7 @@
 use AppBundle\Controller\ErrorController;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\LoggerService;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,32 +27,16 @@ if ($_V->isLogged()) {
 }
 
 $request = Request::createFromGlobals();
+$session = new \Symfony\Component\HttpFoundation\Session\Session();
+$session->start();
+$request->setSession($session);
 
 // TODO: use a DeprecationNoticesHandler class
 // TODO: handle displaying error in JSON and CLI
-set_error_handler(function ($level, $message) use ($config): void {
-    if ($config->get("environment") !== "dev") {
-        return;
-    }
-
-    $i = 0;
-    $trace = "";
-    foreach (debug_backtrace() as $b) {
-
-        if (!isset($b['file']) || !isset($b['line']) || !isset($b['function'])) {
-            continue;
-        }
-
-        $trace .= "#{$i} {$b['file']}({$b['line']}): {$b['function']}\n";
-        $i++;
-    }
-
-    echo "<div class=\"biblys-warning noprint\">
-            DEPRECATED: {$message}
-            <pre>{$trace}</pre>
-        </div>";
+set_error_handler(function ($level, $message) use ($config, $request): void {
+    $loggerService = new LoggerService();
+    $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
 }, E_USER_DEPRECATED ^ E_DEPRECATED);
-
 
 $exceptionController = new ErrorController();
 

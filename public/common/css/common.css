@@ -1440,21 +1440,3 @@ table.unfold tbody {
   text-align: center;
   width: 100%;
 }
-
-.biblys-warning {
-  background: red;
-  bottom: 0;
-  color: white;
-  opacity: 0.8;
-  padding: 5px;
-  position: fixed;
-  text-align: center;
-  width: 100%;
-  z-index: 10000;
-}
-
-.biblys-warning pre {
-  border: 0;
-  background: none;
-  color: white;
-}
