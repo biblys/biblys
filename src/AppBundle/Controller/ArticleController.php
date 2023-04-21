@@ -77,12 +77,13 @@ class ArticleController extends Controller
         );
 
         // Opengraph tags
+        $summary = $article->get('summary') ?: "";
         $opengraphTags = [
             'type' => 'book',
             'title' => $article->get('title'),
             'url' => $request->getScheme().'://'.$request->getHost().
                 $urlGenerator->generate('article_show', ['slug' => $article->get('url')]),
-            'description' => truncate(strip_tags($article->get('summary')), '500', '...', true),
+            'description' => truncate(strip_tags($summary), '500', '...', true),
         ];
         if ($article->hasCover()) {
             $opengraphTags['image'] = $article->getCoverUrl();
@@ -101,7 +102,7 @@ class ArticleController extends Controller
         // Twitter Cards tags
         $twitterCardsTags = [
             'title' => $article->get('title'),
-            'description' => truncate(strip_tags($article->get('summary')), '500', '...', true),
+            'description' => truncate(strip_tags($summary), '500', '...', true),
         ];
         if ($article->hasCover()) {
             $twitterCardsTags['image'] = $article->getCoverUrl();
