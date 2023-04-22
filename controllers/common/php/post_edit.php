@@ -1,13 +1,13 @@
 <?php
 
+global $urlgenerator, $site;
+
+use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
+use Biblys\Service\SlugService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-
-/** @var UrlGenerator $urlgenerator */
-/** @var Site $site */
-
 
 if (!isset($rank)) {
     throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
@@ -29,7 +29,8 @@ if ($request->getMethod() === 'POST') {
     }
 
     // URL de la page
-    $postUrl = makeurl($request->request->get('post_title'));
+    $slugService = new SlugService();
+    $postUrl = $slugService->slugify($request->request->get('post_title'));
     $urls = $pm->get(['post_id' => '!= '.$post->get('id'), 'post_url' => $postUrl]);
     if ($urls) {
         $postUrl .= '_'.$postId;
@@ -96,17 +97,21 @@ $content .= '
         </div>
     ';
 
+$request = Request::createFromGlobals();
+$config = Config::load();
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+
 // Valeurs par defaut pour un nouveau billet
-$p["user_id"] = getLegacyVisitor()->get("id");
+$p["user_id"] = $currentUser->getUser()->getId();
 $p["post_date"] = date("Y-m-d");
 $p["post_time"] = date("H:i");
 
 // Auteur
-if (getLegacyVisitor()->isAdmin()) {
+if ($currentUser->isAdmin()) {
     if(!empty($_LOG["user_screen_name"])) $author = $_LOG["user_screen_name"];
     else $author = $site->get("id");
 }
-elseif (getLegacyVisitor()->isPublisher()) {
+elseif ($currentUser->hasPublisherRight()) {
     $pum = new PublisherManager();
     $publisherId = $currentUser->getCurrentRight()->getPublisherId();
     $publisher = $pum->getById($publisherId);
@@ -160,16 +165,16 @@ $content .= '
         <fieldset>
             <legend>Informations</legend>
             <p>
-                <label for="post_author">Auteur :</label>
+                <label class="floating" for="post_author">Auteur :</label>
                 <input type="text" name="post_author" id="post_author" value="'.$author.'" class="long" disabled="disabled" />
                 <input type="hidden" name="user_id" id="user_id" value="'.$p["user_id"].'" />
                 <input type="hidden" name="publisher_id" id="publisher_id" value="'.($p['publisher_id'] ?? null).'">
             </p>
 ';
-if(getLegacyVisitor()->isAdmin()) {
+if($currentUser->isAdmin()) {
     $content .= '
             <p>
-                <label for="category_id">Catégorie :</label>
+                <label class="floating" for="category_id">Catégorie :</label>
                 <select name="category_id">
                     <option />
     ';
@@ -189,29 +194,28 @@ if(getLegacyVisitor()->isAdmin()) {
 }
 $content .= '
             <p>
-                <label for="post_title" class="required">Titre :</label>
+                <label class="floating" for="post_title" class="required">Titre :</label>
                 <input type="text" name="post_title" id="post_title" value="'.(isset($p['post_title']) ? htmlentities($p['post_title']) : null).'" class="long required" required />
             </p>
             <br>
 
             <p>
-                <label for="post_status">État :</label>
+                <label class="floating" for="post_status">État :</label>
                 <select name="post_status">
                     <option value="0">Hors-ligne</option>
                     <option value="1" '.$status_online.'>En ligne</option>
                 </select>
             </p>
             <p>
-                <label for="post_date" class="required">Date de parution :</label>
+                <label class="floating" for="post_date" class="required">Date de parution :</label>
                 <input type="date" name="post_date" id="post_date" value="'.$p["post_date"].'" placeholder="AAAA-MM-JJ" required>
                 <input type="time" name="post_time" id="post_time" value="'.$p["post_time"].'" placeholder="HH:MM" required>
             </p>
 ';
 
-if (auth("admin"))
-{
+if ($currentUser->isAdmin()) {
     $content .= '
-            <label for="post_link">Lien :</label>
+            <label class="floating" for="post_link">Lien :</label>
             <input 
                 type="url" 
                 name="post_link" 
@@ -222,7 +226,7 @@ if (auth("admin"))
             />
             <br /><br />
 
-            <label for="post_selected">À la une :</label>
+            <label class="floating" for="post_selected">À la une :</label>
             <input type="checkbox" name="post_selected" id="post_selected" value="1"'.$post_selected.' />
             <br /><br />
     ';
@@ -233,11 +237,11 @@ $content .= '
         <fieldset>
             <legend>Illustration</legend>
             <p>
-                <label for="post_illustration">Image :</label>
+                <label class="floating" for="post_illustration">Image :</label>
                 '.($post_illustration_upload).'
             </p>
             <p>
-                <label for="post_illustration_legend">Légende :</label>
+                <label class="floating" for="post_illustration_legend">Légende :</label>
                 <input type="text" name="post_illustration_legend" id="post_illustration_legend" value="'.($p['post_illustration_legend'] ?? null).'" maxlength=64 class="long" />
             </p>
             <p>Cette image (au format JPEG) sera utilisée comme vignette pour les aperçus du billet sur le site ou sur les réseaux sociaux. Taille minimale conseillée pour Facebook : 1200 x 627 pixels.</p>
@@ -271,23 +275,23 @@ $content .= '
         <legend>Base de données</legend>
 
         <p>
-            <label for="post_id" class="disabled">Billet n°</label>
+            <label class="floating" for="post_id" class="disabled">Billet n°</label>
             <input type="text" name="post_id" id="post_id" value="'.($p['post_id'] ?? null).'" readonly>
         </p>
 
         <p>
-            <label for="post_url">Adresse du billet :</label>
+            <label class="floating" for="post_url">Adresse du billet :</label>
             <input type="hidden" name="post_url_old" value='.($p['post_url'] ?? null).'>
             <input type="text" name="post_url" id="post_url" value="'.($p['post_url'] ?? null).'" placeholder="Champ rempli automatiquement" class="long" />
         </p>
         <br>
 
         <p>
-            <label for="post_insert" class="readonly">Billet créé le :</label>
+            <label class="floating" for="post_insert" class="readonly">Billet créé le :</label>
             <input type="text" name="post_insert" id="post_insert" value="'.($p['post_insert'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
         <p>
-            <label for="post_update" class="readonly">Billet modifié le :</label>
+            <label class="floating" for="post_update" class="readonly">Billet modifié le :</label>
             <input type="text" name="post_update" id="post_update" value="'.($p['post_update'] ?? null).'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
         </p>
     </fieldset>

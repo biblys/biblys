@@ -1,15 +1,19 @@
 <?php
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $the_categories = null;
 
+$request = Request::createFromGlobals();
+$config = Config::load();
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 $rank = "log_";
-if (getLegacyVisitor()->isAdmin()) {
+if ($currentUser->isAdmin()) {
     $cm = new CategoryManager();
     $categories = $cm->getAll();
     foreach ($categories as $category) {
@@ -24,7 +28,7 @@ if (getLegacyVisitor()->isAdmin()) {
     ';
     $rank = 'adm_';
 }
-elseif (getLegacyVisitor()->isPublisher()) $rank = 'pub_';
+elseif ($currentUser->hasPublisherRight()) $rank = 'pub_';
 
 $req = NULL;
 /** @var Site $site */
@@ -34,7 +38,7 @@ if (isset($_GET["category_id"])) {
     $params["category_id"] = $_GET["category_id"];
 }
 
-if(!getLegacyVisitor()->isAdmin() && getLegacyVisitor()->isPublisher()) {
+if(!$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
     $req .= 'AND `posts`.`publisher_id` = :publisher_id';
     $params["publisher_id"] = $currentUser->getCurrentRight()->getPublisherId();
 }
@@ -85,8 +89,7 @@ while($p = $posts->fetch(PDO::FETCH_ASSOC)) {
     ';
 }
 
-/** @var Request $request */
-$request->attributes->set("page_title", $_PAGE_TITLE);
+$request->attributes->set("page_title", "Gestion des billets");
 $content = '
     <h1><span class="fa fa-newspaper-o"></span> Gestion des billets</h1>
 
