@@ -105,12 +105,17 @@ class PostController extends Controller
 
         $request->attributes->set("page_title", $post->get("title"));
 
+        $description = "";
+        if ($post->has("content")) {
+            $description = truncate(strip_tags($post->get('content')), '500', '...', true);
+        }
+
         $opengraphTags = [
             "type" => "article",
             "title" => $post->get("title"),
             "url" => "https://" .$request->getHost().
                 $urlgenerator->generate("post_show", ["slug" => $post->get("url")]),
-            "description" => truncate(strip_tags($post->get('content')), '500', '...', true),
+            "description" => $description,
             "site_name" => $site->get("title"),
             "locale" => "fr_FR",
             "article:published_time" => $post->get('date'),

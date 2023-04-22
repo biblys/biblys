@@ -53,13 +53,18 @@
             return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'" class="illustration">';
         }
 
-        public function getFirstImageUrl()
+        public function getFirstImageUrl(): ?string
         {
-            preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $this->get('content'), $image);
-            if (!empty($image['src'])) {
-                return $image["src"];
+            if (!$this->has("content")) {
+                return null;
             }
-            return false;
+
+            preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $this->get('content'), $image);
+            if (empty($image['src'])) {
+                return null;
+            }
+
+            return $image["src"];
         }
 
         /**
