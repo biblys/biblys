@@ -45,13 +45,19 @@ if ($request->getMethod() === 'POST') {
         $illustrationVersion++;
     } elseif (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
         $illustration->delete();
-        unset($_POST["post_illustration_delete"]);
     }
     $post->set("post_illustration_version", $illustrationVersion);
 
     $fields = $request->request->all();
     foreach ($fields as $field => $val) {
-        if (in_array($field, ["post_id", "post_url", "post_url_old", "post_time", "post_illustration_version"])) {
+        if (in_array($field, [
+                "post_id",
+                "post_url",
+                "post_url_old",
+                "post_time",
+                "post_illustration_version",
+                "post_illustration_delete",
+        ])) {
             continue;
         }
         $post->set($field, $val);
@@ -84,8 +90,6 @@ if ($request->getMethod() === 'POST') {
 if (!isset($_GET['id'])) $_GET['id'] = NULL;
 $status_online = NULL;
 $post_selected = NULL;
-
-$post_illustration_upload = '<input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />';
 
 $postId = $request->query->get('id');
 $post = $pm->getById($postId);
@@ -135,8 +139,18 @@ if ($post) {
 
     // Illustration
     $postIllustration = new Media("post", $post->get("id"));
-    if($postIllustration->exists()) {
-        $post_illustration_upload = '<input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" hidden /> <label class="after button" for="post_illustration_upload">Remplacer</label> <input type="checkbox" id="post_illustration_delete" name="post_illustration_delete" value="1" /> <label for="post_illustration_delete" class="after">Supprimer</label>';
+    $postIllustrationUpload = '
+        <label class="floating" for="post_illustration">Image :</label>
+        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />
+    ';
+    if ($postIllustration->exists()) {
+        $postIllustrationUpload = '
+            <div class="text-center">
+                '.$post->getIllustrationTag(height: 300).'<br />
+                <input type="checkbox" value=1 name="post_illustration_delete" id="illustration_delete" />
+                <label for="illustration_delete">Supprimer</label>
+            </div>
+        ';
     }
 
     if ($p['post_status']) $status_online = ' selected';
@@ -233,8 +247,7 @@ $content .= '
         <fieldset>
             <legend>Illustration</legend>
             <p>
-                <label class="floating" for="post_illustration">Image :</label>
-                '.($post_illustration_upload).'
+                '.$postIllustrationUpload.'
             </p>
             <p>
                 <label class="floating" for="illustration_version">Version :</label>
