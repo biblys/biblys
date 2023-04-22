@@ -1,20 +1,22 @@
-<?php /** @noinspection CommaExpressionJS */
+<?php /** @noinspection BadExpressionStatementJS */
+global $request, $_V;
+/** @noinspection CommaExpressionJS */
+global $site;
 
-/** @var Site $site */
+/** @noinspection CommaExpressionJS */
 
 use Biblys\Service\Config;
 use Biblys\Service\Mailer;
-use Framework\Exception\AuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $om = new OrderManager();
 $am = new ArticleManager();
 
-/** @var Request $request */
 $order_url = $request->query->get("url");
 $order = $om->get(["order_url" => $order_url]);
 
@@ -39,7 +41,6 @@ function _orderBelongsToVisitor(Order $order, Visitor $visitor): bool
     return $order->get("user_id") === $visitor->get("user_id");
 }
 
-/** @var Visitor $_V */
 if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isAdmin()) {
 
     $buttons = NULL;
@@ -48,7 +49,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
     $content .= '<h2>Commande n° ' . $o["order_id"] . '</h2>';
 
-    if (auth('admin')) {
+    if ($_V->isAdmin()) {
         $content .= '
             <div class="admin">
                 <p>Commande n° ' . $o["order_id"] . '</p>
@@ -105,7 +106,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     ';
 
     // Ref client
-    if (!empty($o["user_id"]) and auth("admin")) {
+    if (!empty($o["user_id"]) and $_V->isAdmin()) {
         /** @var PDO $_SQL */
         $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `user_id` = :user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         $stock->execute([
@@ -282,7 +283,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         $total_tva += $a['stock_selling_price_tva'];
 
         $copyId = $copy->get('id');
-        if (auth("admin")) {
+        if ($_V->isAdmin()) {
             $copyId = '<a href="/pages/adm_stock?id=' . $copyId . '">' . $copyId . '</a>';
         }
 
@@ -425,10 +426,10 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
             </p>
         ';
     }
-} elseif (!auth()) {
-    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
+} elseif (!$_V->isLogged()) {
+    throw new UnauthorizedHttpException(null, "Vous n'avez pas le droit d'accéder à cette page.");
 } else {
-    throw new AuthException("Vous n'avez pas le droit d'accéder à cette page.");
+    throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
 return new Response($content);
