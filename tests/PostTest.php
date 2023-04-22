@@ -85,14 +85,26 @@ class PostTest extends PHPUnit\Framework\TestCase
      * Test illustration exists
      * @depends testGet
      */
-    public function testGetIllustrationTag(Post $post)
+    public function testGetIllustrationTag()
     {
         $pm = new PostManager();
         $post = $pm->create(["post_illustration_legend" => "Une belle image"]);
-        $illustration = $post->getIllustration();
         $tag = $post->getIllustrationTag();
 
         $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
+    }
+
+    /**
+     * Test illustration exists
+     * @depends testGet
+     */
+    public function testGetIllustrationTagWithHeight()
+    {
+        $pm = new PostManager();
+        $post = $pm->create(["post_illustration_legend" => "Une belle image"]);
+        $tag = $post->getIllustrationTag(height: 60);
+
+        $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" height=60 class="illustration">/', $tag);
     }
 
     /**

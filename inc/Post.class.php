@@ -47,10 +47,16 @@
             return $this->illustrationExists;
         }
 
-        public function getIllustrationTag(): string
+        public function getIllustrationTag(?int $height = null): string
         {
             $illustration = $this->getIllustration();
-            return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'" class="illustration">';
+
+            $heightAttribute = "";
+            if ($height !== null) {
+                $heightAttribute = " height=$height";
+            }
+
+            return '<img src="'.$illustration->url().'" alt="'.$this->get('illustration_legend').'"'.$heightAttribute.' class="illustration">';
         }
 
         public function getFirstImageUrl(): ?string
