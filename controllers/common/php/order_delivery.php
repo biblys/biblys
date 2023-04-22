@@ -10,6 +10,7 @@ use Model\PageQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var Request $request */
@@ -144,7 +145,7 @@ if ($request->getMethod() === "POST") {
         $countryId = $request->request->get('country_id');
         $country = $com->getById($countryId);
         if (!$country) {
-            trigger_error('Pays inconnu.');
+            throw new BadRequestHttpException("Pays inconnu.");
         }
 
         // General order info
