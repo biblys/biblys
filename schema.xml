@@ -998,6 +998,7 @@
     <column name="post_url" phpName="Url" type="LONGVARCHAR"/>
     <column name="post_title" phpName="Title" type="LONGVARCHAR"/>
     <column name="post_content" phpName="Content" type="LONGVARCHAR"/>
+    <column name="post_illustration_version" phpName="IllustrationVersion" type="INTEGER" size="3" defaultValue="0" />
     <column name="post_illustration_legend" phpName="IllustrationLegend" type="VARCHAR" size="64"/>
     <column name="post_selected" phpName="Selected" type="BOOLEAN" size="1"/>
     <column name="post_link" phpName="Link" type="LONGVARCHAR"/>

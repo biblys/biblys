@@ -25,6 +25,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery orderByUrl($order = Criteria::ASC) Order by the post_url column
  * @method     ChildPostQuery orderByTitle($order = Criteria::ASC) Order by the post_title column
  * @method     ChildPostQuery orderByContent($order = Criteria::ASC) Order by the post_content column
+ * @method     ChildPostQuery orderByIllustrationVersion($order = Criteria::ASC) Order by the post_illustration_version column
  * @method     ChildPostQuery orderByIllustrationLegend($order = Criteria::ASC) Order by the post_illustration_legend column
  * @method     ChildPostQuery orderBySelected($order = Criteria::ASC) Order by the post_selected column
  * @method     ChildPostQuery orderByLink($order = Criteria::ASC) Order by the post_link column
@@ -48,6 +49,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPostQuery groupByUrl() Group by the post_url column
  * @method     ChildPostQuery groupByTitle() Group by the post_title column
  * @method     ChildPostQuery groupByContent() Group by the post_content column
+ * @method     ChildPostQuery groupByIllustrationVersion() Group by the post_illustration_version column
  * @method     ChildPostQuery groupByIllustrationLegend() Group by the post_illustration_legend column
  * @method     ChildPostQuery groupBySelected() Group by the post_selected column
  * @method     ChildPostQuery groupByLink() Group by the post_link column
@@ -82,6 +84,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost|null findOneByUrl(string $post_url) Return the first ChildPost filtered by the post_url column
  * @method     ChildPost|null findOneByTitle(string $post_title) Return the first ChildPost filtered by the post_title column
  * @method     ChildPost|null findOneByContent(string $post_content) Return the first ChildPost filtered by the post_content column
+ * @method     ChildPost|null findOneByIllustrationVersion(int $post_illustration_version) Return the first ChildPost filtered by the post_illustration_version column
  * @method     ChildPost|null findOneByIllustrationLegend(string $post_illustration_legend) Return the first ChildPost filtered by the post_illustration_legend column
  * @method     ChildPost|null findOneBySelected(boolean $post_selected) Return the first ChildPost filtered by the post_selected column
  * @method     ChildPost|null findOneByLink(string $post_link) Return the first ChildPost filtered by the post_link column
@@ -108,6 +111,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPost requireOneByUrl(string $post_url) Return the first ChildPost filtered by the post_url column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByTitle(string $post_title) Return the first ChildPost filtered by the post_title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByContent(string $post_content) Return the first ChildPost filtered by the post_content column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPost requireOneByIllustrationVersion(int $post_illustration_version) Return the first ChildPost filtered by the post_illustration_version column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByIllustrationLegend(string $post_illustration_legend) Return the first ChildPost filtered by the post_illustration_legend column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneBySelected(boolean $post_selected) Return the first ChildPost filtered by the post_selected column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPost requireOneByLink(string $post_link) Return the first ChildPost filtered by the post_link column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -142,6 +146,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildPost> findByTitle(string|array<string> $post_title) Return ChildPost objects filtered by the post_title column
  * @method     ChildPost[]|Collection findByContent(string|array<string> $post_content) Return ChildPost objects filtered by the post_content column
  * @psalm-method Collection&\Traversable<ChildPost> findByContent(string|array<string> $post_content) Return ChildPost objects filtered by the post_content column
+ * @method     ChildPost[]|Collection findByIllustrationVersion(int|array<int> $post_illustration_version) Return ChildPost objects filtered by the post_illustration_version column
+ * @psalm-method Collection&\Traversable<ChildPost> findByIllustrationVersion(int|array<int> $post_illustration_version) Return ChildPost objects filtered by the post_illustration_version column
  * @method     ChildPost[]|Collection findByIllustrationLegend(string|array<string> $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
  * @psalm-method Collection&\Traversable<ChildPost> findByIllustrationLegend(string|array<string> $post_illustration_legend) Return ChildPost objects filtered by the post_illustration_legend column
  * @method     ChildPost[]|Collection findBySelected(boolean|array<boolean> $post_selected) Return ChildPost objects filtered by the post_selected column
@@ -269,7 +275,7 @@ abstract class PostQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT post_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
+        $sql = 'SELECT post_id, user_id, site_id, publisher_id, category_id, post_url, post_title, post_content, post_illustration_version, post_illustration_legend, post_selected, post_link, post_status, post_keywords, post_links, post_keywords_generated, post_fb_id, post_date, post_hits, post_insert, post_update, post_created, post_updated FROM posts WHERE post_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -658,6 +664,49 @@ abstract class PostQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(PostTableMap::COL_POST_CONTENT, $content, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the post_illustration_version column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIllustrationVersion(1234); // WHERE post_illustration_version = 1234
+     * $query->filterByIllustrationVersion(array(12, 34)); // WHERE post_illustration_version IN (12, 34)
+     * $query->filterByIllustrationVersion(array('min' => 12)); // WHERE post_illustration_version > 12
+     * </code>
+     *
+     * @param mixed $illustrationVersion The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByIllustrationVersion($illustrationVersion = null, ?string $comparison = null)
+    {
+        if (is_array($illustrationVersion)) {
+            $useMinMax = false;
+            if (isset($illustrationVersion['min'])) {
+                $this->addUsingAlias(PostTableMap::COL_POST_ILLUSTRATION_VERSION, $illustrationVersion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($illustrationVersion['max'])) {
+                $this->addUsingAlias(PostTableMap::COL_POST_ILLUSTRATION_VERSION, $illustrationVersion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(PostTableMap::COL_POST_ILLUSTRATION_VERSION, $illustrationVersion, $comparison);
 
         return $this;
     }

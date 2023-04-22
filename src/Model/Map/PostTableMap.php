@@ -63,7 +63,7 @@ class PostTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 22;
+    public const NUM_COLUMNS = 23;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class PostTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 22;
+    public const NUM_HYDRATE_COLUMNS = 23;
 
     /**
      * the column name for the post_id field
@@ -114,6 +114,11 @@ class PostTableMap extends TableMap
      * the column name for the post_content field
      */
     public const COL_POST_CONTENT = 'posts.post_content';
+
+    /**
+     * the column name for the post_illustration_version field
+     */
+    public const COL_POST_ILLUSTRATION_VERSION = 'posts.post_illustration_version';
 
     /**
      * the column name for the post_illustration_legend field
@@ -199,11 +204,11 @@ class PostTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ]
+        self::TYPE_PHPNAME       => ['Id', 'UserId', 'SiteId', 'PublisherId', 'CategoryId', 'Url', 'Title', 'Content', 'IllustrationVersion', 'IllustrationLegend', 'Selected', 'Link', 'Status', 'Keywords', 'Links', 'KeywordsGenerated', 'FbId', 'Date', 'Hits', 'Insert', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'userId', 'siteId', 'publisherId', 'categoryId', 'url', 'title', 'content', 'illustrationVersion', 'illustrationLegend', 'selected', 'link', 'status', 'keywords', 'links', 'keywordsGenerated', 'fbId', 'date', 'hits', 'insert', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID, PostTableMap::COL_USER_ID, PostTableMap::COL_SITE_ID, PostTableMap::COL_PUBLISHER_ID, PostTableMap::COL_CATEGORY_ID, PostTableMap::COL_POST_URL, PostTableMap::COL_POST_TITLE, PostTableMap::COL_POST_CONTENT, PostTableMap::COL_POST_ILLUSTRATION_VERSION, PostTableMap::COL_POST_ILLUSTRATION_LEGEND, PostTableMap::COL_POST_SELECTED, PostTableMap::COL_POST_LINK, PostTableMap::COL_POST_STATUS, PostTableMap::COL_POST_KEYWORDS, PostTableMap::COL_POST_LINKS, PostTableMap::COL_POST_KEYWORDS_GENERATED, PostTableMap::COL_POST_FB_ID, PostTableMap::COL_POST_DATE, PostTableMap::COL_POST_HITS, PostTableMap::COL_POST_INSERT, PostTableMap::COL_POST_UPDATE, PostTableMap::COL_POST_CREATED, PostTableMap::COL_POST_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['post_id', 'user_id', 'site_id', 'publisher_id', 'category_id', 'post_url', 'post_title', 'post_content', 'post_illustration_version', 'post_illustration_legend', 'post_selected', 'post_link', 'post_status', 'post_keywords', 'post_links', 'post_keywords_generated', 'post_fb_id', 'post_date', 'post_hits', 'post_insert', 'post_update', 'post_created', 'post_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
     ];
 
     /**
@@ -215,11 +220,11 @@ class PostTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationLegend' => 8, 'Selected' => 9, 'Link' => 10, 'Status' => 11, 'Keywords' => 12, 'Links' => 13, 'KeywordsGenerated' => 14, 'FbId' => 15, 'Date' => 16, 'Hits' => 17, 'Insert' => 18, 'Update' => 19, 'CreatedAt' => 20, 'UpdatedAt' => 21, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationLegend' => 8, 'selected' => 9, 'link' => 10, 'status' => 11, 'keywords' => 12, 'links' => 13, 'keywordsGenerated' => 14, 'fbId' => 15, 'date' => 16, 'hits' => 17, 'insert' => 18, 'update' => 19, 'createdAt' => 20, 'updatedAt' => 21, ],
-        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 8, PostTableMap::COL_POST_SELECTED => 9, PostTableMap::COL_POST_LINK => 10, PostTableMap::COL_POST_STATUS => 11, PostTableMap::COL_POST_KEYWORDS => 12, PostTableMap::COL_POST_LINKS => 13, PostTableMap::COL_POST_KEYWORDS_GENERATED => 14, PostTableMap::COL_POST_FB_ID => 15, PostTableMap::COL_POST_DATE => 16, PostTableMap::COL_POST_HITS => 17, PostTableMap::COL_POST_INSERT => 18, PostTableMap::COL_POST_UPDATE => 19, PostTableMap::COL_POST_CREATED => 20, PostTableMap::COL_POST_UPDATED => 21, ],
-        self::TYPE_FIELDNAME     => ['post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_legend' => 8, 'post_selected' => 9, 'post_link' => 10, 'post_status' => 11, 'post_keywords' => 12, 'post_links' => 13, 'post_keywords_generated' => 14, 'post_fb_id' => 15, 'post_date' => 16, 'post_hits' => 17, 'post_insert' => 18, 'post_update' => 19, 'post_created' => 20, 'post_updated' => 21, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'UserId' => 1, 'SiteId' => 2, 'PublisherId' => 3, 'CategoryId' => 4, 'Url' => 5, 'Title' => 6, 'Content' => 7, 'IllustrationVersion' => 8, 'IllustrationLegend' => 9, 'Selected' => 10, 'Link' => 11, 'Status' => 12, 'Keywords' => 13, 'Links' => 14, 'KeywordsGenerated' => 15, 'FbId' => 16, 'Date' => 17, 'Hits' => 18, 'Insert' => 19, 'Update' => 20, 'CreatedAt' => 21, 'UpdatedAt' => 22, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'userId' => 1, 'siteId' => 2, 'publisherId' => 3, 'categoryId' => 4, 'url' => 5, 'title' => 6, 'content' => 7, 'illustrationVersion' => 8, 'illustrationLegend' => 9, 'selected' => 10, 'link' => 11, 'status' => 12, 'keywords' => 13, 'links' => 14, 'keywordsGenerated' => 15, 'fbId' => 16, 'date' => 17, 'hits' => 18, 'insert' => 19, 'update' => 20, 'createdAt' => 21, 'updatedAt' => 22, ],
+        self::TYPE_COLNAME       => [PostTableMap::COL_POST_ID => 0, PostTableMap::COL_USER_ID => 1, PostTableMap::COL_SITE_ID => 2, PostTableMap::COL_PUBLISHER_ID => 3, PostTableMap::COL_CATEGORY_ID => 4, PostTableMap::COL_POST_URL => 5, PostTableMap::COL_POST_TITLE => 6, PostTableMap::COL_POST_CONTENT => 7, PostTableMap::COL_POST_ILLUSTRATION_VERSION => 8, PostTableMap::COL_POST_ILLUSTRATION_LEGEND => 9, PostTableMap::COL_POST_SELECTED => 10, PostTableMap::COL_POST_LINK => 11, PostTableMap::COL_POST_STATUS => 12, PostTableMap::COL_POST_KEYWORDS => 13, PostTableMap::COL_POST_LINKS => 14, PostTableMap::COL_POST_KEYWORDS_GENERATED => 15, PostTableMap::COL_POST_FB_ID => 16, PostTableMap::COL_POST_DATE => 17, PostTableMap::COL_POST_HITS => 18, PostTableMap::COL_POST_INSERT => 19, PostTableMap::COL_POST_UPDATE => 20, PostTableMap::COL_POST_CREATED => 21, PostTableMap::COL_POST_UPDATED => 22, ],
+        self::TYPE_FIELDNAME     => ['post_id' => 0, 'user_id' => 1, 'site_id' => 2, 'publisher_id' => 3, 'category_id' => 4, 'post_url' => 5, 'post_title' => 6, 'post_content' => 7, 'post_illustration_version' => 8, 'post_illustration_legend' => 9, 'post_selected' => 10, 'post_link' => 11, 'post_status' => 12, 'post_keywords' => 13, 'post_links' => 14, 'post_keywords_generated' => 15, 'post_fb_id' => 16, 'post_date' => 17, 'post_hits' => 18, 'post_insert' => 19, 'post_update' => 20, 'post_created' => 21, 'post_updated' => 22, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ]
     ];
 
     /**
@@ -292,6 +297,14 @@ class PostTableMap extends TableMap
         'COL_POST_CONTENT' => 'POST_CONTENT',
         'post_content' => 'POST_CONTENT',
         'posts.post_content' => 'POST_CONTENT',
+        'IllustrationVersion' => 'POST_ILLUSTRATION_VERSION',
+        'Post.IllustrationVersion' => 'POST_ILLUSTRATION_VERSION',
+        'illustrationVersion' => 'POST_ILLUSTRATION_VERSION',
+        'post.illustrationVersion' => 'POST_ILLUSTRATION_VERSION',
+        'PostTableMap::COL_POST_ILLUSTRATION_VERSION' => 'POST_ILLUSTRATION_VERSION',
+        'COL_POST_ILLUSTRATION_VERSION' => 'POST_ILLUSTRATION_VERSION',
+        'post_illustration_version' => 'POST_ILLUSTRATION_VERSION',
+        'posts.post_illustration_version' => 'POST_ILLUSTRATION_VERSION',
         'IllustrationLegend' => 'POST_ILLUSTRATION_LEGEND',
         'Post.IllustrationLegend' => 'POST_ILLUSTRATION_LEGEND',
         'illustrationLegend' => 'POST_ILLUSTRATION_LEGEND',
@@ -431,6 +444,7 @@ class PostTableMap extends TableMap
         $this->addColumn('post_url', 'Url', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('post_content', 'Content', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('post_illustration_version', 'IllustrationVersion', 'INTEGER', false, 3, 0);
         $this->addColumn('post_illustration_legend', 'IllustrationLegend', 'VARCHAR', false, 64, null);
         $this->addColumn('post_selected', 'Selected', 'BOOLEAN', false, 1, null);
         $this->addColumn('post_link', 'Link', 'LONGVARCHAR', false, null, null);
@@ -619,6 +633,7 @@ class PostTableMap extends TableMap
             $criteria->addSelectColumn(PostTableMap::COL_POST_URL);
             $criteria->addSelectColumn(PostTableMap::COL_POST_TITLE);
             $criteria->addSelectColumn(PostTableMap::COL_POST_CONTENT);
+            $criteria->addSelectColumn(PostTableMap::COL_POST_ILLUSTRATION_VERSION);
             $criteria->addSelectColumn(PostTableMap::COL_POST_ILLUSTRATION_LEGEND);
             $criteria->addSelectColumn(PostTableMap::COL_POST_SELECTED);
             $criteria->addSelectColumn(PostTableMap::COL_POST_LINK);
@@ -642,6 +657,7 @@ class PostTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.post_url');
             $criteria->addSelectColumn($alias . '.post_title');
             $criteria->addSelectColumn($alias . '.post_content');
+            $criteria->addSelectColumn($alias . '.post_illustration_version');
             $criteria->addSelectColumn($alias . '.post_illustration_legend');
             $criteria->addSelectColumn($alias . '.post_selected');
             $criteria->addSelectColumn($alias . '.post_link');
@@ -682,6 +698,7 @@ class PostTableMap extends TableMap
             $criteria->removeSelectColumn(PostTableMap::COL_POST_URL);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_TITLE);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_CONTENT);
+            $criteria->removeSelectColumn(PostTableMap::COL_POST_ILLUSTRATION_VERSION);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_ILLUSTRATION_LEGEND);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_SELECTED);
             $criteria->removeSelectColumn(PostTableMap::COL_POST_LINK);
@@ -705,6 +722,7 @@ class PostTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.post_url');
             $criteria->removeSelectColumn($alias . '.post_title');
             $criteria->removeSelectColumn($alias . '.post_content');
+            $criteria->removeSelectColumn($alias . '.post_illustration_version');
             $criteria->removeSelectColumn($alias . '.post_illustration_legend');
             $criteria->removeSelectColumn($alias . '.post_selected');
             $criteria->removeSelectColumn($alias . '.post_link');
