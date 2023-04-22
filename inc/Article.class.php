@@ -525,8 +525,8 @@ class Article extends Entity
      */
     public function isInCart()
     {
-        global $_V;
-        return $_V->hasInCart('article', $this->get('id'));
+        
+        return getLegacyVisitor()->hasInCart('article', $this->get('id'));
     }
 
     /**
@@ -534,8 +534,8 @@ class Article extends Entity
      */
     public function isInWishlist()
     {
-        global $_V;
-        return $_V->hasAWish($this->get('id'));
+        
+        return getLegacyVisitor()->hasAWish($this->get('id'));
     }
 
     /**
@@ -543,8 +543,8 @@ class Article extends Entity
      */
     public function isinAlerts()
     {
-        global $_V;
-        return $_V->hasAlert($this->get('id'));
+        
+        return getLegacyVisitor()->hasAlert($this->get('id'));
     }
 
     /**

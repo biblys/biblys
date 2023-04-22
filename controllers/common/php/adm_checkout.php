@@ -11,8 +11,8 @@ $um = new UserManager();
 /* SELECTION DU PANIER COURANT */
 
 // Si aucun panier n'est specifié, on recherche un panier magasin pour ce vendeur avec 0 livre, sinon on en créera un
-/** @var Visitor $_V */
-$where = array('cart_type' => 'shop', 'cart_seller_id' => $_V->get('user_id'), 'cart_count' => 0);
+
+$where = array('cart_type' => 'shop', 'cart_seller_id' => getLegacyVisitor()->get('user_id'), 'cart_count' => 0);
 
 // Si un panier en particulier est demandé
 if (isset($_GET['cart_id']))

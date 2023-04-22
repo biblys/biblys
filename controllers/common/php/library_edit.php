@@ -1,7 +1,7 @@
 <?php
 
-	if ($_V->isLibrary()) $_GET['id'] = $_V->getCurrentRight()->get('library_id');
-	elseif ($_V->isAdmin()) $mode = 'admin';
+	if (getLegacyVisitor()->isLibrary()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('library_id');
+	elseif (getLegacyVisitor()->isAdmin()) $mode = 'admin';
 	else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
 	$_L = new LibraryManager();

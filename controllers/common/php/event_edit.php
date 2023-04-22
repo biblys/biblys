@@ -4,8 +4,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var Visitor $_V */
-if ($_V->isAdmin() || $_V->isPublisher() || $_V->isBookshop() || $_V->isLibrary()) $mode = 'admin';
+
+if (getLegacyVisitor()->isAdmin() || getLegacyVisitor()->isPublisher() || getLegacyVisitor()->isBookshop() || getLegacyVisitor()->isLibrary()) $mode = 'admin';
 else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
 $buttons = '<button type="submit" form="event" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
@@ -15,11 +15,11 @@ $em = new EventManager();
 /** @var Site $site */
 $where = array('events`.`site_id' => $site->get("id"));
 
-if (!$_V->isAdmin())
+if (!getLegacyVisitor()->isAdmin())
 {
-    if ($_V->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => $_V->getCurrentRight()->get('publisher_id')));
-    if ($_V->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => $_V->getCurrentRight()->get('bookshop_id')));
-    if ($_V->isLibrary()) $where = array_merge($where, array('events`.`library_id' => $_V->getCurrentRight()->get('library_id')));
+    if (getLegacyVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id')));
+    if (getLegacyVisitor()->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => getLegacyVisitor()->getCurrentRight()->get('bookshop_id')));
+    if (getLegacyVisitor()->isLibrary()) $where = array_merge($where, array('events`.`library_id' => getLegacyVisitor()->getCurrentRight()->get('library_id')));
 }
 
 // Edit an existing event
@@ -87,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             if ($e->has('end_date')) $e->set('event_end', $e->get('end_date').' '.$e->get('end_time'));
 
             // Associate to current right
-            if (!$_V->isAdmin())
+            if (!getLegacyVisitor()->isAdmin())
             {
-                if ($_V->isPublisher()) $e->set('publisher_id', $_V->getCurrentRight()->get('publisher_id'));
-                if ($_V->isBookshop()) $e->set('bookshop_id', $_V->getCurrentRight()->get('bookshop_id'));
-                if ($_V->isLibrary()) $e->set('library_id', $_V->getCurrentRight()->get('library_id'));
+                if (getLegacyVisitor()->isPublisher()) $e->set('publisher_id', getLegacyVisitor()->getCurrentRight()->get('publisher_id'));
+                if (getLegacyVisitor()->isBookshop()) $e->set('bookshop_id', getLegacyVisitor()->getCurrentRight()->get('bookshop_id'));
+                if (getLegacyVisitor()->isLibrary()) $e->set('library_id', getLegacyVisitor()->getCurrentRight()->get('library_id'));
             }
 
             // URL

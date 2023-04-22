@@ -1,6 +1,6 @@
 <?php
 
-    if (!$_V->isAdmin() && !$_V->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
+    if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
     $buttons = '<button type="submit" form="signing" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
     
@@ -12,7 +12,7 @@
 	{
 		if ($s = $sm->get(array('signing_id' => $_GET['id'])))
 		{
-            if ($_V->isPublisher() && $s->get('publisher_id') != $_V->getCurrentRight()->get('publisher_id') && !$_V->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
+            if (getLegacyVisitor()->isPublisher() && $s->get('publisher_id') != getLegacyVisitor()->getCurrentRight()->get('publisher_id') && !getLegacyVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
             $_PAGE_TITLE = 'Modifier la dédicace';
             $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
 		}
@@ -24,7 +24,7 @@
 	{	
 		$_PAGE_TITLE = 'Ajouter une dédicace';
         $s = new Signing(array());
-        if ($_V->isAdmin()) trigger_error("Vous ne pouvez pas créer de dédicace en tant qu'administrateur, connectez-vous en tant qu'éditeur.");
+        if (getLegacyVisitor()->isAdmin()) trigger_error("Vous ne pouvez pas créer de dédicace en tant qu'administrateur, connectez-vous en tant qu'éditeur.");
 	}
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -77,9 +77,9 @@
                 }
                 
                 // Associate to current right
-                if (!$_V->isAdmin())
+                if (!getLegacyVisitor()->isAdmin())
                 {
-                    if ($_V->isPublisher()) $s->set('publisher_id', $_V->getCurrentRight()->get('publisher_id'));
+                    if (getLegacyVisitor()->isPublisher()) $s->set('publisher_id', getLegacyVisitor()->getCurrentRight()->get('publisher_id'));
                 }
                 
                 $s = $sm->update($s);
@@ -96,10 +96,10 @@
         
         
         // Stand LAL
-        if ($_SITE['site_id'] == 11 && $_V->isPublisher())
+        if ($_SITE['site_id'] == 11 && getLegacyVisitor()->isPublisher())
         {
             $sum = new SubscriptionManager();
-            if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => $_V->getCurrentRight()->get('publisher_id'))))
+            if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id'))))
             {
                 if ($su->has('subscription_type'))
                 {

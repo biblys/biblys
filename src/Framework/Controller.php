@@ -45,9 +45,9 @@ class Controller
 
     public function __construct()
     {
-        global $_V;
+        
 
-        $this->user = $_V;
+        $this->user = getLegacyVisitor();
     }
 
     /**

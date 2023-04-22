@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 /** @var Site $site */
 /** @var Site $_SITE */
 /** @var UrlGenerator $urlgenerator */
-/** @var Visitor $_V */
+
 /** @var string $_PAGE */
 
 $am = new ArticleManager();
@@ -245,7 +245,7 @@ $articles = EntityManager::prepareAndExecute(
     ORDER BY `article_editing_user` LIMIT 1',
     [
         'article_id' => $request->query->get('id'),
-        'user_id' => $_V->get('user_id'),
+        'user_id' => getLegacyVisitor()->get('user_id'),
     ]
 );
 if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -260,7 +260,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
 
     if (!empty($a['article_title'])) {
         // Mode editeur
-        if (!$_V->isAdmin() && $_V->getCurrentRight()->get('publisher_id') != $a['publisher_id']) {
+        if (!getLegacyVisitor()->isAdmin() && getLegacyVisitor()->getCurrentRight()->get('publisher_id') != $a['publisher_id']) {
             die("Vous n'avez pas le droit de modifier ce livre !");
         }
 
@@ -270,7 +270,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         if (
             $publisher_site &&
             $publisher_site->get('id') != $_SITE['site_id'] &&
-            !$_V->hasRight('publisher', $publisher->get('id'))
+            !getLegacyVisitor()->hasRight('publisher', $publisher->get('id'))
         ) {
             trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name'). ", merci de <a href='https://" .$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
         }
@@ -343,7 +343,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     // Creer un nouvel article
     $articleInsert = EntityManager::prepareAndExecute(
         'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:user_id, NOW())',
-        ['user_id' => $_V->get('user_id')]
+        ['user_id' => getLegacyVisitor()->get('user_id')]
     );
 
     $import = $request->query->get('import');
@@ -454,8 +454,8 @@ if ($collection) {
 
 // Current publisher id (from site or from rights)
 $publisher_id = $site->get('publisher_id');
-if (!$publisher_id && !$_V->isAdmin() && $_V->isPublisher()) {
-    $publisher_id = $_V->getCurrentRight()->get('publisher_id');
+if (!$publisher_id && !getLegacyVisitor()->isAdmin() && getLegacyVisitor()->isPublisher()) {
+    $publisher_id = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
 }
 
 $bonus_fieldset_class = 'hidden';

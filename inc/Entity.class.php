@@ -195,7 +195,6 @@ class EntityManager
 {
     protected $db;
     protected $site;
-    protected $user;
     protected $prefix = 'entity';
     protected $table = 'entities';
     protected $object = 'Entity';
@@ -208,12 +207,11 @@ class EntityManager
     public function __construct()
     {
         global $_SQL;
-        global $_V;
+        
         global $site;
 
         $this->db = $_SQL;
         $this->site = $site;
-        $this->user = $_V;
         $this->idField = $this->prefix.'_id';
     }
 

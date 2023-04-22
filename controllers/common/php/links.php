@@ -1,6 +1,6 @@
 <?php /** @noinspection SqlCheckUsingColumns */
 
-/** @var Visitor $_V */
+
 /** @var Request $request */
 /** @var Site $site */
 /** @var PDO $_SQL */
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-if (!$_V->isAdmin() && !$_V->isPublisher()) {
+if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'effectuer cette opération.");
 }
 

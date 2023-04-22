@@ -32,10 +32,10 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrder()
     {
-        global $_SQL, $_V;
+        global $_SQL;
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $article = EntityFactory::createArticle();
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);
@@ -108,10 +108,10 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrderWithoutShipping()
     {
-        global $_SQL, $_V;
+        global $_SQL;
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Livre numérique téléchargeable",
             "type_id" => 2
@@ -184,10 +184,10 @@ class OrderDeliveryTest extends TestCase
      */
     public function testValidatingAnOrderWithAnEmptyCart()
     {
-        global $_SQL, $_V;
+        global $_SQL;
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $article = EntityFactory::createArticle();
         EntityFactory::createStock(["article_id" => $article->get("id")]);
         $cm = new CartManager();
@@ -266,10 +266,10 @@ class OrderDeliveryTest extends TestCase
      */
     public function testSendingOrderConfirmationMail()
     {
-        global $_SQL, $_V;
+        global $_SQL;
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $article = EntityFactory::createArticle(["article_title" => "Le livre commandé"]);
         $sm = new StockManager();
         $sm->create(["article_id" => $article->get("id")]);

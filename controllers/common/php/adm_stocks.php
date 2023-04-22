@@ -555,7 +555,7 @@ $content .= '
     </form>
 ';
 
-if ($_V->isRoot()) {
+if (getLegacyVisitor()->isRoot()) {
     $content .= '
     <br />
     <div class="center">

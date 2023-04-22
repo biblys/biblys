@@ -87,7 +87,7 @@
 
                     // Persist changes
                     if ('go' == $action) {
-                        $sm->update($stock, 'Bulk update by user #'.$_V->get('id'));
+                        $sm->update($stock, 'Bulk update by user #'.getLegacyVisitor()->get('id'));
 
                     // Draw table
                     } else {

@@ -1,6 +1,5 @@
 <?php
 
-
 use Symfony\Component\HttpFoundation\Request;
 
 class Visitor extends User

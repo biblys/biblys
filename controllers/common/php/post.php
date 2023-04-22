@@ -24,7 +24,7 @@ if (!$use_old_controller) {
 }
 
 if ($post->get('status') == 0) {
-    if (!$_V->isAdmin()) {
+    if (!getLegacyVisitor()->isAdmin()) {
         throw new ResourceNotFoundException("Post is offline.");
     }
 
@@ -49,7 +49,7 @@ $posts->execute(['post_id' => $post->get('id')]);
 
 $p = $posts->fetch(PDO::FETCH_ASSOC);
 
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     $content = '
         <div class="admin">
             <p>Billet n&deg; '.$p["post_id"].'</p>

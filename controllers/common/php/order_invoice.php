@@ -25,8 +25,8 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         $customer = $order->get('customer');
 
         // Check access right
-        /** @var Visitor $_V */
-        if ($customer->get('user_id') != $_V->get('id') && !$_V->isAdmin()) {
+        
+        if ($customer->get('user_id') != getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
 

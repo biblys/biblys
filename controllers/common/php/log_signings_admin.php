@@ -1,9 +1,9 @@
 <?php
     
     // Check user rights
-    if ($_V->isAdmin()) $mode = 'admin';
-	elseif ($_V->isPublisher()) $mode = 'publisher';
-	else trigger_error('Accès non autorisé pour '.$_V->get('user_email'));
+    if (getLegacyVisitor()->isAdmin()) $mode = 'admin';
+	elseif (getLegacyVisitor()->isPublisher()) $mode = 'publisher';
+	else trigger_error('Accès non autorisé pour '.getLegacyVisitor()->get('user_email'));
     
     $_PAGE_TITLE = 'Gestion des dédicaces';
     
@@ -12,9 +12,9 @@
     $export_header = array('Auteur', 'Date', 'Début', 'Fin', 'Exposant', 'Stand');
     
     $where = array();
-    if (!$_V->isAdmin())
+    if (!getLegacyVisitor()->isAdmin())
     {
-        if ($_V->isPublisher()) $where = array_merge($where, array('publisher_id' => $_V->getCurrentRight()->get('publisher_id')));
+        if (getLegacyVisitor()->isPublisher()) $where = array_merge($where, array('publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id')));
     }
     
     $signings = $sm->getAll($where, array('order' => 'signing_date', 'sort' => 'desc'));

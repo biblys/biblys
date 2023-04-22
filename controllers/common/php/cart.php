@@ -31,7 +31,7 @@ $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl])
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {
 
-    if (!$_V->isAdmin()) {
+    if (!getLegacyVisitor()->isAdmin()) {
         throw new AuthException("Seuls les administrateurs peuvent prévisualiser un panier.");
     }
 
@@ -40,7 +40,7 @@ if ($cart_id) {
         throw new NotFoundException(sprintf("Panier %s introuvable.", htmlentities($cart_id)));
     }
 } else {
-    $cart = $_V->getCart('create');
+    $cart = getLegacyVisitor()->getCart('create');
     if (!$cart) {
         throw new Exception("Impossible de créer le panier.");
     }
@@ -87,7 +87,7 @@ foreach ($stocks as $stock) {
     } elseif ($type->getId() == 2) {
         $article_type = ' (numérique)';
         $ebooks++;
-        if ($_V->hasPurchased($article)) {
+        if (getLegacyVisitor()->hasPurchased($article)) {
             $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
         }
     }
@@ -174,7 +174,7 @@ foreach ($stocks as $stock) {
     $Articles++;
 }
 
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     $content .= '
         <div class="admin">
             <p>Panier n&deg; '.$cart->get('id').'</p>
@@ -221,7 +221,7 @@ if (isset($Articles) && $Articles > 0) {
         $order = $om->get(
             [
                 'order_type' => 'web',
-                'user_id' => $_V->get('user_id'),
+                'user_id' => getLegacyVisitor()->get('user_id'),
                 'order_payment_date' => 'NULL',
                 'order_shipping_date' => 'NULL',
                 'order_cancel_date' => 'NULL'
@@ -436,16 +436,16 @@ if (isset($Articles) && $Articles > 0) {
         // Countries
         $destinations = null;
         $countries = $com->getAll();
-        $destinations = array_map(function ($country) use ($_V) {
+        $destinations = array_map(function ($country) {
             $selected = null;
-            if ($country->get('name') === $_V->get('country')) {
+            if ($country->get('name') === getLegacyVisitor()->get('country')) {
                 $selected = " selected";
             }
             return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
         }, $countries);
         $default_destination = $com->get(["country_name" => "France"]);
 
-        if ($_V->isLogged() && $customer = $_V->getCustomer()) {
+        if (getLegacyVisitor()->isLogged() && $customer = getLegacyVisitor()->getCustomer()) {
             $country_id = $customer->get('country_id');
             $country = $com->getById($country_id);
             if ($country) {
@@ -509,7 +509,7 @@ if (isset($Articles) && $Articles > 0) {
     }
 
     // If cart contains downloadable and user not logged
-    if ($downloadable && !$_V->isLogged()) {
+    if ($downloadable && !getLegacyVisitor()->isLogged()) {
         $content .= '<br />'
         . '<div class="center">'
         . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
@@ -517,7 +517,7 @@ if (isset($Articles) && $Articles > 0) {
         . '</div>';
 
     // If cart contains crowdfunding rewards and user not logged
-    } elseif (!empty($crowdfunding) && !$_V->isLogged()) {
+    } elseif (!empty($crowdfunding) && !getLegacyVisitor()->isLogged()) {
         $content .= '<br>'
         . '<div class="center">'
         . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 /** @var UrlGenerator $urlgenerator */
 /** @var Site $site */
 
-/** @var Visitor $_V */
+
 if (!isset($rank)) {
     throw new AccessDeniedHttpException("Accès réservé aux administrateurs.");
 }
@@ -97,18 +97,18 @@ $content .= '
     ';
 
 // Valeurs par defaut pour un nouveau billet
-$p["user_id"] = $_V->get("id");
+$p["user_id"] = getLegacyVisitor()->get("id");
 $p["post_date"] = date("Y-m-d");
 $p["post_time"] = date("H:i");
 
 // Auteur
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     if(!empty($_LOG["user_screen_name"])) $author = $_LOG["user_screen_name"];
     else $author = $site->get("id");
 }
-elseif ($_V->isPublisher()) {
+elseif (getLegacyVisitor()->isPublisher()) {
     $pum = new PublisherManager();
-    $publisherId = $_V->getCurrentRight()->get("publisher_id");
+    $publisherId = $currentUser->getCurrentRight()->getPublisherId();
     $publisher = $pum->getById($publisherId);
     if ($publisher) {
         $author = $publisher->get("name");
@@ -166,7 +166,7 @@ $content .= '
                 <input type="hidden" name="publisher_id" id="publisher_id" value="'.($p['publisher_id'] ?? null).'">
             </p>
 ';
-if($_V->isAdmin()) {
+if(getLegacyVisitor()->isAdmin()) {
     $content .= '
             <p>
                 <label for="category_id">Catégorie :</label>

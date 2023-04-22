@@ -1,5 +1,5 @@
 <?php /** @noinspection BadExpressionStatementJS */
-global $request, $_V;
+global $request;
 /** @noinspection CommaExpressionJS */
 global $site;
 
@@ -41,7 +41,7 @@ function _orderBelongsToVisitor(Order $order, Visitor $visitor): bool
     return $order->get("user_id") === $visitor->get("user_id");
 }
 
-if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isAdmin()) {
+if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor()) || getLegacyVisitor()->isAdmin()) {
 
     $buttons = NULL;
 
@@ -49,7 +49,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
 
     $content .= '<h2>Commande n° ' . $o["order_id"] . '</h2>';
 
-    if ($_V->isAdmin()) {
+    if (getLegacyVisitor()->isAdmin()) {
         $content .= '
             <div class="admin">
                 <p>Commande n° ' . $o["order_id"] . '</p>
@@ -106,7 +106,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
     ';
 
     // Ref client
-    if (!empty($o["user_id"]) and $_V->isAdmin()) {
+    if (!empty($o["user_id"]) and getLegacyVisitor()->isAdmin()) {
         /** @var PDO $_SQL */
         $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `user_id` = :user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         $stock->execute([
@@ -119,7 +119,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         }
     }
 
-    if ($order->has('comment') && $_V->isAdmin()) {
+    if ($order->has('comment') && getLegacyVisitor()->isAdmin()) {
         $content .= '
         <h4>Commentaire du client</h4>
         <p>' . nl2br($order->get('comment')) . '</p>
@@ -283,7 +283,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         $total_tva += $a['stock_selling_price_tva'];
 
         $copyId = $copy->get('id');
-        if ($_V->isAdmin()) {
+        if (getLegacyVisitor()->isAdmin()) {
             $copyId = '<a href="/pages/adm_stock?id=' . $copyId . '">' . $copyId . '</a>';
         }
 
@@ -415,7 +415,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
         ";
     }
 
-    if ($_V->isAdmin()) {
+    if (getLegacyVisitor()->isAdmin()) {
         /** @var UrlGenerator $urlgenerator */
         $content .= '
             <h3 class="text-center">Origine de la commande</h3>
@@ -426,7 +426,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $_V) || $_V->isA
             </p>
         ';
     }
-} elseif (!$_V->isLogged()) {
+} elseif (!getLegacyVisitor()->isLogged()) {
     throw new UnauthorizedHttpException(null, "Vous n'avez pas le droit d'accéder à cette page.");
 } else {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");

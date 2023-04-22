@@ -37,11 +37,11 @@ $currentUrlService = new CurrentUrlService($request);
 $currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $_PAGE_TYPE = substr($_PAGE, 0, 4);
-/** @var Visitor $_V */
-if ($_PAGE_TYPE == "adm_" && !$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
+
+if ($_PAGE_TYPE == "adm_" && !getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher() && !getLegacyVisitor()->isBookshop() && !getLegacyVisitor()->isLibrary()) {
     json_error(0, "Cette action est réservée aux administrateurs (".$_PAGE."). Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
-if ($_PAGE_TYPE == "log_" and !$_V->isLogged()) {
+if ($_PAGE_TYPE == "log_" and !getLegacyVisitor()->isLogged()) {
     json_error(0, "Action impossible. Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
 

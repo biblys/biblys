@@ -333,7 +333,7 @@ class CartManager extends EntityManager
      */
     public function addStock(Cart $cart, $stock, $wish_id = 'undefined', CFReward $reward = null)
     {
-        global $_V, $site;
+        global $site;
         $sm = new StockManager();
 
         if (!is_object($stock)) {
@@ -368,9 +368,9 @@ class CartManager extends EntityManager
 
         // Is the article in the visitor's wishlist ?
         else {
-            if ($_V->isLogged()) {
+            if (getLegacyVisitor()->isLogged()) {
                 $wm = new WishManager();
-                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'user_id' => $_V->get('id')))) {
+                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'user_id' => getLegacyVisitor()->get('id')))) {
                     $w->set('wish_bought', date('Y-m-d H:i:s'));
                     $wm->update($w);
                     $stock->set('wish_id', $w->get('id'));
@@ -428,7 +428,7 @@ class CartManager extends EntityManager
             throw new CartException('Cet article est indisponible.');
         }
 
-        global $_V;
+        
 
         // Default : add an available copy to cart
         $stocks = $article->getAvailableItems('all', [
@@ -445,7 +445,7 @@ class CartManager extends EntityManager
                 }
 
                 // If this copy is already in current user's cart
-                if ($_V->hasInCart('stock', $stock->get('id'))) {
+                if (getLegacyVisitor()->hasInCart('stock', $stock->get('id'))) {
                     continue;
                 }
 

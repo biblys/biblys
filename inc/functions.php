@@ -144,10 +144,6 @@ if (!defined('SITE_PATH')) {
     define('SITE_PATH', $sitePath);
 }
 
-/* BIBLYS.ME */
-
-$_V = new Visitor($request);
-
 // Identification
 /**
  * @throws PropelException
@@ -800,4 +796,23 @@ function loadEncoreAssets(string $env, string $fileType, string $userLevel = 'ap
     }
 
     return $calls;
+}
+
+/**
+ * @deprecated Using getLegacyVisitor is deprecated. Use CurrentUser service instead.
+ */
+function getLegacyVisitor(): Visitor
+{
+    trigger_deprecation(
+        "biblys/biblys",
+        "2.68.0",
+        "Using getLegacyVisitor is deprecated. Use CurrentUser service instead.",
+    );
+
+    if (!isset($GLOBALS["LEGACY_VISITOR"])) {
+        $request = Request::createFromGlobals();
+        $GLOBALS["LEGACY_VISITOR"] = new Visitor($request);
+    }
+
+    return $GLOBALS["LEGACY_VISITOR"];
 }

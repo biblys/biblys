@@ -4,8 +4,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var Visitor $_V */
-if (!$_V->isAdmin()) {
+
+if (!getLegacyVisitor()->isAdmin()) {
     trigger_error("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
@@ -24,7 +24,7 @@ $newList = $request->request->get('new_list');
 if ($newList) {
     /** @var Liste $list */
     $list = $lm->create([
-        'user_id' => $_V->get('user_id'),
+        'user_id' => getLegacyVisitor()->get('user_id'),
     ]);
 
     $listUrl = $request->request->get('list_url', false);
@@ -88,7 +88,7 @@ $list = $lm->get(['list_url' => $url]);
 if ($list) {
     $l = $list;
 
-    if ($_V->isAdmin()) {
+    if (getLegacyVisitor()->isAdmin()) {
         $content .= '
                     <div class="admin">
                         Liste n° '.$list->get('id').'
@@ -125,7 +125,7 @@ if ($list) {
     );
 
     while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
-        if (isset($_GET['action']) && $_GET['action'] == 'return' && $_V->isAdmin()) {
+        if (isset($_GET['action']) && $_GET['action'] == 'return' && getLegacyVisitor()->isAdmin()) {
             $stock = $sm->getById($a['stock_id']);
             $stock->setReturned();
             $sm->update($stock);

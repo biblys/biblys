@@ -14,7 +14,7 @@ class StockControllerTest extends TestCase
 {
     public function testEditFreePriceAction()
     {
-        global $_V;
+        
 
         // given
         $controller = new StockController();
@@ -23,7 +23,7 @@ class StockControllerTest extends TestCase
             "article_price_editable" => 1
         ]);
         $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addStock($cart, $stock);
@@ -78,7 +78,7 @@ class StockControllerTest extends TestCase
 
     public function testEditFreePriceActionLegacyUsage()
     {
-        global $_V;
+        
 
         // given
         $controller = new StockController();
@@ -87,7 +87,7 @@ class StockControllerTest extends TestCase
             "article_price_editable" => 1
         ]);
         $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addStock($cart, $stock);

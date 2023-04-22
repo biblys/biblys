@@ -27,19 +27,19 @@ $result = array();
 if ($request->getMethod() === "POST") {
     $body = $request->getContent();
     $params = json_decode($body, true);
-    /** @var Visitor $_V */
-    if (!$_V->hasAlert($params["article_id"])) {
+    
+    if (!getLegacyVisitor()->hasAlert($params["article_id"])) {
         /** @noinspection PhpUnhandledExceptionInspection */
         $alert = $am->create();
 
-        $alert->set('user_id', $_V->get('id'));
+        $alert->set('user_id', getLegacyVisitor()->get('id'));
         $alert->set('article_id', $params["article_id"]);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->update($alert);
         $result['created'] = 1;
     } else {
-        $alert = $am->get(array('user_id' => $_V->get('id'), 'article_id' => $params["article_id"]));
+        $alert = $am->get(array('user_id' => getLegacyVisitor()->get('id'), 'article_id' => $params["article_id"]));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);

@@ -16,6 +16,7 @@ Deploiement
 - Ajouter `{% include "layout:_flash_messages.html.twig" %}` au fichier de 
   layout `base.html.twig`, juste après l'inclusion
   du partiel `_overall_menu.html.twig`.
+- Dans les controllers, remplacer `$_V` par `getCurrentVisitor`.
 
 ## 2.67.3 (26 avril 2023)
 

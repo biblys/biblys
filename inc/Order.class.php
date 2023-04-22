@@ -478,10 +478,10 @@ class Order extends Entity
      */
     public function deleteRelatedAlerts()
     {
-        global $_V;
+        
 
         // Ignore if user is not logged in
-        if (!$_V->isLogged()) {
+        if (!getLegacyVisitor()->isLogged()) {
             return;
         }
 
@@ -492,7 +492,7 @@ class Order extends Entity
             // Get alert for this user and article
             $alert = $alm->get(
                 [
-                    "user_id" => $_V->get("id"),
+                    "user_id" => getLegacyVisitor()->get("id"),
                     "article_id" => $copy->get("article_id")
                 ]
             );

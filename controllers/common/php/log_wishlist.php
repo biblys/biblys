@@ -7,7 +7,7 @@
         trigger_error('Liste d\'envie #'.$request->query->get('id').' inconnue.');
     }
     
-    if ($wishlist->get('user_id') != $_V->get('id')) {
+    if ($wishlist->get('user_id') != getLegacyVisitor()->get('id')) {
         trigger_error("Vous n'avez pas le droit de modifier cette liste d'envies.");
     }
     

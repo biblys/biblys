@@ -1,6 +1,6 @@
 <?php
 
-global $_V, $request, $site, $_SQL, $_SITE;
+global $request, $site, $_SQL, $_SITE;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +16,10 @@ $lm = new LinkManager();
 
 // Get publisher id
 $publisher_id = null;
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     $publisher_id = $request->query->get("id");
-} elseif ($_V->isPublisher()) {
-    $publisher_id = $_V->getCurrentRight()->get('publisher_id');
+} elseif (getLegacyVisitor()->isPublisher()) {
+    $publisher_id = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
 } else {
     throw new AccessDeniedHttpException('Accès réservé aux administrateurs et aux éditeurs.');
 }
@@ -165,7 +165,7 @@ if ($request->getMethod() == "POST") {
     }
 
     $publisherIdParam = "";
-    if ($_V->isAdmin()) {
+    if (getLegacyVisitor()->isAdmin()) {
         $url_p['id'] = $publisher->get("id");
     }
     $urlQueryString = http_build_query($url_p);
@@ -223,9 +223,9 @@ $content .= '
         </fieldset>
 ';
 if (
-    $_V->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
+    getLegacyVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
     $p["publisher_id"] == $_SITE["publisher_id"] || // Site de l'editeur
-    ($_V->isAdmin()) && ($site->get("id") == 11) // Admin de l'autre livre ou lvdi
+    (getLegacyVisitor()->isAdmin()) && ($site->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
     $content .= '

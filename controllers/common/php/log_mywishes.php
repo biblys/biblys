@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var Visitor $_V */
+
 /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
 /** @var Site $site */
 
@@ -16,17 +16,17 @@ $am = new ArticleManager();
 $content = "";
 
 // Get or create current wishlist
-$wishlist = $wlm->get(array('user_id' => $_V->get('id'), 'wishlist_current' => 1));
+$wishlist = $wlm->get(array('user_id' => getLegacyVisitor()->get('id'), 'wishlist_current' => 1));
 if (!$wishlist) {
 
     // Create a current wishlist for current user
     $wishlist = $wlm->create(array(
-        'user_id' => $_V->get('id'),
+        'user_id' => getLegacyVisitor()->get('id'),
         'wishlist_current' => 1
     ));
 
     // Add wishes
-    $wishes = $wm->getAll(array('user_id' => $_V->get('id'), 'wishlist_id' => 'NULL'));
+    $wishes = $wm->getAll(array('user_id' => getLegacyVisitor()->get('id'), 'wishlist_id' => 'NULL'));
     foreach ($wishes as $wish) {
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
@@ -57,7 +57,7 @@ if ($request->getMethod() === "POST") {
     // Else create it
     else {
         $wish = $wm->create();
-        $wish->set('user_id', $_V->get('id'));
+        $wish->set('user_id', getLegacyVisitor()->get('id'));
         $wish->set('article', $article);
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
@@ -79,7 +79,7 @@ else {
     $request->attributes->set("page_title", $wishlist->get('name'));
 
     // Is user name set ?
-    if ($_V->has('screen_name')) {
+    if (getLegacyVisitor()->has('screen_name')) {
         $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="https://axys.me/#Profil">choisir un nom d\'utilisateur</a>.</p>';
     }
 
@@ -90,11 +90,11 @@ else {
 
     // Show wishlist url & share buttons
     else {
-        $url = 'https://' . $site->get("domaine") . '/wishlist/' . $_V->get('slug');
+        $url = 'https://' . $site->get("domaine") . '/wishlist/' . getLegacyVisitor()->get('slug');
         $share = '
 			<br>
 
-			<p class="center">Adresse publique de votre liste :<br><a href="/wishlist/' . $_V->get('slug') . '">' . $url . '</a></p>
+			<p class="center">Adresse publique de votre liste :<br><a href="/wishlist/' . getLegacyVisitor()->get('slug') . '">' . $url . '</a></p>
 
 			<div class="text-center">
 				' . share_buttons($url, $wishlist->get('name')) . '
@@ -126,7 +126,7 @@ else {
 			</div>
 		';
 
-    $wishes = $_V->getWishes();
+    $wishes = getLegacyVisitor()->getWishes();
 
     if (!count($wishes)) {
         $content .= '

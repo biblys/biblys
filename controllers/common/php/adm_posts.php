@@ -7,9 +7,9 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $the_categories = null;
 
-/** @var Visitor $_V */
+
 $rank = "log_";
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     $cm = new CategoryManager();
     $categories = $cm->getAll();
     foreach ($categories as $category) {
@@ -24,7 +24,7 @@ if ($_V->isAdmin()) {
     ';
     $rank = 'adm_';
 }
-elseif ($_V->isPublisher()) $rank = 'pub_';
+elseif (getLegacyVisitor()->isPublisher()) $rank = 'pub_';
 
 $req = NULL;
 /** @var Site $site */
@@ -34,9 +34,9 @@ if (isset($_GET["category_id"])) {
     $params["category_id"] = $_GET["category_id"];
 }
 
-if(!$_V->isAdmin() && $_V->isPublisher()) {
+if(!getLegacyVisitor()->isAdmin() && getLegacyVisitor()->isPublisher()) {
     $req .= 'AND `posts`.`publisher_id` = :publisher_id';
-    $params["publisher_id"] = $_V->getCurrentRight()->get('publisher_id');
+    $params["publisher_id"] = $currentUser->getCurrentRight()->getPublisherId();
 }
 
 $config = Config::load();

@@ -21,9 +21,8 @@ $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
 // Identification utilisateur
-/** @var $_V */
-if ($_V->isLogged()) {
-    $_LOG = $_V;
+if (getLegacyVisitor()->isLogged()) {
+    $_LOG = getLegacyVisitor();
 }
 
 $request = Request::createFromGlobals();

@@ -28,7 +28,7 @@ if ($cycle->has('desc')) {
     $_ECHO .= '<p>'.$cycle->get('desc').'</p>';
 }
 
-if ($_V->isAdmin()) {
+if (getLegacyVisitor()->isAdmin()) {
     $_ECHO .= '
         <div class="admin">
             <p>Cycle n&deg; '.$cycle->get('id').'</p>

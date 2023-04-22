@@ -318,13 +318,13 @@ class MainController extends Controller
      */
     public function adminShortcutsAction(Request $request, UrlGenerator $urlGenerator)
     {
-        global $_V, $site;
+        global $site;
 
         self::authAdmin($request);
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
-            $shortcuts = $_V->getOpt('shortcuts');
+            $shortcuts = getLegacyVisitor()->getOpt('shortcuts');
 
             // If user has no shortcuts yet, return an empty array
             if (!$shortcuts) {
@@ -338,7 +338,7 @@ class MainController extends Controller
         if ($request->getMethod() == 'POST') {
             $shortcuts = $request->request->get('shortcuts');
 
-            $_V->setOpt('shortcuts', $shortcuts);
+            getLegacyVisitor()->setOpt('shortcuts', $shortcuts);
 
             return new RedirectResponse($urlGenerator->generate('main_admin'));
         }
@@ -346,7 +346,7 @@ class MainController extends Controller
         // Default home page
         $request->attributes->set("page_title", "Gestion des raccourcis");
         return $this->render('AppBundle:Main:adminShortcuts.html.twig', [
-            'shortcuts' => $_V->getOpt('shortcuts'),
+            'shortcuts' => getLegacyVisitor()->getOpt('shortcuts'),
             'articles' => Entry::generateUrlsForEntries(
                 Entry::findByCategory('articles'),
                 $urlGenerator

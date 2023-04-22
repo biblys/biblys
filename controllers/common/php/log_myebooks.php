@@ -94,7 +94,7 @@
     }
 
     $copies = $sm->getAll([
-        "user_id" => $_V->get('id')
+        "user_id" => getLegacyVisitor()->get('id')
     ], [
         "order" => "stock_selling_date",
         "sort" => "desc"

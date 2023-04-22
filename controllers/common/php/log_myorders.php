@@ -1,6 +1,6 @@
 <?php
 
-/** @var Visitor $_V */
+
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,7 +10,7 @@ $content = "<h2>Mes commandes</h2>";
 
 $orders = $om->getAll([
     'order_type' => 'web',
-    'user_id' => $_V->get('id')
+    'user_id' => getLegacyVisitor()->get('id')
 ], [
     'order' => 'order_insert',
     'sort' => 'desc'

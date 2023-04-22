@@ -15,13 +15,14 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 {
     public function testAddArticle()
     {
-        global $_V, $site;
+        global $site;
 
         // given
         $cm = new CartManager();
         $site->setOpt("virtual_stock", 1);
         $controller = new CartController();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
+
         $cm->vacuum($cart);
         $article = EntityFactory::createArticle();
 
@@ -40,16 +41,17 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             $cart->containsArticle($article),
             "it should have added article to cart"
         );
+        $updatedCart = $cm->getById($cart->get("id"));
         $this->assertEquals(
             1,
-            $cart->get("count"),
+            $updatedCart->get("count"),
             "it should have updated cart article count"
         );
     }
 
     public function testAddArticleNotYetAvailable()
     {
-        global $_V, $site;
+        global $site;
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
         $this->expectExceptionMessage(
@@ -60,7 +62,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $site->setOpt("virtual_stock", 1);
         $controller = new CartController();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
         $tomorrow = new DateTime('tomorrow');
         $article = EntityFactory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
@@ -89,13 +91,13 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
     public function testAddStockCopy()
     {
-        global $_V, $site;
+        global $site;
 
         // given
         $cm = new CartManager();
         $site->setOpt("virtual_stock", 0);
         $controller = new CartController();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
 
@@ -114,21 +116,20 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             $cart->containsStock($stock),
             "it should have added article to cart"
         );
+        $updatedCart = $cm->getById($cart->get("id"));
         $this->assertEquals(
             1,
-            $cart->get("count"),
+            $updatedCart->get("count"),
             "it should have updated cart article count"
         );
     }
 
     public function testAddCrowdfundingReward()
     {
-        global $_V;
-
         // given
         $cm = new CartManager();
         $controller = new CartController();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
         $reward = EntityFactory::createCrowdfundingReward();
 
@@ -147,20 +148,19 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             $cart->containsReward($reward),
             "it should have added article to cart"
         );
+        $updatedCart = $cm->getById($cart->get("id"));
         $this->assertEquals(
             1,
-            $cart->get("count"),
+            $updatedCart->get("count"),
             "it should have updated cart article count"
         );
     }
 
     public function testRemoveStock()
     {
-        global $_V;
-
         // given
         $cm = new CartManager();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
@@ -185,20 +185,19 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             $cart->containsStock($stock),
             "it should have removed stock from cart"
         );
+        $updatedCart = $cm->getById($cart->get("id"));
         $this->assertEquals(
             0,
-            $cart->get("count"),
+            $updatedCart->get("count"),
             "it should have updated cart article count"
         );
     }
 
     public function testRemoveStockLegacyUsage()
     {
-        global $_V;
-
         // given
         $cm = new CartManager();
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
@@ -228,19 +227,20 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
             $cart->containsStock($stock),
             "it should have removed stock from cart"
         );
+        $updatedCart = $cm->getById($cart->get("id"));
         $this->assertEquals(
             0,
-            $cart->get("count"),
+            $updatedCart->get("count"),
             "it should have updated cart article count"
         );
     }
 
     public function testGetSummaryWhenCartIsEmpty()
     {
-        global $_V;
+        
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $controller = new CartController();
@@ -266,10 +266,10 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
     public function testGetSummaryWhenCartIsFull()
     {
-        global $_V;
+        
 
         // given
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock(["stock_selling_price" => 500]);

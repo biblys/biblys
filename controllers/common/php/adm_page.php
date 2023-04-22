@@ -47,8 +47,8 @@ if ($pageId && $page) {
 } else {
     $pageTitle = 'Nouvelle page statique';
     $p = array();
-    /** @var Visitor $_V */
-    $p["user_id"] = $_V->get("id");
+    
+    $p["user_id"] = getLegacyVisitor()->get("id");
     $p["page_date"] = date("Y-m-d H:i:s");
 }
 

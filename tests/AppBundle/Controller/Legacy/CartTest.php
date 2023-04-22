@@ -27,7 +27,7 @@ class CartTest extends TestCase
      */
     public function testCartDisplay()
     {
-        global $_V, $site;
+        global $site;
 
         // given
         $site->setOpt("virtual_stock", 1);
@@ -41,7 +41,7 @@ class CartTest extends TestCase
         $session->method("getFlashBag")->willReturn($flashBag);
         $request = new Request();
         $request->query->set("page", "cart");
-        $cart = $_V->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Papeete",
             "type_id" => 1,

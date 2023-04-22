@@ -4,12 +4,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // Check user rights
-/** @var Visitor $_V */
-if ($_V->isAdmin()) $mode = 'admin';
-elseif ($_V->isPublisher()) $mode = 'publisher';
-elseif ($_V->isBookshop()) $mode = 'bookshop';
-elseif ($_V->isLibrary()) $mode = 'library';
-else trigger_error('Accès non autorisé pour '.$_V->get('user_email'));
+
+if (getLegacyVisitor()->isAdmin()) $mode = 'admin';
+elseif (getLegacyVisitor()->isPublisher()) $mode = 'publisher';
+elseif (getLegacyVisitor()->isBookshop()) $mode = 'bookshop';
+elseif (getLegacyVisitor()->isLibrary()) $mode = 'library';
+else trigger_error('Accès non autorisé pour '.getLegacyVisitor()->get('user_email'));
 
 /** @var Request $request */
 $request->attributes->set("page_title", "Gestion des évènements");
@@ -19,11 +19,11 @@ $em = new EventManager();
 /** @var Site $site */
 $where = array('events`.`site_id' => $site->get("id"));
 
-if (!$_V->isAdmin())
+if (!getLegacyVisitor()->isAdmin())
 {
-    if ($_V->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => $_V->getCurrentRight()->get('publisher_id')));
-    if ($_V->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => $_V->getCurrentRight()->get('bookshop_id')));
-    if ($_V->isLibrary()) $where = array_merge($where, array('events`.`library_id' => $_V->getCurrentRight()->get('library_id')));
+    if (getLegacyVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id')));
+    if (getLegacyVisitor()->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => getLegacyVisitor()->getCurrentRight()->get('bookshop_id')));
+    if (getLegacyVisitor()->isLibrary()) $where = array_merge($where, array('events`.`library_id' => getLegacyVisitor()->getCurrentRight()->get('library_id')));
 }
 
 $events = $em->getAll(

@@ -18,7 +18,7 @@ if (!$publisher) {
     }
 
     // Administration
-    if ($_V->isAdmin()) {
+    if (getLegacyVisitor()->isAdmin()) {
         $_ECHO .= '
             <div class="admin">
                 <p>&Eacute;diteur n&deg; '.$publisher->get('id').'</p>

@@ -5,20 +5,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-/** @var Visitor $_V */
-if (!$_V->isAdmin() && !$_V->isPublisher()) {
+
+if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) {
     throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
 }
 
 /** @var Site $site */
-$publisherId = $_V->getCurrentRight()->get("publisher_id");
+$publisherId = getLegacyVisitor()->getCurrentRight()->get("publisher_id");
 if (!$site->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }
 
-if (!$_V->isAdmin() && !$_V->isPublisher() && !$_V->isBookshop() && !$_V->isLibrary()) {
-    trigger_error('Accès non autorisé pour ' . $_V->get('user_email'));
+if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher() && !getLegacyVisitor()->isBookshop() && !getLegacyVisitor()->isLibrary()) {
+    trigger_error('Accès non autorisé pour ' . getLegacyVisitor()->get('user_email'));
 }
 
 $items = array();
@@ -37,18 +37,18 @@ $_PAGE_TITLE_HTML = 'Tableau de bord';
 $rm = new RightManager();
 
 // Get current user right
-$right = $_V->getCurrentRight();
+$right = getLegacyVisitor()->getCurrentRight();
 
 // Change selected user right
 if (isset($_GET['right_id'])) {
-    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => $_V->get('id')));
-    $_V->setCurrentRight($new_right);
+    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => getLegacyVisitor()->get('id')));
+    getLegacyVisitor()->setCurrentRight($new_right);
     return new RedirectResponse('/pages/log_dashboard');
 }
 
 // Show user rights option
 $rights = $rm->getAll(
-    array('user_id' => $_V->get('id'))
+    array('user_id' => getLegacyVisitor()->get('id'))
 );
 
 $rights_optgroup = array();
@@ -85,7 +85,7 @@ $rights_select = '<p class="floatR">En tant que : &nbsp;<select class="goto">'
 /* ITEMS */
 
 // Publisher
-if ($_V->isPublisher()) {
+if (getLegacyVisitor()->isPublisher()) {
     $publisherId = $right->get('publisher_id');
     $pm = new PublisherManager();
     $publisher = $pm->getById($publisherId);
@@ -107,7 +107,7 @@ if ($_V->isPublisher()) {
 }
 
 // Bookshop
-if ($_V->isBookshop()) {
+if (getLegacyVisitor()->isBookshop()) {
     $bookshop = $_SQL->query('SELECT `bookshop_name` FROM `bookshops` WHERE `bookshop_id` = ' . $right->get('bookshop')->get('id'));
     if ($b = $bookshop->fetch(PDO::FETCH_ASSOC)) {
         $items["Librairie"][] = array('Fiche d\'identité', '/pages/bookshop_edit', 'fa-list-alt');
@@ -116,7 +116,7 @@ if ($_V->isBookshop()) {
 }
 
 // Library
-if ($_V->isLibrary()) {
+if (getLegacyVisitor()->isLibrary()) {
     $library = $_SQL->query('SELECT `library_name` FROM `libraries` WHERE `library_id` = ' . $right->get('library')->get('id'));
     if ($b = $library->fetch(PDO::FETCH_ASSOC)) {
 //			$_PAGE_TITLE_HTML .= ' '.$b['library_name'];
