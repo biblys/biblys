@@ -217,7 +217,6 @@ class Controller
 
         // Global variables
         $app = [
-            "axysMenu" => "",
             "currentSite" => $currentSite,
             "currentUrl" => $currentUrlService,
             "currentUser" => $currentUserService,
