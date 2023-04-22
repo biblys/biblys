@@ -1,6 +1,6 @@
 {% if post.hasIllustration() %}
   <div class="post-illustration">
-    <img src="{{ post.illustration.url }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
+    <img src="{{ post.illustration.getUrl }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
   </div>
 {% endif %}
 
@@ -14,7 +14,7 @@
   <div class="linked-articles">
     {% for article in post.articles %}
       <a href="/{{ article.url }}">
-        <img src="{{ article.getCover('url')|raw }}" alt="{{ article.title }}" class="linked-article">
+        <img src="{{ article.coverUrl }}" alt="{{ article.title }}" class="linked-article">
       </a>
     {% endfor %}
   </div>

@@ -125,7 +125,7 @@ class PostController extends Controller
         // Get post illustration for opengraph
         $image = $post->getFirstImageUrl();
         if ($post->hasIllustration()) {
-            $opengraphTags["image"] = $post->getIllustration()->url();
+            $opengraphTags["image"] = $post->getIllustration()->getUrl();
         }
         // Else get first image from post
         elseif ($image) {

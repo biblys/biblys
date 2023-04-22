@@ -111,7 +111,7 @@ class PostTest extends PHPUnit\Framework\TestCase
         $postWithoutImage = $pm->create(["post_content" => '<p>Hello!</p>']);
         $imageUrl2 = $postWithoutImage->getFirstImageUrl();
 
-        $this->assertFalse($imageUrl2);
+        $this->assertNull($imageUrl2);
         $this->assertEquals($imageUrl, "http://domain.com/image1.jpg", "should return first post image url");
     }
 
