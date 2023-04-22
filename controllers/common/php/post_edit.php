@@ -39,16 +39,19 @@ if ($request->getMethod() === 'POST') {
 
     // Illustration
     $illustration = new Media("post", $post->get("id"));
+    $illustrationVersion = $post->get("illustration_version");
     if (!empty($_FILES["post_illustration_upload"]["tmp_name"])) {
         $illustration->upload($_FILES["post_illustration_upload"]["tmp_name"]);
+        $illustrationVersion++;
     } elseif (isset($_POST["post_illustration_delete"]) && $_POST['post_illustration_delete']) {
         $illustration->delete();
         unset($_POST["post_illustration_delete"]);
     }
+    $post->set("post_illustration_version", $illustrationVersion);
 
     $fields = $request->request->all();
     foreach ($fields as $field => $val) {
-        if (in_array($field, ["post_id", "post_url", "post_url_old", "post_time"])) {
+        if (in_array($field, ["post_id", "post_url", "post_url_old", "post_time", "post_illustration_version"])) {
             continue;
         }
         $post->set($field, $val);
@@ -89,13 +92,6 @@ $post = $pm->getById($postId);
 $author = null;
 
 $pageTitle = 'Nouveau billet';
-
-$content .= '
-        <div class="admin">
-            <p>Nouveau billet</p>
-            <p><a href="/pages/'.$rank.'posts">billets</a></p>
-        </div>
-    ';
 
 $request = Request::createFromGlobals();
 $config = Config::load();
@@ -239,6 +235,10 @@ $content .= '
             <p>
                 <label class="floating" for="post_illustration">Image :</label>
                 '.($post_illustration_upload).'
+            </p>
+            <p>
+                <label class="floating" for="illustration_version">Version :</label>
+                <input type="number" value="'.$post->get("illustration_version").'" name="post_illustration_version" id="illustration_version" class="nano" />
             </p>
             <p>
                 <label class="floating" for="post_illustration_legend">Légende :</label>

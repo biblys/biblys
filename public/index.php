@@ -34,7 +34,10 @@ $request->setSession($session);
 // TODO: add to other front controllers
 set_error_handler(function ($level, $message) use ($config, $session): void {
     $trace = debug_backtrace();
-    $caller = $trace[3];
+    $caller = $trace[1];
+    if ($level === E_USER_DEPRECATED) {
+        $caller = $trace[3];
+    }
 
     $loggerService = new LoggerService();
     $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
