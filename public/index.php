@@ -33,11 +33,17 @@ $request->setSession($session);
 // TODO: use a DeprecationNoticesHandler class
 // TODO: add to other front controllers
 set_error_handler(function ($level, $message) use ($config, $session): void {
+    $trace = debug_backtrace();
+    $caller = $trace[3];
+
     $loggerService = new LoggerService();
     $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
 
     if ($config->get("environment") === "dev") {
-        $session->getFlashBag()->add("warning", "DEPRECATED: $message");
+        $session->getFlashBag()->add(
+            "warning",
+            "DEPRECATED (from {$caller["file"]}:{$caller["line"]}): $message"
+        );
     }
 }, E_USER_DEPRECATED ^ E_DEPRECATED);
 
