@@ -56,15 +56,15 @@ class EventController extends Controller
 
         // Offline event
         if ($event && $event->get('status') == 0
-            && $event->get('user_id') !== $this->user->get('id')
-            && !$this->user->isAdmin()) {
+            && $event->get('user_id') !== getLegacyVisitor()->get('id')
+            && !getLegacyVisitor()->isAdmin()) {
             $event = false;
         }
 
         // Future event
         if ($event && $event->get('date') > date("Y-m-d H:i:s")
-            && $event->get('user_id') !== $this->user->get('id')
-            && !$this->user->isAdmin()) {
+            && $event->get('user_id') !== getLegacyVisitor()->get('id')
+            && !getLegacyVisitor()->isAdmin()) {
             $event = false;
         }
 

@@ -31,7 +31,7 @@ class CartController extends Controller
 
         try {
             $cm = new CartManager();
-            $cart = $this->user->getCart("create");
+            $cart = getLegacyVisitor()->getCart("create");
             $cm->addArticle($cart, $article);
             $cm->updateFromStock($cart);
         } catch(CartException $exception) {
@@ -52,7 +52,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = $this->user->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -70,7 +70,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = $this->user->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->addCFReward($cart, $reward);
         $cm->updateFromStock($cart);
 
@@ -88,7 +88,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = $this->user->getCart("create");
+        $cart = getLegacyVisitor()->getCart("create");
         $cm->removeStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -105,7 +105,7 @@ class CartController extends Controller
      */
     public function summaryAction(): JsonResponse
     {
-        $cart = $this->user->getCart();
+        $cart = getLegacyVisitor()->getCart();
         if (!$cart) {
             $cartSummary = Cart::getOneLineEmpty();
             return new JsonResponse($cartSummary);

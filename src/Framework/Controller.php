@@ -39,18 +39,6 @@ use Visitor;
 class Controller
 {
     /**
-     * @deprecated Controller->user is deprecated. Use CurrentUser service instead.
-     */
-    protected ?Visitor $user;
-
-    public function __construct()
-    {
-        
-
-        $this->user = getLegacyVisitor();
-    }
-
-    /**
      * Returns a Response with a rendered template.
      *
      * @param string $templatePath template file path
@@ -234,7 +222,7 @@ class Controller
             "currentUrl" => $currentUrlService,
             "currentUser" => $currentUserService,
             'request' => $request,
-            'user' => $this->user,
+            'user' => new Visitor($request),
             'session' => $session,
             'site' => $site,
             "trackers" => $trackers,

@@ -84,13 +84,13 @@ class PostController extends Controller
 
         // Offline post
         if ($post && $post->get('status') == 0 &&
-                $post->get('user_id') !== $this->user->get('id') && !$this->user->isAdmin()) {
+                $post->get('user_id') !== getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
             $post = false;
         }
 
         // Future post
         if ($post && $post->get('date') > date("Y-m-d H:i:s") &&
-                $post->get('user_id') !== $this->user->get('id') && !$this->user->isAdmin()) {
+                $post->get('user_id') !== getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
             $post = false;
         }
 
@@ -137,7 +137,7 @@ class PostController extends Controller
     // GET /admin/posts/
     public function adminAction(): RedirectResponse
     {
-        if ($this->user->isAdmin()) {
+        if (getLegacyVisitor()->isAdmin()) {
             return new RedirectResponse('/pages/adm_posts');
         }
 
@@ -157,7 +157,7 @@ class PostController extends Controller
             throw new NotFoundException("Post $id not found.");
         }
 
-        if (!$post->canBeDeletedBy($this->user)) {
+        if (!$post->canBeDeletedBy(getLegacyVisitor())) {
             throw new Exception("Vous n'avez pas le droit de supprimer ce billet.");
         }
 

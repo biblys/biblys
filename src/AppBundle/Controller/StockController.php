@@ -147,7 +147,7 @@ class StockController extends Controller
             throw new NotFoundException("Stock $stockId not found");
         }
 
-        if (!$this->user->hasInCart("stock", $stock->get("id"))) {
+        if (!getLegacyVisitor()->hasInCart("stock", $stock->get("id"))) {
             throw new BadRequestHttpException(
                 "Impossible de modifier un exemplaire qui n'est pas dans votre panier."
             );
@@ -157,7 +157,7 @@ class StockController extends Controller
         $newPriceInCents = $newPrice * 100;
         $stock->editFreePrice($newPriceInCents);
         $sm->update($stock);
-        $cm->updateFromStock($this->user->getCart());
+        $cm->updateFromStock(getLegacyVisitor()->getCart());
 
         if ($request->headers->get("Accept") === "application/json") {
             return new JsonResponse();

@@ -24,11 +24,7 @@ class SiteController extends Controller
     public function __construct()
     {
         global $urlgenerator;
-
-        $this->user = getLegacyVisitor();
         $this->url = $urlgenerator;
-
-        parent::__construct();
     }
 
     /**

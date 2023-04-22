@@ -22,7 +22,7 @@ class FileController extends Controller
 
         // Check download right
         try {
-            $file->canBeDownloadedBy($this->user);
+            $file->canBeDownloadedBy(getLegacyVisitor());
         } catch (AuthException $exception) {
             throw $exception;
         } catch (\Exception $exception) {
@@ -44,7 +44,7 @@ class FileController extends Controller
             // Find related copy
             $copy = $sm->get([
                 'article_id' => $file->get('article_id'),
-                'user_id' => $this->user->get('id'),
+                'user_id' => getLegacyVisitor()->get('id'),
             ]);
             if (!$copy) {
                 throw new \Exception('Related copy not found');
@@ -52,7 +52,7 @@ class FileController extends Controller
         }
 
         // Increment download count
-        $file->addDownloadBy($this->user);
+        $file->addDownloadBy(getLegacyVisitor());
 
         // Remove updated marker on copy if necessary
         if ($copy && $copy->get('file_updated')) {
