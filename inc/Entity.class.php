@@ -203,6 +203,7 @@ class EntityManager
     protected $entities = array();
     protected $siteAgnostic = true;
     protected $_entityProperties = [];
+    protected string $idField;
 
     public function __construct()
     {

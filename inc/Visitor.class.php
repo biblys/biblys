@@ -16,9 +16,6 @@ class Visitor extends User
 
     public function __construct(Request $request)
     {
-        global $_SQL;
-        $this->db = $_SQL;
-
         if (isset($_COOKIE['visitor_uid'])) {
             $this->visitor_uid = $_COOKIE['visitor_uid'];
         } else {
