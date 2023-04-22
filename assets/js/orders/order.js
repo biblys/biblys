@@ -45,6 +45,7 @@ export default class Order {
           '<li><a class="pointer" data-action="payed" data-mode="paypal">Paypal</a></li>' +
           '<li><a class="pointer" data-action="payed" data-mode="payplug">Payplug</a></li>' +
           '<li><a class="pointer" data-action="payed" data-mode="transfer">Virement</a></li>' +
+          '<li><a class="pointer" data-action="payed" data-mode="exchange">Échange</a></li>' +
           '</ul>' +
           '</div>',
         followupButton = '';

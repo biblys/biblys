@@ -23,6 +23,7 @@ class Payment extends BasePayment
     private const MODE_PAYPAL = 'paypal';
     private const MODE_PAYPLUG = 'payplug';
     private const MODE_STRIPE = 'stripe';
+    private const MODE_EXCHANGE = 'exchange';
 
     public static function getModes(): array
     {
@@ -34,6 +35,7 @@ class Payment extends BasePayment
             self::MODE_PAYPAL,
             self::MODE_PAYPLUG,
             self::MODE_STRIPE,
+            self::MODE_EXCHANGE,
         ];
     }
 }
