@@ -31,7 +31,7 @@ class UserController extends Controller
             return new RedirectResponse("/");
         }
 
-        $returnUrl = $request->query->get("return_url");
+        $returnUrl = $request->query->get("return_url", "");
         if (str_contains($returnUrl, "logged-out")) {
             $returnUrl = null;
         }

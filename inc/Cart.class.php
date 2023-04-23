@@ -453,10 +453,12 @@ class CartManager extends EntityManager
                 // A copy is not available if it was added to cart less than 1 hour ago
                 // This is meant to prevent "stealing" copy from another cart when a lot
                 // of orders are validated at the same time
-                $addedToCart = strtotime($stock->get('stock_cart_date'));
-                $now = strtotime('now');
-                if ($now - $addedToCart < 3600) {
-                    continue;
+                if ($stock->has("stock_cart_date")) {
+                    $addedToCart = strtotime($stock->get('stock_cart_date'));
+                    $now = strtotime('now');
+                    if ($now - $addedToCart < 3600) {
+                        continue;
+                    }
                 }
 
                 // Else, add copy to cart

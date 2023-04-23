@@ -417,7 +417,7 @@ class ArticleController extends Controller
 
         $links = [];
 
-        $tags = $request->request->get('tags');
+        $tags = $request->request->get('tags', "");
         $tags = explode(',', $tags);
         foreach ($tags as $tag_name) {
             $tag_name = trim($tag_name);

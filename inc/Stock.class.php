@@ -470,6 +470,7 @@ class StockManager extends EntityManager
      * Calculates tax rate based product type and date of sell.
      *
      * @param [type] $stock [description]
+     * @throws Exception
      */
     public function getTaxRate($stock)
     {
@@ -500,9 +501,9 @@ class StockManager extends EntityManager
         }
 
         // If no selling_date defined, use current date
-        $dateOfSale = new \DateTime($stock->get('selling_date'));
-        if (!$dateOfSale) {
-            $dateOfSale = new \DateTime();
+        $dateOfSale = new DateTime();
+        if ($stock->has("selling_date")) {
+            $dateOfSale = new DateTime($stock->get('selling_date'));
         }
 
         $tax = new Tax(

@@ -191,6 +191,10 @@ function auth(string $type = 'user'): bool|Visitor
 
 function authors($x, $m = null)
 {
+    if ($x === null) {
+        return null;
+    }
+
     $x = explode(',', $x);
     $c = count($x);
     if ('url' == $m) {

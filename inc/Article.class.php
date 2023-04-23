@@ -1558,9 +1558,9 @@ class ArticleManager extends EntityManager
         $article->set('article_url', $slug);
 
         // Truncate authors fields
-        $authors = mb_strcut($article->get('authors'), 0, 256);
+        $authors = mb_strcut($article->get('authors') ?: "", 0, 256);
         $article->set('article_authors', $authors);
-        $authorsAlpha = mb_strcut($article->get('authors_alphabetic'), 0, 256);
+        $authorsAlpha = mb_strcut($article->get('authors_alphabetic') ?: "", 0, 256);
         $article->set('article_authors_alphabetic', $authorsAlpha);
 
         return $article;

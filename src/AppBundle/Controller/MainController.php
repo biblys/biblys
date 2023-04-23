@@ -274,7 +274,7 @@ class MainController extends Controller
             $smtpAlert = true;
         }
 
-        $shortcuts = json_decode($currentUser->getOption("shortcuts"));
+        $shortcuts = json_decode($currentUser->getOption("shortcuts") ?: "");
         if ($shortcuts === null) {
             $shortcuts = [];
         }
