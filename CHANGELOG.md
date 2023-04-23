@@ -19,6 +19,7 @@ Deploiement
   layout `base.html.twig`, juste après l'inclusion
   du partiel `_overall_menu.html.twig`.
 - Dans les controllers, remplacer `$_V` par `getCurrentVisitor`.
+- Executer les migrations (supprimer au préalable les colonnes `cart_gift…`)
 
 ## 2.67.3 (26 avril 2023)
 

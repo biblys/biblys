@@ -1490,41 +1490,6 @@
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
   </table>
-  <table name="ticket" idMethod="native" phpName="Ticket">
-    <column name="ticket_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="user_id" phpName="UserId" type="INTEGER"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER"/>
-    <column name="ticket_type" phpName="Type" type="VARCHAR" size="16" defaultValue=""/>
-    <column name="ticket_title" phpName="Title" type="VARCHAR" size="255"/>
-    <column name="ticket_content" phpName="Content" type="LONGVARCHAR"/>
-    <column name="ticket_priority" phpName="Priority" type="INTEGER" defaultValue="0"/>
-    <column name="ticket_created" phpName="CreatedAt" type="TIMESTAMP"/>
-    <column name="ticket_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <column name="ticket_resolved" phpName="Resolved" type="TIMESTAMP"/>
-    <column name="ticket_closed" phpName="Closed" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="ticket_created" />
-      <parameter name="update_column" value="ticket_updated" />
-    </behavior>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="ticket_comment" idMethod="native" phpName="TicketComment">
-    <column name="ticket_comment_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="ticket_id" phpName="TicketId" type="INTEGER"/>
-    <column name="user_id" phpName="UserId" type="INTEGER"/>
-    <column name="ticket_comment_content" phpName="Content" type="LONGVARCHAR"/>
-    <column name="ticket_comment_created" phpName="CreatedAt" type="TIMESTAMP"/>
-    <column name="ticket_comment_update" phpName="Update" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="ticket_comment_created" />
-      <parameter name="update_column" value="ticket_comment_update" />
-    </behavior>
-    <vendor type="mysql">
-      <parameter name="Engine" value="MyISAM"/>
-    </vendor>
-  </table>
   <table name="users" idMethod="native" phpName="User">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
