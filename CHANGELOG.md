@@ -7,6 +7,8 @@ Améliorations
 - Biblys ne supporte plus PHP 8.0. La version minimale requise est PHP 8.1.
 - Mailjet peut désormais être utilisé comme gestionnaire de liste de contacts.
 - L'option de paiement "Échange" a été ajoutée.
+- Un numéro de version a été ajouté aux images d'illustrations des billets 
+  afin de contourner la mise en cache lorsqu'elles sont mises à jour.
 - L'affichage des messages flash d'information, de succès, d'avertissement
   et d'erreur a été améliorée.
 

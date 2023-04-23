@@ -47,6 +47,18 @@
             return $this->illustrationExists;
         }
 
+        public function getIllustrationUrl(): string
+        {
+            $options = [];
+
+            $illustrationVersion = $this->get("illustration_version");
+            if ($illustrationVersion >= 1) {
+                $options["version"] = $illustrationVersion;
+            }
+
+            return $this->getIllustration()->getUrl($options);
+        }
+
         public function getIllustrationTag(?int $height = null): string
         {
             $illustration = $this->getIllustration();

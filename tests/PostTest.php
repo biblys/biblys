@@ -94,6 +94,30 @@ class PostTest extends PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression('/<img src="\/media\/post\/\d+\/\d+\.jpg" alt="Une belle image" class="illustration">/', $tag);
     }
 
+    public function testGetIllustrationUrl()
+    {
+        // given
+        $post = new Post(["post_id" => 1]);
+
+        // when
+        $url = $post->getIllustrationUrl();
+
+        // then
+        $this->assertEquals("/media/post/01/1.jpg", $url);
+    }
+
+    public function testGetIllustrationUrlWithVersion()
+    {
+        // given
+        $post = new Post(["post_id" => 1, "post_illustration_version" => 3]);
+
+        // when
+        $url = $post->getIllustrationUrl();
+
+        // then
+        $this->assertEquals("/media/post/01/1.jpg?v=3", $url);
+    }
+
     /**
      * Test illustration exists
      * @depends testGet

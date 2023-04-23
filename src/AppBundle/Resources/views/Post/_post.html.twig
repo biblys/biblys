@@ -1,6 +1,6 @@
 {% if post.hasIllustration() %}
   <div class="post-illustration">
-    <img src="{{ post.illustration.getUrl }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
+    <img src="{{ post.illustrationUrl }}" class="post-illustration-image" {% if post.has('illustration_legend') %} alt="{{ post.illustration_legend }}" {% endif %}>
   </div>
 {% endif %}
 
