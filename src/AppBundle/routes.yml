@@ -591,6 +591,10 @@ stats_matomo:
   path: /admin/stats/matomo
   controller: AppBundle\Controller\StatsController::matomo
 
+stats_umami:
+  path: /admin/stats/umami
+  controller: AppBundle\Controller\StatsController::umami
+
 # Stock
 
 stock_add_to_cart:

@@ -328,14 +328,8 @@ class Entry
             $entries[] = new Entry("Statistiques (Matomo)", ["category" => "site", "path" => "stats_matomo", 'icon' => 'area-chart']);
         }
 
-        $umami = $config->get("umami");
-        if ($umami && isset($umami["share_url"])) {
-            $entries[] = new Entry("Statistiques (Umami)", [
-                'category' => 'site',
-                'url' => $umami["share_url"],
-                'target' => '_blank',
-                'icon' => 'area-chart',
-            ]);
+        if ($config->has("umami.share_url")) {
+            $entries[] = new Entry("Statistiques (Umami)", ["category" => "site", "path" => "stats_umami", 'icon' => 'area-chart']);
         }
 
         return $entries;

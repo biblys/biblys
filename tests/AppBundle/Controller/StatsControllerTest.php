@@ -33,4 +33,21 @@ class StatsControllerTest extends TestCase
             $response->getTargetUrl(),
         );
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testUmami()
+    {
+        // given
+        $controller = new StatsController();
+        $config = new Config(["umami" => ["share_url" => "https://example.org/umami"]]);
+
+        // when
+        $response = $controller->umami($config);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("https://example.org/umami", $response->getTargetUrl());
+    }
 }

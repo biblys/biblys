@@ -100,4 +100,13 @@ class StatsController extends Controller
 
         return new RedirectResponse($loginUrl);
     }
+
+    public function umami(Config $config): RedirectResponse
+    {
+        if (!$config->has("umami")) {
+            throw new NotFoundHttpException("Matomo is not configured.");
+        }
+
+        return new RedirectResponse($config->get("umami.share_url"));
+    }
 }
