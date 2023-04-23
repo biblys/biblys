@@ -277,10 +277,15 @@ class Media
     }
 
     /**
-     * Kept for backward compatibility, use getUrl instead
+     * @deprecated Using Media->url is deprecated. Use Media->getUrl instead.
      */
     public function url($data = null): string
     {
+        trigger_deprecation(
+            package: "biblys/biblys",
+            version: "2.68.0",
+            message: "Using Media->url is deprecated. Use Media->getUrl instead.",
+        );
         return $this->getUrl(["size" => $data]);
     }
 
