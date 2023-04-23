@@ -324,17 +324,8 @@ class Entry
      */
     public static function _addAnalyticsLinks(Config $config, array $entries): array
     {
-        $matomo = $config->get("matomo");
-        if ($matomo) {
-            $loginUrl = isset($matomo["login"]) && isset($matomo["md5pass"]) ?
-                'index.php?module=Login&action=logme&login=' . $matomo["login"] . '&password=' . $matomo["md5pass"] :
-                '';
-            $entries[] = new Entry("Statistiques (Matomo)", [
-                'category' => 'site',
-                'url' => 'https://' . $matomo['domain'] . '/' . $loginUrl,
-                'target' => '_blank',
-                'icon' => 'area-chart',
-            ]);
+        if ($config->has("matomo.login") && $config->has("matomo.md5pass")) {
+            $entries[] = new Entry("Statistiques (Matomo)", ["category" => "site", "path" => "stats_matomo", 'icon' => 'area-chart']);
         }
 
         $umami = $config->get("umami");

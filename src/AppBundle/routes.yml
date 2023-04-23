@@ -587,6 +587,10 @@ stats_suppliers:
   defaults:
     year: all
 
+stats_matomo:
+  path: /admin/stats/matomo
+  controller: AppBundle\Controller\StatsController::matomo
+
 # Stock
 
 stock_add_to_cart:

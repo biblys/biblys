@@ -2,12 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Admin\Entry;
+use Biblys\Service\Config;
 use Framework\Controller;
 use Propel\Runtime\Exception\PropelException;
 use StockManager;
 use SupplierManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -78,5 +82,22 @@ class StatsController extends Controller
             'year' => $year,
             'total' => $total
         ]);
+    }
+
+    public function matomo(Config $config): RedirectResponse
+    {
+        if (!$config->has("matomo.login") || !$config->has("matomo.md5pass")) {
+            throw new NotFoundHttpException("Matomo is not configured.");
+        }
+
+        $queryString = http_build_query([
+            "module" => "Login",
+            "action" => "logme",
+            "login" => $config->get("matomo.login"),
+            "password" => $config->get("matomo.md5pass"),
+        ]);
+        $loginUrl = "https://{$config->get("matomo.domain")}/index.php?$queryString";
+
+        return new RedirectResponse($loginUrl);
     }
 }
