@@ -5,6 +5,8 @@
 Améliorations
 
 - Biblys ne supporte plus PHP 8.0. La version minimale requise est PHP 8.1.
+- La durée des sessions créées lors d'une connexion à Axys a été allongée 
+  quand la case "Se souvenir de moi" est cochée.
 - Mailjet peut désormais être utilisé comme gestionnaire de liste de contacts.
 - L'option de paiement "Échange" a été ajoutée.
 - Un numéro de version a été ajouté aux images d'illustrations des billets 

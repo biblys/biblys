@@ -6,6 +6,7 @@ use Biblys\Service\Axys;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\TokenService;
 use DateTime;
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Framework\Controller;
@@ -42,6 +43,7 @@ class OpenIDConnectController extends Controller
     /**
      * @throws InvalidTokenException
      * @throws PropelException
+     * @throws Exception
      */
     public function callback(Request $request, Axys $axys, CurrentSite $currentSite): RedirectResponse
     {
@@ -63,10 +65,14 @@ class OpenIDConnectController extends Controller
 
         $userId = $idToken->getClaim("sub");
         $user = UserQuery::create()->findPk($userId);
-        $sessionExpiresAt = new DateTime("+1 day");
+        $sessionExpiresAt = new DateTime("@".$token->getExpires());
         $session = Session::buildForUserAndCurrentSite($user, $currentSite, $sessionExpiresAt);
         $session->save();
-        $response->headers->setCookie(Cookie::create("user_uid")->withValue($session->getToken()));
+
+        $sessionCookie = Cookie::create("user_uid")
+            ->withValue($session->getToken())
+            ->withExpires($token->getExpires());
+        $response->headers->setCookie($sessionCookie);
 
         return $response;
     }

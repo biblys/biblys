@@ -8,6 +8,8 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use DateTime;
+use Exception;
 use Firebase\JWT\JWT;
 use Framework\Exception\AuthException;
 use Lcobucci\JWT\Claim\Basic;
@@ -55,6 +57,7 @@ class OpenIDConnectControllerTest extends TestCase
     /**
      * @throws InvalidTokenException
      * @throws PropelException
+     * @throws Exception
      */
     public function testCallback()
     {
@@ -72,6 +75,7 @@ class OpenIDConnectControllerTest extends TestCase
         $idToken = new Token(["alg" => "RS256"], ["sub" => $subClaim]);
         $accessToken = $this->createMock(AccessToken::class);
         $accessToken->method("getIdToken")->willReturn($idToken);
+        $accessToken->method("getExpires")->willReturn(1682278410);
 
         $oidcProvider = $this->createMock(AxysOpenIDConnectProvider::class);
         $oidcProvider->method("getAccessToken")
@@ -96,10 +100,12 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals("..", $cookies[0]->getValue());
 
         $this->assertEquals("user_uid", $cookies[1]->getName());
+        $this->assertEquals(1682278410, $cookies[1]->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
             ->findOneByToken($cookies[1]->getValue());
         $this->assertNotNull($session);
+        $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
     }
 
     /**
