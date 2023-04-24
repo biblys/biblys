@@ -1,22 +1,20 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace AppBundle\Controller;
 
-use Axys\AxysOpenIDConnectProvider;
 use Biblys\Service\Axys;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\OpenIDConnectProviderService;
 use Biblys\Service\TokenService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
+use Facile\OpenIDClient\Token\TokenSetInterface;
 use Firebase\JWT\JWT;
-use Framework\Exception\AuthException;
-use Lcobucci\JWT\Claim\Basic;
-use Lcobucci\JWT\Token;
+use JsonException;
 use Model\SessionQuery;
-use OpenIDConnectClient\AccessToken;
-use OpenIDConnectClient\Exception\InvalidTokenException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,18 +23,13 @@ require_once __DIR__."/../../setUp.php";
 
 class OpenIDConnectControllerTest extends TestCase
 {
+    /**
+     * @throws JsonException
+     */
     public function testAxys()
     {
         // given
-        $oidcProvider = $this->createMock(AxysOpenIDConnectProvider::class);
-        $oidcProvider->method("getAuthorizationUrl")
-            ->with([
-                "scope" => ["openid", "email"],
-                "state" => "oidc-state-token",
-            ])
-            ->willReturn("https://axys.me/authorize");
         $axys = $this->createMock(Axys::class);
-        $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
         $axys->method("getClientSecret")->willReturn("secret_key");
         $request = new Request();
         $request->query->add(["return_url" => "/my-account"]);
@@ -44,10 +37,15 @@ class OpenIDConnectControllerTest extends TestCase
         $tokenService->method("createOIDCStateToken")
             ->with("/my-account", "secret_key")
             ->willReturn("oidc-state-token");
+
         $controller = new OpenIDConnectController();
+        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
+        $openIDConnectProviderService
+            ->method("getAuthorizationUri")
+            ->willReturn("https://axys.me/authorize");
 
         // when
-        $response = $controller->axys($request, $axys, $tokenService);
+        $response = $controller->axys($request, $tokenService, $openIDConnectProviderService);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -55,62 +53,52 @@ class OpenIDConnectControllerTest extends TestCase
     }
 
     /**
-     * @throws InvalidTokenException
      * @throws PropelException
      * @throws Exception
      */
     public function testCallback()
     {
         // given
+        $request = Request::create("https://www.biblys.fr/openid/callback");
         $stateToken = JWT::encode(["return_url" => "/my-account"], "secret_key", "HS256");
-        $request = new Request();
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);
-        $controller = new OpenIDConnectController();
+
         $user = ModelFactory::createUser();
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
 
-        $subClaim = new Basic("sub", $user->getId());
-        $idToken = new Token(["alg" => "RS256"], ["sub" => $subClaim]);
-        $accessToken = $this->createMock(AccessToken::class);
-        $accessToken->method("getIdToken")->willReturn($idToken);
-        $accessToken->method("getExpires")->willReturn(1682278410);
+        $controller = new OpenIDConnectController();
+        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
 
-        $oidcProvider = $this->createMock(AxysOpenIDConnectProvider::class);
-        $oidcProvider->method("getAccessToken")
-            ->with("authorization_code", ["code" => "authorization_code"])
-            ->willReturn($accessToken);
-
-        $axys = $this->createMock(Axys::class);
-        $axys->method("getOpenIDConnectProvider")->willReturn($oidcProvider);
-        $axys->method("getClientSecret")->willReturn("secret_key");
+        $tokenSet = $this->createMock(TokenSetInterface::class);
+        $tokenSet->method("claims")->willReturn(["sub" => $user->getId(), "exp" => 1682278410]);
+        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
+        $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
 
         // when
-        $response = $controller->callback($request, $axys, $currentSite);
+        $response = $controller->callback($request, $currentSite, $config, $openIDConnectProviderService);
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/my-account", $response->getTargetUrl());
 
         $cookies = $response->headers->getCookies();
-        $this->assertCount(2, $cookies);
+        $this->assertCount(1, $cookies);
 
-        $this->assertEquals("id_token", $cookies[0]->getName());
-        $this->assertEquals("..", $cookies[0]->getValue());
-
-        $this->assertEquals("user_uid", $cookies[1]->getName());
-        $this->assertEquals(1682278410, $cookies[1]->getExpiresTime());
+        $userUidCookie = $cookies[0];
+        $this->assertEquals("user_uid", $userUidCookie->getName());
+        $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
         $session = SessionQuery::create()
             ->filterBySite($site)
-            ->findOneByToken($cookies[1]->getValue());
+            ->filterByUser($user)
+            ->findOneByToken($userUidCookie->getValue());
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
     }
 
     /**
      * @route GET /openid/logout
-     * @throws AuthException
      * @throws PropelException
      */
     public function testLogout()

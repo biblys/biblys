@@ -1,84 +1,86 @@
-<?php
+<?php /** @noinspection PhpMultipleClassDeclarationsInspection */
 
 namespace AppBundle\Controller;
 
-use Biblys\Service\Axys;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\OpenIDConnectProviderService;
 use Biblys\Service\TokenService;
 use DateTime;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Framework\Controller;
-use Framework\Exception\AuthException;
+use Http\Discovery\Psr17Factory;
+use JsonException;
 use Model\Session;
 use Model\SessionQuery;
 use Model\UserQuery;
-use OpenIDConnectClient\Exception\InvalidTokenException;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenIDConnectController extends Controller
 {
-
-    public function axys(Request $request, Axys $axys, TokenService $tokenService): RedirectResponse
+    /**
+     * @throws JsonException
+     */
+    public function axys(
+        Request $request,
+        TokenService $tokenService,
+        OpenIDConnectProviderService $openIDConnectProviderService,
+    ): RedirectResponse
     {
-        $provider = $axys->getOpenIDConnectProvider();
-        $clientSecret = $axys->getClientSecret();
-
-        $stateToken = $tokenService->createOIDCStateToken(
-            $request->query->get("return_url"),
-            $clientSecret
-        );
-        $options = [
-            "scope" => ["openid", "email"],
-            "state" => $stateToken,
-        ];
-        $authorizationUrl = $provider->getAuthorizationUrl($options);
-        return new RedirectResponse($authorizationUrl);
+        $returnUrl = $request->query->get("return_url", "");
+        $authorizationUri = $openIDConnectProviderService->getAuthorizationUri($tokenService, $returnUrl);
+        return new RedirectResponse($authorizationUri);
     }
 
     /**
-     * @throws InvalidTokenException
      * @throws PropelException
      * @throws Exception
      */
-    public function callback(Request $request, Axys $axys, CurrentSite $currentSite): RedirectResponse
+    public function callback(
+        Request $request,
+        CurrentSite $currentSite,
+        Config $config,
+        OpenIDConnectProviderService $openIDConnectProviderService,
+    ):
+    RedirectResponse
     {
-        $provider = $axys->getOpenIDConnectProvider();
-        $code = $request->query->get("code");
-        $token = $provider->getAccessToken("authorization_code", ["code" => $code]);
-        $idToken = $token->getIdToken();
+        $psr17Factory = new Psr17Factory();
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        $psrRequest = $psrHttpFactory->createRequest($request);
+
+        $tokenSet = $openIDConnectProviderService->getTokenSet($psrRequest);
 
         $returnUrl = "/";
         $stateToken = $request->query->get("state");
-        $decodedState = JWT::decode($stateToken, new Key($axys->getClientSecret(), "HS256"));
+        $decodedState = JWT::decode($stateToken, new Key($config->get("axys.client_secret"), "HS256"));
         if (isset($decodedState->return_url)) {
             $returnUrl = $decodedState->return_url;
         }
 
         $response = new RedirectResponse($returnUrl);
 
-        $response->headers->setCookie(Cookie::create("id_token")->withValue($idToken));
-
-        $userId = $idToken->getClaim("sub");
+        $claims = $tokenSet->claims();
+        $userId = $claims["sub"];
         $user = UserQuery::create()->findPk($userId);
-        $sessionExpiresAt = new DateTime("@".$token->getExpires());
+        $sessionExpiresAt = new DateTime("@".$claims["exp"]);
         $session = Session::buildForUserAndCurrentSite($user, $currentSite, $sessionExpiresAt);
         $session->save();
 
         $sessionCookie = Cookie::create("user_uid")
             ->withValue($session->getToken())
-            ->withExpires($token->getExpires());
+            ->withExpires($claims["exp"]);
         $response->headers->setCookie($sessionCookie);
 
         return $response;
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function logout(Request $request): RedirectResponse
@@ -90,4 +92,5 @@ class OpenIDConnectController extends Controller
 
         return new RedirectResponse("/");
     }
+
 }
