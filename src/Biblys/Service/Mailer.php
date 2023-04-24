@@ -55,7 +55,7 @@ class Mailer
      * @param array $headers
      * @return bool [bool]          true if mail was sent
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws InvalidEmailAddressException
      */
     public function send(
         string $to,

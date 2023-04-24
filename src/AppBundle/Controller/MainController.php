@@ -9,19 +9,14 @@ use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
-use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use CartManager;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use GuzzleHttp\Exception\GuzzleException;
-use Model\OptionQuery;
-use Model\PageQuery;
 use OrderManager;
 use PostManager;
 use Propel\Runtime\Exception\PropelException;
@@ -42,7 +37,6 @@ use Twig\Error\SyntaxError;
 class MainController extends Controller
 {
     /**
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws SyntaxError
@@ -166,10 +160,10 @@ class MainController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws LoaderError
-     * @throws Exception
      * @throws TransportExceptionInterface
+     * @throws PropelException
      */
-    public function contactAction(Request $request): Response
+    public function contactAction(Request $request, CurrentUser $currentUserService): Response
     {
         global $site, $config;
 
@@ -188,7 +182,7 @@ class MainController extends Controller
         $recaptcha = false;
         $recaptcha_config = $config->get('recaptcha');
         $recaptcha_sitekey = false;
-        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey']) && !auth()) {
+        if ($recaptcha_config && isset($recaptcha_config['secret']) && isset($recaptcha_config['sitekey']) && !$currentUserService->isAuthentified()) {
             $recaptcha = new Recaptcha($recaptcha_config['secret']);
             $recaptcha_sitekey = $recaptcha_config['sitekey'];
         }
@@ -238,7 +232,6 @@ class MainController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws UpdaterException
      * @throws PropelException
      * @throws Exception
@@ -309,14 +302,17 @@ class MainController extends Controller
     }
 
     /**
-     * @throws AuthException
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
      * @throws SyntaxError
      * @throws UpdaterException
-     * @throws PropelException
      */
-    public function adminShortcutsAction(Request $request, UrlGenerator $urlGenerator)
+    public function adminShortcutsAction(
+        Request $request,
+        UrlGenerator $urlGenerator,
+        CurrentUser $currentUserService,
+    ): RedirectResponse|JsonResponse|Response
     {
         global $site;
 
@@ -324,7 +320,7 @@ class MainController extends Controller
 
         // If XHR request, return the shortcuts as an JSON array
         if ($request->isXmlHttpRequest()) {
-            $shortcuts = getLegacyVisitor()->getOpt('shortcuts');
+            $shortcuts = $currentUserService->getOption("shortcuts");
 
             // If user has no shortcuts yet, return an empty array
             if (!$shortcuts) {
@@ -338,7 +334,7 @@ class MainController extends Controller
         if ($request->getMethod() == 'POST') {
             $shortcuts = $request->request->get('shortcuts');
 
-            getLegacyVisitor()->setOpt('shortcuts', $shortcuts);
+            $currentUserService->setOption("shortcuts", $shortcuts);
 
             return new RedirectResponse($urlGenerator->generate('main_admin'));
         }
@@ -346,7 +342,7 @@ class MainController extends Controller
         // Default home page
         $request->attributes->set("page_title", "Gestion des raccourcis");
         return $this->render('AppBundle:Main:adminShortcuts.html.twig', [
-            'shortcuts' => getLegacyVisitor()->getOpt('shortcuts'),
+            'shortcuts' => $currentUserService->getOption('shortcuts'),
             'articles' => Entry::generateUrlsForEntries(
                 Entry::findByCategory('articles'),
                 $urlGenerator
@@ -378,7 +374,6 @@ class MainController extends Controller
     /**
      * Returns notifications for asked subscriptions.
      *
-     * @throws AuthException
      * @throws PropelException
      */
     public function adminNotificationsAction(Request $request): JsonResponse
@@ -411,7 +406,6 @@ class MainController extends Controller
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws Exception
      * @throws GuzzleException

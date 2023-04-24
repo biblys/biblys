@@ -20,12 +20,12 @@ use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
-use Framework\Exception\AuthException;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -37,7 +37,6 @@ class MainControllerTest extends TestCase
 {
     /**
      * @throws SyntaxError
-     * @throws AuthException
      * @throws RuntimeError
      * @throws LoaderError
      * @throws PropelException
@@ -89,7 +88,7 @@ class MainControllerTest extends TestCase
         $controller = new MainController();
         $request = new Request();
         $site = EntityFactory::createSite();
-        $page = ModelFactory::createPage([
+        ModelFactory::createPage([
             "page_title" => "Home",
             "page_url" => "home",
             "site_id" => $site->get("id"),
@@ -126,9 +125,11 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws SyntaxError
-     * @throws RuntimeError
      * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
      */
     public function testContact()
     {
@@ -141,9 +142,11 @@ class MainControllerTest extends TestCase
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "I'm angry");
         $request->request->set("message", "WHAT THE F");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("isAuthentified")->willReturn(false);
 
         // when
-        $response = $controller->contactAction($request);
+        $response = $controller->contactAction($request, $currentUserService);
 
         // then
         $this->assertEquals(
@@ -161,7 +164,6 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws UpdaterException
-     * @throws AuthException
      * @throws GuzzleException
      */
     public function testAdmin()
@@ -206,7 +208,6 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws UpdaterException
-     * @throws AuthException
      * @throws GuzzleException
      */
     public function testAdminWithHotNews()
@@ -241,7 +242,6 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws UpdaterException
-     * @throws AuthException
      * @throws GuzzleException
      */
     public function testAdminWithHotNewsMarkedAsRead()
@@ -274,7 +274,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws UpdaterException
      * @throws GuzzleException
@@ -322,7 +321,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -336,9 +334,10 @@ class MainControllerTest extends TestCase
         $request = RequestFactory::createAuthRequestForAdminUser();
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = $this->createMock(CurrentUser::class);
 
         // when
-        $response = $controller->adminShortcutsAction($request, $urlGenerator);
+        $response = $controller->adminShortcutsAction($request, $urlGenerator, $currentUser);
 
         // then
         $this->assertEquals(
@@ -354,7 +353,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws GuzzleException
      */
@@ -391,7 +389,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws GuzzleException
      */
@@ -431,7 +428,6 @@ class MainControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      * @throws GuzzleException
      */
@@ -456,7 +452,6 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws UpdaterException
-     * @throws AuthException
      * @throws GuzzleException
      */
     public function testAdminWithEbooks()
@@ -490,7 +485,6 @@ class MainControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws UpdaterException
-     * @throws AuthException
      * @throws GuzzleException
      * @throws Exception
      */
@@ -535,7 +529,6 @@ class MainControllerTest extends TestCase
         $cloudService->method("getPortalUrl")
             ->with("return-url")
             ->willReturn("https://stripe.com/portal?return-url");
-        $returnUrl = "return-url";
 
         // when
         $response = $controller->adminCloudPortal($request, $cloudService);
