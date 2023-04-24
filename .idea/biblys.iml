@@ -110,6 +110,22 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/deprecations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mailjet/mailjet-apiv3-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/facile-it/php-jose-verifier" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/facile-it/php-openid-client" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-middleware" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spomky-labs/base64url" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spomky-labs/pki-framework" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-checker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-encryption" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-key-mgmt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-signature" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-token/jwt-signature-algorithm-rsa" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

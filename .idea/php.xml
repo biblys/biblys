@@ -134,6 +134,26 @@
       <path value="$PROJECT_DIR$/vendor/firebase/php-jwt" />
       <path value="$PROJECT_DIR$/vendor/doctrine/deprecations" />
       <path value="$PROJECT_DIR$/vendor/mailjet/mailjet-apiv3-php" />
+      <path value="$PROJECT_DIR$/vendor/jflight/gacookie" />
+      <path value="$PROJECT_DIR$/vendor/illuminate/container" />
+      <path value="$PROJECT_DIR$/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/vendor/spomky-labs/base64url" />
+      <path value="$PROJECT_DIR$/vendor/spomky-labs/pki-framework" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-server-middleware" />
+      <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-server-handler" />
+      <path value="$PROJECT_DIR$/vendor/facile-it/php-jose-verifier" />
+      <path value="$PROJECT_DIR$/vendor/facile-it/php-openid-client" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-signature-algorithm-rsa" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-encryption" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-key-mgmt" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-core" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-signature" />
+      <path value="$PROJECT_DIR$/vendor/web-token/jwt-checker" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">
