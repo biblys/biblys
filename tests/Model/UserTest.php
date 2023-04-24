@@ -147,6 +147,27 @@ class UserTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testGetCurrentRight()
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $currentRight = new Right();
+        $currentRight->setCurrent(true)->setUser($user);
+        $currentRight->save();
+        $otherRight = new Right();
+        $otherRight->setCurrent(false)->setUser($user);
+        $otherRight->save();
+
+        // when
+        $returnedRight = $user->getCurrentRight();
+
+        //
+        $this->assertEquals($currentRight->getId(), $returnedRight->getId());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testValidatingValidUser()
     {
         // given

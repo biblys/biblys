@@ -69,6 +69,17 @@ class User extends BaseUser
     }
 
     /**
+     * @throws PropelException
+     */
+    public function getCurrentRight(): Right
+    {
+        return RightQuery::create()
+            ->filterByUser($this)
+            ->filterByCurrent(true)
+            ->findOne();
+    }
+
+    /**
      * @param ConnectionInterface|null $con
      * @return bool
      * @throws Exception
