@@ -11,6 +11,7 @@ use Model\CartQuery;
 use Model\Option;
 use Model\OptionQuery;
 use Model\Publisher;
+use Model\Right;
 use Model\SessionQuery;
 use Model\Site;
 use Model\User;
@@ -216,5 +217,14 @@ class CurrentUser
         }
 
         return $this->currentSite;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getCurrentRight(): ?Right
+    {
+        return $this->user?->getCurrentRight();
+
     }
 }

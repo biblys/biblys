@@ -7,7 +7,9 @@ use Biblys\Test\RequestFactory;
 use DateTime;
 use Exception;
 use Model\Option;
+use Model\Right;
 use Model\SiteQuery;
+use Model\User;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -373,6 +375,27 @@ class CurrentUserTest extends TestCase
             $hasRightForPublisher,
             "it returns false for user with no publisher rights"
         );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetCurrentRight()
+    {
+        // given
+        $currentRight = $this->createMock(Right::class);
+        $currentRight->method("getId")->willReturn("1111");
+        $user = $this->createMock(User::class);
+        $user->expects($this->once())
+            ->method("getCurrentRight")
+            ->willReturn($currentRight);
+        $currentUser = new CurrentUser($user, "token");
+
+        // when
+        $returnedRight = $currentUser->getCurrentRight();
+
+        // then
+        $this->assertEquals($currentRight, $returnedRight);
     }
 
     /**
