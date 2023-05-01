@@ -60,7 +60,6 @@
     "ircmaxell/random-lib": "^1.2",
     "symfony/filesystem": "^6.0",
     "league/csv": "^9.7",
-    "steverhoades/oauth2-openid-connect-client": "^0.4.0",
     "ext-dom": "*",
     "ext-libxml": "*",
     "ext-mbstring": "*",
