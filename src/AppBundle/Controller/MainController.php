@@ -251,7 +251,7 @@ class MainController extends Controller
         self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
 
-        if ($cloud->isConfigured() && !$cloud->getSubscription()->isPaid()) {
+        if ($cloud->isConfigured() && !$cloud->getSubscription()->isActive()) {
             return $this->render("AppBundle:Main:adminCloudSubscriptionExpired.html.twig");
         }
 

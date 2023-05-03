@@ -18,7 +18,6 @@ use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
-use DateTime;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use PHPUnit\Framework\TestCase;
@@ -291,7 +290,7 @@ class MainControllerTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $urlGenerator->method("generate")->willReturn("/");
         $cloudSubscription = $this->createMock(CloudSubscription::class);
-        $cloudSubscription->method("isPaid")->willReturn(false);
+        $cloudSubscription->method("isActive")->willReturn(false);
         $cloudService = $this->createMock(CloudService::class);
         $cloudService->method("isConfigured")->willReturn(true);
         $cloudService->method("getSubscription")->willReturn($cloudSubscription);

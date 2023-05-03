@@ -12,7 +12,7 @@
       <p>Domaines inclus : {{ domains|join(", ") }}</p>
     {% endif %}
 
-    {% if not subscription.isPaid %}
+    {% if not subscription.isActive %}
       <p>Votre abonnement a expiré.</p>
     {% endif %}
 
