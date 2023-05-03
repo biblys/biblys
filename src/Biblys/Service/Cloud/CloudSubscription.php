@@ -18,6 +18,11 @@ class CloudSubscription
         return $this->status;
     }
 
+    public function isActive(): bool
+    {
+        return $this->status === "active";
+    }
+
     public function isPaid(): bool
     {
         return $this->isPaid;
