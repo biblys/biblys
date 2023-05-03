@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.68.0 (DEV)
+## 2.68.0 (3 mai 2023)
 
 Améliorations
 
@@ -23,7 +23,7 @@ Deploiement
 - Dans les controllers, remplacer `$_V` par `getCurrentVisitor`.
 - Executer les migrations (supprimer au préalable les colonnes `cart_gift…`)
 
-## 2.67.3 (26 avril 2023)
+### 2.67.3 (26 avril 2023)
 
 Corrections
 
@@ -32,7 +32,7 @@ Corrections
 - Une erreur pouvait empêcher le bon affichage de la page "Mes souhaits". 
   C'est corrigé.
 
-## 2.67.2 (19 avril 2023)
+### 2.67.2 (19 avril 2023)
 
 Corrections
 
@@ -47,7 +47,7 @@ Corrections
 - Les images de couvertures et photos d'exemplaires pouvaient ne pas 
   s'afficher sur la page panier. C'est corrigé.
 
-## 2.67.1 (12 avril 2023)
+### 2.67.1 (12 avril 2023)
 
 Corrections
 
