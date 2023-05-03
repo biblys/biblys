@@ -96,25 +96,4 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertNotNull($session);
         $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
     }
-
-    /**
-     * @route GET /openid/logout
-     * @throws PropelException
-     */
-    public function testLogout()
-    {
-        // given
-        $request = RequestFactory::createAuthRequest();
-        $controller = new OpenIDConnectController();
-
-        // when
-        $response = $controller->logout($request);
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/", $response->getTargetUrl());
-
-        $session = SessionQuery::create()->findOneByToken($request->cookies->get("user_uid"));
-        $this->assertNull($session, "Session should be deleted");
-    }
 }

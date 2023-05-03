@@ -79,18 +79,4 @@ class OpenIDConnectController extends Controller
 
         return $response;
     }
-
-    /**
-     * @throws PropelException
-     */
-    public function logout(Request $request): RedirectResponse
-    {
-        self::authUser($request);
-
-        $session = SessionQuery::create()->findOneByToken($request->cookies->get("user_uid"));
-        $session->delete();
-
-        return new RedirectResponse("/");
-    }
-
 }
