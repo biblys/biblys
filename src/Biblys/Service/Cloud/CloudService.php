@@ -41,7 +41,6 @@ class CloudService
             if (isset($subscription["id"])) {
                 $this->subscription = new CloudSubscription(
                     status: $subscription["status"],
-                    isPaid: $subscription["is_paid"],
                 );
             }
         }

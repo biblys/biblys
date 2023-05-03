@@ -402,7 +402,6 @@ class MainControllerTest extends TestCase
         $cloud = $this->createMock(CloudService::class);
         $cloud->method("getSubscription")->willReturn(new CloudSubscription(
             "active",
-            (new DateTime("1999-12-31"))->getTimestamp(),
         ));
 
         // when
