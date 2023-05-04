@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.68.1 (DEV)
+
+Corrections
+
+- La dépendance du gestionnaire d'erreur Rollbar pouvait déclencher une 
+  erreur fatale. C'est corrigé.
+
 ## 2.68.0 (3 mai 2023)
 
 Améliorations

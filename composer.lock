@@ -2960,16 +2960,16 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "d9a40c864c5965a7f41e25b41abd136f54a6869f"
+                "reference": "4e829697ada547513065eb8c47eaf6141f61d1dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/d9a40c864c5965a7f41e25b41abd136f54a6869f",
-                "reference": "d9a40c864c5965a7f41e25b41abd136f54a6869f",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/4e829697ada547513065eb8c47eaf6141f61d1dd",
+                "reference": "4e829697ada547513065eb8c47eaf6141f61d1dd",
                 "shasum": ""
             },
             "require": {
@@ -2979,9 +2979,9 @@
                 "psr/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
-                "mockery/mockery": "^1",
+                "mockery/mockery": "^1.5.1",
                 "phpmd/phpmd": "^2",
-                "phpunit/phpunit": "^9",
+                "phpunit/phpunit": "^9.6",
                 "squizlabs/php_codesniffer": "^3.6 || 3.x-dev",
                 "vimeo/psalm": "^5"
             },
@@ -3017,9 +3017,9 @@
             "support": {
                 "email": "support@rollbar.com",
                 "issues": "https://github.com/rollbar/rollbar-php/issues",
-                "source": "https://github.com/rollbar/rollbar-php/tree/v4.0.0"
+                "source": "https://github.com/rollbar/rollbar-php/tree/v4.0.1"
             },
-            "time": "2023-03-20T19:03:12+00:00"
+            "time": "2023-04-28T20:01:46+00:00"
         },
         {
             "name": "seld/jsonlint",
