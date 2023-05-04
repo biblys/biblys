@@ -20,11 +20,6 @@ include __DIR__."/../inc/functions.php";
 $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
-// Identification utilisateur
-if (getLegacyVisitor()->isLogged()) {
-    $_LOG = getLegacyVisitor();
-}
-
 $request = Request::createFromGlobals();
 $session = new \Symfony\Component\HttpFoundation\Session\Session();
 $session->start();
