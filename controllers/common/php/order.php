@@ -1,13 +1,14 @@
-<?php /** @noinspection BadExpressionStatementJS */
-global $request;
+<?php
+/** @noinspection PhpUnhandledExceptionInspection */
 /** @noinspection CommaExpressionJS */
-global $site;
-
-/** @noinspection CommaExpressionJS */
+/** @noinspection BadExpressionStatementJS */
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -16,6 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $om = new OrderManager();
 $am = new ArticleManager();
+
+$config = Config::load();
+$request = Request::createFromGlobals();
+$currentSiteService = CurrentSite::buildFromConfig($config);
+$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 $order_url = $request->query->get("url");
 $order = $om->get(["order_url" => $order_url]);
@@ -27,21 +33,7 @@ if (!$order) {
 $o = $order;
 $content = '';
 
-function _isAnonymousOrder(Order $order): bool
-{
-    return !$order->has("user_id");
-}
-
-function _orderBelongsToVisitor(Order $order, Visitor $visitor): bool
-{
-    if (!$visitor->isLogged()) {
-        return false;
-    }
-
-    return $order->get("user_id") === $visitor->get("user_id");
-}
-
-if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor()) || getLegacyVisitor()->isAdmin()) {
+if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserService) || $currentUserService->isAdmin()) {
 
     $buttons = NULL;
 
@@ -49,7 +41,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
 
     $content .= '<h2>Commande n° ' . $o["order_id"] . '</h2>';
 
-    if (getLegacyVisitor()->isAdmin()) {
+    if ($currentUserService->isAdmin()) {
         $content .= '
             <div class="admin">
                 <p>Commande n° ' . $o["order_id"] . '</p>
@@ -106,12 +98,12 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
     ';
 
     // Ref client
-    if (!empty($o["user_id"]) and getLegacyVisitor()->isAdmin()) {
+    if (!empty($o["user_id"]) and $currentUserService->isAdmin()) {
         /** @var PDO $_SQL */
         $stock = $_SQL->prepare("SELECT COUNT(`order_id`) AS `num`, SUM(`order_amount`) AS `CA` FROM `orders` WHERE `user_id` = :user_id AND `site_id` = :site_id AND `order_payment_date` IS NOT NULL AND `order_cancel_date` IS NULL GROUP BY `user_id`");
         $stock->execute([
             'user_id' => $o['user_id'],
-            'site_id' => $site->get('id')
+            'site_id' => $currentSiteService->getId(),
         ]);
         $s = $stock->fetch(PDO::FETCH_ASSOC);
         if ($s) {
@@ -119,7 +111,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         }
     }
 
-    if ($order->has('comment') && getLegacyVisitor()->isAdmin()) {
+    if ($order->has('comment') && $currentUserService->isAdmin()) {
         $content .= '
         <h4>Commentaire du client</h4>
         <p>' . nl2br($order->get('comment')) . '</p>
@@ -155,7 +147,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
     if (!$o["order_payment_date"]) $buttons .= '<a href="/payment/' . $o["order_url"] . '" class="btn btn-primary"><i class="fa fa-money"></i>&nbsp; Payer la commande (' . currency($o["order_amount_tobepaid"] / 100) . ')</a> ';
     else $buttons .= '<a href="/invoice/' . $o["order_url"] . '" class="btn btn-default"><i class="fa fa-print"></i> Imprimer une facture</a> ';
 
-    // Suivi et confirmation
+    $currentSite = $currentSiteService->getSite();
     if ($o["order_shipping_date"]) {
         if ($o["order_track_number"]) {
             $content .= '
@@ -191,10 +183,10 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
                     </html>
                 ';
 
-                $to = $site->get("contact");
-                $subject = $site->get("tag") . " | Commande n° " . $o["order_id"] . " : incident";
+                $to = $currentSite->getContact();
+                $subject = $currentSite->getTag() . " | Commande n° " . $o["order_id"] . " : incident";
                 $body = stripslashes($content);
-                $from = [$site->get("contact") => $o["order_firstname"] . " " . $o["order_lastname"]];
+                $from = [$currentSite->getContact() => $o["order_firstname"] . " " . $o["order_lastname"]];
                 $options = ["reply-to" => $o["order_email"]];
                 $mailer = new Mailer();
                 $mailer->send($to, $subject, $body, $from, $options);
@@ -212,7 +204,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
                             problème, vous pouvez la renvoyer intégralement ou en partie à l\'adresse ci-dessous sous 7
                             jours. Le montant des livres retournés vous sera remboursés intégralement.
                         </p>
-                        <p class="center"><strong>' . $site->get("title") . '<br />' . str_replace("|", "<br />", $site->get("address")) . '</strong></p>
+                        <p class="center"><strong>' . $currentSite->getTitle() . '<br />' . str_replace("|", "<br />", $currentSite->getAddress()) . '</strong></p>
                         <p>Merci d\'indiquer les raisons pour lesquelles vous souhaitez renvoyer votre commande :</p>
                         <textarea name="incident"></textarea>
                         <br />
@@ -246,9 +238,9 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         $cover_article = new Media('stock', $copy->get('id'));
         $cover = NULL;
         if ($cover_article->exists()) {
-            $cover = '<a href="' . $cover_article->url() . '" rel="lightbox"><img src="' . $cover_article->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
+            $cover = '<a href="' . $cover_article->getUrl() . '" rel="lightbox"><img src="' . $cover_article->getUrl(["size" => "h100"]) . '" height=60 alt="' . $a["article_title"] . '"></a>';
         } elseif ($cover_stock->exists()) {
-            $cover = '<a href="' . $cover_stock->url() . '" rel="lightbox"><img src="' . $cover_stock->url('h100') . '" height=60 alt="' . $a["article_title"] . '"></a>';
+            $cover = '<a href="' . $cover_stock->getUrl() . '" rel="lightbox"><img src="' . $cover_stock->getUrl(["size" => "h100"]) . '" height=60 alt="' . $a["article_title"] . '"></a>';
         }
 
         // Precommande
@@ -283,7 +275,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         $total_tva += $a['stock_selling_price_tva'];
 
         $copyId = $copy->get('id');
-        if (getLegacyVisitor()->isAdmin()) {
+        if ($currentUserService->isAdmin()) {
             $copyId = '<a href="/pages/adm_stock?id=' . $copyId . '">' . $copyId . '</a>';
         }
 
@@ -331,7 +323,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
             </tr>
     ';
 
-    if (isset($o["order_weight"]) && $site->get("shipping_fee")) {
+    if (isset($o["order_weight"]) && $currentSite->getShippingFee()) {
         $content .= '
                     <tr>
                         <th colspan="3" class="right">Poids :</th>
@@ -373,7 +365,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         </table>
     ';
 
-    /** @var Config $config */
     $matomo = $config->get("matomo");
     if ($matomo && $order->isPayed()) {
 
@@ -415,7 +406,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         ";
     }
 
-    if (getLegacyVisitor()->isAdmin()) {
+    if ($currentUserService->isAdmin()) {
         /** @var UrlGenerator $urlgenerator */
         $content .= '
             <h3 class="text-center">Origine de la commande</h3>
@@ -426,10 +417,24 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
             </p>
         ';
     }
-} elseif (!getLegacyVisitor()->isLogged()) {
+} elseif (!$currentUserService->isAuthentified()) {
     throw new UnauthorizedHttpException("", "Vous n'avez pas le droit d'accéder à cette page.");
 } else {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
 return new Response($content);
+
+function _isAnonymousOrder(Order $order): bool
+{
+    return !$order->has("user_id");
+}
+
+function _orderBelongsToVisitor(Order $order, CurrentUser $currentUser): bool
+{
+    if (!$currentUser->isAuthentified()) {
+        return false;
+    }
+
+    return $order->get("user_id") === $currentUser->getUser()->getId();
+}

@@ -1,16 +1,19 @@
 <?php
 
-
-
+use Biblys\Service\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $om = new OrderManager();
 
 $content = "<h2>Mes commandes</h2>";
 
+$request = Request::createFromGlobals();
+$currentUserService = CurrentUser::buildFromRequest($request);
+
 $orders = $om->getAll([
     'order_type' => 'web',
-    'user_id' => getLegacyVisitor()->get('id')
+    'user_id' => $currentUserService->getUser()->getId(),
 ], [
     'order' => 'order_insert',
     'sort' => 'desc'

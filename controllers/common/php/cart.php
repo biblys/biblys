@@ -1,11 +1,15 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
+global $urlgenerator;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-use Framework\Exception\AuthException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $am  = new ArticleManager();
@@ -21,6 +25,9 @@ $um = new UserManager();
 $content = null;
 
 $config = Config::load();
+$request = Request::createFromGlobals();
+$currentSiteService = CurrentSite::buildFromConfig($config);
+$currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
 
 /** @var Request $request */
 /** @var UrlGenerator $urlGenerator */
@@ -31,8 +38,8 @@ $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl])
 $cart_id = $request->query->get('cart_id', false);
 if ($cart_id) {
 
-    if (!getLegacyVisitor()->isAdmin()) {
-        throw new AuthException("Seuls les administrateurs peuvent prévisualiser un panier.");
+    if (!$currentUserService->isAdmin()) {
+        throw new AccessDeniedHttpException("Seuls les administrateurs peuvent prévisualiser un panier.");
     }
 
     $cart = $cm->getById($cart_id);
@@ -107,9 +114,9 @@ foreach ($stocks as $stock) {
 
     // On order
     $availability = null;
-    if (!$stock->get('purchase_date') && !$_SITE["publisher_id"]) {
+    if (!$stock->get('purchase_date') && $currentSiteService->getSite()->getPublisherId() === null) {
         $on_order = 1;
-        $availability = '<i class="fa fa-square lightblue" alt="Sur commande" title="Sur commande"></i>&nbsp;';
+        $availability = '<span class="fa fa-square lightblue" title="Sur commande"></span>&nbsp;';
     }
 
     // Preorder
@@ -117,7 +124,7 @@ foreach ($stocks as $stock) {
     if ($article->get('pubdate') > date("Y-m-d")) {
         $pre_order = 1;
         $preorder = '<p class="warning left">&Agrave; para&icirc;tre le '._date($article->get('pubdate'), 'd/m/Y').'</p>';
-        $availability = '<i class="fa fa-square lightblue" alt="Précommande" title="Précommande"></i>&nbsp;';
+        $availability = '<span class="fa fa-square lightblue" title="Précommande"></span>&nbsp;';
     }
 
     // Editable price
@@ -147,7 +154,7 @@ foreach ($stocks as $stock) {
                 '.($stock->has('condition') ? 'État : '.$stock->get('condition').'<br>' : null).'
                 '.$editable_price_form.'
             </td>
-            '.($_SITE["site_shipping_fee"] == "fr" ? '<td class="right">'.$stock->get('weight').'g</td>' : null).'
+            '.($currentSiteService->getSite()->getShippingFee() == "fr" ? '<td class="right">'.$stock->get('weight').'g</td>' : null).'
             <td class="right">
                 '.$availability.'
                 '.currency($stock->get('selling_price') / 100).'<br />
@@ -174,7 +181,7 @@ foreach ($stocks as $stock) {
     $Articles++;
 }
 
-if (getLegacyVisitor()->isAdmin()) {
+if ($currentUserService->isAdmin()) {
     $content .= '
         <div class="admin">
             <p>Panier n&deg; '.$cart->get('id').'</p>
@@ -194,7 +201,7 @@ $content .= '
                 <th></th>
                 <th>Article</th>
 ';
-if ($_SITE["site_shipping_fee"] == "fr") {
+if ($currentSiteService->getSite()->getShippingFee() == "fr") {
     $content .= '<th class="center">Poids</th>';
 }
 $content .= '
@@ -206,7 +213,7 @@ $content .= '
 '.implode($cart_content);
 
 if (isset($Articles) && $Articles > 0) {
-    if (!auth()) {
+    if (!$currentUserService->isAuthentified()) {
         $content .= '
             <p class="warning">
                 Attention : vous n\'&ecirc;tes pas connect&eacute;. Si vous quittez le site, votre
@@ -217,11 +224,11 @@ if (isset($Articles) && $Articles > 0) {
     }
 
     // Deja une commande en cours ?
-    if (auth()) {
+    if ($currentUserService->isAuthentified()) {
         $order = $om->get(
             [
                 'order_type' => 'web',
-                'user_id' => getLegacyVisitor()->get('user_id'),
+                'user_id' => $currentUserService->getUser()->getId(),
                 'order_payment_date' => 'NULL',
                 'order_shipping_date' => 'NULL',
                 'order_cancel_date' => 'NULL'
@@ -249,10 +256,12 @@ if (isset($Articles) && $Articles > 0) {
 
                 // Image
                 $s["couv"] = null;
-                if (media_exists('stock', $s["stock_id"])) {
-                    $s["couv"] = '<a href="'.media_url('stock', $s["stock_id"]).'" rel="lightbox"><img src="'.media_url('stock', $s["stock_id"], 'h60').'" alt="'.$s["article_title"].'" height="60" /></a>';
-                } elseif (media_exists('article', $article->get('id'))) {
-                    $s["couv"] = '<a href="'.media_url('article', $article->get('id')).'" rel="lightbox"><img src="'.media_url('article', $article->get('id'), "h60").'" alt="'.$article->get('title').'" /></a>';
+                $stockPhoto = new Media("stock", $s["stock_id"]);
+                $articleCover = new Media("article", $article->get("id"));
+                if ($stockPhoto->exists()) {
+                    $s["couv"] = '<a href="'.$stockPhoto->getUrl().'" rel="lightbox"><img src="' .$stockPhoto->getUrl(["size" => "h60"]).'" alt="'.$s["article_title"].'" height="60" /></a>';
+                } elseif ($articleCover->exists()) {
+                    $s["couv"] = '<a href="'.$articleCover->getUrl().'" rel="lightbox"><img src="' .$articleCover->getUrl(["size" => "h60"]).'" alt="'.$article->get('title').'" /></a>';
                 }
 
                 $content .= '
@@ -272,7 +281,7 @@ if (isset($Articles) && $Articles > 0) {
                 $content .= '
                         </td>
                 ';
-                if ($_SITE["site_shipping_fee"] == "fr") {
+                if ($currentSiteService->getSite()->getShippingFee() == "fr") {
                     $content .= '<td class="right">'.$s["stock_weight"].'g</td>';
                 }
                 $content .= '
@@ -293,9 +302,9 @@ if (isset($Articles) && $Articles > 0) {
     }
 
     // Special offers
-    $special_offer_amount = $site->getOpt('special_offer_amount');
-    $special_offer_article = $site->getOpt('special_offer_article');
-    $special_offer_collection = $site->getOpt('special_offer_collection');
+    $special_offer_amount = $currentSiteService->getOption('special_offer_amount');
+    $special_offer_article = $currentSiteService->getOption('special_offer_article');
+    $special_offer_collection = $currentSiteService->getOption('special_offer_collection');
 
     // Special offer: article for amount of articles in collection
     if ($special_offer_collection && $special_offer_amount
@@ -402,7 +411,7 @@ if (isset($Articles) && $Articles > 0) {
                     <td colspan="3" class="right">Total :</td>
     ';
 
-    if ($_SITE["site_shipping_fee"] == "fr") {
+    if ($currentSiteService->getSite()->getShippingFee() == "fr") {
         $content .= '<td class="right">'.$Poids.'g <input type="hidden" id="stock_weight" value="'.$Poids.'"></td>';
     }
     $content .= '
@@ -415,12 +424,12 @@ if (isset($Articles) && $Articles > 0) {
 
     // Pre-order books
     if ($pre_order) {
-        $content .= '<p class="warning">Certains des livres de votre panier (<i class="fa fa-square lightblue" alt="Précommande" title="Précommande"></i>) sont à paraître. Votre commande sera expédiée lorsque tous les articles qu\'elles contient seront parus.</p>';
+        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Précommande"></span>) sont à paraître. Votre commande sera expédiée lorsque tous les articles qu\'elles contient seront parus.</p>';
     }
 
     // On order books
     if ($on_order) {
-        $content .= '<p class="warning">Certains des livres de votre panier (<i class="fa fa-square lightblue" alt="Sur commande" title="Sur commande"></i>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut-être retardée de 72h.</p>';
+        $content .= '<p class="warning">Certains des livres de votre panier (<span class="fa fa-square lightblue" title="Sur commande"></span>) ne sont pas disponibles en stock et doivent être commandés. L\'expédition de votre commande peut-être retardée de 72h.</p>';
     }
 
     $content .= '
@@ -437,15 +446,11 @@ if (isset($Articles) && $Articles > 0) {
         $destinations = null;
         $countries = $com->getAll();
         $destinations = array_map(function ($country) {
-            $selected = null;
-            if ($country->get('name') === getLegacyVisitor()->get('country')) {
-                $selected = " selected";
-            }
-            return '<option value="'.$country->get('id').'"'.$selected.'>'.$country->get('name').'</option>';
+            return '<option value="'.$country->get('id').'">'.$country->get('name').'</option>';
         }, $countries);
         $default_destination = $com->get(["country_name" => "France"]);
 
-        if (getLegacyVisitor()->isLogged() && $customer = getLegacyVisitor()->getCustomer()) {
+        if ($currentUserService->isAuthentified() && $customer = getLegacyVisitor()->getCustomer()) {
             $country_id = $customer->get('country_id');
             $country = $com->getById($country_id);
             if ($country) {
@@ -509,7 +514,7 @@ if (isset($Articles) && $Articles > 0) {
     }
 
     // If cart contains downloadable and user not logged
-    if ($downloadable && !getLegacyVisitor()->isLogged()) {
+    if ($downloadable && !$currentUserService->isAuthentified()) {
         $content .= '<br />'
         . '<div class="center">'
         . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
@@ -517,18 +522,16 @@ if (isset($Articles) && $Articles > 0) {
         . '</div>';
 
     // If cart contains crowdfunding rewards and user not logged
-    } elseif (!empty($crowdfunding) && !getLegacyVisitor()->isLogged()) {
+    } elseif (!empty($crowdfunding) && !$currentUserService->isAuthentified()) {
         $content .= '<br>'
         . '<div class="center">'
         . '<p class="warning">Votre panier contient au moins une contrepartie de financement participatif.<br>Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
         . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
         . '</div>';
+    } elseif (isset($o["order_id"])) {
+        $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
     } else {
-        if (isset($o["order_id"])) {
-            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Ajouter à la commande en cours</button></div>';
-        } else {
-            $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
-        }
+        $content .= '<div class="center"><button type="submit" class="btn btn-primary" id="continue">Finaliser votre commande</button></div>';
     }
 
     $content .= '
