@@ -2,7 +2,6 @@
 
 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
-/** @var string $_PAGE */
 
 use Biblys\Database\Connection;
 use Biblys\Exception\InvalidEntityException;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
@@ -36,6 +36,17 @@ $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $routes = RouteLoader::load();
 $urlgenerator = new UrlGenerator($routes, new RequestContext());
 $_SQL = Connection::init($config);
+
+if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
+    throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
+}
+
+/** @var Site $site */
+$publisherId = $currentUser->getCurrentRight()->getPublisherId();
+if (!$site->allowsPublisherWithId($publisherId)) {
+    $pm = new PublisherManager();
+    throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
+}
 
 $am->setIgnoreSiteFilters(true);
 
@@ -226,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($redirect_to_stock)) {
             return new RedirectResponse('/pages/adm_stock?add=' . $_POST['article_id'] . '#add');
         } elseif (isset($redirect_to_new)) {
-            return new RedirectResponse('/pages/adm_article');
+            return new RedirectResponse('/pages/article_edit');
         } else {
             $routes = RouteLoader::load();
             $articleUrl = $urlgenerator->generate('article_show', [
@@ -364,7 +375,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     );
 
     $import = $request->query->get('import');
-    return new RedirectResponse('/pages/'.$_PAGE.'?import='.$import);
+    return new RedirectResponse('/pages/article_edit?import='.$import);
 }
 
 // Types
@@ -669,7 +680,7 @@ $content .= '
         </fieldset>
     </form>
 
-    <form id="article_form" action="/pages/'.$_PAGE.'?id='.$a['article_id'].'" method="post" enctype="multipart/form-data" class="fieldset check event" data-mode="'.$_MODE.'" data-uploading=0 data-submitted=0>
+    <form id="article_form" action="/pages/article_edit?id='.$a['article_id'].'" method="post" enctype="multipart/form-data" class="fieldset check event" data-mode="'.$_MODE.'" data-uploading=0 data-submitted=0>
 
         <fieldset>
             <legend>Importation</legend>

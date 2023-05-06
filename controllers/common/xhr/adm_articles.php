@@ -50,7 +50,7 @@ if (isset($q)) {
     }
     $json[$j]["label"] = '=> Nouvel article pour '.$_GET["term"];
     $json[$j]["value"] = '';
-    $json[$j]["url"] = "/pages/adm_article?import=".$_GET["term"];
+    $json[$j]["url"] = "/pages/article_edit?import=".$_GET["term"];
 }
 
 $response = new JsonResponse($json);

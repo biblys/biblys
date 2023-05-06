@@ -187,7 +187,7 @@ class Entry
 
         $entries = [];
 
-        $entries[] = new Entry('Nouvel article', ['category' => 'articles', 'url' => '/pages/adm_article', 'icon' => 'book']);
+        $entries[] = new Entry('Nouvel article', ['category' => 'articles', 'url' => '/pages/article_edit', 'icon' => 'book']);
         $entries[] = new Entry('Rayons', ['category' => 'articles', 'path' => 'rayon_index', 'icon' => 'sort-amount-asc']);
         $entries[] = new Entry('Termes de recherche', ['category' => 'articles', 'path' => 'article_search_terms', 'icon' => 'search', 'subscription' => 'search-terms']);
         $entries[] = new Entry('Codes ISBN', ['category' => 'articles', 'url' => '/pages/adm_isbn_codes', 'icon' => 'barcode']);
