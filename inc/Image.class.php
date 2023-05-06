@@ -260,8 +260,8 @@
 		 */
 		public function create()
 		{
-			global $_SITE;
-			$insert = $this->_db->query('INSERT INTO `images`(`site_id`, `image_inserted`) VALUES('.$_SITE['site_id'].', NOW())');
+			
+			$insert = $this->_db->query('INSERT INTO `images`(`site_id`, `image_inserted`) VALUES('.getLegacyCurrentSite()['site_id'].', NOW())');
 			$id = $this->_db->lastInsertId();
 
 			$get = $this->get(array('image_id' => $id));
@@ -274,7 +274,7 @@
 		public function update(Image $i)
 		{
 
-			global $_SITE;
+			
 
 			$fields = array(); // Updated fields array
 			$params = array(); // SQL query params

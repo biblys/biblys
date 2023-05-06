@@ -24,11 +24,11 @@
 		);
 	
 		function __construct($options = null, $initialize = true) {
-			global $_SITE;
+			
 			$this->options = array(
 				'script_url' => $this->get_full_url().'/',
-				'upload_dir' => biblysPath()."/public/".$_SITE["site_name"]."/img/",
-				'upload_url' => "/".$_SITE["site_name"]."/img/",
+				'upload_dir' => biblysPath()."/public/".getLegacyCurrentSite()["site_name"]."/img/",
+				'upload_url' => "/".getLegacyCurrentSite()["site_name"]."/img/",
 				'param_name' => 'files',
 				// Set the following option to 'POST', if your server does not support
 				// DELETE requests. This is a parameter sent to the client:
@@ -519,7 +519,7 @@
 
 	if($_GET["load"]) {
 		// Fichiers HTML
-		$dir = biblysPath()."/public/".$_SITE["site_name"]."/html/";
+		$dir = biblysPath()."/public/".getLegacyCurrentSite()["site_name"]."/html/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			while($element = readdir($dir)) {
@@ -534,7 +534,7 @@
 		}
 		
 		// Fichiers CSS
-		$dir = biblysPath()."/public/".$_SITE["site_name"]."/css/";
+		$dir = biblysPath()."/public/".getLegacyCurrentSite()["site_name"]."/css/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			while($element = readdir($dir)) {
@@ -549,7 +549,7 @@
 		}
 		
 		// Fichiers IMG
-		$dir = biblysPath()."/public/".$_SITE["site_name"]."/img/";
+		$dir = biblysPath()."/public/".getLegacyCurrentSite()["site_name"]."/img/";
 		if(is_dir($dir)) {
 			$dir = opendir($dir);
 			$img = array();
@@ -560,11 +560,11 @@
 					}
 				}
 			}
-			foreach($img as $f) $j["img"] .= '<li data-id="'.md5('/img/'.$f).'" data-url="/'.$_SITE["site_name"].'/img/'.$f.'" class="openImage">'.$f.'</li>';
+			foreach($img as $f) $j["img"] .= '<li data-id="'.md5('/img/'.$f).'" data-url="/'.getLegacyCurrentSite()["site_name"].'/img/'.$f.'" class="openImage">'.$f.'</li>';
 		}
 		
 	} elseif($_GET["open"]) {
-		$file = biblysPath()."/public/".$_SITE["site_name"].$_GET["file"];
+		$file = biblysPath()."/public/".getLegacyCurrentSite()["site_name"].$_GET["file"];
 		if(file_exists($file)) {
 			$j["id"] = md5($_GET["file"]);
 			$j["content"] = htmlspecialchars(file_get_contents($file, true));
@@ -572,11 +572,11 @@
 			$j["name"] = $_GET["name"];
 		} else $j["error"] = 'Le fichier n\'existe pas !';
 	} elseif($_GET["save"]) {
-		$file = biblysPath()."/public/".$_SITE["site_name"].$_POST["url"];
+		$file = biblysPath()."/public/".getLegacyCurrentSite()["site_name"].$_POST["url"];
 		fwrite(fopen($file, "w"), stripslashes($_POST["content"]));
 		$j["ok"] = 1;
 	} elseif($_GET["create"]) {
-		$file = biblysPath()."/public/".$_SITE["site_name"].'/html/'.$_GET["name"];
+		$file = biblysPath()."/public/".getLegacyCurrentSite()["site_name"].'/html/'.$_GET["name"];
 		fwrite(fopen($file, "w"), stripslashes($_POST["content"]));
 		$j["ok"] = 1;
 	} elseif($_GET["upload"]) {

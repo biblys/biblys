@@ -49,8 +49,7 @@ class OrderDeliveryTest extends TestCase
             "order_firstname" => "Barnabé",
             "order_lastname" => "Famagouste"
         ];
-        $_SITE = $site;
-        $country = ModelFactory::createCountry();
+                $country = ModelFactory::createCountry();
 
         $request = new Request();
         $request->setMethod("POST");
@@ -126,8 +125,7 @@ class OrderDeliveryTest extends TestCase
             "order_firstname" => "Barnabé",
             "order_lastname" => "Famagouste"
         ];
-        $_SITE = $site;
-
+        
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
@@ -199,8 +197,7 @@ class OrderDeliveryTest extends TestCase
             "order_firstname" => "Barnabé",
             "order_lastname" => "Famagouste"
         ];
-        $_SITE = $site;
-
+        
         $request = new Request();
         $request->setMethod("POST");
         $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");

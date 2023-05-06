@@ -44,7 +44,7 @@ $stock = $_SQL->prepare(
     GROUP BY `s`.`stock_id`
     ORDER BY `stock_purchase_date`'
 );
-$params['site_id'] = $_SITE["site_id"];
+$params['site_id'] = getLegacyCurrentSite()["site_id"];
 $stock->execute($params) or error($orders->errorInfo());
 
 // Export to CSV
@@ -60,7 +60,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
         $s['stock_condition'] = 'Occasion';
     }
     // Prix HT
-    if ($_SITE['site_tva']) {
+    if (getLegacyCurrentSite()['site_tva']) {
         $s['tva_rate'] = tva_rate(
             $s['article_tva'], $s["stock_purchase_date"]
         ) / 100;
@@ -140,7 +140,7 @@ $_ECHO .= '
     <form action="/pages/export_to_csv" method="post">
         <fieldset class="right">
             <input type="hidden" name="filename" 
-                value="stock_'.$_SITE['site_name'].'_au_'.$_GET["date"].'">
+                value="stock_'.getLegacyCurrentSite()['site_name'].'_au_'.$_GET["date"].'">
             <input type="hidden" name="header" 
                 value="'.htmlentities(json_encode($header)).'">
             <input type="hidden" name="data" 

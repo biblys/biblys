@@ -16,7 +16,7 @@ if (isset($_GET["type"]) && !empty($_GET['type'])) $query .= " AND `type_id` = "
 $query = "SELECT `article_title`, `article_url`, GROUP_CONCAT(DISTINCT `article_id`) AS `ids`, COUNT(`stock_id`) AS `Ventes`, SUM(`stock_selling_price`) AS `CA`, GROUP_CONCAT(DISTINCT `article_publisher` SEPARATOR ', ') AS `publishers`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
-    WHERE `stock`.`site_id` = ".$_SITE["site_id"]." AND `stock_selling_price` != 0 ".$query."
+    WHERE `stock`.`site_id` = ".getLegacyCurrentSite()["site_id"]." AND `stock_selling_price` != 0 ".$query."
     GROUP BY `article_item`, IF (`article_item` IS null, `article_id`, null)
     HAVING COUNT(`stock_id`) >= 3
     ORDER BY `Ventes` DESC, `CA`";
@@ -26,7 +26,7 @@ $sql = $_SQL->query($query);
 $i = 0; $total = 0;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $i++;
-    if ($_SITE['site_tva']) $x["CA"] = $x["CA"] / 1.055;
+    if (getLegacyCurrentSite()['site_tva']) $x["CA"] = $x["CA"] / 1.055;
     $list .= '
             <tr>
                 <td class="right">'.$i.'.</td>
@@ -49,7 +49,7 @@ for($y = date('Y'); $y >= 2010; $y--) {
 // Types d'articles
 $type_options = Biblys\Article\Type::getOptions($request->query->get('type'));
 
-if ($_SITE['site_tva']) $HT = 'HT'; else $HT = 'TTC';
+if (getLegacyCurrentSite()['site_tva']) $HT = 'HT'; else $HT = 'TTC';
 
 $_ECHO .= '
 

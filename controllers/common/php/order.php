@@ -168,11 +168,10 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
             // Incident
             if (!empty($_POST["incident"])) {
                 // Envoi du mail
-                /** @var Site $_SITE */
-                $content = '
+                                $content = '
                     <html lang="fr">
                         <head>
-                            <title>' . $_SITE["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
+                            <title>' . getLegacyCurrentSite()["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
                         </head>
                         <body>
                             <p>Le client souhaite retourner la commande n°&nbsp;<a href="https://' . $_SERVER["HTTP_HOST"] . '/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></p>

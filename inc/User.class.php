@@ -262,8 +262,6 @@ class User extends Entity
     /**
      * Is the user root ?
      *
-     * @global Site $_SITE
-     *
      * @return bool
      */
     public function isRoot()
@@ -274,30 +272,28 @@ class User extends Entity
     /**
      * Is the user an admin ?
      *
-     * @global Site $_SITE
-     *
      * @return bool
      */
     public function isAdmin()
     {
-        global $_SITE;
+        
         if ($this->isRoot()) {
             return true;
         } else {
-            return $this->hasRight('site', $_SITE['id']);
+            return $this->hasRight('site', getLegacyCurrentSite()['id']);
         }
     }
 
     public function getRights()
     {
-        global $_SITE;
+        
 
         $rm = new RightManager();
         $rights = $rm->getAll(['user_id' => $this->get('id')], [], false);
 
         // Keep only admin rights for current site
         foreach ($rights as $key => $right) {
-            if ($right->has('site_id') && $right->get('site_id') != $_SITE['site_id']) {
+            if ($right->has('site_id') && $right->get('site_id') != getLegacyCurrentSite()['site_id']) {
                 unset($rights[$key]);
             }
         }

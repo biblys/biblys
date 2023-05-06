@@ -12,7 +12,7 @@
 
     $rows = array_map(function($stock) {
 
-        global $_SITE, $sm, $done;
+        global $sm, $done;
 
         $article = $stock->get('article');
         if (!$article) {

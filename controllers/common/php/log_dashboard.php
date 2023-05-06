@@ -65,9 +65,9 @@ foreach ($rights as $r) {
         $mode = 'Bibliothèque';
         $label = $r->get('library')->get('name');
     } elseif ($r->has('site_id')) {
-        if ($r->get('site_id') == $_SITE['site_id']) {
+        if ($r->get('site_id') == getLegacyCurrentSite()['site_id']) {
             $mode = 'Administrateur';
-            $label = $_SITE['site_title'];
+            $label = getLegacyCurrentSite()['site_title'];
         } else continue;
     } else continue;
     $rights_optgroup[$mode][] = '<option' . ($r->has('current') ? ' selected' : null) . ' value="/pages/log_dashboard?right_id=' . $r->get('id') . '">' . $label . '</option>';
@@ -96,7 +96,7 @@ if (getLegacyVisitor()->isPublisher()) {
         $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/log_article', 'fa-book');
 
         // L'Autre Livre
-        if ($_SITE['site_id'] == 11) {
+        if (getLegacyCurrentSite()['site_id'] == 11) {
             $items['Contenu'][] = array('Billets', '/pages/pub_posts', 'fa-newspaper-o');
             $items['Contenu'][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
             $items['Contenu'][] = array('Dédicaces', '/pages/log_signings_admin', 'fa-pencil');
@@ -124,7 +124,7 @@ if (getLegacyVisitor()->isLibrary()) {
         $items["Bibliothèque"][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
 
         // LVDI
-        if ($_SITE['site_id'] == 16) $items['Assistance'][] = array('Mode d\'emploi', '/pages/doc_partenaires');
+        if (getLegacyCurrentSite()['site_id'] == 16) $items['Assistance'][] = array('Mode d\'emploi', '/pages/doc_partenaires');
     }
 }
 

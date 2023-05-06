@@ -243,8 +243,7 @@ $content .= '
                 <td>' . $numberOfCopiesInCart . '</td>
             </tr>
 ';
-/** @var Site $_SITE */
-if ($_SITE["site_shipping_fee"] == 'fr') {
+if (getLegacyCurrentSite()["site_shipping_fee"] == 'fr') {
     $content .= '
                 <tr>
                     <td class="right">Poids : </td>

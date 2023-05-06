@@ -15,7 +15,7 @@
 				`article_id`, `article_pubdate`, `type_id`, `article_tva`
 		FROM `stock`
 		JOIN `articles` USING(`article_id`)
-		WHERE `site_id` = '.$_SITE['site_id']);
+		WHERE `site_id` = '.getLegacyCurrentSite()['site_id']);
 	$stock = $stock->fetchAll(PDO::FETCH_ASSOC);
 
 	$table = NULL;
@@ -35,7 +35,7 @@
 				)
 			{
 				// HT Price
-				if ($_SITE['site_tva'])
+				if (getLegacyCurrentSite()['site_tva'])
 				{
 					$s['tva_rate'] = tva_rate($s['article_tva'],$s["stock_purchase_date"]) / 100;
 					$s['stock_selling_price_ht'] = $s['stock_selling_price'] / (1 + $s['tva_rate']);

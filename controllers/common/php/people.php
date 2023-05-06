@@ -27,14 +27,13 @@ if (!$use_old_controller) {
 
 $p = $people;
 
-/** @var Site $_SITE */
 $_OPENGRAPH = '
     <meta property="og:title" content="'.$p["people_name"].'"/>
     <meta property="og:type" content="author"/>
     <meta property="og:url" content="https://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
     <meta property="og:description" content="'.truncate($p["people_bio"], '500', '...', true).'"/>
     <meta property="og:locale" content="fr_FR"/>
-    <meta property="og:site_name" content="'.$_SITE["site_name"].'"/>
+    <meta property="og:site_name" content="'.getLegacyCurrentSite()["site_name"].'"/>
 ';
 
 $photo = new Media("people", $p["people_id"]);
@@ -73,7 +72,7 @@ if ($people->has('pseudo')) {
 
 // Linked post
 /** @var PDO $_SQL */
-$sql = $_SQL->query("SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '".$_SITE["site_id"]."' AND `links`.`people_id` = '".$p["people_id"]."'");
+$sql = $_SQL->query("SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '".getLegacyCurrentSite()["site_id"]."' AND `links`.`people_id` = '".$p["people_id"]."'");
 $posts = $sql->fetchAll();
 
 if ($posts) {

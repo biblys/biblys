@@ -63,9 +63,9 @@ class Visitor extends User
         */
     public function isAdmin()
     {
-        global $_SITE;
+        
         $right = $this->getCurrentRight();
-        if ($right->get('site_id') == $_SITE['site_id']) {
+        if ($right->get('site_id') == getLegacyCurrentSite()['site_id']) {
             return true;
         }
         return false;
@@ -203,7 +203,7 @@ class Visitor extends User
 
     public function getCurrentRight(): Right
     {
-        global $_SITE;
+        
 
         $rm = new RightManager();
         $rights = $this->getRights();
@@ -216,7 +216,7 @@ class Visitor extends User
         }
 
         // If no right & user is admin, return admin right
-        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => $_SITE['site_id']])) {
+        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => getLegacyCurrentSite()['site_id']])) {
             return $right;
         }
 

@@ -96,7 +96,7 @@
         
         
         // Stand LAL
-        if ($_SITE['site_id'] == 11 && getLegacyVisitor()->isPublisher())
+        if (getLegacyCurrentSite()['site_id'] == 11 && getLegacyVisitor()->isPublisher())
         {
             $sum = new SubscriptionManager();
             if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id'))))

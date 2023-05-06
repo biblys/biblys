@@ -131,7 +131,7 @@
 				<fieldset>
 					<legend>Autres informations</legend>
 					<p>
-						<label for="bookshop_representative">'.($_SITE['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
+						<label for="bookshop_representative">'.(getLegacyCurrentSite()['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
 						<input type="text" name="bookshop_representative" id="bookshop_representative" value="'.(isset($b['bookshop_representative']) ? $b["bookshop_representative"] : null).'" class="long">
 					</p>
 					<p>

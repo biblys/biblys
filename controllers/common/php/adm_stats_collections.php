@@ -17,7 +17,7 @@
         HAVING COUNT(`stock_id`) >= 3
         ORDER BY `CA` DESC, `Ventes`
     ");
-	$query->bindValue(':site_id', $_SITE["site_id"], PDO::PARAM_INT);
+	$query->bindValue(':site_id', getLegacyCurrentSite()["site_id"], PDO::PARAM_INT);
 	if(isset($_GET["year"])) $query->bindValue(':year', $_GET["year"].'%', PDO::PARAM_INT);
 	$query->execute() or error(pdo_error());
     

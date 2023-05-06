@@ -84,7 +84,7 @@ if (!empty($_GET["q"])) {
                 $sql[] = "`stock_condition` != 'Neuf'";
                 $filters .= ' d\'occasion';
             } elseif ($q == "commande") {
-                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".$_SITE['site_id']."]%' AND `article_availability` = 1";
+                $sql[] = "`stock_id` IS NULL AND `article_links` LIKE '%[onorder:".getLegacyCurrentSite()['site_id']."]%' AND `article_availability` = 1";
                 $filters .= ' sur commande';
             } elseif ($q == "indisp") {
                 $sql[] = "`stock_id` IS NULL";
@@ -261,7 +261,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
 
 
         // Sur commande
-    } elseif (strstr($x["article_links"], '[onorder:'.$_SITE["site_id"].']') && $x["article_availability"] == 1) {
+    } elseif (strstr($x["article_links"], '[onorder:'.getLegacyCurrentSite()["site_id"].']') && $x["article_availability"] == 1) {
         $x["availability"] = '<img src="/common/img/square_blue.png" alt="Sur commande" title="Sur commande" />';
         $x["price"] = price($x["article_price"], 'EUR');
         $x["condition"] = ' onorder';
@@ -481,7 +481,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         <meta property="og:title" content="'.$_PAGE_TITLE.'"/>
         <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
         <meta property="og:description" content="'.strip_tags(truncate(strip_tags($_og_description), '500', '...', true)).'"/>
-        <meta property="og:site_name" content="'.$_SITE["site_name"].'"/>
+        <meta property="og:site_name" content="'.getLegacyCurrentSite()["site_name"].'"/>
     '.$_og_image;
 }
 

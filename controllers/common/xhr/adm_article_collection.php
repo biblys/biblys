@@ -14,7 +14,7 @@ if ($getTerm) {
     $publisherId = null;
 
     // Si on est sur un site editeur
-    if (!empty($_SITE["publisher_id"])) {
+    if (!empty(getLegacyCurrentSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
         $publisherId = $site->get('publisher_id');
         $params["publisher_id"] = $publisherId;

@@ -5,6 +5,7 @@
 Déploiement
 
 - Dans les controllers, remplacer `$_LOG` par `getLegacyVisitor()`.
+- Dans les controllers, remplacer `$_SITE` par `getLegacyCurrentSite()`.
 
 ### 2.68.6 (14 juin 2023)
 

@@ -6,7 +6,7 @@
         
         public function __construct($data)
         {
-            global $_SQL, $_SITE;
+            global $_SQL;
 
             /* JOINS */
             

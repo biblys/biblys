@@ -1,6 +1,6 @@
 <?php
 
-global $request, $site, $_SQL, $_SITE;
+global $request, $site, $_SQL;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -224,7 +224,7 @@ $content .= '
 ';
 if (
     getLegacyVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
-    $p["publisher_id"] == $_SITE["publisher_id"] || // Site de l'editeur
+    $p["publisher_id"] == getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
     (getLegacyVisitor()->isAdmin()) && ($site->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
@@ -318,7 +318,7 @@ if (
             </fieldset>
     ';
 
-    if ($_SITE['site_id'] == 11)
+    if (getLegacyCurrentSite()['site_id'] == 11)
     {
         $content .= '
             <fieldset>
@@ -434,7 +434,7 @@ $content .= '
 ';
 
 // Gestion des fournisseurs
-if ($_SITE["site_shop"]) {
+if (getLegacyCurrentSite()["site_shop"]) {
     $sm = new SupplierManager();
 
     $addSupplier = $request->query->get('add_supplier');

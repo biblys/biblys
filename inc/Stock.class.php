@@ -10,7 +10,7 @@ class Stock extends Entity
 
     public function __construct($data, $withJoins = true)
     {
-        global $_SQL, $_SITE;
+        global $_SQL;
 
         /* JOINS */
 

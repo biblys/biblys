@@ -114,7 +114,7 @@ if ($_POST) {
             }
             $req .= "`event_title` LIKE '%".$q."%'";
         }
-        $events = $_SQL->query("SELECT `event_id`, `event_title` FROM `events` WHERE ".$req." AND `site_id` = '".$_SITE["site_id"]."' ORDER BY `event_title`");
+        $events = $_SQL->query("SELECT `event_id`, `event_title` FROM `events` WHERE ".$req." AND `site_id` = '".getLegacyCurrentSite()["site_id"]."' ORDER BY `event_title`");
         while ($e = $events->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $e["event_title"];
             $j[$i]["value"] = '';
@@ -130,7 +130,7 @@ if ($_POST) {
             }
             $req .= "`post_title` LIKE '%".$q."%'";
         }
-        $posts = $_SQL->query("SELECT `post_id`, `post_title` FROM `posts` WHERE ".$req." AND `site_id` = '".$_SITE["site_id"]."' ORDER BY `post_title`");
+        $posts = $_SQL->query("SELECT `post_id`, `post_title` FROM `posts` WHERE ".$req." AND `site_id` = '".getLegacyCurrentSite()["site_id"]."' ORDER BY `post_title`");
         while ($p = $posts->fetch(PDO::FETCH_ASSOC)) {
             $j[$i]["label"] = $p["post_title"];
             $j[$i]["value"] = '';

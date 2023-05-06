@@ -47,7 +47,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
         $lm = new LinkManager();
 
-        $link = $lm->get(array('site_id' => $_SITE['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
+        $link = $lm->get(array('site_id' => getLegacyCurrentSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
 
         if ($link)
         {
@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         }
         else
         {
-            $link = $lm->create(array('site_id' => $_SITE['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
+            $link = $lm->create(array('site_id' => getLegacyCurrentSite()['site_id'], 'article_id' => $article->get('id'), 'link_do_not_reorder' => 1));
             $dnr = '1';
         }
 

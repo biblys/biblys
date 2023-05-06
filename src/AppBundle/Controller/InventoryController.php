@@ -128,7 +128,7 @@ class InventoryController extends Controller
      */
     public function importAction(Request $request, UrlGenerator $urlGenerator, $id): Response
     {
-        global $_SQL, $_SITE;
+        global $_SQL;
 
         $im = new InventoryManager();
         $inventory = $im->getById($id);
@@ -162,7 +162,7 @@ class InventoryController extends Controller
             GROUP BY `article_ean`, `stock_purchase_date`
             ORDER BY stock_purchase_date DESC
         ");
-        $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['site_id' => getLegacyCurrentSite()["site_id"], 'date' => $date." ".$time]);
         $total = count($stocks->fetchAll(PDO::FETCH_ASSOC));
 
         // Process 100 more copies
@@ -177,7 +177,7 @@ class InventoryController extends Controller
             GROUP BY article_ean
             LIMIT $offset, $limit
         ");
-        $stocks->execute(['site_id' => $_SITE["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['site_id' => getLegacyCurrentSite()["site_id"], 'date' => $date." ".$time]);
         $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($stocks as $stock) {

@@ -135,7 +135,6 @@ if (!$site_id) {
 // Get site info
 $sm = new SiteManager();
 $site = $sm->getById($site_id);
-$_SITE = $site;
 if (!$site) {
     throw new Exception('No site defined with id ' . $site_id);
 }
@@ -336,7 +335,7 @@ function e404($debug = 'e404 function called without debug info')
 
 function error($x, $t = 'MySQL')
 {
-    global $_SITE;
+
     global $_POST;
     if (is_array($x)) {
         $x = 'SQL Error #' . $x[1] . ' : ' . $x[2];
@@ -587,9 +586,9 @@ function user_name($x)
 // Afficher page
 function render_page($page_id, $mode = 'standalone')
 {
-    global $_SITE;
+
     global $_SQL;
-    $pages = $_SQL->query("SELECT `page_content` FROM `pages` WHERE `page_id` = '" . $page_id . "' AND `site_id` = '" . $_SITE['site_id'] . "' AND `page_status` = 1 LIMIT 1");
+    $pages = $_SQL->query("SELECT `page_content` FROM `pages` WHERE `page_id` = '" . $page_id . "' AND `site_id` = '" . getLegacyCurrentSite()['site_id'] . "' AND `page_status` = 1 LIMIT 1");
     if ('include' == $mode && $p = $pages->fetch(PDO::FETCH_ASSOC)) {
         return $p['page_content'];
     }
@@ -624,15 +623,15 @@ function file_size($s)
 // Retourne un taux de TVA
 function tva_rate($tva, $date = null, $article_type = 1)
 {
-    global $_SITE;
 
-    if ('be' == $_SITE['site_tva']) {
+
+    if ('be' == getLegacyCurrentSite()['site_tva']) {
         if (1 == $tva && 1 == $article_type) { // Livre papier
             $rate = '6';
         } else {
             $rate = '21';
         }
-    } elseif ('fr' == $_SITE['site_tva']) {
+    } elseif ('fr' == getLegacyCurrentSite()['site_tva']) {
         if ('all' == $tva) {
             return [2.1, 5.5, 7, 19.6, 20];
         }
@@ -820,6 +819,29 @@ function getLegacyVisitor(): Visitor
     }
 
     return $GLOBALS["LEGACY_VISITOR"];
+}
+
+/**
+ * @throws Exception
+ * @deprecated Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.
+ */
+function getLegacyCurrentSite(): Site
+{
+    trigger_deprecation(
+        "biblys/biblys",
+        "2.69.0",
+        "Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.",
+    );
+
+    if (!isset($GLOBALS["LEGACY_CURRENT_SITE"])) {
+        $config = Config::load();
+        $currentSiteId = $config->get("site");
+        $sm = new SiteManager();
+        $currentSite = $sm->getById($currentSiteId);
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $currentSite;
+    }
+
+    return $GLOBALS["LEGACY_CURRENT_SITE"];
 }
 
 // TODO: use a DeprecationNoticesHandler class

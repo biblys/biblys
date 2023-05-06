@@ -408,7 +408,7 @@ class Article extends Entity
      */
     public function getStock($mode = 'all'): array
     {
-        global $_SITE;
+        
 
         $sm = new StockManager();
         $stock = $sm->getAll([
@@ -420,7 +420,7 @@ class Article extends Entity
 
         if ($mode == 'available') {
             foreach ($stock as $s) {
-                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != $_SITE['site_id']) {
+                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != getLegacyCurrentSite()['site_id']) {
                     continue;
                 } else {
                     $uid = $s->get('selling_price') . '-' . $s->get('condition');
@@ -777,7 +777,7 @@ class Article extends Entity
      */
     public function getRayons(): array
     {
-        global $_SQL, $_SITE;
+        global $_SQL;
 
         $sql = $_SQL->prepare("
             SELECT `rayon_id`, `rayon_name`, `rayon_url`
@@ -790,7 +790,7 @@ class Article extends Entity
         ");
         $sql->execute([
             ':article_id' => $this->get('id'),
-            ':site_id' => $_SITE->get('id')
+            ':site_id' => getLegacyCurrentSite()->get('id')
         ]);
         $rayons = $sql->fetchAll();
 

@@ -294,7 +294,7 @@ if (empty($_POST['hide_shipping']))
             {
 
                 // Port HT
-                if ($_SITE['site_tva'])
+                if (getLegacyCurrentSite()['site_tva'])
                 {
                     $s['tva_rate'] = tva_rate(3,$s["date"]) / 100;
                     $s['ti'] = $s['tva_rate'] * 1000;

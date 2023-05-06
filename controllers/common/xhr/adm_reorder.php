@@ -5,7 +5,7 @@ $cm = new CollectionManager();
 if ($collection = $cm->getById($_GET['collection_id'])) {
 
     $query = "SELECT `articles`.`article_id`, `article_title`, `article_url`, `article_ean`,
-        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = '".$_SITE['site_id']."') AS `dnr`
+        (SELECT `link_do_not_reorder` FROM `links` WHERE `articles`.`article_id` = `links`.`article_id` AND `link_do_not_reorder` = 1 AND `site_id` = '".getLegacyCurrentSite()['site_id']."') AS `dnr`
         FROM `articles`
         WHERE `articles`.`collection_id` = '".$_GET["collection_id"]."' AND `type_id` != '2'";
 
@@ -23,7 +23,7 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
 
     foreach ($articles as $a) {
 
-        $ventes = $_SQL->query("SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` WHERE `article_id` = '".$a["article_id"]."' AND `site_id` = '".$_SITE["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC");
+        $ventes = $_SQL->query("SELECT DATE_FORMAT(`stock_selling_date`,'%Y-%m-%d') AS `lastSale` FROM `stock` WHERE `article_id` = '".$a["article_id"]."' AND `site_id` = '".getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NOT NULL ORDER BY `stock_selling_date` DESC");
         $v = $ventes->fetch(PDO::FETCH_ASSOC);
         $a["lastSale"] = $v["lastSale"];
         $a["sales"] = $ventes->rowCount();
@@ -32,7 +32,7 @@ if ($collection = $cm->getById($_GET['collection_id'])) {
             continue;
         }
 
-        $stock = $_SQL->query("SELECT `stock_id` FROM `stock` WHERE `stock`.`article_id` = '".$a["article_id"]."' AND `stock`.`site_id` = '".$_SITE["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock`.`stock_selling_date` IS NULL AND `stock`.`stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
+        $stock = $_SQL->query("SELECT `stock_id` FROM `stock` WHERE `stock`.`article_id` = '".$a["article_id"]."' AND `stock`.`site_id` = '".getLegacyCurrentSite()["site_id"]."' AND `stock_condition` = 'Neuf' AND `stock`.`stock_selling_date` IS NULL AND `stock`.`stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
         $a["stock"] = $stock->rowCount();
 
         $collection_articles[] = $a;

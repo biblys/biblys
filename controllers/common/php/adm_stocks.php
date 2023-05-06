@@ -509,7 +509,7 @@ $tfoot = '
 //$tbody = $tr_stock.$tr_paniers.$tr_ventes.$tr_retours;
 $tbody = $list;
 
-$lists = $lm->getAll(['site_id' => $_SITE['site_id']]);
+$lists = $lm->getAll(['site_id' => getLegacyCurrentSite()['site_id']]);
 $lists = array_map(function ($list) {
     return '<option value='.$list->get('id').'>'.$list->get('title').'</option>';
 }, $lists);
@@ -559,7 +559,7 @@ if (getLegacyVisitor()->isRoot()) {
     $content .= '
     <br />
     <div class="center">
-        <textarea>'.$req.' AND `site_id` = '.$_SITE['site_id'].'</textarea>
+        <textarea>'.$req.' AND `site_id` = '.getLegacyCurrentSite()['site_id'].'</textarea>
     </div>
     ';
 }

@@ -5,7 +5,7 @@
     $am = new ArticleManager();
     $sm = new StockManager();
 
-    $articles = $am->getAll(array('publisher_id' => $_SITE['publisher_id']));
+    $articles = $am->getAll(array('publisher_id' => getLegacyCurrentSite()['publisher_id']));
     
     $table = array();
     foreach ($articles as $article)

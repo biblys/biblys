@@ -8,7 +8,7 @@
 	$stock = $_SQL->prepare('SELECT
 		`stock_invoice`, `stock_selling_price`, `stock_selling_date`, `stock_return_date`
 	FROM `stock` WHERE `site_id` = :site_id AND `stock_invoice` IS NOT NULL ORDER BY `stock_invoice`');
-	$stock->bindValue('site_id',$_SITE['site_id'],PDO::PARAM_INT);
+	$stock->bindValue('site_id',getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 
 	$inv = array();

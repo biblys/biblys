@@ -287,8 +287,7 @@ else $alert = NULL;
 $_PAGE_TITLE = 'Caisse';
 $content = '';
 
-/** @var Site $_SITE */
-if ($_SITE['site_tva'] === 'fr') {
+if (getLegacyCurrentSite()['site_tva'] === 'fr') {
     $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>

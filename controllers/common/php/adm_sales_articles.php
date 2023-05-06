@@ -9,7 +9,6 @@ $content = null;
 
 
 /** @var PDO $_SQL */
-/** @var Site $_SITE */
 /** @var Site $site */
 
 // FILTRES
@@ -77,7 +76,7 @@ $stock = $_SQL->prepare('SELECT
     WHERE `s`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `a`.`article_id`
     ORDER BY `sales` DESC');
-$params['site_id'] = $_SITE["site_id"];
+$params['site_id'] = getLegacyCurrentSite()["site_id"];
 $stock->execute($params) or error($stock->errorInfo());
 
 // Types
