@@ -4,6 +4,7 @@ use ApiBundle\Controller\ErrorController;
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\CurrentUser;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,10 @@ $response = new JsonResponse();
 $config = Config::load();
 Connection::initPropel($config);
 
-// Identification utilisateur
-if (auth()) {
-    $_LOG = auth('log');
+$request = Request::createFromGlobals();
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+if ($currentUser->isAuthentified()) {
+    $_LOG = new Visitor($request);
 }
 
 // PAGE EN COURS
@@ -40,7 +42,6 @@ $_PAGE = explode('?', $_PAGE);
 $_PAGE = $_PAGE[0];
 
 // Verification page utilisateur et admin
-$request = Request::createFromGlobals();
 $routes = RouteLoader::load();
 $urlGenerator = new UrlGenerator($routes, new RequestContext());
 $currentUrlService = new CurrentUrlService($request);
@@ -48,10 +49,10 @@ $currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $_PAGE_TYPE = substr($_PAGE, 0, 4);
 
-if ($_PAGE_TYPE == "adm_" && !getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher() && !getLegacyVisitor()->isBookshop() && !getLegacyVisitor()->isLibrary()) {
+if ($_PAGE_TYPE == "adm_" && !$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
     json_error(0, "Cette action est réservée aux administrateurs (".$_PAGE."). Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
-if ($_PAGE_TYPE == "log_" and !getLegacyVisitor()->isLogged()) {
+if ($_PAGE_TYPE == "log_" and !$currentUser->isAuthentified()) {
     json_error(0, "Action impossible. Veuillez vous <a href='".$loginUrl."'>identifier</a>.");
 }
 
