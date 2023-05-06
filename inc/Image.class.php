@@ -162,20 +162,7 @@
 			$count = count($downloads->fetchAll(PDO::FETCH_ASSOC));
 			return $count;
 		}
-
-		/* Has the image been updated since user last download ? */
-		public function hasBeenUpdated()
-		{
-			global $_SQL, $_LOG;
-			$downloads = $_SQL->query('SELECT `download_version` FROM `downloads` WHERE `image_id` = '.$this->get('image_id').' AND `user_id` = '.$_LOG['user_id'].' ORDER BY `download_date` DESC LIMIT 1');
-			if ($d = $downloads->fetch(PDO::FETCH_ASSOC))
-			{
-				if (version_compare($this->get('version'), $d['download_version']) == 1) return true;
-			}
-			return false;
-		}
-
-	}
+    }
 
 	class ImagesManager
 	{
