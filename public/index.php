@@ -3,11 +3,11 @@
 use AppBundle\Controller\ErrorController;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\LoggerService;
 use Framework\RouteLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
@@ -21,29 +21,11 @@ $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
 
 $request = Request::createFromGlobals();
-$session = new \Symfony\Component\HttpFoundation\Session\Session();
+$session = new Session();
 $session->start();
 $request->setSession($session);
 
-// TODO: use a DeprecationNoticesHandler class
-// TODO: add to other front controllers
-set_error_handler(function ($level, $message) use ($config, $session): void {
-    $trace = debug_backtrace();
-    $caller = $trace[1];
-    if ($level === E_USER_DEPRECATED) {
-        $caller = $trace[3];
-    }
-
-    $loggerService = new LoggerService();
-    $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
-
-    if ($config->get("environment") === "dev") {
-        $session->getFlashBag()->add(
-            "warning",
-            "DEPRECATED (from {$caller["file"]}:{$caller["line"]}): $message"
-        );
-    }
-}, E_USER_DEPRECATED ^ E_DEPRECATED);
+catchDeprecationNotices($config, $session);
 
 $exceptionController = new ErrorController();
 
