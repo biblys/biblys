@@ -38,10 +38,6 @@ class LegacyController extends Controller
     {
         global $site, $_SITE, $_ECHO, $_SQL, $_PAGE_TITLE, $urlgenerator;
 
-        if (getLegacyVisitor()->isLogged()) {
-            $_LOG = getLegacyVisitor();
-        }
-
         $_PAGE = $request->get('page', 'home');
 
         $_PAGE_TYPE = substr($_PAGE, 0, 4);

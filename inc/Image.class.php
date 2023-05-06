@@ -274,7 +274,7 @@
 		public function update(Image $i)
 		{
 
-			global $_LOG, $_SITE;
+			global $_SITE;
 
 			$fields = array(); // Updated fields array
 			$params = array(); // SQL query params

@@ -32,9 +32,6 @@ Connection::initPropel($config);
 
 $request = Request::createFromGlobals();
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-if ($currentUser->isAuthentified()) {
-    $_LOG = new Visitor($request);
-}
 
 // PAGE EN COURS
 $_PAGE = str_replace("/x/", "", $_SERVER["REQUEST_URI"]);

@@ -40,8 +40,7 @@ else
 {
     $cart = $cm->create();
     $cart->set('cart_type', 'shop');
-    /** @var Visitor $_LOG */
-    $cart->set('cart_seller_id', $_LOG['user_id']);
+    $cart->set('cart_seller_id', getLegacyVisitor()['user_id']);
     $cart = $cm->update($cart);
     return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
 }

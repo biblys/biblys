@@ -337,7 +337,6 @@ function e404($debug = 'e404 function called without debug info')
 function error($x, $t = 'MySQL')
 {
     global $_SITE;
-    global $_LOG;
     global $_POST;
     if (is_array($x)) {
         $x = 'SQL Error #' . $x[1] . ' : ' . $x[2];

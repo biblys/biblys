@@ -53,7 +53,7 @@
                 foreach ($files as $f) {
                     $e['dl_links'][] = '
                         <li>
-                            <a href="'.$f->getUrl($_LOG['user_key']).'" 
+                            <a href="'.$f->getUrl(getLegacyVisitor()['user_key']).'" 
                                     title="'.$f->get('version').' | '.file_size($f->get('size')).' | '.$f->getType('name').'"
                                     aria-label="Télécharger au format '.$f->getType('name').'">
                                 <img src="'.$f->getType('icon').'" width=16 alt="'.$f->getType('name').'">

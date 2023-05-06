@@ -260,8 +260,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                 $files = $fm->getAll(['article_id' => $a['article_id'], 'file_access' => 1]);
                 if ($files) {
                     foreach ($files as $f) {
-                        /** @var User $_LOG */
-                        $a['dl_links'] .= ' <a href="' . $f->getUrl($_LOG['user_key']) . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"><img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->get('title') . '</a> &nbsp;';
+                        $a['dl_links'] .= ' <a href="' . $f->getUrl(getLegacyVisitor()['user_key']) . '" title="' . $f->get('version') . ' | ' . file_size($f->get('size')) . ' | ' . $f->getType('name') . '"><img src="' . $f->getType('icon') . '" width=16 alt="Télécharger"> ' . $f->get('title') . '</a> &nbsp;';
                     }
                     $a['dl_links'] = '<div class="btn btn-default"><i class="fa fa-cloud-download"></i> &nbsp; ' . $a['dl_links'] . '</a>';
                 }

@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 2.69.0 (DEV)
+
+Déploiement
+
+- Dans les controllers, remplacer `$_LOG` par `getLegacyVisitor()`.
+
 ### 2.68.6 (14 juin 2023)
 
 Corrections
@@ -68,7 +74,7 @@ Deploiement
 - Ajouter `{% include "layout:_flash_messages.html.twig" %}` au fichier de 
   layout `base.html.twig`, juste après l'inclusion
   du partiel `_overall_menu.html.twig`.
-- Dans les controllers, remplacer `$_V` par `getCurrentVisitor`.
+- Dans les controllers, remplacer `$_V` par `getLegacyVisitor()`.
 - Executer les migrations (supprimer au préalable les colonnes `cart_gift…`)
 
 ### 2.67.3 (26 avril 2023)

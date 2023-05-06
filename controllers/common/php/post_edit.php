@@ -112,7 +112,7 @@ $p["post_time"] = date("H:i");
 
 // Auteur
 if ($currentUser->isAdmin()) {
-    if(!empty($_LOG["user_screen_name"])) $author = $_LOG["user_screen_name"];
+    if(!empty(getLegacyVisitor()["user_screen_name"])) $author = getLegacyVisitor()["user_screen_name"];
     else $author = $site->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {
