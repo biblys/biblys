@@ -1,11 +1,20 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
 
+/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var string $_PAGE */
+
+use Biblys\Database\Connection;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\LinkQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,19 +22,20 @@ use Biblys\Service\Browser;
 use Biblys\Isbn\Isbn;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-
-/** @var PDO $_SQL */
-/** @var Request $request */
-/** @var Site $site */
-/** @var Site $_SITE */
-/** @var UrlGenerator $urlgenerator */
-
-/** @var string $_PAGE */
+use Symfony\Component\Routing\RequestContext;
 
 $am = new ArticleManager();
 $sm = new SiteManager();
 $pm = new PublisherManager();
 $cm = new CollectionManager();
+
+$config = Config::load();
+$request = Request::createFromGlobals();
+$currentSite = CurrentSite::buildFromConfig($config);
+$currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+$routes = RouteLoader::load();
+$urlgenerator = new UrlGenerator($routes, new RequestContext());
+$_SQL = Connection::init($config);
 
 $am->setIgnoreSiteFilters(true);
 
@@ -160,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Set article collection & publisher
     $collectionId = $request->request->get('collection_id');
+    /** @var Collection $collection */
     $collection = $cm->getById($collectionId);
     if (!$collection) {
         throw new Exception('Collection unknown');
@@ -175,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Persist & refresh article
     try {
         $am->update($article);
+        /** @var Article $article */
         $article = $am->getById($article->get('id'));
 
         // Update keywords & links
@@ -190,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Virtual stock: update available copies if necessary
-        if ($site->getOpt('virtual_stock')) {
+        if ($currentSite->getOption('virtual_stock')) {
             $stm = new StockManager();
             $stock = $stm->getAll(['article_id' => $article->get('id')]);
             $params['stock_updated'] = 0;
@@ -216,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } elseif (isset($redirect_to_new)) {
             return new RedirectResponse('/pages/adm_article');
         } else {
+            $routes = RouteLoader::load();
             $articleUrl = $urlgenerator->generate('article_show', [
                 'slug' => $article->get('url'),
             ]);
@@ -249,7 +262,7 @@ $articles = EntityManager::prepareAndExecute(
     ORDER BY `article_editing_user` LIMIT 1',
     [
         'article_id' => $request->query->get('id'),
-        'user_id' => getLegacyVisitor()->get('user_id'),
+        'user_id' => $currentUser->getUser()->getId(),
     ]
 );
 if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
@@ -264,7 +277,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
 
     if (!empty($a['article_title'])) {
         // Mode editeur
-        if (!getLegacyVisitor()->isAdmin() && getLegacyVisitor()->getCurrentRight()->get('publisher_id') != $a['publisher_id']) {
+        if (!$currentUser->isAdmin() && $currentUser->getCurrentRight()->getPublisherId() != $a['publisher_id']) {
             die("Vous n'avez pas le droit de modifier ce livre !");
         }
 
@@ -273,8 +286,8 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         $publisher_site = $sm->get(array('publisher_id' => $publisher->get('id')));
         if (
             $publisher_site &&
-            $publisher_site->get('id') != $_SITE['site_id'] &&
-            !getLegacyVisitor()->hasRight('publisher', $publisher->get('id'))
+            $publisher_site->get('id') != $currentSite->getId() &&
+            !$currentUser->hasRightForPublisher($publisher->get('id'))
         ) {
             trigger_error("Vous n'avez pas l'autorisation de modifier les articles du catalogue ".$publisher->get('name'). ", merci de <a href='https://" .$publisher_site->get('domaine')."/contact/'>contacter l'éditeur</a>.");
         }
@@ -301,7 +314,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
 
         $content .= '
             <div class="article-editor">
-                <h1><span class="fa fa-book"></span> Modifier l\'article n&deg; '.$a['article_id'].'</h1>
+                <h1><span class="fa fa-book"></span> Modifier l\'article n° '.$a['article_id'].'</h1>
 
                 <a href="'.$articleUrl.'">
                     <div class="article-thumb">
@@ -311,13 +324,13 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
                             <p>
                                 de '.truncate($a['article_authors'], 65, '...', true, true).'<br />
                                 coll. '.$a['article_collection'].' '.numero($a['article_number']).' ('.$a['article_publisher'].')<br />
-                                Prix &eacute;diteur : '.price($a['article_price'], 'EUR').'
+                                Prix éditeur : '.price($a['article_price'], 'EUR').'
                             </p>
                         </div>
                     </div>
                 </a>
         ';
-        $import_default = '<div class="center"><a class="btn btn-default reimport event">R&eacute;importer la fiche depuis la base externe...</a></div>';
+        $import_default = '<div class="center"><a class="btn btn-default reimport event">Réimporter la fiche depuis la base externe...</a></div>';
     } else {
         $request->attributes->set("page_title", "Créer un nouvel article");
         $_MODE = 'insert';
@@ -334,20 +347,20 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         $import_default = '<h4 class="center">Entrez un ISBN ou un titre <br />pour rechercher dans les bases externes...</h4>';
 
         // Default type
-        if ($site->getOpt('default_type_id')) {
-            $article->set('type_id', $site->getOpt('default_type_id'));
+        if ($currentSite->getOption('default_type_id')) {
+            $article->set('type_id', $currentSite->getOption('default_type_id'));
         }
 
-        $a['collection_id'] = $site->getOpt('default_collection_id') ? $site->getOpt('default_collection_id') : $a['collection_id'];
-        $a['article_source_id'] = $site->getOpt('default_article_source_id') ? $site->getOpt('default_article_source_id') : $a['article_source_id'];
-        $a['article_pubdate'] = $site->getOpt('default_article_pubdate') ? $site->getOpt('default_article_pubdate') : $a['article_pubdate'];
-        $default_tags = $site->getOpt('default_article_tags');
+        $a['collection_id'] = $currentSite->getOption('default_collection_id') ? $currentSite->getOption('default_collection_id') : $a['collection_id'];
+        $a['article_source_id'] = $currentSite->getOption('default_article_source_id') ? $currentSite->getOption('default_article_source_id') : $a['article_source_id'];
+        $a['article_pubdate'] = $currentSite->getOption('default_article_pubdate') ? $currentSite->getOption('default_article_pubdate') : $a['article_pubdate'];
+        $default_tags = $currentSite->getOption('default_article_tags');
     }
 } else {
     // Creer un nouvel article
     $articleInsert = EntityManager::prepareAndExecute(
         'INSERT INTO `articles`(`article_editing_user`, `article_created`) VALUES(:user_id, NOW())',
-        ['user_id' => getLegacyVisitor()->get('user_id')]
+        ['user_id' => $currentUser->getUser()->getId()]
     );
 
     $import = $request->query->get('import');
@@ -383,7 +396,7 @@ if (!empty($a['collection_id'])) {
     $a['publisher_id'] = $c['publisher_id'];
     if (!empty($c['pricegrid_id'])) {
         $category_field_class = '';
-        $article_price_readonly = 'readonly title="Choisissez la cat&eacute;gorie correspondante."';
+        $article_price_readonly = 'readonly title="Choisissez la catégorie correspondante."';
     }
 }
 
@@ -410,7 +423,7 @@ if ($a['article_tva'] == 1) {
 }
 
 // Langues
-$lang_current_options = '<option value="48">Fran&ccedil;ais</option>'; // Default a la creation de la fiche
+$lang_current_options = '<option value="48">Français</option>'; // Default a la creation de la fiche
 $lang_original_options = '<option value=""></option>'; // Default a la creation de la fiche
 $langs = $_SQL->prepare('SELECT `lang_id`, `lang_name`, `lang_name_original` FROM `langs` ORDER BY `lang_name`');
 $lgm = new LangManager();
@@ -457,9 +470,9 @@ if ($collection) {
 }
 
 // Current publisher id (from site or from rights)
-$publisher_id = $site->get('publisher_id');
-if (!$publisher_id && !getLegacyVisitor()->isAdmin() && getLegacyVisitor()->isPublisher()) {
-    $publisher_id = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
+$publisher_id = $currentSite->getSite()->getPublisherId();
+if (!$publisher_id && !$currentUser->isAdmin() && $currentUser->hasPublisherRight()) {
+    $publisher_id = $currentUser->getCurrentRight()->getPublisherId();
 }
 
 $bonus_fieldset_class = 'hidden';
@@ -508,7 +521,7 @@ if ($_MODE == 'insert') {
 // Couverture
 $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" />';
 if ($article->hasCover()) {
-    $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label class="floating" for="article_cover_delete" class="after">Supprimer</label>';
+    $article_cover_upload = '<input type="file" id="article_cover_upload" name="article_cover_upload" accept="image/jpeg" hidden /> <label class="after btn btn-default" for="article_cover_upload">Remplacer</label> <input type="checkbox" id="article_cover_delete" name="article_cover_delete" value="1" /> <label for="article_cover_delete" class="after">Supprimer</label>';
 }
 
 // ** FICHIERS TELECHARGEABLES ** //
@@ -598,18 +611,19 @@ $submit_and_stock = '<br>
     <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_stock">
         Valider et ajouter un exemplaire
     </button>';
-if ($site->getOpt('virtual_stock')) {
+if ($currentSite->getOption('virtual_stock')) {
     $submit_and_stock = null;
 }
 
+/** @noinspection DuplicatedCode */
 $content .= '
     <form id="createCollection" class="event hidden">
         <fieldset>
-            <p>Si l\'éditeur n\'a pas de collection ou si le livre est &laquo;&nbsp;hors collection&nbsp;&raquo;, indiquer le nom de l\'éditeur à l\'identique dans le champ collection.</p>
+            <p>'."Si l'éditeur n'a pas de collection ou si le livre est «&nbsp;hors collection&nbsp;», indiquer le nom de l'éditeur à l'identique dans le champ collection.".'</p>
             <label class="floating" for="collection_name">Collection :</label>
             <input type="text" id="collection_name" name="collection_name" class="long" required />
             <br />
-            <label class="floating" for="collection_publisher">&Eacute;diteur :</label>
+            <label class="floating" for="collection_publisher">Éditeur :</label>
             '.$createCollectionPublisher.'
             <br />
         </fieldset>
@@ -617,7 +631,7 @@ $content .= '
 
     <form id="create_people" class="e createPeopleForm hidden">
         <fieldset>
-            <label class="floating" for="people_first_name">Pr&eacute;nom :</label>
+            <label class="floating" for="people_first_name">Prénom :</label>
             <input type="text" id="people_first_name" name="people_first_name" class="long" />
             <br />
             <label class="floating" for="people_last_name">Nom :</label>
@@ -627,7 +641,7 @@ $content .= '
 
     <form id="create_price" class="hidden">
         <fieldset>
-            <label class="floating" for="price_cat">Cat&eacute;gorie :</label>
+            <label class="floating" for="price_cat">Catégorie :</label>
             <input type="text" id="price_cat" name="price_cat" class="short" />
             <br />
             <label class="floating" for="price_amount">Prix :</label>
@@ -639,13 +653,13 @@ $content .= '
 
     <form id="add_award" class="event hidden">
         <fieldset>
-            <label class="floating" for="award_name">R&eacute;compense :</label>
+            <label class="floating" for="award_name">Récompense :</label>
             <input type="text" id="award_name" name="award_name" class="long" required />
             <br />
-            <label class="floating" for="award_year">Ann&eacute;e :</label>
+            <label class="floating" for="award_year">Année :</label>
             <input type="number" id="award_year" name="award_year" class="short" required />
             <br />
-            <label class="floating" for="award_category">Cat&eacute;gorie :</label>
+            <label class="floating" for="award_category">Catégorie :</label>
             <input type="text" id="award_category" name="award_category" class="long" />
             <br />
             <label class="floating" for="award_note">Note :</label>
@@ -667,7 +681,7 @@ $content .= '
         <fieldset>
             <legend>L\'essentiel</legend>
 
-            <label class="floating" for="article_id">Article n&deg;</label>
+            <label class="floating" for="article_id">Article n°</label>
             <input type="text" id="article_id" name="article_id" value="'.$a['article_id'].'" class="mini" readonly required />
             <br /><br />
 
@@ -693,26 +707,26 @@ $content .= '
 
             <label class="floating" for="article_collection">Collection :</label>
             '.$collection.'
-            n&deg; <input type="text" id="article_number" name="article_number" value="'.$a['article_number'].'" class="mini article_duplicate_check event" />
+            n° <input type="text" id="article_number" name="article_number" value="'.$a['article_number'].'" class="mini article_duplicate_check event" />
             <br />
             <label class="floating" for="article_cycle">Cycle :</label>
             '.$cycle.'
             t. <input type="text" id="article_tome" name="article_tome" value="'.$a['article_tome'].'" class="mini" />
             <br /><br />
 
-            <label class="floating" for="article_availability_dilicom">Disponibilit&eacute; :</label>
+            <label class="floating" for="article_availability_dilicom">Disponibilité :</label>
             <select id="article_availability_dilicom" name="article_availability_dilicom" required>
                 '.implode($availability_options).'
             </select>
-            <span'.(!$site->getOpt('virtual_stock') ? ' style="display: none;"' : null).'>
+            <span'.(!$currentSite->getOption('virtual_stock') ? ' style="display: none;"' : null).'>
                 <input type="checkbox" name="article_preorder" id="article_preorder" value="1" '.$preorder.' />
-                <label class="floating" for="article_preorder" class="after">Pr&eacute;commande</label>
+                <label class="floating" for="article_preorder" class="after">Précommande</label>
             </span>
             <br /><br />
 
             <div id="article_category_div" class="'.$category_field_class.'">
-                <label class="floating" for="article_category">Cat&eacute;gorie :</label>
-                <input type="text" id="article_category" name="article_category" value="'.$a['article_category'].'" class="mini" title="Appuyez sur la touche &darr; pour faire appara&icirc;tre la liste des cat&eacute;gories." />
+                <label class="floating" for="article_category">Catégorie :</label>
+                <input type="text" id="article_category" name="article_category" value="'.$a['article_category'].'" class="mini" title="Appuyez sur la touche &darr; pour faire apparaître la liste des catégories." />
                 <br />
             </div>
             <p>
@@ -762,13 +776,13 @@ $content .= '
             <label class="floating" for="article_textid">TextID :</label>
             <input type="text" id="article_textid" name="article_textid" value="'.$a['article_textid'].'" class="verylong" maxlength=32>
             <br />
-            <label class="floating" for="article_item">Item n&deg;</label>
+            <label class="floating" for="article_item">Item n°</label>
             <input type="text" id="article_item" name="article_item" value="'.$a['article_item'].'" class="mini article_duplicate_check event"  />
             <br />
-            <label class="floating" for="article_link_to">Lier &agrave l\'article n&deg;</label>
+            <label class="floating" for="article_link_to">Lier à l\'article n°</label>
             <input type="number" id="article_link_to" name="article_link_to" class="mini" />
             <br />
-            <label class="floating" for="article_source_id">Extrait de l\'article n&deg;</label>
+            <label class="floating" for="article_source_id">Extrait de l\'article n°</label>
             <input type="number" name="article_source_id" value="'.$a['article_source_id'].'" class="mini" />
             <br /><br />
 
@@ -780,12 +794,12 @@ $content .= '
             <br /><br />
 
             <label class="floating" for="article_ean_others">Autres ISBN :</label>
-            <textarea id="article_ean_others" name="article_ean_others" class="small" title="ISBN de pr&eacute;c&eacute;dentes &eacute;ditions dans la m&eacute;me collection, s&eacute;par&eacute;s par un espace.">'.$a['article_ean_others'].'</textarea>
+            <textarea id="article_ean_others" name="article_ean_others" class="small" title="ISBN de précédentes éditions dans la méme collection, séparés par un espace.">'.$a['article_ean_others'].'</textarea>
             <br /><br />
         </fieldset>
 
         <fieldset>
-            <legend>Donn&eacute;es bibliographiques</legend>
+            <legend>Données bibliographiques</legend>
 
             <label class="floating" for="article_title_alphabetic">Titre pour le tri :</label>
             <input type="text" id="article_title_alphabetic" name="article_title_alphabetic" value="'.($article->has("article_title_alphabetic") ? htmlspecialchars($a['article_title_alphabetic']) : "").'" class="long" placeholder="Champ rempli automatiquement" />
@@ -969,14 +983,14 @@ $content .= '
         </fieldset>
 
         <fieldset>
-            <legend>R&eacute;compenses litt&eacute;raires</legend>
+            <legend>Récompenses littéraires</legend>
             <ul id="awards">
                 '.$the_awards.'
             </ul>
             <div class="center">
                 <br />
                 <a id="addAward" class="btn btn-default">
-                    Ajouter une r&eacute;compense
+                    Ajouter une récompense
                 </a>
             </div>
         </fieldset>
@@ -1052,9 +1066,9 @@ $content .= '
                 <p><a href="https://www.biblys.fr/pages/doc_article">Documentation</a></p>
             </div>
             <p class="center">
-                <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_show">Valider et aller &agrave; la fiche</button>
+                <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_show">Valider et aller à la fiche</button>
                 <br>
-                <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_new">Valider et cr&eacute;er une autre fiche</button>
+                <button class="btn btn-primary btn-sm" type="submit" name="article_submit_and_new">Valider et créer une autre fiche</button>
                 ' .$submit_and_stock.'
             </p>
         </fieldset>
@@ -1070,7 +1084,7 @@ $content .= '
         </fieldset>
 
         <fieldset>
-            <legend>Base de donn&eacute;es</legend>
+            <legend>Base de données</legend>
 
             <label class="floating" for="article_created" class="readonly">Fiche créée le :</label>
             <input type="text" name="article_created" id="article_created" value="'.$a['article_created'].'" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" disabled>
@@ -1080,7 +1094,7 @@ $content .= '
             <br /><br />
 
             <label class="floating" for="article_keywords" class="disabled">Termes de recherche :</label>
-            <textarea id="article_keywords" name="article_keywords" class="large" placeholder="Utilis&eacute;s par le moteur de recherche et g&eacute;n&eacute;r&eacute;s automatiquement. Pour ajouter manuellement un terme de recherche personnalisé (par exemple th&eacute;matique), utilisez les mots-clés." disabled>'.$a['article_keywords'].'</textarea>
+            <textarea id="article_keywords" name="article_keywords" class="large" placeholder="Utilisés par le moteur de recherche et générés automatiquement. Pour ajouter manuellement un terme de recherche personnalisé (par exemple thématique), utilisez les mots-clés." disabled>'.$a['article_keywords'].'</textarea>
             <br /><br />
 
             <label class="floating" for="article_links" class="disabled">Liaisons :</label>
