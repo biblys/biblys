@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use ApiBundle\Controller\ErrorController;
 use Biblys\Database\Connection;
@@ -6,13 +6,23 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentUrlService;
 use Framework\RouteLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
 
 // INCLUDES
 require_once(__DIR__."/../inc/functions.php");
+
+$config = Config::load();
+Biblys\Database\Connection::initPropel($config);
+
+$request = Request::createFromGlobals();
+$session = new Session();
+$session->start();
+$request->setSession($session);
+
+catchDeprecationNotices($config, $session);
 
 $response = new JsonResponse();
 
