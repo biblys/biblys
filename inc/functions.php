@@ -100,47 +100,11 @@ try {
 
 /* CURRENT SITE DETECTION */
 
-// One site
-$site_id = $config->get('site');
-$multisites = false;
-
-// Multi-site
-if (!$site_id) {
-    $host = $request->getHost();
-
-    // Check if host is an alias
-    $aliases = $config->get('aliases');
-    if ($aliases) {
-        if (isset($aliases[$host])) {
-            /** @noinspection HttpUrlsUsage */
-            $url = 'http://' . $aliases[$host] . $request->getRequestUri();
-            $response = new RedirectResponse($url);
-            $response->send();
-            die();
-        }
-    }
-
-    // Get all sites from config
-    $sites = $config->get('sites');
-    if (!$sites) {
-        throw new Exception('No site defined in config file');
-    }
-
-    // Look for a site with this host
-    if (isset($sites[$host])) {
-        $site_id = $sites[$host];
-    } else {
-        throw new Exception('No site found for ' . $host);
-    }
-
-    $multisites = true;
-}
-
-// Get site info
 $sm = new SiteManager();
-$site = $sm->getById($site_id);
+$siteId = $config->get('site');
+$site = $sm->getById($siteId);
 if (!$site) {
-    throw new Exception('No site defined with id ' . $site_id);
+    throw new Exception('No site defined with id ' . $siteId);
 }
 
 // Define site_path (should be replaced with $site->get("path"))
