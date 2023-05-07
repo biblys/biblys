@@ -12,7 +12,7 @@ if (!$publisher) {
 
     $p = $publisher;
 
-    $use_old_controller = $site->getOpt('use_old_publisher_controller');
+    $use_old_controller = $_SITE->getOpt('use_old_publisher_controller');
     if (!$use_old_controller) {
         redirect('/editeur/'.$publisher->get('url'));
     }

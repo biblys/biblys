@@ -7,7 +7,7 @@
 
     $controller = function() {
 
-        global $request, $_SQL, $site;
+        global $request, $_SQL, $_SITE;
 
         $fm = new FileManager();
         $am = new ArticleManager();
@@ -19,7 +19,7 @@
             // Associate a file from file manager
             if ($action == 'associate') {
 
-                $file_path = $site->get('path').$_POST['file'];
+                $file_path = $_SITE->get('path').$_POST['file'];
 
                 if (!file_exists($file_path)) {
                     trigger_error("Le fichier $new_file n'existe pas !");

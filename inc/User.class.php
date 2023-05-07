@@ -20,11 +20,11 @@ class User extends Entity
 
     public function getOpt($key)
     {
-        global $site;
+        global $_SITE;
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $site->get('id'), 'option_key' => $key, 'user_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'user_id' => $this->get('id')]);
 
         if ($option) {
             return $option->get('value');
@@ -35,11 +35,11 @@ class User extends Entity
 
     public function setOpt($key, $value)
     {
-        global $site;
+        global $_SITE;
 
         $om = new OptionManager();
 
-        $option = $om->get(['site_id' => $site->get('id'), 'option_key' => $key, 'user_id' => $this->get('id')]);
+        $option = $om->get(['site_id' => $_SITE->get('id'), 'option_key' => $key, 'user_id' => $this->get('id')]);
 
         // If option already exists, update it
         if ($option) {
@@ -51,7 +51,7 @@ class User extends Entity
         }
 
         // Else, create a new one
-        $option = $om->create(['site_id' => $site->get('id'), 'user_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
+        $option = $om->create(['site_id' => $_SITE->get('id'), 'user_id' => $this->get('id'), 'option_key' => $key, 'option_value' => $value]);
 
         return $this;
     }
@@ -484,7 +484,7 @@ class UserManager extends EntityManager
      */
     public function addToLibrary(User $user, array $articles = [], array $stocks = [], $predownload = false, $options = [])
     {
-        global $site;
+        global $_SITE;
 
         $added = [];
         $errors = [];
@@ -497,9 +497,9 @@ class UserManager extends EntityManager
         if (!empty($articles)) {
             foreach ($articles as $article) {
                 // Check if article is owned by current site
-                $downloadablePublishers = explode(',', $site->getOpt('downloadable_publishers'));
+                $downloadablePublishers = explode(',', $_SITE->getOpt('downloadable_publishers'));
                 if (
-                    $site->get('publisher_id') !== $article->get('publisher_id') &&
+                    $_SITE->get('publisher_id') !== $article->get('publisher_id') &&
                     !in_array($article->get('publisher_id'), $downloadablePublishers)
                 ) {
                     throw new Exception('Ce site n\'est pas autorisé à distribué cet article.');

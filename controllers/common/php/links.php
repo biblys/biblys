@@ -2,7 +2,6 @@
 
 
 /** @var Request $request */
-/** @var Site $site */
 /** @var PDO $_SQL */
 
 use Symfony\Component\HttpFoundation\Request;

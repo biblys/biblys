@@ -2,7 +2,7 @@
 /** @noinspection PhpPossiblePolymorphicInvocationInspection */
 /** @noinspection PhpUnhandledExceptionInspection */
 
-global $urlgenerator, $site;
+global $urlgenerator, $_SITE;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
@@ -113,7 +113,7 @@ $p["post_time"] = date("H:i");
 // Auteur
 if ($currentUser->isAdmin()) {
     if(!empty(getLegacyVisitor()["user_screen_name"])) $author = getLegacyVisitor()["user_screen_name"];
-    else $author = $site->get("id");
+    else $author = $_SITE->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {
     $pum = new PublisherManager();

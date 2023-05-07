@@ -49,7 +49,7 @@ class EventController extends Controller
 
     public function showAction(Request $request, $slug)
     {
-        global $site, $urlgenerator;
+        global $_SITE, $urlgenerator;
 
         $em = new EventManager();
         $event = $em->get(["event_url" => $slug]);
@@ -80,7 +80,7 @@ class EventController extends Controller
             "url" => "https://".$request->getHost().
                 $urlgenerator->generate("event_show", ["slug" => $event->get("url")]),
             "description" => truncate(strip_tags($event->get('content')), '500', '...', true),
-            "site_name" => $site->get("title"),
+            "site_name" => $_SITE->get("title"),
             "locale" => "fr_FR",
             "article:published_time" => $event->get('date'),
             "article:modified_time" => $event->get('updated')

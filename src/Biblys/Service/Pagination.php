@@ -20,7 +20,7 @@ class Pagination
 
     public function __construct($currentPageIndex, $itemCount, $limit = null)
     {
-        global $site;
+        global $_SITE;
 
         if ($currentPageIndex < 0) {
             throw new InvalidArgumentException("Page number cannot be less than 0");
@@ -30,7 +30,7 @@ class Pagination
         $this->_currentPageNumber = $currentPageIndex + 1;
         $this->_itemCount = $itemCount;
 
-        $this->_limit = $site->getOpt('articles_per_page');
+        $this->_limit = $_SITE->getOpt('articles_per_page');
         if (!$this->_limit) {
             $this->_limit = 10;
         }

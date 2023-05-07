@@ -162,7 +162,7 @@ class CronsController extends Controller
      */
     public function exportPdlAction(Request $request): JsonResponse
     {
-        global $site;
+        global $_SITE;
         global $config;
 
         $request->headers->set('Accept', 'application/json');
@@ -184,7 +184,7 @@ class CronsController extends Controller
         $password = $pdl['password'];
 
         $active_stock_query = null;
-        $active_stock = $site->getOpt('active_stock');
+        $active_stock = $_SITE->getOpt('active_stock');
         if ($active_stock) {
             $active_stock = "'".implode("','", explode(',', $active_stock))."'";
             $active_stock_query = ' AND `stock_stockage` IN ('.$active_stock.')';
@@ -205,7 +205,7 @@ class CronsController extends Controller
             GROUP BY `article_ean`';
         $stock = EntityManager::prepareAndExecute(
             $query,
-            ['site_id' => $site->get('id')]
+            ['site_id' => $_SITE->get('id')]
         );
 
         $title = 'EXTRACTION STOCK DU '.date('d/m/Y');

@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var PDO $_SQL */
-/** @var Site $site */
 /** @var Request $request */
 
 $request->attributes->set("page_title", "Admininistrateurs");
@@ -38,7 +37,7 @@ $rights = $_SQL->prepare("
     WHERE `rights`.`site_id` = :site_id
     ORDER BY `DateConnexion` DESC
 ");
-$rights->execute(["site_id" => $site->get("id")]);
+$rights->execute(["site_id" => $_SITE->get("id")]);
 
 $table = NULL;
 while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {

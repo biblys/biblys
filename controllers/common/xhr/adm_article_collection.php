@@ -16,7 +16,7 @@ if ($getTerm) {
     // Si on est sur un site editeur
     if (!empty(getLegacyCurrentSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
-        $publisherId = $site->get('publisher_id');
+        $publisherId = $_SITE->get('publisher_id');
         $params["publisher_id"] = $publisherId;
     }
 
@@ -79,8 +79,7 @@ if ($getTerm) {
         $json[$i]["collection_id"] = $c["collection_id"];
         $json[$i]["publisher_id"] = $c["publisher_id"];
         $json[$i]["pricegrid_id"] = $c["pricegrid_id"];
-        /** @var Site $site */
-        $json[$i]["publisher_allowed_on_site"] = $site->allowsPublisherWithId($c["publisher_id"]) ? 1 : 0;
+                $json[$i]["publisher_allowed_on_site"] = $_SITE->allowsPublisherWithId($c["publisher_id"]) ? 1 : 0;
 
         $i++;
         $j_colls[] = $c["collection_id"];

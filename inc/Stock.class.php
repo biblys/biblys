@@ -98,7 +98,7 @@ class Stock extends Entity
      */
     public function isAvailable()
     {
-        global $site;
+        global $_SITE;
 
         if (!$this->has('id')) {
             return false;
@@ -110,7 +110,7 @@ class Stock extends Entity
         }
 
         // Not available if from unactive stock
-        $active_stock = $site->getOpt('active_stock');
+        $active_stock = $_SITE->getOpt('active_stock');
         if ($active_stock) {
             $active_stock = explode(',', $active_stock);
             if (!in_array($this->get('stockage'), $active_stock)) {

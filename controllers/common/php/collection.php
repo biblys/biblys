@@ -14,15 +14,14 @@ $content = '';
 if ($collection) {
     $c = $collection;
 
-    /** @var Site $site */
-    $use_old_controller = $site->getOpt('use_old_collection_controller');
+        $use_old_controller = $_SITE->getOpt('use_old_collection_controller');
     if (!$use_old_controller) {
         return new RedirectResponse('/collection/'.$c['collection_url'], 301);
     }
 
     $_PAGE_TITLE = 'Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;';
 
-    if ($site->has("publisher")) {
+    if ($_SITE->has("publisher")) {
         $_PAGE_TITLE .= ' ('.$c["collection_publisher"].')';
     }
 
@@ -38,7 +37,7 @@ if ($collection) {
                 <p>Collection n&deg; '.$c["collection_id"].'</p>
                 <p><a href="'.$urlgenerator->generate('collection_edit', ['id' => $c['collection_id']]).'">modifier</a></p>
         ';
-        if ($site->has("shop")) {
+        if ($_SITE->has("shop")) {
             $content .= '<p><a href="/pages/adm_stocks?collection_id='.$c["collection_id"].'">stock</a></p>';
         }
 

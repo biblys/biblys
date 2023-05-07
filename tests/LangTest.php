@@ -13,7 +13,7 @@ class LangTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LangManager();
 

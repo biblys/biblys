@@ -13,8 +13,7 @@ for ($y = date('Y'); $y >= 2010; $y--) {
     $years .= '<option value="?year='.$y.'" '.$sel.'>'.$y.'</option>';
 }
 
-/** @var Site $site */
-$params = ["site_id" => $site->get("id")];
+$params = ["site_id" => $_SITE->get("id")];
 $query = NULL;
 if (!empty($_GET['year'])) {
     $query = " AND `stock_selling_date` LIKE :year ";
@@ -26,7 +25,6 @@ if (!empty($_GET['year'])) {
     $_GET['q'] = NULL;
 }
 
-/** @var Site $site */
 $query = '
     SELECT
            `customers`.`customer_id`,

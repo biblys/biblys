@@ -117,11 +117,11 @@ class UserTest extends PHPUnit\Framework\TestCase
 
     public function testAddToLibrary()
     {
-        global $site;
+        global $_SITE;
 
         // given
         $publisher = EntityFactory::createPublisher();
-        $site->set("publisher_id", $publisher->get("id"));
+        $_SITE->set("publisher_id", $publisher->get("id"));
         $um = new UserManager();
         $user = $um->create(["user_email" => "customer@biblys.fr"]);
         $am = new ArticleManager();

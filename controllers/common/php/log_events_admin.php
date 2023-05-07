@@ -16,8 +16,7 @@ $request->attributes->set("page_title", "Gestion des évènements");
 
 $em = new EventManager();
 
-/** @var Site $site */
-$where = array('events`.`site_id' => $site->get("id"));
+$where = array('events`.`site_id' => $_SITE->get("id"));
 
 if (!getLegacyVisitor()->isAdmin())
 {

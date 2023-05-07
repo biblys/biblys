@@ -52,19 +52,19 @@ class MainController extends Controller
         UrlGenerator $urlGenerator,
     ): Response
     {
-        global $site;
+        global $_SITE;
 
-        $opengraph = ['title' => $site->get('title')];
-        $twitterCards = ['title' => $site->get('title')];
+        $opengraph = ['title' => $_SITE->get('title')];
+        $twitterCards = ['title' => $_SITE->get('title')];
 
-        $preview_image = $site->getOpt('home_preview_image');
+        $preview_image = $_SITE->getOpt('home_preview_image');
         if ($preview_image) {
             $opengraph['image'] = $preview_image;
             $twitterCards['image'] = $preview_image;
-            $twitterCards['image:alt'] = $site->get('title');
+            $twitterCards['image:alt'] = $_SITE->get('title');
         }
 
-        $preview_text = $site->getOpt('home_preview_text');
+        $preview_text = $_SITE->getOpt('home_preview_text');
         if ($preview_text) {
             $opengraph['description'] = $preview_text;
             $twitterCards['description'] = $preview_text;
@@ -165,7 +165,7 @@ class MainController extends Controller
      */
     public function contactAction(Request $request, CurrentUser $currentUserService): Response
     {
-        global $site, $config;
+        global $_SITE, $config;
 
         $name = $request->request->get('name');
         $email = $request->request->get('email');
@@ -208,10 +208,10 @@ class MainController extends Controller
 
                 $mailer = new Mailer();
                 $mailer->send(
-                    $site->get('site_contact'),
+                    $_SITE->get('site_contact'),
                     $subject,
                     nl2br($message),
-                    [$site->get('site_contact') => $name],
+                    [$_SITE->get('site_contact') => $name],
                     ['reply-to' => $email]
                 );
                 $success = true;
@@ -246,7 +246,7 @@ class MainController extends Controller
         CurrentSite $currentSite,
     ): Response
     {
-        global $site;
+        global $_SITE;
 
         self::authAdmin($request);
         $request->attributes->set("page_title", "Administration Biblys");
@@ -296,7 +296,7 @@ class MainController extends Controller
             'site' => Entry::generateUrlsForEntries(Entry::findByCategory('site'), $urlGenerator),
             'biblys' => Entry::generateUrlsForEntries(Entry::findByCategory('biblys'), $urlGenerator),
             'custom' => Entry::generateUrlsForEntries(Entry::findByCategory('custom'), $urlGenerator),
-            'site_title' => $site->get('title'),
+            'site_title' => $_SITE->get('title'),
             "hot_news" => $hotNewsBanner,
         ]);
     }
@@ -314,7 +314,7 @@ class MainController extends Controller
         CurrentUser $currentUserService,
     ): RedirectResponse|JsonResponse|Response
     {
-        global $site;
+        global $_SITE;
 
         self::authAdmin($request);
 
@@ -367,7 +367,7 @@ class MainController extends Controller
                 Entry::findByCategory('custom'),
                 $urlGenerator
             ),
-            'site_title' => $site->get('title'),
+            'site_title' => $_SITE->get('title'),
         ]);
     }
 

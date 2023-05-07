@@ -9,7 +9,7 @@ $_PAGE_TITLE = 'Le Blog';
 $pp = null;
 
 // Use new post controller and redirect ?
-$use_old_controller = $site->getOpt('use_old_post_controller');
+$use_old_controller = $_SITE->getOpt('use_old_post_controller');
 
 if (getLegacyVisitor()->isAdmin())
 {

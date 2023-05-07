@@ -15,7 +15,7 @@ if (!$cycle) {
     );
 }
 
-$useOldController = $site->getOpt('use_old_cycle_controller');
+$useOldController = $_SITE->getOpt('use_old_cycle_controller');
 if (!$useOldController) {
     return new RedirectResponse("/cycle/".$cycle->get("url"), 301);
 }

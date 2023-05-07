@@ -189,14 +189,13 @@ if ($request->getMethod() === "POST") {
         $om->hydrateFromCart($order, $cart);
 
         /** @var Mailer $mailer */
-        /** @var Site $site */
-        $termsPageId = $site->getOpt('cgv_page');
+                $termsPageId = $_SITE->getOpt('cgv_page');
         $termsPage = PageQuery::create()->findPk($termsPageId);
         OrderDeliveryHelpers::sendOrderConfirmationMail(
             $order,
             $shipping,
             $mailer,
-            $site,
+            $_SITE,
             $isUpdatingAnExistingOrder,
             $termsPage
         );
@@ -272,12 +271,11 @@ $content .= '
     </table>
 ';
 
-/** @var Site $site */
-$shipping_date = $site->getOpt('shipping_date');
+$shipping_date = $_SITE->getOpt('shipping_date');
 if ($shipping_date) {
     $content .= '
         <h3>Date d\'expédition</h3>
-        <p>' . $site->getOpt('shipping_date') . '</p>
+        <p>' . $_SITE->getOpt('shipping_date') . '</p>
     ';
 }
 
@@ -300,7 +298,7 @@ if (isset($error)) {
 
 // Newsletter checkbox
 $newsletter_checkbox = null;
-if ($site->getOpt('newsletter') == 1) {
+if ($_SITE->getOpt('newsletter') == 1) {
     $checked = null;
     $showCheckbox = true;
 
@@ -327,7 +325,7 @@ if ($site->getOpt('newsletter') == 1) {
 }
 
 // CGV checkbox
-$cgv_page = $site->getOpt('cgv_page');
+$cgv_page = $_SITE->getOpt('cgv_page');
 $cgv_checkbox = '<input type="hidden" name="cgv_checkbox" value=1>';
 if ($cgv_page) {
     $pm = new PageManager();

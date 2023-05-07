@@ -32,8 +32,7 @@ class SiteTest extends TestCase
     {
         // given
         $sm = new SiteManager();
-        /** @var Site $site */
-        $site = $sm->create();
+                $site = $sm->create();
         $site->setOpt("publisher_filter", "3,1,2");
 
         // when
@@ -53,8 +52,7 @@ class SiteTest extends TestCase
     {
         // given
         $sm = new SiteManager();
-        /** @var Site $site */
-        $site = $sm->create();
+                $site = $sm->create();
         $site->setOpt("publisher_filter", "3,2");
 
         // when

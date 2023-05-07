@@ -52,7 +52,7 @@ class Controller
      */
     public function render(string $templatePath, array $vars = []): Response
     {
-        global $site, $request;
+        global $_SITE, $request;
         $config = Config::load();
 
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -94,9 +94,9 @@ class Controller
 
         // return absolute url for a route
         $functions[] = new TwigFunction('url', function ($route, $vars = []) {
-            global $urlgenerator, $site;
+            global $urlgenerator, $_SITE;
 
-            return 'https://' .$site->get('domain').$urlgenerator->generate($route, $vars);
+            return 'https://' .$_SITE->get('domain').$urlgenerator->generate($route, $vars);
         });
 
         // returns share buttons for url
@@ -189,7 +189,7 @@ class Controller
         $loader = new TemplateLoader($currentSite, $filesystem);
 
         // Load Twig
-        if ($site->get('environment') == 'dev') {
+        if ($_SITE->get('environment') == 'dev') {
             $twig = new Environment($loader, ['strict_variables' => true]);
         } else {
             $twig = new Environment($loader, ['strict_variables' => true, 'debug' => true]);
@@ -223,7 +223,7 @@ class Controller
             'request' => $request,
             'user' => new Visitor($request),
             'session' => $session,
-            'site' => $site,
+            'site' => $_SITE,
             "trackers" => $trackers,
         ];
         $twig->addGlobal('app', $app);
@@ -294,8 +294,8 @@ class Controller
         }
 
         if (!isset($tags['site_name'])) {
-            global $site;
-            $tags['site_name'] = $site->get('title');
+            global $_SITE;
+            $tags['site_name'] = $_SITE->get('title');
         }
 
         if (!isset($tags['locale'])) {

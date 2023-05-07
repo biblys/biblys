@@ -13,14 +13,14 @@ class PaymentTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $site;
+        global $_SITE;
 
         $lm = new PaymentManager();
 
         $payment = $lm->create();
 
         $this->assertInstanceOf('Payment', $payment);
-        $this->assertEquals($payment->get('site_id'), $site->get('id'));
+        $this->assertEquals($payment->get('site_id'), $_SITE->get('id'));
 
         return $payment;
     }

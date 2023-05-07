@@ -18,8 +18,7 @@ if (!$people) {
     throw new ResourceNotFoundException('No people found for url '.htmlentities($url));
 }
 
-/** @var Site $site */
-$use_old_controller = $site->getOpt("use_old_people_controller");
+$use_old_controller = $_SITE->getOpt("use_old_people_controller");
 if (!$use_old_controller) {
     return new RedirectResponse("/p/$url/", 301);
 }

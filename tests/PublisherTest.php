@@ -28,7 +28,7 @@ class PublisherTest extends PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        global $site;
+        global $_SITE;
 
         $pm = new PublisherManager();
 

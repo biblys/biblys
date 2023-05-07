@@ -54,7 +54,7 @@ class PeopleController extends Controller
      */
     public function showAction(Request $request, $slug): RedirectResponse|Response
     {
-        global $site;
+        global $_SITE;
 
         $pm = new PeopleManager();
         $am = new ArticleManager();
@@ -64,7 +64,7 @@ class PeopleController extends Controller
             throw new NotFoundException("People $slug not found");
         }
 
-        $use_old_controller = $site->getOpt('use_old_people_controller');
+        $use_old_controller = $_SITE->getOpt('use_old_people_controller');
         if ($use_old_controller) {
             return new RedirectResponse("/$slug/");
         }

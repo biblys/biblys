@@ -38,7 +38,7 @@ if ($query) {
             AND `stock_return_date` IS NULL
             AND `stock_lost_date` IS NULL
     ";
-    $params["site_id"] = $site->get("id");
+    $params["site_id"] = $_SITE->get("id");
 
     // EXEMPLAIRES
     $num = 0;

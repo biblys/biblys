@@ -63,7 +63,7 @@ class MediaFileTest extends PHPUnit\Framework\TestCase
      */
     public function testGetUrl()
     {
-        global $site;
+        global $_SITE;
 
         $mfm = new MediaFileManager();
         $media = $mfm->create([
@@ -72,7 +72,7 @@ class MediaFileTest extends PHPUnit\Framework\TestCase
             'media_ext' => 'ext'
         ]);
 
-        $site->set('site_name', 'site');
+        $_SITE->set('site_name', 'site');
 
         $this->assertEquals($media->getUrl(), '/site/media/dir/file.ext');
     }

@@ -102,14 +102,14 @@ try {
 
 $sm = new SiteManager();
 $siteId = $config->get('site');
-$site = $sm->getById($siteId);
-if (!$site) {
+$_SITE = $sm->getById($siteId);
+if (!$_SITE) {
     throw new Exception('No site defined with id ' . $siteId);
 }
 
 // Define site_path (should be replaced with $site->get("path"))
 if (!defined('SITE_PATH')) {
-    $sitePath = __DIR__.'/../public/'.$site->get('name');
+    $sitePath = __DIR__.'/../public/'.$_SITE->get('name');
     define('SITE_PATH', $sitePath);
 }
 
@@ -720,7 +720,7 @@ function share_buttons($url, $text = null, $options = []): string
 function get_controller_path($controller): bool|string
 {
     /** @noinspection PhpUnusedLocalVariableInspection */
-    global $site;
+    global $_SITE;
 
     $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
     $app_path = __DIR__."/../app/controllers/".$controller.".php";

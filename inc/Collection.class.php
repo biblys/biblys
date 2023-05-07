@@ -55,9 +55,9 @@ class Collection extends Entity
                 return $where;
             }
 
-            global $site;
+            global $_SITE;
 
-            $publisher_filter = $site->getOpt('publisher_filter');
+            $publisher_filter = $_SITE->getOpt('publisher_filter');
             if ($publisher_filter && !array_key_exists('publisher_id', $where)) {
                 $where['publisher_id'] = explode(',', $publisher_filter);
             }

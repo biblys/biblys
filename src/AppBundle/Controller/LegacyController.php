@@ -36,7 +36,7 @@ class LegacyController extends Controller
         UrlGenerator $urlGenerator,
     ): Response
     {
-        global $site, $_ECHO, $_SQL, $_PAGE_TITLE, $urlgenerator;
+        global $_SITE, $_ECHO, $_SQL, $_PAGE_TITLE, $urlgenerator;
 
         $_PAGE = $request->get('page', 'home');
 
@@ -53,10 +53,10 @@ class LegacyController extends Controller
 
         // Get correct controller for called url
         $controller_path = get_controller_path($_PAGE);
-        $twig_template = __DIR__ . "/../../../public/".$site->get('name')."/html/".$_PAGE.".html.twig";
+        $twig_template = __DIR__ . "/../../../public/".$_SITE->get('name')."/html/".$_PAGE.".html.twig";
 
         // Twig template controller
-        if ($site->get('html_renderer') && file_exists($twig_template)) {
+        if ($_SITE->get('html_renderer') && file_exists($twig_template)) {
             $_HTML = $twig_template;
             $_INCLUDE = get_controller_path('_twig');
         }

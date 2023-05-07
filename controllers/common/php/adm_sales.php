@@ -21,7 +21,7 @@ $days = EntityManager::prepareAndExecute(
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ["site_id" => $site->get("id")]
+    ["site_id" => $_SITE->get("id")]
 );
 while ($o = $days->fetch()) {
     $dates .= '<option value="?d='.$o["date"].'">'._date($o["date"],"l j F").'</option>';
@@ -35,7 +35,7 @@ $mois = EntityManager::prepareAndExecute(
     WHERE `orders`.`site_id` = '" . getLegacyCurrentSite()["site_id"] . "' AND `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ["site_id" => $site->get("id")]
+    ["site_id" => $_SITE->get("id")]
 );
 while ($m = $mois->fetch()) {
     if (!empty($m["date"])) $months .= '<option value="?m='.$m["date"].'">'._date($m["date"],"F Y").'</option>';
@@ -89,7 +89,7 @@ $orders = EntityManager::prepareAndExecute(
     WHERE `o`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `order_id`
     ORDER BY `order_payment_date`",
-    ["site_id" => $site->get('id')]
+    ["site_id" => $_SITE->get('id')]
 );
 
 $tbody = null;

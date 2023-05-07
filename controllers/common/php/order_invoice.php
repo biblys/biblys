@@ -5,7 +5,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /** @var Request $request */
-/** @var Site $site */
 
 $om = new OrderManager();
 $sm = new StockManager();
@@ -40,7 +39,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     // Condition column for bookshops
     $condition = null;
-    if ($site->get("shop")) {
+    if ($_SITE->get("shop")) {
         $condition = '<th>&Eacute;tat</th>';
         $colspan = 3;
     }
@@ -77,7 +76,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
                     <em>de '.truncate($article->get('authors'), 100, '...', true, true).'</em><br>
                     coll. '.$article->get('collection')->get('name').' '.numero($article->get('number')).'
                 </td>
-                '.($site->get("shop") ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
+                '.($_SITE->get("shop") ? '<td class="center">'.$stock->get('condition').'</td>' : null).'
                 <td class="right">
                     '.currency($stock->get('selling_price') / 100).'
                 </td>
@@ -102,7 +101,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
     // No TVA legal notice
     $notva = null;
-    if (!$site->get("tva")) {
+    if (!$_SITE->get("tva")) {
         $notva = '<p class="center"><strong>TVA non applicable en application de l\'article 293 B du CGI.</strong></p><br>';
     }
 
@@ -126,7 +125,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
             <p>'.$order->get('order_email').'</p>
         </div>
 
-        <h3>'.$site->get("title").'<br />'.str_replace("|","<br />",$site->get("address")).'</h3>
+        <h3>'.$_SITE->get("title").'<br />'.str_replace("|","<br />",$_SITE->get("address")).'</h3>
 
         <h2>'.$pageTitle.'</h2>
 
@@ -175,13 +174,12 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
         <p class="text-center">
             Confirmez la r&eacute;ception de votre commande ou signalez un incident : <br>
-            <strong>'.$site->get("domain").'/confirmer/'.$order->get('order_id').'</strong>
+            <strong>'.$_SITE->get("domain").'/confirmer/'.$order->get('order_id').'</strong>
         </p>
 
     ';
 
-    /** @var Site $site */
-    $notice = $site->getOpt('invoice_notice');
+        $notice = $_SITE->getOpt('invoice_notice');
     if ($notice) {
         $content .= '<p class="text-center">'.str_replace('\n', '<br/>', $notice).'</p>';
     }

@@ -149,8 +149,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
      */
     public function testOnOrder(Article $article)
     {
-        global $site;
-        $siteId = $site->get("id");
+        global $_SITE;
+        $siteId = $_SITE->get("id");
 
         // Create a fake publisher for article
         $pm = new PublisherManager();
@@ -800,8 +800,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherFiltered = $pm->create(["publisher_name" => "Éditeur filtré"]);
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur autorisé"]);
-        $GLOBALS["site"] = EntityFactory::createSite();
-        $GLOBALS["site"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $GLOBALS["_SITE"] = EntityFactory::createSite();
+        $GLOBALS["_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
         $article = $am->create([
@@ -826,8 +826,8 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
         $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
         $sm = new SiteManager();
-        $GLOBALS["site"] = $sm->create([]);
-        $GLOBALS["site"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
+        $GLOBALS["_SITE"] = $sm->create([]);
+        $GLOBALS["_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
         $am->setIgnoreSiteFilters(true);
@@ -847,7 +847,7 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     public function testPreprocessSlugWithOneAuthor()
     {
         // given
-        $GLOBALS["site"] = EntityFactory::createSite();
+        $GLOBALS["_SITE"] = EntityFactory::createSite();
         $am = new ArticleManager();
         $article = EntityFactory::createArticle([
             "article_title" => "Pénates du soir"

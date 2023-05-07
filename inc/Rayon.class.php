@@ -26,18 +26,18 @@ class Rayon extends Entity
 
     public function addArticle($article)
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LinkManager();
 
         // Check if article is already in rayon
-        $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->get(['site_id' => $_SITE->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
             throw new Exception("L'article « ".$article->get('title')." » est déjà dans le rayon « ".$this->get('name')." ».");
         }
 
         // Create link
-        $link = $lm->create(['site_id' => $site->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->create(['site_id' => $_SITE->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
         $article_links = $article->get('links')."[rayon:".$this->get('id')."]";
@@ -50,13 +50,13 @@ class Rayon extends Entity
 
     public function removeArticle($article)
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LinkManager();
         $am = new ArticleManager();
 
         // Remove links for this article & rayon
-        $links = $lm->getAll(['site_id' => $site->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
+        $links = $lm->getAll(['site_id' => $_SITE->get('id'), 'rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
         foreach ($links as $link) {
             $lm->delete($link);
         }

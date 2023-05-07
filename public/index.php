@@ -12,7 +12,6 @@ use Symfony\Component\HttpKernel\EventListener\ErrorListener;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\RequestContext;
 
-/** @var Site $site */
 
 // INCLUDES
 include __DIR__."/../inc/functions.php";

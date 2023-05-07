@@ -1,6 +1,6 @@
 <?php
 
-global $request, $_SQL, $site;
+global $request, $_SQL, $_SITE;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +75,7 @@ $carts = $_SQL->prepare("
     GROUP BY `cart_id`
     ORDER BY `stock_cart_date` DESC
 ");
-$carts->execute(['site_id' => $site->get('id')]);
+$carts->execute(['site_id' => $_SITE->get('id')]);
 while($c = $carts->fetch(PDO::FETCH_ASSOC)) {
     if(isset($c["Email"])) $c["user"] = $c["Email"];
     else $c["user"] = $c["cart_ip"];

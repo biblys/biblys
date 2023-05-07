@@ -257,9 +257,9 @@ class Entry
      */
     public static function getCustomEntries(): array
     {
-        global $site;
+        global $_SITE;
 
-        $entries = json_decode($site->getOpt('admin_entries'));
+        $entries = json_decode($_SITE->getOpt('admin_entries'));
 
         // If JSON is malformatted
         if (json_last_error() !== JSON_ERROR_NONE) {

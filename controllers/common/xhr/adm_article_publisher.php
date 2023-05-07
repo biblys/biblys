@@ -19,8 +19,7 @@ if ($searchTerm) {
         $json[$i]["value"] = $p["publisher_name"];
         $json[$i]["publisher_name"] = $p["publisher_name"];
         $json[$i]["publisher_id"] = $p["publisher_id"];
-        /** @var Site $site */
-        $json[$i]["allowed_on_site"] = $site->allowsPublisherWithId($p["publisher_id"]) ? 1 : 0;
+                $json[$i]["allowed_on_site"] = $_SITE->allowsPublisherWithId($p["publisher_id"]) ? 1 : 0;
         $i++;
     }
     $json[$i]["label"] = '=> Créer : '.$_GET["term"];

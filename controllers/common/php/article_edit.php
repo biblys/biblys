@@ -41,9 +41,8 @@ if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
-/** @var Site $site */
 $publisherId = $currentUser->getCurrentRight()->getPublisherId();
-if (!$site->allowsPublisherWithId($publisherId)) {
+if (!$_SITE->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }

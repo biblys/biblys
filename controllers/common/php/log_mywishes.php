@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
-/** @var Site $site */
 
 $wlm = new WishlistManager();
 $wm = new WishManager();
@@ -90,7 +89,7 @@ else {
 
     // Show wishlist url & share buttons
     else {
-        $url = 'https://' . $site->get("domaine") . '/wishlist/' . getLegacyVisitor()->get('slug');
+        $url = 'https://' . $_SITE->get("domaine") . '/wishlist/' . getLegacyVisitor()->get('slug');
         $share = '
 			<br>
 
@@ -154,7 +153,7 @@ else {
             $criterias[] = '`articles`.`article_id` = ' . $w['article_id'];
         }
         $_REQ = "(".join(" OR ", $criterias).")";
-        if ($site->has("publisher_id")) $_REQ .= ' AND `articles`.`publisher_id` = ' . $site->get
+        if ($_SITE->has("publisher_id")) $_REQ .= ' AND `articles`.`publisher_id` = ' . $_SITE->get
             ("publisher_id");
         $content .= require_once '_list.php';
         $_ECHO = null;

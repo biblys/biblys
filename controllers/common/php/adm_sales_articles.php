@@ -9,12 +9,11 @@ $content = null;
 
 
 /** @var PDO $_SQL */
-/** @var Site $site */
 
 // FILTRES
-$last30daysOptions = _getDatesOptions($site->get("id"), "%Y-%m-%d", "l j f", "d");
-$months = _getDatesOptions($site->get("id"), "%Y-%m", "F Y", "m");
-$years = _getDatesOptions($site->get("id"), "%Y", "Y", "y");
+$last30daysOptions = _getDatesOptions($_SITE->get("id"), "%Y-%m-%d", "l j f", "d");
+$months = _getDatesOptions($_SITE->get("id"), "%Y-%m", "F Y", "m");
+$years = _getDatesOptions($_SITE->get("id"), "%Y", "Y", "y");
 
 // Affichage par défaut : ventes du jour courant
 if (empty($_GET["date1"]) && empty($_GET["d"]) && empty($_GET["m"]) && empty($_GET["y"])) $_GET["d"] = date("Y-m-d");

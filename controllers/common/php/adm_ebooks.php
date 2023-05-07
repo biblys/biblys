@@ -4,13 +4,12 @@ use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/** @var Site $site */
 /** @var PDO $_SQL */
 /** @var Request $request */
 
 $request->attributes->set("page_title", "Ventes numériques");
 
-if (!$site->getOpt('downloadable_publishers')) {
+if (!$_SITE->getOpt('downloadable_publishers')) {
     throw new Exception("L'option de site `downloadable_publishers` doit être définie.");
 }
 
@@ -18,7 +17,7 @@ if (!$site->getOpt('downloadable_publishers')) {
 $ao = array();
 $articles = $_SQL->query("SELECT `article_id`, `article_title`, `article_collection` FROM `articles`
     WHERE
-        `publisher_id` IN (" . $site->getOpt('downloadable_publishers') . ")
+        `publisher_id` IN (" . $_SITE->getOpt('downloadable_publishers') . ")
         AND (`type_id` = 2 OR `type_id` = 11) ORDER BY `article_collection`, `article_title_alphabetic`");
 while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     $ao[$a["article_collection"]][] = '<option value="' . $a["article_id"] . '"' . (isset($_GET["article_id"]) && $_GET["article_id"] == $a["article_id"] ? ' selected' : null) . '>' . $a["article_title"] . '</option>';
@@ -32,14 +31,14 @@ foreach ($ao as $c => $a) {
 // People select
 $people_options = NULL;
 $people = $_SQL->prepare("SELECT `people_id`, `people_name` FROM `articles` JOIN `roles` USING(`article_id`) JOIN `people` USING(`people_id`) JOIN `collections` USING(`collection_id`) WHERE `collections`.`site_id` = :site_id AND `type_id` = 2 AND `job_id` = 1 GROUP BY `people_id` ORDER BY `people_last_name`");
-$people->execute(['site_id' => $site->get('id')]);
+$people->execute(['site_id' => $_SITE->get('id')]);
 while ($p = $people->fetch(PDO::FETCH_ASSOC)) {
     $people_options .= '<option value="' . $p["people_id"] . '">' . $p["people_name"] . '</option>';
 }
 
 $req = NULL;
 $reqPeople = null;
-$reqParams = ['site_id' => $site->get('id')];
+$reqParams = ['site_id' => $_SITE->get('id')];
 $reqPeopleParams = [];
 
 if (!empty($_GET["date1"])) {

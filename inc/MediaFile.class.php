@@ -7,9 +7,9 @@ class MediaFile extends Entity
 
     public function getUrl()
     {
-        global $site;
+        global $_SITE;
 
-        return '/' . $site->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
+        return '/' . $_SITE->get('name') . '/media/' . $this->get('dir') . '/' . $this->get('file')
             . '.' . $this->get('ext');
     }
 }

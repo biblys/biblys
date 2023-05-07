@@ -15,11 +15,11 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 {
     public function testAddArticle()
     {
-        global $site;
+        global $_SITE;
 
         // given
         $cm = new CartManager();
-        $site->setOpt("virtual_stock", 1);
+        $_SITE->setOpt("virtual_stock", 1);
         $controller = new CartController();
         $cart = getLegacyVisitor()->getCart("create");
 
@@ -51,7 +51,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
     public function testAddArticleNotYetAvailable()
     {
-        global $site;
+        global $_SITE;
 
         $this->expectException("Symfony\Component\HttpKernel\Exception\ConflictHttpException");
         $this->expectExceptionMessage(
@@ -60,7 +60,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
         // given
         $cm = new CartManager();
-        $site->setOpt("virtual_stock", 1);
+        $_SITE->setOpt("virtual_stock", 1);
         $controller = new CartController();
         $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);
@@ -91,11 +91,11 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
 
     public function testAddStockCopy()
     {
-        global $site;
+        global $_SITE;
 
         // given
         $cm = new CartManager();
-        $site->setOpt("virtual_stock", 0);
+        $_SITE->setOpt("virtual_stock", 0);
         $controller = new CartController();
         $cart = getLegacyVisitor()->getCart("create");
         $cm->vacuum($cart);

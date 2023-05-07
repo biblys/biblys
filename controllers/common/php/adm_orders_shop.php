@@ -19,7 +19,7 @@ $orders = EntityManager::prepareAndExecute(
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ['site_id' => $GLOBALS["site"]->get('id')]
+    ['site_id' => $GLOBALS["_SITE"]->get('id')]
 );
 while ($o = $orders->fetch(PDO::FETCH_ASSOC)) {
     $dates .= '<option value="?d='.$o["date"].'">'._date($o["date"], "l j F").'</option>';
@@ -34,7 +34,7 @@ $mois = EntityManager::prepareAndExecute(
       AND `order_payment_date` != '0000-00-00 00:00:00'
     GROUP BY `date`
     ORDER BY `date` DESC",
-    ["site_id" => $GLOBALS["site"]->get("id")]
+    ["site_id" => $GLOBALS["_SITE"]->get("id")]
 );
 while ($m = $mois->fetch(PDO::FETCH_ASSOC)) {
     $months .= '<option value="?m='.$m["date"].'">'._date($m["date"], "F Y").'</option>';
@@ -74,7 +74,7 @@ if (empty($_GET["time1"])) $_GET["time1"] = "00:00";
 if (empty($_GET["time2"])) $_GET["time2"] = "23:59";
 
 $req = null;
-$sqlParams = ['site_id' => $GLOBALS["site"]->get('id')];
+$sqlParams = ['site_id' => $GLOBALS["_SITE"]->get('id')];
 
 if (!empty($_GET["date1"])) {
     $req .= "AND `order_payment_date` >= '".$_GET["date1"]." ".$_GET["time1"].":00' AND `order_payment_date` <= '".$_GET["date2"]." ".$_GET["time2"].":59'";

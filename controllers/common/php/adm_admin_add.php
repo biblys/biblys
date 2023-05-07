@@ -5,7 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var Request $request */
-/** @var Site $site */
 
 $um = new UserManager();
 
@@ -25,8 +24,8 @@ if ($request->getMethod() === "POST") {
     }
 
     // Set admin right
-    if (!$user->hasRight('site', $site['site_id'])) {
-        $user->giveRight('site', $site['site_id']);
+    if (!$user->hasRight('site', $_SITE['site_id'])) {
+        $user->giveRight('site', $_SITE['site_id']);
     }
 
     // E-mail de bienvenue
@@ -49,11 +48,11 @@ if ($request->getMethod() === "POST") {
         ';
     }
 
-    $headers = 'From: '.$site['site_title'].' <'.$site['site_contact'].'>'."\r\n";
-    $subject = $site['site_tag'].' | Votre accès au site';
+    $headers = 'From: '.$_SITE['site_title'].' <'.$_SITE['site_contact'].'>'."\r\n";
+    $subject = $_SITE['site_tag'].' | Votre accès au site';
     $message = '
 <p>Bonjour,</p>
-<p>Votre accès administrateur a été créé sur le site <a href="https://'.$site['site_domain'].'/">'.$site['site_title'].'</a>.</p>
+<p>Votre accès administrateur a été créé sur le site <a href="https://'.$_SITE['site_domain'].'/">'.$_SITE['site_title'].'</a>.</p>
 '.$credentials;
 
     $um->mail($user,$subject,$message,$headers);

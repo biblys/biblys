@@ -61,7 +61,7 @@ class CollectionController extends Controller
      */
     public function showAction(Request $request, string $slug)
     {
-        global $site;
+        global $_SITE;
 
         $cm = new CollectionManager();
         $am = new ArticleManager();
@@ -71,7 +71,7 @@ class CollectionController extends Controller
             throw new NotFoundException("Collection $slug not found");
         }
 
-        $use_old_controller = $site->getOpt('use_old_collection_controller');
+        $use_old_controller = $_SITE->getOpt('use_old_collection_controller');
         if ($use_old_controller) {
             return new RedirectResponse('/o/collection/'.$slug);
         }

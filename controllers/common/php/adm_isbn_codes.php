@@ -55,7 +55,7 @@
     // Get most recent EAN to start from
     $ean = $eans[0];
 
-    $isbn_checker_start = $site->getOpt('isbn_checker_start');
+    $isbn_checker_start = $_SITE->getOpt('isbn_checker_start');
     if ($isbn_checker_start) {
         $ean_start = Isbn::convertToEan13($isbn_checker_start);
 

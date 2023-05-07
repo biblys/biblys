@@ -208,10 +208,10 @@ class EntityManager
     {
         global $_SQL;
         
-        global $site;
+        global $_SITE;
 
         $this->db = $_SQL;
-        $this->site = $site;
+        $this->site = $_SITE;
         $this->idField = $this->prefix.'_id';
     }
 
@@ -356,8 +356,8 @@ class EntityManager
     public function count(array $where = [])
     {
         if ($this->siteAgnostic === false) {
-            global $site;
-            $where['site_id'] = $site->get('id');
+            global $_SITE;
+            $where['site_id'] = $_SITE->get('id');
         }
 
         if (method_exists($this, 'addSiteFilters')) {
@@ -385,8 +385,8 @@ class EntityManager
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
         if ($this->siteAgnostic === false) {
-            global $site;
-            $where['site_id'] = $site->get('id');
+            global $_SITE;
+            $where['site_id'] = $_SITE->get('id');
         }
 
         $q = EntityManager::buildSqlQuery($where);
@@ -478,8 +478,8 @@ class EntityManager
     {
         // If not site agnostic, add site id
         if ($this->siteAgnostic === false) {
-            global $site;
-            $defaults['site_id'] = $site->get('id');
+            global $_SITE;
+            $defaults['site_id'] = $_SITE->get('id');
         }
 
         $entity = new $this->object($defaults);

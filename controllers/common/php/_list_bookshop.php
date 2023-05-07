@@ -158,7 +158,7 @@ if (isset($listOrderBy)) {
 
 // Pagination
 $npp = 10; // nombre par page
-$articles_per_page = $site->getOpt('articles_per_page');
+$articles_per_page = $_SITE->getOpt('articles_per_page');
 if ($articles_per_page) {
     $npp = $articles_per_page;
 }
@@ -168,7 +168,7 @@ $_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
 $nextPageNum = $offset + $npp;
 
 $active_stock_query = null;
-$active_stock = $site->getOpt("active_stock");
+$active_stock = $_SITE->getOpt("active_stock");
 if ($active_stock) {
     $active_stock = "'".implode("','", explode(",", $active_stock))."'";
     $active_stock_query = " AND `stock_stockage` IN (".$active_stock.")";
@@ -187,7 +187,7 @@ $sql_query = "
 
 // Compter le nombre de résultats
 $numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, [
-    "site_id" => $site->get("id"),
+    "site_id" => $_SITE->get("id"),
 ]);
 $num = count($numQ->fetchAll());
 
@@ -224,7 +224,7 @@ $sql = EntityManager::prepareAndExecute("
     ".$sql_query." 
     ".$_REQ_ORDER." 
     ".$_REQ_LIMIT,
-    ["site_id" => $site->get("id")]
+    ["site_id" => $_SITE->get("id")]
 );
 
 $ix = $offset;

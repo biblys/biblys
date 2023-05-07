@@ -33,7 +33,7 @@ $collections = $_SQL->prepare("SELECT `publisher_name`, `supplier_id`, `supplier
     LEFT JOIN `publishers` USING(`publisher_id`)
     WHERE `suppliers`.`site_id` = :site_id
     ORDER BY `publisher_name`");
-$collections->execute(['site_id' => $site->get('id')]);
+$collections->execute(['site_id' => $_SITE->get('id')]);
 while ($c = $collections->fetch(PDO::FETCH_ASSOC)) {
     $_ECHO .= '
         <tr>

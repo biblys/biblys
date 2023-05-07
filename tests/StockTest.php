@@ -13,10 +13,10 @@ class StockTest extends PHPUnit\Framework\TestCase
     // Set site TVA before tests
     public static function setUpBeforeClass(): void
     {
-        global $site;
+        global $_SITE;
         $sm = new SiteManager();
-        $site->set('site_tva', 'fr');
-        $sm->update($site);
+        $_SITE->set('site_tva', 'fr');
+        $sm->update($_SITE);
     }
 
     /**

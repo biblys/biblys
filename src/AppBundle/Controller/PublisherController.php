@@ -41,7 +41,7 @@ class PublisherController extends Controller
      */
     public function indexAction(Request $request): Response
     {
-        global $site;
+        global $_SITE;
         
         $pm = new PublisherManager();
 
@@ -51,7 +51,7 @@ class PublisherController extends Controller
         }
 
         $totalCount = $pm->count([]);
-        $limit = $site->getOpt('publisher_per_page') ? $site->getOpt('publisher_per_page') : 100;
+        $limit = $_SITE->getOpt('publisher_per_page') ? $_SITE->getOpt('publisher_per_page') : 100;
         $pagination = new Pagination($pageNumber, $totalCount, $limit);
 
         $publishers = $pm->getAll([], [
@@ -79,7 +79,7 @@ class PublisherController extends Controller
      */
     public function showAction(Request $request, $slug): Response
     {
-        global $site;
+        global $_SITE;
 
         $pm = new PublisherManager();
         $am = new ArticleManager();
@@ -89,12 +89,12 @@ class PublisherController extends Controller
             throw new NotFoundException("Publisher $slug not found");
         }
 
-        $use_old_controller = $site->getOpt('use_old_publisher_controller');
+        $use_old_controller = $_SITE->getOpt('use_old_publisher_controller');
         if ($use_old_controller) {
             return new RedirectResponse('/o/editeur/'.$slug);
         }
 
-        $publisher_filter = $site->getOpt('publisher_filter');
+        $publisher_filter = $_SITE->getOpt('publisher_filter');
         if ($publisher_filter) {
             $publishersFromFilter = explode(',', $publisher_filter);
             if (!in_array($publisher->get('id'), $publishersFromFilter)) {

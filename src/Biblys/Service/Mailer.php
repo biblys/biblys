@@ -27,9 +27,9 @@ class Mailer
 
     public function __construct()
     {
-        global $site, $config;
+        global $_SITE, $config;
 
-        $this->defaultSender = new Address($site->get("site_contact"), $site->get("site_title"));
+        $this->defaultSender = new Address($_SITE->get("site_contact"), $_SITE->get("site_title"));
         $this->transport = new SendmailTransport();
 
         // If an SMTP config is defined

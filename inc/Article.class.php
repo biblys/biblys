@@ -221,10 +221,10 @@ class Article extends Entity
      */
     public function getCFRewards(): array
     {
-        global $_SQL, $site;
+        global $_SQL, $_SITE;
 
         $result = array();
-        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $site->get('id') . '"');
+        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $_SITE->get('id') . '"');
         while ($r = $rewards->fetch(PDO::FETCH_ASSOC)) {
             $result[] = new CFReward($r);
         }
@@ -959,14 +959,14 @@ class Article extends Entity
      */
     public function getTaxRate()
     {
-        global $site;
+        global $_SITE;
 
         // If site doesn't use TVA, no tax
-        if (!$site->get('site_tva')) {
+        if (!$_SITE->get('site_tva')) {
             return 0;
         }
-        $sellerCountry = $site->get('site_tva');
-        $customerCountry = $site->get('site_tva');
+        $sellerCountry = $_SITE->get('site_tva');
+        $customerCountry = $_SITE->get('site_tva');
 
         // Set product type
         $tax_type = "STANDARD";
@@ -1113,14 +1113,14 @@ class ArticleManager extends EntityManager
             return $where;
         }
 
-        global $site;
+        global $_SITE;
 
-        $publisherFilter = $site->getOpt('publisher_filter');
+        $publisherFilter = $_SITE->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
             $where['publisher_id'] = explode(',', $publisherFilter);
         }
 
-        $collectionFilterHide = $site->getOpt('collection_filter_hide');
+        $collectionFilterHide = $_SITE->getOpt('collection_filter_hide');
         if ($collectionFilterHide && !array_key_exists('collection_id', $where)) {
             $where['collection_id NOT IN'] = explode(',', $collectionFilterHide);
         }
@@ -1345,18 +1345,18 @@ class ArticleManager extends EntityManager
      */
     public function addRayon($article, $rayon)
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LinkManager();
 
         // Check if article is already in rayon
-        $link = $lm->get(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->get(['site_id' => $_SITE->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
             throw new ArticleAlreadyInRayonException($article->get("title"), $rayon->get("name"));
         }
 
         // Create link
-        $link = $lm->create(['site_id' => $site->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->create(['site_id' => $_SITE->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
         $article_links = $article->get('links') . "[rayon:" . $rayon->get('id') . "]";

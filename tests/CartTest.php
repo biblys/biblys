@@ -216,14 +216,14 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testNeedsShipping()
     {
-        global $site;
+        global $_SITE;
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
         $not_virtual_stock = false;
-        if (!$site->getOpt('virtual_stock')) {
-            $site->setOpt('virtual_stock', 1);
+        if (!$_SITE->getOpt('virtual_stock')) {
+            $_SITE->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -245,7 +245,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($cart->needsShipping(), "Carts with physical article need shipping");
 
         if ($not_virtual_stock) {
-            $site->setOpt('virtual_stock', 0);
+            $_SITE->setOpt('virtual_stock', 0);
         }
 
         $cm->delete($cart);
@@ -256,12 +256,12 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticle()
     {
-        global $site;
+        global $_SITE;
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
-        $site->setOpt('virtual_stock', 1);
+        $_SITE->setOpt('virtual_stock', 1);
 
         $cart = $cm->create();
         $article = EntityFactory::createArticle(["article_availability_dilicom" => 1]);
@@ -278,7 +278,7 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleForUnreleaseArticle()
     {
-        global $site;
+        global $_SITE;
 
         // given
         $this->expectException("Entity\Exception\CartException");
@@ -286,7 +286,7 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         // given
         $cm = new CartManager();
-        $site->setOpt('virtual_stock', 1);
+        $_SITE->setOpt('virtual_stock', 1);
         $cart = $cm->create();
         $tomorrow = new DateTime("tomorrow");
         $article = EntityFactory::createArticle([
@@ -303,15 +303,15 @@ class CartTest extends PHPUnit\Framework\TestCase
      */
     public function testAddArticleCooldown()
     {
-        global $site;
+        global $_SITE;
 
         $cm = new CartManager();
         $am = new ArticleManager();
         $sm = new StockManager();
 
         $not_virtual_stock = false;
-        if (!$site->getOpt('virtual_stock')) {
-            $site->setOpt('virtual_stock', 1);
+        if (!$_SITE->getOpt('virtual_stock')) {
+            $_SITE->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -350,7 +350,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         );
 
         if ($not_virtual_stock) {
-            $site->setOpt('virtual_stock', 0);
+            $_SITE->setOpt('virtual_stock', 0);
         }
 
         $this->stocks = $article->getStock();
@@ -367,14 +367,14 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectException("Exception");
         $this->expectExceptionMessage("L'article Plop n'a pas pu être ajouté au panier car il est hors commerce.");
 
-        global $site;
+        global $_SITE;
 
         $cm = new CartManager();
         $am = new ArticleManager();
 
         $not_virtual_stock = false;
-        if (!$site->getOpt('virtual_stock')) {
-            $site->setOpt('virtual_stock', 1);
+        if (!$_SITE->getOpt('virtual_stock')) {
+            $_SITE->setOpt('virtual_stock', 1);
             $not_virtual_stock = true;
         }
 
@@ -386,7 +386,7 @@ class CartTest extends PHPUnit\Framework\TestCase
         $cm->addArticle($cart, $article);
 
         if ($not_virtual_stock) {
-            $site->setOpt('virtual_stock', 0);
+            $_SITE->setOpt('virtual_stock', 0);
         }
     }
 
@@ -400,8 +400,8 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("L'article À réimprimer n'a pas pu être ajouté au panier car il est en cours de réimpression.");
 
         // given
-        global $site;
-        $site->setOpt('virtual_stock', 1);
+        global $_SITE;
+        $_SITE->setOpt('virtual_stock', 1);
         $cm = new CartManager();
         $cart = $cm->create();
         $article = EntityFactory::createArticle([
@@ -460,9 +460,9 @@ class CartTest extends PHPUnit\Framework\TestCase
     public function testContainsReward()
     {
         // given
-        $GLOBALS["site"] = EntityFactory::createSite();
+        $GLOBALS["_SITE"] = EntityFactory::createSite();
         $reward = EntityFactory::createCrowdfundingReward([
-            "site_id" => $GLOBALS["site"]->get("id"),
+            "site_id" => $GLOBALS["_SITE"]->get("id"),
             "limited" => 0,
         ]);
         $cart = EntityFactory::createCart();
@@ -483,7 +483,7 @@ class CartTest extends PHPUnit\Framework\TestCase
     public function testDelete()
     {
         // given
-        $GLOBALS["site"] = EntityFactory::createSite();
+        $GLOBALS["_SITE"] = EntityFactory::createSite();
         $cm = new CartManager();
         $webCart = EntityFactory::createCart(["cart_type" => "web"]);
         $shopCart = EntityFactory::createCart(["cart_type" => "shop"]);

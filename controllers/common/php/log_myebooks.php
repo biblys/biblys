@@ -33,7 +33,7 @@
 
     $ebooks = NULL;
 
-    if ($site->has('publisher_id')) {
+    if ($_SITE->has('publisher_id')) {
 
         // Extrait gratuit
         $excerpt = EntityManager::prepareAndExecute("SELECT `a`.`article_id`, `article_title`, `article_authors`, `article_url`, `article_pubdate`
@@ -42,7 +42,7 @@
             WHERE `publisher_id` = :publisher_id AND `article_preorder` = 1 AND `article_pubdate` > NOW() AND `file_access` = 0
             GROUP BY `article_id`
             ORDER BY `article_pubdate` LIMIT 1",
-            ['publisher_id' => $site->get('publisher_id')]
+            ['publisher_id' => $_SITE->get('publisher_id')]
         );
 
         if ($e = $excerpt->fetch(PDO::FETCH_ASSOC)) {

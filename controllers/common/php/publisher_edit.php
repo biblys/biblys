@@ -1,6 +1,6 @@
 <?php
 
-global $request, $site, $_SQL;
+global $request, $_SITE, $_SQL;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,7 +62,7 @@ if ($request->getMethod() == "POST") {
     $_POST["publisher_url"] = makeurl($_POST["publisher_name"]);
 
     // Short description (L'Autre livre)
-    if ($site->get("id") == 11) {
+    if ($_SITE->get("id") == 11) {
         $main_desc = $request->request->get("publisher_desc", false);
         $short_desc = $request->request->get("publisher_desc_short", false);
 
@@ -225,7 +225,7 @@ $content .= '
 if (
     getLegacyVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
     $p["publisher_id"] == getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
-    (getLegacyVisitor()->isAdmin()) && ($site->get("id") == 11) // Admin de l'autre livre ou lvdi
+    (getLegacyVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
     $content .= '
@@ -442,14 +442,14 @@ if (getLegacyCurrentSite()["site_shop"]) {
     if ($addSupplier) {
         $lm->create([
             'publisher_id' => $publisher->get('id'),
-            'site_id' => $site->get('id'),
+            'site_id' => $_SITE->get('id'),
             'supplier_id' => $addSupplier
         ]);
         return new RedirectResponse("/pages/publisher_edit?id=".$publisher->get('id')."#suppliers");
     } elseif(isset($_GET["del_supplier"])) {
         $link = $lm->get([
             'publisher_id' => $publisher->get('id'),
-            'site_id' => $site->get('id'),
+            'site_id' => $_SITE->get('id'),
             'supplier_id' => $delSupplier
         ]);
         $lm->delete($link);

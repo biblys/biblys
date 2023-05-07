@@ -27,11 +27,11 @@
          */
         public function getPublishers()
         {
-            global $site;
+            global $_SITE;
 
             // Get links for this suppliers
             $lm = new LinkManager();
-            $links = $lm->getAll(['site_id' => $site->get('id'), 'publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
+            $links = $lm->getAll(['site_id' => $_SITE->get('id'), 'publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
 
             // Get publishers id from links
             $publisherIds = array_map(function($link) {

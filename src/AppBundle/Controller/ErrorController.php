@@ -153,7 +153,7 @@ class ErrorController extends Controller
         ResourceNotFoundException|InvalidParameterException $exception
     ): Response
     {
-        global $_SQL, $site;
+        global $_SQL, $_SITE;
 
         $protocol = $request->isSecure() ? 'https' : 'http';
 
@@ -173,7 +173,7 @@ class ErrorController extends Controller
         $redirections->execute(
             [
                 'redirection_old' => $redirectionOld,
-                'site_id' => $site->get('id')
+                'site_id' => $_SITE->get('id')
             ]
         );
         if ($r = $redirections->fetch(PDO::FETCH_ASSOC)) {

@@ -20,12 +20,12 @@ class AwardsController extends Controller
      */
     public function indexAction(): Response
     {
-        global $site;
+        global $_SITE;
 
         $awm = new AwardManager();
 
         $where = [];
-        $filter = $site->getOpt('publisher_filter');
+        $filter = $_SITE->getOpt('publisher_filter');
         if ($filter) {
             $where = ['publisher_id' => explode(',', $filter)];
         }

@@ -64,10 +64,10 @@ class Publisher extends Entity
      */
     public function getSuppliers(): array
     {
-        global $site, $_SQL;
+        global $_SITE, $_SQL;
 
         $query = $_SQL->prepare("SELECT `supplier_id`, `supplier_name` FROM `links` JOIN `suppliers` USING(`supplier_id`) WHERE `links`.`site_id` = :site AND `suppliers`.`site_id` = :site AND `publisher_id` = :publisher");
-        $query->execute(['site' => $site->get('id'), 'publisher' => $this->get('id')]);
+        $query->execute(['site' => $_SITE->get('id'), 'publisher' => $this->get('id')]);
         $query = $query->fetchAll();
 
         $suppliers = [];
@@ -84,19 +84,19 @@ class Publisher extends Entity
      */
     public function addSupplier(Supplier $supplier)
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $site->get('id'),
+            'site_id' => $_SITE->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
 
         if (!$link) {
             $lm->create([
-                'site_id' => $site->get('id'),
+                'site_id' => $_SITE->get('id'),
                 'supplier_id' => $supplier->get('id'),
                 'publisher_id' => $this->get('id')
             ]);
@@ -109,12 +109,12 @@ class Publisher extends Entity
      */
     public function removeSupplier(Supplier $supplier)
     {
-        global $site;
+        global $_SITE;
 
         $lm = new LinkManager();
 
         $link = $lm->get([
-            'site_id' => $site->get('id'),
+            'site_id' => $_SITE->get('id'),
             'supplier_id' => $supplier->get('id'),
             'publisher_id' => $this->get('id')
         ]);
@@ -191,9 +191,9 @@ class PublisherManager extends EntityManager
             return $where;
         }
 
-        global $site;
+        global $_SITE;
 
-        $publisherFilter = $site->getOpt('publisher_filter');
+        $publisherFilter = $_SITE->getOpt('publisher_filter');
         if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
             $where['publisher_id'] = explode(',', $publisherFilter);
         }

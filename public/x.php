@@ -57,9 +57,8 @@ $_RESULT = null;
 
 // Recherche de la page site, par defaut, ou 404
 try {
-    /** @var Site $site */
-    if (file_exists(__DIR__.'/../controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php')) {
-        $_PAGE = include(__DIR__.'/../controllers/'.$site->get('name').'/xhr/'.$_PAGE.'.php');
+        if (file_exists(__DIR__.'/../controllers/'.$_SITE->get('name').'/xhr/'.$_PAGE.'.php')) {
+        $_PAGE = include(__DIR__.'/../controllers/'.$_SITE->get('name').'/xhr/'.$_PAGE.'.php');
     } elseif (file_exists(__DIR__.'/../controllers/common/xhr/'.$_PAGE.'.php')) {
         $_PAGE = include(__DIR__.'/../controllers/common/xhr/'.$_PAGE.'.php');
     } else {
