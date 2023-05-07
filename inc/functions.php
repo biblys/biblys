@@ -1,9 +1,11 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
 use Biblys\Service\SlugService;
+use JetBrains\PhpStorm\NoReturn;
 use Propel\Runtime\Exception\PropelException;
 use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,6 +21,7 @@ error_reporting(E_ALL);
 // Catch trigger_error calls and turn them into exceptions
 // to ensure execution is stopped until they are all replaced
 // with proper exceptions
+/** @noinspection PhpUnusedParameterInspection */
 function errorHandler($errno, $errstr, $errfile, $errline): void
 {
     $message = "An error was thrown using trigger_error in $errfile:$errline: $errstr";
@@ -109,6 +112,7 @@ if (!$site_id) {
     $aliases = $config->get('aliases');
     if ($aliases) {
         if (isset($aliases[$host])) {
+            /** @noinspection HttpUrlsUsage */
             $url = 'http://' . $aliases[$host] . $request->getRequestUri();
             $response = new RedirectResponse($url);
             $response->send();
@@ -139,7 +143,7 @@ if (!$site) {
     throw new Exception('No site defined with id ' . $site_id);
 }
 
-// Define site_path (should be replace with $site->get("path"))
+// Define site_path (should be replaced with $site->get("path"))
 if (!defined('SITE_PATH')) {
     $sitePath = __DIR__.'/../public/'.$site->get('name');
     define('SITE_PATH', $sitePath);
@@ -190,7 +194,7 @@ function auth(string $type = 'user'): bool|Visitor
     return false;
 }
 
-function authors($x, $m = null)
+function authors($x, $m = null): ?string
 {
     if ($x === null) {
         return null;
@@ -200,7 +204,9 @@ function authors($x, $m = null)
     $c = count($x);
     if ('url' == $m) {
         foreach ($x as $k => $v) {
-            $x[$k] = '<a href="/' . makeurl($v) . '/">' . $v . '</a>';
+            $slugService = new SlugService();
+            $slug = $slugService->slugify($v);
+            $x[$k] = '<a href="/' . $slug . '/">' . $v . '</a>';
         }
     }
     if ($c > 2) {
@@ -307,7 +313,7 @@ function _date($dateToFormat, $format = 'd-m-Y'): bool|string
         throw new InvalidDateFormatException("Cannot format date with day of week: $dayOfWeek");
     }
 
-    $trans = [ // Pour le Samedi 5 septembre 2010 à 07h34m05
+    $trans = [ // Pour le dimanche 5 septembre 2010 à 07h34m05
         'D' => date('D', $timestamp), // Sat
         'd' => $day, // 05
         'j' => date('j', $timestamp), // 5
@@ -333,7 +339,7 @@ function e404($debug = 'e404 function called without debug info')
     throw new Symfony\Component\Routing\Exception\ResourceNotFoundException($debug);
 }
 
-function error($x, $t = 'MySQL')
+function error($x, $t = 'MySQL'): void
 {
 
     global $_POST;
@@ -345,7 +351,7 @@ function error($x, $t = 'MySQL')
     }
 }
 
-function file_dir($x)
+function file_dir($x): string
 {
     $x = substr($x, -2, 2);
     if (1 == strlen($x)) {
@@ -355,7 +361,7 @@ function file_dir($x)
     return $x;
 }
 
-function json_error($errno, $errstr, $errfile = null, $errline = null, $errcontext = null)
+#[NoReturn] function json_error($errno, $errstr, $errfile = null, $errline = null): void
 {
     $json = [
         'errno' => $errno,
@@ -411,13 +417,13 @@ function media_exists($type, $id): bool
     }
     $path = MEDIA_PATH . '//' . $type . '/' . file_dir($id) . '/' . $id . '.' . $ext;
     if ('ebook-pdf' == $type) {
-        $path = biblysPath() . '/dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
+        $path = __DIR__ . '/../dl/pdf/' . file_dir($id) . '/' . $id . '.pdf';
     }
     if ('ebook-epub' == $type) {
-        $path = biblysPath() . '/dl/epub/' . file_dir($id) . '/' . $id . '.epub';
+        $path = __DIR__ . '/../dl/epub/' . file_dir($id) . '/' . $id . '.epub';
     }
     if ('ebook-azw' == $type) {
-        $path = biblysPath() . '/dl/azw/' . file_dir($id) . '/' . $id . '.azw';
+        $path = __DIR__ . '/../dl/azw/' . file_dir($id) . '/' . $id . '.azw';
     }
     if (file_exists($path)) {
         return true;
@@ -426,7 +432,7 @@ function media_exists($type, $id): bool
     }
 }
 
-function numero($x, $b = ' n&deg;&nbsp;')
+function numero($x, $b = ' n&deg;&nbsp;'): string
 {
     if (!empty($x)) {
         return $b . $x;
@@ -435,7 +441,7 @@ function numero($x, $b = ' n&deg;&nbsp;')
     }
 }
 
-function price($x, $m = null, $decimals = 2)
+function price($x, $m = null, $decimals = 2): float|int|string
 {
     if ('EUR' == $m) {
         return number_format(round($x / 100, 6), $decimals, ',', '&#8239;') . '&nbsp;&euro;';
@@ -448,13 +454,16 @@ function price($x, $m = null, $decimals = 2)
  * Format number as a price with site currency.
  *
  * @param float $amount the amount to format
- * @param bool  $cents  if true, the amount is in cents and should be
+ * @param bool $cents if true, the amount is in cents and should be
  *                      divided by 100 before display
+ * @return string
+ * @throws PropelException
  */
-function currency($amount, $cents = false)
+function currency(float $amount, bool $cents = false): string
 {
-    global $site;
-    $currency = $site->getOpt('currency');
+    $config = Config::load();
+    $currentSiteService = CurrentSite::buildFromConfig($config);
+    $currency = $currentSiteService->getOption("currency");
 
     if ($cents) {
         $amount = round($amount / 100, 6);
@@ -499,20 +508,14 @@ function s($x, $s = null, $p = null)
     } elseif (isset($p) and $x > 1) {
         return $p;
     }
+
+    return "";
 }
 
 /**
  * Truncate a string.
- *
- * @param string $string
- * @param int    $max_length
- * @param type   $replacement
- * @param bool   $trunc_at_space
- * @param bool   $with_tooltip
- *
- * @return string
  */
-function truncate($string, $max_length = 30, $replacement = '', $trunc_at_space = false, $with_tooltip = false)
+function truncate(string $string, int $max_length = 30, string $replacement = '', bool $trunc_at_space = false, bool $with_tooltip = false): array|string
 {
     $string = strip_tags($string);
     $max_length -= mb_strlen($replacement);
@@ -546,13 +549,13 @@ function makeurl($x): string
 }
 
 // Créer l'adresse de la page de la collection
-function collection_url($publisher, $collection)
+function collection_url($publisher, $collection): string
 {
     return CollectionManager::createSlug($publisher, $collection);
 }
 
 // Retirer l'article déterminant avec un titre
-function alphabetize($text)
+function alphabetize($text): array|string|null
 {
     return preg_replace("#^(L'|l'|Le |le |LE |La |la |LA |Les |les |LES )(.*)#", '$2, $1', $text);
 }
@@ -586,16 +589,19 @@ function user_name($x)
 // Afficher page
 function render_page($page_id, $mode = 'standalone')
 {
-
+$config = Config::load();
+    $currentSiteService = CurrentSite::buildFromConfig($config);
     global $_SQL;
-    $pages = $_SQL->query("SELECT `page_content` FROM `pages` WHERE `page_id` = '" . $page_id . "' AND `site_id` = '" . getLegacyCurrentSite()['site_id'] . "' AND `page_status` = 1 LIMIT 1");
+    $pages = $_SQL->query("SELECT `page_content` FROM `pages` WHERE `page_id` = '" . $page_id . "' AND `site_id` = '" . $currentSiteService->getId() . "' AND `page_status` = 1 LIMIT 1");
     if ('include' == $mode && $p = $pages->fetch(PDO::FETCH_ASSOC)) {
         return $p['page_content'];
     }
+
+    return "";
 }
 
 // Unité de taille
-function file_size($s)
+function file_size($s): string
 {
     $i = 0;
     while ($s > 1024) {
@@ -603,6 +609,7 @@ function file_size($s)
         ++$i;
     }
     $p = 0;
+    $u = "";
     if (0 == $i) {
         $u = '&nbsp;octets';
     } elseif (1 == $i) {
@@ -621,17 +628,17 @@ function file_size($s)
 }
 
 // Retourne un taux de TVA
-function tva_rate($tva, $date = null, $article_type = 1)
+function tva_rate($tva, $date = null, $article_type = 1): bool|array|string
 {
-
-
-    if ('be' == getLegacyCurrentSite()['site_tva']) {
+$config = Config::load();
+    $currentSiteService = CurrentSite::buildFromConfig($config);
+    if ('be' == $currentSiteService->getSite()->getTva()) {
         if (1 == $tva && 1 == $article_type) { // Livre papier
             $rate = '6';
         } else {
             $rate = '21';
         }
-    } elseif ('fr' == getLegacyCurrentSite()['site_tva']) {
+    } elseif ('fr' == $currentSiteService->getSite()->getTva()) {
         if ('all' == $tva) {
             return [2.1, 5.5, 7, 19.6, 20];
         }
@@ -653,15 +660,11 @@ function tva_rate($tva, $date = null, $article_type = 1)
         }
     }
 
-    if (isset($rate)) {
-        return $rate;
-    } else {
-        return false;
-    }
+    return $rate ?? false;
 }
 
 // Calcule un pourcentage
-function percent($val1, $val2, $precision = 0)
+function percent($val1, $val2, $precision = 0): bool|string
 {
     if (!$val2) {
         return false;
@@ -674,7 +677,7 @@ function percent($val1, $val2, $precision = 0)
     return $res . '&nbsp;%';
 }
 
-function get_template($template, $variables = [])
+function get_template($template, $variables = []): Response
 {
     $controller = new Framework\Controller();
 
@@ -684,43 +687,37 @@ function get_template($template, $variables = [])
 /**
  * Generates HTML for share buttons.
  *
- * @param string $url     the url to share
- * @param string $text    the text to share
- * @param array  $options an array of options
- *
- * @return HTML The HTML code for the share buttons
- *
  * Options:
  *  - class:   adds a class to main element
  *  - buttons: for each button, boolean to set whether the button should be shown
  *  - icons:   for each button, replace the default icon with another from set
  *  - images:  for each button, replace the default icon with an image
  */
-function share_buttons($url, $text = null, $options = [])
+function share_buttons($url, $text = null, $options = []): string
 {
     // Buttons option
 
-    $options['buttons'] = isset($options['buttons']) ? $options['buttons'] : [];
+    $options['buttons'] = $options['buttons'] ?? [];
     $options['buttons'] = [
-        'facebook' => isset($options['buttons']['facebook']) ? $options['buttons']['facebook'] : true,
-        'twitter' => isset($options['buttons']['twitter']) ? $options['buttons']['twitter'] : true,
-        'pinterest' => isset($options['buttons']['pinterest']) ? $options['buttons']['pinterest'] : true,
-        'mail' => isset($options['buttons']['mail']) ? $options['buttons']['mail'] : true,
+        'facebook' => $options['buttons']['facebook'] ?? true,
+        'twitter' => $options['buttons']['twitter'] ?? true,
+        'pinterest' => $options['buttons']['pinterest'] ?? true,
+        'mail' => $options['buttons']['mail'] ?? true,
     ];
 
     // Icons option
 
-    $options['icons'] = isset($options['icons']) ? $options['icons'] : [];
+    $options['icons'] = $options['icons'] ?? [];
     $options['icons'] = [
-        'facebook' => isset($options['icons']['facebook']) ? $options['icons']['facebook'] : 'fa-facebook-square',
-        'twitter' => isset($options['icons']['twitter']) ? $options['icons']['twitter'] : 'fa-twitter-square',
-        'pinterest' => isset($options['icons']['pinterest']) ? $options['icons']['pinterest'] : 'fa-pinterest-square',
-        'mail' => isset($options['icons']['mail']) ? $options['icons']['mail'] : 'fa-envelope',
+        'facebook' => $options['icons']['facebook'] ?? 'fa-facebook-square',
+        'twitter' => $options['icons']['twitter'] ?? 'fa-twitter-square',
+        'pinterest' => $options['icons']['pinterest'] ?? 'fa-pinterest-square',
+        'mail' => $options['icons']['mail'] ?? 'fa-envelope',
     ];
 
     // Images option
 
-    $options['images'] = isset($options['images']) ? $options['images'] : [];
+    $options['images'] = $options['images'] ?? [];
     $options['images'] = [
         'facebook' => isset($options['images']['facebook']) ? '<img src="' . $options['images']['facebook'] . '" alt="Facebook">' : '<i class="fa fa-' . $options['icons']['facebook'] . ' fa-2x"></i>',
         'twitter' => isset($options['images']['twitter']) ? '<img src="' . $options['images']['twitter'] . '" alt="Twitter">' : '<i class="fa fa-' . $options['icons']['twitter'] . ' fa-2x"></i>',
@@ -732,19 +729,19 @@ function share_buttons($url, $text = null, $options = [])
 
     $buttons = [];
 
-    if (true == $options['buttons']['facebook']) {
+    if ($options['buttons']['facebook']) {
         $buttons['facebook'] = ' <li><a class="facebook-share-button" href="https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url) . '" target="_blank" title="Partager sur Facebook">' . $options['images']['facebook'] . '</a></li>';
     }
 
-    if (true == $options['buttons']['twitter']) {
+    if ($options['buttons']['twitter']) {
         $buttons['twitter'] = ' <li><a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=' . urlencode($text . ' ' . $url) . '&related=biblys" target="_blank" title="Partager sur Twitter">' . $options['images']['twitter'] . '</a></li>';
     }
 
-    if (true == $options['buttons']['pinterest']) {
+    if ($options['buttons']['pinterest']) {
         $buttons['pinterest'] = ' <li><a class="pinterest-share-button" href="https://pinterest.com/pin/create/link/?url=' . urlencode($url) . '" target="_blank" title="Partager sur Pinterest">' . $options['images']['pinterest'] . '</a></li>';
     }
 
-    if (true == $options['buttons']['mail']) {
+    if ($options['buttons']['mail']) {
         $buttons['mail'] = ' <li><a class="mail-share-button" href="mailto:?&subject=' . urlencode($text) . '&body=' . urlencode($url) . '" title="Partager par courriel">' . $options['images']['mail'] . '</a></li>';
     }
 
@@ -758,6 +755,7 @@ function share_buttons($url, $text = null, $options = [])
 // Returns site controller if it exists, or default controller, or false
 function get_controller_path($controller): bool|string
 {
+    /** @noinspection PhpUnusedLocalVariableInspection */
     global $site;
 
     $default_path = __DIR__."/../controllers/common/php/".$controller.".php";
