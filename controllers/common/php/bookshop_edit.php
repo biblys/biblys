@@ -50,7 +50,7 @@
 		$_B->update($b);
 		
 		$params['success'] = $b->get('name').' a bien été mise à jour.';
-		redirect('/librairie/'.$b->get('url'), $params);
+		redirect('/librairie/' . $b->get('url'), $params);
 		
 	}
 	else

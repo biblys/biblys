@@ -24,9 +24,9 @@
 			$insert->bindValue('link_sponsor_user_id',$_POST['link_sponsor_user_id'],PDO::PARAM_INT);
 			$insert->execute() or error($insert->errorInfo());
 			
-			redirect('/pages/adm_sponsors',array('success' => 'Le nouveau parrainage a été créé.'));
+			redirect('/pages/adm_sponsors', array('success' => 'Le nouveau parrainage a été créé.'));
 		}
-		if (isset($error)) redirect('/pages/adm_sponsors',array('error' => $error, 'user_id' => $_POST['user_id'], 'link_sponsor_user_id' => $_POST['link_sponsor_user_id']));
+		if (isset($error)) redirect('/pages/adm_sponsors', array('error' => $error, 'user_id' => $_POST['user_id'], 'link_sponsor_user_id' => $_POST['link_sponsor_user_id']));
 	}
 	elseif (isset($_GET['delete']))
 	{
@@ -34,7 +34,7 @@
 		$delete->bindValue('link_id',$_GET['delete'],PDO::PARAM_INT);
 		$delete->execute() or error($delete->errorInfo());
 		
-		redirect('/pages/adm_sponsors',array('success' => 'Le parrainage a été supprimé.'));
+		redirect('/pages/adm_sponsors', array('success' => 'Le parrainage a été supprimé.'));
 	}
 	
 	if (isset($_GET['success'])) $message = '<p class="success">'.$_GET['success'].'</p>';

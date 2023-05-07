@@ -471,7 +471,7 @@ function currency($amount, $cents = false)
 /**
  * @deprecated Using redirect() is deprecated. Use RedirectResponse instead.
  */
-function redirect($url, $params = null, $text = null, $status = 302): void
+#[NoReturn] function redirect($url, $params = null, $status = 302): void
 {
     global $response;
 

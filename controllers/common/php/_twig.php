@@ -11,7 +11,7 @@
         $articles->execute(['url' => $_GET['url']]);
 
         if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
-            redirect($urlgenerator->generate('article_show', ['slug' => $a['article_url']]), null, null, 301);
+            redirect($urlgenerator->generate('article_show', ['slug' => $a['article_url']]), null, 301);
         } else {
             $e404 = true;
         }

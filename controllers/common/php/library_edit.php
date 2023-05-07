@@ -49,7 +49,7 @@
 		$_L->update($l);
 		
 		$params['success'] = $l->get('name').' a bien été mise à jour.';
-		redirect('/bibliotheque/'.$l->get('url'), $params);
+		redirect('/bibliotheque/' . $l->get('url'), $params);
 		
 	}
 	else
