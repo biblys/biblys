@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 
 class Visitor extends User
@@ -12,6 +14,8 @@ class Visitor extends User
 
     /** @var User */
     private $user = null;
+
+    private ?bool $isAdmin = null;
 
     public function __construct(Request $request)
     {
@@ -56,19 +60,27 @@ class Visitor extends User
         return $this->logged;
     }
 
-    /*
-        * Is the visitor currently an admin ?
-        * @param type $id
-        * @return boolean
-        */
-    public function isAdmin()
+    /**
+     * @throws Exception
+     */
+    public function isAdmin(): bool
     {
-        
-        $right = $this->getCurrentRight();
-        if ($right->get('site_id') == getLegacyCurrentSite()['site_id']) {
-            return true;
+        if (!$this->isLogged()) {
+            return false;
         }
-        return false;
+
+        if ($this->isAdmin === null) {
+            $config = Config::load();
+            $currentSiteService = CurrentSite::buildFromConfig($config);
+
+            $right = $this->getCurrentRight();
+            $this->isAdmin = false;
+            if ($right->get('site_id') == $currentSiteService->getId()) {
+                $this->isAdmin = true;
+            }
+        }
+
+        return $this->isAdmin;
     }
 
     public function isPublisher()
@@ -108,7 +120,7 @@ class Visitor extends User
     /**
      * Is the visitor currently a library ?
      * @param int $id
-     * @return boolean
+     * @return bool
      */
     public function isLibrary($id = null)
     {

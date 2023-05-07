@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 
 class InvalidCredentialsException extends Exception
@@ -286,14 +288,15 @@ class User extends Entity
 
     public function getRights()
     {
-        
+        $config = Config::load();
+        $currentSiteService = CurrentSite::buildFromConfig($config);
 
         $rm = new RightManager();
         $rights = $rm->getAll(['user_id' => $this->get('id')], [], false);
 
         // Keep only admin rights for current site
         foreach ($rights as $key => $right) {
-            if ($right->has('site_id') && $right->get('site_id') != getLegacyCurrentSite()['site_id']) {
+            if ($right->has('site_id') && $right->get('site_id') != $currentSiteService->getId()) {
                 unset($rights[$key]);
             }
         }
