@@ -4,6 +4,7 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\Config;
 use Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 class LegacyCodeHelper
 {
@@ -57,5 +58,23 @@ class LegacyCodeHelper
         }
 
         return null;
+    }
+
+    /**
+     * @deprecated Using getGlobalRequest is deprecated. Use Request instead.
+     */
+    public static function getGlobalRequest(): Request
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.69.0",
+            "Using getGlobalRequest is deprecated. Use Request instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_REQUEST"])) {
+            $GLOBALS["LEGACY_REQUEST"] = Request::createFromGlobals();
+        }
+
+        return $GLOBALS["LEGACY_REQUEST"];
     }
 }
