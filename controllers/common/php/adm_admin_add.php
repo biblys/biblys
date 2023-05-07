@@ -24,8 +24,8 @@ if ($request->getMethod() === "POST") {
     }
 
     // Set admin right
-    if (!$user->hasRight('site', $_SITE['site_id'])) {
-        $user->giveRight('site', $_SITE['site_id']);
+    if (!$user->hasRight('site', getLegacyCurrentSite()['site_id'])) {
+        $user->giveRight('site', getLegacyCurrentSite()['site_id']);
     }
 
     // E-mail de bienvenue
@@ -48,11 +48,11 @@ if ($request->getMethod() === "POST") {
         ';
     }
 
-    $headers = 'From: '.$_SITE['site_title'].' <'.$_SITE['site_contact'].'>'."\r\n";
-    $subject = $_SITE['site_tag'].' | Votre accès au site';
+    $headers = 'From: '.getLegacyCurrentSite()['site_title'].' <'.getLegacyCurrentSite()['site_contact'].'>'."\r\n";
+    $subject = getLegacyCurrentSite()['site_tag'].' | Votre accès au site';
     $message = '
 <p>Bonjour,</p>
-<p>Votre accès administrateur a été créé sur le site <a href="https://'.$_SITE['site_domain'].'/">'.$_SITE['site_title'].'</a>.</p>
+<p>Votre accès administrateur a été créé sur le site <a href="https://'.getLegacyCurrentSite()['site_domain'].'/">'.getLegacyCurrentSite()['site_title'].'</a>.</p>
 '.$credentials;
 
     $um->mail($user,$subject,$message,$headers);
