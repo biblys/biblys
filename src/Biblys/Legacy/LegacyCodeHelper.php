@@ -2,10 +2,29 @@
 
 namespace Biblys\Legacy;
 
+use Biblys\Service\Config;
 use Exception;
 
 class LegacyCodeHelper
 {
+    /**
+     * @deprecated Using getLegacyGlobalConfig is deprecated. Use CurrentUser service instead.
+     */
+    public static function getGlobalConfig(): Config
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.69.0",
+            "Using getGlobalConfig is deprecated. Use Config service instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_CONFIG"])) {
+            $GLOBALS["LEGACY_CONFIG"] = Config::load();
+        }
+
+        return $GLOBALS["LEGACY_CONFIG"];
+    }
+
     /**
      * @throws Exception
      * @deprecated Using getLegacyGlobalPageTitle is deprecated. Use Twig blog "title" or $request->attributes->set("page_title", …) instead.
