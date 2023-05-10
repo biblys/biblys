@@ -45,7 +45,7 @@
         </select>
       </div>
 
-      {% if app.site.getOpt("virtual_stock") != 1 %}
+      {% if app.currentSite.getOption("virtual_stock") != 1 %}
         <div>
           <input type="checkbox" value="1" id="filter-in-stock" name="in-stock" {{ inStockFilterChecked }} />
           <label class="after" for="filter-in-stock">Articles en stock uniquement</label>
