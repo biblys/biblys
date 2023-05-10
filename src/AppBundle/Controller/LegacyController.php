@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -57,7 +58,7 @@ class LegacyController extends Controller
 
         $controllerPath = get_controller_path($pageQueryParam);
         if (!$controllerPath) {
-            throw new ResourceNotFoundException("Cannot find a legacy controller for url $pageQueryParam.");
+            throw new NotFoundHttpException("Cannot find a legacy controller for url $pageQueryParam.");
         }
 
         $_ECHO = "";

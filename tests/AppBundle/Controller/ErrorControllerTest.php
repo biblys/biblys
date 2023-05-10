@@ -250,7 +250,8 @@ class ErrorControllerTest extends TestCase
         $controller = new ErrorController();
         $request = new Request();
         $request->query->set("page", "bientot");
-        $exception = new NotFoundHttpException();
+        $previousException = new ResourceNotFoundException("No routes found for GET /bientot");
+        $exception = new NotFoundHttpException("Page not found", $previousException);
         $GLOBALS["originalRequest"] = $request;
 
         // when

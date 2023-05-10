@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -44,7 +45,25 @@ class ErrorController extends Controller
      */
     public function exception(Request $request, Exception $exception): Response
     {
-        if (is_a($exception, ResourceNotFoundException::class) || is_a($exception, InvalidParameterException::class)) {
+        // If route is not found in route.yml, we might be dealing with a legacy
+        // controller. We try to handle the route below. If not, default action
+        // will throw a resourceNotFoundException that will be catched below.
+        if (self::_isAnExceptionThrownByRouter($exception)) {
+            try {
+                return self::_handleLegacyController();
+            } catch (Exception $exception) {
+                // TODO: find a better way
+                // This is necessary because of legacy controller can throw exceptions
+                // that won't be caught by event dispatcher
+                $errorController = new ErrorController();
+                return $errorController->exception($request, $exception);
+            }
+        }
+
+        if (
+            is_a($exception, ResourceNotFoundException::class)
+            || is_a($exception, InvalidParameterException::class)
+            || is_a($exception, NotFoundHttpException::class)) {
             return $this->handlePageNotFound($request, $exception);
         }
 
@@ -70,38 +89,6 @@ class ErrorController extends Controller
 
         if (is_a($exception, "Symfony\Component\HttpKernel\Exception\ConflictHttpException")) {
             return self::_defaultHandler(409, $exception, $request);
-        }
-
-        // If route is not found in route.yml, we might be dealing with a legacy
-        // controller. We try to handle the route below. If not, default action
-        // will throw a resourceNotFoundException that will be catched below.
-        if (is_a($exception, "Symfony\Component\HttpKernel\Exception\NotFoundHttpException")) {
-            $legacyController = new LegacyController();
-            $session = new Session();
-            $mailer = new Mailer();
-            $config = Config::load();
-            $currentSite = CurrentSite::buildFromConfig($config);
-            $routes = RouteLoader::load();
-            $urlgenerator = new UrlGenerator($routes, new RequestContext());
-            try {
-                global $originalRequest;
-                $response = $legacyController->defaultAction(
-                    $originalRequest,
-                    $session,
-                    $mailer,
-                    $config,
-                    $currentSite,
-                    $urlgenerator
-                );
-                $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
-                return $response;
-            } catch (Exception $exception) {
-                // TODO: find a better way
-                // This is necessary because of legacy controller can throw exceptions
-                // that won't be caught by event dispatcher
-                $errorController = new ErrorController();
-                return $errorController->exception($request, $exception);
-            }
         }
 
         return $this->handleServerError($request, $exception);
@@ -140,9 +127,6 @@ class ErrorController extends Controller
     /**
      * HTTP 404
      *
-     * @param Request $request
-     * @param ResourceNotFoundException|InvalidParameterException $exception
-     * @return Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -150,7 +134,7 @@ class ErrorController extends Controller
      */
     private function handlePageNotFound(
         Request $request,
-        ResourceNotFoundException|InvalidParameterException $exception
+        NotFoundHttpException|ResourceNotFoundException|InvalidParameterException $exception
     ): Response
     {
         global $_SQL, $_SITE;
@@ -322,5 +306,53 @@ class ErrorController extends Controller
         $response->setStatusCode($statusCode);
 
         return $response;
+    }
+
+    /**
+     * @return Response
+     * @throws PropelException
+     */
+    private static function _handleLegacyController(): Response
+    {
+        $legacyController = new LegacyController();
+        $session = new Session();
+        $mailer = new Mailer();
+        $config = Config::load();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $routes = RouteLoader::load();
+        $urlgenerator = new UrlGenerator($routes, new RequestContext());
+        global $originalRequest;
+        $response = $legacyController->defaultAction(
+            $originalRequest,
+            $session,
+            $mailer,
+            $config,
+            $currentSite,
+            $urlgenerator
+        );
+        $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
+        return $response;
+    }
+
+    /**
+     * @param Exception $exception
+     * @return bool
+     */
+    private static function _isAnExceptionThrownByRouter(Exception $exception): bool
+    {
+        if (!is_a($exception, NotFoundHttpException::class)) {
+            return false;
+        }
+
+        $previous = $exception->getPrevious();
+        if (!is_a($previous, ResourceNotFoundException::class)) {
+            return false;
+        }
+
+        if (!str_contains($previous->getMessage(), "No routes found for")) {
+            return false;
+        }
+
+        return true;
     }
 }
