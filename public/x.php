@@ -2,6 +2,7 @@
 
 use ApiBundle\Controller\ErrorController;
 use Biblys\Database\Connection;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
@@ -23,7 +24,7 @@ $session = new Session();
 $session->start();
 $request->setSession($session);
 
-catchDeprecationNotices($config, $session);
+LegacyCodeHelper::catchDeprecationNotices($config, $session);
 
 $response = new JsonResponse();
 

@@ -1,6 +1,7 @@
 <?php
 
 use AppBundle\Controller\ErrorController;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Framework\RouteLoader;
@@ -24,7 +25,7 @@ $session = new Session();
 $session->start();
 $request->setSession($session);
 
-catchDeprecationNotices($config, $session);
+LegacyCodeHelper::catchDeprecationNotices($config, $session);
 
 $exceptionController = new ErrorController();
 

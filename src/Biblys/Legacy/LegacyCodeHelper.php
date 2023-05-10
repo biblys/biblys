@@ -3,10 +3,12 @@
 namespace Biblys\Legacy;
 
 use Biblys\Service\Config;
+use Biblys\Service\LoggerService;
 use Exception;
 use Site;
 use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Visitor;
 
 class LegacyCodeHelper
@@ -122,5 +124,28 @@ class LegacyCodeHelper
         }
 
         return $GLOBALS["LEGACY_VISITOR"];
+    }
+
+    public static function catchDeprecationNotices(Config $config, Session $session): void
+    {
+        set_error_handler(function ($level, $message) use ($config, $session): void {
+            $trace = debug_backtrace();
+            $caller = $trace[1];
+            if ($level === E_USER_DEPRECATED) {
+                $caller = $trace[3];
+            }
+
+            if ($config->get("logs.deprecations")) {
+                $loggerService = new LoggerService();
+                $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
+            }
+
+            if ($config->get("environment") === "dev") {
+                $session->getFlashBag()->add(
+                    "warning",
+                    "DEPRECATED (from {$caller["file"]}:{$caller["line"]}): $message"
+                );
+            }
+        }, E_USER_DEPRECATED ^ E_DEPRECATED);
     }
 }
