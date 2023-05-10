@@ -402,9 +402,11 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createSite(): Site
+    public static function createSite(array $attributes = []): Site
     {
         $site = new Site();
+        $site->setName($attributes["name"] ?? "paronymie");
+        $site->setTitle($attributes["title"] ?? "Éditions Paronymie");
         $site->save();
 
         return $site;

@@ -13,7 +13,7 @@ class CurrentSite
     /**
      * @var Site
      */
-    private $site;
+    private Site $site;
 
     public function __construct(Site $site)
     {
@@ -28,6 +28,11 @@ class CurrentSite
     public function getId(): int
     {
         return $this->site->getId();
+    }
+
+    public function getTitle(): string
+    {
+        return $this->site->getTitle();
     }
 
     /**
@@ -53,11 +58,8 @@ class CurrentSite
             ->filterByKey($key)
             ->findOne();
 
-        if (!$option) {
-            return null;
-        }
+        return $option?->getValue();
 
-        return $option->getValue();
     }
 
     /**

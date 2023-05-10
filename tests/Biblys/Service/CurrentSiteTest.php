@@ -152,4 +152,20 @@ class CurrentSiteTest extends TestCase
         // then
         $this->assertEquals($site->getId(), $id);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTitle()
+    {
+        // given
+        $site = ModelFactory::createSite(["title" => "Éditions Paronymie"]);
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $title = $currentSite->getTitle();
+
+        // then
+        $this->assertEquals("Éditions Paronymie", $title);
+    }
 }
