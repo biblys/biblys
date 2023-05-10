@@ -1,39 +1,45 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
-/** @var \Symfony\Component\HttpFoundation\Session\Session $session */
-
 $wlm = new WishlistManager();
 $wm = new WishManager();
 $am = new ArticleManager();
 
+$config = Config::load();
+$request = Request::createFromGlobals();
+$currentSiteService = CurrentSite::buildFromConfig($config);
+$currentUserService = CurrentUser::buildFromRequest($request);
+
 $content = "";
 
 // Get or create current wishlist
-$wishlist = $wlm->get(array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'wishlist_current' => 1));
+$wishlist = $wlm->get([
+    "user_id" => $currentUserService->getUser()->getId(),
+    "wishlist_current" => 1
+]);
 if (!$wishlist) {
 
     // Create a current wishlist for current user
     $wishlist = $wlm->create(array(
-        'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
+        'user_id' => $currentUserService->getUser()->getId(),
         'wishlist_current' => 1
     ));
 
     // Add wishes
-    $wishes = $wm->getAll(array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'wishlist_id' => 'NULL'));
+    $wishes = $wm->getAll(array('user_id' => $currentUserService->getUser()->getId(), 'wishlist_id' => 'NULL'));
     foreach ($wishes as $wish) {
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
     }
 }
 
-/** @var Request $request */
 if ($request->getMethod() === "POST") {
 
     $content = $request->getContent();
@@ -57,7 +63,7 @@ if ($request->getMethod() === "POST") {
     // Else create it
     else {
         $wish = $wm->create();
-        $wish->set('user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
+        $wish->set('user_id', $currentUserService->getUser()->getId());
         $wish->set('article', $article);
         $wish->set('wishlist', $wishlist);
         $wm->update($wish);
@@ -65,7 +71,6 @@ if ($request->getMethod() === "POST") {
         $p['message'] = "&laquo;&nbsp;" . $article->get('title') . "&nbsp;&raquo a bien été ajouté à votre <a href='/pages/log_mywishes'>liste d'envies</a>.";
     }
 
-    /** @var Request $request */
     if ($request->headers->get("Accept") === "application/json") {
         return new JsonResponse($p);
     }
@@ -78,23 +83,26 @@ else {
 
     $request->attributes->set("page_title", $wishlist->get('name'));
 
-    // Is user name set ?
-    if (LegacyCodeHelper::getGlobalVisitor()->has('screen_name')) {
+    // Is username set ?
+    if (!$currentUserService->getUser()->getUsername()) {
         $share = '<p class="alert alert-warning"><i class="fa fa-info-circle"></i> Pour pouvoir partager votre liste d\'envies, commencez par <a href="https://axys.me/#Profil">choisir un nom d\'utilisateur</a>.</p>';
     }
 
     // Is wishlist public ?
     elseif (!$wishlist->has('public')) {
-        $share = '<p class="alert alert-warning">Cette liste d\'envies n\'est pas publique. Cliquez sur <strong>Modifier</strong> pour changer sa visibilité.</p>';
+        $share = '<p class="alert alert-warning">'
+            ."Cette liste d'envies n'est pas publique. Cliquez sur <strong>Modifier</strong> pour changer sa visibilité.".
+        '</p>';
     }
 
     // Show wishlist url & share buttons
     else {
-        $url = 'https://' . $_SITE->get("domaine") . '/wishlist/' . LegacyCodeHelper::getGlobalVisitor()->get('slug');
+        $url = 'https://' . $currentSiteService->getSite()->getDomain() . '/wishlist/' .
+            $currentUserService->getUser()->getSlug();
         $share = '
 			<br>
 
-			<p class="center">Adresse publique de votre liste :<br><a href="/wishlist/' . LegacyCodeHelper::getGlobalVisitor()->get('slug') . '">' . $url . '</a></p>
+			<p class="center">Adresse publique de votre liste :<br><a href="/wishlist/' . $currentUserService->getUser()->getSlug() . '">' . $url . '</a></p>
 
 			<div class="text-center">
 				' . share_buttons($url, $wishlist->get('name')) . '
@@ -126,8 +134,7 @@ else {
 			</div>
 		';
 
-    $wishes = LegacyCodeHelper::getGlobalVisitor()->getWishes();
-
+    $wishes = $currentUserService->getUser()->getWishes();
     if (!count($wishes)) {
         $content .= '
 				<p class="center">Votre liste d\'envies est vide !</p>
@@ -150,12 +157,12 @@ else {
 				</div><br>
 			';
         $criterias = [];
-        foreach ($wishes as $w) {
-            $criterias[] = '`articles`.`article_id` = ' . $w['article_id'];
+        foreach ($wishes->getData() as $wish) {
+            $criterias[] = '`articles`.`article_id` = ' . $wish->getArticleId();
         }
         $_REQ = "(".join(" OR ", $criterias).")";
-        if ($_SITE->has("publisher_id")) $_REQ .= ' AND `articles`.`publisher_id` = ' . $_SITE->get
-            ("publisher_id");
+        $publisherId = $currentSiteService->getSite()->getPublisherId();
+        if ($publisherId) $_REQ .= ' AND `articles`.`publisher_id` = ' .$publisherId;
         $content .= require_once '_list.php';
         $_ECHO = null;
     }
