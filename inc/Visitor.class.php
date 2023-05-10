@@ -1,20 +1,14 @@
 <?php
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
 
 class Visitor extends User
 {
-    /** @var bool */
-    private $logged = false;
-
-    /** @var mixed|string */
-    private $visitor_uid = null;
-
-    /** @var User */
-    private $user = null;
+    private bool $logged = false;
+    private mixed $visitor_uid;
+    private ?User $user = null;
 
     private ?bool $isAdmin = null;
 
@@ -32,9 +26,11 @@ class Visitor extends User
         if ($userUidCookie) {
             $this->_setUserFromToken($userUidCookie);
         }
+
+        parent::__construct([]);
     }
 
-    public function has($field)
+    public function has($field): bool
     {
         if (isset($this->user)) {
             return $this->user->has($field);
@@ -84,7 +80,10 @@ class Visitor extends User
         return $this->isAdmin;
     }
 
-    public function isPublisher()
+    /**
+     * @throws Exception
+     */
+    public function isPublisher(): bool
     {
         $right = $this->getCurrentRight();
         if ($right->has('publisher_id')) {
@@ -94,22 +93,10 @@ class Visitor extends User
         return false;
     }
 
-    public function isPublisherWithId($id)
-    {
-        $right = $this->getCurrentRight();
-        if ($right->get('publisher_id') === $id) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
-     * Is the visitor currently a bookshop ?
-     * @param int $id
-     * @return bool
+     * @throws Exception
      */
-    public function isBookshop($id = null)
+    public function isBookshop(): bool
     {
         $right = $this->getCurrentRight();
         if ($right->has('bookshop_id')) {
@@ -119,11 +106,9 @@ class Visitor extends User
     }
 
     /**
-     * Is the visitor currently a library ?
-     * @param int $id
-     * @return bool
+     * @throws Exception
      */
-    public function isLibrary($id = null)
+    public function isLibrary(): bool
     {
         $right = $this->getCurrentRight();
         if ($right->has('library_id')) {
@@ -169,6 +154,7 @@ class Visitor extends User
                 if ($this->isLogged()) {
                     $defaults['user_id'] = $this->get('id');
                 }
+                /** @var Cart $cart */
                 $cart = $cm->create($defaults);
                 $this->cart = $cart;
                 return $cart;
@@ -179,7 +165,7 @@ class Visitor extends User
     }
 
     // Get wishes from parent class only if logged in
-    public function getWishes()
+    public function getWishes(): array
     {
         if ($this->isLogged()) {
             return parent::getWishes();
@@ -190,6 +176,7 @@ class Visitor extends User
 
     /**
      * Allow the visitor to choose from his different rights
+     * @throws Exception
      */
     public function setCurrentRight(Right $right): bool
     {
@@ -214,10 +201,11 @@ class Visitor extends User
         return false;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getCurrentRight(): Right
     {
-        
-
         $rm = new RightManager();
         $rights = $this->getRights();
 
@@ -229,7 +217,11 @@ class Visitor extends User
         }
 
         // If no right & user is admin, return admin right
-        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id']])) {
+        $currentSiteService = CurrentSite::buildFromConfig(Config::load());
+        if ($right = $rm->get([
+            'user_id' => $this->get('id'),
+            'site_id' => $currentSiteService->getId(),
+        ])) {
             return $right;
         }
 
@@ -242,44 +234,27 @@ class Visitor extends User
         return new Right([]);
     }
 
-    /**
-     * User->getPurchases override: only get purchases if user is logged
-     * @return array An array of purchases, empty if user is not logged in
-     */
-    public function getPurchases()
-    {
-        if ($this->isLogged()) {
-            return parent::getPurchases();
-        }
-
-        return [];
-    }
-
-    /**
-     * @param string $token
-     * @return bool
-     */
-    private function _setUserFromToken(string $token): bool
+    private function _setUserFromToken(string $token): void
     {
         $sm = new SessionManager();
         $session = $sm->get(['session_token' => $token]);
         if (!$session) {
-            return false;
+            return;
         }
 
         if (($session->get('expires') < date('Y-m-d H:i:s'))) {
-            return false;
+            return;
         }
 
         $um = new UserManager();
+        /** @var User|false $user */
         $user = $um->getById($session->get('user_id'));
         if (!$user) {
-            return false;
+            return;
         }
 
         $this->logged = true;
         $this->user = $user;
         $this->set('user_uid', $token);
-        return true;
     }
 }
