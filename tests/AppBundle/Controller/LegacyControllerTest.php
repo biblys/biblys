@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
+use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -148,6 +149,7 @@ class LegacyControllerTest extends TestCase
     {
         // given
         $request = new Request();
+        ModelFactory::createPage(["page_url" => "page-statique"]);
         $request->query->set("page", "page-statique");
         $session = new Session();
         $mailer = new Mailer();

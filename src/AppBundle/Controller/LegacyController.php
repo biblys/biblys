@@ -8,12 +8,14 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
+use Model\PageQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LegacyController extends Controller
@@ -33,23 +35,29 @@ class LegacyController extends Controller
     {
         global $_SITE, $_ECHO, $_SQL, $urlgenerator;
 
-        $_PAGE = $request->get('page', 'home');
+        $pageQueryParam = $request->get('page', 'home');
 
-        $_PAGE_TYPE = substr($_PAGE, 0, 4);
-        if ($_PAGE_TYPE == 'adm_') {
+        $pagePrefix = substr($pageQueryParam, 0, 4);
+        if ($pagePrefix == 'adm_') {
             self::authAdmin($request);
         }
-        if ($_PAGE_TYPE == 'pub_') {
+        if ($pagePrefix == 'pub_') {
             self::authPublisher($request, null);
         }
-        if ($_PAGE_TYPE == 'log_') {
+        if ($pagePrefix == 'log_') {
             self::authUser($request);
         }
 
-        $controllerPath = get_controller_path($_PAGE);
-        if (!$controllerPath) {
-            $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $_PAGE]);
+        // Retrocompatibility for static page urls (eg. /pages/:page_slug)
+        $staticPage = PageQuery::create()->findOneByUrl($pageQueryParam);
+        if ($staticPage) {
+            $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $staticPage->getUrl()]);
             return new RedirectResponse($staticPageUrl, 301);
+        }
+
+        $controllerPath = get_controller_path($pageQueryParam);
+        if (!$controllerPath) {
+            throw new ResourceNotFoundException("Cannot find a legacy controller for url $pageQueryParam.");
         }
 
         $_ECHO = "";
