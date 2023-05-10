@@ -13,6 +13,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
 use Biblys\Test\EntityFactory;
@@ -129,6 +130,7 @@ class MainControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function testContact()
     {
@@ -143,9 +145,12 @@ class MainControllerTest extends TestCase
         $request->request->set("message", "WHAT THE F");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthentified")->willReturn(false);
+        $config = Config::load();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
 
         // when
-        $response = $controller->contactAction($request, $currentUserService);
+        $response = $controller->contactAction($request, $currentUserService, $templateService);
 
         // then
         $this->assertEquals(

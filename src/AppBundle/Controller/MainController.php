@@ -12,6 +12,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
+use Biblys\Service\TemplateService;
 use Biblys\Service\Updater\UpdaterException;
 use CartManager;
 use Exception;
@@ -220,7 +221,7 @@ class MainController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Main:contact.html.twig', [
+        return $templateService->render('AppBundle:Main:contact.html.twig', [
             'name' => $name,
             'email' => $email,
             'subject' => $subject,
