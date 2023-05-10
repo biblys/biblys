@@ -17,10 +17,10 @@ $lm = new LinkManager();
 
 // Get publisher id
 $publisher_id = null;
-if (getLegacyVisitor()->isAdmin()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
     $publisher_id = $request->query->get("id");
-} elseif (getLegacyVisitor()->isPublisher()) {
-    $publisher_id = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
+} elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
+    $publisher_id = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id');
 } else {
     throw new AccessDeniedHttpException('Accès réservé aux administrateurs et aux éditeurs.');
 }
@@ -166,7 +166,7 @@ if ($request->getMethod() == "POST") {
     }
 
     $publisherIdParam = "";
-    if (getLegacyVisitor()->isAdmin()) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
         $url_p['id'] = $publisher->get("id");
     }
     $urlQueryString = http_build_query($url_p);
@@ -224,9 +224,9 @@ $content .= '
         </fieldset>
 ';
 if (
-    getLegacyVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
+    LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
     $p["publisher_id"] == LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
-    (getLegacyVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
+    (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
     $content .= '

@@ -2,6 +2,7 @@
 
 /** @noinspection HtmlUnknownTarget */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -28,18 +29,18 @@ if ($request->getMethod() === "POST") {
     $body = $request->getContent();
     $params = json_decode($body, true);
     
-    if (!getLegacyVisitor()->hasAlert($params["article_id"])) {
+    if (!LegacyCodeHelper::getGlobalVisitor()->hasAlert($params["article_id"])) {
         /** @noinspection PhpUnhandledExceptionInspection */
         $alert = $am->create();
 
-        $alert->set('user_id', getLegacyVisitor()->get('id'));
+        $alert->set('user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
         $alert->set('article_id', $params["article_id"]);
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->update($alert);
         $result['created'] = 1;
     } else {
-        $alert = $am->get(array('user_id' => getLegacyVisitor()->get('id'), 'article_id' => $params["article_id"]));
+        $alert = $am->get(array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'), 'article_id' => $params["article_id"]));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $am->delete($alert);

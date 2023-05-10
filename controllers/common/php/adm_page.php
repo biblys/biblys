@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ if ($pageId && $page) {
     $pageTitle = 'Nouvelle page statique';
     $p = array();
     
-    $p["user_id"] = getLegacyVisitor()->get("id");
+    $p["user_id"] = LegacyCodeHelper::getGlobalVisitor()->get("id");
     $p["page_date"] = date("Y-m-d H:i:s");
 }
 

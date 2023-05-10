@@ -1,6 +1,8 @@
 <?php
 
-    $lm = new ListeManager();
+use Biblys\Legacy\LegacyCodeHelper;
+
+$lm = new ListeManager();
     $sm = new StockManager();
 
     \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier les exemplaires de la liste');
@@ -87,7 +89,7 @@
 
                     // Persist changes
                     if ('go' == $action) {
-                        $sm->update($stock, 'Bulk update by user #'.getLegacyVisitor()->get('id'));
+                        $sm->update($stock, 'Bulk update by user #'. LegacyCodeHelper::getGlobalVisitor()->get('id'));
 
                     // Draw table
                     } else {

@@ -556,7 +556,7 @@ $content .= '
     </form>
 ';
 
-if (getLegacyVisitor()->isRoot()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isRoot()) {
     $content .= '
     <br />
     <div class="center">

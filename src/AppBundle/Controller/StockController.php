@@ -6,13 +6,11 @@ use ArticleManager;
 use CartManager;
 use Exception;
 use Framework\Controller;
-
 use Propel\Runtime\Exception\PropelException;
 use StockManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -147,7 +145,7 @@ class StockController extends Controller
             throw new NotFoundException("Stock $stockId not found");
         }
 
-        if (!getLegacyVisitor()->hasInCart("stock", $stock->get("id"))) {
+        if (!\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->hasInCart("stock", $stock->get("id"))) {
             throw new BadRequestHttpException(
                 "Impossible de modifier un exemplaire qui n'est pas dans votre panier."
             );
@@ -157,7 +155,7 @@ class StockController extends Controller
         $newPriceInCents = $newPrice * 100;
         $stock->editFreePrice($newPriceInCents);
         $sm->update($stock);
-        $cm->updateFromStock(getLegacyVisitor()->getCart());
+        $cm->updateFromStock(\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart());
 
         if ($request->headers->get("Accept") === "application/json") {
             return new JsonResponse();

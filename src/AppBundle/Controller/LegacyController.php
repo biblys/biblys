@@ -9,15 +9,12 @@ use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
-use Model\PageQuery;
-use PageManager;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class LegacyController extends Controller

@@ -1,16 +1,17 @@
 <?php
 
 use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Legacy\LegacyCodeHelper;
 use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
-if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) {
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
     throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
 }
 
-$publisherId = getLegacyVisitor()->getCurrentRight()->get("publisher_id");
+$publisherId = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get("publisher_id");
 if (!$_SITE->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");

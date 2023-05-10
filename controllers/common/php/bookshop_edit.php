@@ -2,8 +2,8 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 
-if (getLegacyVisitor()->isBookshop()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('bookshop_id');
-	elseif (getLegacyVisitor()->isAdmin()) $mode = 'admin';
+if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('bookshop_id');
+	elseif (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
     else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
 	$_B = new BookshopManager();

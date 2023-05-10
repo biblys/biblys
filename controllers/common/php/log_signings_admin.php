@@ -1,9 +1,11 @@
 <?php
     
     // Check user rights
-    if (getLegacyVisitor()->isAdmin()) $mode = 'admin';
-	elseif (getLegacyVisitor()->isPublisher()) $mode = 'publisher';
-	else trigger_error('Accès non autorisé pour '.getLegacyVisitor()->get('user_email'));
+use Biblys\Legacy\LegacyCodeHelper;
+
+if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
+	elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
+	else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
     
     \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Gestion des dédicaces');
     
@@ -12,9 +14,9 @@
     $export_header = array('Auteur', 'Date', 'Début', 'Fin', 'Exposant', 'Stand');
     
     $where = array();
-    if (!getLegacyVisitor()->isAdmin())
+    if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
     {
-        if (getLegacyVisitor()->isPublisher()) $where = array_merge($where, array('publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id')));
+        if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
     }
     
     $signings = $sm->getAll($where, array('order' => 'signing_date', 'sort' => 'desc'));

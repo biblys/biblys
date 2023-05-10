@@ -301,7 +301,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['cart'] = '<td></td>';
     if (!empty($x['stock_id']) && $copy) {
         $cart_class = 'black';
-        if (getLegacyVisitor()->hasInCart('article', $x['article_id'])) {
+        if (LegacyCodeHelper::getGlobalVisitor()->hasInCart('article', $x['article_id'])) {
             $cart_class = 'green';
         }
         $x['cart'] = '
@@ -314,7 +314,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Wishlist button
     $wish_icon = 'fa-heart-o';
     $wish_text = 'Ajouter <em>'.$x['article_title'].'</em> à vos envies';
-    if (getLegacyVisitor()->hasAWish($x['article_id'])) {
+    if (LegacyCodeHelper::getGlobalVisitor()->hasAWish($x['article_id'])) {
         $wish_icon = 'fa-heart red';
         $wish_text = 'Retirer <em>'.$x['article_title'].'</em> de vos envies';
     }
@@ -329,7 +329,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     // Alert button
     $alert_icon = 'fa-bell-o';
     $alert_text = 'Créer une alerte pour <em>'.$x['article_title'].'</em>';
-    if (getLegacyVisitor()->hasAlert($x['article_id'])) {
+    if (LegacyCodeHelper::getGlobalVisitor()->hasAlert($x['article_id'])) {
         $alert_icon = 'fa-bell orange';
         $alert_text = 'Retirer <em>'.$x['article_title'].'</em> de vos alertes';
     }

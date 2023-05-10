@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 $request->attributes->set("page_title", "Commande » Validation");
 
-$cart = getLegacyVisitor()->getCart();
+$cart = LegacyCodeHelper::getGlobalVisitor()->getCart();
 if (!$cart) {
     return new Response('<p class="error">Le panier n\'existe pas</p>');
 }
@@ -45,7 +45,7 @@ $currentUrl = $currentUrlService->getRelativeUrl();
 $loginUrl = $urlGenerator->generate("user_login", ["return_url" => $currentUrl]);
 $signupUrl = $urlGenerator->generate("user_signup");
 
-$orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor(getLegacyVisitor());
+$orderInProgress = OrderDeliveryHelpers::getOrderInProgressForVisitor(LegacyCodeHelper::getGlobalVisitor());
 if ($orderInProgress) {
     $copies = $orderInProgress->getCopies();
     foreach ($copies as $copy) {
@@ -70,7 +70,7 @@ foreach ($stock as $s) {
 
 /** @var Request $request */
 $countryId = $request->query->get('country_id');
-$countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId, getLegacyVisitor()->get("country"));
+$countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId, LegacyCodeHelper::getGlobalVisitor()->get("country"));
 
 $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $request->query->get('shipping_id'));
 $shippingMode = $shipping ? $shipping->get("mode") : "";
@@ -126,9 +126,9 @@ if ($request->getMethod() === "POST") {
         /* CUSTOMER */
 
         // Get customer from User
-        if (getLegacyVisitor()->isLogged()) {
-            $order->set('user_id', getLegacyVisitor()->get('id'));
-            $customer = getLegacyVisitor()->getCustomer('create');
+        if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
+            $order->set('user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
+            $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer('create');
         } // Else get customer from email address
         elseif ($getCustomer = $cm->get(array('customer_email' => $_POST['order_email']))) {
             $customer = $getCustomer;
@@ -303,7 +303,7 @@ if ($_SITE->getOpt('newsletter') == 1) {
     $checked = null;
     $showCheckbox = true;
 
-    if (getLegacyVisitor()->isLogged() && $mailingList->hasContact(getLegacyVisitor()->get("email"))) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isLogged() && $mailingList->hasContact(LegacyCodeHelper::getGlobalVisitor()->get("email"))) {
         $showCheckbox = false;
     }
 
@@ -367,18 +367,18 @@ $order = new Order([]);
 
 $previousOrder = null;
 
-if (getLegacyVisitor()->isLogged()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
     $om = new OrderManager();
     $previousOrder = $om->get(
         [
-            'user_id' => getLegacyVisitor()->get('id'),
+            'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'),
             'order_cancel_date' => 'NULL',
         ],
         ['order' => 'order_created', 'sort' => 'desc']
     );
 
     // Prefill order email with user email
-    $order->set('order_email', getLegacyVisitor()->get('email'));
+    $order->set('order_email', LegacyCodeHelper::getGlobalVisitor()->get('email'));
 }
 
 if ($previousOrder) {

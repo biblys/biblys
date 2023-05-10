@@ -23,7 +23,7 @@ class StockControllerTest extends TestCase
             "article_price_editable" => 1
         ]);
         $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addStock($cart, $stock);
@@ -87,7 +87,7 @@ class StockControllerTest extends TestCase
             "article_price_editable" => 1
         ]);
         $stock = EntityFactory::createStock(["article_id" => $article->get("id")]);
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $cm->addStock($cart, $stock);

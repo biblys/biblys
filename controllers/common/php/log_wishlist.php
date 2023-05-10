@@ -1,13 +1,15 @@
 <?php
 
-    $wm = new WishlistManager();
+use Biblys\Legacy\LegacyCodeHelper;
+
+$wm = new WishlistManager();
 
     $wishlist = $wm->getById($request->query->get('id'));
     if (!$wishlist) {
         trigger_error('Liste d\'envie #'.$request->query->get('id').' inconnue.');
     }
     
-    if ($wishlist->get('user_id') != getLegacyVisitor()->get('id')) {
+    if ($wishlist->get('user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id')) {
         trigger_error("Vous n'avez pas le droit de modifier cette liste d'envies.");
     }
     

@@ -11,7 +11,7 @@ $pp = null;
 // Use new post controller and redirect ?
 $use_old_controller = $_SITE->getOpt('use_old_post_controller');
 
-if (getLegacyVisitor()->isAdmin())
+if (LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
     $_ECHO .= '
         <div class="admin">

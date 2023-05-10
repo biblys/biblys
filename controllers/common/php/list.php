@@ -1,11 +1,12 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
-if (!getLegacyVisitor()->isAdmin()) {
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
     trigger_error("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
@@ -24,7 +25,7 @@ $newList = $request->request->get('new_list');
 if ($newList) {
     /** @var Liste $list */
     $list = $lm->create([
-        'user_id' => getLegacyVisitor()->get('user_id'),
+        'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('user_id'),
     ]);
 
     $listUrl = $request->request->get('list_url', false);
@@ -88,7 +89,7 @@ $list = $lm->get(['list_url' => $url]);
 if ($list) {
     $l = $list;
 
-    if (getLegacyVisitor()->isAdmin()) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
         $content .= '
                     <div class="admin">
                         Liste n° '.$list->get('id').'
@@ -125,7 +126,7 @@ if ($list) {
     );
 
     while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
-        if (isset($_GET['action']) && $_GET['action'] == 'return' && getLegacyVisitor()->isAdmin()) {
+        if (isset($_GET['action']) && $_GET['action'] == 'return' && LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $stock = $sm->getById($a['stock_id']);
             $stock->setReturned();
             $sm->update($stock);

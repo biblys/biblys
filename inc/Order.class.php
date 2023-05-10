@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use PayPal\Api\Amount;
@@ -8,9 +9,9 @@ use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
-use PayPal\Api\PaymentExecution;
 use Payplug\Exception\HttpException;
 
 class Order extends Entity
@@ -481,7 +482,7 @@ class Order extends Entity
         
 
         // Ignore if user is not logged in
-        if (!getLegacyVisitor()->isLogged()) {
+        if (!LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
             return;
         }
 
@@ -492,7 +493,7 @@ class Order extends Entity
             // Get alert for this user and article
             $alert = $alm->get(
                 [
-                    "user_id" => getLegacyVisitor()->get("id"),
+                    "user_id" => LegacyCodeHelper::getGlobalVisitor()->get("id"),
                     "article_id" => $copy->get("article_id")
                 ]
             );

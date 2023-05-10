@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -41,7 +40,7 @@ class CartTest extends TestCase
         $session->method("getFlashBag")->willReturn($flashBag);
         $request = new Request();
         $request->query->set("page", "cart");
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Papeete",
             "type_id" => 1,

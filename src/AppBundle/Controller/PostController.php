@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\Pagination;
+use Exception;
 use Framework\Controller;
 use PostManager;
 use Propel\Runtime\Exception\PropelException;
@@ -10,8 +11,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
-
-use Exception;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -84,13 +83,13 @@ class PostController extends Controller
 
         // Offline post
         if ($post && $post->get('status') == 0 &&
-                $post->get('user_id') !== getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
+                $post->get('user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 
         // Future post
         if ($post && $post->get('date') > date("Y-m-d H:i:s") &&
-                $post->get('user_id') !== getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
+                $post->get('user_id') !== \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->get('id') && !\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             $post = false;
         }
 
@@ -142,7 +141,7 @@ class PostController extends Controller
     // GET /admin/posts/
     public function adminAction(): RedirectResponse
     {
-        if (getLegacyVisitor()->isAdmin()) {
+        if (\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             return new RedirectResponse('/pages/adm_posts');
         }
 
@@ -162,7 +161,7 @@ class PostController extends Controller
             throw new NotFoundException("Post $id not found.");
         }
 
-        if (!$post->canBeDeletedBy(getLegacyVisitor())) {
+        if (!$post->canBeDeletedBy(\Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor())) {
             throw new Exception("Vous n'avez pas le droit de supprimer ce billet.");
         }
 

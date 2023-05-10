@@ -26,7 +26,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
         // Check access right
         
-        if ($customer->get('user_id') != getLegacyVisitor()->get('id') && !getLegacyVisitor()->isAdmin()) {
+        if ($customer->get('user_id') != LegacyCodeHelper::getGlobalVisitor()->get('id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
             throw new AccessDeniedHttpException();
         }
 

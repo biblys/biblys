@@ -13,7 +13,7 @@ $um = new UserManager();
 
 // Si aucun panier n'est specifié, on recherche un panier magasin pour ce vendeur avec 0 livre, sinon on en créera un
 
-$where = array('cart_type' => 'shop', 'cart_seller_id' => getLegacyVisitor()->get('user_id'), 'cart_count' => 0);
+$where = array('cart_type' => 'shop', 'cart_seller_id' => LegacyCodeHelper::getGlobalVisitor()->get('user_id'), 'cart_count' => 0);
 
 // Si un panier en particulier est demandé
 if (isset($_GET['cart_id']))
@@ -41,7 +41,7 @@ else
 {
     $cart = $cm->create();
     $cart->set('cart_type', 'shop');
-    $cart->set('cart_seller_id', getLegacyVisitor()['user_id']);
+    $cart->set('cart_seller_id', LegacyCodeHelper::getGlobalVisitor()['user_id']);
     $cart = $cm->update($cart);
     return new RedirectResponse(sprintf("/pages/adm_checkout?cart_id=%s", $cart->get('id')));
 }

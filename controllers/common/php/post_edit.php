@@ -4,6 +4,7 @@
 
 global $urlgenerator, $_SITE;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\SlugService;
@@ -112,7 +113,7 @@ $p["post_time"] = date("H:i");
 
 // Auteur
 if ($currentUser->isAdmin()) {
-    if(!empty(getLegacyVisitor()["user_screen_name"])) $author = getLegacyVisitor()["user_screen_name"];
+    if(!empty(LegacyCodeHelper::getGlobalVisitor()["user_screen_name"])) $author = LegacyCodeHelper::getGlobalVisitor()["user_screen_name"];
     else $author = $_SITE->get("id");
 }
 elseif ($currentUser->hasPublisherRight()) {

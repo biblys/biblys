@@ -7,18 +7,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
-if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) {
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
     throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
 }
 
-$publisherId = getLegacyVisitor()->getCurrentRight()->get("publisher_id");
+$publisherId = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get("publisher_id");
 if (!$_SITE->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }
 
-if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher() && !getLegacyVisitor()->isBookshop() && !getLegacyVisitor()->isLibrary()) {
-    trigger_error('Accès non autorisé pour ' . getLegacyVisitor()->get('user_email'));
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher() && !LegacyCodeHelper::getGlobalVisitor()->isBookshop() && !LegacyCodeHelper::getGlobalVisitor()->isLibrary()) {
+    trigger_error('Accès non autorisé pour ' . LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
 }
 
 $items = array();
@@ -36,18 +36,18 @@ else $browser_alert = $browser->getUpdateAlert();
 $rm = new RightManager();
 
 // Get current user right
-$right = getLegacyVisitor()->getCurrentRight();
+$right = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight();
 
 // Change selected user right
 if (isset($_GET['right_id'])) {
-    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => getLegacyVisitor()->get('id')));
-    getLegacyVisitor()->setCurrentRight($new_right);
+    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')));
+    LegacyCodeHelper::getGlobalVisitor()->setCurrentRight($new_right);
     return new RedirectResponse('/pages/log_dashboard');
 }
 
 // Show user rights option
 $rights = $rm->getAll(
-    array('user_id' => getLegacyVisitor()->get('id'))
+    array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'))
 );
 
 $rights_optgroup = array();
@@ -84,7 +84,7 @@ $rights_select = '<p class="floatR">En tant que : &nbsp;<select class="goto">'
 /* ITEMS */
 
 // Publisher
-if (getLegacyVisitor()->isPublisher()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
     $publisherId = $right->get('publisher_id');
     $pm = new PublisherManager();
     $publisher = $pm->getById($publisherId);
@@ -106,7 +106,7 @@ if (getLegacyVisitor()->isPublisher()) {
 }
 
 // Bookshop
-if (getLegacyVisitor()->isBookshop()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) {
     $bookshop = $_SQL->query('SELECT `bookshop_name` FROM `bookshops` WHERE `bookshop_id` = ' . $right->get('bookshop')->get('id'));
     if ($b = $bookshop->fetch(PDO::FETCH_ASSOC)) {
         $items["Librairie"][] = array('Fiche d\'identité', '/pages/bookshop_edit', 'fa-list-alt');
@@ -115,7 +115,7 @@ if (getLegacyVisitor()->isBookshop()) {
 }
 
 // Library
-if (getLegacyVisitor()->isLibrary()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) {
     $library = $_SQL->query('SELECT `library_name` FROM `libraries` WHERE `library_id` = ' . $right->get('library')->get('id'));
     if ($b = $library->fetch(PDO::FETCH_ASSOC)) {
         $items["Bibliothèque"][] = array('Fiche d\'identité', '/pages/library_edit', 'fa-list-alt');

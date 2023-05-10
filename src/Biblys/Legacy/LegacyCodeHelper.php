@@ -7,6 +7,7 @@ use Exception;
 use Site;
 use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
+use Visitor;
 
 class LegacyCodeHelper
 {
@@ -102,5 +103,24 @@ class LegacyCodeHelper
         }
 
         return $GLOBALS["LEGACY_REQUEST"];
+    }
+
+    /**
+     * @deprecated Using getLegacyVisitor is deprecated. Use CurrentUser service instead.
+     */
+    public static function getGlobalVisitor(): Visitor
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.68.0",
+            "Using getLegacyVisitor is deprecated. Use CurrentUser service instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_VISITOR"])) {
+            $request = Request::createFromGlobals();
+            $GLOBALS["LEGACY_VISITOR"] = new Visitor($request);
+        }
+
+        return $GLOBALS["LEGACY_VISITOR"];
     }
 }

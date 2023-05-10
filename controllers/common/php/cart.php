@@ -2,6 +2,7 @@
 
 global $urlgenerator;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
@@ -47,7 +48,7 @@ if ($cart_id) {
         throw new NotFoundException(sprintf("Panier %s introuvable.", htmlentities($cart_id)));
     }
 } else {
-    $cart = getLegacyVisitor()->getCart('create');
+    $cart = LegacyCodeHelper::getGlobalVisitor()->getCart('create');
     if (!$cart) {
         throw new Exception("Impossible de créer le panier.");
     }
@@ -94,7 +95,7 @@ foreach ($stocks as $stock) {
     } elseif ($type->getId() == 2) {
         $article_type = ' (numérique)';
         $ebooks++;
-        if (getLegacyVisitor()->hasPurchased($article)) {
+        if (LegacyCodeHelper::getGlobalVisitor()->hasPurchased($article)) {
             $purchased = '<p class="warning left"><a href="/pages/log_mybooks" title="Vous avez déjà acheté ce titre. Juste pour info.">Déjà acheté !</a></p>';
         }
     }
@@ -450,7 +451,7 @@ if (isset($Articles) && $Articles > 0) {
         }, $countries);
         $default_destination = $com->get(["country_name" => "France"]);
 
-        if ($currentUserService->isAuthentified() && $customer = getLegacyVisitor()->getCustomer()) {
+        if ($currentUserService->isAuthentified() && $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer()) {
             $country_id = $customer->get('country_id');
             $country = $com->getById($country_id);
             if ($country) {

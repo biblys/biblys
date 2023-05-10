@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Legacy\LegacyCodeHelper;
 use Cart;
 use CartManager;
 use CFRewardManager;
@@ -31,7 +32,7 @@ class CartController extends Controller
 
         try {
             $cm = new CartManager();
-            $cart = getLegacyVisitor()->getCart("create");
+            $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
             $cm->addArticle($cart, $article);
             $cm->updateFromStock($cart);
         } catch(CartException $exception) {
@@ -52,7 +53,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->addStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -70,7 +71,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->addCFReward($cart, $reward);
         $cm->updateFromStock($cart);
 
@@ -88,7 +89,7 @@ class CartController extends Controller
         }
 
         $cm = new CartManager();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->removeStock($cart, $stock);
         $cm->updateFromStock($cart);
 
@@ -105,7 +106,7 @@ class CartController extends Controller
      */
     public function summaryAction(): JsonResponse
     {
-        $cart = getLegacyVisitor()->getCart();
+        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart();
         if (!$cart) {
             $cartSummary = Cart::getOneLineEmpty();
             return new JsonResponse($cartSummary);

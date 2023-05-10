@@ -4,11 +4,12 @@
 /** @var Request $request */
 /** @var PDO $_SQL */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) {
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'effectuer cette opération.");
 }
 

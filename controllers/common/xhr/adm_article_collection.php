@@ -22,9 +22,9 @@ if ($getTerm) {
     }
 
     // Si on est en mode gestion editeur
-    elseif (!getLegacyVisitor()->isAdmin() && getLegacyVisitor()->isPublisher()) {
+    elseif (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
-        $publisherId = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
+        $publisherId = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id');
         $params["publisher_id"] = $publisherId;
     }
     $terms = explode(" ", $getTerm);

@@ -1,7 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 $cycleSlug = $request->query->get("url");
@@ -28,7 +28,7 @@ if ($cycle->has('desc')) {
     $_ECHO .= '<p>'.$cycle->get('desc').'</p>';
 }
 
-if (getLegacyVisitor()->isAdmin()) {
+if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
     $_ECHO .= '
         <div class="admin">
             <p>Cycle n&deg; '.$cycle->get('id').'</p>

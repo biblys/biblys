@@ -1,6 +1,8 @@
 <?php
 
-	$am = new ArticleManager();
+use Biblys\Legacy\LegacyCodeHelper;
+
+$am = new ArticleManager();
     $sm = new StockManager();
     $fm = new FileManager();
 
@@ -53,7 +55,7 @@
                 foreach ($files as $f) {
                     $e['dl_links'][] = '
                         <li>
-                            <a href="'.$f->getUrl(getLegacyVisitor()['user_key']).'" 
+                            <a href="'.$f->getUrl(LegacyCodeHelper::getGlobalVisitor()['user_key']).'" 
                                     title="'.$f->get('version').' | '.file_size($f->get('size')).' | '.$f->getType('name').'"
                                     aria-label="Télécharger au format '.$f->getType('name').'">
                                 <img src="'.$f->getType('icon').'" width=16 alt="'.$f->getType('name').'">
@@ -94,7 +96,7 @@
     }
 
     $copies = $sm->getAll([
-        "user_id" => getLegacyVisitor()->get('id')
+        "user_id" => LegacyCodeHelper::getGlobalVisitor()->get('id')
     ], [
         "order" => "stock_selling_date",
         "sort" => "desc"

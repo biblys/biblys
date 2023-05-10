@@ -1,9 +1,10 @@
 <?php
 
-	use Symfony\Component\HttpFoundation\JsonResponse;
-    use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Legacy\LegacyCodeHelper;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-    $r = array();
+$r = array();
 
     $controller = function() {
 
@@ -34,7 +35,7 @@
 
                 $file_name = $request->request->get('name');
                 $file = $fm->create();
-                $fm->upload($file, $file_path, $file_name, $article->get('id'), getLegacyVisitor()['user_id']);
+                $fm->upload($file, $file_path, $file_name, $article->get('id'), LegacyCodeHelper::getGlobalVisitor()['user_id']);
 
                 // Return new table line
                 $r['success'] = "Le fichier &laquo;&nbsp;$file_name&nbsp;&raquo; a bien été associé à l'article &laquo;&nbsp;$article_title&nbsp;&raquo;.";
@@ -109,7 +110,7 @@
                 // Copy file into the files directory
                 try
                 {
-                    $fm->upload($file, $f['tmp_name'], $f['name'], $_POST['article_id'], getLegacyVisitor()['user_id']);
+                    $fm->upload($file, $f['tmp_name'], $f['name'], $_POST['article_id'], LegacyCodeHelper::getGlobalVisitor()['user_id']);
                     $file->markAsUpdated();
                 }
                 catch (Exception $e)

@@ -527,7 +527,7 @@ class Article extends Entity
     public function isInCart()
     {
         
-        return getLegacyVisitor()->hasInCart('article', $this->get('id'));
+        return LegacyCodeHelper::getGlobalVisitor()->hasInCart('article', $this->get('id'));
     }
 
     /**
@@ -536,7 +536,7 @@ class Article extends Entity
     public function isInWishlist()
     {
         
-        return getLegacyVisitor()->hasAWish($this->get('id'));
+        return LegacyCodeHelper::getGlobalVisitor()->hasAWish($this->get('id'));
     }
 
     /**
@@ -545,7 +545,7 @@ class Article extends Entity
     public function isinAlerts()
     {
         
-        return getLegacyVisitor()->hasAlert($this->get('id'));
+        return LegacyCodeHelper::getGlobalVisitor()->hasAlert($this->get('id'));
     }
 
     /**

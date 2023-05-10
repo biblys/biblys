@@ -18,7 +18,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 	
 	$stock = $_SQL->prepare($req);
 	$stock->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
-	$stock->bindValue('user_id',getLegacyVisitor()['user_id'],PDO::PARAM_INT);
+	$stock->bindValue('user_id', LegacyCodeHelper::getGlobalVisitor()['user_id'],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 	while ($s = $stock->fetch(PDO::FETCH_ASSOC))
 	{
@@ -51,7 +51,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 		
 		<form action="/pages/export_to_csv" method="post">
 			<fieldset class="center">
-				<input type="hidden" name="filename" value="achats-'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'-'.makeurl(getLegacyVisitor()['user_screen_name']).'">
+				<input type="hidden" name="filename" value="achats-'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'-'.makeurl(LegacyCodeHelper::getGlobalVisitor()['user_screen_name']).'">
 				<input type="hidden" name="header" value="'.htmlentities(json_encode($header)).'">
 				<input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
 				<button type="submit">T&eacute;l&eacute;charger au format CSV</button>

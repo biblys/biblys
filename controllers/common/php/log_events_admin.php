@@ -1,15 +1,16 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 // Check user rights
 
-if (getLegacyVisitor()->isAdmin()) $mode = 'admin';
-elseif (getLegacyVisitor()->isPublisher()) $mode = 'publisher';
-elseif (getLegacyVisitor()->isBookshop()) $mode = 'bookshop';
-elseif (getLegacyVisitor()->isLibrary()) $mode = 'library';
-else trigger_error('Accès non autorisé pour '.getLegacyVisitor()->get('user_email'));
+if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
+elseif (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $mode = 'publisher';
+elseif (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $mode = 'bookshop';
+elseif (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $mode = 'library';
+else trigger_error('Accès non autorisé pour '. LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
 
 /** @var Request $request */
 $request->attributes->set("page_title", "Gestion des évènements");
@@ -18,11 +19,11 @@ $em = new EventManager();
 
 $where = array('events`.`site_id' => $_SITE->get("id"));
 
-if (!getLegacyVisitor()->isAdmin())
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
-    if (getLegacyVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id')));
-    if (getLegacyVisitor()->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => getLegacyVisitor()->getCurrentRight()->get('bookshop_id')));
-    if (getLegacyVisitor()->isLibrary()) $where = array_merge($where, array('events`.`library_id' => getLegacyVisitor()->getCurrentRight()->get('library_id')));
+    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
+    if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $where = array_merge($where, array('events`.`bookshop_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('bookshop_id')));
+    if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $where = array_merge($where, array('events`.`library_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('library_id')));
 }
 
 $events = $em->getAll(

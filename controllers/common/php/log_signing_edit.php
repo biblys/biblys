@@ -2,7 +2,7 @@
 
 use Biblys\Legacy\LegacyCodeHelper;
 
-if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
+if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
     $buttons = '<button type="submit" form="signing" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
     
@@ -14,7 +14,7 @@ if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigge
 	{
 		if ($s = $sm->get(array('signing_id' => $_GET['id'])))
 		{
-            if (getLegacyVisitor()->isPublisher() && $s->get('publisher_id') != getLegacyVisitor()->getCurrentRight()->get('publisher_id') && !getLegacyVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
+            if (LegacyCodeHelper::getGlobalVisitor()->isPublisher() && $s->get('publisher_id') != LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
             \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier la dédicace');
             $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
 		}
@@ -26,7 +26,7 @@ if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigge
 	{	
 		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ajouter une dédicace');
         $s = new Signing(array());
-        if (getLegacyVisitor()->isAdmin()) trigger_error("Vous ne pouvez pas créer de dédicace en tant qu'administrateur, connectez-vous en tant qu'éditeur.");
+        if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) trigger_error("Vous ne pouvez pas créer de dédicace en tant qu'administrateur, connectez-vous en tant qu'éditeur.");
 	}
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -79,9 +79,9 @@ if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigge
                 }
                 
                 // Associate to current right
-                if (!getLegacyVisitor()->isAdmin())
+                if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
                 {
-                    if (getLegacyVisitor()->isPublisher()) $s->set('publisher_id', getLegacyVisitor()->getCurrentRight()->get('publisher_id'));
+                    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $s->set('publisher_id', LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'));
                 }
                 
                 $s = $sm->update($s);
@@ -98,10 +98,10 @@ if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigge
         
         
         // Stand LAL
-        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11 && getLegacyVisitor()->isPublisher())
+        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11 && LegacyCodeHelper::getGlobalVisitor()->isPublisher())
         {
             $sum = new SubscriptionManager();
-            if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id'))))
+            if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'))))
             {
                 if ($su->has('subscription_type'))
                 {

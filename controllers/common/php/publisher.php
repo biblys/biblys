@@ -20,7 +20,7 @@ if (!$publisher) {
     }
 
     // Administration
-    if (getLegacyVisitor()->isAdmin()) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
         $_ECHO .= '
             <div class="admin">
                 <p>&Eacute;diteur n&deg; '.$publisher->get('id').'</p>

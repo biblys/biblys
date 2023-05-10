@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Entity\Exception\CartException;
 
 class Cart extends Entity
@@ -368,9 +369,9 @@ class CartManager extends EntityManager
 
         // Is the article in the visitor's wishlist ?
         else {
-            if (getLegacyVisitor()->isLogged()) {
+            if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
                 $wm = new WishManager();
-                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'user_id' => getLegacyVisitor()->get('id')))) {
+                if ($w = $wm->get(array('article_id' => $stock->get('article_id'), 'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')))) {
                     $w->set('wish_bought', date('Y-m-d H:i:s'));
                     $wm->update($w);
                     $stock->set('wish_id', $w->get('id'));
@@ -445,7 +446,7 @@ class CartManager extends EntityManager
                 }
 
                 // If this copy is already in current user's cart
-                if (getLegacyVisitor()->hasInCart('stock', $stock->get('id'))) {
+                if (LegacyCodeHelper::getGlobalVisitor()->hasInCart('stock', $stock->get('id'))) {
                     continue;
                 }
 

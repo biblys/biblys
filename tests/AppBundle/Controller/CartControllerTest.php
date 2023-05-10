@@ -6,6 +6,7 @@
  */
 
 use AppBundle\Controller\CartController;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +22,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $_SITE->setOpt("virtual_stock", 1);
         $controller = new CartController();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
 
         $cm->vacuum($cart);
         $article = EntityFactory::createArticle();
@@ -62,7 +63,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $_SITE->setOpt("virtual_stock", 1);
         $controller = new CartController();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
         $tomorrow = new DateTime('tomorrow');
         $article = EntityFactory::createArticle(["article_pubdate" => $tomorrow->format("Y-m-d")]);
@@ -97,7 +98,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         $cm = new CartManager();
         $_SITE->setOpt("virtual_stock", 0);
         $controller = new CartController();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
 
@@ -129,7 +130,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         // given
         $cm = new CartManager();
         $controller = new CartController();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
         $reward = EntityFactory::createCrowdfundingReward();
 
@@ -160,7 +161,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
     {
         // given
         $cm = new CartManager();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
@@ -197,7 +198,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
     {
         // given
         $cm = new CartManager();
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock();
         $cm->addStock($cart, $stock);
@@ -240,7 +241,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         
 
         // given
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $controller = new CartController();
@@ -269,7 +270,7 @@ class CartControllerTest extends PHPUnit\Framework\TestCase
         
 
         // given
-        $cart = getLegacyVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $cm = new CartManager();
         $cm->vacuum($cart);
         $stock = EntityFactory::createStock(["stock_selling_price" => 500]);
