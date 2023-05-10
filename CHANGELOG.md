@@ -4,6 +4,8 @@
 
 - Les rayons pouvaient ne pas correctement s'afficher sur la page d'édition 
   d'un article. C'est corrigé.
+- L'accès anonyme à une page de commande pouvait déclencher une erreur. 
+  Désormais, c'est l'invite à s'identifier qui s'affiche.
 
 ### 2.68.1 (7 mai 2023)
 

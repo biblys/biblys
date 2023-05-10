@@ -427,7 +427,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, getLegacyVisitor
         ';
     }
 } elseif (!getLegacyVisitor()->isLogged()) {
-    throw new UnauthorizedHttpException(null, "Vous n'avez pas le droit d'accéder à cette page.");
+    throw new UnauthorizedHttpException("", "Vous n'avez pas le droit d'accéder à cette page.");
 } else {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
