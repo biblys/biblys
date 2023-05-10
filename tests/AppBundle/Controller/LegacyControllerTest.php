@@ -6,7 +6,6 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\RequestFactory;
-use Framework\Exception\AuthException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,6 @@ require_once(__DIR__."/../../setUp.php");
 class LegacyControllerTest extends TestCase
 {
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDefaultAction()
@@ -54,7 +52,6 @@ class LegacyControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDefaultActionRequiringLogin()
@@ -85,7 +82,6 @@ class LegacyControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDefaultActionRequiringPublisherRight()
@@ -116,7 +112,6 @@ class LegacyControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDefaultActionRequiringAdminRight()
@@ -147,7 +142,6 @@ class LegacyControllerTest extends TestCase
     }
 
     /**
-     * @throws AuthException
      * @throws PropelException
      */
     public function testDefaultActionForStaticPagesLegacyRoute()

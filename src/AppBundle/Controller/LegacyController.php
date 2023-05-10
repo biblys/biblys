@@ -46,43 +46,30 @@ class LegacyController extends Controller
             self::authUser($request);
         }
 
-        // Get correct controller for called url
-        $controller_path = get_controller_path($_PAGE);
-        if ($controller_path) {
-            $_INCLUDE = $controller_path;
-        }
-
-        // If static page, redirect to new /page/:slug url
-        else {
+        $controllerPath = get_controller_path($_PAGE);
+        if (!$controllerPath) {
             $staticPageUrl = $urlGenerator->generate("static_page_show", ["slug" => $_PAGE]);
             return new RedirectResponse($staticPageUrl, 301);
         }
 
-        // INCLUDE PAGE EN COURS
-        $_ECHO = null;
-        $response = require $_INCLUDE;
+        $_ECHO = "";
+        $response = require $controllerPath;
 
-        if (!$response instanceof Response && isset($_ECHO)) {
-            trigger_error("Using \$_ECHO in $_INCLUDE. Legacy controllers should return a Response.", E_USER_DEPRECATED);
-            $response = new Response($_ECHO);
-        }
-
-        // Is this still used?
-        if (isset($_JSON)) {
-            trigger_error("Using \$_JSON in $_INCLUDE. Legacy controllers should return a Response", E_USER_DEPRECATED);
-            $_JSON->send();
-            die();
-        }
-
-        // If response is JSON, return immediately and die
-        // Is this still necessary? Should be ok to return JsonResponse here.
         if ($response instanceof JsonResponse) {
-            $response->send();
-            die();
+            return $response;
         }
 
         if ($response instanceof RedirectResponse) {
             return $response;
+        }
+
+        if (!($response instanceof Response)) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.69.0",
+                "Using \$_ECHO (in {$controllerPath}) is deprecated. Return a Response instead."
+            );
+            $response = new Response($_ECHO);
         }
 
         if (isset($GLOBALS["_PAGE_TITLE"])) {
