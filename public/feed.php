@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 include("../inc/constants.php");
 
 // INCLUDES
@@ -14,7 +16,7 @@ $_PAGE = $_PAGE[0];
 $_FEED = array('@attributes' => array('version' => '2.0', 'xmlns:atom' => 'http://www.w3.org/2005/Atom'));
 
 $_FEED["channel"]["language"] = "fr";
-$_FEED["channel"]["atom:link"] = array('@attributes' => array('href' => 'http://'.getLegacyCurrentSite()["site_domain"].'/feed/'.$_PAGE, 'rel' => 'self', 'type' => 'application/rss+xml'));
+$_FEED["channel"]["atom:link"] = array('@attributes' => array('href' => 'http://'. LegacyCodeHelper::getLegacyCurrentSite()["site_domain"].'/feed/'.$_PAGE, 'rel' => 'self', 'type' => 'application/rss+xml'));
 
 // Recherche de la page site, par defaut, ou 404
 $default_feed = biblysPath().'/controllers/common/feeds/'.$_PAGE.'.php';

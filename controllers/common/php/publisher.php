@@ -1,5 +1,7 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
+
 $pm = new PublisherManager();
 
 $publisher = $pm->get(['publisher_url' => $request->query->get('url')]);
@@ -58,6 +60,6 @@ if (!$publisher) {
         <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
         <meta property="og:description" content="'.strip_tags(truncate(strip_tags($p["publisher_desc"]),'500','...',true)).'"/>
         <meta property="og:locale" content="fr_FR"/>
-        <meta property="og:site_name" content="'.getLegacyCurrentSite()["site_title"].'"/>
+        <meta property="og:site_name" content="'. LegacyCodeHelper::getLegacyCurrentSite()["site_title"].'"/>
     ';
 }

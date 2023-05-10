@@ -1,6 +1,7 @@
 <?php
 
 use Biblys\Exception\EntityAlreadyExistsException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -14,7 +15,7 @@ if ($getTerm) {
     $publisherId = null;
 
     // Si on est sur un site editeur
-    if (!empty(getLegacyCurrentSite()["publisher_id"])) {
+    if (!empty(LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"])) {
         $_REQ_SITE = "AND `publisher_id` = :publisher_id";
         $publisherId = $_SITE->get('publisher_id');
         $params["publisher_id"] = $publisherId;

@@ -1,8 +1,9 @@
 <?php
 
-    use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Isbn\Isbn as Isbn;
+use Biblys\Legacy\LegacyCodeHelper;
 
-    class Image
+class Image
 	{
 		private $_i,
 			$path;
@@ -261,7 +262,7 @@
 		public function create()
 		{
 			
-			$insert = $this->_db->query('INSERT INTO `images`(`site_id`, `image_inserted`) VALUES('.getLegacyCurrentSite()['site_id'].', NOW())');
+			$insert = $this->_db->query('INSERT INTO `images`(`site_id`, `image_inserted`) VALUES('. LegacyCodeHelper::getLegacyCurrentSite()['site_id'].', NOW())');
 			$id = $this->_db->lastInsertId();
 
 			$get = $this->get(array('image_id' => $id));

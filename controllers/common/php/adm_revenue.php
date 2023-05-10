@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -293,7 +294,7 @@ if (empty($_POST['hide_shipping']))
             {
 
                 // Port HT
-                if (getLegacyCurrentSite()['site_tva'])
+                if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'])
                 {
                     $s['tva_rate'] = tva_rate(3,$s["date"]) / 100;
                     $s['ti'] = $s['tva_rate'] * 1000;

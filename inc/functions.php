@@ -783,29 +783,6 @@ function getLegacyVisitor(): Visitor
     return $GLOBALS["LEGACY_VISITOR"];
 }
 
-/**
- * @throws Exception
- * @deprecated Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.
- */
-function getLegacyCurrentSite(): Site
-{
-    trigger_deprecation(
-        "biblys/biblys",
-        "2.69.0",
-        "Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.",
-    );
-
-    if (!isset($GLOBALS["LEGACY_CURRENT_SITE"])) {
-        $config = Config::load();
-        $currentSiteId = $config->get("site");
-        $sm = new SiteManager();
-        $currentSite = $sm->getById($currentSiteId);
-        $GLOBALS["LEGACY_CURRENT_SITE"] = $currentSite;
-    }
-
-    return $GLOBALS["LEGACY_CURRENT_SITE"];
-}
-
 // TODO: use a DeprecationNoticesHandler class
 // TODO: add to all front controllers
 function catchDeprecationNotices(Config $config, Session $session): void

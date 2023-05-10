@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -75,7 +76,7 @@ $stock = $_SQL->prepare('SELECT
     WHERE `s`.`site_id` = :site_id'.$_QUERY.'
     GROUP BY `a`.`article_id`
     ORDER BY `sales` DESC');
-$params['site_id'] = getLegacyCurrentSite()["site_id"];
+$params['site_id'] = LegacyCodeHelper::getLegacyCurrentSite()["site_id"];
 $stock->execute($params) or error($stock->errorInfo());
 
 // Types

@@ -3,6 +3,7 @@
 /** @noinspection CommaExpressionJS */
 /** @noinspection BadExpressionStatementJS */
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -171,7 +172,7 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
                                 $content = '
                     <html lang="fr">
                         <head>
-                            <title>' . getLegacyCurrentSite()["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
+                            <title>' . LegacyCodeHelper::getLegacyCurrentSite()["site_tag"] . ' | Commande n° ' . $o["order_id"] . ' : incident</title>
                         </head>
                         <body>
                             <p>Le client souhaite retourner la commande n°&nbsp;<a href="https://' . $_SERVER["HTTP_HOST"] . '/order/' . $o["order_url"] . '">' . $o["order_id"] . '</a></p>

@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Service\Config;
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -111,7 +111,7 @@ if ($html)
     // OPENGRAPH
     $opengraph['og:type'] = 'article';
     $opengraph['og:url'] = 'http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-    $opengraph['og:site_name'] = getLegacyCurrentSite()["site_title"];
+    $opengraph['og:site_name'] = LegacyCodeHelper::getLegacyCurrentSite()["site_title"];
     $opengraph['og:title'] = $post->get('title');
     $opengraph['og:description'] = truncate($post->get('content'), '500', '...', true);
     if ($post->has('category')) $opengraph['article:section'] = $post->get('category')->get('name');
@@ -144,7 +144,7 @@ else
 $_OPENGRAPH = '
     <meta property="og:type"                 content="article">
     <meta property="og:url"                  content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'">
-    <meta property="og:site_name"            content="'.getLegacyCurrentSite()["site_title"].'">
+    <meta property="og:site_name"            content="'. LegacyCodeHelper::getLegacyCurrentSite()["site_title"].'">
     <meta property="og:title"                content="'.$p["post_title"].'">
     <meta property="og:description"          content="'.truncate($p["post_content"],'500','...',true).'">
     <meta property="article:published_time"  content="'.$p["post_date"].'">

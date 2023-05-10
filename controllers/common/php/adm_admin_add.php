@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +25,8 @@ if ($request->getMethod() === "POST") {
     }
 
     // Set admin right
-    if (!$user->hasRight('site', getLegacyCurrentSite()['site_id'])) {
-        $user->giveRight('site', getLegacyCurrentSite()['site_id']);
+    if (!$user->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['site_id'])) {
+        $user->giveRight('site', LegacyCodeHelper::getLegacyCurrentSite()['site_id']);
     }
 
     // E-mail de bienvenue
@@ -48,11 +49,11 @@ if ($request->getMethod() === "POST") {
         ';
     }
 
-    $headers = 'From: '.getLegacyCurrentSite()['site_title'].' <'.getLegacyCurrentSite()['site_contact'].'>'."\r\n";
-    $subject = getLegacyCurrentSite()['site_tag'].' | Votre accès au site';
+    $headers = 'From: '. LegacyCodeHelper::getLegacyCurrentSite()['site_title'].' <'. LegacyCodeHelper::getLegacyCurrentSite()['site_contact'].'>'."\r\n";
+    $subject = LegacyCodeHelper::getLegacyCurrentSite()['site_tag'].' | Votre accès au site';
     $message = '
 <p>Bonjour,</p>
-<p>Votre accès administrateur a été créé sur le site <a href="https://'.getLegacyCurrentSite()['site_domain'].'/">'.getLegacyCurrentSite()['site_title'].'</a>.</p>
+<p>Votre accès administrateur a été créé sur le site <a href="https://'. LegacyCodeHelper::getLegacyCurrentSite()['site_domain'].'/">'. LegacyCodeHelper::getLegacyCurrentSite()['site_title'].'</a>.</p>
 '.$credentials;
 
     $um->mail($user,$subject,$message,$headers);

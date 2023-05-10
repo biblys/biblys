@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -242,7 +243,7 @@ $content .= '
                 <td>' . $numberOfCopiesInCart . '</td>
             </tr>
 ';
-if (getLegacyCurrentSite()["site_shipping_fee"] == 'fr') {
+if (LegacyCodeHelper::getLegacyCurrentSite()["site_shipping_fee"] == 'fr') {
     $content .= '
                 <tr>
                     <td class="right">Poids : </td>

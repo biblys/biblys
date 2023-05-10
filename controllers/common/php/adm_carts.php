@@ -2,6 +2,7 @@
 
 global $request, $_SQL, $_SITE;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,7 +30,7 @@ $request->attributes->set("page_title", "Paniers");
 $alert = null;
 
 // Date limite
-if(getLegacyCurrentSite()["site_id"] == 8) $datelimite = date('Y-m-d h:i:s',(strtotime("-2 days")));
+if(LegacyCodeHelper::getLegacyCurrentSite()["site_id"] == 8) $datelimite = date('Y-m-d h:i:s',(strtotime("-2 days")));
 else $datelimite = date('Y-m-d h:i:s',(strtotime("-1 days")));
 
 $content = '

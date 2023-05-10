@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
@@ -282,7 +283,7 @@ class User extends Entity
         if ($this->isRoot()) {
             return true;
         } else {
-            return $this->hasRight('site', getLegacyCurrentSite()['id']);
+            return $this->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['id']);
         }
     }
 

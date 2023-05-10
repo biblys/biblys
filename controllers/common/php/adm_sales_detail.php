@@ -1,19 +1,21 @@
 <?php
 
-\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Ventes détaillées');
+use Biblys\Legacy\LegacyCodeHelper;
+
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ventes détaillées');
 
 /* RACCOURCIS */
 
 // Raccourci 30 derniers jours
 $dates = null;
-$days = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".getLegacyCurrentSite()["site_id"]."' AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
+$days = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
 while ($s = $days->fetch()) {
     $dates .= '<option value="?d='.$s["date"].'">'._date($s["date"],"l j F").'</option>';
 }
 
 // Raccourci mois
 $months = null;
-$mois = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '".getLegacyCurrentSite()["site_id"]."' AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
+$mois = $_SQL->query("SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`,`order_payment_date` FROM `orders` WHERE `orders`.`site_id` = '". LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `order_cancel_date` IS null GROUP BY `date` ORDER BY `date` DESC");
 while ($m = $mois->fetch()) {
     if (!empty($m["date"])) $months .= '<option value="?m='.$m["date"].'">'._date($m["date"],"F Y").'</option>';
 }
@@ -74,7 +76,7 @@ $stock = $_SQL->prepare('SELECT
     WHERE `o`.`site_id` = :site_id AND `order_payment_date` IS NOT null'.$_QUERY.'
     GROUP BY `s`.`stock_id`
     ORDER BY `order_payment_date`');
-$params['site_id'] = getLegacyCurrentSite()["site_id"];
+$params['site_id'] = LegacyCodeHelper::getLegacyCurrentSite()["site_id"];
 $stock->execute($params) or error($orders->errorInfo());
 
 // Export to CSV
@@ -87,7 +89,7 @@ $type_options = Biblys\Article\Type::getOptions($request->query->get('type_id'))
 // Rayons
 $rayon_options = null;
 $site_rayon = array();
-$rayons = $_SQL->query("SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = ".getLegacyCurrentSite()['site_id']." ORDER BY `rayon_order`");
+$rayons = $_SQL->query("SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = ". LegacyCodeHelper::getLegacyCurrentSite()['site_id']." ORDER BY `rayon_order`");
 while ($r = $rayons->fetch(PDO::FETCH_ASSOC))
 {
     if (isset($_GET['rayon_id']) && $r["rayon_id"] == $_GET["rayon_id"]) $r["selected"] = ' selected'; else $r['selected'] = null;
@@ -186,7 +188,7 @@ $_ECHO .= '
 
         <form action="/pages/export_to_csv" method="post" class="floatR">
             <fieldset>
-                <input type="hidden" name="filename" value="ventes_'.getLegacyCurrentSite()['site_name'].'_'.$_GET["date1"].'_'.$_GET["date2"].'">
+                <input type="hidden" name="filename" value="ventes_'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'_'.$_GET["date1"].'_'.$_GET["date2"].'">
                 <input type="hidden" name="header" value="'.htmlentities(json_encode($header)).'">
                 <input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
                 <button class="btn btn-default" type="submit">T&eacute;l&eacute;charger au format CSV</button>

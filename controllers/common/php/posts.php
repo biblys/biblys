@@ -1,6 +1,6 @@
 <?php
 
-use Biblys\Service\Config;
+use Biblys\Legacy\LegacyCodeHelper;
 
 $um = new UserManager();
 
@@ -62,7 +62,7 @@ $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `pos
     LEFT JOIN `categories` USING(`category_id`)
     LEFT JOIN `users` ON `posts`.`user_id` = `users`.`id`
     LEFT JOIN `links` USING(`post_id`)
-WHERE `posts`.`site_id` = '" .getLegacyCurrentSite()["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' ".$aut_req." ".$cat_req.""
+WHERE `posts`.`site_id` = '" . LegacyCodeHelper::getLegacyCurrentSite()["site_id"]."' AND `post_date` <= NOW() AND `post_status` = '1' ".$aut_req." ".$cat_req.""
         . "GROUP BY `post_id`";
 
 // Pagination

@@ -2,6 +2,7 @@
 
 /** @noinspection PhpParameterNameChangedDuringInheritanceInspection */
 
+use Biblys\Article\Type;
 use Biblys\Contributor\Contributor;
 use Biblys\Contributor\Job;
 use Biblys\Contributor\UnknownJobException;
@@ -10,7 +11,7 @@ use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Exception\InvalidEntityFetchedException;
 use Biblys\Isbn\Isbn;
-use Biblys\Article\Type;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
 use Model\PeopleQuery;
 
@@ -420,7 +421,7 @@ class Article extends Entity
 
         if ($mode == 'available') {
             foreach ($stock as $s) {
-                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != getLegacyCurrentSite()['site_id']) {
+                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != LegacyCodeHelper::getLegacyCurrentSite()['site_id']) {
                     continue;
                 } else {
                     $uid = $s->get('selling_price') . '-' . $s->get('condition');
@@ -790,7 +791,7 @@ class Article extends Entity
         ");
         $sql->execute([
             ':article_id' => $this->get('id'),
-            ':site_id' => getLegacyCurrentSite()->get('id')
+            ':site_id' => LegacyCodeHelper::getLegacyCurrentSite()->get('id')
         ]);
         $rayons = $sql->fetchAll();
 

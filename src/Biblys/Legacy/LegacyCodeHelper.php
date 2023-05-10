@@ -4,12 +4,37 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\Config;
 use Exception;
+use Site;
+use SiteManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class LegacyCodeHelper
 {
     /**
-     * @deprecated Using getLegacyGlobalConfig is deprecated. Use CurrentUser service instead.
+     * @throws Exception
+     * @deprecated Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.
+     */
+    public static function getLegacyCurrentSite(): Site
+    {
+        trigger_deprecation(
+            "biblys/biblys",
+            "2.69.0",
+            "Using getLegacyCurrentSite is deprecated. Use CurrentSite service instead.",
+        );
+
+        if (!isset($GLOBALS["LEGACY_CURRENT_SITE"])) {
+            $config = Config::load();
+            $currentSiteId = $config->get("site");
+            $sm = new SiteManager();
+            $currentSite = $sm->getById($currentSiteId);
+            $GLOBALS["LEGACY_CURRENT_SITE"] = $currentSite;
+        }
+
+        return $GLOBALS["LEGACY_CURRENT_SITE"];
+    }
+
+    /**
+     * @deprecated Using getGlobalConfig is deprecated. Use CurrentUser service instead.
      */
     public static function getGlobalConfig(): Config
     {

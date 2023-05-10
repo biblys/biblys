@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -287,7 +288,7 @@ else $alert = NULL;
 \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Caisse');
 $content = '';
 
-if (getLegacyCurrentSite()['site_tva'] === 'fr') {
+if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'] === 'fr') {
     $content .= '
         <p class="alert alert-warning">
             <span class="fa fa-warning"></span>

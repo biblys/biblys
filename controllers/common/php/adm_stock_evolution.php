@@ -1,6 +1,8 @@
 <?php
 
-	\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle("Évolution des stocks");
+use Biblys\Legacy\LegacyCodeHelper;
+
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Évolution des stocks");
 
 	if (!isset($_GET['date'])) $_GET['date'] = (date('Y')-1).'-01-01';
 	if (!isset($_GET['period'])) $_GET['period'] = 'month';
@@ -15,7 +17,7 @@
 				`article_id`, `article_pubdate`, `type_id`, `article_tva`
 		FROM `stock`
 		JOIN `articles` USING(`article_id`)
-		WHERE `site_id` = '.getLegacyCurrentSite()['site_id']);
+		WHERE `site_id` = '. LegacyCodeHelper::getLegacyCurrentSite()['site_id']);
 	$stock = $stock->fetchAll(PDO::FETCH_ASSOC);
 
 	$table = NULL;
@@ -35,7 +37,7 @@
 				)
 			{
 				// HT Price
-				if (getLegacyCurrentSite()['site_tva'])
+				if (LegacyCodeHelper::getLegacyCurrentSite()['site_tva'])
 				{
 					$s['tva_rate'] = tva_rate($s['article_tva'],$s["stock_purchase_date"]) / 100;
 					$s['stock_selling_price_ht'] = $s['stock_selling_price'] / (1 + $s['tva_rate']);

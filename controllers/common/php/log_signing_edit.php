@@ -1,6 +1,8 @@
 <?php
 
-    if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
+use Biblys\Legacy\LegacyCodeHelper;
+
+if (!getLegacyVisitor()->isAdmin() && !getLegacyVisitor()->isPublisher()) trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 
     $buttons = '<button type="submit" form="signing" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Enregistrer</button>';
     
@@ -96,7 +98,7 @@
         
         
         // Stand LAL
-        if (getLegacyCurrentSite()['site_id'] == 11 && getLegacyVisitor()->isPublisher())
+        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11 && getLegacyVisitor()->isPublisher())
         {
             $sum = new SubscriptionManager();
             if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => getLegacyVisitor()->getCurrentRight()->get('publisher_id'))))

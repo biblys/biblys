@@ -1,6 +1,8 @@
 <?php
 
-	error_reporting(E_ALL ^ E_NOTICE);
+use Biblys\Legacy\LegacyCodeHelper;
+
+error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors','On');
 
 	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('R&eacute;sultats par facture');
@@ -8,7 +10,7 @@
 	$stock = $_SQL->prepare('SELECT
 		`stock_invoice`, `stock_selling_price`, `stock_selling_date`, `stock_return_date`
 	FROM `stock` WHERE `site_id` = :site_id AND `stock_invoice` IS NOT NULL ORDER BY `stock_invoice`');
-	$stock->bindValue('site_id',getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
+	$stock->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 	$stock->execute() or error($stock->errorInfo());
 
 	$inv = array();

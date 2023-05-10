@@ -1,6 +1,8 @@
 <?php
 
-	if (getLegacyVisitor()->isLibrary()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('library_id');
+use Biblys\Legacy\LegacyCodeHelper;
+
+if (getLegacyVisitor()->isLibrary()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('library_id');
 	elseif (getLegacyVisitor()->isAdmin()) $mode = 'admin';
 	else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
@@ -129,7 +131,7 @@
 				<fieldset>
 					<legend>Autres informations</legend>
 					<p>
-						<label for="library_representative">'.(getLegacyCurrentSite()['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
+						<label for="library_representative">'.(LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
 						<input type="text" name="library_representative" id="library_representative" value="'.(isset($l['library_representative']) ? $l["library_representative"] : null).'" class="long">
 					</p>
 					<p>

@@ -1,6 +1,8 @@
 <?php
-	
-	if (getLegacyVisitor()->isBookshop()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('bookshop_id');
+
+use Biblys\Legacy\LegacyCodeHelper;
+
+if (getLegacyVisitor()->isBookshop()) $_GET['id'] = getLegacyVisitor()->getCurrentRight()->get('bookshop_id');
 	elseif (getLegacyVisitor()->isAdmin()) $mode = 'admin';
     else trigger_error('Vous n\'avez pas le droit d\'accéder à cette page.', E_USER_ERROR);
 	
@@ -131,7 +133,7 @@
 				<fieldset>
 					<legend>Autres informations</legend>
 					<p>
-						<label for="bookshop_representative">'.(getLegacyCurrentSite()['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
+						<label for="bookshop_representative">'.(LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 16 ? 'Contact LVDI' : 'Représentant légal').' :</label>
 						<input type="text" name="bookshop_representative" id="bookshop_representative" value="'.(isset($b['bookshop_representative']) ? $b["bookshop_representative"] : null).'" class="long">
 					</p>
 					<p>

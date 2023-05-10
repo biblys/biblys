@@ -2,6 +2,7 @@
 
 global $request, $_SITE, $_SQL;
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -224,7 +225,7 @@ $content .= '
 ';
 if (
     getLegacyVisitor()->getCurrentRight()->get('publisher_id') == $p['publisher_id'] || // Utilisateur connecté avec les droits pour l'editeur
-    $p["publisher_id"] == getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
+    $p["publisher_id"] == LegacyCodeHelper::getLegacyCurrentSite()["publisher_id"] || // Site de l'editeur
     (getLegacyVisitor()->isAdmin()) && ($_SITE->get("id") == 11) // Admin de l'autre livre ou lvdi
 )
 {
@@ -318,7 +319,7 @@ if (
             </fieldset>
     ';
 
-    if (getLegacyCurrentSite()['site_id'] == 11)
+    if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11)
     {
         $content .= '
             <fieldset>
@@ -434,7 +435,7 @@ $content .= '
 ';
 
 // Gestion des fournisseurs
-if (getLegacyCurrentSite()["site_shop"]) {
+if (LegacyCodeHelper::getLegacyCurrentSite()["site_shop"]) {
     $sm = new SupplierManager();
 
     $addSupplier = $request->query->get('add_supplier');

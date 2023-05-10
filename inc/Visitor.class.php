@@ -1,5 +1,6 @@
 <?php
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Request;
@@ -228,7 +229,7 @@ class Visitor extends User
         }
 
         // If no right & user is admin, return admin right
-        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => getLegacyCurrentSite()['site_id']])) {
+        if ($right = $rm->get(['user_id' => $this->get('id'), 'site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id']])) {
             return $right;
         }
 

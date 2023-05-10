@@ -1,6 +1,8 @@
 <?php
 
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+use Biblys\Legacy\LegacyCodeHelper;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
 		$am = new ArticleManager();
 		$lm = new LinkManager();
@@ -10,7 +12,7 @@
 			trigger_error('Article '.$_POST['article_id'].' inconnu.');
 		}
 		
-		$link = $lm->get(array('article_id' => $_POST['article_id'], 'site_id' => getLegacyCurrentSite()['site_id'], 'link_hide' => 1));
+		$link = $lm->get(array('article_id' => $_POST['article_id'], 'site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id'], 'link_hide' => 1));
 		
 		// Article already hidden ?
 		if ($link) {
@@ -23,7 +25,7 @@
 		else {
 			$lm->create(array(
 				'article_id' => $article->get('id'),
-				'site_id' => getLegacyCurrentSite()['site_id'],
+				'site_id' => LegacyCodeHelper::getLegacyCurrentSite()['site_id'],
 				'link_hide' => 1
 			));
 			$result = 'hide';

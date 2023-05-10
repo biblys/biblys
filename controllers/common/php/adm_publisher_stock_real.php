@@ -1,11 +1,13 @@
 <?php
 
-    \Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Stock éditeur');
+use Biblys\Legacy\LegacyCodeHelper;
+
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Stock éditeur');
 
     $am = new ArticleManager();
     $sm = new StockManager();
 
-    $articles = $am->getAll(array('publisher_id' => getLegacyCurrentSite()['publisher_id']));
+    $articles = $am->getAll(array('publisher_id' => LegacyCodeHelper::getLegacyCurrentSite()['publisher_id']));
     
     $table = array();
     foreach ($articles as $article)

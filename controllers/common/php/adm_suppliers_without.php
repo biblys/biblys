@@ -1,7 +1,9 @@
 <?php
 
-	$publishers = $_SQL->prepare("SELECT `p`.`publisher_id`, `publisher_name` FROM `publishers` AS `p` WHERE NOT EXISTS (SELECT `link_id` FROM `links` AS `l` WHERE `l`.`publisher_id` = `p`.`publisher_id` AND `supplier_id` IS NOT NULL AND `site_id` = :site_id) ORDER BY `publisher_name_alphabetic`");
-	$publishers->bindValue('site_id',getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
+use Biblys\Legacy\LegacyCodeHelper;
+
+$publishers = $_SQL->prepare("SELECT `p`.`publisher_id`, `publisher_name` FROM `publishers` AS `p` WHERE NOT EXISTS (SELECT `link_id` FROM `links` AS `l` WHERE `l`.`publisher_id` = `p`.`publisher_id` AND `supplier_id` IS NOT NULL AND `site_id` = :site_id) ORDER BY `publisher_name_alphabetic`");
+	$publishers->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 	$publishers->execute() or error($publishers->errorInfo());
 	
 	while ($p = $publishers->fetch(PDO::FETCH_ASSOC))

@@ -1,6 +1,8 @@
 <?php
 
-	\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Parrainages');
+use Biblys\Legacy\LegacyCodeHelper;
+
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Parrainages');
 
 	if (!empty($_POST))
 	{
@@ -19,7 +21,7 @@
 		else
 		{
 			$insert = $_SQL->prepare('INSERT INTO `links`(`site_id`,`user_id`,`link_sponsor_user_id`,`link_date`) VALUES(:site_id,:user_id,:link_sponsor_user_id,NOW())');
-			$insert->bindValue('site_id',getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
+			$insert->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 			$insert->bindValue('user_id',$_POST['user_id'],PDO::PARAM_INT);
 			$insert->bindValue('link_sponsor_user_id',$_POST['link_sponsor_user_id'],PDO::PARAM_INT);
 			$insert->execute() or error($insert->errorInfo());
@@ -47,7 +49,7 @@
 		GROUP BY `link_id`
 		ORDER BY `link_sponsor_user_id`
 	');
-	$q->bindValue('site_id',getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
+	$q->bindValue('site_id', LegacyCodeHelper::getLegacyCurrentSite()['site_id'],PDO::PARAM_INT);
 	$q->execute() or error($q->errorInfo());
 	$sponsors = $q->fetchAll(PDO::FETCH_ASSOC);
 	$q->closeCursor();

@@ -1,6 +1,8 @@
 <?php
 
-    \Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Chiffre d\'affaires par collections');
+use Biblys\Legacy\LegacyCodeHelper;
+
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Chiffre d\'affaires par collections');
 
     $list = NULL;
     
@@ -17,7 +19,7 @@
         HAVING COUNT(`stock_id`) >= 3
         ORDER BY `CA` DESC, `Ventes`
     ");
-	$query->bindValue(':site_id', getLegacyCurrentSite()["site_id"], PDO::PARAM_INT);
+	$query->bindValue(':site_id', LegacyCodeHelper::getLegacyCurrentSite()["site_id"], PDO::PARAM_INT);
 	if(isset($_GET["year"])) $query->bindValue(':year', $_GET["year"].'%', PDO::PARAM_INT);
 	$query->execute() or error(pdo_error());
     
