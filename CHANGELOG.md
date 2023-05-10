@@ -1,5 +1,10 @@
 # Historique des modifications
 
+### 2.68.2 (DEV)
+
+- Les rayons pouvaient ne pas correctement s'afficher sur la page d'édition 
+  d'un article. C'est corrigé.
+
 ### 2.68.1 (7 mai 2023)
 
 Corrections

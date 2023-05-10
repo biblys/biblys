@@ -2,6 +2,10 @@
 
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
+use Model\ArticleCategory;
+use Model\ArticleCategoryQuery;
+use Model\LinkQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -519,16 +523,20 @@ foreach ($files as $file) {
 
 // ** METADONNEES ** //
 
-// Rayons actuels
-$links = $_SQL->query("
-    SELECT `link_id`, `rayon_name` FROM `links`
-    JOIN `rayons` USING(`rayon_id`)
-    WHERE `article_id` = '".$a['article_id']."'
-        AND `links`.`site_id` = '".$_SITE['site_id']."'
-    ORDER BY `link_id`");
-$rayons_actuels = null;
-while ($r = $links->fetch(PDO::FETCH_ASSOC)) {
-    $rayons_actuels .= '<li><a class="btn btn-danger btn-xs" data-remove_link='.$r['link_id'].'><span class="fa fa-remove" title="Supprimer le rayon"></span></a> '.$r['rayon_name'].'</li>';
+$articleCategoryLinks = LinkQuery::create()
+    ->filterByArticleId($article->get('id'))
+    ->filterByRayonId(null, Criteria::ISNOTNULL)
+    ->find();
+$currentArticleCategories = "";
+/** @var ArticleCategory $articleCategory */
+foreach ($articleCategoryLinks as $articleCategoryLink) {
+    $articleCategory = ArticleCategoryQuery::create()->findPk($articleCategoryLink->getRayonId());
+    $currentArticleCategories .= '<li>
+        <a class="btn btn-danger btn-xs" data-remove_link='.$articleCategoryLink->getId().'>
+            <span class="fa fa-remove" title="Supprimer le rayon"></span>
+        </a> 
+        '.$articleCategory->getName().'
+    </li>';
 }
 
 // Rayons ajoutables
@@ -949,7 +957,7 @@ $content .= '
             <legend>Rayons</legend>
 
             <h3>Rayons actuels</h3>
-            <ul id="rayons">'.$rayons_actuels.'</ul>
+            <ul id="rayons">'.$currentArticleCategories.'</ul>
             <br>
 
             '.$rayons_options.'
