@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 $mm = new MediaFileManager();
 $mediaFolderPath = $mm->getMediaFolderPath();
 
-$_PAGE_TITLE = 'Gestion des médias';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Gestion des médias');
 
 $content = '
     <h1><span class="fa fa-image"></span> Gestion des médias</h1>

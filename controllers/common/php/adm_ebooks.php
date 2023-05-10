@@ -79,8 +79,8 @@ $Gratuits = null;
 $subReqParams = $reqParams;
 while ($l = $ventes->fetch(PDO::FETCH_ASSOC)) {
 
-    if (!empty($_GET["people_id"])) $_PAGE_TITLE = "Ventes numériques : " . authors($l["article_authors"]);
-    if (!empty($_GET["article_id"])) $_PAGE_TITLE = "Ventes numériques : " . $l["article_title"];
+    if (!empty($_GET["people_id"])) \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . authors($l["article_authors"]));
+    if (!empty($_GET["article_id"])) \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Ventes numériques : " . $l["article_title"]);
 
     $subReqParams['article_id'] = $l['article_id'];
 

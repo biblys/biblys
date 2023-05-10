@@ -284,7 +284,7 @@ elseif (isset($_GET['error'])) $alert = '<p class="error">'.$_GET['error'].'</p>
 elseif (isset($_GET['order_created'])) $alert = '<p class="success">La vente a été enregistrée sous le numéro '.$_GET['order_created'].'.</p>';
 else $alert = NULL;
 
-$_PAGE_TITLE = 'Caisse';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Caisse');
 $content = '';
 
 if (getLegacyCurrentSite()['site_tva'] === 'fr') {
@@ -298,7 +298,7 @@ if (getLegacyCurrentSite()['site_tva'] === 'fr') {
 }
 
 $content .= '
-    <h1><span class="fa fa-money"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-money"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     '.$alert.'
 

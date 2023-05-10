@@ -1,6 +1,6 @@
 <?php
 
-$_PAGE_TITLE = 'Éditeurs';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Éditeurs');
 
 $letters = '<p class="center">';
 for ($L = "A"; $L != "AA"; $L++) {
@@ -43,7 +43,7 @@ while ($x = $publishers->fetch()) {
 
 $_ECHO .= '
     <h2 class="floatR"><a href="/pages/collections">Collections</a></h2>
-    <h2>'.$_PAGE_TITLE.'</h2>
+    <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
     <form class="center" method="get">
       <fieldset>
         <p>Rechercher un &eacute;diteur :

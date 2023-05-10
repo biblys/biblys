@@ -20,9 +20,9 @@ if (!$useOldController) {
     return new RedirectResponse("/cycle/".$cycle->get("url"), 301);
 }
 
-$_PAGE_TITLE = 'La série &laquo; '.$cycle->get('name').' &raquo;';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('La série &laquo; '.$cycle->get('name').' &raquo;');
 
-$_ECHO .= '<h2>'.$_PAGE_TITLE.'</h2>';
+$_ECHO .= '<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>';
 
 if ($cycle->has('desc')) {
     $_ECHO .= '<p>'.$cycle->get('desc').'</p>';

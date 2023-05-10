@@ -3,11 +3,11 @@
     $lm = new ListeManager();
     $sm = new StockManager();
 
-    $_PAGE_TITLE = 'Modifier les exemplaires de la liste';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier les exemplaires de la liste');
 
     if (!isset($_GET['list_id'])) {
         $_ECHO .= '
-            <h1>'.$_PAGE_TITLE.'</h1>
+            <h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
             <form>
                 <label>Liste :</label>
                 <input type="number" name="list_id" class="mini" required>
@@ -117,7 +117,7 @@
             }
 
             $_ECHO .= '
-                <h1>'.$_PAGE_TITLE.'</h1>
+                <h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
                 <h2>Liste : <a href="/list/'.$list->get('url').'">'.$list->get('title').'</a> ('.count($stocks).' exemplaires)</h2>
             
                 '.(isset($_GET['updated']) ? '<p class="success">'.$_GET['updated'].' exemplaires modifiés.</p>' : null).'

@@ -2,7 +2,7 @@
 
     use Biblys\Isbn\Isbn as Isbn;
 
-    $_PAGE_TITLE = 'Codes ISBN';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Codes ISBN');
 
     $nexts = null;
     $tbody = null;

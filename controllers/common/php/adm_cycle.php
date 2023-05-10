@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$_PAGE_TITLE = 'Modifier '.$cycle->get('name');
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier '.$cycle->get('name'));
 
 $content = '
     <h2>Modifier <a href="/serie/'.$cycle->get('url').'">'.$cycle->get('name').'</a></h2>

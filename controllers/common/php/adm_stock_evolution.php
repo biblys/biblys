@@ -1,6 +1,6 @@
 <?php
 
-	$_PAGE_TITLE = "Évolution des stocks";
+	\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle("Évolution des stocks");
 
 	if (!isset($_GET['date'])) $_GET['date'] = (date('Y')-1).'-01-01';
 	if (!isset($_GET['period'])) $_GET['period'] = 'month';
@@ -104,7 +104,7 @@
 	if ($_GET['period'] == 'day') $ps['day'] = ' selected';
 
 	$_ECHO .= '
-		<h2><img src="/common/icons/adm_stock_status.svg" width=32 alt="'.$_PAGE_TITLE.'"> '.$_PAGE_TITLE.'</h2>
+		<h2><img src="/common/icons/adm_stock_status.svg" width=32 alt="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'"> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 
 		<form class="fieldset">
 			<fieldset>

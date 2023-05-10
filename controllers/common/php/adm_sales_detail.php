@@ -1,6 +1,6 @@
 <?php
 
-$_PAGE_TITLE = 'Ventes détaillées';
+\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Ventes détaillées');
 
 /* RACCOURCIS */
 
@@ -125,7 +125,7 @@ $stock->closeCursor();
 
 $_ECHO .= '
         <a href="/pages/adm_orders_shop" class="floatR">Revenir à l\'interface actuelle</a>
-        <h1><span class="fa fa-line-chart"></span> '.$_PAGE_TITLE.'</h1>
+        <h1><span class="fa fa-line-chart"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <p>
             <label for="d">Raccourcis :</label>

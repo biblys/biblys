@@ -9,7 +9,7 @@
 	
 	if (isset($_GET['url']) && $b = $_B->get(array('bookshop_url' => $_GET['url'])))
 	{
-		$_PAGE_TITLE = $b['bookshop_name'];
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($b['bookshop_name']);
 		
 		if (auth('admin'))
 		{
@@ -53,7 +53,7 @@
 		
 		$_ECHO .= '
 			'.$alert.'
-			<h1>'.$_PAGE_TITLE.'</h1>
+			<h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 			
 			<div class="biblys-col-6">'.$b->get('desc').'</div><div class="biblys-col-6">'.$coords.'</div>
 			

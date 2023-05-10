@@ -4,7 +4,7 @@ $am = new ArticleManager();
 $sm = new SupplierManager();
 $cm = new CollectionManager();
 
-$_PAGE_TITLE = 'Réassort';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Réassort');
 
 $suppliers = $sm->getAll(array(), array('order' => 'supplier_name'));
 $suppliers = array_map(function($supplier) {

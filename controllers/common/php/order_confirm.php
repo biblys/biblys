@@ -2,7 +2,7 @@
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 
-$_PAGE_TITLE = 'Confirmation';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Confirmation');
 
 $om = new OrderManager();
 $orderId = $request->query->get('id');

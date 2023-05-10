@@ -8,7 +8,7 @@
     $stocks = $sm->getAll($stock_query, array('limit' => 100));
     $done = 0;
 
-    $_PAGE_TITLE = '('.$count.') Recalculer la TVA des exemplaires en stock';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('('.$count.') Recalculer la TVA des exemplaires en stock');
 
     $rows = array_map(function($stock) {
 
@@ -50,7 +50,7 @@
     }, $stocks);
 
     $_ECHO .= '
-        <h2>'.$_PAGE_TITLE.'</h2>
+        <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 
         <table class="table">
             <thead>

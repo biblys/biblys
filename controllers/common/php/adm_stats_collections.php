@@ -1,6 +1,6 @@
 <?php
 
-    $_PAGE_TITLE = 'Chiffre d\'affaires par collections';
+    \Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Chiffre d\'affaires par collections');
 
     $list = NULL;
     
@@ -45,7 +45,7 @@
     
     $_ECHO .= '
         
-        <h2><img src="/common/icons/adm_stats_collections.svg" width=32 alt="'.$_PAGE_TITLE.'"> '.$_PAGE_TITLE.'</h2>
+        <h2><img src="/common/icons/adm_stats_collections.svg" width=32 alt="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'"> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
         
         <form>
 			<fieldset>

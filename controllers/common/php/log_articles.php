@@ -95,9 +95,9 @@ while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
         ';
 }
 
-$_PAGE_TITLE = 'Catalogue '.$publisher->getName();
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Catalogue '.$publisher->getName());
 
-$content .= '<h1><img src="/common/icons/pub_articles.svg" alt="'.$_PAGE_TITLE.'" width=32> '.$_PAGE_TITLE.'</h1>';
+$content .= '<h1><img src="/common/icons/pub_articles.svg" alt="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'" width=32> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>';
 
 
 foreach ($L as $k => $v) {

@@ -1,6 +1,6 @@
 <?php
 
-$_PAGE_TITLE = 'Fournisseurs';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Fournisseurs');
 
 $alerts = null;
 if (isset($_GET['deleted'])) {

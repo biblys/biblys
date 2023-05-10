@@ -13,7 +13,7 @@
 		if ($s = $sm->get(array('signing_id' => $_GET['id'])))
 		{
             if (getLegacyVisitor()->isPublisher() && $s->get('publisher_id') != getLegacyVisitor()->getCurrentRight()->get('publisher_id') && !getLegacyVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
-            $_PAGE_TITLE = 'Modifier la dédicace';
+            \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier la dédicace');
             $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-o"></i> Supprimer</button>';
 		}
 		else trigger_error('Cette dédicace n\'existe pas.', E_USER_ERROR);
@@ -22,7 +22,7 @@
 	// Create a new signing
 	elseif ($_SERVER['REQUEST_METHOD'] != 'POST')
 	{	
-		$_PAGE_TITLE = 'Ajouter une dédicace';
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ajouter une dédicace');
         $s = new Signing(array());
         if (getLegacyVisitor()->isAdmin()) trigger_error("Vous ne pouvez pas créer de dédicace en tant qu'administrateur, connectez-vous en tant qu'éditeur.");
 	}
@@ -110,7 +110,7 @@
         }
         
 		$_ECHO .= '
-			<h1><i class="fa fa-pencil"></i> '.$_PAGE_TITLE.'</h1>
+			<h1><i class="fa fa-pencil"></i> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
             <p>'.$buttons.'</p>
 
 			<form id="signing" method="post" class="form-horizontal fieldset">

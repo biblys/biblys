@@ -3,12 +3,12 @@
     $lm = new ListeManager();
     $sm = new StockManager();
 
-    $_PAGE_TITLE = 'Dupliquer les exemplaires';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Dupliquer les exemplaires');
 
     if (!isset($_GET['list_id']))
     {
         $_ECHO .= '
-            <h1>'.$_PAGE_TITLE.'</h1>
+            <h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
             <form>
                 <label>Liste à dupliquer :</label>
                 <input type="number" name="list_id" class="mini" required>
@@ -93,7 +93,7 @@
             }
             
             $_ECHO .= '
-                <h1>'.$_PAGE_TITLE.'</h1>
+                <h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
                 <h2>Liste : '.$list->get('title').' ('.count($stocks).' exemplaires)</h2>
             
                 '.(isset($_GET['duplicated']) ? '<p class="success">'.$_GET['duplicated'].' exemplaires dupliqués</p>' : null).'

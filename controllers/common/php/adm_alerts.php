@@ -3,7 +3,7 @@
 use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\Response;
 
-$_PAGE_TITLE = 'Livres les plus recherchés';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Livres les plus recherchés');
 
 /** @var PDO $_SQL */
 $alerts = $_SQL->query("SELECT COUNT(`alert_id`) AS `num`, `article_title`, `article_url`, `article_authors`, `article_collection`, `article_number`, `article_publisher`
@@ -39,7 +39,7 @@ if (!$currentSite->hasOptionEnabled("alerts")) {
 }
 
 $content = '
-    <h1><span class="fa fa-bell"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-bell"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     '.$disabledAlertsWarning.'
 

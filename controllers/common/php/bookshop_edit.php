@@ -12,7 +12,7 @@
 	{
 		if ($b = $_B->get(array('bookshop_id' => $_GET['id'])))
 		{
-			$_PAGE_TITLE = 'Modifier <a href="/librairie/'.$b['bookshop_url'].'">'.$b['bookshop_name'].'</a>';
+			\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier <a href="/librairie/'.$b['bookshop_url'].'">'.$b['bookshop_name'].'</a>');
 		}
 		else trigger_error('Cette librairie n\'existe pas.', E_USER_ERROR);
 	}
@@ -20,7 +20,7 @@
 	// Create a new bookshop
 	else
 	{	
-		$_PAGE_TITLE = 'Créer une nouvelle librairie';
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Créer une nouvelle librairie');
         $b = new Bookshop(array());
 	}
 
@@ -38,7 +38,7 @@
 		{
 			if ($b = $_B->get(array('bookshop_id' => $_POST['bookshop_id'])))
 			{
-				$_PAGE_TITLE = 'Modifier '.$b['bookshop_name'];
+				\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier '.$b['bookshop_name']);
 			}
 			else trigger_error('Cette librairie n\'existe pas.', E_USER_ERROR);
 		}
@@ -77,7 +77,7 @@
         } else $managers = null;
 		
 		$_ECHO .= '
-			<h2>'.$_PAGE_TITLE.'</h2>
+			<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 			
 			<form method="post" class="fieldset" enctype="multipart/form-data" data-uploading=0>
 				<fieldset>

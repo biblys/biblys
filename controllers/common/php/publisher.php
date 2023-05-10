@@ -28,7 +28,7 @@ if (!$publisher) {
         ';
     }
 
-    $_PAGE_TITLE = $p["publisher_name"];
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($p["publisher_name"]);
 
     $cm = new CollectionManager();
     $collections = $cm->getAll(['publisher_id' => $publisher->get('id')]);
@@ -39,7 +39,7 @@ if (!$publisher) {
 
     $_ECHO .= '
         <article class="publisher">
-            <h2>'.$_PAGE_TITLE.'</h2>
+            <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
             '.($publisher->has('desc') ? $publisher->get('desc') : null).'
         </article>
     '.$colls;

@@ -57,7 +57,7 @@ while ($p = $rights->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $content = '
-    <h1><span class="fa fa-users"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-users"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     '.($message ?? null).'<br>
 

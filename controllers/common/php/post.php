@@ -60,7 +60,7 @@ if (getLegacyVisitor()->isAdmin()) {
         </div>
     ';
 }
-$_PAGE_TITLE = $p["post_title"];
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($p["post_title"]);
 
 if(!empty($p["category_name"])) $dans = 'dans la rubrique <a href="/blog/'.$p["category_url"].'/">'.$p["category_name"].'</a>.'; else $dans = null;
 if(!empty($p["user_screen_name"])) $par = "par ".$p["user_screen_name"]; else $par = null;

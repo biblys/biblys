@@ -13,7 +13,7 @@
 		if ($getLibrary = $_L->get(array('library_id' => $_GET['id'])))
 		{
 			$l = $getLibrary;
-			$_PAGE_TITLE = 'Modifier <a href="/bibliotheque/'.$l['library_url'].'">'.$l['library_name'].'</a>';
+			\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier <a href="/bibliotheque/'.$l['library_url'].'">'.$l['library_name'].'</a>');
 		}
 		else trigger_error('Cette bibliothèque n\'existe pas.', E_USER_ERROR);
 	}
@@ -21,7 +21,7 @@
 	// Create a new library
 	else
 	{	
-		$_PAGE_TITLE = 'Créer une nouvelle bibliothèque';
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Créer une nouvelle bibliothèque');
 	}
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -76,7 +76,7 @@
         } else $managers = null;
 		
 		$_ECHO .= '
-			<h2>'.$_PAGE_TITLE.'</h2>
+			<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 			
 			<form method="post" class="fieldset" enctype="multipart/form-data" data-uploading=0>
 				<fieldset>

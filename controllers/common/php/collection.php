@@ -19,10 +19,10 @@ if ($collection) {
         return new RedirectResponse('/collection/'.$c['collection_url'], 301);
     }
 
-    $_PAGE_TITLE = 'Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;');
 
     if ($_SITE->has("publisher")) {
-        $_PAGE_TITLE .= ' ('.$c["collection_publisher"].')';
+        \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() .= ' ('.$c["collection_publisher"].')';
     }
 
     $content .= '

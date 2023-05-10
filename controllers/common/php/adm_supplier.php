@@ -2,7 +2,7 @@
 
 $sm = new SupplierManager();
 
-$_PAGE_TITLE = 'Nouveau fournisseur';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Nouveau fournisseur');
 
 if (isset($_GET['delete']))
 {
@@ -62,7 +62,7 @@ if (isset($_GET['id'])) {
 		trigger_error('Fournisseur inexistant.');
 	}
 
-	$_PAGE_TITLE = 'Modifier le fournisseur '.$supplier->get('name');
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier le fournisseur '.$supplier->get('name'));
 }
 
 $alerts = null;
@@ -76,7 +76,7 @@ if (isset($_GET["articles_to_update"])) {
 }
 
 $_ECHO .='
-	<h1><span class="fa fa-truck"></span> '.$_PAGE_TITLE.'</h1>
+	<h1><span class="fa fa-truck"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
 	<div class="admin">
 		<p><a href="/pages/adm_suppliers">Fournisseurs</a></p>

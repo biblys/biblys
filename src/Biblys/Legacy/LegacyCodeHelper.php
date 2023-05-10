@@ -28,14 +28,14 @@ class LegacyCodeHelper
 
     /**
      * @throws Exception
-     * @deprecated Using getLegacyGlobalPageTitle is deprecated. Use Twig blog "title" or $request->attributes->set("page_title", …) instead.
+     * @deprecated Using setGlobalPageTitle is deprecated. Use Twig blog "title" or $request->attributes->set("page_title", …) instead.
      */
-    public static function setLegacyGlobalPageTitle($pageTitle): void
+    public static function setGlobalPageTitle($pageTitle): void
     {
         trigger_deprecation(
             "biblys/biblys",
             "2.69.0",
-            "Using setLegacyGlobalPageTitle is deprecated. Use Twig blog \"title\" or \$request->attributes->set(\"page_title\", …) instead.",
+            "Using setGlobalPageTitle is deprecated. Use Twig blog \"title\" or \$request->attributes->set(\"page_title\", …) instead.",
         );
 
         $GLOBALS["LEGACY_PAGE_TITLE"] = $pageTitle;
@@ -43,14 +43,15 @@ class LegacyCodeHelper
 
     /**
      * @throws Exception
-     * @deprecated Using getLegacyGlobalPageTitle is deprecated. Use Twig blog "title" or $request->attributes->set("page_title", …) instead.
+     * @deprecated Using getGlobalPageTitle is deprecated. Use Twig blog "title" or
+     * $request->attributes->set("page_title", …) instead.
      */
-    public static function getLegacyGlobalPageTitle(): ?string
+    public static function getGlobalPageTitle(): ?string
     {
         trigger_deprecation(
             "biblys/biblys",
             "2.69.0",
-            "Using getLegacyGlobalPageTitle is deprecated. Use Twig blog \"title\" or \$request->attributes->get(\"page_title\", …) instead.",
+            "Using getGlobalPageTitle is deprecated. Use Twig blog \"title\" or \$request->attributes->get(\"page_title\", …) instead.",
         );
 
         if (isset($GLOBALS["LEGACY_PAGE_TITLE"])) {

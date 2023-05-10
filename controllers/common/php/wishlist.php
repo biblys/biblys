@@ -22,7 +22,7 @@ if (!$wishlist->has('public')) {
     throw new Exception('Cette liste d\'envies n\'est pas publique.');
 }
 
-$_PAGE_TITLE = $wishlist->get('name');
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($wishlist->get('name'));
 
 $wishes = $user->getWishes();
 
@@ -82,7 +82,7 @@ foreach ($wishes as $w) {
 
 $_OPENGRAPH = '
     <meta property="og:type" content="website">
-    <meta property="og:title" content="'.$_PAGE_TITLE.'">
+    <meta property="og:title" content="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'">
     <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'">
     <meta property="og:description" content="Offrez un livre à '.$user->get('screen_name').' en soutenant l\'édition et la librairie indépendante !">
     <meta property="og:locale" content="fr_FR">
@@ -92,7 +92,7 @@ shuffle($og_images);
 if (!empty($og_images)) $_OPENGRAPH .= '<meta property="og:image" content="'.$og_images[0].'">';
 
 $content = '
-    <h2>'.$_PAGE_TITLE.'</h2>
+    <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
     <p>Liste d\'envies de '.$user->get('screen_name').'</p>
     
     <table class="biblys-table">

@@ -1,6 +1,6 @@
 <?php
 
-	$_PAGE_TITLE = 'Parrainages';
+	\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Parrainages');
 
 	if (!empty($_POST))
 	{
@@ -80,7 +80,7 @@
 	}
 	
 	$_ECHO .= '
-		<h2>'.$_PAGE_TITLE.'</h2>
+		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 		
 		'.$message.$error.'
 		

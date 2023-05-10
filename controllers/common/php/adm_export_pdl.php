@@ -22,9 +22,9 @@
 	$ftp_server = 'ftp.titelive.com';
 	$stream_context = stream_context_create(array('ftp' => array('overwrite' => true))); 
 
-	$_PAGE_TITLE = 'Exportation Place des libraires';
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Exportation Place des libraires');
 	
-	$_ECHO .= '<h2>'.$_PAGE_TITLE.'</h2>';
+	$_ECHO .= '<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>';
 	
 	foreach ($sites as $site) {
 	

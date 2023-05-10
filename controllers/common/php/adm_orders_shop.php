@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $TVA = array();
 
-$_PAGE_TITLE = 'Ventes';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ventes');
 
 $dates = null;
 $orders = EntityManager::prepareAndExecute(

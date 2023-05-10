@@ -1,6 +1,6 @@
 <?php
 
-$_PAGE_TITLE = 'Stock détaillé';
+\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Stock détaillé');
 
 // REQUETE DES STOCK
 
@@ -100,7 +100,7 @@ while ($s = $stock->fetch(PDO::FETCH_ASSOC)) {
 $stock->closeCursor();
 
 $_ECHO .= '
-    <h1><span class="fa fa-line-chart"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-line-chart"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     <form class="fieldset">
         <fieldset>

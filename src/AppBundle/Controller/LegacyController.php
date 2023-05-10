@@ -36,7 +36,7 @@ class LegacyController extends Controller
         UrlGenerator $urlGenerator,
     ): Response
     {
-        global $_SITE, $_ECHO, $_SQL, $_PAGE_TITLE, $urlgenerator;
+        global $_SITE, $_ECHO, $_SQL, $urlgenerator;
 
         $_PAGE = $request->get('page', 'home');
 

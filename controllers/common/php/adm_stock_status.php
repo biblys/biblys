@@ -4,7 +4,7 @@
 	if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 	if (empty($_GET["condition"])) $_GET["condition"] = 'all';
 
-	$_PAGE_TITLE = 'Extrait d\'inventaire au '._date($_GET['date'], 'j f Y');
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Extrait d\'inventaire au '._date($_GET['date'], 'j f Y'));
 
 	// REQUETE DES STOCKS
 
@@ -368,7 +368,7 @@
 
 	$_ECHO .= '
 
-		<h1><span class="fa fa-bar-chart"></span> '.$_PAGE_TITLE.'</h1>
+		<h1><span class="fa fa-bar-chart"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 		<form class="fieldset hidden-print">
 			<fieldset>
 				<legend>Options</legend>

@@ -166,15 +166,15 @@ if (!$input) {
 	}
 
 	if(!empty($terms)) {
-		$_PAGE_TITLE = 'Recherche de &laquo;&nbsp;'.trim(htmlspecialchars($terms)).'&nbsp;&raquo;'.$filters;
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Recherche de &laquo;&nbsp;'.trim(htmlspecialchars($terms)).'&nbsp;&raquo;'.$filters);
 	} else {
 		if(!isset($type)) $type = 'Livres';
-		$_PAGE_TITLE = $type.' '.$filters;
+		\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($type.' '.$filters);
 	}
 
 	$content .= '
 		<p class="floatR"><a href="https://www.biblys.fr/pages/doc_mots-cles-magiques">Recherche avancée</a></p>
-		<h2>'.$_PAGE_TITLE.'</h2>
+		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 	';
 
 	$_SEARCH_TERMS = $_GET['q'];

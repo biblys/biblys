@@ -22,10 +22,10 @@
 		$message = '<p class="error">'.htmlentities($_GET['error']).'</p>';
 	}
 
-    $_PAGE_TITLE = 'Ma biblioth&egrave;que numérique';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ma biblioth&egrave;que numérique');
 
     $_ECHO .= '
-		<h2>'.$_PAGE_TITLE.'</h2>
+		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 		'.$message.'
 		<p>Ci-dessous, vous retrouverez la liste de tous les livres numériques achetés sur notre plateforme. Vous pouvez les télécharger &agrave; volonté et dans le format qui vous convient.</p>
 		<p>Besoin d\'aide ? Découvrez <a href="http://www.biblys.fr/pages/doc_ebooks" target="_blank">comment télécharger et lire des livres numériques</a>.</p>

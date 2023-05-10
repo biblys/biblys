@@ -1,6 +1,6 @@
 <?php
 
-    $_PAGE_TITLE = 'Stock éditeur';
+    \Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Stock éditeur');
 
     $am = new ArticleManager();
     $sm = new StockManager();
@@ -30,7 +30,7 @@
     }
     
     $_ECHO .= '
-        <h1>'.$_PAGE_TITLE.'</h1>
+        <h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
         <table class="sortable admin-table publisher_stock" cellpadding=0 cellspacing=0>
             <thead class="pointer">
                 <tr>

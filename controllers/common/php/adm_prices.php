@@ -2,7 +2,7 @@
 
     $pricegridId = $request->query->get('pricegrid_id');
 
-    $_PAGE_TITLE = 'Grille de prix n&deg; '.$pricegridId;
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Grille de prix n&deg; '.$pricegridId);
 
     $_ECHO .= '<h2>Grille de prix <a href="/pages/adm_prices?pricegrid_id='.$pricegridId.'">n&deg;'.$pricegridId.'</a></h2>';
 

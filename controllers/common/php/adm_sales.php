@@ -3,7 +3,7 @@
 use Biblys\Service\Config;
 use Symfony\Component\HttpFoundation\Response;
 
-$_PAGE_TITLE = 'Ventes';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ventes');
 
 $_QUERY = null;
 
@@ -115,7 +115,7 @@ $orders->closeCursor();
 
 $content = '
         <a href="/pages/adm_orders_shop" class="floatR">Revenir à l\'interface actuelle</a>
-        <h1><span class="fa fa-line-chart"></span> '.$_PAGE_TITLE.'</h1>
+        <h1><span class="fa fa-line-chart"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <p>
             <label for="d">Raccourcis :</label>

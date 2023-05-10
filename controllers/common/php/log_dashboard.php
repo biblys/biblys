@@ -28,8 +28,7 @@ $browser = new Browser();
 if ($browser->isUpToDate()) $browser_alert = null;
 else $browser_alert = $browser->getUpdateAlert();
 
-$_PAGE_TITLE = 'Tableau de bord';
-$_PAGE_TITLE_HTML = 'Tableau de bord';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Tableau de bord');
 
 /* USER RIGHTS */
 
@@ -118,7 +117,6 @@ if (getLegacyVisitor()->isBookshop()) {
 if (getLegacyVisitor()->isLibrary()) {
     $library = $_SQL->query('SELECT `library_name` FROM `libraries` WHERE `library_id` = ' . $right->get('library')->get('id'));
     if ($b = $library->fetch(PDO::FETCH_ASSOC)) {
-//			$_PAGE_TITLE_HTML .= ' '.$b['library_name'];
         $items["Bibliothèque"][] = array('Fiche d\'identité', '/pages/library_edit', 'fa-list-alt');
         $items["Bibliothèque"][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
 
@@ -160,7 +158,7 @@ foreach ($items as $k => $v) {
 
 $content = '
         ' . $rights_select . '
-    <h1><i class="fa fa-dashboard"></i> ' . $_PAGE_TITLE_HTML . '</h1>
+    <h1><i class="fa fa-dashboard"></i> ' . \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() . '</h1>
 
     ' . $browser_alert . '
 

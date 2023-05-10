@@ -13,9 +13,9 @@
 		';
 	}
 
-	$_PAGE_TITLE = '&Eacute;diteurs sans fournisseur';
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('&Eacute;diteurs sans fournisseur');
 	$_ECHO .= '
-		<h2>'.$_PAGE_TITLE.'</h2>
+		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 		
 		<div class="admin">
 			<p><a href="/pages/adm_supplier">Nouveau fournisseur</a></p>

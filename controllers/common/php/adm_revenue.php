@@ -377,7 +377,7 @@ if (isset($ra))
 
 $content = '
 
-        <h1><span class="fa fa-money"></span> '.$_PAGE_TITLE.'</h1>
+        <h1><span class="fa fa-money"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <p>
             <label for="d">Raccourcis :</label>

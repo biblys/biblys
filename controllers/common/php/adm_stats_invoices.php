@@ -3,7 +3,7 @@
 	error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors','On');
 
-	$_PAGE_TITLE = 'R&eacute;sultats par facture';
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('R&eacute;sultats par facture');
 
 	$stock = $_SQL->prepare('SELECT
 		`stock_invoice`, `stock_selling_price`, `stock_selling_date`, `stock_return_date`
@@ -62,7 +62,7 @@
 
 
 	$_ECHO .= '
-		<h1><span class="fa fa-file"></span> '.$_PAGE_TITLE.'</h1>
+		<h1><span class="fa fa-file"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
 		<table class="admin-table">
 			<thead>

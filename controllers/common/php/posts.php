@@ -4,7 +4,7 @@ use Biblys\Service\Config;
 
 $um = new UserManager();
 
-$_PAGE_TITLE = 'Le Blog';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Le Blog');
 
 $pp = null;
 
@@ -29,7 +29,7 @@ if (isset($_GET["category"]))
     $cm = new CategoryManager();
     if ($c = $cm->get(array('category_url' => $_GET['category']))) {
         $cat_req = " AND `posts`.`category_id` = '".$c->get('id')."'";
-        $_PAGE_TITLE = $c->get('name');
+        \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($c->get('name'));
 
         if (!$use_old_controller) {
             redirect($urlgenerator->generate('category_show', ['slug' => $request->query->get('category')]));
@@ -44,7 +44,7 @@ if (isset($_GET["author"]))
     if ($u = $um->get(array('user_slug' => $_GET['author'])))
     {
         $aut_req = " AND `posts`.`user_id` = '".$u->get('id')."'";
-        if (isset($_PAGE_TITLE)) $_PAGE_TITLE .= ' de '.$u->get('screen_name');
+        if (isset(\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle())) \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() .= ' de '.$u->get('screen_name');
     }
 }
 
@@ -52,7 +52,7 @@ if (!$use_old_controller) {
     redirect($urlgenerator->generate('post_index'));
 }
 
-$_ECHO .= '<h1>'.$_PAGE_TITLE.'</h1>';
+$_ECHO .= '<h1>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>';
 
 // Requête
 $posts_query = "SELECT `post_id`, `post_title`, `post_url`, `post_content`, `post_date`, `post_illustration_legend`,

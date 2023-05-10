@@ -51,7 +51,7 @@ if ($request->getMethod() === "POST") {
 
 $table = null;
 
-$_PAGE_TITLE = 'Mes alertes Biblys';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Mes alertes Biblys');
 
 $content = null;
 
@@ -119,7 +119,7 @@ while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
 $content .= '
     <h2>
         <span class="fa fa-bell-o"></span>
-        '.$_PAGE_TITLE.'
+        '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'
     </h2>
 
     <p><strong>Ci-dessous, la liste des alertes que vous avez créées.</strong></p>

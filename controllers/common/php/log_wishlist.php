@@ -23,10 +23,10 @@
         
     }
 
-    $_PAGE_TITLE = "Modifier &laquo;&nbsp;".$wishlist->get('name')."&nbsp;&raquo;";
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle("Modifier &laquo;&nbsp;".$wishlist->get('name')."&nbsp;&raquo;");
 
     $_ECHO .= '
-        <h2>'.$_PAGE_TITLE.'</h2>
+        <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
     
         <form class="fieldset" method="post">
             <fieldset>

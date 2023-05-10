@@ -5,7 +5,7 @@
 	elseif (getLegacyVisitor()->isPublisher()) $mode = 'publisher';
 	else trigger_error('Accès non autorisé pour '.getLegacyVisitor()->get('user_email'));
     
-    $_PAGE_TITLE = 'Gestion des dédicaces';
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Gestion des dédicaces');
     
     $sm = new SigningManager();
     
@@ -39,7 +39,7 @@
     if (isset($_GET['success'])) $alert = '<p class="success">'.$_GET['success'].'</p><br>';
     
     $_ECHO .= '
-        <h1><i class="fa fa-pencil"></i> '.$_PAGE_TITLE.'</h1>
+        <h1><i class="fa fa-pencil"></i> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <form action="/pages/export_to_csv" method="post">
 			<fieldset>

@@ -2,7 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Response;
 
-$_PAGE_TITLE = 'Clients';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Clients');
 
 if (!isset($_GET['q'])) $_GET['q'] = null;
 
@@ -43,7 +43,7 @@ $customers = EntityManager::prepareAndExecute($query, $params);
 
 
 $content = '
-    <h1><span class="fa fa-address-card"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-address-card"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
     <p class="buttonset">
         <a class="btn btn-primary" href="/pages/adm_customer"><i class="fa fa-user"></i> Nouveau client</a>

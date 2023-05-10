@@ -3,7 +3,7 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-$_PAGE_TITLE = 'Ventes par article en stock';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Ventes par article en stock');
 
 $content = null;
 
@@ -106,7 +106,7 @@ $stock->closeCursor();
 
 $content = '
         <a href="/pages/adm_orders_shop">Revenir à l\'interface actuelle</a>
-        <h1><span class="fa fa-book"></span> '.$_PAGE_TITLE.'</h1>
+        <h1><span class="fa fa-book"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <p>
             <label for="d">Raccourcis :</label>

@@ -325,7 +325,7 @@ if (!empty($_GET['id'])) {
         <p><a href="/pages/adm_stock?del=' . $s['stock_id'] . '" data-confirm="Voulez-vous vraiment SUPPRIMER cet exemplaire ?">supprimer</a></p>
     ';
 } elseif (!empty($copyId)) {
-    $_PAGE_TITLE = 'Dupliquer l\'exemplaire n&deg; ' . $copyId;
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Dupliquer l\'exemplaire n&deg; ' . $copyId);
     $content .= '<h1><span class="fa fa-copy"></span> Dupliquer l\'exemplaire n<sup>o</sup> ' . $_GET['copy'] . '</h1>';
     $stock = $sm->getById($copyId);
     if (!$stock) {

@@ -1,6 +1,6 @@
 <?php
 
-	$_PAGE_TITLE = $_GET["dir"].' Gestion des images';
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($_GET["dir"].' Gestion des images');
 	$_ECHO .= '
 		<h2>Gestion des images</h2>
 		

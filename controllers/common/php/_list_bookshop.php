@@ -478,8 +478,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
     $_OPENGRAPH = '
         <meta property="og:type" content="website"/>
-        <meta property="og:title" content="'.$_PAGE_TITLE.'"/>
-        <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
+        <meta property="og:title" content="'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'" <meta property="og:url" content="http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"].'"/>
         <meta property="og:description" content="'.strip_tags(truncate(strip_tags($_og_description), '500', '...', true)).'"/>
         <meta property="og:site_name" content="'.getLegacyCurrentSite()["site_name"].'"/>
     '.$_og_image;

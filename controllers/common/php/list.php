@@ -13,10 +13,10 @@ $lm = new ListeManager();
 $sm = new StockManager();
 $linm = new LinkManager();
 
-$_PAGE_TITLE = 'Listes';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Listes');
 
 $content = '
-    <h1><span class="fa fa-list"></span> '.$_PAGE_TITLE.'</h1>
+    <h1><span class="fa fa-list"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 ';
 
 /** @var Request $request */
@@ -161,9 +161,9 @@ if ($list) {
         return new RedirectResponse('/list/'.$l['list_url'].'?returned=1');
     }
 
-    $_PAGE_TITLE = $list->get('title');
+    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle($list->get('title'));
     $content .= '
-                <h2><a href="/list/'.$l['list_url'].'">'.$_PAGE_TITLE.'</a></h2>
+                <h2><a href="/list/'.$l['list_url'].'">'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</a></h2>
 
                 <label for="list">Ajouter &agrave; la liste :</label>
                 <input 

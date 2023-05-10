@@ -7,7 +7,7 @@ if ($active_stock) {
     $active_stock_query = " AND `stock_stockage` IN (".$active_stock.")";
 }
 
-$_PAGE_TITLE = 'En promotion';
+\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('En promotion');
 
 $articles = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`, `stock_id`, `stock_selling_price`, `stock_selling_price_saved`
     FROM `articles`
@@ -32,7 +32,7 @@ while($l = $articles->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $_ECHO .= '
-    <h2>'.$_PAGE_TITLE.'</h2>
+    <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 
     <section class="center">
         '.share_buttons($_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]).'

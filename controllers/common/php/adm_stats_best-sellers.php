@@ -1,6 +1,6 @@
 <?php
 
-$_PAGE_TITLE = 'Best-sellers';
+\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Best-sellers');
 
 $list = null;
 $query = null;
@@ -53,7 +53,7 @@ if (getLegacyCurrentSite()['site_tva']) $HT = 'HT'; else $HT = 'TTC';
 
 $_ECHO .= '
 
-        <h1><span class="fa fa-sort-amount-desc"></span> '.$_PAGE_TITLE.'</h1>
+        <h1><span class="fa fa-sort-amount-desc"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
 
         <form class="fieldset">
             <fieldset>

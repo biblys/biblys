@@ -1,6 +1,6 @@
 <?php
 
-	$_PAGE_TITLE = 'Mes achats';
+	\Biblys\Legacy\LegacyCodeHelper::setLegacyGlobalPageTitle('Mes achats');
 
 	$req = "SELECT `stock_id`, `stock_selling_date`,
 			`article_id`, `article_title`, `article_url`, `article_authors`, `article_publisher`, `article_ean`, `lang_iso_639-2`
@@ -45,7 +45,7 @@
 	}
 	
 	$_ECHO = '
-		<h2>'.$_PAGE_TITLE.'</h2>
+		<h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
 		
 		<form action="/pages/export_to_csv" method="post">
 			<fieldset class="center">
