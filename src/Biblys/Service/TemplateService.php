@@ -3,10 +3,9 @@
 namespace Biblys\Service;
 
 use Biblys\Isbn\Isbn;
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Legacy\TemplateGlobal\Site;
 use Cart;
 use Exception;
-use Framework\Controller;
 use Framework\TemplateLoader;
 use Media;
 use Model\Article;
@@ -223,7 +222,7 @@ class TemplateService
             "request" => $request,
             "user" => new Visitor($request),
             "session" => $session,
-            "site" => LegacyCodeHelper::getLegacyCurrentSite(),
+            "site" => new Site($config),
             "trackers" => $trackers,
         ];
         $twig->addGlobal('app', $app);
