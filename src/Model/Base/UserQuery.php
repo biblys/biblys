@@ -163,7 +163,27 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithStock() Adds a RIGHT JOIN clause and with to the query using the Stock relation
  * @method     ChildUserQuery innerJoinWithStock() Adds a INNER JOIN clause and with to the query using the Stock relation
  *
- * @method     \Model\SiteQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildUserQuery leftJoinWish($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wish relation
+ * @method     ChildUserQuery rightJoinWish($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wish relation
+ * @method     ChildUserQuery innerJoinWish($relationAlias = null) Adds a INNER JOIN clause to the query using the Wish relation
+ *
+ * @method     ChildUserQuery joinWithWish($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wish relation
+ *
+ * @method     ChildUserQuery leftJoinWithWish() Adds a LEFT JOIN clause and with to the query using the Wish relation
+ * @method     ChildUserQuery rightJoinWithWish() Adds a RIGHT JOIN clause and with to the query using the Wish relation
+ * @method     ChildUserQuery innerJoinWithWish() Adds a INNER JOIN clause and with to the query using the Wish relation
+ *
+ * @method     ChildUserQuery leftJoinWishlist($relationAlias = null) Adds a LEFT JOIN clause to the query using the Wishlist relation
+ * @method     ChildUserQuery rightJoinWishlist($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Wishlist relation
+ * @method     ChildUserQuery innerJoinWishlist($relationAlias = null) Adds a INNER JOIN clause to the query using the Wishlist relation
+ *
+ * @method     ChildUserQuery joinWithWishlist($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Wishlist relation
+ *
+ * @method     ChildUserQuery leftJoinWithWishlist() Adds a LEFT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
+ * @method     ChildUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
+ *
+ * @method     \Model\SiteQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -2832,6 +2852,352 @@ abstract class UserQuery extends ModelCriteria
     {
         /** @var $q \Model\StockQuery */
         $q = $this->useInQuery('Stock', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Wish object
+     *
+     * @param \Model\Wish|ObjectCollection $wish the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByWish($wish, ?string $comparison = null)
+    {
+        if ($wish instanceof \Model\Wish) {
+            $this
+                ->addUsingAlias(UserTableMap::COL_ID, $wish->getUserId(), $comparison);
+
+            return $this;
+        } elseif ($wish instanceof ObjectCollection) {
+            $this
+                ->useWishQuery()
+                ->filterByPrimaryKeys($wish->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByWish() only accepts arguments of type \Model\Wish or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Wish relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinWish(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Wish');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Wish');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Wish relation Wish object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\WishQuery A secondary query class using the current class as primary query
+     */
+    public function useWishQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinWish($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Wish', '\Model\WishQuery');
+    }
+
+    /**
+     * Use the Wish relation Wish object
+     *
+     * @param callable(\Model\WishQuery):\Model\WishQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withWishQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useWishQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Wish table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\WishQuery The inner query object of the EXISTS statement
+     */
+    public function useWishExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\WishQuery */
+        $q = $this->useExistsQuery('Wish', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wish table for a NOT EXISTS query.
+     *
+     * @see useWishExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useWishNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishQuery */
+        $q = $this->useExistsQuery('Wish', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wish table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\WishQuery The inner query object of the IN statement
+     */
+    public function useInWishQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\WishQuery */
+        $q = $this->useInQuery('Wish', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wish table for a NOT IN query.
+     *
+     * @see useWishInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInWishQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishQuery */
+        $q = $this->useInQuery('Wish', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Wishlist object
+     *
+     * @param \Model\Wishlist|ObjectCollection $wishlist the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByWishlist($wishlist, ?string $comparison = null)
+    {
+        if ($wishlist instanceof \Model\Wishlist) {
+            $this
+                ->addUsingAlias(UserTableMap::COL_ID, $wishlist->getUserId(), $comparison);
+
+            return $this;
+        } elseif ($wishlist instanceof ObjectCollection) {
+            $this
+                ->useWishlistQuery()
+                ->filterByPrimaryKeys($wishlist->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByWishlist() only accepts arguments of type \Model\Wishlist or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Wishlist relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinWishlist(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Wishlist');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Wishlist');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Wishlist relation Wishlist object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\WishlistQuery A secondary query class using the current class as primary query
+     */
+    public function useWishlistQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinWishlist($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Wishlist', '\Model\WishlistQuery');
+    }
+
+    /**
+     * Use the Wishlist relation Wishlist object
+     *
+     * @param callable(\Model\WishlistQuery):\Model\WishlistQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withWishlistQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->useWishlistQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Wishlist table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\WishlistQuery The inner query object of the EXISTS statement
+     */
+    public function useWishlistExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useExistsQuery('Wishlist', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for a NOT EXISTS query.
+     *
+     * @see useWishlistExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishlistQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useWishlistNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useExistsQuery('Wishlist', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\WishlistQuery The inner query object of the IN statement
+     */
+    public function useInWishlistQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useInQuery('Wishlist', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Wishlist table for a NOT IN query.
+     *
+     * @see useWishlistInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\WishlistQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInWishlistQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\WishlistQuery */
+        $q = $this->useInQuery('Wishlist', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

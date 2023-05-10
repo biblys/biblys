@@ -19,12 +19,18 @@ use Model\Stock as ChildStock;
 use Model\StockQuery as ChildStockQuery;
 use Model\User as ChildUser;
 use Model\UserQuery as ChildUserQuery;
+use Model\Wish as ChildWish;
+use Model\WishQuery as ChildWishQuery;
+use Model\Wishlist as ChildWishlist;
+use Model\WishlistQuery as ChildWishlistQuery;
 use Model\Map\CartTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SessionTableMap;
 use Model\Map\StockTableMap;
 use Model\Map\UserTableMap;
+use Model\Map\WishTableMap;
+use Model\Map\WishlistTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -393,6 +399,20 @@ abstract class User implements ActiveRecordInterface
     protected $collStocksPartial;
 
     /**
+     * @var        ObjectCollection|ChildWish[] Collection to store aggregation of ChildWish objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildWish> Collection to store aggregation of ChildWish objects.
+     */
+    protected $collWishes;
+    protected $collWishesPartial;
+
+    /**
+     * @var        ObjectCollection|ChildWishlist[] Collection to store aggregation of ChildWishlist objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildWishlist> Collection to store aggregation of ChildWishlist objects.
+     */
+    protected $collWishlists;
+    protected $collWishlistsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -451,6 +471,20 @@ abstract class User implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildStock>
      */
     protected $stocksScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildWish[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildWish>
+     */
+    protected $wishesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildWishlist[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildWishlist>
+     */
+    protected $wishlistsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -2183,6 +2217,10 @@ abstract class User implements ActiveRecordInterface
 
             $this->collStocks = null;
 
+            $this->collWishes = null;
+
+            $this->collWishlists = null;
+
         } // if (deep)
     }
 
@@ -2406,6 +2444,42 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->collStocks !== null) {
                 foreach ($this->collStocks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->wishesScheduledForDeletion !== null) {
+                if (!$this->wishesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->wishesScheduledForDeletion as $wish) {
+                        // need to save related object because we set the relation to null
+                        $wish->save($con);
+                    }
+                    $this->wishesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collWishes !== null) {
+                foreach ($this->collWishes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->wishlistsScheduledForDeletion !== null) {
+                if (!$this->wishlistsScheduledForDeletion->isEmpty()) {
+                    foreach ($this->wishlistsScheduledForDeletion as $wishlist) {
+                        // need to save related object because we set the relation to null
+                        $wishlist->save($con);
+                    }
+                    $this->wishlistsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collWishlists !== null) {
+                foreach ($this->collWishlists as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3067,6 +3141,36 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->collStocks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collWishes) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'wishes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'wishess';
+                        break;
+                    default:
+                        $key = 'Wishes';
+                }
+
+                $result[$key] = $this->collWishes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collWishlists) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'wishlists';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'wishlists';
+                        break;
+                    default:
+                        $key = 'Wishlists';
+                }
+
+                $result[$key] = $this->collWishlists->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -3665,6 +3769,18 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getWishes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addWish($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getWishlists() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addWishlist($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -3775,6 +3891,14 @@ abstract class User implements ActiveRecordInterface
         }
         if ('Stock' === $relationName) {
             $this->initStocks();
+            return;
+        }
+        if ('Wish' === $relationName) {
+            $this->initWishes();
+            return;
+        }
+        if ('Wishlist' === $relationName) {
+            $this->initWishlists();
             return;
         }
     }
@@ -5157,6 +5281,484 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collWishes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addWishes()
+     */
+    public function clearWishes()
+    {
+        $this->collWishes = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collWishes collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialWishes($v = true): void
+    {
+        $this->collWishesPartial = $v;
+    }
+
+    /**
+     * Initializes the collWishes collection.
+     *
+     * By default this just sets the collWishes collection to an empty array (like clearcollWishes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initWishes(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collWishes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = WishTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collWishes = new $collectionClassName;
+        $this->collWishes->setModel('\Model\Wish');
+    }
+
+    /**
+     * Gets an array of ChildWish objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildWish[] List of ChildWish objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWish> List of ChildWish objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getWishes(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collWishesPartial && !$this->isNew();
+        if (null === $this->collWishes || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collWishes) {
+                    $this->initWishes();
+                } else {
+                    $collectionClassName = WishTableMap::getTableMap()->getCollectionClassName();
+
+                    $collWishes = new $collectionClassName;
+                    $collWishes->setModel('\Model\Wish');
+
+                    return $collWishes;
+                }
+            } else {
+                $collWishes = ChildWishQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collWishesPartial && count($collWishes)) {
+                        $this->initWishes(false);
+
+                        foreach ($collWishes as $obj) {
+                            if (false == $this->collWishes->contains($obj)) {
+                                $this->collWishes->append($obj);
+                            }
+                        }
+
+                        $this->collWishesPartial = true;
+                    }
+
+                    return $collWishes;
+                }
+
+                if ($partial && $this->collWishes) {
+                    foreach ($this->collWishes as $obj) {
+                        if ($obj->isNew()) {
+                            $collWishes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collWishes = $collWishes;
+                $this->collWishesPartial = false;
+            }
+        }
+
+        return $this->collWishes;
+    }
+
+    /**
+     * Sets a collection of ChildWish objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $wishes A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setWishes(Collection $wishes, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildWish[] $wishesToDelete */
+        $wishesToDelete = $this->getWishes(new Criteria(), $con)->diff($wishes);
+
+
+        $this->wishesScheduledForDeletion = $wishesToDelete;
+
+        foreach ($wishesToDelete as $wishRemoved) {
+            $wishRemoved->setUser(null);
+        }
+
+        $this->collWishes = null;
+        foreach ($wishes as $wish) {
+            $this->addWish($wish);
+        }
+
+        $this->collWishes = $wishes;
+        $this->collWishesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Wish objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Wish objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countWishes(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collWishesPartial && !$this->isNew();
+        if (null === $this->collWishes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collWishes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getWishes());
+            }
+
+            $query = ChildWishQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collWishes);
+    }
+
+    /**
+     * Method called to associate a ChildWish object to this object
+     * through the ChildWish foreign key attribute.
+     *
+     * @param ChildWish $l ChildWish
+     * @return $this The current object (for fluent API support)
+     */
+    public function addWish(ChildWish $l)
+    {
+        if ($this->collWishes === null) {
+            $this->initWishes();
+            $this->collWishesPartial = true;
+        }
+
+        if (!$this->collWishes->contains($l)) {
+            $this->doAddWish($l);
+
+            if ($this->wishesScheduledForDeletion and $this->wishesScheduledForDeletion->contains($l)) {
+                $this->wishesScheduledForDeletion->remove($this->wishesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildWish $wish The ChildWish object to add.
+     */
+    protected function doAddWish(ChildWish $wish): void
+    {
+        $this->collWishes[]= $wish;
+        $wish->setUser($this);
+    }
+
+    /**
+     * @param ChildWish $wish The ChildWish object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeWish(ChildWish $wish)
+    {
+        if ($this->getWishes()->contains($wish)) {
+            $pos = $this->collWishes->search($wish);
+            $this->collWishes->remove($pos);
+            if (null === $this->wishesScheduledForDeletion) {
+                $this->wishesScheduledForDeletion = clone $this->collWishes;
+                $this->wishesScheduledForDeletion->clear();
+            }
+            $this->wishesScheduledForDeletion[]= $wish;
+            $wish->setUser(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collWishlists collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addWishlists()
+     */
+    public function clearWishlists()
+    {
+        $this->collWishlists = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collWishlists collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialWishlists($v = true): void
+    {
+        $this->collWishlistsPartial = $v;
+    }
+
+    /**
+     * Initializes the collWishlists collection.
+     *
+     * By default this just sets the collWishlists collection to an empty array (like clearcollWishlists());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initWishlists(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collWishlists && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = WishlistTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collWishlists = new $collectionClassName;
+        $this->collWishlists->setModel('\Model\Wishlist');
+    }
+
+    /**
+     * Gets an array of ChildWishlist objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildWishlist[] List of ChildWishlist objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildWishlist> List of ChildWishlist objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getWishlists(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collWishlistsPartial && !$this->isNew();
+        if (null === $this->collWishlists || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collWishlists) {
+                    $this->initWishlists();
+                } else {
+                    $collectionClassName = WishlistTableMap::getTableMap()->getCollectionClassName();
+
+                    $collWishlists = new $collectionClassName;
+                    $collWishlists->setModel('\Model\Wishlist');
+
+                    return $collWishlists;
+                }
+            } else {
+                $collWishlists = ChildWishlistQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collWishlistsPartial && count($collWishlists)) {
+                        $this->initWishlists(false);
+
+                        foreach ($collWishlists as $obj) {
+                            if (false == $this->collWishlists->contains($obj)) {
+                                $this->collWishlists->append($obj);
+                            }
+                        }
+
+                        $this->collWishlistsPartial = true;
+                    }
+
+                    return $collWishlists;
+                }
+
+                if ($partial && $this->collWishlists) {
+                    foreach ($this->collWishlists as $obj) {
+                        if ($obj->isNew()) {
+                            $collWishlists[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collWishlists = $collWishlists;
+                $this->collWishlistsPartial = false;
+            }
+        }
+
+        return $this->collWishlists;
+    }
+
+    /**
+     * Sets a collection of ChildWishlist objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $wishlists A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setWishlists(Collection $wishlists, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildWishlist[] $wishlistsToDelete */
+        $wishlistsToDelete = $this->getWishlists(new Criteria(), $con)->diff($wishlists);
+
+
+        $this->wishlistsScheduledForDeletion = $wishlistsToDelete;
+
+        foreach ($wishlistsToDelete as $wishlistRemoved) {
+            $wishlistRemoved->setUser(null);
+        }
+
+        $this->collWishlists = null;
+        foreach ($wishlists as $wishlist) {
+            $this->addWishlist($wishlist);
+        }
+
+        $this->collWishlists = $wishlists;
+        $this->collWishlistsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Wishlist objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Wishlist objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countWishlists(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collWishlistsPartial && !$this->isNew();
+        if (null === $this->collWishlists || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collWishlists) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getWishlists());
+            }
+
+            $query = ChildWishlistQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collWishlists);
+    }
+
+    /**
+     * Method called to associate a ChildWishlist object to this object
+     * through the ChildWishlist foreign key attribute.
+     *
+     * @param ChildWishlist $l ChildWishlist
+     * @return $this The current object (for fluent API support)
+     */
+    public function addWishlist(ChildWishlist $l)
+    {
+        if ($this->collWishlists === null) {
+            $this->initWishlists();
+            $this->collWishlistsPartial = true;
+        }
+
+        if (!$this->collWishlists->contains($l)) {
+            $this->doAddWishlist($l);
+
+            if ($this->wishlistsScheduledForDeletion and $this->wishlistsScheduledForDeletion->contains($l)) {
+                $this->wishlistsScheduledForDeletion->remove($this->wishlistsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildWishlist $wishlist The ChildWishlist object to add.
+     */
+    protected function doAddWishlist(ChildWishlist $wishlist): void
+    {
+        $this->collWishlists[]= $wishlist;
+        $wishlist->setUser($this);
+    }
+
+    /**
+     * @param ChildWishlist $wishlist The ChildWishlist object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeWishlist(ChildWishlist $wishlist)
+    {
+        if ($this->getWishlists()->contains($wishlist)) {
+            $pos = $this->collWishlists->search($wishlist);
+            $this->collWishlists->remove($pos);
+            if (null === $this->wishlistsScheduledForDeletion) {
+                $this->wishlistsScheduledForDeletion = clone $this->collWishlists;
+                $this->wishlistsScheduledForDeletion->clear();
+            }
+            $this->wishlistsScheduledForDeletion[]= $wishlist;
+            $wishlist->setUser(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -5252,6 +5854,16 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collWishes) {
+                foreach ($this->collWishes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collWishlists) {
+                foreach ($this->collWishlists as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collCarts = null;
@@ -5259,6 +5871,8 @@ abstract class User implements ActiveRecordInterface
         $this->collRights = null;
         $this->collSessions = null;
         $this->collStocks = null;
+        $this->collWishes = null;
+        $this->collWishlists = null;
         $this->aSite = null;
         return $this;
     }
@@ -5378,6 +5992,24 @@ abstract class User implements ActiveRecordInterface
             }
             if (null !== $this->collStocks) {
                 foreach ($this->collStocks as $referrerFK) {
+                    if (method_exists($referrerFK, 'validate')) {
+                        if (!$referrerFK->validate($validator)) {
+                            $failureMap->addAll($referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+            }
+            if (null !== $this->collWishes) {
+                foreach ($this->collWishes as $referrerFK) {
+                    if (method_exists($referrerFK, 'validate')) {
+                        if (!$referrerFK->validate($validator)) {
+                            $failureMap->addAll($referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+            }
+            if (null !== $this->collWishlists) {
+                foreach ($this->collWishlists as $referrerFK) {
                     if (method_exists($referrerFK, 'validate')) {
                         if (!$referrerFK->validate($validator)) {
                             $failureMap->addAll($referrerFK->getValidationFailures());

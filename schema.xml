@@ -1581,6 +1581,9 @@
       <unique-column name="user_id"/>
       <unique-column name="article_id"/>
     </unique>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -1600,5 +1603,8 @@
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
   </table>
 </database>
