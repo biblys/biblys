@@ -163,7 +163,7 @@ class MainController extends Controller
      * @throws TransportExceptionInterface
      * @throws PropelException
      */
-    public function contactAction(Request $request, CurrentUser $currentUserService): Response
+    public function contactAction(Request $request, CurrentUser $currentUserService, TemplateService $templateService): Response
     {
         global $_SITE, $config;
 
