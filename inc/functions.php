@@ -834,8 +834,10 @@ function catchDeprecationNotices(Config $config, Session $session): void
             $caller = $trace[3];
         }
 
-        $loggerService = new LoggerService();
-        $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
+        if ($config->get("logs.deprecations")) {
+            $loggerService = new LoggerService();
+            $loggerService->log("deprecations", "WARNING", $message, ["trace" => debug_backtrace()]);
+        }
 
         if ($config->get("environment") === "dev") {
             $session->getFlashBag()->add(

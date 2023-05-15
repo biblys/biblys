@@ -11,6 +11,8 @@ site: 1
 
 #logs:
 #  sql: false
+#  errors: false
+#  deprecations: false
 #
 #maintenance:
 #  enabled: true
