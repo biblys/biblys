@@ -1,11 +1,11 @@
 # Historique des modifications
 
-### 2.68.3 (DEV)
+### 2.68.3 (17 mai 2023)
 
 Corrections
 
 - La journalisation des notices de dépréciation pouvait créer des journaux très 
-- lourds très rapidement. Elle est désormais désactivée par défaut.
+  lourds très rapidement. Elle est désormais désactivée par défaut.
 
 ### 2.68.2 (10 mai 2023)
 
