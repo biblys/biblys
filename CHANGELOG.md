@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.68.4 (DEV)
+
+Corrections
+
+- Un problème de variable indéfini empêchait le bon fonctionnement de la 
+  page d'édition des billets.
+
 ### 2.68.3 (17 mai 2023)
 
 Corrections

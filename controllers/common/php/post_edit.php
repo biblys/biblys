@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpPossiblePolymorphicInvocationInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
 
 global $urlgenerator, $site;
 
@@ -22,9 +24,11 @@ if ($request->getMethod() === 'POST') {
     // Creation d'un nouveau billet
     $postId = $request->request->get('post_id');
     if (!$postId) {
+        /** @var @Post $post */
         $post = $pm->create();
     } else {
         $update = 1;
+        /** @var @Post $post */
         $post = $pm->getById($postId);
     }
 
@@ -119,6 +123,8 @@ elseif ($currentUser->hasPublisherRight()) {
         $author = $publisher->get("name");
     }
 }
+
+$postIllustrationUpload = null;
 
 if ($post) {
     $p = $post;
@@ -251,7 +257,7 @@ $content .= '
             </p>
             <p>
                 <label class="floating" for="illustration_version">Version :</label>
-                <input type="number" value="'.$post->get("illustration_version").'" name="post_illustration_version" id="illustration_version" class="nano" />
+                <input type="number" value="'.(isset($post) ? "" : $post->get("illustration_version")).'" name="post_illustration_version" id="illustration_version" class="nano" />
             </p>
             <p>
                 <label class="floating" for="post_illustration_legend">Légende :</label>
