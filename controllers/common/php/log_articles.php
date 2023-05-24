@@ -21,7 +21,7 @@ $am = new ArticleManager();
 
 $content = "";
 
-$publisherId = $GLOBALS["_V"]->getCurrentRight()->get('publisher_id');
+$publisherId = getLegacyVisitor()->getCurrentRight()->get('publisher_id');
 $publisher = PublisherQuery::create()->findPk($publisherId);
 
 $query = "SELECT `articles`.`article_id`, `article_title`, `article_preorder`, `article_title_alphabetic`, `article_url`, `article_authors`, `article_authors_alphabetic`, `article_collection`, `article_publisher`, `article_ean`, `article_pubdate`, `article_availability`,
