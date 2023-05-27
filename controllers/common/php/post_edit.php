@@ -124,7 +124,10 @@ elseif ($currentUser->hasPublisherRight()) {
     }
 }
 
-$postIllustrationUpload = null;
+$postIllustrationUpload = '
+        <label for="post_illustration">Image :</label>
+        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />
+    ';
 
 if ($post) {
     $p = $post;
@@ -145,10 +148,6 @@ if ($post) {
 
     // Illustration
     $postIllustration = new Media("post", $post->get("id"));
-    $postIllustrationUpload = '
-        <label class="floating" for="post_illustration">Image :</label>
-        <input type="file" id="post_illustration_upload" name="post_illustration_upload" accept="image/jpeg" />
-    ';
     if ($postIllustration->exists()) {
         $postIllustrationUpload = '
             <div class="text-center">
