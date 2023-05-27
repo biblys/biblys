@@ -107,6 +107,7 @@ function noosfere($x, $mode = null): array
         $a['article_authors'] = null;
         if (!empty($n->Intervenants->Intervenant)) {
             $p = 0;
+            $people = [];
             foreach ($n->Intervenants->Intervenant as $Intervenant) {
                 if ($Intervenant->Nom != "ANTHOLOGIE" and $Intervenant->Nom != "REVUE") {
                     if (!empty($Intervenant->Prenom)) {
