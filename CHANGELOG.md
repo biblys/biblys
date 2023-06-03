@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.68.5 (DEV)
+
+Corrections
+
+- La redirection vers la page d'accueil après la connexion pouvait échouer. 
+  C'est corrigé.
+
 ### 2.68.4 (27 mai 2023)
 
 Corrections

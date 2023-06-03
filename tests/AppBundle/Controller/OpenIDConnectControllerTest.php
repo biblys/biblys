@@ -60,6 +60,51 @@ class OpenIDConnectControllerTest extends TestCase
     {
         // given
         $request = Request::create("https://www.biblys.fr/openid/callback");
+        $stateToken = JWT::encode(["return_url" => ""], "secret_key", "HS256");
+        $request->query->set("code", "authorization_code");
+        $request->query->set("state", $stateToken);
+
+        $user = ModelFactory::createUser();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        $controller = new OpenIDConnectController();
+        $config = new Config(["axys" => ["client_secret" => "secret_key"]]);
+
+        $tokenSet = $this->createMock(TokenSetInterface::class);
+        $tokenSet->method("claims")->willReturn(["sub" => $user->getId(), "exp" => 1682278410]);
+        $openIDConnectProviderService = $this->createMock(OpenIDConnectProviderService::class);
+        $openIDConnectProviderService->method("getTokenSet")->willReturn($tokenSet);
+
+        // when
+        $response = $controller->callback($request, $currentSite, $config, $openIDConnectProviderService);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/", $response->getTargetUrl());
+
+        $cookies = $response->headers->getCookies();
+        $this->assertCount(1, $cookies);
+
+        $userUidCookie = $cookies[0];
+        $this->assertEquals("user_uid", $userUidCookie->getName());
+        $this->assertEquals(1682278410, $userUidCookie->getExpiresTime());
+        $session = SessionQuery::create()
+            ->filterBySite($site)
+            ->filterByUser($user)
+            ->findOneByToken($userUidCookie->getValue());
+        $this->assertNotNull($session);
+        $this->assertEquals(new DateTime("@1682278410"), $session->getExpiresAt());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithReturnUrl()
+    {
+        // given
+        $request = Request::create("https://www.biblys.fr/openid/callback");
         $stateToken = JWT::encode(["return_url" => "/my-account"], "secret_key", "HS256");
         $request->query->set("code", "authorization_code");
         $request->query->set("state", $stateToken);

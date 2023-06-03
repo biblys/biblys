@@ -59,7 +59,7 @@ class OpenIDConnectController extends Controller
         $returnUrl = "/";
         $stateToken = $request->query->get("state");
         $decodedState = JWT::decode($stateToken, new Key($config->get("axys.client_secret"), "HS256"));
-        if (isset($decodedState->return_url)) {
+        if (isset($decodedState->return_url) && $decodedState->return_url !== "") {
             $returnUrl = $decodedState->return_url;
         }
 
