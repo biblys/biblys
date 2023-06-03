@@ -504,7 +504,7 @@ class Order extends Entity
         }
     }
 
-    public function getCountryName(): string
+    public function getCountryName(): ?string
     {
         if ($this->has("country_id")) {
             $cm = new CountryManager();

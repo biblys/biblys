@@ -6,6 +6,8 @@ Corrections
 
 - La redirection vers la page d'accueil après la connexion pouvait échouer. 
   C'est corrigé.
+- L'affichage de la facture d'une commande à laquelle n'était associé aucun 
+  pays de livraison déclenchait une erreur. C'est corrigé.
 
 ### 2.68.4 (27 mai 2023)
 
