@@ -1837,16 +1837,16 @@
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
-            "version": "v1.5.8",
+            "version": "v1.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
-                "reference": "747518ce0eebf64d27e9903441a255c85472a139"
+                "reference": "34bac76ee81d541c3500813cb3f8d936d2689d24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/747518ce0eebf64d27e9903441a255c85472a139",
-                "reference": "747518ce0eebf64d27e9903441a255c85472a139",
+                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/34bac76ee81d541c3500813cb3f8d936d2689d24",
+                "reference": "34bac76ee81d541c3500813cb3f8d936d2689d24",
                 "shasum": ""
             },
             "require": {
@@ -1888,9 +1888,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
-                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.5.8"
+                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.5.9"
             },
-            "time": "2022-10-15T16:24:08+00:00"
+            "time": "2023-06-11T09:42:03+00:00"
         },
         {
             "name": "monolog/monolog",
