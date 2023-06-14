@@ -17,8 +17,8 @@ if (isset($_GET['collection_id'])) {
     ';
 }
 
-if (empty($_GET['stock_insert'])) {
-    $_GET['stock_insert'] = null;
+if (empty($_GET['stock_created'])) {
+    $_GET['stock_created'] = null;
 }
 if (empty($_GET['stock_invoice'])) {
     $_GET['stock_invoice'] = null;
@@ -46,15 +46,15 @@ $liste = null;
 
 $stockDates = EntityManager::prepareAndExecute(
     "SELECT
-        DATE_FORMAT(`stock_insert`, '%Y-%m-%d') as `date`
+        DATE_FORMAT(`stock_created`, '%Y-%m-%d') as `date`
     FROM `stock`
-    WHERE `stock`.`site_id` = :site_id AND `stock_insert` > SUBDATE(NOW(), INTERVAL 1 MONTH)
+    WHERE `stock`.`site_id` = :site_id AND `stock_created` > SUBDATE(NOW(), INTERVAL 1 MONTH)
     GROUP BY `date`
     ORDER BY `date` DESC",
     ['site_id' => $site->get('id')]
 );
 foreach ($stockDates as $stockDate) {
-    if ($_GET['stock_insert'] == $stockDate['date']) {
+    if ($_GET['stock_created'] == $stockDate['date']) {
         $stockDate['selected'] = 'selected="selected"';
     } else {
         $stockDate['selected'] = null;
@@ -82,8 +82,8 @@ $types_options = array_map(function ($type) {
 $content .= '
     <form method="get">
         <p>
-            <label for="stock_insert">Ajout&eacute;s le :</label>
-            <select name="stock_insert" id="stock_insert">
+            <label for="stock_created">Ajout&eacute;s le :</label>
+            <select name="stock_created" id="stock_created">
                 <option />
                 '.$dates.'
             </select>
@@ -187,8 +187,8 @@ $content .= '
 
 // Build query
 $req = null;
-if (isset($_GET['stock_insert'])) {
-    $req .= " AND `stock_insert` LIKE '".$_GET['stock_insert']."%' ";
+if (isset($_GET['stock_created'])) {
+    $req .= " AND `stock_created` LIKE '".$_GET['stock_created']."%' ";
 }
 if (isset($_GET['stock_invoice'])) {
     $req .= " AND `stock_invoice` LIKE '%".addslashes($_GET['stock_invoice'])."%' ";
