@@ -531,6 +531,11 @@ $currentArticleCategories = "";
 /** @var ArticleCategory $articleCategory */
 foreach ($articleCategoryLinks as $articleCategoryLink) {
     $articleCategory = ArticleCategoryQuery::create()->findPk($articleCategoryLink->getRayonId());
+    if ($articleCategory === null) {
+        $articleCategory = new ArticleCategory();
+        $articleCategory->setName("Rayon supprimé");
+    }
+
     $currentArticleCategories .= '<li>
         <a class="btn btn-danger btn-xs" data-remove_link='.$articleCategoryLink->getId().'>
             <span class="fa fa-remove" title="Supprimer le rayon"></span>

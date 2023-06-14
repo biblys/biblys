@@ -6,6 +6,8 @@ Corrections
 
 - Certaines dates n'apparaissaient pas dans le filtre "Ajoutés le" sur la 
   page des stocks. C'est corrigé.
+- L'affichage de la page d'édition d'article pouvait échouer pour un article 
+  associé à un rayon supprimé. C'est corrigé.
 
 ### 2.68.5 (9 juin 2023)
 
