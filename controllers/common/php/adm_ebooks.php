@@ -184,7 +184,7 @@ $content .= '
 
 $articleId = $request->query->get('article_id');
 if ($articleId) {
-    $content .= '<h3>Statistiques de t&eacute;l&eacute;chargements</h3>';
+    $content .= '<h3>Statistiques de téléchargements</h3>';
 
     $downloads = $_SQL->prepare("SELECT `download_filetype`, `download_version` FROM `downloads` WHERE `article_id` = :article_id");
     $downloads->execute(['article_id' => $articleId]);

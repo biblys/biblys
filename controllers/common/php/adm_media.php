@@ -57,7 +57,7 @@ if (!empty($_FILES)) {
 $dir_nom = $mediaFolderPath.$_GET['dir']; // dossier liste (pour lister le r?pertoir courant : $dir_nom = '.'  --> ('point')
 $dir = opendir($dir_nom); // on ouvre le contenu du dossier courant
 if (!$dir) {
-    throw new Exception('Erreur de listage : le r&eacute;pertoire '.$dir_nom.' n\'existe pas');
+    throw new Exception('Erreur de listage : le répertoire '.$dir_nom.' n\'existe pas');
 }
 
 $fichier = []; // on déclare le tableau contenant le nom des fichiers
@@ -124,7 +124,7 @@ if ($getDir && $getFile) {
 
     if ($getDel) {
         $mm->delete($file);
-        $content .= '<br /><p>Le fichier <strong>'.$_GET['file'].'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
+        $content .= '<br /><p>Le fichier <strong>'.$_GET['file'].'</strong> a été supprimé.</p>';
     } else {
         $media = EntityManager::prepareAndExecute(
             'SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
@@ -178,7 +178,7 @@ if ($getDir && $getFile) {
                         <label for="media_title">Titre :</label>
                         <input type="text" name="media_title" id="media_title" value="'.$m['media_title'].'" class="long" /><br />
 
-                        <label for="category_id">Cat&eacute;gorie :</label>
+                        <label for="category_id">Catégorie :</label>
                         <select name="category_id">
                             <option value="0" />
                             '.$categories_options.'
@@ -210,7 +210,7 @@ if ($getDir && $getFile) {
     
     if ($getDel) {
         $mm->deleteDirectory($getDir);
-        $content .= '<br /><p>Le dossier <strong>'.$getDir.'</strong> a &eacute;t&eacute; supprim&eacute;.</p>';
+        $content .= '<br /><p>Le dossier <strong>'.$getDir.'</strong> a été supprimé.</p>';
     } else {
 
         $content .= '

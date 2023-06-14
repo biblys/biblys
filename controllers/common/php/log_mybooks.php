@@ -54,7 +54,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 				<input type="hidden" name="filename" value="achats-'. LegacyCodeHelper::getLegacyCurrentSite()['site_name'].'-'.makeurl(LegacyCodeHelper::getGlobalVisitor()['user_screen_name']).'">
 				<input type="hidden" name="header" value="'.htmlentities(json_encode($header)).'">
 				<input type="hidden" name="data" value="'.htmlentities(json_encode($export)).'">
-				<button type="submit">T&eacute;l&eacute;charger au format CSV</button>
+				<button type="submit">Télécharger au format CSV</button>
 			</fieldset>
 		</form>
 		<br />

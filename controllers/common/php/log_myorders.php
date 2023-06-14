@@ -26,7 +26,7 @@ $content .= '
                 <th>Ref.</th>
                 <th>Date</th>
                 <th>Paiement</th>
-                <th>Exp&eacute;dition</th>
+                <th>Expédition</th>
                 <th>Montant</th>
             </tr>
         </thead>
@@ -53,7 +53,7 @@ foreach ($orders as $order) {
             <tr>
                 <td class="center"><a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a></td>
                 <td class="center">'._date($o["order_insert"], 'd/m/Y').'</td>
-                <td class="center" colspan=3>Annul&eacute;e le '._date($o["order_cancel_date"], 'd/m/Y').'</td>
+                <td class="center" colspan=3>Annulée le '._date($o["order_cancel_date"], 'd/m/Y').'</td>
             </tr>
         ';
     } else {

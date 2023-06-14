@@ -18,9 +18,9 @@
           <select id="order_status" class="form-control">
             <option value="">Tout</option>
             <option value="1"{{ app.request.get('status') == 1 ? ' selected' }}>&Agrave; payer</option>
-            <option value="2"{{ app.request.get('status') == 2 ? ' selected' }}>&Agrave; exp&eacute;dier</option>
+            <option value="2"{{ app.request.get('status') == 2 ? ' selected' }}>&Agrave; expédier</option>
             <option value="3"{{ app.request.get('status') == 3 ? ' selected' }}>&Agrave; mettre à dispo.</option>
-            <option value="4"{{ app.request.get('status') == 4 ? ' selected' }}>Annul&eacute;es</option>
+            <option value="4"{{ app.request.get('status') == 4 ? ' selected' }}>Annulées</option>
           </select>
         </div>
         <label for="order_payment_mode" class="col-sm-2 control-label">Paiement</label>
@@ -35,7 +35,7 @@
             <option value="transfer">Virement</option>
           </select>
         </div>
-        <label for="order_shipping_mode" class="col-sm-2 control-label">Exp&eacute;dition</label>
+        <label for="order_shipping_mode" class="col-sm-2 control-label">Expédition</label>
         <div class="col-sm-10">
           <select id="order_shipping_mode" class="form-control">
             <option value="">Tout</option>
@@ -71,7 +71,7 @@
       <th>Montant</th>
       <th></th>
       <th colspan="2">Paiement</th>
-      <th>Exp&eacute;dition</th>
+      <th>Expédition</th>
       <th></th>
     </tr>
     </thead>

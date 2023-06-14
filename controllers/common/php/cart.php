@@ -217,8 +217,8 @@ if (isset($Articles) && $Articles > 0) {
     if (!$currentUserService->isAuthentified()) {
         $content .= '
             <p class="warning">
-                Attention : vous n\'&ecirc;tes pas connect&eacute;. Si vous quittez le site, votre
-                panier ne sera pas sauvegard&eacute;.
+                Attention : vous n\'&ecirc;tes pas connecté. Si vous quittez le site, votre
+                panier ne sera pas sauvegardé.
                 <a href="'.$loginUrl.'">Connectez-vous</a> 
                 pour sauvegarder votre panier.
             </p><br />';
@@ -243,7 +243,7 @@ if (isset($Articles) && $Articles > 0) {
 
                 <h3>Commande en cours (n&deg; <a href="/order/'.$o["order_url"].'">'.$o["order_id"].'</a>)</h3>
 
-                <p>Vous avez d&eacute;j&agrave; une commande en attente de paiement. Les livres de votre panier seront ajout&eacute;s aux livres de la commande ci-dessous et les frais de port recalcul&eacute;s en cons&eacute;quence. Si vous ne souhaitez plus commander les livres de la commande n&deg; '.$o["order_id"].', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
+                <p>Vous avez déj&agrave; une commande en attente de paiement. Les livres de votre panier seront ajoutés aux livres de la commande ci-dessous et les frais de port recalculés en conséquence. Si vous ne souhaitez plus commander les livres de la commande n&deg; '.$o["order_id"].', <a href="/contact/">contactez-nous</a> pour faire annuler la commande.</p>
 
                 <br />
                 <table class="table">
@@ -467,7 +467,7 @@ if (isset($Articles) && $Articles > 0) {
         }
 
         $content .= '
-                <h3>Mode d\'exp&eacute;dition</h3>
+                <h3>Mode d\'expédition</h3>
 
                 '.$plus30.'
 
@@ -479,7 +479,7 @@ if (isset($Articles) && $Articles > 0) {
                     <thead>
                         <tr>
                             <th style="width: 200px;">Pays de destination</th>
-                            <th>Mode d\'exp&eacute;dition</th>
+                            <th>Mode d\'expédition</th>
                             <th style="width: 75px;">Frais</th>
 
                         </tr>
@@ -506,7 +506,7 @@ if (isset($Articles) && $Articles > 0) {
                         </tr>
                         <tr>
                             <td></td>
-                            <td class="bold right">Montant &agrave; r&eacute;gler :</td>
+                            <td class="bold right">Montant &agrave; régler :</td>
                             <td id="total" class="right bold">'.currency($Total / 100).'</td>
                         </tr>
                     </tbody>
@@ -518,7 +518,7 @@ if (isset($Articles) && $Articles > 0) {
     if ($downloadable && !$currentUserService->isAuthentified()) {
         $content .= '<br />'
         . '<div class="center">'
-        . '<p class="warning">Votre panier contient au moins un livre num&eacute;rique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
+        . '<p class="warning">Votre panier contient au moins un livre numérique. Vous devez vous <a href="'.$loginUrl.'">identifier</a> pour continuer.</p>'
         . '<button type="button" disabled class="btn btn-default">Finaliser la commande</button>'
         . '</div>';
 

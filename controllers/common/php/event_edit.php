@@ -200,11 +200,11 @@ else
                 </p>
                 
                 <p>
-                    <label>Fiche cr&eacute;e le :</label>
+                    <label>Fiche crée le :</label>
                     <input type="text" value="'.($e->has('created') ? $e->get('created') : null).'" disabled class="long">
                 </p>
                 <p>
-                    <label>Fiche modifi&eacute;e le :</label>
+                    <label>Fiche modifiée le :</label>
                     <input type="text" value="'.($e->has('updated') ? $e->get('updated') : null).'" disabled class="long">
                 </p>
             </fieldset>

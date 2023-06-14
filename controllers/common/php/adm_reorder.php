@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     <th>&Eacute;diteur</th>
     <th>Titre</th>
     <th>EAN</th>
-    <th>Qt&eacute;</th>
+    <th>Qté</th>
     </thead>
     <tbody>
     '.$table.'
@@ -149,7 +149,7 @@ elseif ($supplier && $_SERVER["REQUEST_METHOD"] == "GET")
                                 <th>Derni&egrave;re vente</th>
                                 <th>Stock</th>
                                 <th>Ventes</th>
-                                <th>R&eacute;a</th>
+                                <th>Réa</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -164,7 +164,7 @@ elseif ($supplier && $_SERVER["REQUEST_METHOD"] == "GET")
                 </fieldset>
     </form>
 
-            <h2>&Agrave; ne pas r&eacute;assortir</h2>
+            <h2>&Agrave; ne pas réassortir</h2>
 
             <table class="reorder admin-table hidden">
                 <thead>

@@ -51,7 +51,7 @@ use Biblys\Legacy\LegacyCodeHelper;
         
         <form>
 			<fieldset>
-				<label for="year">Ann&eacute;e :</label>
+				<label for="year">Année :</label>
 				<select name="year" id="year" class="goto">
 					<option value="?" />Cumul</option>
                     '.$years.'

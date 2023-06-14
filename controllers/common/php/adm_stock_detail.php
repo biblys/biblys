@@ -147,7 +147,7 @@ $_ECHO .= '
                 value="'.htmlentities(json_encode($header)).'">
             <input type="hidden" name="data" 
                 value="'.htmlentities(json_encode($export)).'">
-            <button type="submit">T&eacute;l&eacute;charger au format CSV</button>
+            <button type="submit">Télécharger au format CSV</button>
         </fieldset>
     </form>
     <br>

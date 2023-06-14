@@ -22,7 +22,7 @@ $delPageId = $request->query->get('del');
 if ($delPageId) {
     $delPage = $pm->getById($delPageId);
     $pm->delete($delPage);
-    $content .= '<p class="success">La page n°'.$delPage->get('id').' a bien &eacute;t&eacute; supprim&eacute;e.</p>';
+    $content .= '<p class="success">La page n°'.$delPage->get('id').' a bien été supprimée.</p>';
 } elseif($request->getMethod() === "POST") {
 
     // Création d'une nouvelle page

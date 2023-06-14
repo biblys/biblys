@@ -53,7 +53,7 @@ $content = '
         <fieldset>
             <legend>Filtres</legend>
             <p>
-                <label for="year">Ann&eacute;e :</label>
+                <label for="year">Année :</label>
                 <select id="year" class="goto">
                     <option value="/pages/adm_customers">Cumul</option>
                     '.$years.'

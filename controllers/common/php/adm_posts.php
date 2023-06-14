@@ -111,7 +111,7 @@ $content = '
                 <th></th>
                 <th>Titre</th>
                 <th>Auteur</th>
-                <th>Cat&eacute;gorie</th>
+                <th>Catégorie</th>
                 <th>Date</th>
                 <th></th>
                 <th></th>

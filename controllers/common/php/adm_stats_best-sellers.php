@@ -62,7 +62,7 @@ $_ECHO .= '
                 <legend>Filtres</legend>
 
                 <p>
-                    <label for="year">Ann&eacute;e :</label>
+                    <label for="year">Année :</label>
                     <select name="year" id="year">
                         <option value="0">Cumul</option>
                         '.$years.'

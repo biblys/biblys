@@ -154,11 +154,11 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 					<br>
 					
 					<p>
-						<label>Fiche cr&eacute;e le :</label>
+						<label>Fiche crée le :</label>
 						<input type="text" value="'.($s->has('created') ? $s->get('created') : null).'" disabled class="long">
 					</p>
 					<p>
-						<label>Fiche modifi&eacute;e le :</label>
+						<label>Fiche modifiée le :</label>
 						<input type="text" value="'.($s->has('updated') ? $s->get('updated') : null).'" disabled class="long">
 					</p>
                 </fieldset>

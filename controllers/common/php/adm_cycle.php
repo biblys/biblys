@@ -70,14 +70,14 @@ $content = '
             </div>
         </fieldset>
         <fieldset>
-            <legend>Base de donn&eacute;es</legend>
+            <legend>Base de données</legend>
             <label for="cycle_id">Cycle n&deg;</label>
             <input type="text" name="cycle_id" id="cycle_id" value="'.$cycle->get('id').'" readonly>
             <br>
             <label for="cycle_url">URL :</label>
             <input type="text" name="cycle_url" id="cycle_url" value="'.$cycle->get('url').'" class="long">
             <br><br>
-            <label for="cycle_insert">Date de cr&eacute;ation :</label>
+            <label for="cycle_insert">Date de création :</label>
             <input type="datetime" name="cycle_insert" id="cycle_insert" value="'.$cycle->get('insert').'" class="datetime" readonly>
             <br>
             <label for="cycle_update">Date de modification :</label>

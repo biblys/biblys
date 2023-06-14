@@ -62,10 +62,10 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
 
         // E-books & preorder after title
         if ($article->get('type_id') == 2) {
-            $article['title'] .= ' (num&eacute;rique)';
+            $article['title'] .= ' (numérique)';
         }
         if ($article->get('pubdate') > $order->get('created')) {
-            $article["title"] .= ' (pr&eacute;commande)';
+            $article["title"] .= ' (précommande)';
         }
 
         // Build content table
@@ -109,7 +109,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
     // Payment
     $payment = null;
     if ($order->has('order_payment_date')) {
-        $payment = '<p class="center">R&egrave;glement effectu&eacute; le '._date($order->get('payment_date'), 'd/m/Y').' par '.ucwords($order->get('payment_mode')).'.</p><br>';
+        $payment = '<p class="center">R&egrave;glement effectué le '._date($order->get('payment_date'), 'd/m/Y').' par '.ucwords($order->get('payment_mode')).'.</p><br>';
     }
 
     $content .= '
@@ -174,7 +174,7 @@ if ($order = $om->get(array('order_url' => $_GET['url']))) {
         '.$notva.$payment.'
 
         <p class="text-center">
-            Confirmez la r&eacute;ception de votre commande ou signalez un incident : <br>
+            Confirmez la réception de votre commande ou signalez un incident : <br>
             <strong>'.$_SITE->get("domain").'/confirmer/'.$order->get('order_id').'</strong>
         </p>
 

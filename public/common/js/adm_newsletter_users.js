@@ -27,11 +27,11 @@ $(function() {
 					window._alert(data.error);
 				} else {
 					if(action == "unsub") {
-						notify(data.count+" adresse(s) d&eacute;sabonn&eacute;e(s)");
-						$("tr.checked td.status").removeClass("success invalid").addClass("error").html("D&eacute;sabonn&eacute;");
+						notify(data.count+" adresse(s) désabonnée(s)");
+						$("tr.checked td.status").removeClass("success invalid").addClass("error").html("Désabonné");
 					} else {
-						notify(data.count+" adresse(s) r&eacute;abonn&eacute;e(s)");					
-						$("tr.checked td.status").removeClass("error invalid").addClass("success").html("Abonn&eacute;");
+						notify(data.count+" adresse(s) réabonnée(s)");					
+						$("tr.checked td.status").removeClass("error invalid").addClass("success").html("Abonné");
 					}
 					$("tr.checked").removeClass("checked");
 					$("input[type=checkbox]:checked").attr("checked",false);

@@ -83,7 +83,7 @@ $types_options = array_map(function ($type) {
 $content .= '
     <form method="get">
         <p>
-            <label for="stock_created">Ajout&eacute;s le :</label>
+            <label for="stock_created">Ajoutés le :</label>
             <select name="stock_created" id="stock_created">
                 <option />
                 '.$dates.'
@@ -91,13 +91,13 @@ $content .= '
         </p>
 
         <p>
-            <label for="availability">Disponibilit&eacute; :</label>
+            <label for="availability">Disponibilité :</label>
             <select name="availability" id="availability">
                 <option value="all">Tous</a>
                 <option value="stock"'.$a['stock'].'>En stock</a>
                 <option value="panier"'.$a['panier'].'>En panier</a>
                 <option value="ventes"'.$a['ventes'].'>Vendus</a>
-                <option value="retours"'.$a['retours'].'>Retourn&eacute;s</a>
+                <option value="retours"'.$a['retours'].'>Retournés</a>
                 <option value="perdus"'.$a['perdus'].'>Perdus</a>
             </select>
         </p>
@@ -347,7 +347,7 @@ foreach ($sql as $x) {
 
         if ($x['stock_return_date']) { // Retourné
             $x['led'] = 'square_orange';
-            $x['status'] = 'Retourn&eacute;&nbsp;le<br />'._date($x['stock_return_date'], 'd/m/Y');
+            $x['status'] = 'Retourné&nbsp;le<br />'._date($x['stock_return_date'], 'd/m/Y');
             unset($x['returnButton'],$x['soldButton']);
             ++$retours;
         } elseif ($x['stock_selling_date']) { // Vendu
@@ -520,7 +520,7 @@ $content .= '
         <img src="/common/img/square_green.png" /> '.$stocks.' en stock<br />
         <img src="/common/img/square_gray.png" /> '.$paniers.' en panier'.s($paniers).'<br />
         <img src="/common/img/square_blue.png" /> '.$ventes.' vendu'.s($ventes).'<br />
-        <img src="/common/img/square_orange.png" /> '.$retours.' retourn&eacute;'.s($retours).'<br />
+        <img src="/common/img/square_orange.png" /> '.$retours.' retourné'.s($retours).'<br />
         <img src="/common/img/square_purple.png" /> '.$perdus.' perdus'.s($perdus).'
     </p>
     <table class="inventory">

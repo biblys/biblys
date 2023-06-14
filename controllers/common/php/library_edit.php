@@ -105,7 +105,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $_GET['id'] = LegacyCodeH
 						<label for="library_country">Pays :</label>
 						<input type="text" name="library_country" id="library_country" value="'.(isset($l['library_country']) ? $l["library_country"] : null).'">
 					</p>
-						<label for="library_phone">T&eacute;l&eacute;phone :</label>
+						<label for="library_phone">Téléphone :</label>
 						<input type="tel" name="library_phone" id="library_phone" value="'.(isset($l['library_phone']) ? $l["library_phone"] : null).'" class="long">
 						<br>
 						<label for="library_fax">Fax :</label>
@@ -163,7 +163,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $_GET['id'] = LegacyCodeH
 					<input type="submit" value="Enregistrer les modifications" />
 				</fieldset>
 				<fieldset>
-					<legend>Base de donn&eacute;es</legend>
+					<legend>Base de données</legend>
 					
 					<p>
 						<label for="library_id"">Librairie n&deg; :</label>
@@ -183,11 +183,11 @@ if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) $_GET['id'] = LegacyCodeH
 					<br>
 					
 					<p>
-						<label>Fiche cr&eacute;e le :</label>
+						<label>Fiche crée le :</label>
 						<input type="email" value="'.(isset($l['library_created']) ? $l["library_created"] : null).'" disabled class="long">
 					</p>
 					<p>
-						<label>Fiche modifi&eacute;e le :</label>
+						<label>Fiche modifiée le :</label>
 						<input type="email" value="'.(isset($l['library_updated']) ? $l["library_updated"] : null).'" disabled class="long">
 					</p>
 				</fieldset>

@@ -5,7 +5,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 error_reporting(E_ALL ^ E_NOTICE);
 	ini_set('display_errors','On');
 
-	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('R&eacute;sultats par facture');
+	\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Résultats par facture');
 
 	$stock = $_SQL->prepare('SELECT
 		`stock_invoice`, `stock_selling_price`, `stock_selling_date`, `stock_return_date`

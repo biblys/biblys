@@ -227,7 +227,7 @@ $content .= '
 ';
 
 if (isset($o["order_id"])) {
-    $content .= '<p class="warning">Les livres du panier seront ajout&eacute;s &agrave; votre <a href="/order/' . $o["order_url"] . '">commande en cours</a>.</p><br />';
+    $content .= '<p class="warning">Les livres du panier seront ajoutés &agrave; votre <a href="/order/' . $o["order_url"] . '">commande en cours</a>.</p><br />';
 }
 
 $content .= '
@@ -265,7 +265,7 @@ if ($cart->needsShipping()) {
 }
 $content .= '
             <tr>
-                <td class="right">Montant &agrave; r&eacute;gler : </td>
+                <td class="right">Montant &agrave; régler : </td>
                 <td>' . currency($total / 100) . '</td>
             </tr>
         </tbody>
@@ -283,9 +283,9 @@ if ($shipping_date) {
 $form_class = null;
 if (!auth()) {
     $content .= '
-        <h3>Vos coordonn&eacute;es</h3>
-        <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$loginUrl.'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonn&eacute;es.</p>
-        <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="'.$signupUrl.'" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonn&eacute;es pour une prochaine commande.</p>
+        <h3>Vos coordonnées</h3>
+        <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$loginUrl.'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonnées.</p>
+        <h4>Vous n\'avez pas de compte Axys ?</h4> <p><a href="'.$signupUrl.'" class="btn btn-primary">Inscrivez-vous</a> pour sauvegarder vos coordonnées pour une prochaine commande.</p>
         <br />
         <button id="show_orderForm" class="showThis btn btn-warning">Je souhaite commander sans utiliser un compte Axys</button>
         <br /><br />

@@ -58,9 +58,9 @@ if (!empty($_POST)) {
         $erreur = NULL;
         if(!empty($email)) {
             $mailing = $mm->get(['mailing_email' => $email]);
-            if ($mailing) $erreur = "adresse d&eacute;j&agrave; en base !";
+            if ($mailing) $erreur = "adresse déj&agrave; en base !";
             $syntaxe='#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,5}$#';
-            if(!preg_match($syntaxe,$email)) $erreur = "adresse $email mal form&eacute;e !";
+            if(!preg_match($syntaxe,$email)) $erreur = "adresse $email mal formée !";
 
             if(!empty($erreur)) $ajouts .= '<span class="error">'.$email.'</span> : '.$erreur.'<br />';
             else {
@@ -86,10 +86,10 @@ foreach ($mailings as $m) {
         $invalid .= '<tr class="pointer"><td class="center"><input type="checkbox" data-id="'.$m["mailing_id"].'"></td><td>'.$m["mailing_email"].'</td><td class="center">'._date($m["mailing_date"],'d/m/Y').'</td><td class="status warning">Invalide</td></tr>';
         $num_invalid++;
     } elseif($m["mailing_block"] == 1) {
-        $unsub .= '<tr class="pointer"><td class="center"><input type="checkbox" data-id="'.$m["mailing_id"].'"></td><td>'.$m["mailing_email"].'</td><td class="center">'._date($m["mailing_date"],'d/m/Y').'</td><td class="status error">D&eacute;sabonn&eacute;</td></tr>';
+        $unsub .= '<tr class="pointer"><td class="center"><input type="checkbox" data-id="'.$m["mailing_id"].'"></td><td>'.$m["mailing_email"].'</td><td class="center">'._date($m["mailing_date"],'d/m/Y').'</td><td class="status error">Désabonné</td></tr>';
         $num_unsub++;
     } else {
-        $emails .= '<tr class="pointer"><td class="center"><input type="checkbox" data-id="'.$m["mailing_id"].'"></td><td>'.$m["mailing_email"].'</td><td class="center">'._date($m["mailing_date"],'d/m/Y').'</td><td class="status success">Abonn&eacute;</td></tr>';
+        $emails .= '<tr class="pointer"><td class="center"><input type="checkbox" data-id="'.$m["mailing_id"].'"></td><td>'.$m["mailing_email"].'</td><td class="center">'._date($m["mailing_date"],'d/m/Y').'</td><td class="status success">Abonné</td></tr>';
         $num_emails++;
     }
 }
@@ -102,8 +102,8 @@ $content .= '
     <table class="admin-table">
         <thead>
             <tr>
-                <th class="center">Abonn&eacute;s</th>
-                <th class="center">D&eacute;sabonn&eacute;s</th>
+                <th class="center">Abonnés</th>
+                <th class="center">Désabonnés</th>
                 <th class="center">Invalides</th>
             </tr>
         </thead>

@@ -31,7 +31,7 @@ if ($query) {
     $params = array("letter" => $_GET["l"].'%');
 } else {
     $req = ' ORDER BY `publisher_insert` DESC, `publisher_id` DESC LIMIT 50';
-    $subtitle = '<h3>R&eacute;cemment ajout&eacute;s</h3>';
+    $subtitle = '<h3>Récemment ajoutés</h3>';
 }
 
 $publishers = $_SQL->prepare('SELECT `publisher_name`,`publisher_url` FROM `publishers`'.$req);
@@ -46,7 +46,7 @@ $_ECHO .= '
     <h2>'.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h2>
     <form class="center" method="get">
       <fieldset>
-        <p>Rechercher un &eacute;diteur :
+        <p>Rechercher un éditeur :
           <input type="text" name="q" value="'.htmlentities($query).'" />
           <input type="submit" value="&#187;" />
         </p>

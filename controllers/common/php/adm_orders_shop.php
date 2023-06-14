@@ -366,7 +366,7 @@ foreach ($TVA as $rate => $amount) {
 
 $content .= '
 
-<h3>R&eacute;capitulatif</h3>
+<h3>Récapitulatif</h3>
 <table class="admin-table">
     <tr>
         <th colspan="'.($ti + 2).'">TVA</th>

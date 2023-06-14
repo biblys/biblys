@@ -123,7 +123,7 @@ if ($request->getMethod() === 'POST') {
         if (empty($_POST['stock_id']) or $_POST['stock_num'] > 1) {
             $stock = $sm->create();
             $_POST['stock_id'] = $stock->get('id');
-            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien &eacute;t&eacute; ajout&eacute; au stock !</p>';
+            $content .= '<p class="success">L\'exemplaire n&deg; <a href="/pages/adm_stock?id=' . $_POST['stock_id'] . '">' . $_POST['stock_id'] . '</a> a bien été ajouté au stock !</p>';
             $mode = 'insert';
             $update_date = 'NULL';
         } else {
@@ -140,7 +140,7 @@ if ($request->getMethod() === 'POST') {
         if (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 1) {
             if ($photo->exists()) {
                 $photo->delete();
-                $content = '<p class="success">La photo de l\'exemplaire a &eacute;t&eacute; supprim&eacute;e !</p>';
+                $content = '<p class="success">La photo de l\'exemplaire a été supprimée !</p>';
             }
         }
 
@@ -280,13 +280,13 @@ if (!empty($_GET['id'])) {
     $content .= "<h1><span class=\"fa fa-cubes\"></span> Modifier l'exemplaire n°{$_GET['id']}</h1>";
 
     if (isset($_GET['created'])) {
-        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajout&eacute;' . s($_GET['created']) . ' au stock !</p>';
+        $content .= '<p class="success">' . $_GET['created'] . ' exemplaire' . s($_GET['created']) . ' ajouté' . s($_GET['created']) . ' au stock !</p>';
     } elseif (isset($_GET['returned'])) {
-        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; retourn&eacute;.</p>';
+        $content .= '<p class="success">L\'exemplaire a été retourné.</p>';
     } elseif (isset($_GET['losted'])) {
-        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme perdu.</p>';
+        $content .= '<p class="success">L\'exemplaire a été marqué comme perdu.</p>';
     } elseif (isset($_GET['solded'])) {
-        $content .= '<p class="success">L\'exemplaire a &eacute;t&eacute; marqu&eacute; comme vendu en magasin.</p>';
+        $content .= '<p class="success">L\'exemplaire a été marqué comme vendu en magasin.</p>';
     }
 
     if (isset($_GET['alerts'])) {
@@ -424,7 +424,7 @@ if ($article) {
                     <p>
                         de ' . truncate($a['article_authors'], 65, '...', true, true) . '<br />
                         coll. ' . $a['article_collection'] . ' ' . numero($a['article_number']) . ' (' . $a['article_publisher'] . ')<br />
-                        Prix &eacute;diteur : ' . price($a['article_price'], 'EUR') . '
+                        Prix éditeur : ' . price($a['article_price'], 'EUR') . '
                     </p>
                 </div>
             </div>
@@ -606,7 +606,7 @@ if ($article) {
         ';
     }
 
-    // Prix de vente par d&eacute;faut d'après prix &eacute;diteur
+    // Prix de vente par défaut d'après prix éditeur
     if (empty($s['stock_selling_price']) and !empty($a['article_price'])) {
         $s['stock_selling_price'] = $a['article_price'];
     }
@@ -722,7 +722,7 @@ if ($article) {
         <form enctype="multipart/form-data" method="post" action="/pages/adm_stock" class="fieldset">
             <fieldset>
 
-                <label title="Chaque exemplaire en base a un num&eacute;ro unique" for="stock_id" class="readonly">Exemplaire n&deg; </label>
+                <label title="Chaque exemplaire en base a un numéro unique" for="stock_id" class="readonly">Exemplaire n&deg; </label>
                 <input type="text" name="stock_id" id="stock_id" value="' . $_GET['id'] . '" class="mini" readonly />
                 <br />
 
@@ -734,7 +734,7 @@ if ($article) {
 
                 ' . $supplier . '
                 <label for="stock_invoice">Lot / Facture n&deg; :</label>
-                ' . $invoice . ' <input type="checkbox" name="stock_depot" id="stock_depot" value=1' . (isset($s['stock_depot']) && $s['stock_depot'] ? ' checked' : null) . '> <label for="stock_depot" class="after">D&eacute;p&ocirc;t</label>
+                ' . $invoice . ' <input type="checkbox" name="stock_depot" id="stock_depot" value=1' . (isset($s['stock_depot']) && $s['stock_depot'] ? ' checked' : null) . '> <label for="stock_depot" class="after">Dép&ocirc;t</label>
                 <br />
                 <label for="stock_stockage">Emplacement :</label>
                 <input 
@@ -758,7 +758,7 @@ if ($article) {
                     <option>Moyen</option>
                     <option>Mauvais</option>
                     <option>Très mauvais</option>
-                </select> <input type="text" name="stock_condition_details" placeholder="Pr&eacute;cisions sur l\'&eacute;tat..." value="' . $s['stock_condition_details'] . '" />
+                </select> <input type="text" name="stock_condition_details" placeholder="Précisions sur l\'état..." value="' . $s['stock_condition_details'] . '" />
                 <br />
 
                 <label for="stock_selling_price" class="required">Prix de vente :</label>
@@ -771,7 +771,7 @@ if ($article) {
 
                 ' . $photo_field . '
 
-                <label for="stock_pub_year">D&eacute;p&ocirc;t l&eacute;gal :</label>
+                <label for="stock_pub_year">Dép&ocirc;t légal :</label>
                 <input type="number" id="stock_pub_year" name="stock_pub_year" maxlength="4" min="1900" max="' . (date('Y') + 1) . '" class="mini" placeholder="AAAA" value="' . $s['stock_pub_year'] . '" />
                 </span>
                 <br /><br />
@@ -880,7 +880,7 @@ if ($article) {
             ' . $orderLink . '
             <br />
             <br />
-            <label readonly for="stock_return_date">Retourn&eacute; le :</label>
+            <label readonly for="stock_return_date">Retourné le :</label>
             <input type="text" name="stock_return_date" id="stock_return_date" value="' . (isset($s['stock_return_date']) ? $s['stock_return_date'] : null) . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" />
             ' . $cancelReturnLink . '
             <br />
@@ -894,11 +894,11 @@ if ($article) {
     if ($mode == 'update') {
         $content .= '
             <fieldset>
-                <legend>Base de donn&eacute;es</legend>
-                <label for="stock_insert" class="readonly">Fiche cr&eacute;&eacute;e le :</label>
+                <legend>Base de données</legend>
+                <label for="stock_insert" class="readonly">Fiche créée le :</label>
                 <input type="text" name="stock_insert" id="stock_insert" value="' . $s['stock_created'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
                 <br />
-                <label for="stock_update" class="readonly">Fiche modifi&eacute;e le :</label>
+                <label for="stock_update" class="readonly">Fiche modifiée le :</label>
                 <input type="text" name="stock_update" id="stock_update" value="' . $s['stock_updated'] . '" placeholder="AAAA-MM-DD HH:MM:SS" class="datetime" readonly />
                 <br /><br />
             </fieldset>

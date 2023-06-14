@@ -17,7 +17,7 @@
         $update_cols .= " OR `collection_id` = `".$c["collection_id"]."`";
     }
 
-    if(isset($colls)) $_ECHO .= '<h3>Collections concern&eacute;es</h3><ul>'.$colls.'</ul><br />';
+    if(isset($colls)) $_ECHO .= '<h3>Collections concernées</h3><ul>'.$colls.'</ul><br />';
 
     $priceId = $request->request->get('id');
     if ($priceId) {
@@ -28,7 +28,7 @@
             'price_id' => $priceId
         ]);
 
-        $_ECHO .= '<p class="success">La cat&eacute;gorie a &eacute;t&eacute; mise &agrave; jour.</p>';
+        $_ECHO .= '<p class="success">La catégorie a été mise &agrave; jour.</p>';
 
         $livres = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_number`, `article_url`
                                 FROM `articles`
@@ -41,7 +41,7 @@
         $num_livres = $livres->rowCount();
 
         if(!empty($num_livres)) {
-            $_ECHO .= '<h3>'.$num_livres.' article'.s($num_livres).' modifi&eacute;'.s($num_livres).' ('.$_POST["price_cat"].' &#224; '.price($_POST["price_amount"],'EUR').')</h3>';
+            $_ECHO .= '<h3>'.$num_livres.' article'.s($num_livres).' modifié'.s($num_livres).' ('.$_POST["price_cat"].' &#224; '.price($_POST["price_amount"],'EUR').')</h3>';
             while ($l = $livres->fetch(PDO::FETCH_ASSOC)) {
                 $articleUpdate = $_SQL->prepare("UPDATE `articles` SET `article_price` = :price_amount, `article_updated` = NOW() WHERE `article_id` = :article_id LIMIT 1");
                 $articleUpdate->execute([
@@ -71,7 +71,7 @@
                 <form method="post">
                     <fieldset>
                         <input type="hidden" name="id" value="'.$priceId.'" />
-                        <label for="price_cat">Cat&eacute;gorie :</label>
+                        <label for="price_cat">Catégorie :</label>
                         <input type="text" name="price_cat" id="price_cat" value="'.$p['price_cat'].'" />
                         <br />
                         <label for="price_amount">Prix :</label>
@@ -97,7 +97,7 @@
 
     $_ECHO .= '<table class="admin-table sortable">
             <tr>
-                <td>Cat&eacute;gorie</td>
+                <td>Catégorie</td>
                 <td class="right">Prix</td>
                 <td></td>
             </tr>';

@@ -244,10 +244,10 @@ if ($_GET["mode"] == "search") { // Mode recherche
     }
     $r .= '</div>';
     if (empty($results)) {
-        $r .= '<p class="center">Aucun r&eacute;sultat dans les bases externes.</p>';
+        $r .= '<p class="center">Aucun résultat dans les bases externes.</p>';
     }
     if (isset($additional_results)) {
-        $r .= '<div id="additionalResults" class="hidden">'.$additional_results.'</div><h3 id="showAllResults" class="toggleThis center pointer">Afficher plus de r&eacute;sultats...</h3>';
+        $r .= '<div id="additionalResults" class="hidden">'.$additional_results.'</div><h3 id="showAllResults" class="toggleThis center pointer">Afficher plus de résultats...</h3>';
     }
 
     $response = new JsonResponse(['result' => $r]);

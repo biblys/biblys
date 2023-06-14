@@ -101,7 +101,7 @@ $_ECHO .='
 			<legend>Options</legend>
 			<p>
 				<input type="checkbox" name="supplier_notva" id="supplier_notva" value="1" '.($supplier->has('notva') ? 'checked' : null).'>
-				<label class="after" for="supplier_notva">Exempt&eacute; de TVA</label>
+				<label class="after" for="supplier_notva">Exempté de TVA</label>
 			</p>
 
 			<p>

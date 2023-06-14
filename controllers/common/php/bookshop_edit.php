@@ -107,7 +107,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCode
 						<input type="text" name="bookshop_country" id="bookshop_country" value="'.(isset($b['bookshop_country']) ? $b["bookshop_country"] : null).'">
 					</p>
 					<p>
-						<label for="bookshop_phone">T&eacute;l&eacute;phone :</label>
+						<label for="bookshop_phone">Téléphone :</label>
 						<input type="tel" name="bookshop_phone" id="bookshop_phone" value="'.(isset($b['bookshop_phone']) ? $b["bookshop_phone"] : null).'" class="medium">
 						<br>
 						<label for="bookshop_fax">Fax :</label>
@@ -169,7 +169,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCode
 					<input type="submit" value="Enregistrer les modifications" />
 				</fieldset>
 				<fieldset>
-					<legend>Base de donn&eacute;es</legend>
+					<legend>Base de données</legend>
 					
 					<p>
 						<label for="bookshop_id"">Librairie n&deg; :</label>
@@ -189,11 +189,11 @@ if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) $_GET['id'] = LegacyCode
 					<br>
 					
 					<p>
-						<label>Fiche cr&eacute;e le :</label>
+						<label>Fiche crée le :</label>
 						<input type="email" value="'.(isset($b['bookshop_created']) ? $b["bookshop_created"] : null).'" disabled class="long">
 					</p>
 					<p>
-						<label>Fiche modifi&eacute;e le :</label>
+						<label>Fiche modifiée le :</label>
 						<input type="email" value="'.(isset($b['bookshop_updated']) ? $b["bookshop_updated"] : null).'" disabled class="long">
 					</p>
 				</fieldset>

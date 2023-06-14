@@ -31,7 +31,7 @@ class OrderDeliveryHelpers
     {
         if (empty($request->request->get('order_firstname'))) {
             throw new OrderDetailsValidationException(
-                'Le champ &laquo;&nbsp;Pr&eacute;nom&nbsp;&raquo; est obligatoire !'
+                'Le champ &laquo;&nbsp;Prénom&nbsp;&raquo; est obligatoire !'
             );
         }
 

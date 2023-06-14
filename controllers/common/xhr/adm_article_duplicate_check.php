@@ -38,7 +38,7 @@ if ($field && $value) {
             $i++;
         }
         if (!empty($i)) {
-            $json["message"] = '<a href="#duplicates_fieldset">'.$i.' doublon'.s($i).' potentiel'.s($i).' d&eacute;tect&eacute;'.s($i).'&nbsp;!</a>';
+            $json["message"] = '<a href="#duplicates_fieldset">'.$i.' doublon'.s($i).' potentiel'.s($i).' détecté'.s($i).'&nbsp;!</a>';
         }
         
         $response = new JsonResponse($json);
