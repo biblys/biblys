@@ -275,6 +275,8 @@ event_show:
 file_download:
   path: /download/{id}.{format}
   controller: AppBundle\Controller\FileController::downloadAction
+  requirements:
+    id: \d+
 
 # Gallery
 
