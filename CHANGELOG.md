@@ -4,9 +4,9 @@
 
 Déploiement
 
-- Dans les controllers, remplacer `$_LOG` par `getLegacyVisitor()`.
-- Dans les controllers, remplacer `$_SITE` par `getLegacyCurrentSite()`.
-- Dans les controllers, remplacer `$site` par `getLegacyCurrentSite()`.
+- Dans les controllers, remplacer `$_LOG` par `LegacyCodeHelper::getGlobalVisitor()`.
+- Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getLegacyCurrentSite()`.
+- Dans les controllers, remplacer `$site` par `LegacyCodeHelper::getLegacyCurrentSite()`.
 
 
 ### 2.68.6 (14 juin 2023)

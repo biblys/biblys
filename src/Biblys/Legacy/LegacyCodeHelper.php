@@ -37,6 +37,14 @@ class LegacyCodeHelper
     }
 
     /**
+     * @throws Exception
+     * @deprecated Using getGlobalSite is deprecated. Use CurrentSite service instead.
+     */
+    public static function getGlobalSite(): Site {
+        return self::getLegacyCurrentSite();
+    }
+
+    /**
      * @deprecated Using getGlobalConfig is deprecated. Use CurrentUser service instead.
      */
     public static function getGlobalConfig(): Config
