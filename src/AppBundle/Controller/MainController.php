@@ -164,7 +164,11 @@ class MainController extends Controller
      * @throws TransportExceptionInterface
      * @throws PropelException
      */
-    public function contactAction(Request $request, CurrentUser $currentUserService, TemplateService $templateService): Response
+    public function contactAction(
+        Request $request,
+        CurrentUser $currentUserService,
+        TemplateService $templateService,
+        Mailer $mailer): Response
     {
         global $_SITE, $config;
 
@@ -207,7 +211,6 @@ class MainController extends Controller
                     );
                 }
 
-                $mailer = new Mailer();
                 $mailer->send(
                     $_SITE->get('site_contact'),
                     $subject,

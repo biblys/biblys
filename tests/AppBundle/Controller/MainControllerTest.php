@@ -148,9 +148,15 @@ class MainControllerTest extends TestCase
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
         $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $mailer = $this->createMock(Mailer::class);
 
         // when
-        $response = $controller->contactAction($request, $currentUserService, $templateService);
+        $response = $controller->contactAction(
+            $request,
+            $currentUserService,
+            $templateService,
+            $mailer,
+        );
 
         // then
         $this->assertEquals(
@@ -159,7 +165,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "L&#039;adresse angry.customer.666.@biblys.fr est invalide.",
+            "Votre message a bien été envoyé.",
             $response->getContent(),
             "it should display an error message"
         );
