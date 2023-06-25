@@ -2,12 +2,16 @@
 
 ## 2.69.0 (DEV)
 
+Améliorations
+
+- La protection anti-spam du formulaire de contact a été renforcée avec 
+  l'ajout d'un mécanisme de type "honey pot".
+
 Déploiement
 
 - Dans les controllers, remplacer `$_LOG` par `LegacyCodeHelper::getGlobalVisitor()`.
 - Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getLegacyCurrentSite()`.
 - Dans les controllers, remplacer `$site` par `LegacyCodeHelper::getLegacyCurrentSite()`.
-
 
 ### 2.68.6 (14 juin 2023)
 

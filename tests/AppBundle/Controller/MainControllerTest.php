@@ -144,6 +144,7 @@ class MainControllerTest extends TestCase
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "I'm angry");
         $request->request->set("message", "WHAT THE F*CK IS HAPPENING?!");
+        $request->request->set("phone", "");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
@@ -191,6 +192,7 @@ class MainControllerTest extends TestCase
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "I'm angry");
         $request->request->set("message", "WHATTHEF");
+        $request->request->set("phone", "WHATTHEF");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
@@ -214,6 +216,54 @@ class MainControllerTest extends TestCase
         );
         $this->assertStringContainsString(
             "Le message doit être long d&#039;au moins 10 caractères.",
+            $response->getContent(),
+            "displays an error message"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testContactWithFilledHoneyPotField()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->request->set("email", "angry.customer.666.@biblys.fr");
+        $request->request->set("name", "Angry Customer");
+        $request->request->set("subject", "I'm angry");
+        $request->request->set("message", "WHAT THE F*CK");
+        $request->request->set("phone", "+33.1.23.45.67.89");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("isAuthentified")->willReturn(false);
+        $config = Config::load();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $mailer = $this->createMock(Mailer::class);
+
+        // when
+        $response = $controller->contactAction(
+            $request,
+            $currentUserService,
+            $templateService,
+            $mailer,
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Le message n&#039;a pas pu être envoyé.",
             $response->getContent(),
             "displays an error message"
         );

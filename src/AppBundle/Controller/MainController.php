@@ -178,6 +178,8 @@ class MainController extends Controller
             $request->request->get('subject') : $request->query->get('subject');
         $message = $request->request->get('message') ?
             $request->request->get('message') : $request->query->get('message');
+        $honeyPot = $request->request->get('phone') ?
+            $request->request->get('phone') : $request->query->get('phone');
         $error = null;
         $success = false;
 
@@ -215,6 +217,10 @@ class MainController extends Controller
                     throw new ContactPageException(
                         "Le message doit être long d'au moins 10 caractères."
                     );
+                }
+
+                if (!empty($honeyPot)) {
+                    throw new ContactPageException("Le message n'a pas pu être envoyé.");
                 }
 
                 $mailer->send(

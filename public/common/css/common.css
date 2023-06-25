@@ -405,6 +405,10 @@ label.button {
   width: 100%;
 }
 
+.contact-form__phone-number {
+  display: none;
+}
+
 .article_role label {
   width: 200px;
 }
