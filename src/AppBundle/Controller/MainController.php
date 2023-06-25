@@ -211,6 +211,12 @@ class MainController extends Controller
                     );
                 }
 
+                if (strlen($message) < 10) {
+                    throw new ContactPageException(
+                        "Le message doit être long d'au moins 10 caractères."
+                    );
+                }
+
                 $mailer->send(
                     $_SITE->get('site_contact'),
                     $subject,

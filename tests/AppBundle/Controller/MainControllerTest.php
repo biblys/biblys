@@ -7,6 +7,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\ContactPageException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
@@ -142,7 +143,7 @@ class MainControllerTest extends TestCase
         $request->request->set("email", "angry.customer.666.@biblys.fr");
         $request->request->set("name", "Angry Customer");
         $request->request->set("subject", "I'm angry");
-        $request->request->set("message", "WHAT THE F");
+        $request->request->set("message", "WHAT THE F*CK IS HAPPENING?!");
         $currentUserService = $this->createMock(CurrentUser::class);
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
@@ -167,7 +168,54 @@ class MainControllerTest extends TestCase
         $this->assertStringContainsString(
             "Votre message a bien été envoyé.",
             $response->getContent(),
-            "it should display an error message"
+            "displays a success message"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testContactWithTooShortBody()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->request->set("email", "angry.customer.666.@biblys.fr");
+        $request->request->set("name", "Angry Customer");
+        $request->request->set("subject", "I'm angry");
+        $request->request->set("message", "WHATTHEF");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("isAuthentified")->willReturn(false);
+        $config = Config::load();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $mailer = $this->createMock(Mailer::class);
+
+        // when
+        $response = $controller->contactAction(
+            $request,
+            $currentUserService,
+            $templateService,
+            $mailer,
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200"
+        );
+        $this->assertStringContainsString(
+            "Le message doit être long d&#039;au moins 10 caractères.",
+            $response->getContent(),
+            "displays an error message"
         );
     }
 
