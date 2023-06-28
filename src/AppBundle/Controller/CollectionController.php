@@ -3,11 +3,11 @@
 namespace AppBundle\Controller;
 
 use ArticleManager;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
-use Framework\Exception\AuthException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -51,18 +51,18 @@ class CollectionController extends Controller
      * Show a Collection's page and related articles
      *
      * @route GET /collection/{slug}.
-     * @param Request $request
-     * @param string $slug
-     * @return RedirectResponse|Response
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function showAction(Request $request, string $slug)
+    public function showAction(
+        Request $request,
+        CurrentSite $currentSite,
+        string $slug
+    ):
+    RedirectResponse|Response
     {
-        global $_SITE;
-
         $cm = new CollectionManager();
         $am = new ArticleManager();
 
@@ -71,7 +71,7 @@ class CollectionController extends Controller
             throw new NotFoundException("Collection $slug not found");
         }
 
-        $use_old_controller = $_SITE->getOpt('use_old_collection_controller');
+        $use_old_controller = $currentSite->getOption("use_old_collection_controller");
         if ($use_old_controller) {
             return new RedirectResponse('/o/collection/'.$slug);
         }
@@ -103,7 +103,6 @@ class CollectionController extends Controller
      * @param UrlGenerator $urlGenerator
      * @param int $id
      * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
@@ -164,18 +163,12 @@ class CollectionController extends Controller
      * Delete a collection
      * @route GET /admin/collection/{id}/delete.
      *
-     * @param Request $request
-     * @param UrlGenerator $urlGenerator
-     * @param int $id
-     *
-     * @return Response
-     * @throws AuthException
      * @throws LoaderError
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function deleteAction(Request $request, UrlGenerator $urlGenerator, int $id)
+    public function deleteAction(Request $request, UrlGenerator $urlGenerator, int $id): RedirectResponse|Response
     {
         Controller::authAdmin($request);
 
