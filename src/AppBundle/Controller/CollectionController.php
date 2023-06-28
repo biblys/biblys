@@ -8,6 +8,7 @@ use Biblys\Service\Pagination;
 use CollectionManager;
 use Exception;
 use Framework\Controller;
+use InvalidArgumentException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -79,7 +81,12 @@ class CollectionController extends Controller
         // Pagination
         $page = (int) $request->query->get('p', 0);
         $totalCount = $am->count(['collection_id' => $collection->get('id')]);
-        $pagination = new Pagination($page, $totalCount);
+
+        try {
+            $pagination = new Pagination($page, $totalCount);
+        } catch (InvalidArgumentException $exception) {
+            throw new BadRequestHttpException($exception->getMessage());
+        }
 
         $articles = $am->getAll(['collection_id' => $collection->get('id')], [
             'order' => 'article_pubdate',

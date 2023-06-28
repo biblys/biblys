@@ -16,6 +16,7 @@ use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
+use InvalidArgumentException;
 use LinkManager;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
@@ -198,7 +199,11 @@ class ArticleController extends Controller
 
             if ($inStockFilter) {
                 $count = $am->countSearchResultsForAvailableStock($query, $currentSite);
-                $pagination = new Pagination($page, $count);
+                try {
+                    $pagination = new Pagination($page, $count);
+                } catch (InvalidArgumentException $exception) {
+                    throw new BadRequestHttpException($exception->getMessage());
+                }
                 $pagination->setQueryParams($queryParams);
                 $articles = $am->searchWithAvailableStock($query, $currentSite, [
                     'order' => $selectedSortOptionField,
@@ -208,7 +213,11 @@ class ArticleController extends Controller
                 ]);
             } else {
                 $count = $am->countSearchResults($query);
-                $pagination = new Pagination($page, $count);
+                try {
+                    $pagination = new Pagination($page, $count);
+                } catch (InvalidArgumentException $exception) {
+                    throw new BadRequestHttpException($exception->getMessage());
+                }
                 $pagination->setQueryParams($queryParams);
                 $articles = $am->search($query, [
                     'order' => $selectedSortOptionField,
