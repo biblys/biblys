@@ -66,7 +66,7 @@ try {
         header("HTTP/1.0 404 Not Found");
         die('ERROR > Page introuvable');
     }
-} catch (Throwable $exception) {
+} catch (Exception $exception) {
     $controller = new ErrorController();
     $response = $controller->exception($exception);
     $response->send();
