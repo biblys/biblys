@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.69.0 (DEV)
+## 2.69.0 (5 juillet 2023)
 
 Améliorations
 
@@ -10,8 +10,8 @@ Améliorations
 Déploiement
 
 - Dans les controllers, remplacer `$_LOG` par `LegacyCodeHelper::getGlobalVisitor()`.
-- Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getLegacyCurrentSite()`.
-- Dans les controllers, remplacer `$site` par `LegacyCodeHelper::getLegacyCurrentSite()`.
+- Dans les controllers, remplacer `$_SITE` par `LegacyCodeHelper::getGlobalSite()`.
+- Dans les controllers, remplacer `$site` par `LegacyCodeHelper::getGlobalSite()`.
 
 ### 2.68.6 (14 juin 2023)
 
