@@ -189,8 +189,8 @@ elseif ($order) {
     }, $countries);
 
     $feesList = [];
-    if ($order->get('country')) {
-        $country = CountryQuery::create()->findPk($order->get('country')->get('id'));
+    $country = $order->get("country");
+    if ($country instanceof Country) {
         /** @var CurrentSite $currentSite */
         $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
             $currentSite,

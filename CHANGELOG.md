@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.69.1 (DEV)
+
+Corrections
+
+- Une erreur pouvait survenir lors de l'affichage de l'éditeur de commande 
+  pour une commande dont le pays de livraison n'était pas renseigné. C'est 
+  corrigé.
+
 ## 2.69.0 (5 juillet 2023)
 
 Améliorations
