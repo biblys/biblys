@@ -194,7 +194,7 @@ $countries = array_map(function($country) use($order) {
 
 $feesList = [];
 $country = $order->get("country");
-    if ($country instanceof Country) {
+if ($country instanceof Country) {
     /** @var CurrentSite $currentSite */
     $fees = ShippingFeeQuery::getForCountryWeightAndAmount(
         $currentSite,
