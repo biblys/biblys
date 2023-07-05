@@ -9,15 +9,6 @@ $sm = new StockManager();
 $request->attributes->set("page_title", "Stock");
 $content = '<h1><span class="fa fa-cubes"></span> Stock</h1>';
 
-if (isset($_GET['collection_id'])) {
-    $content .= '
-        <div class="admin">
-            <p>Inventaire</p>
-            <p><a href="/pages/adm_stock_export?collection_id='.$_GET['collection_id'].'">Exporter</a></p>
-        </div>
-    ';
-}
-
 if (empty($_GET['stock_created'])) {
     $_GET['stock_created'] = null;
 }
