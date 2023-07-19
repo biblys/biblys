@@ -17,6 +17,8 @@ use Model\Option as ChildOption;
 use Model\OptionQuery as ChildOptionQuery;
 use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
+use Model\Page as ChildPage;
+use Model\PageQuery as ChildPageQuery;
 use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Right as ChildRight;
@@ -35,6 +37,7 @@ use Model\Map\CrowdfundingCampaignTableMap;
 use Model\Map\CrowfundingRewardTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\OrderTableMap;
+use Model\Map\PageTableMap;
 use Model\Map\PaymentTableMap;
 use Model\Map\RightTableMap;
 use Model\Map\SessionTableMap;
@@ -420,6 +423,13 @@ abstract class Site implements ActiveRecordInterface
     protected $collOrdersPartial;
 
     /**
+     * @var        ObjectCollection|ChildPage[] Collection to store aggregation of ChildPage objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildPage> Collection to store aggregation of ChildPage objects.
+     */
+    protected $collPages;
+    protected $collPagesPartial;
+
+    /**
      * @var        ObjectCollection|ChildPayment[] Collection to store aggregation of ChildPayment objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildPayment> Collection to store aggregation of ChildPayment objects.
      */
@@ -503,6 +513,13 @@ abstract class Site implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildOrder>
      */
     protected $ordersScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPage[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildPage>
+     */
+    protected $pagesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2548,6 +2565,8 @@ abstract class Site implements ActiveRecordInterface
 
             $this->collOrders = null;
 
+            $this->collPages = null;
+
             $this->collPayments = null;
 
             $this->collArticleCategories = null;
@@ -2771,6 +2790,24 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->collOrders !== null) {
                 foreach ($this->collOrders as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->pagesScheduledForDeletion !== null) {
+                if (!$this->pagesScheduledForDeletion->isEmpty()) {
+                    foreach ($this->pagesScheduledForDeletion as $page) {
+                        // need to save related object because we set the relation to null
+                        $page->save($con);
+                    }
+                    $this->pagesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPages !== null) {
+                foreach ($this->collPages as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -3535,6 +3572,21 @@ abstract class Site implements ActiveRecordInterface
 
                 $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collPages) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'pages';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'pagess';
+                        break;
+                    default:
+                        $key = 'Pages';
+                }
+
+                $result[$key] = $this->collPages->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collPayments) {
 
                 switch ($keyType) {
@@ -4243,6 +4295,12 @@ abstract class Site implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getPages() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPage($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPayments() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPayment($relObj->copy($deepCopy));
@@ -4338,6 +4396,10 @@ abstract class Site implements ActiveRecordInterface
         }
         if ('Order' === $relationName) {
             $this->initOrders();
+            return;
+        }
+        if ('Page' === $relationName) {
+            $this->initPages();
             return;
         }
         if ('Payment' === $relationName) {
@@ -5634,6 +5696,245 @@ abstract class Site implements ActiveRecordInterface
             }
             $this->ordersScheduledForDeletion[]= $order;
             $order->setSite(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collPages collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addPages()
+     */
+    public function clearPages()
+    {
+        $this->collPages = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collPages collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialPages($v = true): void
+    {
+        $this->collPagesPartial = $v;
+    }
+
+    /**
+     * Initializes the collPages collection.
+     *
+     * By default this just sets the collPages collection to an empty array (like clearcollPages());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPages(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collPages && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PageTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPages = new $collectionClassName;
+        $this->collPages->setModel('\Model\Page');
+    }
+
+    /**
+     * Gets an array of ChildPage objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildSite is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPage[] List of ChildPage objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPage> List of ChildPage objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getPages(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collPagesPartial && !$this->isNew();
+        if (null === $this->collPages || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collPages) {
+                    $this->initPages();
+                } else {
+                    $collectionClassName = PageTableMap::getTableMap()->getCollectionClassName();
+
+                    $collPages = new $collectionClassName;
+                    $collPages->setModel('\Model\Page');
+
+                    return $collPages;
+                }
+            } else {
+                $collPages = ChildPageQuery::create(null, $criteria)
+                    ->filterBySite($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPagesPartial && count($collPages)) {
+                        $this->initPages(false);
+
+                        foreach ($collPages as $obj) {
+                            if (false == $this->collPages->contains($obj)) {
+                                $this->collPages->append($obj);
+                            }
+                        }
+
+                        $this->collPagesPartial = true;
+                    }
+
+                    return $collPages;
+                }
+
+                if ($partial && $this->collPages) {
+                    foreach ($this->collPages as $obj) {
+                        if ($obj->isNew()) {
+                            $collPages[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPages = $collPages;
+                $this->collPagesPartial = false;
+            }
+        }
+
+        return $this->collPages;
+    }
+
+    /**
+     * Sets a collection of ChildPage objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $pages A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setPages(Collection $pages, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildPage[] $pagesToDelete */
+        $pagesToDelete = $this->getPages(new Criteria(), $con)->diff($pages);
+
+
+        $this->pagesScheduledForDeletion = $pagesToDelete;
+
+        foreach ($pagesToDelete as $pageRemoved) {
+            $pageRemoved->setSite(null);
+        }
+
+        $this->collPages = null;
+        foreach ($pages as $page) {
+            $this->addPage($page);
+        }
+
+        $this->collPages = $pages;
+        $this->collPagesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Page objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Page objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countPages(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collPagesPartial && !$this->isNew();
+        if (null === $this->collPages || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPages) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPages());
+            }
+
+            $query = ChildPageQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySite($this)
+                ->count($con);
+        }
+
+        return count($this->collPages);
+    }
+
+    /**
+     * Method called to associate a ChildPage object to this object
+     * through the ChildPage foreign key attribute.
+     *
+     * @param ChildPage $l ChildPage
+     * @return $this The current object (for fluent API support)
+     */
+    public function addPage(ChildPage $l)
+    {
+        if ($this->collPages === null) {
+            $this->initPages();
+            $this->collPagesPartial = true;
+        }
+
+        if (!$this->collPages->contains($l)) {
+            $this->doAddPage($l);
+
+            if ($this->pagesScheduledForDeletion and $this->pagesScheduledForDeletion->contains($l)) {
+                $this->pagesScheduledForDeletion->remove($this->pagesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPage $page The ChildPage object to add.
+     */
+    protected function doAddPage(ChildPage $page): void
+    {
+        $this->collPages[]= $page;
+        $page->setSite($this);
+    }
+
+    /**
+     * @param ChildPage $page The ChildPage object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removePage(ChildPage $page)
+    {
+        if ($this->getPages()->contains($page)) {
+            $pos = $this->collPages->search($page);
+            $this->collPages->remove($pos);
+            if (null === $this->pagesScheduledForDeletion) {
+                $this->pagesScheduledForDeletion = clone $this->collPages;
+                $this->pagesScheduledForDeletion->clear();
+            }
+            $this->pagesScheduledForDeletion[]= $page;
+            $page->setSite(null);
         }
 
         return $this;
@@ -7324,6 +7625,11 @@ abstract class Site implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPages) {
+                foreach ($this->collPages as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPayments) {
                 foreach ($this->collPayments as $o) {
                     $o->clearAllReferences($deep);
@@ -7361,6 +7667,7 @@ abstract class Site implements ActiveRecordInterface
         $this->collCrowfundingRewards = null;
         $this->collOptions = null;
         $this->collOrders = null;
+        $this->collPages = null;
         $this->collPayments = null;
         $this->collArticleCategories = null;
         $this->collRights = null;

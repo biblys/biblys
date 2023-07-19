@@ -157,6 +157,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
  * @method     ChildSiteQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
+ * @method     ChildSiteQuery leftJoinPage($relationAlias = null) Adds a LEFT JOIN clause to the query using the Page relation
+ * @method     ChildSiteQuery rightJoinPage($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Page relation
+ * @method     ChildSiteQuery innerJoinPage($relationAlias = null) Adds a INNER JOIN clause to the query using the Page relation
+ *
+ * @method     ChildSiteQuery joinWithPage($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Page relation
+ *
+ * @method     ChildSiteQuery leftJoinWithPage() Adds a LEFT JOIN clause and with to the query using the Page relation
+ * @method     ChildSiteQuery rightJoinWithPage() Adds a RIGHT JOIN clause and with to the query using the Page relation
+ * @method     ChildSiteQuery innerJoinWithPage() Adds a INNER JOIN clause and with to the query using the Page relation
+ *
  * @method     ChildSiteQuery leftJoinPayment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Payment relation
  * @method     ChildSiteQuery rightJoinPayment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Payment relation
  * @method     ChildSiteQuery innerJoinPayment($relationAlias = null) Adds a INNER JOIN clause to the query using the Payment relation
@@ -217,7 +227,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSiteQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
  * @method     ChildSiteQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\CartQuery|\Model\CrowdfundingCampaignQuery|\Model\CrowfundingRewardQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PageQuery|\Model\PaymentQuery|\Model\ArticleCategoryQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSite|null findOne(?ConnectionInterface $con = null) Return the first ChildSite matching the query
  * @method     ChildSite findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildSite matching the query, or a new ChildSite object populated from the query conditions when no match is found
@@ -2718,6 +2728,179 @@ abstract class SiteQuery extends ModelCriteria
     {
         /** @var $q \Model\OrderQuery */
         $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\Page object
+     *
+     * @param \Model\Page|ObjectCollection $page the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByPage($page, ?string $comparison = null)
+    {
+        if ($page instanceof \Model\Page) {
+            $this
+                ->addUsingAlias(SiteTableMap::COL_SITE_ID, $page->getSiteId(), $comparison);
+
+            return $this;
+        } elseif ($page instanceof ObjectCollection) {
+            $this
+                ->usePageQuery()
+                ->filterByPrimaryKeys($page->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByPage() only accepts arguments of type \Model\Page or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Page relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinPage(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Page');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Page');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Page relation Page object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\PageQuery A secondary query class using the current class as primary query
+     */
+    public function usePageQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinPage($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Page', '\Model\PageQuery');
+    }
+
+    /**
+     * Use the Page relation Page object
+     *
+     * @param callable(\Model\PageQuery):\Model\PageQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withPageQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::LEFT_JOIN
+    ) {
+        $relatedQuery = $this->usePageQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to Page table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\PageQuery The inner query object of the EXISTS statement
+     */
+    public function usePageExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\PageQuery */
+        $q = $this->useExistsQuery('Page', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Page table for a NOT EXISTS query.
+     *
+     * @see usePageExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PageQuery The inner query object of the NOT EXISTS statement
+     */
+    public function usePageNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PageQuery */
+        $q = $this->useExistsQuery('Page', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to Page table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\PageQuery The inner query object of the IN statement
+     */
+    public function useInPageQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\PageQuery */
+        $q = $this->useInQuery('Page', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to Page table for a NOT IN query.
+     *
+     * @see usePageInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\PageQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInPageQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\PageQuery */
+        $q = $this->useInQuery('Page', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

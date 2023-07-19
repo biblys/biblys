@@ -913,6 +913,9 @@
     <vendor type="mysql">
       <parameter name="Engine" value="MyISAM"/>
     </vendor>
+    <foreign-key foreignTable="sites" skipSql="true">
+      <reference local="site_id" foreign="site_id"/>
+    </foreign-key>
   </table>
   <table name="payments" idMethod="native" phpName="Payment">
     <column name="payment_id" phpName="Id" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>

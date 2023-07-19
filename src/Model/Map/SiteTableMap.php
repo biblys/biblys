@@ -727,6 +727,13 @@ class SiteTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, 'Orders', false);
+        $this->addRelation('Page', '\\Model\\Page', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, 'Pages', false);
         $this->addRelation('Payment', '\\Model\\Payment', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

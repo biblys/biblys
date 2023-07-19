@@ -268,7 +268,7 @@ class PageTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('page_id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('site_id', 'SiteId', 'INTEGER', false, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('page_url', 'Url', 'LONGVARCHAR', false, null, null);
         $this->addColumn('page_title', 'Title', 'LONGVARCHAR', false, null, null);
         $this->addColumn('page_content', 'Content', 'LONGVARCHAR', false, null, null);
@@ -286,6 +286,13 @@ class PageTableMap extends TableMap
      */
     public function buildRelations(): void
     {
+        $this->addRelation('Site', '\\Model\\Site', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':site_id',
+    1 => ':site_id',
+  ),
+), null, null, null, false);
     }
 
     /**

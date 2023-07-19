@@ -7,6 +7,8 @@ Corrections
 - Une erreur pouvait survenir lors de l'affichage de l'éditeur de commande 
   pour une commande dont le pays de livraison n'était pas renseigné. C'est 
   corrigé.
+- L'option de site `old_controller` pour la page d'accueil pouvait 
+  déclencher une erreur 404. A présent, la page d'accueil s'affiche.
 
 ## 2.69.0 (5 juillet 2023)
 
