@@ -48,6 +48,7 @@ class ModelFactory
         $right = new Right();
         $right->setUser($user);
         $right->setSite($site);
+        $right->setCurrent(true);
         $right->save();
 
         return $user;

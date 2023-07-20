@@ -9,6 +9,8 @@ Corrections
   corrigé.
 - L'option de site `old_controller` pour la page d'accueil pouvait 
   déclencher une erreur 404. A présent, la page d'accueil s'affiche.
+- L'affichage de la page d'édition article pouvait échouer avec une erreur. 
+  Ce n'est plus le cas.
 
 ## 2.69.0 (5 juillet 2023)
 

@@ -6,6 +6,7 @@
 use Biblys\Database\Connection;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\LinkQuery;
@@ -14,10 +15,6 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Framework\RouteLoader;
-use Model\ArticleCategory;
-use Model\ArticleCategoryQuery;
-use Model\LinkQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,9 +30,9 @@ $sm = new SiteManager();
 $pm = new PublisherManager();
 $cm = new CollectionManager();
 
-$config = Config::load();
-$request = Request::createFromGlobals();
+/** @var Config $config */
 $currentSite = CurrentSite::buildFromConfig($config);
+/** @var Request $request */
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $routes = RouteLoader::load();
 $urlgenerator = new UrlGenerator($routes, new RequestContext());
@@ -46,7 +43,7 @@ if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
 }
 
 $publisherId = $currentUser->getCurrentRight()->getPublisherId();
-if (!$_SITE->allowsPublisherWithId($publisherId)) {
+if (!LegacyCodeHelper::getLegacyCurrentSite()->allowsPublisherWithId($publisherId)) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }
@@ -61,7 +58,7 @@ if (!$browser->isUpToDate()) {
     $content .= $browser->getUpdateAlert('error');
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($request->getMethod() === "POST") {
     /** @var Article $article */
     $article = $am->getById($_POST['article_id']);
 
