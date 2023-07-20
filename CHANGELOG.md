@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.69.2 (DEV)
+
+Corrections
+
+- Une erreur "Votre maison d'édition n'est pas autorisée sur ce site." 
+  pouvait apparaître sur la page d'édition d'article pour les 
+  administrateurs. C'est corrigé.
+
 ### 2.69.1 (20 juilet 2023)
 
 Corrections

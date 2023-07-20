@@ -361,6 +361,7 @@ class ModelFactory
         $right = new Right();
         $right->setUser($user);
         $right->setPublisherId($publisher->getId());
+        $right->setCurrent(true);
         $right->save();
 
         return $user;

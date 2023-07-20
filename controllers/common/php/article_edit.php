@@ -43,7 +43,10 @@ if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
 }
 
 $publisherId = $currentUser->getCurrentRight()->getPublisherId();
-if (!LegacyCodeHelper::getLegacyCurrentSite()->allowsPublisherWithId($publisherId)) {
+if (
+    $publisherId
+    && !LegacyCodeHelper::getLegacyCurrentSite()->allowsPublisherWithId($publisherId)
+) {
     $pm = new PublisherManager();
     throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
 }
@@ -289,7 +292,7 @@ if ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
     if (!empty($a['article_title'])) {
         // Mode editeur
         if (!$currentUser->isAdmin() && $currentUser->getCurrentRight()->getPublisherId() != $a['publisher_id']) {
-            die("Vous n'avez pas le droit de modifier ce livre !");
+            throw new AccessDeniedHttpException("Vous n'avez pas le droit de modifier ce livre !");
         }
 
         // Biblys publisher's catalog can only be edited on its own site
