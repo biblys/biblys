@@ -50,6 +50,7 @@ class MainController extends Controller
         Mailer $mailer,
         Config $config,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
     ): Response
     {
@@ -143,12 +144,13 @@ class MainController extends Controller
             } elseif ($homeOption == 'old_controller') {
                 $legacyController = new LegacyController();
                 return $legacyController->defaultAction(
-                    $request,
-                    $session,
-                    $mailer,
-                    $config,
-                    $currentSite,
-                    $urlGenerator
+                    request: $request,
+                    session: $session,
+                    mailer: $mailer,
+                    config: $config,
+                    currentSite: $currentSite,
+                    currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+                    urlGenerator: $urlGenerator
                 );
             }
         }

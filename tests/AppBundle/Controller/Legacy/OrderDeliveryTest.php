@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Legacy;
 use AppBundle\Controller\LegacyController;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -74,12 +75,13 @@ class OrderDeliveryTest extends TestCase
 
         // when
         $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -148,12 +150,13 @@ class OrderDeliveryTest extends TestCase
 
         // when
         $response = $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -231,12 +234,13 @@ class OrderDeliveryTest extends TestCase
 
         // when
         $response = $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -318,12 +322,13 @@ class OrderDeliveryTest extends TestCase
 
         // when
         $response = $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then

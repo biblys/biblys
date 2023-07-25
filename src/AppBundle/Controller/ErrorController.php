@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use Exception;
@@ -323,12 +324,13 @@ class ErrorController extends Controller
         $urlgenerator = new UrlGenerator($routes, new RequestContext());
         global $originalRequest;
         $response = $legacyController->defaultAction(
-            $originalRequest,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlgenerator
+            request: $originalRequest,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($originalRequest, $config),
+            urlGenerator: $urlgenerator,
         );
         $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
         return $response;

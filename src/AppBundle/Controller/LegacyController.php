@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Exception;
 use Framework\Controller;
@@ -31,6 +32,7 @@ class LegacyController extends Controller
         Mailer $mailer,
         Config $config,
         CurrentSite $currentSite,
+        CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
     ): Response
     {

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -36,12 +37,13 @@ class LegacyControllerTest extends TestCase
 
         // when
         $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -78,7 +80,8 @@ class LegacyControllerTest extends TestCase
             $mailer,
             $config,
             $currentSite,
-            $urlGenerator,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
     }
 
@@ -108,7 +111,8 @@ class LegacyControllerTest extends TestCase
             $mailer,
             $config,
             $currentSite,
-            $urlGenerator,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
     }
 
@@ -133,12 +137,13 @@ class LegacyControllerTest extends TestCase
 
         // when
         $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
     }
 
@@ -164,12 +169,13 @@ class LegacyControllerTest extends TestCase
 
         // when
         $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then

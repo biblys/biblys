@@ -7,7 +7,6 @@
 
 namespace AppBundle\Controller;
 
-use Biblys\Exception\ContactPageException;
 use Biblys\Service\Cloud\CloudService;
 use Biblys\Service\Cloud\CloudSubscription;
 use Biblys\Service\Config;
@@ -58,12 +57,13 @@ class MainControllerTest extends TestCase
 
         // when
         $response = $controller->homeAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
@@ -104,12 +104,13 @@ class MainControllerTest extends TestCase
 
         // when
         $response = $controller->homeAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            urlGenerator: $urlGenerator,
         );
 
         // then
