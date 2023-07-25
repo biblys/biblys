@@ -77,6 +77,21 @@ class LegacyController extends Controller
             $argumentResolver = $container->get("argument_resolver");
             $arguments = $argumentResolver->getArguments($request, $legacyController);
             $response = $legacyController(...$arguments);
+        } elseif ($_ECHO !== "") {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.70.0",
+                "Using global \$_ECHO (in legacy controller {$controllerPath}) is deprecated. Return an anonymous function instead."
+            );
+            $response = new Response($_ECHO);
+        } elseif (isset($response)) {
+            trigger_deprecation(
+                "biblys/biblys",
+                "2.70.0",
+                "Returning a Response (in legacy controller {$controllerPath}) is deprecated. Return an anonymous function instead."
+            );
+        } else {
+            throw new Exception("Legacy controller must expose a legacyController function.");
         }
 
         if ($response instanceof JsonResponse) {
@@ -85,15 +100,6 @@ class LegacyController extends Controller
 
         if ($response instanceof RedirectResponse) {
             return $response;
-        }
-
-        if (!($response instanceof Response)) {
-            trigger_deprecation(
-                "biblys/biblys",
-                "2.69.0",
-                "Using \$_ECHO (in {$controllerPath}) is deprecated. Return a Response instead."
-            );
-            $response = new Response($_ECHO);
         }
 
         if (isset($GLOBALS["_PAGE_TITLE"])) {
