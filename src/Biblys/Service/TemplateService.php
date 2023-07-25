@@ -62,6 +62,19 @@ class TemplateService
         return new Response($rendered);
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function renderFromString(string $templateString, array $vars = []): Response
+    {
+        $twig = $this->_getTwigEnvironment();
+        $template = $twig->createTemplate($templateString);
+        $rendered = $template->render($vars);
+
+        return new Response($rendered);
+    }
+
     private function _getTwigEnvironment(): Environment
     {
         $config = $this->config;
