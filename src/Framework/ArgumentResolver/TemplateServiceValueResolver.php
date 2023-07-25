@@ -32,6 +32,6 @@ class TemplateServiceValueResolver implements ArgumentValueResolverInterface
         $config = Config::load();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-        yield new TemplateService($config, $currentSiteService, $currentUserService);
+        yield new TemplateService($config, $currentSiteService, $currentUserService, $request);
     }
 }

@@ -42,7 +42,12 @@ class Controller
         $request = Request::createFromGlobals();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $templateService = new TemplateService(
+            $config,
+            $currentSiteService,
+            $currentUserService,
+            $request,
+        );
         return $templateService->render($templatePath, $vars);
     }
 

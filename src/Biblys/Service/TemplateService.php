@@ -32,16 +32,19 @@ class TemplateService
     private Config $config;
     private CurrentSite $currentSiteService;
     private CurrentUser $currentUserService;
+    private Request $request;
 
     public function __construct(
         Config $config,
         CurrentSite $currentSiteService,
         CurrentUser $currentUserService,
+        Request $request,
     )
     {
         $this->config = $config;
         $this->currentSiteService = $currentSiteService;
         $this->currentUserService = $currentUserService;
+        $this->request = $request;
     }
 
     /**
@@ -52,16 +55,14 @@ class TemplateService
      */
     public function render(string $templatePath, array $vars): Response
     {
-        global $request;
-
-        $twig = $this->_getTwigEnvironment($request);
+        $twig = $this->_getTwigEnvironment();
         $template = $twig->load($templatePath);
         $rendered = $template->render($vars);
 
         return new Response($rendered);
     }
 
-    private function _getTwigEnvironment(Request $request): Environment
+    private function _getTwigEnvironment(): Environment
     {
         $config = $this->config;
         $currentSite = $this->currentSiteService;
@@ -93,10 +94,10 @@ class TemplateService
 
         $twig->addGlobal('app', [
             "currentSite" => $currentSite,
-            "currentUrl" => new CurrentUrlService($request),
+            "currentUrl" => new CurrentUrlService($this->request),
             "currentUser" => $currentUserService,
-            "request" => $request,
-            "user" => new Visitor($request),
+            "request" => $this->request,
+            "user" => new Visitor($this->request),
             "session" => new Session(),
             "site" => new Site($config),
             "trackers" => self::_getAnalyticsTrackers($config),

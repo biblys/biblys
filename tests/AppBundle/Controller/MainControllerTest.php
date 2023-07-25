@@ -149,7 +149,12 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $templateService = new TemplateService(
+            $config,
+            $currentSiteService,
+            $currentUserService,
+            $request
+        );
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -197,7 +202,12 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $templateService = new TemplateService(
+            $config,
+            $currentSiteService,
+            $currentUserService,
+            $request
+        );
         $mailer = $this->createMock(Mailer::class);
 
         // when
@@ -245,7 +255,12 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $templateService = new TemplateService($config, $currentSiteService, $currentUserService);
+        $templateService = new TemplateService(
+            $config,
+            $currentSiteService,
+            $currentUserService,
+            $request
+        );
         $mailer = $this->createMock(Mailer::class);
 
         // when
