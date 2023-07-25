@@ -1,5 +1,6 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
+use Biblys\Service\TemplateService;
 
-return new Response('<p>Bientôt...</p>');
+/** @var TemplateService $templateService */
+return $templateService->renderFromString("<p>Bientôt…</p>");
