@@ -7,6 +7,8 @@ Corrections
 - Une erreur "Votre maison d'édition n'est pas autorisée sur ce site." 
   pouvait apparaître sur la page d'édition d'article pour les 
   administrateurs. C'est corrigé.
+- Une alerte créée sans prix maximum pouvait déclencher une erreur sur la 
+  page d'ajout d'un exemplaire au stock. Ça n'arrivera plus.
 
 ### 2.69.1 (20 juilet 2023)
 

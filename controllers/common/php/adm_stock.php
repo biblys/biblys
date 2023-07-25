@@ -502,7 +502,7 @@ if ($article) {
                     <td>' . $user->get('email') . '</a></td>
                     <td>' . $alert->get('condition') . '</td>
                     <td>' . $alert->get('pub_year') . '</td>
-                    <td>' . currency($alert->get('max_price'), true) . '</td>
+                    <td>' . ($alert->get('max_price') ? currency($alert->get('max_price'), true) : "" ). '</td>
                 </tr>
             ';
         }, $alerts);
