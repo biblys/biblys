@@ -52,6 +52,7 @@ class MainController extends Controller
         CurrentSite $currentSite,
         CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
+        TemplateService $templateService,
     ): Response
     {
         global $_SITE;
@@ -149,8 +150,9 @@ class MainController extends Controller
                     mailer: $mailer,
                     config: $config,
                     currentSite: $currentSite,
-                    currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
-                    urlGenerator: $urlGenerator
+                    currentUser: $currentUser,
+                    urlGenerator: $urlGenerator,
+                    templateService: $templateService,
                 );
             }
         }

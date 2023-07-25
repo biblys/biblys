@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Model\PageQuery;
@@ -23,7 +24,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class LegacyController extends Controller
 {
     /**
-     * @throws PropelException
      * @throws Exception
      */
     public function defaultAction(
@@ -34,6 +34,7 @@ class LegacyController extends Controller
         CurrentSite $currentSite,
         CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
+        TemplateService $templateService,
     ): Response
     {
         global $_SITE, $_ECHO, $_SQL, $urlgenerator;

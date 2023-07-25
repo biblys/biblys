@@ -3,10 +3,12 @@
 namespace AppBundle\Controller\Legacy;
 
 use AppBundle\Controller\LegacyController;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use CartManager;
 use Exception;
@@ -41,7 +43,7 @@ class CartTest extends TestCase
         $session->method("getFlashBag")->willReturn($flashBag);
         $request = new Request();
         $request->query->set("page", "cart");
-        $cart = \Biblys\Legacy\LegacyCodeHelper::getGlobalVisitor()->getCart("create");
+        $cart = LegacyCodeHelper::getGlobalVisitor()->getCart("create");
         $article = EntityFactory::createArticle([
             "article_title" => "Papeete",
             "type_id" => 1,
@@ -52,17 +54,19 @@ class CartTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $legacyController = new LegacyController();
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $legacyController = new LegacyController();
         $response = $legacyController->defaultAction(
             request: $request,
             session: $session,
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then

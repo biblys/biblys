@@ -6,8 +6,10 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +24,7 @@ class LegacyControllerTest extends TestCase
 {
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testDefaultAction()
     {
@@ -34,6 +37,7 @@ class LegacyControllerTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $legacyController->defaultAction(
@@ -42,8 +46,9 @@ class LegacyControllerTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -56,6 +61,7 @@ class LegacyControllerTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testDefaultActionRequiringLogin()
     {
@@ -72,6 +78,7 @@ class LegacyControllerTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $legacyController->defaultAction(
@@ -80,13 +87,15 @@ class LegacyControllerTest extends TestCase
             $mailer,
             $config,
             $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
     }
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testDefaultActionRequiringPublisherRight()
     {
@@ -103,6 +112,7 @@ class LegacyControllerTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $legacyController->defaultAction(
@@ -111,13 +121,15 @@ class LegacyControllerTest extends TestCase
             $mailer,
             $config,
             $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
     }
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testDefaultActionRequiringAdminRight()
     {
@@ -134,6 +146,7 @@ class LegacyControllerTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $legacyController->defaultAction(
@@ -142,13 +155,15 @@ class LegacyControllerTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
     }
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function testDefaultActionForStaticPagesLegacyRoute()
     {
@@ -166,6 +181,7 @@ class LegacyControllerTest extends TestCase
             ->method("generate")
             ->with("static_page_show", ["slug" => "page-statique"])
             ->willReturn("/page/page-statique");
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $legacyController->defaultAction(
@@ -174,8 +190,9 @@ class LegacyControllerTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then

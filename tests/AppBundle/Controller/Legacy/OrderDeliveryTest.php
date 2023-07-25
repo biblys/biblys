@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use CartManager;
@@ -72,6 +73,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $legacyController->defaultAction(
@@ -80,8 +82,9 @@ class OrderDeliveryTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -147,16 +150,18 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $response = $response = $legacyController->defaultAction(
+        $response = $legacyController->defaultAction(
             request: $request,
             session: $session,
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -231,16 +236,18 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $response = $response = $legacyController->defaultAction(
+        $response = $legacyController->defaultAction(
             request: $request,
             session: $session,
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -319,16 +326,18 @@ class OrderDeliveryTest extends TestCase
                 ]
             )
             ->willReturn(true);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $response = $response = $legacyController->defaultAction(
+        $response = $legacyController->defaultAction(
             request: $request,
             session: $session,
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then

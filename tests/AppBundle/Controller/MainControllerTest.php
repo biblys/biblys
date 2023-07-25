@@ -54,6 +54,7 @@ class MainControllerTest extends TestCase
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $controller->homeAction(
@@ -62,8 +63,9 @@ class MainControllerTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -101,6 +103,7 @@ class MainControllerTest extends TestCase
         $session = new Session();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $controller->homeAction(
@@ -109,8 +112,9 @@ class MainControllerTest extends TestCase
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then

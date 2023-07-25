@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
 use Exception;
@@ -38,19 +39,22 @@ class ArticleEditTest extends TestCase
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // then
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas le droit d'accéder à cette page.");
 
         // when
-        $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+        $response = $legacyController->defaultAction(
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
     }
 
@@ -73,15 +77,18 @@ class ArticleEditTest extends TestCase
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
         $response = $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
-            $urlGenerator,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then
@@ -108,6 +115,7 @@ class ArticleEditTest extends TestCase
         $legacyController = new LegacyController();
         $config = Config::load();
         $currentSite = CurrentSite::buildFromConfig($config);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
         // when
@@ -119,6 +127,7 @@ class ArticleEditTest extends TestCase
             currentSite: $currentSite,
             currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
             urlGenerator: $urlGenerator,
+            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
         );
 
         // then

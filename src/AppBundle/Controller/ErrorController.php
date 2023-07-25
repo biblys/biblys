@@ -8,6 +8,7 @@ use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
@@ -323,14 +324,17 @@ class ErrorController extends Controller
         $routes = RouteLoader::load();
         $urlgenerator = new UrlGenerator($routes, new RequestContext());
         global $originalRequest;
+        $currentUser = CurrentUser::buildFromRequestAndConfig($originalRequest, $config);
+        $templateService = new TemplateService($config, $currentSite, $currentUser, $originalRequest);
         $response = $legacyController->defaultAction(
             request: $originalRequest,
             session: $session,
             mailer: $mailer,
             config: $config,
             currentSite: $currentSite,
-            currentUser: CurrentUser::buildFromRequestAndConfig($originalRequest, $config),
+            currentUser: $currentUser,
             urlGenerator: $urlgenerator,
+            templateService: $templateService,
         );
         $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
         return $response;
