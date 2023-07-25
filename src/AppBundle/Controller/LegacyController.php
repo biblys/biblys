@@ -8,6 +8,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
+use Closure;
 use Exception;
 use Framework\Controller;
 use Model\PageQuery;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -68,6 +70,14 @@ class LegacyController extends Controller
 
         $_ECHO = "";
         $response = require $controllerPath;
+
+        if ($response instanceof Closure) {
+            $legacyController = $response;
+            $container = include __DIR__."/../../container.php";
+            $argumentResolver = $container->get("argument_resolver");
+            $arguments = $argumentResolver->getArguments($request, $legacyController);
+            $response = $legacyController(...$arguments);
+        }
 
         if ($response instanceof JsonResponse) {
             return $response;
