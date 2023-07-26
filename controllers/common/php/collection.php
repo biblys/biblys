@@ -1,5 +1,9 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
+use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,30 +18,31 @@ $content = '';
 if ($collection) {
     $c = $collection;
 
-        $use_old_controller = $_SITE->getOpt('use_old_collection_controller');
+    /** @var CurrentSite $currentSite */
+    $use_old_controller = $currentSite->getOption('use_old_collection_controller');
     if (!$use_old_controller) {
         return new RedirectResponse('/collection/'.$c['collection_url'], 301);
     }
 
-    \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;');
-
-    if ($_SITE->has("publisher")) {
-        \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() .= ' ('.$c["collection_publisher"].')';
+    $pageTitle = 'Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;';
+    if (LegacyCodeHelper::getGlobalSite()->has("publisher")) {
+        $pageTitle .= ' ('.$c["collection_publisher"].')';
     }
+    $request->attributes->set("page_title", $pageTitle);
 
     $content .= '
         <h2>Collection &laquo;&nbsp;'.$c["collection_name"].'&nbsp;&raquo;</h2>
         <span class="hidden" id="search_terms">collection:'.$c["collection_id"].'</span>
     ';
 
-    if (auth("admin")) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
         /** @var $urlgenerator */
         $content .= '
             <div class="admin">
                 <p>Collection n&deg; '.$c["collection_id"].'</p>
                 <p><a href="'.$urlgenerator->generate('collection_edit', ['id' => $c['collection_id']]).'">modifier</a></p>
         ';
-        if ($_SITE->has("shop")) {
+        if (LegacyCodeHelper::getGlobalSite()->has("shop")) {
             $content .= '<p><a href="/pages/adm_stocks?collection_id='.$c["collection_id"].'">stock</a></p>';
         }
 
