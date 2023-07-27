@@ -41,6 +41,7 @@ class MailingControllerTest extends TestCase
             ->method("addContact")
             ->with("valid-email@example.org", true);
         $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->expects($this->once())->method("isConfigured")->willReturn(true);
         $mailingListService->expects($this->once())
             ->method("getMailingList")
             ->with()
@@ -76,6 +77,7 @@ class MailingControllerTest extends TestCase
             ->method("removeContact")
             ->with("valid-email@example.org");
         $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->expects($this->once())->method("isConfigured")->willReturn(true);
         $mailingListService->expects($this->once())
             ->method("getMailingList")
             ->with()
@@ -113,6 +115,7 @@ class MailingControllerTest extends TestCase
         ]);
         $mailingList->expects($this->once())->method("getContactCount")->willReturn(2);
         $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->expects($this->once())->method("isConfigured")->willReturn(true);
         $mailingListService->expects($this->once())
             ->method("getMailingList")
             ->with()

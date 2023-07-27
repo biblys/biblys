@@ -578,6 +578,7 @@ class ArticleControllerTest extends TestCase
             ->with("free-reader@example.org")
             ->willReturn(false);
         $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->expects($this->once())->method("isConfigured")->willReturn(true);
         $mailingListService->expects($this->once())->method("getMailingList")->willReturn($mailingList);
 
         // when

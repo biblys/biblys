@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var Request $request */
-
 /** @var UrlGenerator $urlGenerator */
 
 $request->attributes->set("page_title", "Commande » Validation");
@@ -84,8 +83,11 @@ if ($shipping) {
 }
 
 $config = Config::load();
+$mailingList = null;
 $mailingListService = new MailingListService($config);
-$mailingList = $mailingListService->getMailingList();
+if ($mailingListService->isConfigured()) {
+    $mailingList = $mailingListService->getMailingList();
+}
 
 // Confirm order
 /** @var Request $request */
@@ -105,12 +107,8 @@ if ($request->getMethod() === "POST") {
         /* MAILING */
         $newsletter_checked = $request->request->get('newsletter', false);
         $email = $request->request->get('order_email');
-        if ($newsletter_checked) {
-            try {
-                $mailingList->addContact($email, true);
-            } catch (Exception $e) {
-                // Ignore errors
-            }
+        if ($newsletter_checked && $mailingListService->isConfigured()) {
+            $mailingList->addContact($email, true);
         }
 
         /* GET ORDER */
@@ -190,13 +188,14 @@ if ($request->getMethod() === "POST") {
         $om->hydrateFromCart($order, $cart);
 
         /** @var Mailer $mailer */
-                $termsPageId = $_SITE->getOpt('cgv_page');
+        /** @var CurrentSite $currentSite */
+        $termsPageId = $currentSite->getOption("cgv_page");
         $termsPage = PageQuery::create()->findPk($termsPageId);
         OrderDeliveryHelpers::sendOrderConfirmationMail(
             $order,
             $shipping,
             $mailer,
-            $_SITE,
+            LegacyCodeHelper::getGlobalSite(),
             $isUpdatingAnExistingOrder,
             $termsPage
         );
@@ -272,11 +271,12 @@ $content .= '
     </table>
 ';
 
-$shipping_date = $_SITE->getOpt('shipping_date');
+/** @var CurrentSite $currentSite */
+$shipping_date = $currentSite->getOption('shipping_date');
 if ($shipping_date) {
     $content .= '
         <h3>Date d\'expédition</h3>
-        <p>' . $_SITE->getOpt('shipping_date') . '</p>
+        <p>' . $currentSite->getOption('shipping_date') . '</p>
     ';
 }
 
@@ -299,11 +299,13 @@ if (isset($error)) {
 
 // Newsletter checkbox
 $newsletter_checkbox = null;
-if ($_SITE->getOpt('newsletter') == 1) {
+if ($currentSite->getOption("newsletter") == 1) {
     $checked = null;
     $showCheckbox = true;
 
-    if (LegacyCodeHelper::getGlobalVisitor()->isLogged() && $mailingList->hasContact(LegacyCodeHelper::getGlobalVisitor()->get("email"))) {
+    if (LegacyCodeHelper::getGlobalVisitor()->isLogged()
+            && $mailingListService->isConfigured()
+            && $mailingList->hasContact(LegacyCodeHelper::getGlobalVisitor()->get("email"))) {
         $showCheckbox = false;
     }
 
@@ -326,7 +328,7 @@ if ($_SITE->getOpt('newsletter') == 1) {
 }
 
 // CGV checkbox
-$cgv_page = $_SITE->getOpt('cgv_page');
+$cgv_page = $currentSite->getOption("cgv_page");
 $cgv_checkbox = '<input type="hidden" name="cgv_checkbox" value=1>';
 if ($cgv_page) {
     $pm = new PageManager();

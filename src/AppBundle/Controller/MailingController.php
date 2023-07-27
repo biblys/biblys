@@ -4,17 +4,20 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\CaptchaValidationException;
 use Biblys\Service\Config;
+use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 use Biblys\Service\MailingList\Exception\InvalidEmailAddressException;
 use Biblys\Service\MailingList\Exception\MailingListServiceException;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
+use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use ReCaptcha\ReCaptcha as ReCaptcha;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -37,6 +40,10 @@ class MailingController extends Controller
         MailingListService $mailingListService,
     ): RedirectResponse|Response
     {
+        if (!$mailingListService->isConfigured()) {
+            throw new NotFoundHttpException("Aucun service de gestion de liste de contacts n'est configuré.");
+        }
+
         $request->attributes->set("page_title", "Inscription à la newsletter");
 
         // ReCaptcha
@@ -99,6 +106,10 @@ class MailingController extends Controller
         MailingListService $mailingListService,
     ): RedirectResponse|Response
     {
+        if (!$mailingListService->isConfigured()) {
+            throw new NotFoundHttpException("Aucun service de gestion de liste de contacts n'est configuré.");
+        }
+
         $request->attributes->set("page_title", "Désinscription de la newsletter");
         $error = null;
 
@@ -128,6 +139,7 @@ class MailingController extends Controller
      * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws InvalidConfigurationException
      */
     public function contacts(
         Request $request,
@@ -135,6 +147,11 @@ class MailingController extends Controller
     ): Response
     {
         self::authAdmin($request);
+
+        if (!$mailingListService->isConfigured()) {
+            throw new NotFoundHttpException("Aucun service de gestion de liste de contacts n'est configuré.");
+        }
+
         $request->attributes->set("page_title", "Liste de contacts");
 
         $currentPage = $request->query->get("p", 0);

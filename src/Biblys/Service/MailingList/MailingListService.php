@@ -3,24 +3,37 @@
 namespace Biblys\Service\MailingList;
 
 use Biblys\Service\Config;
-use Exception;
+use Biblys\Service\MailingList\Exception\InvalidConfigurationException;
 
 class MailingListService
 {
-    private MailingListInterface $list;
+    private ?MailingListInterface $list = null;
+    private bool $isConfigured = false;
 
     public function __construct(Config $config)
     {
         if ($config->get("mailing.service") === "mailjet") {
             $this->list = new MailjetMailingList($config);
-            return;
+            $this->isConfigured = true;
         }
-
-        throw new Exception("Aucun service de gestion de liste de contacts n'est configuré.");
     }
 
-    public function getMailingList(): MailingListInterface
+    public function isConfigured(): bool
     {
+        return $this->isConfigured;
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function getMailingList(): ?MailingListInterface
+    {
+        if (!$this->isConfigured()) {
+            throw new InvalidConfigurationException(
+                "Aucun service de gestion de liste de contacts n'est configuré."
+            );
+        }
+
         return $this->list;
     }
 }

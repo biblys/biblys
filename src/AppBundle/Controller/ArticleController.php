@@ -289,11 +289,13 @@ class ArticleController extends Controller
 
         $newsletter = false;
         $newsletter_checked = false;
-        $mailingList = $mailingListService->getMailingList();
-        if ($currentSiteService->getOption("newsletter") === "1") {
-            $newsletter = true;
-            if ($mailingList->hasContact($currentUser->getEmail())) {
-                $newsletter_checked = null;
+        if ($mailingListService->isConfigured()) {
+            $mailingList = $mailingListService->getMailingList();
+            if ($currentSiteService->getOption("newsletter") === "1") {
+                $newsletter = true;
+                if ($mailingList->hasContact($currentUser->getEmail())) {
+                    $newsletter_checked = null;
+                }
             }
         }
 
