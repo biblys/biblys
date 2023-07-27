@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\LoggerService;
-use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
@@ -344,58 +343,6 @@ class OrderController extends Controller
             $loggerService->log("payplug", "ERROR", 'PayplugException: ' . $exception->getMessage());
             throw $exception;
         }
-    }
-
-    /**
-     * Display conversions for recents orders
-     * /admin/orders/conversions.
-     *
-     * @param Request $request
-     * @return Response
-     * @throws LoaderError
-     * @throws PropelException
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function conversionsAction(Request $request): Response
-    {
-        self::authAdmin($request);
-
-        $filters = ['order_utm_source' => 'NOT NULL'];
-
-        $utmSource = $request->query->get('source');
-        if ($utmSource) {
-            $filters['order_utm_source'] = $utmSource;
-        }
-
-        $utmCampaign = $request->query->get('campaign');
-        if ($utmCampaign) {
-            $filters['order_utm_campaign'] = $utmCampaign;
-        }
-
-        $utmMedium = $request->query->get('medium');
-        if ($utmSource) {
-            $filters['order_utm_medium'] = $utmMedium;
-        }
-
-        $om = new OrderManager();
-
-        // Pagination
-        $page = (int) $request->query->get('p', 0);
-        $totalCount = $om->count($filters);
-        $pagination = new Pagination($page, $totalCount, 100);
-
-        $orders = $om->getAll($filters, [
-            'order' => 'order_payment_date',
-            'sort' => 'desc',
-            'limit' => $pagination->getLimit(),
-            'offset' => $pagination->getOffset(),
-        ]);
-
-        return $this->render('AppBundle:Order:conversions.html.twig', array_merge($filters, [
-            'orders' => $orders,
-            'pages' => $pagination,
-        ]));
     }
 
     private function _jsonOrder(Order $order): array

@@ -404,18 +404,6 @@ if (_isAnonymousOrder($order) || _orderBelongsToVisitor($order, $currentUserServ
             </script>
         ";
     }
-
-    if ($currentUserService->isAdmin()) {
-        /** @var UrlGenerator $urlgenerator */
-        $content .= '
-            <h3 class="text-center">Origine de la commande</h3>
-            <p class="text-center">
-                Source : <a href="' . $urlgenerator->generate('orders_conversions') . '?source=' . $order->get('utm_source') . '">' . $order->get('utm_source') . '</a><br>
-                Campagne : <a href="' . $urlgenerator->generate('orders_conversions') . '?campaign=' . $order->get('utm_campaign') . '">' . $order->get('utm_campaign') . '</a><br>
-                Medium : <a href="' . $urlgenerator->generate('orders_conversions') . '?medium=' . $order->get('utm_medium') . '">' . $order->get('utm_medium') . '</a><br>
-            </p>
-        ';
-    }
 } elseif (!$currentUserService->isAuthentified()) {
     throw new UnauthorizedHttpException("", "Vous n'avez pas le droit d'accéder à cette page.");
 } else {

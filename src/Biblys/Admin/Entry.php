@@ -221,7 +221,6 @@ class Entry
 
         $entries[] = new Entry('Chiffre d\'affaires', ['category' => 'stats', 'url' => '/pages/adm_revenue', 'icon' => 'money']);
         $entries[] = new Entry('Best-sellers', ['category' => 'stats', 'url' => '/pages/adm_stats_best-sellers', 'icon' => 'sort-amount-desc']);
-        $entries[] = new Entry('Suivi des conversions', ['category' => 'stats', 'path' => 'orders_conversions', 'icon' => 'handshake-o']);
         $entries[] = new Entry('C.A. par fournisseur', ['category' => 'stats', 'path' => 'stats_suppliers', 'icon' => 'truck']);
         $entries[] = new Entry('C.A. par facture', ['category' => 'stats', 'url' => '/pages/adm_stats_invoices', 'icon' => 'file']);
         $entries[] = new Entry('Ventes par article', ['category' => 'stats', 'url' => '/pages/adm_sales_articles', 'icon' => 'book']);

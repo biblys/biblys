@@ -1,5 +1,15 @@
 # Historique des modifications
 
+## 2.70.0 (DEV)
+
+Améliorations
+
+- L'outil de suivi des conversions a été supprimé.
+
+Déploiement
+
+- Exécuter les migrations
+
 ### 2.69.3 (2 août 2023)
 
 Corrections

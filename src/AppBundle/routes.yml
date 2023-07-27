@@ -364,10 +364,6 @@ order_update:
   path: /admin/orders/{id}/{action}
   controller: AppBundle\Controller\OrderController::updateAction
 
-orders_conversions:
-  path: /admin/orders/conversions
-  controller: AppBundle\Controller\OrderController::conversionsAction
-
 orders_show:
   methods: GET
   path: /admin/orders/{id}
