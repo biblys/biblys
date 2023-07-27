@@ -865,9 +865,6 @@
     <column name="order_phone" phpName="Phone" type="LONGVARCHAR"/>
     <column name="order_comment" phpName="Comment" type="VARCHAR" size="1024"/>
     <column name="order_utmz" phpName="Utmz" type="VARCHAR" size="1024"/>
-    <column name="order_utm_source" phpName="UtmSource" type="VARCHAR" size="256"/>
-    <column name="order_utm_campaign" phpName="UtmCampaign" type="VARCHAR" size="256"/>
-    <column name="order_utm_medium" phpName="UtmMedium" type="VARCHAR" size="256"/>
     <column name="order_referer" phpName="Referer" type="LONGVARCHAR"/>
     <column name="order_insert" phpName="Insert" type="TIMESTAMP"/>
     <column name="order_payment_date" phpName="PaymentDate" type="TIMESTAMP"/>

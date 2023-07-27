@@ -63,7 +63,7 @@ class OrderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 50;
+    public const NUM_COLUMNS = 47;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class OrderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 50;
+    public const NUM_HYDRATE_COLUMNS = 47;
 
     /**
      * the column name for the order_id field
@@ -261,21 +261,6 @@ class OrderTableMap extends TableMap
     public const COL_ORDER_UTMZ = 'orders.order_utmz';
 
     /**
-     * the column name for the order_utm_source field
-     */
-    public const COL_ORDER_UTM_SOURCE = 'orders.order_utm_source';
-
-    /**
-     * the column name for the order_utm_campaign field
-     */
-    public const COL_ORDER_UTM_CAMPAIGN = 'orders.order_utm_campaign';
-
-    /**
-     * the column name for the order_utm_medium field
-     */
-    public const COL_ORDER_UTM_MEDIUM = 'orders.order_utm_medium';
-
-    /**
      * the column name for the order_referer field
      */
     public const COL_ORDER_REFERER = 'orders.order_referer';
@@ -339,11 +324,11 @@ class OrderTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'Slug', 'SiteId', 'UserId', 'CustomerId', 'SellerId', 'Type', 'AsAGift', 'GiftRecipient', 'Amount', 'Discount', 'AmountTobepaid', 'ShippingId', 'CountryId', 'Shipping', 'ShippingMode', 'TrackNumber', 'PaymentMode', 'PaymentCash', 'PaymentCheque', 'PaymentTransfer', 'PaymentCard', 'PaymentPaypal', 'PaymentPayplug', 'PaymentLeft', 'Title', 'Firstname', 'Lastname', 'Address1', 'Address2', 'Postalcode', 'City', 'Country', 'Email', 'Phone', 'Comment', 'Utmz', 'UtmSource', 'UtmCampaign', 'UtmMedium', 'Referer', 'Insert', 'PaymentDate', 'ShippingDate', 'FollowupDate', 'ConfirmationDate', 'CancelDate', 'Update', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'slug', 'siteId', 'userId', 'customerId', 'sellerId', 'type', 'asAGift', 'giftRecipient', 'amount', 'discount', 'amountTobepaid', 'shippingId', 'countryId', 'shipping', 'shippingMode', 'trackNumber', 'paymentMode', 'paymentCash', 'paymentCheque', 'paymentTransfer', 'paymentCard', 'paymentPaypal', 'paymentPayplug', 'paymentLeft', 'title', 'firstname', 'lastname', 'address1', 'address2', 'postalcode', 'city', 'country', 'email', 'phone', 'comment', 'utmz', 'utmSource', 'utmCampaign', 'utmMedium', 'referer', 'insert', 'paymentDate', 'shippingDate', 'followupDate', 'confirmationDate', 'cancelDate', 'update', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID, OrderTableMap::COL_ORDER_URL, OrderTableMap::COL_SITE_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_CUSTOMER_ID, OrderTableMap::COL_SELLER_ID, OrderTableMap::COL_ORDER_TYPE, OrderTableMap::COL_AS_A_GIFT, OrderTableMap::COL_GIFT_RECIPIENT, OrderTableMap::COL_ORDER_AMOUNT, OrderTableMap::COL_ORDER_DISCOUNT, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, OrderTableMap::COL_SHIPPING_ID, OrderTableMap::COL_COUNTRY_ID, OrderTableMap::COL_ORDER_SHIPPING, OrderTableMap::COL_ORDER_SHIPPING_MODE, OrderTableMap::COL_ORDER_TRACK_NUMBER, OrderTableMap::COL_ORDER_PAYMENT_MODE, OrderTableMap::COL_ORDER_PAYMENT_CASH, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, OrderTableMap::COL_ORDER_PAYMENT_CARD, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, OrderTableMap::COL_ORDER_PAYMENT_LEFT, OrderTableMap::COL_ORDER_TITLE, OrderTableMap::COL_ORDER_FIRSTNAME, OrderTableMap::COL_ORDER_LASTNAME, OrderTableMap::COL_ORDER_ADDRESS1, OrderTableMap::COL_ORDER_ADDRESS2, OrderTableMap::COL_ORDER_POSTALCODE, OrderTableMap::COL_ORDER_CITY, OrderTableMap::COL_ORDER_COUNTRY, OrderTableMap::COL_ORDER_EMAIL, OrderTableMap::COL_ORDER_PHONE, OrderTableMap::COL_ORDER_COMMENT, OrderTableMap::COL_ORDER_UTMZ, OrderTableMap::COL_ORDER_UTM_SOURCE, OrderTableMap::COL_ORDER_UTM_CAMPAIGN, OrderTableMap::COL_ORDER_UTM_MEDIUM, OrderTableMap::COL_ORDER_REFERER, OrderTableMap::COL_ORDER_INSERT, OrderTableMap::COL_ORDER_PAYMENT_DATE, OrderTableMap::COL_ORDER_SHIPPING_DATE, OrderTableMap::COL_ORDER_FOLLOWUP_DATE, OrderTableMap::COL_ORDER_CONFIRMATION_DATE, OrderTableMap::COL_ORDER_CANCEL_DATE, OrderTableMap::COL_ORDER_UPDATE, OrderTableMap::COL_ORDER_CREATED, OrderTableMap::COL_ORDER_UPDATED, ],
-        self::TYPE_FIELDNAME     => ['order_id', 'order_url', 'site_id', 'user_id', 'customer_id', 'seller_id', 'order_type', 'order_as_a_gift', 'order_gift_recipient', 'order_amount', 'order_discount', 'order_amount_tobepaid', 'shipping_id', 'country_id', 'order_shipping', 'order_shipping_mode', 'order_track_number', 'order_payment_mode', 'order_payment_cash', 'order_payment_cheque', 'order_payment_transfer', 'order_payment_card', 'order_payment_paypal', 'order_payment_payplug', 'order_payment_left', 'order_title', 'order_firstname', 'order_lastname', 'order_address1', 'order_address2', 'order_postalcode', 'order_city', 'order_country', 'order_email', 'order_phone', 'order_comment', 'order_utmz', 'order_utm_source', 'order_utm_campaign', 'order_utm_medium', 'order_referer', 'order_insert', 'order_payment_date', 'order_shipping_date', 'order_followup_date', 'order_confirmation_date', 'order_cancel_date', 'order_update', 'order_created', 'order_updated', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, ]
+        self::TYPE_PHPNAME       => ['Id', 'Slug', 'SiteId', 'UserId', 'CustomerId', 'SellerId', 'Type', 'AsAGift', 'GiftRecipient', 'Amount', 'Discount', 'AmountTobepaid', 'ShippingId', 'CountryId', 'Shipping', 'ShippingMode', 'TrackNumber', 'PaymentMode', 'PaymentCash', 'PaymentCheque', 'PaymentTransfer', 'PaymentCard', 'PaymentPaypal', 'PaymentPayplug', 'PaymentLeft', 'Title', 'Firstname', 'Lastname', 'Address1', 'Address2', 'Postalcode', 'City', 'Country', 'Email', 'Phone', 'Comment', 'Utmz', 'Referer', 'Insert', 'PaymentDate', 'ShippingDate', 'FollowupDate', 'ConfirmationDate', 'CancelDate', 'Update', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'slug', 'siteId', 'userId', 'customerId', 'sellerId', 'type', 'asAGift', 'giftRecipient', 'amount', 'discount', 'amountTobepaid', 'shippingId', 'countryId', 'shipping', 'shippingMode', 'trackNumber', 'paymentMode', 'paymentCash', 'paymentCheque', 'paymentTransfer', 'paymentCard', 'paymentPaypal', 'paymentPayplug', 'paymentLeft', 'title', 'firstname', 'lastname', 'address1', 'address2', 'postalcode', 'city', 'country', 'email', 'phone', 'comment', 'utmz', 'referer', 'insert', 'paymentDate', 'shippingDate', 'followupDate', 'confirmationDate', 'cancelDate', 'update', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID, OrderTableMap::COL_ORDER_URL, OrderTableMap::COL_SITE_ID, OrderTableMap::COL_USER_ID, OrderTableMap::COL_CUSTOMER_ID, OrderTableMap::COL_SELLER_ID, OrderTableMap::COL_ORDER_TYPE, OrderTableMap::COL_AS_A_GIFT, OrderTableMap::COL_GIFT_RECIPIENT, OrderTableMap::COL_ORDER_AMOUNT, OrderTableMap::COL_ORDER_DISCOUNT, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID, OrderTableMap::COL_SHIPPING_ID, OrderTableMap::COL_COUNTRY_ID, OrderTableMap::COL_ORDER_SHIPPING, OrderTableMap::COL_ORDER_SHIPPING_MODE, OrderTableMap::COL_ORDER_TRACK_NUMBER, OrderTableMap::COL_ORDER_PAYMENT_MODE, OrderTableMap::COL_ORDER_PAYMENT_CASH, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER, OrderTableMap::COL_ORDER_PAYMENT_CARD, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG, OrderTableMap::COL_ORDER_PAYMENT_LEFT, OrderTableMap::COL_ORDER_TITLE, OrderTableMap::COL_ORDER_FIRSTNAME, OrderTableMap::COL_ORDER_LASTNAME, OrderTableMap::COL_ORDER_ADDRESS1, OrderTableMap::COL_ORDER_ADDRESS2, OrderTableMap::COL_ORDER_POSTALCODE, OrderTableMap::COL_ORDER_CITY, OrderTableMap::COL_ORDER_COUNTRY, OrderTableMap::COL_ORDER_EMAIL, OrderTableMap::COL_ORDER_PHONE, OrderTableMap::COL_ORDER_COMMENT, OrderTableMap::COL_ORDER_UTMZ, OrderTableMap::COL_ORDER_REFERER, OrderTableMap::COL_ORDER_INSERT, OrderTableMap::COL_ORDER_PAYMENT_DATE, OrderTableMap::COL_ORDER_SHIPPING_DATE, OrderTableMap::COL_ORDER_FOLLOWUP_DATE, OrderTableMap::COL_ORDER_CONFIRMATION_DATE, OrderTableMap::COL_ORDER_CANCEL_DATE, OrderTableMap::COL_ORDER_UPDATE, OrderTableMap::COL_ORDER_CREATED, OrderTableMap::COL_ORDER_UPDATED, ],
+        self::TYPE_FIELDNAME     => ['order_id', 'order_url', 'site_id', 'user_id', 'customer_id', 'seller_id', 'order_type', 'order_as_a_gift', 'order_gift_recipient', 'order_amount', 'order_discount', 'order_amount_tobepaid', 'shipping_id', 'country_id', 'order_shipping', 'order_shipping_mode', 'order_track_number', 'order_payment_mode', 'order_payment_cash', 'order_payment_cheque', 'order_payment_transfer', 'order_payment_card', 'order_payment_paypal', 'order_payment_payplug', 'order_payment_left', 'order_title', 'order_firstname', 'order_lastname', 'order_address1', 'order_address2', 'order_postalcode', 'order_city', 'order_country', 'order_email', 'order_phone', 'order_comment', 'order_utmz', 'order_referer', 'order_insert', 'order_payment_date', 'order_shipping_date', 'order_followup_date', 'order_confirmation_date', 'order_cancel_date', 'order_update', 'order_created', 'order_updated', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, ]
     ];
 
     /**
@@ -355,11 +340,11 @@ class OrderTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'Slug' => 1, 'SiteId' => 2, 'UserId' => 3, 'CustomerId' => 4, 'SellerId' => 5, 'Type' => 6, 'AsAGift' => 7, 'GiftRecipient' => 8, 'Amount' => 9, 'Discount' => 10, 'AmountTobepaid' => 11, 'ShippingId' => 12, 'CountryId' => 13, 'Shipping' => 14, 'ShippingMode' => 15, 'TrackNumber' => 16, 'PaymentMode' => 17, 'PaymentCash' => 18, 'PaymentCheque' => 19, 'PaymentTransfer' => 20, 'PaymentCard' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentLeft' => 24, 'Title' => 25, 'Firstname' => 26, 'Lastname' => 27, 'Address1' => 28, 'Address2' => 29, 'Postalcode' => 30, 'City' => 31, 'Country' => 32, 'Email' => 33, 'Phone' => 34, 'Comment' => 35, 'Utmz' => 36, 'UtmSource' => 37, 'UtmCampaign' => 38, 'UtmMedium' => 39, 'Referer' => 40, 'Insert' => 41, 'PaymentDate' => 42, 'ShippingDate' => 43, 'FollowupDate' => 44, 'ConfirmationDate' => 45, 'CancelDate' => 46, 'Update' => 47, 'CreatedAt' => 48, 'UpdatedAt' => 49, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'slug' => 1, 'siteId' => 2, 'userId' => 3, 'customerId' => 4, 'sellerId' => 5, 'type' => 6, 'asAGift' => 7, 'giftRecipient' => 8, 'amount' => 9, 'discount' => 10, 'amountTobepaid' => 11, 'shippingId' => 12, 'countryId' => 13, 'shipping' => 14, 'shippingMode' => 15, 'trackNumber' => 16, 'paymentMode' => 17, 'paymentCash' => 18, 'paymentCheque' => 19, 'paymentTransfer' => 20, 'paymentCard' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentLeft' => 24, 'title' => 25, 'firstname' => 26, 'lastname' => 27, 'address1' => 28, 'address2' => 29, 'postalcode' => 30, 'city' => 31, 'country' => 32, 'email' => 33, 'phone' => 34, 'comment' => 35, 'utmz' => 36, 'utmSource' => 37, 'utmCampaign' => 38, 'utmMedium' => 39, 'referer' => 40, 'insert' => 41, 'paymentDate' => 42, 'shippingDate' => 43, 'followupDate' => 44, 'confirmationDate' => 45, 'cancelDate' => 46, 'update' => 47, 'createdAt' => 48, 'updatedAt' => 49, ],
-        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID => 0, OrderTableMap::COL_ORDER_URL => 1, OrderTableMap::COL_SITE_ID => 2, OrderTableMap::COL_USER_ID => 3, OrderTableMap::COL_CUSTOMER_ID => 4, OrderTableMap::COL_SELLER_ID => 5, OrderTableMap::COL_ORDER_TYPE => 6, OrderTableMap::COL_AS_A_GIFT => 7, OrderTableMap::COL_GIFT_RECIPIENT => 8, OrderTableMap::COL_ORDER_AMOUNT => 9, OrderTableMap::COL_ORDER_DISCOUNT => 10, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID => 11, OrderTableMap::COL_SHIPPING_ID => 12, OrderTableMap::COL_COUNTRY_ID => 13, OrderTableMap::COL_ORDER_SHIPPING => 14, OrderTableMap::COL_ORDER_SHIPPING_MODE => 15, OrderTableMap::COL_ORDER_TRACK_NUMBER => 16, OrderTableMap::COL_ORDER_PAYMENT_MODE => 17, OrderTableMap::COL_ORDER_PAYMENT_CASH => 18, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE => 19, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER => 20, OrderTableMap::COL_ORDER_PAYMENT_CARD => 21, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL => 22, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG => 23, OrderTableMap::COL_ORDER_PAYMENT_LEFT => 24, OrderTableMap::COL_ORDER_TITLE => 25, OrderTableMap::COL_ORDER_FIRSTNAME => 26, OrderTableMap::COL_ORDER_LASTNAME => 27, OrderTableMap::COL_ORDER_ADDRESS1 => 28, OrderTableMap::COL_ORDER_ADDRESS2 => 29, OrderTableMap::COL_ORDER_POSTALCODE => 30, OrderTableMap::COL_ORDER_CITY => 31, OrderTableMap::COL_ORDER_COUNTRY => 32, OrderTableMap::COL_ORDER_EMAIL => 33, OrderTableMap::COL_ORDER_PHONE => 34, OrderTableMap::COL_ORDER_COMMENT => 35, OrderTableMap::COL_ORDER_UTMZ => 36, OrderTableMap::COL_ORDER_UTM_SOURCE => 37, OrderTableMap::COL_ORDER_UTM_CAMPAIGN => 38, OrderTableMap::COL_ORDER_UTM_MEDIUM => 39, OrderTableMap::COL_ORDER_REFERER => 40, OrderTableMap::COL_ORDER_INSERT => 41, OrderTableMap::COL_ORDER_PAYMENT_DATE => 42, OrderTableMap::COL_ORDER_SHIPPING_DATE => 43, OrderTableMap::COL_ORDER_FOLLOWUP_DATE => 44, OrderTableMap::COL_ORDER_CONFIRMATION_DATE => 45, OrderTableMap::COL_ORDER_CANCEL_DATE => 46, OrderTableMap::COL_ORDER_UPDATE => 47, OrderTableMap::COL_ORDER_CREATED => 48, OrderTableMap::COL_ORDER_UPDATED => 49, ],
-        self::TYPE_FIELDNAME     => ['order_id' => 0, 'order_url' => 1, 'site_id' => 2, 'user_id' => 3, 'customer_id' => 4, 'seller_id' => 5, 'order_type' => 6, 'order_as_a_gift' => 7, 'order_gift_recipient' => 8, 'order_amount' => 9, 'order_discount' => 10, 'order_amount_tobepaid' => 11, 'shipping_id' => 12, 'country_id' => 13, 'order_shipping' => 14, 'order_shipping_mode' => 15, 'order_track_number' => 16, 'order_payment_mode' => 17, 'order_payment_cash' => 18, 'order_payment_cheque' => 19, 'order_payment_transfer' => 20, 'order_payment_card' => 21, 'order_payment_paypal' => 22, 'order_payment_payplug' => 23, 'order_payment_left' => 24, 'order_title' => 25, 'order_firstname' => 26, 'order_lastname' => 27, 'order_address1' => 28, 'order_address2' => 29, 'order_postalcode' => 30, 'order_city' => 31, 'order_country' => 32, 'order_email' => 33, 'order_phone' => 34, 'order_comment' => 35, 'order_utmz' => 36, 'order_utm_source' => 37, 'order_utm_campaign' => 38, 'order_utm_medium' => 39, 'order_referer' => 40, 'order_insert' => 41, 'order_payment_date' => 42, 'order_shipping_date' => 43, 'order_followup_date' => 44, 'order_confirmation_date' => 45, 'order_cancel_date' => 46, 'order_update' => 47, 'order_created' => 48, 'order_updated' => 49, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'Slug' => 1, 'SiteId' => 2, 'UserId' => 3, 'CustomerId' => 4, 'SellerId' => 5, 'Type' => 6, 'AsAGift' => 7, 'GiftRecipient' => 8, 'Amount' => 9, 'Discount' => 10, 'AmountTobepaid' => 11, 'ShippingId' => 12, 'CountryId' => 13, 'Shipping' => 14, 'ShippingMode' => 15, 'TrackNumber' => 16, 'PaymentMode' => 17, 'PaymentCash' => 18, 'PaymentCheque' => 19, 'PaymentTransfer' => 20, 'PaymentCard' => 21, 'PaymentPaypal' => 22, 'PaymentPayplug' => 23, 'PaymentLeft' => 24, 'Title' => 25, 'Firstname' => 26, 'Lastname' => 27, 'Address1' => 28, 'Address2' => 29, 'Postalcode' => 30, 'City' => 31, 'Country' => 32, 'Email' => 33, 'Phone' => 34, 'Comment' => 35, 'Utmz' => 36, 'Referer' => 37, 'Insert' => 38, 'PaymentDate' => 39, 'ShippingDate' => 40, 'FollowupDate' => 41, 'ConfirmationDate' => 42, 'CancelDate' => 43, 'Update' => 44, 'CreatedAt' => 45, 'UpdatedAt' => 46, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'slug' => 1, 'siteId' => 2, 'userId' => 3, 'customerId' => 4, 'sellerId' => 5, 'type' => 6, 'asAGift' => 7, 'giftRecipient' => 8, 'amount' => 9, 'discount' => 10, 'amountTobepaid' => 11, 'shippingId' => 12, 'countryId' => 13, 'shipping' => 14, 'shippingMode' => 15, 'trackNumber' => 16, 'paymentMode' => 17, 'paymentCash' => 18, 'paymentCheque' => 19, 'paymentTransfer' => 20, 'paymentCard' => 21, 'paymentPaypal' => 22, 'paymentPayplug' => 23, 'paymentLeft' => 24, 'title' => 25, 'firstname' => 26, 'lastname' => 27, 'address1' => 28, 'address2' => 29, 'postalcode' => 30, 'city' => 31, 'country' => 32, 'email' => 33, 'phone' => 34, 'comment' => 35, 'utmz' => 36, 'referer' => 37, 'insert' => 38, 'paymentDate' => 39, 'shippingDate' => 40, 'followupDate' => 41, 'confirmationDate' => 42, 'cancelDate' => 43, 'update' => 44, 'createdAt' => 45, 'updatedAt' => 46, ],
+        self::TYPE_COLNAME       => [OrderTableMap::COL_ORDER_ID => 0, OrderTableMap::COL_ORDER_URL => 1, OrderTableMap::COL_SITE_ID => 2, OrderTableMap::COL_USER_ID => 3, OrderTableMap::COL_CUSTOMER_ID => 4, OrderTableMap::COL_SELLER_ID => 5, OrderTableMap::COL_ORDER_TYPE => 6, OrderTableMap::COL_AS_A_GIFT => 7, OrderTableMap::COL_GIFT_RECIPIENT => 8, OrderTableMap::COL_ORDER_AMOUNT => 9, OrderTableMap::COL_ORDER_DISCOUNT => 10, OrderTableMap::COL_ORDER_AMOUNT_TOBEPAID => 11, OrderTableMap::COL_SHIPPING_ID => 12, OrderTableMap::COL_COUNTRY_ID => 13, OrderTableMap::COL_ORDER_SHIPPING => 14, OrderTableMap::COL_ORDER_SHIPPING_MODE => 15, OrderTableMap::COL_ORDER_TRACK_NUMBER => 16, OrderTableMap::COL_ORDER_PAYMENT_MODE => 17, OrderTableMap::COL_ORDER_PAYMENT_CASH => 18, OrderTableMap::COL_ORDER_PAYMENT_CHEQUE => 19, OrderTableMap::COL_ORDER_PAYMENT_TRANSFER => 20, OrderTableMap::COL_ORDER_PAYMENT_CARD => 21, OrderTableMap::COL_ORDER_PAYMENT_PAYPAL => 22, OrderTableMap::COL_ORDER_PAYMENT_PAYPLUG => 23, OrderTableMap::COL_ORDER_PAYMENT_LEFT => 24, OrderTableMap::COL_ORDER_TITLE => 25, OrderTableMap::COL_ORDER_FIRSTNAME => 26, OrderTableMap::COL_ORDER_LASTNAME => 27, OrderTableMap::COL_ORDER_ADDRESS1 => 28, OrderTableMap::COL_ORDER_ADDRESS2 => 29, OrderTableMap::COL_ORDER_POSTALCODE => 30, OrderTableMap::COL_ORDER_CITY => 31, OrderTableMap::COL_ORDER_COUNTRY => 32, OrderTableMap::COL_ORDER_EMAIL => 33, OrderTableMap::COL_ORDER_PHONE => 34, OrderTableMap::COL_ORDER_COMMENT => 35, OrderTableMap::COL_ORDER_UTMZ => 36, OrderTableMap::COL_ORDER_REFERER => 37, OrderTableMap::COL_ORDER_INSERT => 38, OrderTableMap::COL_ORDER_PAYMENT_DATE => 39, OrderTableMap::COL_ORDER_SHIPPING_DATE => 40, OrderTableMap::COL_ORDER_FOLLOWUP_DATE => 41, OrderTableMap::COL_ORDER_CONFIRMATION_DATE => 42, OrderTableMap::COL_ORDER_CANCEL_DATE => 43, OrderTableMap::COL_ORDER_UPDATE => 44, OrderTableMap::COL_ORDER_CREATED => 45, OrderTableMap::COL_ORDER_UPDATED => 46, ],
+        self::TYPE_FIELDNAME     => ['order_id' => 0, 'order_url' => 1, 'site_id' => 2, 'user_id' => 3, 'customer_id' => 4, 'seller_id' => 5, 'order_type' => 6, 'order_as_a_gift' => 7, 'order_gift_recipient' => 8, 'order_amount' => 9, 'order_discount' => 10, 'order_amount_tobepaid' => 11, 'shipping_id' => 12, 'country_id' => 13, 'order_shipping' => 14, 'order_shipping_mode' => 15, 'order_track_number' => 16, 'order_payment_mode' => 17, 'order_payment_cash' => 18, 'order_payment_cheque' => 19, 'order_payment_transfer' => 20, 'order_payment_card' => 21, 'order_payment_paypal' => 22, 'order_payment_payplug' => 23, 'order_payment_left' => 24, 'order_title' => 25, 'order_firstname' => 26, 'order_lastname' => 27, 'order_address1' => 28, 'order_address2' => 29, 'order_postalcode' => 30, 'order_city' => 31, 'order_country' => 32, 'order_email' => 33, 'order_phone' => 34, 'order_comment' => 35, 'order_utmz' => 36, 'order_referer' => 37, 'order_insert' => 38, 'order_payment_date' => 39, 'order_shipping_date' => 40, 'order_followup_date' => 41, 'order_confirmation_date' => 42, 'order_cancel_date' => 43, 'order_update' => 44, 'order_created' => 45, 'order_updated' => 46, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, ]
     ];
 
     /**
@@ -664,30 +649,6 @@ class OrderTableMap extends TableMap
         'COL_ORDER_UTMZ' => 'ORDER_UTMZ',
         'order_utmz' => 'ORDER_UTMZ',
         'orders.order_utmz' => 'ORDER_UTMZ',
-        'UtmSource' => 'ORDER_UTM_SOURCE',
-        'Order.UtmSource' => 'ORDER_UTM_SOURCE',
-        'utmSource' => 'ORDER_UTM_SOURCE',
-        'order.utmSource' => 'ORDER_UTM_SOURCE',
-        'OrderTableMap::COL_ORDER_UTM_SOURCE' => 'ORDER_UTM_SOURCE',
-        'COL_ORDER_UTM_SOURCE' => 'ORDER_UTM_SOURCE',
-        'order_utm_source' => 'ORDER_UTM_SOURCE',
-        'orders.order_utm_source' => 'ORDER_UTM_SOURCE',
-        'UtmCampaign' => 'ORDER_UTM_CAMPAIGN',
-        'Order.UtmCampaign' => 'ORDER_UTM_CAMPAIGN',
-        'utmCampaign' => 'ORDER_UTM_CAMPAIGN',
-        'order.utmCampaign' => 'ORDER_UTM_CAMPAIGN',
-        'OrderTableMap::COL_ORDER_UTM_CAMPAIGN' => 'ORDER_UTM_CAMPAIGN',
-        'COL_ORDER_UTM_CAMPAIGN' => 'ORDER_UTM_CAMPAIGN',
-        'order_utm_campaign' => 'ORDER_UTM_CAMPAIGN',
-        'orders.order_utm_campaign' => 'ORDER_UTM_CAMPAIGN',
-        'UtmMedium' => 'ORDER_UTM_MEDIUM',
-        'Order.UtmMedium' => 'ORDER_UTM_MEDIUM',
-        'utmMedium' => 'ORDER_UTM_MEDIUM',
-        'order.utmMedium' => 'ORDER_UTM_MEDIUM',
-        'OrderTableMap::COL_ORDER_UTM_MEDIUM' => 'ORDER_UTM_MEDIUM',
-        'COL_ORDER_UTM_MEDIUM' => 'ORDER_UTM_MEDIUM',
-        'order_utm_medium' => 'ORDER_UTM_MEDIUM',
-        'orders.order_utm_medium' => 'ORDER_UTM_MEDIUM',
         'Referer' => 'ORDER_REFERER',
         'Order.Referer' => 'ORDER_REFERER',
         'referer' => 'ORDER_REFERER',
@@ -824,9 +785,6 @@ class OrderTableMap extends TableMap
         $this->addColumn('order_phone', 'Phone', 'LONGVARCHAR', false, null, null);
         $this->addColumn('order_comment', 'Comment', 'VARCHAR', false, 1024, null);
         $this->addColumn('order_utmz', 'Utmz', 'VARCHAR', false, 1024, null);
-        $this->addColumn('order_utm_source', 'UtmSource', 'VARCHAR', false, 256, null);
-        $this->addColumn('order_utm_campaign', 'UtmCampaign', 'VARCHAR', false, 256, null);
-        $this->addColumn('order_utm_medium', 'UtmMedium', 'VARCHAR', false, 256, null);
         $this->addColumn('order_referer', 'Referer', 'LONGVARCHAR', false, null, null);
         $this->addColumn('order_insert', 'Insert', 'TIMESTAMP', false, null, null);
         $this->addColumn('order_payment_date', 'PaymentDate', 'TIMESTAMP', false, null, null);
@@ -1054,9 +1012,6 @@ class OrderTableMap extends TableMap
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_PHONE);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_COMMENT);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_UTMZ);
-            $criteria->addSelectColumn(OrderTableMap::COL_ORDER_UTM_SOURCE);
-            $criteria->addSelectColumn(OrderTableMap::COL_ORDER_UTM_CAMPAIGN);
-            $criteria->addSelectColumn(OrderTableMap::COL_ORDER_UTM_MEDIUM);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_REFERER);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_INSERT);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDER_PAYMENT_DATE);
@@ -1105,9 +1060,6 @@ class OrderTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.order_phone');
             $criteria->addSelectColumn($alias . '.order_comment');
             $criteria->addSelectColumn($alias . '.order_utmz');
-            $criteria->addSelectColumn($alias . '.order_utm_source');
-            $criteria->addSelectColumn($alias . '.order_utm_campaign');
-            $criteria->addSelectColumn($alias . '.order_utm_medium');
             $criteria->addSelectColumn($alias . '.order_referer');
             $criteria->addSelectColumn($alias . '.order_insert');
             $criteria->addSelectColumn($alias . '.order_payment_date');
@@ -1173,9 +1125,6 @@ class OrderTableMap extends TableMap
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_PHONE);
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_COMMENT);
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_UTMZ);
-            $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_UTM_SOURCE);
-            $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_UTM_CAMPAIGN);
-            $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_UTM_MEDIUM);
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_REFERER);
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_INSERT);
             $criteria->removeSelectColumn(OrderTableMap::COL_ORDER_PAYMENT_DATE);
@@ -1224,9 +1173,6 @@ class OrderTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.order_phone');
             $criteria->removeSelectColumn($alias . '.order_comment');
             $criteria->removeSelectColumn($alias . '.order_utmz');
-            $criteria->removeSelectColumn($alias . '.order_utm_source');
-            $criteria->removeSelectColumn($alias . '.order_utm_campaign');
-            $criteria->removeSelectColumn($alias . '.order_utm_medium');
             $criteria->removeSelectColumn($alias . '.order_referer');
             $criteria->removeSelectColumn($alias . '.order_insert');
             $criteria->removeSelectColumn($alias . '.order_payment_date');

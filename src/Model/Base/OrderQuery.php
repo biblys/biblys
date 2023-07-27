@@ -56,9 +56,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByPhone($order = Criteria::ASC) Order by the order_phone column
  * @method     ChildOrderQuery orderByComment($order = Criteria::ASC) Order by the order_comment column
  * @method     ChildOrderQuery orderByUtmz($order = Criteria::ASC) Order by the order_utmz column
- * @method     ChildOrderQuery orderByUtmSource($order = Criteria::ASC) Order by the order_utm_source column
- * @method     ChildOrderQuery orderByUtmCampaign($order = Criteria::ASC) Order by the order_utm_campaign column
- * @method     ChildOrderQuery orderByUtmMedium($order = Criteria::ASC) Order by the order_utm_medium column
  * @method     ChildOrderQuery orderByReferer($order = Criteria::ASC) Order by the order_referer column
  * @method     ChildOrderQuery orderByInsert($order = Criteria::ASC) Order by the order_insert column
  * @method     ChildOrderQuery orderByPaymentDate($order = Criteria::ASC) Order by the order_payment_date column
@@ -107,9 +104,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery groupByPhone() Group by the order_phone column
  * @method     ChildOrderQuery groupByComment() Group by the order_comment column
  * @method     ChildOrderQuery groupByUtmz() Group by the order_utmz column
- * @method     ChildOrderQuery groupByUtmSource() Group by the order_utm_source column
- * @method     ChildOrderQuery groupByUtmCampaign() Group by the order_utm_campaign column
- * @method     ChildOrderQuery groupByUtmMedium() Group by the order_utm_medium column
  * @method     ChildOrderQuery groupByReferer() Group by the order_referer column
  * @method     ChildOrderQuery groupByInsert() Group by the order_insert column
  * @method     ChildOrderQuery groupByPaymentDate() Group by the order_payment_date column
@@ -191,9 +185,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder|null findOneByPhone(string $order_phone) Return the first ChildOrder filtered by the order_phone column
  * @method     ChildOrder|null findOneByComment(string $order_comment) Return the first ChildOrder filtered by the order_comment column
  * @method     ChildOrder|null findOneByUtmz(string $order_utmz) Return the first ChildOrder filtered by the order_utmz column
- * @method     ChildOrder|null findOneByUtmSource(string $order_utm_source) Return the first ChildOrder filtered by the order_utm_source column
- * @method     ChildOrder|null findOneByUtmCampaign(string $order_utm_campaign) Return the first ChildOrder filtered by the order_utm_campaign column
- * @method     ChildOrder|null findOneByUtmMedium(string $order_utm_medium) Return the first ChildOrder filtered by the order_utm_medium column
  * @method     ChildOrder|null findOneByReferer(string $order_referer) Return the first ChildOrder filtered by the order_referer column
  * @method     ChildOrder|null findOneByInsert(string $order_insert) Return the first ChildOrder filtered by the order_insert column
  * @method     ChildOrder|null findOneByPaymentDate(string $order_payment_date) Return the first ChildOrder filtered by the order_payment_date column
@@ -245,9 +236,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByPhone(string $order_phone) Return the first ChildOrder filtered by the order_phone column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByComment(string $order_comment) Return the first ChildOrder filtered by the order_comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUtmz(string $order_utmz) Return the first ChildOrder filtered by the order_utmz column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUtmSource(string $order_utm_source) Return the first ChildOrder filtered by the order_utm_source column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUtmCampaign(string $order_utm_campaign) Return the first ChildOrder filtered by the order_utm_campaign column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUtmMedium(string $order_utm_medium) Return the first ChildOrder filtered by the order_utm_medium column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByReferer(string $order_referer) Return the first ChildOrder filtered by the order_referer column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByInsert(string $order_insert) Return the first ChildOrder filtered by the order_insert column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPaymentDate(string $order_payment_date) Return the first ChildOrder filtered by the order_payment_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -336,12 +324,6 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildOrder> findByComment(string|array<string> $order_comment) Return ChildOrder objects filtered by the order_comment column
  * @method     ChildOrder[]|Collection findByUtmz(string|array<string> $order_utmz) Return ChildOrder objects filtered by the order_utmz column
  * @psalm-method Collection&\Traversable<ChildOrder> findByUtmz(string|array<string> $order_utmz) Return ChildOrder objects filtered by the order_utmz column
- * @method     ChildOrder[]|Collection findByUtmSource(string|array<string> $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmSource(string|array<string> $order_utm_source) Return ChildOrder objects filtered by the order_utm_source column
- * @method     ChildOrder[]|Collection findByUtmCampaign(string|array<string> $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmCampaign(string|array<string> $order_utm_campaign) Return ChildOrder objects filtered by the order_utm_campaign column
- * @method     ChildOrder[]|Collection findByUtmMedium(string|array<string> $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
- * @psalm-method Collection&\Traversable<ChildOrder> findByUtmMedium(string|array<string> $order_utm_medium) Return ChildOrder objects filtered by the order_utm_medium column
  * @method     ChildOrder[]|Collection findByReferer(string|array<string> $order_referer) Return ChildOrder objects filtered by the order_referer column
  * @psalm-method Collection&\Traversable<ChildOrder> findByReferer(string|array<string> $order_referer) Return ChildOrder objects filtered by the order_referer column
  * @method     ChildOrder[]|Collection findByInsert(string|array<string> $order_insert) Return ChildOrder objects filtered by the order_insert column
@@ -461,7 +443,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_utm_source, order_utm_campaign, order_utm_medium, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
+        $sql = 'SELECT order_id, order_url, site_id, user_id, customer_id, seller_id, order_type, order_as_a_gift, order_gift_recipient, order_amount, order_discount, order_amount_tobepaid, shipping_id, country_id, order_shipping, order_shipping_mode, order_track_number, order_payment_mode, order_payment_cash, order_payment_cheque, order_payment_transfer, order_payment_card, order_payment_paypal, order_payment_payplug, order_payment_left, order_title, order_firstname, order_lastname, order_address1, order_address2, order_postalcode, order_city, order_country, order_email, order_phone, order_comment, order_utmz, order_referer, order_insert, order_payment_date, order_shipping_date, order_followup_date, order_confirmation_date, order_cancel_date, order_update, order_created, order_updated FROM orders WHERE order_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1874,90 +1856,6 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         $this->addUsingAlias(OrderTableMap::COL_ORDER_UTMZ, $utmz, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the order_utm_source column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUtmSource('fooValue');   // WHERE order_utm_source = 'fooValue'
-     * $query->filterByUtmSource('%fooValue%', Criteria::LIKE); // WHERE order_utm_source LIKE '%fooValue%'
-     * $query->filterByUtmSource(['foo', 'bar']); // WHERE order_utm_source IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $utmSource The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByUtmSource($utmSource = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($utmSource)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_SOURCE, $utmSource, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the order_utm_campaign column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUtmCampaign('fooValue');   // WHERE order_utm_campaign = 'fooValue'
-     * $query->filterByUtmCampaign('%fooValue%', Criteria::LIKE); // WHERE order_utm_campaign LIKE '%fooValue%'
-     * $query->filterByUtmCampaign(['foo', 'bar']); // WHERE order_utm_campaign IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $utmCampaign The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByUtmCampaign($utmCampaign = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($utmCampaign)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_CAMPAIGN, $utmCampaign, $comparison);
-
-        return $this;
-    }
-
-    /**
-     * Filter the query on the order_utm_medium column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUtmMedium('fooValue');   // WHERE order_utm_medium = 'fooValue'
-     * $query->filterByUtmMedium('%fooValue%', Criteria::LIKE); // WHERE order_utm_medium LIKE '%fooValue%'
-     * $query->filterByUtmMedium(['foo', 'bar']); // WHERE order_utm_medium IN ('foo', 'bar')
-     * </code>
-     *
-     * @param string|string[] $utmMedium The value to use as filter.
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByUtmMedium($utmMedium = null, ?string $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($utmMedium)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        $this->addUsingAlias(OrderTableMap::COL_ORDER_UTM_MEDIUM, $utmMedium, $comparison);
 
         return $this;
     }

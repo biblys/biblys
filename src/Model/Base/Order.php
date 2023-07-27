@@ -341,27 +341,6 @@ abstract class Order implements ActiveRecordInterface
     protected $order_utmz;
 
     /**
-     * The value for the order_utm_source field.
-     *
-     * @var        string|null
-     */
-    protected $order_utm_source;
-
-    /**
-     * The value for the order_utm_campaign field.
-     *
-     * @var        string|null
-     */
-    protected $order_utm_campaign;
-
-    /**
-     * The value for the order_utm_medium field.
-     *
-     * @var        string|null
-     */
-    protected $order_utm_medium;
-
-    /**
      * The value for the order_referer field.
      *
      * @var        string|null
@@ -1075,36 +1054,6 @@ abstract class Order implements ActiveRecordInterface
     public function getUtmz()
     {
         return $this->order_utmz;
-    }
-
-    /**
-     * Get the [order_utm_source] column value.
-     *
-     * @return string|null
-     */
-    public function getUtmSource()
-    {
-        return $this->order_utm_source;
-    }
-
-    /**
-     * Get the [order_utm_campaign] column value.
-     *
-     * @return string|null
-     */
-    public function getUtmCampaign()
-    {
-        return $this->order_utm_campaign;
-    }
-
-    /**
-     * Get the [order_utm_medium] column value.
-     *
-     * @return string|null
-     */
-    public function getUtmMedium()
-    {
-        return $this->order_utm_medium;
     }
 
     /**
@@ -2060,66 +2009,6 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [order_utm_source] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setUtmSource($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->order_utm_source !== $v) {
-            $this->order_utm_source = $v;
-            $this->modifiedColumns[OrderTableMap::COL_ORDER_UTM_SOURCE] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [order_utm_campaign] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setUtmCampaign($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->order_utm_campaign !== $v) {
-            $this->order_utm_campaign = $v;
-            $this->modifiedColumns[OrderTableMap::COL_ORDER_UTM_CAMPAIGN] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [order_utm_medium] column.
-     *
-     * @param string|null $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setUtmMedium($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->order_utm_medium !== $v) {
-            $this->order_utm_medium = $v;
-            $this->modifiedColumns[OrderTableMap::COL_ORDER_UTM_MEDIUM] = true;
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the value of [order_referer] column.
      *
      * @param string|null $v New value
@@ -2510,67 +2399,58 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 36 + $startcol : OrderTableMap::translateFieldName('Utmz', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_utmz = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : OrderTableMap::translateFieldName('UtmSource', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->order_utm_source = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : OrderTableMap::translateFieldName('UtmCampaign', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->order_utm_campaign = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : OrderTableMap::translateFieldName('UtmMedium', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->order_utm_medium = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : OrderTableMap::translateFieldName('Referer', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 37 + $startcol : OrderTableMap::translateFieldName('Referer', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_referer = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : OrderTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 38 + $startcol : OrderTableMap::translateFieldName('Insert', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_insert = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : OrderTableMap::translateFieldName('PaymentDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 39 + $startcol : OrderTableMap::translateFieldName('PaymentDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_payment_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 43 + $startcol : OrderTableMap::translateFieldName('ShippingDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 40 + $startcol : OrderTableMap::translateFieldName('ShippingDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_shipping_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 44 + $startcol : OrderTableMap::translateFieldName('FollowupDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 41 + $startcol : OrderTableMap::translateFieldName('FollowupDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_followup_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 45 + $startcol : OrderTableMap::translateFieldName('ConfirmationDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 42 + $startcol : OrderTableMap::translateFieldName('ConfirmationDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_confirmation_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 46 + $startcol : OrderTableMap::translateFieldName('CancelDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 43 + $startcol : OrderTableMap::translateFieldName('CancelDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_cancel_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 47 + $startcol : OrderTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 44 + $startcol : OrderTableMap::translateFieldName('Update', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_update = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 48 + $startcol : OrderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 45 + $startcol : OrderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->order_created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 49 + $startcol : OrderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 46 + $startcol : OrderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -2583,7 +2463,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 50; // 50 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 47; // 47 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Order'), 0, $e);
@@ -2945,15 +2825,6 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTMZ)) {
             $modifiedColumns[':p' . $index++]  = 'order_utmz';
         }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_SOURCE)) {
-            $modifiedColumns[':p' . $index++]  = 'order_utm_source';
-        }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_CAMPAIGN)) {
-            $modifiedColumns[':p' . $index++]  = 'order_utm_campaign';
-        }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_MEDIUM)) {
-            $modifiedColumns[':p' . $index++]  = 'order_utm_medium';
-        }
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_REFERER)) {
             $modifiedColumns[':p' . $index++]  = 'order_referer';
         }
@@ -3141,18 +3012,6 @@ abstract class Order implements ActiveRecordInterface
                         break;
                     case 'order_utmz':
                         $stmt->bindValue($identifier, $this->order_utmz, PDO::PARAM_STR);
-
-                        break;
-                    case 'order_utm_source':
-                        $stmt->bindValue($identifier, $this->order_utm_source, PDO::PARAM_STR);
-
-                        break;
-                    case 'order_utm_campaign':
-                        $stmt->bindValue($identifier, $this->order_utm_campaign, PDO::PARAM_STR);
-
-                        break;
-                    case 'order_utm_medium':
-                        $stmt->bindValue($identifier, $this->order_utm_medium, PDO::PARAM_STR);
 
                         break;
                     case 'order_referer':
@@ -3369,42 +3228,33 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getUtmz();
 
             case 37:
-                return $this->getUtmSource();
-
-            case 38:
-                return $this->getUtmCampaign();
-
-            case 39:
-                return $this->getUtmMedium();
-
-            case 40:
                 return $this->getReferer();
 
-            case 41:
+            case 38:
                 return $this->getInsert();
 
-            case 42:
+            case 39:
                 return $this->getPaymentDate();
 
-            case 43:
+            case 40:
                 return $this->getShippingDate();
 
-            case 44:
+            case 41:
                 return $this->getFollowupDate();
 
-            case 45:
+            case 42:
                 return $this->getConfirmationDate();
 
-            case 46:
+            case 43:
                 return $this->getCancelDate();
 
-            case 47:
+            case 44:
                 return $this->getUpdate();
 
-            case 48:
+            case 45:
                 return $this->getCreatedAt();
 
-            case 49:
+            case 46:
                 return $this->getUpdatedAt();
 
             default:
@@ -3472,20 +3322,29 @@ abstract class Order implements ActiveRecordInterface
             $keys[34] => $this->getPhone(),
             $keys[35] => $this->getComment(),
             $keys[36] => $this->getUtmz(),
-            $keys[37] => $this->getUtmSource(),
-            $keys[38] => $this->getUtmCampaign(),
-            $keys[39] => $this->getUtmMedium(),
-            $keys[40] => $this->getReferer(),
-            $keys[41] => $this->getInsert(),
-            $keys[42] => $this->getPaymentDate(),
-            $keys[43] => $this->getShippingDate(),
-            $keys[44] => $this->getFollowupDate(),
-            $keys[45] => $this->getConfirmationDate(),
-            $keys[46] => $this->getCancelDate(),
-            $keys[47] => $this->getUpdate(),
-            $keys[48] => $this->getCreatedAt(),
-            $keys[49] => $this->getUpdatedAt(),
+            $keys[37] => $this->getReferer(),
+            $keys[38] => $this->getInsert(),
+            $keys[39] => $this->getPaymentDate(),
+            $keys[40] => $this->getShippingDate(),
+            $keys[41] => $this->getFollowupDate(),
+            $keys[42] => $this->getConfirmationDate(),
+            $keys[43] => $this->getCancelDate(),
+            $keys[44] => $this->getUpdate(),
+            $keys[45] => $this->getCreatedAt(),
+            $keys[46] => $this->getUpdatedAt(),
         ];
+        if ($result[$keys[38]] instanceof \DateTimeInterface) {
+            $result[$keys[38]] = $result[$keys[38]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[39]] instanceof \DateTimeInterface) {
+            $result[$keys[39]] = $result[$keys[39]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[40]] instanceof \DateTimeInterface) {
+            $result[$keys[40]] = $result[$keys[40]]->format('Y-m-d H:i:s.u');
+        }
+
         if ($result[$keys[41]] instanceof \DateTimeInterface) {
             $result[$keys[41]] = $result[$keys[41]]->format('Y-m-d H:i:s.u');
         }
@@ -3508,18 +3367,6 @@ abstract class Order implements ActiveRecordInterface
 
         if ($result[$keys[46]] instanceof \DateTimeInterface) {
             $result[$keys[46]] = $result[$keys[46]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[47]] instanceof \DateTimeInterface) {
-            $result[$keys[47]] = $result[$keys[47]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[48]] instanceof \DateTimeInterface) {
-            $result[$keys[48]] = $result[$keys[48]]->format('Y-m-d H:i:s.u');
-        }
-
-        if ($result[$keys[49]] instanceof \DateTimeInterface) {
-            $result[$keys[49]] = $result[$keys[49]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -3706,42 +3553,33 @@ abstract class Order implements ActiveRecordInterface
                 $this->setUtmz($value);
                 break;
             case 37:
-                $this->setUtmSource($value);
-                break;
-            case 38:
-                $this->setUtmCampaign($value);
-                break;
-            case 39:
-                $this->setUtmMedium($value);
-                break;
-            case 40:
                 $this->setReferer($value);
                 break;
-            case 41:
+            case 38:
                 $this->setInsert($value);
                 break;
-            case 42:
+            case 39:
                 $this->setPaymentDate($value);
                 break;
-            case 43:
+            case 40:
                 $this->setShippingDate($value);
                 break;
-            case 44:
+            case 41:
                 $this->setFollowupDate($value);
                 break;
-            case 45:
+            case 42:
                 $this->setConfirmationDate($value);
                 break;
-            case 46:
+            case 43:
                 $this->setCancelDate($value);
                 break;
-            case 47:
+            case 44:
                 $this->setUpdate($value);
                 break;
-            case 48:
+            case 45:
                 $this->setCreatedAt($value);
                 break;
-            case 49:
+            case 46:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -3882,43 +3720,34 @@ abstract class Order implements ActiveRecordInterface
             $this->setUtmz($arr[$keys[36]]);
         }
         if (array_key_exists($keys[37], $arr)) {
-            $this->setUtmSource($arr[$keys[37]]);
+            $this->setReferer($arr[$keys[37]]);
         }
         if (array_key_exists($keys[38], $arr)) {
-            $this->setUtmCampaign($arr[$keys[38]]);
+            $this->setInsert($arr[$keys[38]]);
         }
         if (array_key_exists($keys[39], $arr)) {
-            $this->setUtmMedium($arr[$keys[39]]);
+            $this->setPaymentDate($arr[$keys[39]]);
         }
         if (array_key_exists($keys[40], $arr)) {
-            $this->setReferer($arr[$keys[40]]);
+            $this->setShippingDate($arr[$keys[40]]);
         }
         if (array_key_exists($keys[41], $arr)) {
-            $this->setInsert($arr[$keys[41]]);
+            $this->setFollowupDate($arr[$keys[41]]);
         }
         if (array_key_exists($keys[42], $arr)) {
-            $this->setPaymentDate($arr[$keys[42]]);
+            $this->setConfirmationDate($arr[$keys[42]]);
         }
         if (array_key_exists($keys[43], $arr)) {
-            $this->setShippingDate($arr[$keys[43]]);
+            $this->setCancelDate($arr[$keys[43]]);
         }
         if (array_key_exists($keys[44], $arr)) {
-            $this->setFollowupDate($arr[$keys[44]]);
+            $this->setUpdate($arr[$keys[44]]);
         }
         if (array_key_exists($keys[45], $arr)) {
-            $this->setConfirmationDate($arr[$keys[45]]);
+            $this->setCreatedAt($arr[$keys[45]]);
         }
         if (array_key_exists($keys[46], $arr)) {
-            $this->setCancelDate($arr[$keys[46]]);
-        }
-        if (array_key_exists($keys[47], $arr)) {
-            $this->setUpdate($arr[$keys[47]]);
-        }
-        if (array_key_exists($keys[48], $arr)) {
-            $this->setCreatedAt($arr[$keys[48]]);
-        }
-        if (array_key_exists($keys[49], $arr)) {
-            $this->setUpdatedAt($arr[$keys[49]]);
+            $this->setUpdatedAt($arr[$keys[46]]);
         }
 
         return $this;
@@ -4074,15 +3903,6 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTMZ)) {
             $criteria->add(OrderTableMap::COL_ORDER_UTMZ, $this->order_utmz);
         }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_SOURCE)) {
-            $criteria->add(OrderTableMap::COL_ORDER_UTM_SOURCE, $this->order_utm_source);
-        }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_CAMPAIGN)) {
-            $criteria->add(OrderTableMap::COL_ORDER_UTM_CAMPAIGN, $this->order_utm_campaign);
-        }
-        if ($this->isColumnModified(OrderTableMap::COL_ORDER_UTM_MEDIUM)) {
-            $criteria->add(OrderTableMap::COL_ORDER_UTM_MEDIUM, $this->order_utm_medium);
-        }
         if ($this->isColumnModified(OrderTableMap::COL_ORDER_REFERER)) {
             $criteria->add(OrderTableMap::COL_ORDER_REFERER, $this->order_referer);
         }
@@ -4237,9 +4057,6 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setPhone($this->getPhone());
         $copyObj->setComment($this->getComment());
         $copyObj->setUtmz($this->getUtmz());
-        $copyObj->setUtmSource($this->getUtmSource());
-        $copyObj->setUtmCampaign($this->getUtmCampaign());
-        $copyObj->setUtmMedium($this->getUtmMedium());
         $copyObj->setReferer($this->getReferer());
         $copyObj->setInsert($this->getInsert());
         $copyObj->setPaymentDate($this->getPaymentDate());
@@ -4674,9 +4491,6 @@ abstract class Order implements ActiveRecordInterface
         $this->order_phone = null;
         $this->order_comment = null;
         $this->order_utmz = null;
-        $this->order_utm_source = null;
-        $this->order_utm_campaign = null;
-        $this->order_utm_medium = null;
         $this->order_referer = null;
         $this->order_insert = null;
         $this->order_payment_date = null;
