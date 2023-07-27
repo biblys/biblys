@@ -3,6 +3,7 @@
 namespace Biblys\Service\MailingList;
 
 use Biblys\Service\Config;
+use Exception;
 
 class MailingListService
 {
@@ -15,7 +16,7 @@ class MailingListService
             return;
         }
 
-        $this->list = new BiblysMailingList($config);
+        throw new Exception("Aucun service de gestion de liste de contacts n'est configuré.");
     }
 
     public function getMailingList(): MailingListInterface

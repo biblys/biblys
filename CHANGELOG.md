@@ -5,6 +5,7 @@
 Améliorations
 
 - L'outil de suivi des conversions a été supprimé.
+- L'option "biblys" du gestionnaire de liste de contacts a été supprimée.
 
 Déploiement
 
