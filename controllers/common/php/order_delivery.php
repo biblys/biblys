@@ -1,10 +1,11 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Legacy\OrderDeliveryHelpers;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
+use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListService;
 use Model\PageQuery;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /** @var Request $request */
 /** @var UrlGenerator $urlGenerator */
+/** @var CurrentUser $currentUser */
 
 $request->attributes->set("page_title", "Commande » Validation");
 
@@ -74,7 +76,7 @@ $countryInput = OrderDeliveryHelpers::getCountryInput($cart, $countryId, LegacyC
 $shipping = OrderDeliveryHelpers::calculateShippingFees($cart, $request->query->get('shipping_id'));
 $shippingMode = $shipping ? $shipping->get("mode") : "";
 $shippingFee = $shipping ? $shipping->get("fee") : 0;
-$shippingType = $shipping ? $shipping->get("type") : null;
+$shippingType = $shipping?->get("type");
 
 // Add shipping to order total amount
 $total = $totalPrice;
@@ -124,7 +126,7 @@ if ($request->getMethod() === "POST") {
         /* CUSTOMER */
 
         // Get customer from User
-        if (LegacyCodeHelper::getGlobalVisitor()->isLogged()) {
+        if ($currentUser->isAuthentified()) {
             $order->set('user_id', LegacyCodeHelper::getGlobalVisitor()->get('id'));
             $customer = LegacyCodeHelper::getGlobalVisitor()->getCustomer('create');
         } // Else get customer from email address
@@ -132,7 +134,7 @@ if ($request->getMethod() === "POST") {
             $customer = $getCustomer;
         } // else Create a new customer with order info
         else {
-            $customer = $cm->create(array());
+            $customer = $cm->create();
             $customer->set('customer_email', $_POST['order_email'])
                 ->set('customer_first_name', $_POST['order_firstname'])
                 ->set('customer_last_name', $_POST['order_lastname']);
@@ -242,7 +244,7 @@ $content .= '
                 <td>' . $numberOfCopiesInCart . '</td>
             </tr>
 ';
-if (LegacyCodeHelper::getLegacyCurrentSite()["site_shipping_fee"] == 'fr') {
+if (LegacyCodeHelper::getGlobalSite()["site_shipping_fee"] == 'fr') {
     $content .= '
                 <tr>
                     <td class="right">Poids : </td>
@@ -281,7 +283,7 @@ if ($shipping_date) {
 }
 
 $form_class = null;
-if (!auth()) {
+if (!$currentUser->isAuthentified()) {
     $content .= '
         <h3>Vos coordonnées</h3>
         <h4>Vous avez un compte Axys ?</h4> <p><a href="'.$loginUrl.'" class="btn btn-primary">Connectez-vous</a> pour remplir automatiquement vos coordonnées.</p>
@@ -316,7 +318,7 @@ if ($currentSite->getOption("newsletter") == 1) {
                     <input type="checkbox" name="newsletter" value="1" ' . $checked . ' >
                     Je souhaite recevoir la newsletter <small>(facultatif)</small><br>
                     <small>
-                        En cochant cette case,  vous acceptez de recevoir par
+                        En cochant cette case, vous acceptez de recevoir par
                         courriel notre newsletter. Vous comprenez que vous pouvez
                         vous désabonner de ces communications en cliquant sur le
                         lien de désabonnement inséré à la fin de ces courriels.
@@ -392,7 +394,7 @@ if ($previousOrder) {
         <div class="previous-order">
             <p>
                 <span class="fa fa-lightbulb-o"></span>
-                Vous pouvez pré-remplir le formulaire avec les coordonnées
+                Vous pouvez préremplir le formulaire avec les coordonnées
                 utilisées lors de votre précédente commande
                 (n°&nbsp;' . $previousOrder->get('id') . ').
             </p>
