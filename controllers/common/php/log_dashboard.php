@@ -1,24 +1,29 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Browser;
+use Biblys\Service\CurrentSite;
+use Biblys\Service\CurrentUser;
+use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/** @var CurrentUser $currentUser */
+/** @var CurrentSite $currentSite */
+/** @var Request $request */
 
-if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
+if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
     throw new AccessDeniedHttpException("Page réservée aux éditeurs.");
 }
 
-$publisherId = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get("publisher_id");
-if (!$_SITE->allowsPublisherWithId($publisherId)) {
-    $pm = new PublisherManager();
-    throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
-}
-
-if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGlobalVisitor()->isPublisher() && !LegacyCodeHelper::getGlobalVisitor()->isBookshop() && !LegacyCodeHelper::getGlobalVisitor()->isLibrary()) {
-    trigger_error('Accès non autorisé pour ' . LegacyCodeHelper::getGlobalVisitor()->get('user_email'));
+$publisherId = $currentUser->getCurrentRight()?->getPublisherId();
+$publisher = PublisherQuery::create()->findPk($publisherId);
+if (!$currentSite->allowsPublisher($publisher)) {
+    throw new AccessDeniedHttpException(
+        "Votre maison d'édition {$publisher->getName()} n'est pas autorisée sur ce site."
+    );
 }
 
 $items = array();
@@ -29,26 +34,24 @@ $browser = new Browser();
 if ($browser->isUpToDate()) $browser_alert = null;
 else $browser_alert = $browser->getUpdateAlert();
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Tableau de bord');
+$request->attributes->set("page_title", "Tableau de bord");
 
 /* USER RIGHTS */
 
 $rm = new RightManager();
 
 // Get current user right
-$right = LegacyCodeHelper::getGlobalVisitor()->getCurrentRight();
+$right = $currentUser->getCurrentRight();
 
 // Change selected user right
 if (isset($_GET['right_id'])) {
-    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id')));
+    $new_right = $rm->get(array('right_id' => $_GET['right_id'], 'user_id' => $currentUser->getId()));
     LegacyCodeHelper::getGlobalVisitor()->setCurrentRight($new_right);
     return new RedirectResponse('/pages/log_dashboard');
 }
 
 // Show user rights option
-$rights = $rm->getAll(
-    array('user_id' => LegacyCodeHelper::getGlobalVisitor()->get('id'))
-);
+$rights = $rm->getAll(['user_id' => $currentUser->getUser()->getId()]);
 
 $rights_optgroup = array();
 foreach ($rights as $r) {
@@ -64,9 +67,9 @@ foreach ($rights as $r) {
         $mode = 'Bibliothèque';
         $label = $r->get('library')->get('name');
     } elseif ($r->has('site_id')) {
-        if ($r->get('site_id') == LegacyCodeHelper::getLegacyCurrentSite()['site_id']) {
+        if ($r->get('site_id') == $currentSite->getId()) {
             $mode = 'Administrateur';
-            $label = LegacyCodeHelper::getLegacyCurrentSite()['site_title'];
+            $label = $currentSite->getTitle();
         } else continue;
     } else continue;
     $rights_optgroup[$mode][] = '<option' . ($r->has('current') ? ' selected' : null) . ' value="/pages/log_dashboard?right_id=' . $r->get('id') . '">' . $label . '</option>';
@@ -84,8 +87,8 @@ $rights_select = '<p class="floatR">En tant que : &nbsp;<select class="goto">'
 /* ITEMS */
 
 // Publisher
-if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
-    $publisherId = $right->get('publisher_id');
+if ($currentUser->hasPublisherRight()) {
+    $publisherId = $right->getPublisherId();
     $pm = new PublisherManager();
     $publisher = $pm->getById($publisherId);
     if ($publisher) {
@@ -95,7 +98,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
         $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/article_edit', 'fa-book');
 
         // L'Autre Livre
-        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11) {
+        if ($currentSite->getId() == 11) {
             $items['Contenu'][] = array('Billets', '/pages/pub_posts', 'fa-newspaper-o');
             $items['Contenu'][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
             $items['Contenu'][] = array('Dédicaces', '/pages/log_signings_admin', 'fa-pencil');
@@ -105,30 +108,9 @@ if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
     }
 }
 
-// Bookshop
-if (LegacyCodeHelper::getGlobalVisitor()->isBookshop()) {
-    $bookshop = $_SQL->query('SELECT `bookshop_name` FROM `bookshops` WHERE `bookshop_id` = ' . $right->get('bookshop')->get('id'));
-    if ($b = $bookshop->fetch(PDO::FETCH_ASSOC)) {
-        $items["Librairie"][] = array('Fiche d\'identité', '/pages/bookshop_edit', 'fa-list-alt');
-        $items["Librairie"][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
-    }
-}
-
-// Library
-if (LegacyCodeHelper::getGlobalVisitor()->isLibrary()) {
-    $library = $_SQL->query('SELECT `library_name` FROM `libraries` WHERE `library_id` = ' . $right->get('library')->get('id'));
-    if ($b = $library->fetch(PDO::FETCH_ASSOC)) {
-        $items["Bibliothèque"][] = array('Fiche d\'identité', '/pages/library_edit', 'fa-list-alt');
-        $items["Bibliothèque"][] = array('Évènements', '/pages/log_events_admin', 'fa-calendar');
-
-        // LVDI
-        if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 16) $items['Assistance'][] = array('Mode d\'emploi', '/pages/doc_partenaires');
-    }
-}
-
 // Biblys
-$items["Assistance"][] = array('Documentation', 'http://www.biblys.fr/pages/doc_index');
-$items["Assistance"][] = array('Besoin d\'aide ?', 'http://nokto.net/contact');
+$items["Assistance"][] = array('Documentation', 'https://www.biblys.fr/pages/doc_index');
+$items["Assistance"][] = array('Besoin d\'aide ?', 'https://clemlatz.dev/contact/');
 
 // Sections
 $sections = NULL;
@@ -142,9 +124,7 @@ foreach ($items as $k => $v) {
         $i['class'] = null;
         $i['icon_path'] = '/common/icons/' . str_replace("/pages/", "", $i["link"]) . '.svg';
         $i['icon_link'] = null;
-//			if(!empty($i[2])) $i["class"] = ' class="'.$i[2].'"'; else $i['class'] = NULL;
         if (isset($i[2]) && strstr($i[2], 'fa-')) $i['icon_link'] = '<i class="fa ' . $i[2] . '"></i>';
-        elseif (file_exists(biblysPath() . '/sites' . $i["icon_path"])) $i['icon_link'] = '<a href="' . $i["link"] . '"' . $i["class"] . '><img src="' . $i['icon_path'] . '" style="vertical-align: middle;" width=16 height=16></a>';
         else $i['icon_link'] = NULL;
         $sections .= '
         <p>
@@ -159,7 +139,7 @@ foreach ($items as $k => $v) {
 
 $content = '
         ' . $rights_select . '
-    <h1><i class="fa fa-dashboard"></i> ' . \Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle() . '</h1>
+    <h1><i class="fa fa-dashboard"></i> Tableau de bord</h1>
 
     ' . $browser_alert . '
 
