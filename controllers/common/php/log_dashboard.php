@@ -92,7 +92,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) {
         $items["Éditeur"][] = array('Fiche d\'identité', '/pages/publisher_edit', 'fa-list-alt');
 
         $items["Bibliographie"][] = array('Catalogue', '/pages/log_articles', 'fa-books');
-        $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/log_article', 'fa-book');
+        $items["Bibliographie"][] = array('Créer un nouveau livre', '/pages/article_edit', 'fa-book');
 
         // L'Autre Livre
         if (LegacyCodeHelper::getLegacyCurrentSite()['site_id'] == 11) {

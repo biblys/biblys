@@ -1,5 +1,12 @@
 # Historique des modifications
 
+### 2.69.3 (DEV)
+
+Corrections
+
+- Une erreur 404 pouvait survenir lors de l'ajout d'un nouvel article ou 
+  l'accès au catalogue en tant qu'éditeur. C'est corrigé.
+
 ### 2.69.2 (26 juillet 2023)
 
 Corrections

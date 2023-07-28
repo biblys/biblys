@@ -90,7 +90,7 @@ while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
                 <td>'.$a["isbn"].'</td>
                 <td>'._date($a["article_pubdate"], 'd/m/Y').'</td>
                 <td>
-                    <a href="/pages/log_article?id='.$a["article_id"].'" class="btn btn-default"><i class="fa fa-edit"></i> Éditer</a>
+                    <a href="/pages/article_edit?id='.$a["article_id"].'" class="btn btn-default"><i class="fa fa-edit"></i> Éditer</a>
                 </td>
             </tr>
         ';
