@@ -63,7 +63,8 @@ class Site extends Entity
         return $this->get('title');
     }
 
-    public function allowsPublisherWithId($publisherId): bool
+    public function
+    allowsPublisherWithId($publisherId): bool
     {
         $publisherFilter = $this->getOpt('publisher_filter');
         if (!$publisherFilter) {

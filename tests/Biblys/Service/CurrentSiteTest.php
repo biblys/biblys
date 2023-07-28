@@ -168,4 +168,63 @@ class CurrentSiteTest extends TestCase
         // then
         $this->assertEquals("Éditions Paronymie", $title);
     }
+
+    /**
+     * allowsPublisher
+     */
+
+    /**
+     * @throws PropelException
+     */
+    public function testAllowsPublisherWithNoFilter()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+
+        // when
+        $allowsPublisher = $currentSite->allowsPublisher($publisher);
+
+        // then
+        $this->assertTrue($allowsPublisher);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAllowsPublisherWithIdInFilter()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $otherPublisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $publisher->getId().",".$otherPublisher->getId());
+
+        // when
+        $allowsPublisher = $currentSite->allowsPublisher($publisher);
+
+        // then
+        $this->assertTrue($allowsPublisher);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testAllowsPublisherWithOtherIdInFilter()
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $otherPublisher = ModelFactory::createPublisher();
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("publisher_filter", $otherPublisher->getId());
+
+        // when
+        $allowsPublisher = $currentSite->allowsPublisher($publisher);
+
+        // then
+        $this->assertFalse($allowsPublisher);
+    }
 }

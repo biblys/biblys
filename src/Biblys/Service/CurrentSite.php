@@ -4,6 +4,7 @@ namespace Biblys\Service;
 
 use Model\Option;
 use Model\OptionQuery;
+use Model\Publisher;
 use Model\Site;
 use Model\SiteQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -94,4 +95,24 @@ class CurrentSite
     {
         return $this->getOption($optionKey) === "1";
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function allowsPublisher(Publisher $publisher): bool
+    {
+        $publisherFilter = $this->getOption("publisher_filter");
+        if ($publisherFilter === null) {
+            return true;
+        }
+
+        $publisherIds = explode(",", $publisherFilter);
+        if (in_array($publisher->getId(), $publisherIds)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
