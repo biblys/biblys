@@ -4,6 +4,7 @@ namespace Framework\ArgumentResolver;
 
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
+use Exception;
 use Generator;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +25,10 @@ class CurrentUserValueResolver implements ArgumentValueResolverInterface
 
     /**
      * @throws PropelException
+     * @throws Exception
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield CurrentUser::buildFromRequest($request);
+        yield CurrentUser::buildFromRequestAndConfig($request, Config::load());
     }
 }
