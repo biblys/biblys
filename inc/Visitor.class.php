@@ -209,28 +209,10 @@ class Visitor extends User
         $rm = new RightManager();
         $rights = $this->getRights();
 
-        // Find current right
-        foreach ($rights as $right) {
-            if ($right->has('right_current')) {
-                return $right;
-            }
-        }
-
-        // If no right & user is admin, return admin right
-        $currentSiteService = CurrentSite::buildFromConfig(Config::load());
-        if ($right = $rm->get([
-            'user_id' => $this->get('id'),
-            'site_id' => $currentSiteService->getId(),
-        ])) {
-            return $right;
-        }
-
-        // Else if other right available, set that one
         if ($right = $rm->get(['user_id' => $this->get('id')])) {
             return $right;
         }
 
-        // If no right at all, return empty right
         return new Right([]);
     }
 

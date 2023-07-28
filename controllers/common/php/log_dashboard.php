@@ -1,6 +1,5 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Browser;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -39,50 +38,11 @@ return function(
 
     $request->attributes->set("page_title", "Tableau de bord");
 
-    /* USER RIGHTS */
-
-    $rm = new RightManager();
-
-    // Get current user right
-    $right = $currentUser->getCurrentRight();
-
-    // Change selected user right
-    if (isset($_GET['right_id'])) {
-        $new_right = $rm->get([
-            'right_id' => $_GET['right_id'],
-            'user_id' => $currentUser->getUser()->getId()
-        ]);
-        LegacyCodeHelper::getGlobalVisitor()->setCurrentRight($new_right);
-        return new RedirectResponse('/pages/log_dashboard');
-    }
-
-    // Show user rights option_se
-    $rights = $rm->getAll(['user_id' => $currentUser->getUser()->getId()]);
-
-    $rights_optgroup = array();
-    foreach ($rights as $r) {
-        $label = null;
-        if ($r->has('publisher')) {
-            $mode = 'Éditeur';
-            $label = $r->get('publisher')->get('name');
-        } elseif ($r->has('site_id')) {
-            if ($r->get('site_id') == $currentSite->getId()) {
-                $mode = 'Administrateur';
-                $label = $currentSite->getTitle();
-            } else continue;
-        } else continue;
-        $rights_optgroup[$mode][] = '<option' . ($r->has('current') ? ' selected' : null) . ' value="/pages/log_dashboard?right_id=' . $r->get('id') . '">' . $label . '</option>';
-    }
-
-    $rights_optgroups = null;
-    foreach ($rights_optgroup as $k => $v) {
-        $rights_optgroups .= '<optgroup label="' . $k . '">' . implode($v) . '</optgroup>';
-    }
-
     /* ITEMS */
 
     // Publisher
     if ($currentUser->hasPublisherRight()) {
+        $right = $currentUser->getCurrentRight();
         $publisherId = $right->getPublisherId();
         $pm = new PublisherManager();
         $publisher = $pm->getById($publisherId);
@@ -131,15 +91,7 @@ return function(
     }
 
 
-    $templateCode = '
-        <p class="floatR">
-            En tant que : 
-            &nbsp;
-            <select class="goto">
-                {{rights_optgroups|raw}}
-            </select>
-        </p>
-        
+    $templateCode = '        
         <h1><i class="fa fa-dashboard"></i> Tableau de bord</h1>
     
         {{browser_alert|raw}}
@@ -150,7 +102,6 @@ return function(
   ';
 
     return $templateService->renderFromString($templateCode, [
-        "rights_optgroups" => $rights_optgroups,
         "browser_alert" => $browser_alert,
         "sections" => $sections,
     ]);

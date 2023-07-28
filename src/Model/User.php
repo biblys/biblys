@@ -75,7 +75,6 @@ class User extends BaseUser
     {
         return RightQuery::create()
             ->filterByUser($this)
-            ->filterByCurrent(true)
             ->findOne();
     }
 
