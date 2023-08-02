@@ -8,11 +8,13 @@ use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Framework\Exception\AuthException;
 use Framework\RouteLoader;
+use Opengraph\Writer;
 use PDO;
 use Propel\Runtime\Exception\PropelException;
 use ReflectionClass;
@@ -321,6 +323,7 @@ class ErrorController extends Controller
     /**
      * @return Response
      * @throws PropelException
+     * @throws Exception
      */
     private static function _handleLegacyController(): Response
     {
@@ -333,7 +336,14 @@ class ErrorController extends Controller
         $urlgenerator = new UrlGenerator($routes, new RequestContext());
         global $originalRequest;
         $currentUser = CurrentUser::buildFromRequestAndConfig($originalRequest, $config);
-        $templateService = new TemplateService($config, $currentSite, $currentUser, $originalRequest);
+        $metaTagsService = new MetaTagsService(new Writer());
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $originalRequest,
+        );
         $response = $legacyController->defaultAction(
             request: $originalRequest,
             session: $session,

@@ -23,7 +23,14 @@ class TemplateServiceTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentUser = $this->createMock(CurrentUser::class);
         $request = new Request();
-        $templateService = new TemplateService($config, $currentSite, $currentUser, $request);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $templateService->renderFromString(

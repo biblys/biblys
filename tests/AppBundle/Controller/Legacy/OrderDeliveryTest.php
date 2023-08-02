@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -74,6 +75,14 @@ class OrderDeliveryTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -84,7 +93,7 @@ class OrderDeliveryTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -151,6 +160,14 @@ class OrderDeliveryTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -161,7 +178,7 @@ class OrderDeliveryTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -237,6 +254,14 @@ class OrderDeliveryTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -247,7 +272,7 @@ class OrderDeliveryTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -327,6 +352,14 @@ class OrderDeliveryTest extends TestCase
             )
             ->willReturn(true);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -337,7 +370,7 @@ class OrderDeliveryTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then

@@ -5,9 +5,11 @@ namespace Framework;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Model\Publisher;
+use Opengraph\Writer;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -42,11 +44,13 @@ class Controller
         $request = Request::createFromGlobals();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = new MetaTagsService(new Writer());
         $templateService = new TemplateService(
-            $config,
-            $currentSiteService,
-            $currentUserService,
-            $request,
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
         );
         return $templateService->render($templatePath, $vars);
     }

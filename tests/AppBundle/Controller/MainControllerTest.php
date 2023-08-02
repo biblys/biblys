@@ -13,6 +13,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Updater\Updater;
 use Biblys\Service\Updater\UpdaterException;
@@ -55,6 +56,14 @@ class MainControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $controller->homeAction(
@@ -65,7 +74,7 @@ class MainControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -104,6 +113,14 @@ class MainControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $controller->homeAction(
@@ -114,7 +131,7 @@ class MainControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService
         );
 
         // then
@@ -154,11 +171,13 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
         $templateService = new TemplateService(
-            $config,
-            $currentSiteService,
-            $currentUserService,
-            $request
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
         );
         $mailer = $this->createMock(Mailer::class);
 
@@ -207,11 +226,13 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
         $templateService = new TemplateService(
-            $config,
-            $currentSiteService,
-            $currentUserService,
-            $request
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
         );
         $mailer = $this->createMock(Mailer::class);
 
@@ -260,11 +281,13 @@ class MainControllerTest extends TestCase
         $currentUserService->method("isAuthentified")->willReturn(false);
         $config = Config::load();
         $currentSiteService = $this->createMock(CurrentSite::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
         $templateService = new TemplateService(
-            $config,
-            $currentSiteService,
-            $currentUserService,
-            $request
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
         );
         $mailer = $this->createMock(Mailer::class);
 

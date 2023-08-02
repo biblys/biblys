@@ -6,6 +6,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -38,6 +39,14 @@ class LegacyControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -48,7 +57,7 @@ class LegacyControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -79,6 +88,14 @@ class LegacyControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $legacyController->defaultAction(
@@ -89,7 +106,7 @@ class LegacyControllerTest extends TestCase
             $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
     }
 
@@ -113,6 +130,14 @@ class LegacyControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $legacyController->defaultAction(
@@ -123,7 +148,7 @@ class LegacyControllerTest extends TestCase
             $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
     }
 
@@ -147,6 +172,14 @@ class LegacyControllerTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $legacyController->defaultAction(
@@ -157,7 +190,7 @@ class LegacyControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
     }
 
@@ -182,6 +215,14 @@ class LegacyControllerTest extends TestCase
             ->with("static_page_show", ["slug" => "page-statique"])
             ->willReturn("/page/page-statique");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -192,7 +233,7 @@ class LegacyControllerTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then

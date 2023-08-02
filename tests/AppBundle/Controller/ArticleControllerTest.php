@@ -10,6 +10,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListInterface;
 use Biblys\Service\MailingList\MailingListService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -45,6 +46,7 @@ class ArticleControllerTest extends TestCase
         $currentSiteService = $this->createMock(CurrentSite::class);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $loggerService = $this->createMock(LoggerService::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
         $controller = new ArticleController();
 
         // when
@@ -54,6 +56,7 @@ class ArticleControllerTest extends TestCase
             currentSiteService: $currentSiteService,
             urlGenerator:  $urlGenerator,
             loggerService: $loggerService,
+            metaTags: $metaTagsService,
             slug: $article->getSlug(),
         );
 

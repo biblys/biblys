@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
@@ -40,13 +41,21 @@ class ArticleEditTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // then
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage("Vous n'avez pas le droit d'accéder à cette page.");
 
         // when
-        $response = $legacyController->defaultAction(
+        $legacyController->defaultAction(
             request: $request,
             session: $session,
             mailer: $mailer,
@@ -54,7 +63,7 @@ class ArticleEditTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
     }
 
@@ -78,6 +87,14 @@ class ArticleEditTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -88,7 +105,7 @@ class ArticleEditTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then
@@ -117,6 +134,14 @@ class ArticleEditTest extends TestCase
         $currentSite = CurrentSite::buildFromConfig($config);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
         $urlGenerator = $this->createMock(UrlGenerator::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -127,7 +152,7 @@ class ArticleEditTest extends TestCase
             currentSite: $currentSite,
             currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService,
         );
 
         // then

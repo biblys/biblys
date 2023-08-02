@@ -8,6 +8,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Biblys\Test\EntityFactory;
 use CartManager;
@@ -56,6 +57,14 @@ class CartTest extends TestCase
         $urlGenerator = $this->createMock(UrlGenerator::class);
         $legacyController = new LegacyController();
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = new TemplateService(
+            config: $config,
+            currentSiteService: $currentSite,
+            currentUserService: $currentUser,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
 
         // when
         $response = $legacyController->defaultAction(
@@ -66,7 +75,7 @@ class CartTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: new TemplateService($config, $currentSite, $currentUser, $request),
+            templateService: $templateService
         );
 
         // then

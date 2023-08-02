@@ -32,18 +32,21 @@ class TemplateService
     private Config $config;
     private CurrentSite $currentSiteService;
     private CurrentUser $currentUserService;
+    private MetaTagsService $metaTagsService;
     private Request $request;
 
     public function __construct(
         Config $config,
         CurrentSite $currentSiteService,
         CurrentUser $currentUserService,
+        MetaTagsService $metaTagsService,
         Request $request,
     )
     {
         $this->config = $config;
         $this->currentSiteService = $currentSiteService;
         $this->currentUserService = $currentUserService;
+        $this->metaTagsService = $metaTagsService;
         $this->request = $request;
     }
 
@@ -114,6 +117,7 @@ class TemplateService
             "session" => new Session(),
             "site" => new Site($config),
             "trackers" => self::_getAnalyticsTrackers($config),
+            "metaTags" => $this->metaTagsService->dump(),
         ]);
 
         foreach ($functions as $function) {

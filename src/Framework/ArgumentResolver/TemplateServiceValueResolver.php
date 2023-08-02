@@ -5,9 +5,11 @@ namespace Framework\ArgumentResolver;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Generator;
+use Opengraph\Writer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -32,6 +34,13 @@ class TemplateServiceValueResolver implements ArgumentValueResolverInterface
         $config = Config::load();
         $currentSiteService = CurrentSite::buildFromConfig($config);
         $currentUserService = CurrentUser::buildFromRequestAndConfig($request, $config);
-        yield new TemplateService($config, $currentSiteService, $currentUserService, $request);
+        $metaTagsService = new MetaTagsService(new Writer());
+        yield new TemplateService(
+            config: $config,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            metaTagsService: $metaTagsService,
+            request: $request,
+        );
     }
 }
