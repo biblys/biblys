@@ -13,6 +13,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\GleephService;
 use Biblys\Service\LoggerService;
 use Biblys\Service\MailingList\MailingListService;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
@@ -49,12 +50,13 @@ class ArticleController extends Controller
      * @throws ClientExceptionInterface
      */
     public function showAction(
-        Request $request,
-        Config $config,
-        CurrentSite $currentSiteService,
-        UrlGenerator $urlGenerator,
-        LoggerService $loggerService,
-        $slug
+        Request         $request,
+        Config          $config,
+        CurrentSite     $currentSiteService,
+        UrlGenerator    $urlGenerator,
+        LoggerService   $loggerService,
+        MetaTagsService $metaTags,
+                        $slug
     ): RedirectResponse|Response
     {
         $am = new ArticleManager();
@@ -124,6 +126,7 @@ class ArticleController extends Controller
         }
 
         $articleModel = ArticleQuery::create()->findPk($article->get("id"));
+        $metaTags->setTitle($articleModel->getTitle());
 
         return $this->render("AppBundle:Article:show.html.twig", [
             "article" => $article,
