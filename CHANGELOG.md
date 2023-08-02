@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 2.70.0 (DEV)
+## 2.70.0 (2 août 2023)
 
 Améliorations
 
