@@ -94,6 +94,7 @@ class OrderDeliveryTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -179,6 +180,7 @@ class OrderDeliveryTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -273,6 +275,7 @@ class OrderDeliveryTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -371,6 +374,7 @@ class OrderDeliveryTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then

@@ -353,6 +353,7 @@ class ErrorController extends Controller
             currentUser: $currentUser,
             urlGenerator: $urlgenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
         $response->headers->set("SHOULD_RESET_STATUS_CODE_TO_200", "true");
         return $response;

@@ -64,6 +64,7 @@ class ArticleEditTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
     }
 
@@ -106,6 +107,7 @@ class ArticleEditTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -153,6 +155,7 @@ class ArticleEditTest extends TestCase
             currentUser: CurrentUser::buildFromRequestAndConfig($request, $config),
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then

@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.72.0 (DEV)
+
+Améliorations
+
+- L'affichage de prévisualisation lors de la publication d'un lien vers un
+  site Biblys sur les réseaux sociaux a été améliorée.
+
 ### 2.71.2 (31 août 2023)
 
 Corrections

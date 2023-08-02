@@ -7,6 +7,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Closure;
 use Exception;
@@ -37,6 +38,7 @@ class LegacyController extends Controller
         CurrentUser $currentUser,
         UrlGenerator $urlGenerator,
         TemplateService $templateService,
+        MetaTagsService $metaTagsService,
     ): Response
     {
         global $_SITE, $_ECHO, $_SQL, $urlgenerator;

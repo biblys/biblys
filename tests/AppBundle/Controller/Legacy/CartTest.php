@@ -75,7 +75,8 @@ class CartTest extends TestCase
             currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
-            templateService: $templateService
+            templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then

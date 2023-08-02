@@ -58,6 +58,7 @@ class LegacyControllerTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
@@ -99,14 +100,15 @@ class LegacyControllerTest extends TestCase
 
         // when
         $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
     }
 
@@ -141,14 +143,15 @@ class LegacyControllerTest extends TestCase
 
         // when
         $legacyController->defaultAction(
-            $request,
-            $session,
-            $mailer,
-            $config,
-            $currentSite,
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
     }
 
@@ -191,6 +194,7 @@ class LegacyControllerTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
     }
 
@@ -234,6 +238,7 @@ class LegacyControllerTest extends TestCase
             currentUser: $currentUser,
             urlGenerator: $urlGenerator,
             templateService: $templateService,
+            metaTagsService: $metaTagsService,
         );
 
         // then
