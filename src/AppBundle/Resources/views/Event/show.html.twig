@@ -7,7 +7,7 @@
 {% block main %}
   {% include 'AppBundle:Event:_event.html.twig' %}
 
-  {% if app.user.isAdmin and events is not defined %}
+  {% if app.currentUser.isAdmin and events is not defined %}
     <div class="admin">
       <p>Evènement n°
         {{ event.id }}</p>

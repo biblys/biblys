@@ -13,7 +13,7 @@
 
   {% include 'AppBundle:Article:_list.html.twig' %}
 
-  {% if app.user.isAdmin() %}
+  {% if app.currentUser.isAdmin() %}
     <div class="admin">
       <p>Cycle n° {{ cycle.id }}</p>
     </div>

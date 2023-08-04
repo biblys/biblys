@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    {% if app.user.isAdmin() %}
+    {% if app.currentUser.isAdmin() %}
         <div class="admin">
             <p>Campagne n° {{ campaign.id }}</p>
             <p><a href="{{ path('cf_campaign_edit', { id: campaign.id }) }}">modifier</a></p>

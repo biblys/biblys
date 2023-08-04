@@ -19,7 +19,7 @@
     {{ staticPage.content|raw }}
   </article>
 
-  {% if app.user.isAdmin %}
+  {% if app.currentUser.isAdmin %}
     <div class="admin">
       <p>Page n&deg; {{ staticPage.id }}</p>
       <p><a href="/pages/adm_page?id={{ staticPage.id }}">modifier</a></p>

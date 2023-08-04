@@ -18,7 +18,7 @@
         {% include "AppBundle:Post:_post.html.twig" %}
     </article>
 
-    {% if app.user.isAdmin %}
+    {% if app.currentUser.isAdmin %}
         <div class="admin">
             <p>Billet n°
                 {{ post.id }}</p>

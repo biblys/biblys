@@ -72,7 +72,7 @@
 
   {% endif %}
 
-  {% if app.user.isAdmin() %}
+  {% if app.currentUser.isAdmin() %}
     <div class="admin">
       <p>Article n° {{ article.id }}</p>
       <p><a href="/pages/article_edit?id={{ article.id }}">modifier</a></p>

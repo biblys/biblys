@@ -1,5 +1,11 @@
 # Historique des modifications
 
+### 2.70.1 (DEV)
+
+Corrections
+
+- Le menu d'administration pouvait ne pas apparaître. C'est corrigé.
+
 ## 2.70.0 (2 août 2023)
 
 Améliorations

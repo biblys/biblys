@@ -9,7 +9,7 @@
 
   <p>Cette page n'existe pas !</p>
 
-  {% if app.user.isAdmin %}
+  {% if app.currentUser.isAdmin %}
     <p class="alert alert-danger">
       <strong>{{ exceptionClass }}</strong><br/>
       {{ exception.message }}

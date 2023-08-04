@@ -35,7 +35,7 @@
 
     {% include 'AppBundle:Article:_list.html.twig' %}
 
-    {% if app.user.isAdmin() %}
+    {% if app.currentUser.isAdmin() %}
       <div class="admin">
         <p>Contributeur·trice n° {{ people.id }}</p>
         <p><a href="{{ path('people_edit', { id: people.id }) }}">modifier</a></p>

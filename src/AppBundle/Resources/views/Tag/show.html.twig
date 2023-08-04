@@ -14,7 +14,7 @@
 
   {% include 'AppBundle:Article:_list.html.twig' %}
 
-  {% if app.user.isAdmin() %}
+  {% if app.currentUser.isAdmin() %}
     <div class="admin">
       <p>Mot-clé n° {{ tag.id }}</p>
       <p><a href="{{ path('tag_edit', { id: tag.id }) }}">modifier</a></p>

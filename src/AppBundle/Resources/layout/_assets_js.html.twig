@@ -12,12 +12,12 @@
 <script type="text/javascript" src="{{ asset("/common/js/common.js") }}"></script>
 <script type="text/javascript" src="{{ asset("/common/js/_list.js") }}"></script>
 
-{% if app.user.isPublisher or app.user.isAdmin %}
+{% if app.currentUser.hasPublisherRight or app.currentUser.isAdmin %}
   <script type="text/javascript" src="{{ asset("/common/js/article_edit.js") }}"></script>
   <script type="text/javascript" src="{{ asset("/common/js/adm_publisher.js") }}"></script>
 {% endif %}
 
-{% if app.user.isAdmin %}
+{% if app.currentUser.isAdmin %}
   <script type="text/javascript" src="{{ asset("/common/js/biblys-admin.js") }}"></script>
   <script type="text/javascript" src="{{ asset("/common/js/adm_publisher_stock.js") }}"></script>
   <script type="text/javascript" src="{{ asset("/common/js/adm_reorder.js") }}"></script>

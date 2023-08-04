@@ -24,7 +24,7 @@
 
   {% include 'AppBundle:Article:_list.html.twig' %}
 
-  {% if app.user.isAdmin() %}
+  {% if app.currentUser.isAdmin() %}
     <div class="admin">
       <p>Éditeur n°
         {{ publisher.id }}</p>
