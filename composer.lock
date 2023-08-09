@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed6fc37179bb9bed125f21e1b62f326c",
+    "content-hash": "5e2ab53880677bd4593356fc3a424f66",
     "packages": [
         {
             "name": "biblys/eurotax",
@@ -55,16 +55,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "dev-next",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "08763ac6b49d3ccf0770d34f0f9b5103fbc059fc"
+                "reference": "688c8599870456b6968ece83c5c9c7df26d15cab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/08763ac6b49d3ccf0770d34f0f9b5103fbc059fc",
-                "reference": "08763ac6b49d3ccf0770d34f0f9b5103fbc059fc",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/688c8599870456b6968ece83c5c9c7df26d15cab",
+                "reference": "688c8599870456b6968ece83c5c9c7df26d15cab",
                 "shasum": ""
             },
             "require": {
@@ -102,7 +102,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/next"
+                "source": "https://github.com/biblys/isbn/tree/3.0.0"
             },
             "time": "2022-11-26T00:00:00+00:00"
         },
@@ -10074,7 +10074,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "biblys/isbn": 20,
         "propel/propel": 10,
         "roave/security-advisories": 20
     },
