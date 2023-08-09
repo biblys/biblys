@@ -1,19 +1,23 @@
 <?php
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * @throws Exception
+ * @throws TransportExceptionInterface
  */
 return function (
     Request $request,
     CurrentSite $currentSite,
     TemplateService $templateService,
+    Mailer $mailer,
 ): Response|RedirectResponse
 {
     $um = new AxysAccountManager();
