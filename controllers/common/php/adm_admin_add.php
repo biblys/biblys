@@ -6,18 +6,15 @@ use Biblys\Service\TemplateService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-/**
- * @throws Exception
- * @throws TransportExceptionInterface
- */
 return function (
-    Request $request,
-    CurrentSite $currentSite,
+    Request         $request,
+    CurrentSite     $currentSite,
     TemplateService $templateService,
-    Mailer $mailer,
+    Mailer          $mailer,
+    HttpSession     $session,
 ): Response|RedirectResponse
 {
     $um = new AxysAccountManager();
@@ -29,17 +26,24 @@ return function (
             throw new BadRequestHttpException("Le champ Adresse e-mail est obligatoire.");
         }
 
-        /** @var AxysAccount $user */
-        $user = $um->get(['axys_account_id' => $axysAccountEmail]);
-        if (!$user) {
-            throw new BadRequestHttpException(
-                "L'adresse e-mail doit correspondre à un compte utilisateur existant."
-            );
+        try {
+            /** @var AxysAccount $axysAccount */
+            $axysAccount = $um->get(['axys_account_id' => $axysAccountEmail]);
+            if (!$axysAccount) {
+                throw new BadRequestHttpException(
+                    "L'adresse e-mail doit correspondre à un compte utilisateur existant."
+                );
+            }
+
+            if ($axysAccount->hasRight('site', $currentSite->getId())) {
+                throw new BadRequestHttpException("L'utilisateur $axysAccountEmail a déjà un accès administrateur.");
+            }
+        } catch (BadRequestHttpException $exception) {
+            $session->getFlashBag()->add("error", $exception->getMessage());
+            return new RedirectResponse("/pages/adm_admin_add");
         }
 
-        if (!$user->hasRight('site', $currentSite->getId())) {
-            $user->giveRight('site', $currentSite->getId());
-        }
+        $axysAccount->giveRight('site', $currentSite->getId());
 
         $subject = $currentSite->getSite()->getTag() . ' | Votre accès au site';
         $message = '
@@ -51,19 +55,20 @@ return function (
                 </a>.
             </p>
             <p>
-                Vos identifiants de connexion sont votre adresse e-mail (' . $user->get("user_email") . ') 
+                Vos identifiants de connexion sont votre adresse e-mail (' . $axysAccount->get("axys_account_email") . ') 
                 et le mot de passe que vous avez défini au moment de la création de votre compte 
                 (vous pourrez demander à en recevoir un nouveau si besoin).
             </p>
         ';
 
-        $um->mail($user, $subject, $message);
+        $um->mail($axysAccount, $subject, $message);
 
-        $params["added"] = 1;
-        $params["email"] = $user->get("axys_account_email");
-        $queryParams = http_build_query($params);
+        $session->getFlashBag()->add(
+            "success",
+            "Un accès administrateur a été ajouté pour le compte $axysAccountEmail."
+        );
 
-        return new RedirectResponse("/pages/adm_admins?$queryParams");
+        return new RedirectResponse("/pages/adm_admins");
     }
 
     $request->attributes->set("page_title", "Ajouter un administrateur");

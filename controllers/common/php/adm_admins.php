@@ -24,12 +24,6 @@ if (isset($_GET['deleted'])) {
     $message = '<p class="success">L\'utilisateur '.$_GET['email'].' a été supprimé.</p>';
 }
 
-// Utilisateur ajouté
-if (isset($_GET['added'])) {
-    if (isset($_GET['created'])) $messageC = '<p class="success">Un compte Axys a été créé pour l\'utilisateur '.$_GET['email'].'.</p>'; else $messageC = null;
-    $message = $messageC.'<p class="success">L\'utilisateur '.$_GET['email'].' a été ajouté aux administrateurs.</p>';
-}
-
 $rights = $_SQL->prepare("
     SELECT `axys_accounts`.`axys_account_id`, `axys_account_email`, `axys_account_screen_name`, `axys_account_login_date`, `right_id`
         FROM `rights`
