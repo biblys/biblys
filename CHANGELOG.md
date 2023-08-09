@@ -4,8 +4,10 @@
 
 Améliorations
 
-- L'affichage de prévisualisation lors de la publication d'un lien vers un
-  site Biblys sur les réseaux sociaux a été améliorée.
+- L'affichage de prévisualisation lors de la publication d'un lien vers un 
+  site Biblys sur les réseaux sociaux a été améliorée. 
+- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
+  ne possède pas un compte au préalable.
 
 ### 2.71.2 (31 août 2023)
 
