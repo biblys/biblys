@@ -1,12 +1,20 @@
 <?php
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\TemplateService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-return function (Request $request, CurrentSite $currentSite, $axysAccountEmail): Response|RedirectResponse
+/**
+ * @throws Exception
+ */
+return function (
+    Request $request,
+    CurrentSite $currentSite,
+    TemplateService $templateService,
+): Response|RedirectResponse
 {
     $um = new AxysAccountManager();
 
@@ -56,7 +64,7 @@ return function (Request $request, CurrentSite $currentSite, $axysAccountEmail):
 
     $request->attributes->set("page_title", "Ajouter un administrateur");
 
-    $content = '
+    $template = '
     <h2><span class="fa fa-user-plus"></span> Ajouter un administrateur</h2>
 
     <p class="alert alert-warning">
@@ -86,5 +94,5 @@ return function (Request $request, CurrentSite $currentSite, $axysAccountEmail):
     </form>
 ';
 
-    return new Response($content);
+    return $templateService->renderFromString($template);
 };
