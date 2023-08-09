@@ -305,16 +305,12 @@ class User extends Entity
         return $rights;
     }
 
-    public function hasRight($type, $id = null)
+    public function hasRight(string $type, int $id): bool
     {
         $rights = $this->getRights();
         foreach ($rights as $r) {
-            if ($r->has($type . '_id')) {
-                if (!isset($id)) {
-                    return true;
-                } elseif ($r->get($type . '_id') == $id) {
-                    return true;
-                }
+            if ($r->get($type . '_id') === $id) {
+                return true;
             }
         }
 
