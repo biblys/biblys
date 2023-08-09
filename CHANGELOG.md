@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 2.71.0 (DEV)
+
+Améliorations
+
+- Il n'est plus possible d'inviter un utilisateur à être administrateur s'il 
+  ne possède pas un compte au préalable.
+
 ### 2.70.2 (16 août 2023)
 
 Corrections

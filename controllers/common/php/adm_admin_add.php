@@ -1,10 +1,12 @@
 <?php
 
-use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/** @var CurrentSite $currentSite */
 /** @var Request $request */
 
 $um = new AxysAccountManager();
@@ -17,46 +19,36 @@ if ($request->getMethod() === "POST") {
         trigger_error("Le champ Adresse e-mail est obligatoire.");
     }
 
-    // Create a user if it doesn't exist
-    $user = $um->get(['axys_account_email' => $axysAccountEmail]);
-    if (!$user)  {
-        $user = $um->create(array("axys_account_email" => $axysAccountEmail));
-        $params['created'] = 1;
+        /** @var AxysAccount $user */
+        $user = $um->get(['axys_account_id' => $axysAccountEmail]);
+        if (!$user) {
+            throw new BadRequestHttpException(
+                "L'adresse e-mail doit correspondre à un compte utilisateur existant."
+            );
+        }
+
+
+    if (!$user->hasRight('site', $currentSite->getId())) {
+        $user->giveRight('site', $currentSite->getId());
     }
 
-    // Set admin right
-    if (!$user->hasRight('site', LegacyCodeHelper::getLegacyCurrentSite()['site_id'])) {
-        $user->giveRight('site', LegacyCodeHelper::getLegacyCurrentSite()['site_id']);
-    }
-
-    // E-mail de bienvenue
-    if ($user->get('axys_account_just_created')) // Si nouvel utilisateur, on ajoute les identifiants
-    {
-        $credentials = '
+    $subject = $currentSite->getSite()->getTag() . ' | Votre accès au site';
+        $message = '
+            <p>Bonjour,</p>
             <p>
-                Vos identifiants de connexion Axys :<br />
-                Adresse e-mail : '.$user->get("axys_account_email").'<br />
-                Le mot de passe vous a été envoyé par courriel. Nous vous invitons à le changer dès votre première connexion.
+                Votre accès administrateur a été créé sur le site 
+                <a href="https://'.$currentSite->getSite()->getDomain().'/">'
+                    .$currentSite->getSite()->getTitle().'
+                </a>.
+            </p>
+            <p>
+                Vos identifiants de connexion sont votre adresse e-mail (' . $user->get("user_email") . ') 
+                et le mot de passe que vous avez défini au moment de la création de votre compte 
+                (vous pourrez demander à en recevoir un nouveau si besoin).
             </p>
         ';
-    }
-    else
-    {
-        $credentials = '
-            <p>
-                Vos identifiants de connexion sont votre adresse e-mail ('.$user->get("axys_account_email").') et le mot de passe que vous avez défini au moment de la création de votre compte Axys (vous pourrez demander à en recevoir un nouveau si besoin).
-            </p>
-        ';
-    }
 
-    $headers = 'From: '. LegacyCodeHelper::getLegacyCurrentSite()['site_title'].' <'. LegacyCodeHelper::getLegacyCurrentSite()['site_contact'].'>'."\r\n";
-    $subject = LegacyCodeHelper::getLegacyCurrentSite()['site_tag'].' | Votre accès au site';
-    $message = '
-<p>Bonjour,</p>
-<p>Votre accès administrateur a été créé sur le site <a href="https://'. LegacyCodeHelper::getLegacyCurrentSite()['site_domain'].'/">'. LegacyCodeHelper::getLegacyCurrentSite()['site_title'].'</a>.</p>
-'.$credentials;
-
-    $um->mail($user,$subject,$message,$headers);
+    $um->mail($user, $subject, $message);
 
     $params["added"] = 1;
     $params["email"] = $user->get("axys_account_email");
@@ -75,12 +67,19 @@ $content = '
         L\'utilisateur obtiendra tous les droits d\'administration sur le site.
     </p>
 
-    <form method="post" class="check">
+    <p class="alert alert-info">
+            <span class="fa fa-info-circle"></span>&nbsp;
+            L\'adresse e-mail doit correspondre à un compte utilisateur existant.
+            Si ce n\'est pas le cas, invitez le futur administrateur à créer au préalable
+            un compte utilisateur et à vous communiquer l\'adresse e-mail utilisée.
+        </p>
+    
+        <form method="post" class="check">
         <fieldset>
             <p>
                 <label for="axys_account_email">Adresse e-mail :</label>
                 <input type="email" name="axys_account_email" id="axys_account_email" value="'.($axysAccountEmail ?? null).'" class="long" required>&nbsp;
-                <span class="fa fa-info-circle" title="Si cette adresse ne correspond pas à un compte Axys, un nouveau compte sera créé automatiquement avec un mot de passe aléatoire envoyé par e-mail."></span>
+                
             </p>
             <br>
             <div class="center">
