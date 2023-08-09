@@ -60,29 +60,6 @@ class Visitor extends User
     /**
      * @throws Exception
      */
-    public function isAdmin(): bool
-    {
-        if (!$this->isLogged()) {
-            return false;
-        }
-
-        if ($this->isAdmin === null) {
-            $config = Config::load();
-            $currentSiteService = CurrentSite::buildFromConfig($config);
-
-            $right = $this->getCurrentRight();
-            $this->isAdmin = false;
-            if ($right->get('site_id') == $currentSiteService->getId()) {
-                $this->isAdmin = true;
-            }
-        }
-
-        return $this->isAdmin;
-    }
-
-    /**
-     * @throws Exception
-     */
     public function isPublisher(): bool
     {
         $right = $this->getCurrentRight();
@@ -207,8 +184,6 @@ class Visitor extends User
     public function getCurrentRight(): Right
     {
         $rm = new RightManager();
-        $rights = $this->getRights();
-
         if ($right = $rm->get(['user_id' => $this->get('id')])) {
             return $right;
         }

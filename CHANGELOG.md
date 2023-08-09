@@ -1,5 +1,13 @@
 # Historique des modifications
 
+### 2.70.2 (DEV)
+
+Corrections
+
+- Le message "Vous n'êtes pas autorisé à accéder à cette page." pouvait 
+  apparaître pour un utilisateur avec des droits d'administration. C'est 
+  corrigé.
+
 ### 2.70.1 (9 août 2023)
 
 Corrections
