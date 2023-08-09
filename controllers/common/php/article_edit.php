@@ -6,10 +6,10 @@
 use Biblys\Database\Connection;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Isbn\IsbnParsingException;
-use Biblys\Legacy\LegacyCodeHelper;
 use Model\ArticleCategory;
 use Model\ArticleCategoryQuery;
 use Model\LinkQuery;
+use Model\PublisherQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
@@ -42,13 +42,11 @@ if (!$currentUser->isAdmin() && !$currentUser->hasPublisherRight()) {
     throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
-$publisherId = $currentUser->getCurrentRight()->getPublisherId();
-if (
-    $publisherId
-    && !LegacyCodeHelper::getLegacyCurrentSite()->allowsPublisherWithId($publisherId)
-) {
-    $pm = new PublisherManager();
-    throw new AccessDeniedHttpException("Votre maison d'édition n'est pas autorisée sur ce site.");
+$publisherId = $currentUser->getCurrentRight()?->getPublisherId();
+$publisher = PublisherQuery::create()->findPk($publisherId);
+if ($publisherId && !$currentSite->allowsPublisher($publisher)) {
+    $publisherName = $publisher->getName();
+    throw new AccessDeniedHttpException("Votre maison d'édition $publisherName n'est pas autorisée sur ce site.");
 }
 
 $am->setIgnoreSiteFilters(true);
@@ -712,7 +710,7 @@ $content .= '
             </div>
 
             <label class="floating" for="article_title">Titre :</label>
-            <input type="text" id="article_title" name="article_title" value="'.htmlspecialchars($a['article_title']).'" class="long article_duplicate_check event'.$article_title_class.'" required />
+            <input type="text" id="article_title" name="article_title" value="'.htmlspecialchars($a['article_title'] ?: "").'" class="long article_duplicate_check event'.$article_title_class.'" required />
             <br />
 
             <label class="floating" for="article_authors">Auteur·trice·s :</label>
