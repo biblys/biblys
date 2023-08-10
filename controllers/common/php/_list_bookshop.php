@@ -485,5 +485,8 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     '.$_og_image;
 }
 
-$_ECHO .= $listContent;
+if (!empty($_ECHO)) {
+    $_ECHO .= $listContent;
+}
+
 return $listContent;
