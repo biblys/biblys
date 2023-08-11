@@ -2,8 +2,8 @@
 
 namespace Model\Map;
 
-use Model\AxysApp;
-use Model\AxysAppQuery;
+use Model\AxysConsent;
+use Model\AxysConsentQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'axys_apps' table.
+ * This class defines the structure of the 'axys_consents' table.
  *
  *
  *
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class AxysAppTableMap extends TableMap
+class AxysConsentTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class AxysAppTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    public const CLASS_NAME = 'Model.Map.AxysAppTableMap';
+    public const CLASS_NAME = 'Model.Map.AxysConsentTableMap';
 
     /**
      * The default database name for this class
@@ -43,27 +43,27 @@ class AxysAppTableMap extends TableMap
     /**
      * The table name for this class
      */
-    public const TABLE_NAME = 'axys_apps';
+    public const TABLE_NAME = 'axys_consents';
 
     /**
      * The PHP name of this class (PascalCase)
      */
-    public const TABLE_PHP_NAME = 'AxysApp';
+    public const TABLE_PHP_NAME = 'AxysConsent';
 
     /**
      * The related Propel class for this table
      */
-    public const OM_CLASS = '\\Model\\AxysApp';
+    public const OM_CLASS = '\\Model\\AxysConsent';
 
     /**
      * A class that can be returned by this tableMap
      */
-    public const CLASS_DEFAULT = 'Model.AxysApp';
+    public const CLASS_DEFAULT = 'Model.AxysConsent';
 
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 7;
+    public const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -73,42 +73,37 @@ class AxysAppTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 7;
+    public const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the id field
      */
-    public const COL_ID = 'axys_apps.id';
+    public const COL_ID = 'axys_consents.id';
 
     /**
-     * the column name for the client_id field
+     * the column name for the app_id field
      */
-    public const COL_CLIENT_ID = 'axys_apps.client_id';
+    public const COL_APP_ID = 'axys_consents.app_id';
 
     /**
-     * the column name for the client_secret field
+     * the column name for the user_id field
      */
-    public const COL_CLIENT_SECRET = 'axys_apps.client_secret';
+    public const COL_USER_ID = 'axys_consents.user_id';
 
     /**
-     * the column name for the name field
+     * the column name for the scopes field
      */
-    public const COL_NAME = 'axys_apps.name';
-
-    /**
-     * the column name for the redirect_uri field
-     */
-    public const COL_REDIRECT_URI = 'axys_apps.redirect_uri';
+    public const COL_SCOPES = 'axys_consents.scopes';
 
     /**
      * the column name for the created_at field
      */
-    public const COL_CREATED_AT = 'axys_apps.created_at';
+    public const COL_CREATED_AT = 'axys_consents.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    public const COL_UPDATED_AT = 'axys_apps.updated_at';
+    public const COL_UPDATED_AT = 'axys_consents.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -124,11 +119,11 @@ class AxysAppTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'ClientId', 'ClientSecret', 'Name', 'RedirectUri', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'clientId', 'clientSecret', 'name', 'redirectUri', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [AxysAppTableMap::COL_ID, AxysAppTableMap::COL_CLIENT_ID, AxysAppTableMap::COL_CLIENT_SECRET, AxysAppTableMap::COL_NAME, AxysAppTableMap::COL_REDIRECT_URI, AxysAppTableMap::COL_CREATED_AT, AxysAppTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'client_id', 'client_secret', 'name', 'redirect_uri', 'created_at', 'updated_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id', 'AppId', 'UserId', 'Scopes', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'appId', 'userId', 'scopes', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID, AxysConsentTableMap::COL_APP_ID, AxysConsentTableMap::COL_USER_ID, AxysConsentTableMap::COL_SCOPES, AxysConsentTableMap::COL_CREATED_AT, AxysConsentTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'app_id', 'user_id', 'scopes', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
     /**
@@ -140,11 +135,11 @@ class AxysAppTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'ClientId' => 1, 'ClientSecret' => 2, 'Name' => 3, 'RedirectUri' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'clientId' => 1, 'clientSecret' => 2, 'name' => 3, 'redirectUri' => 4, 'createdAt' => 5, 'updatedAt' => 6, ],
-        self::TYPE_COLNAME       => [AxysAppTableMap::COL_ID => 0, AxysAppTableMap::COL_CLIENT_ID => 1, AxysAppTableMap::COL_CLIENT_SECRET => 2, AxysAppTableMap::COL_NAME => 3, AxysAppTableMap::COL_REDIRECT_URI => 4, AxysAppTableMap::COL_CREATED_AT => 5, AxysAppTableMap::COL_UPDATED_AT => 6, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'client_id' => 1, 'client_secret' => 2, 'name' => 3, 'redirect_uri' => 4, 'created_at' => 5, 'updated_at' => 6, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'AppId' => 1, 'UserId' => 2, 'Scopes' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'appId' => 1, 'userId' => 2, 'scopes' => 3, 'createdAt' => 4, 'updatedAt' => 5, ],
+        self::TYPE_COLNAME       => [AxysConsentTableMap::COL_ID => 0, AxysConsentTableMap::COL_APP_ID => 1, AxysConsentTableMap::COL_USER_ID => 2, AxysConsentTableMap::COL_SCOPES => 3, AxysConsentTableMap::COL_CREATED_AT => 4, AxysConsentTableMap::COL_UPDATED_AT => 5, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'app_id' => 1, 'user_id' => 2, 'scopes' => 3, 'created_at' => 4, 'updated_at' => 5, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, ]
     ];
 
     /**
@@ -154,59 +149,51 @@ class AxysAppTableMap extends TableMap
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
-        'AxysApp.Id' => 'ID',
+        'AxysConsent.Id' => 'ID',
         'id' => 'ID',
-        'axysApp.id' => 'ID',
-        'AxysAppTableMap::COL_ID' => 'ID',
+        'axysConsent.id' => 'ID',
+        'AxysConsentTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'axys_apps.id' => 'ID',
-        'ClientId' => 'CLIENT_ID',
-        'AxysApp.ClientId' => 'CLIENT_ID',
-        'clientId' => 'CLIENT_ID',
-        'axysApp.clientId' => 'CLIENT_ID',
-        'AxysAppTableMap::COL_CLIENT_ID' => 'CLIENT_ID',
-        'COL_CLIENT_ID' => 'CLIENT_ID',
-        'client_id' => 'CLIENT_ID',
-        'axys_apps.client_id' => 'CLIENT_ID',
-        'ClientSecret' => 'CLIENT_SECRET',
-        'AxysApp.ClientSecret' => 'CLIENT_SECRET',
-        'clientSecret' => 'CLIENT_SECRET',
-        'axysApp.clientSecret' => 'CLIENT_SECRET',
-        'AxysAppTableMap::COL_CLIENT_SECRET' => 'CLIENT_SECRET',
-        'COL_CLIENT_SECRET' => 'CLIENT_SECRET',
-        'client_secret' => 'CLIENT_SECRET',
-        'axys_apps.client_secret' => 'CLIENT_SECRET',
-        'Name' => 'NAME',
-        'AxysApp.Name' => 'NAME',
-        'name' => 'NAME',
-        'axysApp.name' => 'NAME',
-        'AxysAppTableMap::COL_NAME' => 'NAME',
-        'COL_NAME' => 'NAME',
-        'axys_apps.name' => 'NAME',
-        'RedirectUri' => 'REDIRECT_URI',
-        'AxysApp.RedirectUri' => 'REDIRECT_URI',
-        'redirectUri' => 'REDIRECT_URI',
-        'axysApp.redirectUri' => 'REDIRECT_URI',
-        'AxysAppTableMap::COL_REDIRECT_URI' => 'REDIRECT_URI',
-        'COL_REDIRECT_URI' => 'REDIRECT_URI',
-        'redirect_uri' => 'REDIRECT_URI',
-        'axys_apps.redirect_uri' => 'REDIRECT_URI',
+        'axys_consents.id' => 'ID',
+        'AppId' => 'APP_ID',
+        'AxysConsent.AppId' => 'APP_ID',
+        'appId' => 'APP_ID',
+        'axysConsent.appId' => 'APP_ID',
+        'AxysConsentTableMap::COL_APP_ID' => 'APP_ID',
+        'COL_APP_ID' => 'APP_ID',
+        'app_id' => 'APP_ID',
+        'axys_consents.app_id' => 'APP_ID',
+        'UserId' => 'USER_ID',
+        'AxysConsent.UserId' => 'USER_ID',
+        'userId' => 'USER_ID',
+        'axysConsent.userId' => 'USER_ID',
+        'AxysConsentTableMap::COL_USER_ID' => 'USER_ID',
+        'COL_USER_ID' => 'USER_ID',
+        'user_id' => 'USER_ID',
+        'axys_consents.user_id' => 'USER_ID',
+        'Scopes' => 'SCOPES',
+        'AxysConsent.Scopes' => 'SCOPES',
+        'scopes' => 'SCOPES',
+        'axysConsent.scopes' => 'SCOPES',
+        'AxysConsentTableMap::COL_SCOPES' => 'SCOPES',
+        'COL_SCOPES' => 'SCOPES',
+        'axys_consents.scopes' => 'SCOPES',
         'CreatedAt' => 'CREATED_AT',
-        'AxysApp.CreatedAt' => 'CREATED_AT',
+        'AxysConsent.CreatedAt' => 'CREATED_AT',
         'createdAt' => 'CREATED_AT',
-        'axysApp.createdAt' => 'CREATED_AT',
-        'AxysAppTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'axysConsent.createdAt' => 'CREATED_AT',
+        'AxysConsentTableMap::COL_CREATED_AT' => 'CREATED_AT',
         'COL_CREATED_AT' => 'CREATED_AT',
         'created_at' => 'CREATED_AT',
-        'axys_apps.created_at' => 'CREATED_AT',
+        'axys_consents.created_at' => 'CREATED_AT',
         'UpdatedAt' => 'UPDATED_AT',
-        'AxysApp.UpdatedAt' => 'UPDATED_AT',
+        'AxysConsent.UpdatedAt' => 'UPDATED_AT',
         'updatedAt' => 'UPDATED_AT',
-        'axysApp.updatedAt' => 'UPDATED_AT',
-        'AxysAppTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'axysConsent.updatedAt' => 'UPDATED_AT',
+        'AxysConsentTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
         'COL_UPDATED_AT' => 'UPDATED_AT',
         'updated_at' => 'UPDATED_AT',
-        'axys_apps.updated_at' => 'UPDATED_AT',
+        'axys_consents.updated_at' => 'UPDATED_AT',
     ];
 
     /**
@@ -219,18 +206,17 @@ class AxysAppTableMap extends TableMap
     public function initialize(): void
     {
         // attributes
-        $this->setName('axys_apps');
-        $this->setPhpName('AxysApp');
+        $this->setName('axys_consents');
+        $this->setPhpName('AxysConsent');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Model\\AxysApp');
+        $this->setClassName('\\Model\\AxysConsent');
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('client_id', 'ClientId', 'VARCHAR', true, 32, null);
-        $this->addColumn('client_secret', 'ClientSecret', 'VARCHAR', true, 64, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
-        $this->addColumn('redirect_uri', 'RedirectUri', 'VARCHAR', true, 256, null);
+        $this->addForeignKey('app_id', 'AppId', 'INTEGER', 'axys_apps', 'id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'users', 'id', true, null, null);
+        $this->addColumn('scopes', 'Scopes', 'VARCHAR', true, 256, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     }
@@ -242,13 +228,20 @@ class AxysAppTableMap extends TableMap
      */
     public function buildRelations(): void
     {
-        $this->addRelation('AxysConsent', '\\Model\\AxysConsent', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('AxysApp', '\\Model\\AxysApp', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':app_id',
     1 => ':id',
   ),
-), null, null, 'AxysConsents', false);
+), null, null, null, false);
+        $this->addRelation('User', '\\Model\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, null, false);
     }
 
     /**
@@ -321,7 +314,7 @@ class AxysAppTableMap extends TableMap
      */
     public static function getOMClass(bool $withPrefix = true): string
     {
-        return $withPrefix ? AxysAppTableMap::CLASS_DEFAULT : AxysAppTableMap::OM_CLASS;
+        return $withPrefix ? AxysConsentTableMap::CLASS_DEFAULT : AxysConsentTableMap::OM_CLASS;
     }
 
     /**
@@ -335,22 +328,22 @@ class AxysAppTableMap extends TableMap
      *
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array (AxysApp object, last column rank)
+     * @return array (AxysConsent object, last column rank)
      */
     public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
-        $key = AxysAppTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = AxysAppTableMap::getInstanceFromPool($key))) {
+        $key = AxysConsentTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = AxysConsentTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + AxysAppTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + AxysConsentTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = AxysAppTableMap::OM_CLASS;
-            /** @var AxysApp $obj */
+            $cls = AxysConsentTableMap::OM_CLASS;
+            /** @var AxysConsent $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            AxysAppTableMap::addInstanceToPool($obj, $key);
+            AxysConsentTableMap::addInstanceToPool($obj, $key);
         }
 
         return [$obj, $col];
@@ -373,18 +366,18 @@ class AxysAppTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = AxysAppTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = AxysAppTableMap::getInstanceFromPool($key))) {
+            $key = AxysConsentTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = AxysConsentTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var AxysApp $obj */
+                /** @var AxysConsent $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                AxysAppTableMap::addInstanceToPool($obj, $key);
+                AxysConsentTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -406,19 +399,17 @@ class AxysAppTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(AxysAppTableMap::COL_ID);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_CLIENT_ID);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_CLIENT_SECRET);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_NAME);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_REDIRECT_URI);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(AxysAppTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_ID);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_APP_ID);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_SCOPES);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(AxysConsentTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.client_id');
-            $criteria->addSelectColumn($alias . '.client_secret');
-            $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.redirect_uri');
+            $criteria->addSelectColumn($alias . '.app_id');
+            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.scopes');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }
@@ -439,19 +430,17 @@ class AxysAppTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_ID);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_CLIENT_ID);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_CLIENT_SECRET);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_NAME);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_REDIRECT_URI);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_CREATED_AT);
-            $criteria->removeSelectColumn(AxysAppTableMap::COL_UPDATED_AT);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_ID);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_APP_ID);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_SCOPES);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(AxysConsentTableMap::COL_UPDATED_AT);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
-            $criteria->removeSelectColumn($alias . '.client_id');
-            $criteria->removeSelectColumn($alias . '.client_secret');
-            $criteria->removeSelectColumn($alias . '.name');
-            $criteria->removeSelectColumn($alias . '.redirect_uri');
+            $criteria->removeSelectColumn($alias . '.app_id');
+            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.scopes');
             $criteria->removeSelectColumn($alias . '.created_at');
             $criteria->removeSelectColumn($alias . '.updated_at');
         }
@@ -466,13 +455,13 @@ class AxysAppTableMap extends TableMap
      */
     public static function getTableMap(): TableMap
     {
-        return Propel::getServiceContainer()->getDatabaseMap(AxysAppTableMap::DATABASE_NAME)->getTable(AxysAppTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(AxysConsentTableMap::DATABASE_NAME)->getTable(AxysConsentTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a AxysApp or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a AxysConsent or Criteria object OR a primary key value.
      *
-     * @param mixed $values Criteria or AxysApp object or primary key or array of primary keys
+     * @param mixed $values Criteria or AxysConsent object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -483,27 +472,27 @@ class AxysAppTableMap extends TableMap
      public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysConsentTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Model\AxysApp) { // it's a model object
+        } elseif ($values instanceof \Model\AxysConsent) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(AxysAppTableMap::DATABASE_NAME);
-            $criteria->add(AxysAppTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(AxysConsentTableMap::DATABASE_NAME);
+            $criteria->add(AxysConsentTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = AxysAppQuery::create()->mergeWith($criteria);
+        $query = AxysConsentQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            AxysAppTableMap::clearInstancePool();
+            AxysConsentTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                AxysAppTableMap::removeInstanceFromPool($singleval);
+                AxysConsentTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -511,20 +500,20 @@ class AxysAppTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the axys_apps table.
+     * Deletes all rows from the axys_consents table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
-        return AxysAppQuery::create()->doDeleteAll($con);
+        return AxysConsentQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a AxysApp or Criteria object.
+     * Performs an INSERT on the database, given a AxysConsent or Criteria object.
      *
-     * @param mixed $criteria Criteria or AxysApp object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or AxysConsent object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed The new primary key.
      * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
@@ -533,22 +522,22 @@ class AxysAppTableMap extends TableMap
     public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysConsentTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from AxysApp object
+            $criteria = $criteria->buildCriteria(); // build Criteria from AxysConsent object
         }
 
-        if ($criteria->containsKey(AxysAppTableMap::COL_ID) && $criteria->keyContainsValue(AxysAppTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AxysAppTableMap::COL_ID.')');
+        if ($criteria->containsKey(AxysConsentTableMap::COL_ID) && $criteria->keyContainsValue(AxysConsentTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AxysConsentTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = AxysAppQuery::create()->mergeWith($criteria);
+        $query = AxysConsentQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)

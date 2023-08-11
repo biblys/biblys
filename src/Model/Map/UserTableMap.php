@@ -669,6 +669,13 @@ class UserTableMap extends TableMap
     1 => ':site_id',
   ),
 ), null, null, null, false);
+        $this->addRelation('AxysConsent', '\\Model\\AxysConsent', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':user_id',
+    1 => ':id',
+  ),
+), null, null, 'AxysConsents', false);
         $this->addRelation('Cart', '\\Model\\Cart', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

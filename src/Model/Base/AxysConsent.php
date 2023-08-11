@@ -7,16 +7,15 @@ use \Exception;
 use \PDO;
 use Model\AxysApp as ChildAxysApp;
 use Model\AxysAppQuery as ChildAxysAppQuery;
-use Model\AxysConsent as ChildAxysConsent;
 use Model\AxysConsentQuery as ChildAxysConsentQuery;
-use Model\Map\AxysAppTableMap;
+use Model\User as ChildUser;
+use Model\UserQuery as ChildUserQuery;
 use Model\Map\AxysConsentTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
-use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -26,20 +25,20 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'axys_apps' table.
+ * Base class that represents a row from the 'axys_consents' table.
  *
  *
  *
  * @package    propel.generator.Model.Base
  */
-abstract class AxysApp implements ActiveRecordInterface
+abstract class AxysConsent implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      *
      * @var string
      */
-    public const TABLE_MAP = '\\Model\\Map\\AxysAppTableMap';
+    public const TABLE_MAP = '\\Model\\Map\\AxysConsentTableMap';
 
 
     /**
@@ -76,32 +75,25 @@ abstract class AxysApp implements ActiveRecordInterface
     protected $id;
 
     /**
-     * The value for the client_id field.
+     * The value for the app_id field.
      *
-     * @var        string
+     * @var        int
      */
-    protected $client_id;
+    protected $app_id;
 
     /**
-     * The value for the client_secret field.
+     * The value for the user_id field.
      *
-     * @var        string
+     * @var        int
      */
-    protected $client_secret;
+    protected $user_id;
 
     /**
-     * The value for the name field.
+     * The value for the scopes field.
      *
      * @var        string
      */
-    protected $name;
-
-    /**
-     * The value for the redirect_uri field.
-     *
-     * @var        string
-     */
-    protected $redirect_uri;
+    protected $scopes;
 
     /**
      * The value for the created_at field.
@@ -118,11 +110,14 @@ abstract class AxysApp implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * @var        ObjectCollection|ChildAxysConsent[] Collection to store aggregation of ChildAxysConsent objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildAxysConsent> Collection to store aggregation of ChildAxysConsent objects.
+     * @var        ChildAxysApp
      */
-    protected $collAxysConsents;
-    protected $collAxysConsentsPartial;
+    protected $aAxysApp;
+
+    /**
+     * @var        ChildUser
+     */
+    protected $aUser;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -133,14 +128,7 @@ abstract class AxysApp implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildAxysConsent[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildAxysConsent>
-     */
-    protected $axysConsentsScheduledForDeletion = null;
-
-    /**
-     * Initializes internal state of Model\Base\AxysApp object.
+     * Initializes internal state of Model\Base\AxysConsent object.
      */
     public function __construct()
     {
@@ -233,9 +221,9 @@ abstract class AxysApp implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>AxysApp</code> instance.  If
-     * <code>obj</code> is an instance of <code>AxysApp</code>, delegates to
-     * <code>equals(AxysApp)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>AxysConsent</code> instance.  If
+     * <code>obj</code> is an instance of <code>AxysConsent</code>, delegates to
+     * <code>equals(AxysConsent)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param mixed $obj The object to compare to.
      * @return bool Whether equal to the object specified.
@@ -376,43 +364,33 @@ abstract class AxysApp implements ActiveRecordInterface
     }
 
     /**
-     * Get the [client_id] column value.
+     * Get the [app_id] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getClientId()
+    public function getAppId()
     {
-        return $this->client_id;
+        return $this->app_id;
     }
 
     /**
-     * Get the [client_secret] column value.
+     * Get the [user_id] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getClientSecret()
+    public function getUserId()
     {
-        return $this->client_secret;
+        return $this->user_id;
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [scopes] column value.
      *
      * @return string
      */
-    public function getName()
+    public function getScopes()
     {
-        return $this->name;
-    }
-
-    /**
-     * Get the [redirect_uri] column value.
-     *
-     * @return string
-     */
-    public function getRedirectUri()
-    {
-        return $this->redirect_uri;
+        return $this->scopes;
     }
 
     /**
@@ -473,87 +451,75 @@ abstract class AxysApp implements ActiveRecordInterface
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[AxysAppTableMap::COL_ID] = true;
+            $this->modifiedColumns[AxysConsentTableMap::COL_ID] = true;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [client_id] column.
+     * Set the value of [app_id] column.
      *
-     * @param string $v New value
+     * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setClientId($v)
+    public function setAppId($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->client_id !== $v) {
-            $this->client_id = $v;
-            $this->modifiedColumns[AxysAppTableMap::COL_CLIENT_ID] = true;
+        if ($this->app_id !== $v) {
+            $this->app_id = $v;
+            $this->modifiedColumns[AxysConsentTableMap::COL_APP_ID] = true;
+        }
+
+        if ($this->aAxysApp !== null && $this->aAxysApp->getId() !== $v) {
+            $this->aAxysApp = null;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [client_secret] column.
+     * Set the value of [user_id] column.
      *
-     * @param string $v New value
+     * @param int $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setClientSecret($v)
+    public function setUserId($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->client_secret !== $v) {
-            $this->client_secret = $v;
-            $this->modifiedColumns[AxysAppTableMap::COL_CLIENT_SECRET] = true;
+        if ($this->user_id !== $v) {
+            $this->user_id = $v;
+            $this->modifiedColumns[AxysConsentTableMap::COL_USER_ID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+            $this->aUser = null;
         }
 
         return $this;
     }
 
     /**
-     * Set the value of [name] column.
+     * Set the value of [scopes] column.
      *
      * @param string $v New value
      * @return $this The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setScopes($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[AxysAppTableMap::COL_NAME] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the value of [redirect_uri] column.
-     *
-     * @param string $v New value
-     * @return $this The current object (for fluent API support)
-     */
-    public function setRedirectUri($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->redirect_uri !== $v) {
-            $this->redirect_uri = $v;
-            $this->modifiedColumns[AxysAppTableMap::COL_REDIRECT_URI] = true;
+        if ($this->scopes !== $v) {
+            $this->scopes = $v;
+            $this->modifiedColumns[AxysConsentTableMap::COL_SCOPES] = true;
         }
 
         return $this;
@@ -572,7 +538,7 @@ abstract class AxysApp implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAppTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[AxysConsentTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -592,7 +558,7 @@ abstract class AxysApp implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[AxysAppTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[AxysConsentTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -635,28 +601,25 @@ abstract class AxysApp implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysAppTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : AxysConsentTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysAppTableMap::translateFieldName('ClientId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->client_id = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AxysConsentTableMap::translateFieldName('AppId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->app_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysAppTableMap::translateFieldName('ClientSecret', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->client_secret = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AxysConsentTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysAppTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : AxysConsentTableMap::translateFieldName('Scopes', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->scopes = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysAppTableMap::translateFieldName('RedirectUri', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->redirect_uri = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysAppTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : AxysConsentTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : AxysAppTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : AxysConsentTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -669,10 +632,10 @@ abstract class AxysApp implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = AxysAppTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = AxysConsentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysApp'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Model\\AxysConsent'), 0, $e);
         }
     }
 
@@ -692,6 +655,12 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function ensureConsistency(): void
     {
+        if ($this->aAxysApp !== null && $this->app_id !== $this->aAxysApp->getId()) {
+            $this->aAxysApp = null;
+        }
+        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+            $this->aUser = null;
+        }
     }
 
     /**
@@ -715,13 +684,13 @@ abstract class AxysApp implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(AxysAppTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AxysConsentTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildAxysAppQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildAxysConsentQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -731,8 +700,8 @@ abstract class AxysApp implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collAxysConsents = null;
-
+            $this->aAxysApp = null;
+            $this->aUser = null;
         } // if (deep)
     }
 
@@ -742,8 +711,8 @@ abstract class AxysApp implements ActiveRecordInterface
      * @param ConnectionInterface $con
      * @return void
      * @throws \Propel\Runtime\Exception\PropelException
-     * @see AxysApp::setDeleted()
-     * @see AxysApp::isDeleted()
+     * @see AxysConsent::setDeleted()
+     * @see AxysConsent::isDeleted()
      */
     public function delete(?ConnectionInterface $con = null): void
     {
@@ -752,11 +721,11 @@ abstract class AxysApp implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysConsentTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildAxysAppQuery::create()
+            $deleteQuery = ChildAxysConsentQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -791,7 +760,7 @@ abstract class AxysApp implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AxysAppTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AxysConsentTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -802,16 +771,16 @@ abstract class AxysApp implements ActiveRecordInterface
                 // timestampable behavior
                 $time = time();
                 $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
-                if (!$this->isColumnModified(AxysAppTableMap::COL_CREATED_AT)) {
+                if (!$this->isColumnModified(AxysConsentTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt($highPrecision);
                 }
-                if (!$this->isColumnModified(AxysAppTableMap::COL_UPDATED_AT)) {
+                if (!$this->isColumnModified(AxysConsentTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(AxysAppTableMap::COL_UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(AxysConsentTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -823,7 +792,7 @@ abstract class AxysApp implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                AxysAppTableMap::addInstanceToPool($this);
+                AxysConsentTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -849,6 +818,25 @@ abstract class AxysApp implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aAxysApp !== null) {
+                if ($this->aAxysApp->isModified() || $this->aAxysApp->isNew()) {
+                    $affectedRows += $this->aAxysApp->save($con);
+                }
+                $this->setAxysApp($this->aAxysApp);
+            }
+
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -858,23 +846,6 @@ abstract class AxysApp implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
-            }
-
-            if ($this->axysConsentsScheduledForDeletion !== null) {
-                if (!$this->axysConsentsScheduledForDeletion->isEmpty()) {
-                    \Model\AxysConsentQuery::create()
-                        ->filterByPrimaryKeys($this->axysConsentsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->axysConsentsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collAxysConsents !== null) {
-                foreach ($this->collAxysConsents as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -897,36 +868,33 @@ abstract class AxysApp implements ActiveRecordInterface
         $modifiedColumns = [];
         $index = 0;
 
-        $this->modifiedColumns[AxysAppTableMap::COL_ID] = true;
+        $this->modifiedColumns[AxysConsentTableMap::COL_ID] = true;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysAppTableMap::COL_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AxysConsentTableMap::COL_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(AxysAppTableMap::COL_ID)) {
+        if ($this->isColumnModified(AxysConsentTableMap::COL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'id';
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CLIENT_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'client_id';
+        if ($this->isColumnModified(AxysConsentTableMap::COL_APP_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'app_id';
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CLIENT_SECRET)) {
-            $modifiedColumns[':p' . $index++]  = 'client_secret';
+        if ($this->isColumnModified(AxysConsentTableMap::COL_USER_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'user_id';
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+        if ($this->isColumnModified(AxysConsentTableMap::COL_SCOPES)) {
+            $modifiedColumns[':p' . $index++]  = 'scopes';
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_REDIRECT_URI)) {
-            $modifiedColumns[':p' . $index++]  = 'redirect_uri';
-        }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(AxysConsentTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(AxysConsentTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO axys_apps (%s) VALUES (%s)',
+            'INSERT INTO axys_consents (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -939,20 +907,16 @@ abstract class AxysApp implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
 
                         break;
-                    case 'client_id':
-                        $stmt->bindValue($identifier, $this->client_id, PDO::PARAM_STR);
+                    case 'app_id':
+                        $stmt->bindValue($identifier, $this->app_id, PDO::PARAM_INT);
 
                         break;
-                    case 'client_secret':
-                        $stmt->bindValue($identifier, $this->client_secret, PDO::PARAM_STR);
+                    case 'user_id':
+                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
 
                         break;
-                    case 'name':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
-
-                        break;
-                    case 'redirect_uri':
-                        $stmt->bindValue($identifier, $this->redirect_uri, PDO::PARAM_STR);
+                    case 'scopes':
+                        $stmt->bindValue($identifier, $this->scopes, PDO::PARAM_STR);
 
                         break;
                     case 'created_at':
@@ -1009,7 +973,7 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function getByName(string $name, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AxysAppTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AxysConsentTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1029,21 +993,18 @@ abstract class AxysApp implements ActiveRecordInterface
                 return $this->getId();
 
             case 1:
-                return $this->getClientId();
+                return $this->getAppId();
 
             case 2:
-                return $this->getClientSecret();
+                return $this->getUserId();
 
             case 3:
-                return $this->getName();
+                return $this->getScopes();
 
             case 4:
-                return $this->getRedirectUri();
-
-            case 5:
                 return $this->getCreatedAt();
 
-            case 6:
+            case 5:
                 return $this->getUpdatedAt();
 
             default:
@@ -1068,26 +1029,25 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function toArray(string $keyType = TableMap::TYPE_PHPNAME, bool $includeLazyLoadColumns = true, array $alreadyDumpedObjects = [], bool $includeForeignObjects = false): array
     {
-        if (isset($alreadyDumpedObjects['AxysApp'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['AxysConsent'][$this->hashCode()])) {
             return ['*RECURSION*'];
         }
-        $alreadyDumpedObjects['AxysApp'][$this->hashCode()] = true;
-        $keys = AxysAppTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['AxysConsent'][$this->hashCode()] = true;
+        $keys = AxysConsentTableMap::getFieldNames($keyType);
         $result = [
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getClientId(),
-            $keys[2] => $this->getClientSecret(),
-            $keys[3] => $this->getName(),
-            $keys[4] => $this->getRedirectUri(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
+            $keys[1] => $this->getAppId(),
+            $keys[2] => $this->getUserId(),
+            $keys[3] => $this->getScopes(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[5]] instanceof \DateTimeInterface) {
-            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[4]] instanceof \DateTimeInterface) {
+            $result[$keys[4]] = $result[$keys[4]]->format('Y-m-d H:i:s.u');
         }
 
-        if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
+        if ($result[$keys[5]] instanceof \DateTimeInterface) {
+            $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1096,20 +1056,35 @@ abstract class AxysApp implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collAxysConsents) {
+            if (null !== $this->aAxysApp) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'axysConsents';
+                        $key = 'axysApp';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'axys_consentss';
+                        $key = 'axys_apps';
                         break;
                     default:
-                        $key = 'AxysConsents';
+                        $key = 'AxysApp';
                 }
 
-                $result[$key] = $this->collAxysConsents->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aAxysApp->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'users';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1129,7 +1104,7 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function setByName(string $name, $value, string $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = AxysAppTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = AxysConsentTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
 
@@ -1151,21 +1126,18 @@ abstract class AxysApp implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setClientId($value);
+                $this->setAppId($value);
                 break;
             case 2:
-                $this->setClientSecret($value);
+                $this->setUserId($value);
                 break;
             case 3:
-                $this->setName($value);
+                $this->setScopes($value);
                 break;
             case 4:
-                $this->setRedirectUri($value);
-                break;
-            case 5:
                 $this->setCreatedAt($value);
                 break;
-            case 6:
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1192,28 +1164,25 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function fromArray(array $arr, string $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = AxysAppTableMap::getFieldNames($keyType);
+        $keys = AxysConsentTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setClientId($arr[$keys[1]]);
+            $this->setAppId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setClientSecret($arr[$keys[2]]);
+            $this->setUserId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setName($arr[$keys[3]]);
+            $this->setScopes($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setRedirectUri($arr[$keys[4]]);
+            $this->setCreatedAt($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCreatedAt($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setUpdatedAt($arr[$keys[6]]);
+            $this->setUpdatedAt($arr[$keys[5]]);
         }
 
         return $this;
@@ -1256,28 +1225,25 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function buildCriteria(): Criteria
     {
-        $criteria = new Criteria(AxysAppTableMap::DATABASE_NAME);
+        $criteria = new Criteria(AxysConsentTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(AxysAppTableMap::COL_ID)) {
-            $criteria->add(AxysAppTableMap::COL_ID, $this->id);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_ID)) {
+            $criteria->add(AxysConsentTableMap::COL_ID, $this->id);
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CLIENT_ID)) {
-            $criteria->add(AxysAppTableMap::COL_CLIENT_ID, $this->client_id);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_APP_ID)) {
+            $criteria->add(AxysConsentTableMap::COL_APP_ID, $this->app_id);
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CLIENT_SECRET)) {
-            $criteria->add(AxysAppTableMap::COL_CLIENT_SECRET, $this->client_secret);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_USER_ID)) {
+            $criteria->add(AxysConsentTableMap::COL_USER_ID, $this->user_id);
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_NAME)) {
-            $criteria->add(AxysAppTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_SCOPES)) {
+            $criteria->add(AxysConsentTableMap::COL_SCOPES, $this->scopes);
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_REDIRECT_URI)) {
-            $criteria->add(AxysAppTableMap::COL_REDIRECT_URI, $this->redirect_uri);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_CREATED_AT)) {
+            $criteria->add(AxysConsentTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(AxysAppTableMap::COL_CREATED_AT)) {
-            $criteria->add(AxysAppTableMap::COL_CREATED_AT, $this->created_at);
-        }
-        if ($this->isColumnModified(AxysAppTableMap::COL_UPDATED_AT)) {
-            $criteria->add(AxysAppTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(AxysConsentTableMap::COL_UPDATED_AT)) {
+            $criteria->add(AxysConsentTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1295,8 +1261,8 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function buildPkeyCriteria(): Criteria
     {
-        $criteria = ChildAxysAppQuery::create();
-        $criteria->add(AxysAppTableMap::COL_ID, $this->id);
+        $criteria = ChildAxysConsentQuery::create();
+        $criteria->add(AxysConsentTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -1359,7 +1325,7 @@ abstract class AxysApp implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of \Model\AxysApp (or compatible) type.
+     * @param object $copyObj An object of \Model\AxysConsent (or compatible) type.
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param bool $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws \Propel\Runtime\Exception\PropelException
@@ -1367,26 +1333,11 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function copyInto(object $copyObj, bool $deepCopy = false, bool $makeNew = true): void
     {
-        $copyObj->setClientId($this->getClientId());
-        $copyObj->setClientSecret($this->getClientSecret());
-        $copyObj->setName($this->getName());
-        $copyObj->setRedirectUri($this->getRedirectUri());
+        $copyObj->setAppId($this->getAppId());
+        $copyObj->setUserId($this->getUserId());
+        $copyObj->setScopes($this->getScopes());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-
-        if ($deepCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-
-            foreach ($this->getAxysConsents() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addAxysConsent($relObj->copy($deepCopy));
-                }
-            }
-
-        } // if ($deepCopy)
-
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1402,7 +1353,7 @@ abstract class AxysApp implements ActiveRecordInterface
      * objects.
      *
      * @param bool $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Model\AxysApp Clone of current object.
+     * @return \Model\AxysConsent Clone of current object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function copy(bool $deepCopy = false)
@@ -1415,286 +1366,106 @@ abstract class AxysApp implements ActiveRecordInterface
         return $copyObj;
     }
 
-
     /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
+     * Declares an association between this object and a ChildAxysApp object.
      *
-     * @param string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName): void
-    {
-        if ('AxysConsent' === $relationName) {
-            $this->initAxysConsents();
-            return;
-        }
-    }
-
-    /**
-     * Clears out the collAxysConsents collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return $this
-     * @see addAxysConsents()
-     */
-    public function clearAxysConsents()
-    {
-        $this->collAxysConsents = null; // important to set this to NULL since that means it is uninitialized
-
-        return $this;
-    }
-
-    /**
-     * Reset is the collAxysConsents collection loaded partially.
-     *
-     * @return void
-     */
-    public function resetPartialAxysConsents($v = true): void
-    {
-        $this->collAxysConsentsPartial = $v;
-    }
-
-    /**
-     * Initializes the collAxysConsents collection.
-     *
-     * By default this just sets the collAxysConsents collection to an empty array (like clearcollAxysConsents());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param bool $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initAxysConsents(bool $overrideExisting = true): void
-    {
-        if (null !== $this->collAxysConsents && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = AxysConsentTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collAxysConsents = new $collectionClassName;
-        $this->collAxysConsents->setModel('\Model\AxysConsent');
-    }
-
-    /**
-     * Gets an array of ChildAxysConsent objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildAxysApp is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildAxysConsent[] List of ChildAxysConsent objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildAxysConsent> List of ChildAxysConsent objects
+     * @param ChildAxysApp $v
+     * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysConsents(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    public function setAxysApp(ChildAxysApp $v = null)
     {
-        $partial = $this->collAxysConsentsPartial && !$this->isNew();
-        if (null === $this->collAxysConsents || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->collAxysConsents) {
-                    $this->initAxysConsents();
-                } else {
-                    $collectionClassName = AxysConsentTableMap::getTableMap()->getCollectionClassName();
-
-                    $collAxysConsents = new $collectionClassName;
-                    $collAxysConsents->setModel('\Model\AxysConsent');
-
-                    return $collAxysConsents;
-                }
-            } else {
-                $collAxysConsents = ChildAxysConsentQuery::create(null, $criteria)
-                    ->filterByAxysApp($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collAxysConsentsPartial && count($collAxysConsents)) {
-                        $this->initAxysConsents(false);
-
-                        foreach ($collAxysConsents as $obj) {
-                            if (false == $this->collAxysConsents->contains($obj)) {
-                                $this->collAxysConsents->append($obj);
-                            }
-                        }
-
-                        $this->collAxysConsentsPartial = true;
-                    }
-
-                    return $collAxysConsents;
-                }
-
-                if ($partial && $this->collAxysConsents) {
-                    foreach ($this->collAxysConsents as $obj) {
-                        if ($obj->isNew()) {
-                            $collAxysConsents[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collAxysConsents = $collAxysConsents;
-                $this->collAxysConsentsPartial = false;
-            }
+        if ($v === null) {
+            $this->setAppId(NULL);
+        } else {
+            $this->setAppId($v->getId());
         }
 
-        return $this->collAxysConsents;
-    }
+        $this->aAxysApp = $v;
 
-    /**
-     * Sets a collection of ChildAxysConsent objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param Collection $axysConsents A Propel collection.
-     * @param ConnectionInterface $con Optional connection object
-     * @return $this The current object (for fluent API support)
-     */
-    public function setAxysConsents(Collection $axysConsents, ?ConnectionInterface $con = null)
-    {
-        /** @var ChildAxysConsent[] $axysConsentsToDelete */
-        $axysConsentsToDelete = $this->getAxysConsents(new Criteria(), $con)->diff($axysConsents);
-
-
-        $this->axysConsentsScheduledForDeletion = $axysConsentsToDelete;
-
-        foreach ($axysConsentsToDelete as $axysConsentRemoved) {
-            $axysConsentRemoved->setAxysApp(null);
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildAxysApp object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAxysConsent($this);
         }
 
-        $this->collAxysConsents = null;
-        foreach ($axysConsents as $axysConsent) {
-            $this->addAxysConsent($axysConsent);
-        }
-
-        $this->collAxysConsents = $axysConsents;
-        $this->collAxysConsentsPartial = false;
 
         return $this;
     }
 
+
     /**
-     * Returns the number of related AxysConsent objects.
+     * Get the associated ChildAxysApp object
      *
-     * @param Criteria $criteria
-     * @param bool $distinct
-     * @param ConnectionInterface $con
-     * @return int Count of related AxysConsent objects.
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildAxysApp The associated ChildAxysApp object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function countAxysConsents(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    public function getAxysApp(?ConnectionInterface $con = null)
     {
-        $partial = $this->collAxysConsentsPartial && !$this->isNew();
-        if (null === $this->collAxysConsents || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collAxysConsents) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getAxysConsents());
-            }
-
-            $query = ChildAxysConsentQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByAxysApp($this)
-                ->count($con);
+        if ($this->aAxysApp === null && ($this->app_id != 0)) {
+            $this->aAxysApp = ChildAxysAppQuery::create()->findPk($this->app_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAxysApp->addAxysConsents($this);
+             */
         }
 
-        return count($this->collAxysConsents);
+        return $this->aAxysApp;
     }
 
     /**
-     * Method called to associate a ChildAxysConsent object to this object
-     * through the ChildAxysConsent foreign key attribute.
+     * Declares an association between this object and a ChildUser object.
      *
-     * @param ChildAxysConsent $l ChildAxysConsent
+     * @param ChildUser $v
      * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function addAxysConsent(ChildAxysConsent $l)
+    public function setUser(ChildUser $v = null)
     {
-        if ($this->collAxysConsents === null) {
-            $this->initAxysConsents();
-            $this->collAxysConsentsPartial = true;
+        if ($v === null) {
+            $this->setUserId(NULL);
+        } else {
+            $this->setUserId($v->getId());
         }
 
-        if (!$this->collAxysConsents->contains($l)) {
-            $this->doAddAxysConsent($l);
+        $this->aUser = $v;
 
-            if ($this->axysConsentsScheduledForDeletion and $this->axysConsentsScheduledForDeletion->contains($l)) {
-                $this->axysConsentsScheduledForDeletion->remove($this->axysConsentsScheduledForDeletion->search($l));
-            }
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildUser object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAxysConsent($this);
         }
 
-        return $this;
-    }
-
-    /**
-     * @param ChildAxysConsent $axysConsent The ChildAxysConsent object to add.
-     */
-    protected function doAddAxysConsent(ChildAxysConsent $axysConsent): void
-    {
-        $this->collAxysConsents[]= $axysConsent;
-        $axysConsent->setAxysApp($this);
-    }
-
-    /**
-     * @param ChildAxysConsent $axysConsent The ChildAxysConsent object to remove.
-     * @return $this The current object (for fluent API support)
-     */
-    public function removeAxysConsent(ChildAxysConsent $axysConsent)
-    {
-        if ($this->getAxysConsents()->contains($axysConsent)) {
-            $pos = $this->collAxysConsents->search($axysConsent);
-            $this->collAxysConsents->remove($pos);
-            if (null === $this->axysConsentsScheduledForDeletion) {
-                $this->axysConsentsScheduledForDeletion = clone $this->collAxysConsents;
-                $this->axysConsentsScheduledForDeletion->clear();
-            }
-            $this->axysConsentsScheduledForDeletion[]= clone $axysConsent;
-            $axysConsent->setAxysApp(null);
-        }
 
         return $this;
     }
 
 
     /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this AxysApp is new, it will return
-     * an empty collection; or if this AxysApp has previously
-     * been saved, it will retrieve related AxysConsents from storage.
+     * Get the associated ChildUser object
      *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in AxysApp.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildAxysConsent[] List of ChildAxysConsent objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildAxysConsent}> List of ChildAxysConsent objects
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildUser The associated ChildUser object.
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAxysConsentsJoinUser(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getUser(?ConnectionInterface $con = null)
     {
-        $query = ChildAxysConsentQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
+        if ($this->aUser === null && ($this->user_id != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addAxysConsents($this);
+             */
+        }
 
-        return $this->getAxysConsents($query, $con);
+        return $this->aUser;
     }
 
     /**
@@ -1706,11 +1477,16 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aAxysApp) {
+            $this->aAxysApp->removeAxysConsent($this);
+        }
+        if (null !== $this->aUser) {
+            $this->aUser->removeAxysConsent($this);
+        }
         $this->id = null;
-        $this->client_id = null;
-        $this->client_secret = null;
-        $this->name = null;
-        $this->redirect_uri = null;
+        $this->app_id = null;
+        $this->user_id = null;
+        $this->scopes = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -1734,14 +1510,10 @@ abstract class AxysApp implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
-            if ($this->collAxysConsents) {
-                foreach ($this->collAxysConsents as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
-        $this->collAxysConsents = null;
+        $this->aAxysApp = null;
+        $this->aUser = null;
         return $this;
     }
 
@@ -1752,7 +1524,7 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(AxysAppTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(AxysConsentTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1764,7 +1536,7 @@ abstract class AxysApp implements ActiveRecordInterface
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[AxysAppTableMap::COL_UPDATED_AT] = true;
+        $this->modifiedColumns[AxysConsentTableMap::COL_UPDATED_AT] = true;
 
         return $this;
     }

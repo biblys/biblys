@@ -144,6 +144,19 @@
     <column name="redirect_uri" required="true" type="VARCHAR" size="256" />
     <behavior name="timestampable" />
   </table>
+  <table name="axys_consents" phpName="AxysConsent">
+    <column name="id" primaryKey="true" required="true" type="INTEGER" autoIncrement="true" />
+    <column name="app_id" required="true" type="INTEGER" />
+    <column name="user_id" required="true" type="INTEGER" />
+    <column name="scopes" required="true" type="VARCHAR" size="256" />
+    <behavior name="timestampable" />
+    <foreign-key foreignTable="axys_apps" skipSql="true">
+      <reference local="app_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="users" skipSql="true">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+  </table>
   <table name="awards" idMethod="native" phpName="Award">
     <column name="award_id" phpName="Id" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="article_id" phpName="ArticleId" type="INTEGER" size="10" sqlType="int(10) unsigned"/>

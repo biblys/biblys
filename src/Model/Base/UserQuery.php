@@ -113,6 +113,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithSite() Adds a RIGHT JOIN clause and with to the query using the Site relation
  * @method     ChildUserQuery innerJoinWithSite() Adds a INNER JOIN clause and with to the query using the Site relation
  *
+ * @method     ChildUserQuery leftJoinAxysConsent($relationAlias = null) Adds a LEFT JOIN clause to the query using the AxysConsent relation
+ * @method     ChildUserQuery rightJoinAxysConsent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AxysConsent relation
+ * @method     ChildUserQuery innerJoinAxysConsent($relationAlias = null) Adds a INNER JOIN clause to the query using the AxysConsent relation
+ *
+ * @method     ChildUserQuery joinWithAxysConsent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AxysConsent relation
+ *
+ * @method     ChildUserQuery leftJoinWithAxysConsent() Adds a LEFT JOIN clause and with to the query using the AxysConsent relation
+ * @method     ChildUserQuery rightJoinWithAxysConsent() Adds a RIGHT JOIN clause and with to the query using the AxysConsent relation
+ * @method     ChildUserQuery innerJoinWithAxysConsent() Adds a INNER JOIN clause and with to the query using the AxysConsent relation
+ *
  * @method     ChildUserQuery leftJoinCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cart relation
  * @method     ChildUserQuery rightJoinCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cart relation
  * @method     ChildUserQuery innerJoinCart($relationAlias = null) Adds a INNER JOIN clause to the query using the Cart relation
@@ -183,7 +193,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\SiteQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\AxysConsentQuery|\Model\CartQuery|\Model\OptionQuery|\Model\RightQuery|\Model\SessionQuery|\Model\StockQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -1987,6 +1997,179 @@ abstract class UserQuery extends ModelCriteria
     {
         /** @var $q \Model\SiteQuery */
         $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
+     * Filter the query by a related \Model\AxysConsent object
+     *
+     * @param \Model\AxysConsent|ObjectCollection $axysConsent the related object to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByAxysConsent($axysConsent, ?string $comparison = null)
+    {
+        if ($axysConsent instanceof \Model\AxysConsent) {
+            $this
+                ->addUsingAlias(UserTableMap::COL_ID, $axysConsent->getUserId(), $comparison);
+
+            return $this;
+        } elseif ($axysConsent instanceof ObjectCollection) {
+            $this
+                ->useAxysConsentQuery()
+                ->filterByPrimaryKeys($axysConsent->getPrimaryKeys())
+                ->endUse();
+
+            return $this;
+        } else {
+            throw new PropelException('filterByAxysConsent() only accepts arguments of type \Model\AxysConsent or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AxysConsent relation
+     *
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function joinAxysConsent(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AxysConsent');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AxysConsent');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AxysConsent relation AxysConsent object
+     *
+     * @see useQuery()
+     *
+     * @param string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Model\AxysConsentQuery A secondary query class using the current class as primary query
+     */
+    public function useAxysConsentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAxysConsent($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AxysConsent', '\Model\AxysConsentQuery');
+    }
+
+    /**
+     * Use the AxysConsent relation AxysConsent object
+     *
+     * @param callable(\Model\AxysConsentQuery):\Model\AxysConsentQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withAxysConsentQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = Criteria::INNER_JOIN
+    ) {
+        $relatedQuery = $this->useAxysConsentQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to AxysConsent table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \Model\AxysConsentQuery The inner query object of the EXISTS statement
+     */
+    public function useAxysConsentExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \Model\AxysConsentQuery */
+        $q = $this->useExistsQuery('AxysConsent', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to AxysConsent table for a NOT EXISTS query.
+     *
+     * @see useAxysConsentExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \Model\AxysConsentQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useAxysConsentNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\AxysConsentQuery */
+        $q = $this->useExistsQuery('AxysConsent', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to AxysConsent table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \Model\AxysConsentQuery The inner query object of the IN statement
+     */
+    public function useInAxysConsentQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \Model\AxysConsentQuery */
+        $q = $this->useInQuery('AxysConsent', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to AxysConsent table for a NOT IN query.
+     *
+     * @see useAxysConsentInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \Model\AxysConsentQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInAxysConsentQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \Model\AxysConsentQuery */
+        $q = $this->useInQuery('AxysConsent', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 

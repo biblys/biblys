@@ -5,6 +5,8 @@ namespace Model\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Model\AxysConsent as ChildAxysConsent;
+use Model\AxysConsentQuery as ChildAxysConsentQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
 use Model\Option as ChildOption;
@@ -23,6 +25,7 @@ use Model\Wish as ChildWish;
 use Model\WishQuery as ChildWishQuery;
 use Model\Wishlist as ChildWishlist;
 use Model\WishlistQuery as ChildWishlistQuery;
+use Model\Map\AxysConsentTableMap;
 use Model\Map\CartTableMap;
 use Model\Map\OptionTableMap;
 use Model\Map\RightTableMap;
@@ -364,6 +367,13 @@ abstract class User implements ActiveRecordInterface
     protected $aSite;
 
     /**
+     * @var        ObjectCollection|ChildAxysConsent[] Collection to store aggregation of ChildAxysConsent objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildAxysConsent> Collection to store aggregation of ChildAxysConsent objects.
+     */
+    protected $collAxysConsents;
+    protected $collAxysConsentsPartial;
+
+    /**
      * @var        ObjectCollection|ChildCart[] Collection to store aggregation of ChildCart objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildCart> Collection to store aggregation of ChildCart objects.
      */
@@ -436,6 +446,13 @@ abstract class User implements ActiveRecordInterface
      * @var     ConstraintViolationList
      */
     protected $validationFailures;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildAxysConsent[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildAxysConsent>
+     */
+    protected $axysConsentsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -2207,6 +2224,8 @@ abstract class User implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSite = null;
+            $this->collAxysConsents = null;
+
             $this->collCarts = null;
 
             $this->collOptions = null;
@@ -2358,6 +2377,23 @@ abstract class User implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->axysConsentsScheduledForDeletion !== null) {
+                if (!$this->axysConsentsScheduledForDeletion->isEmpty()) {
+                    \Model\AxysConsentQuery::create()
+                        ->filterByPrimaryKeys($this->axysConsentsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->axysConsentsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAxysConsents !== null) {
+                foreach ($this->collAxysConsents as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->cartsScheduledForDeletion !== null) {
@@ -3066,6 +3102,21 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->aSite->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->collAxysConsents) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'axysConsents';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'axys_consentss';
+                        break;
+                    default:
+                        $key = 'AxysConsents';
+                }
+
+                $result[$key] = $this->collAxysConsents->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collCarts) {
 
                 switch ($keyType) {
@@ -3739,6 +3790,12 @@ abstract class User implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getAxysConsents() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAxysConsent($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCarts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCart($relObj->copy($deepCopy));
@@ -3873,6 +3930,10 @@ abstract class User implements ActiveRecordInterface
      */
     public function initRelation($relationName): void
     {
+        if ('AxysConsent' === $relationName) {
+            $this->initAxysConsents();
+            return;
+        }
         if ('Cart' === $relationName) {
             $this->initCarts();
             return;
@@ -3901,6 +3962,271 @@ abstract class User implements ActiveRecordInterface
             $this->initWishlists();
             return;
         }
+    }
+
+    /**
+     * Clears out the collAxysConsents collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addAxysConsents()
+     */
+    public function clearAxysConsents()
+    {
+        $this->collAxysConsents = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collAxysConsents collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialAxysConsents($v = true): void
+    {
+        $this->collAxysConsentsPartial = $v;
+    }
+
+    /**
+     * Initializes the collAxysConsents collection.
+     *
+     * By default this just sets the collAxysConsents collection to an empty array (like clearcollAxysConsents());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAxysConsents(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collAxysConsents && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = AxysConsentTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collAxysConsents = new $collectionClassName;
+        $this->collAxysConsents->setModel('\Model\AxysConsent');
+    }
+
+    /**
+     * Gets an array of ChildAxysConsent objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildAxysConsent[] List of ChildAxysConsent objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAxysConsent> List of ChildAxysConsent objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getAxysConsents(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collAxysConsentsPartial && !$this->isNew();
+        if (null === $this->collAxysConsents || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collAxysConsents) {
+                    $this->initAxysConsents();
+                } else {
+                    $collectionClassName = AxysConsentTableMap::getTableMap()->getCollectionClassName();
+
+                    $collAxysConsents = new $collectionClassName;
+                    $collAxysConsents->setModel('\Model\AxysConsent');
+
+                    return $collAxysConsents;
+                }
+            } else {
+                $collAxysConsents = ChildAxysConsentQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collAxysConsentsPartial && count($collAxysConsents)) {
+                        $this->initAxysConsents(false);
+
+                        foreach ($collAxysConsents as $obj) {
+                            if (false == $this->collAxysConsents->contains($obj)) {
+                                $this->collAxysConsents->append($obj);
+                            }
+                        }
+
+                        $this->collAxysConsentsPartial = true;
+                    }
+
+                    return $collAxysConsents;
+                }
+
+                if ($partial && $this->collAxysConsents) {
+                    foreach ($this->collAxysConsents as $obj) {
+                        if ($obj->isNew()) {
+                            $collAxysConsents[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAxysConsents = $collAxysConsents;
+                $this->collAxysConsentsPartial = false;
+            }
+        }
+
+        return $this->collAxysConsents;
+    }
+
+    /**
+     * Sets a collection of ChildAxysConsent objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $axysConsents A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setAxysConsents(Collection $axysConsents, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildAxysConsent[] $axysConsentsToDelete */
+        $axysConsentsToDelete = $this->getAxysConsents(new Criteria(), $con)->diff($axysConsents);
+
+
+        $this->axysConsentsScheduledForDeletion = $axysConsentsToDelete;
+
+        foreach ($axysConsentsToDelete as $axysConsentRemoved) {
+            $axysConsentRemoved->setUser(null);
+        }
+
+        $this->collAxysConsents = null;
+        foreach ($axysConsents as $axysConsent) {
+            $this->addAxysConsent($axysConsent);
+        }
+
+        $this->collAxysConsents = $axysConsents;
+        $this->collAxysConsentsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related AxysConsent objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related AxysConsent objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countAxysConsents(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collAxysConsentsPartial && !$this->isNew();
+        if (null === $this->collAxysConsents || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAxysConsents) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAxysConsents());
+            }
+
+            $query = ChildAxysConsentQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collAxysConsents);
+    }
+
+    /**
+     * Method called to associate a ChildAxysConsent object to this object
+     * through the ChildAxysConsent foreign key attribute.
+     *
+     * @param ChildAxysConsent $l ChildAxysConsent
+     * @return $this The current object (for fluent API support)
+     */
+    public function addAxysConsent(ChildAxysConsent $l)
+    {
+        if ($this->collAxysConsents === null) {
+            $this->initAxysConsents();
+            $this->collAxysConsentsPartial = true;
+        }
+
+        if (!$this->collAxysConsents->contains($l)) {
+            $this->doAddAxysConsent($l);
+
+            if ($this->axysConsentsScheduledForDeletion and $this->axysConsentsScheduledForDeletion->contains($l)) {
+                $this->axysConsentsScheduledForDeletion->remove($this->axysConsentsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildAxysConsent $axysConsent The ChildAxysConsent object to add.
+     */
+    protected function doAddAxysConsent(ChildAxysConsent $axysConsent): void
+    {
+        $this->collAxysConsents[]= $axysConsent;
+        $axysConsent->setUser($this);
+    }
+
+    /**
+     * @param ChildAxysConsent $axysConsent The ChildAxysConsent object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removeAxysConsent(ChildAxysConsent $axysConsent)
+    {
+        if ($this->getAxysConsents()->contains($axysConsent)) {
+            $pos = $this->collAxysConsents->search($axysConsent);
+            $this->collAxysConsents->remove($pos);
+            if (null === $this->axysConsentsScheduledForDeletion) {
+                $this->axysConsentsScheduledForDeletion = clone $this->collAxysConsents;
+                $this->axysConsentsScheduledForDeletion->clear();
+            }
+            $this->axysConsentsScheduledForDeletion[]= clone $axysConsent;
+            $axysConsent->setUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related AxysConsents from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildAxysConsent[] List of ChildAxysConsent objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAxysConsent}> List of ChildAxysConsent objects
+     */
+    public function getAxysConsentsJoinAxysApp(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildAxysConsentQuery::create(null, $criteria);
+        $query->joinWith('AxysApp', $joinBehavior);
+
+        return $this->getAxysConsents($query, $con);
     }
 
     /**
@@ -5829,6 +6155,11 @@ abstract class User implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collAxysConsents) {
+                foreach ($this->collAxysConsents as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCarts) {
                 foreach ($this->collCarts as $o) {
                     $o->clearAllReferences($deep);
@@ -5866,6 +6197,7 @@ abstract class User implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collAxysConsents = null;
         $this->collCarts = null;
         $this->collOptions = null;
         $this->collRights = null;
@@ -5954,6 +6286,15 @@ abstract class User implements ActiveRecordInterface
                 $failureMap->addAll($retval);
             }
 
+            if (null !== $this->collAxysConsents) {
+                foreach ($this->collAxysConsents as $referrerFK) {
+                    if (method_exists($referrerFK, 'validate')) {
+                        if (!$referrerFK->validate($validator)) {
+                            $failureMap->addAll($referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+            }
             if (null !== $this->collCarts) {
                 foreach ($this->collCarts as $referrerFK) {
                     if (method_exists($referrerFK, 'validate')) {
